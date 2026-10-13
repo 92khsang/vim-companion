@@ -188,4 +188,27 @@ describe("checkIds", () => {
       ),
     ]);
   });
+
+  test("reports a command that pnpm gen writes and the VS Code snapshot lacks", () => {
+    const files: CommandFile[] = [
+      {
+        path: FILE,
+        data: { commands: [entry("file.save", SAVE, { action: "SaveAll" })] },
+      },
+    ];
+    const ids = snapshots(
+      ["whichkey.show", "workbench.action.files.save"],
+      ["SaveAll"],
+      [],
+    );
+    // From "vim.remap": whichkey.show at most 13, workbench.action.files.save at least 18.
+    expect(checkIds(files, ids, ["whichkey.show", "vim.remap"])).toEqual([
+      diagnostic(
+        VSCODE_IDS,
+        "vim.remap",
+        "UNKNOWN_COMMAND",
+        'pnpm gen writes this command, but the snapshot lacks it (did you mean "whichkey.show" or "workbench.action.files.save"?)',
+      ),
+    ]);
+  });
 });
