@@ -159,6 +159,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkSemantics,
   checkSupport,
   checkMotionModes,
+  checkAliases,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -380,14 +381,14 @@ function checkDuplicateKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use, i) => {
     if (!use.parsed.ok) return [];
     const modes = modesOf(use.at.entry);
-    const earlier = uses
-      .slice(0, i)
-      .find(
-        (other) =>
-          other.kind === use.kind &&
-          other.text === use.text &&
-          modesOf(other.at.entry).some((mode) => modes.includes(mode)),
-      );
+    const earlier = uses.slice(0, i).find(
+      (other) =>
+        other.kind === use.kind &&
+        other.text === use.text &&
+        modesOf(other.at.entry).some((mode) => modes.includes(mode)) &&
+        // An alias with a primary key of its own entry is for ALIAS to report.
+        !(other.at === use.at && other.alias === undefined),
+    );
     return earlier === undefined
       ? []
       : [
@@ -674,6 +675,76 @@ function checkMotionModes({ placed }: Context): Diagnostic[] {
         ]
       : [],
   );
+}
+
+/** SemVer 2.0.0 without build metadata: x.y.z[-prerelease]. */
+const VERSION =
+  /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?$/;
+
+/** The longest label, generated or not. */
+const LABEL_MAX = 24;
+
+const KIND_NAMES: Record<KeyKind, string> = { leader: "leader", vim: "Vim" };
+
+/**
+ * Rule ALIAS: an alias moves an old key to the entry's first key of the same kind, so its label
+ * "Moved to <key>" needs that key and fits 24 characters; the old key is not the entry's own, and
+ * until is a version.
+ */
+function checkAliases({ placed }: Context): Diagnostic[] {
+  return placed.flatMap((at) => {
+    const { entry } = at;
+    return (entry.aliases ?? []).flatMap((alias, a) => {
+      const found: Diagnostic[] = [];
+      for (const kind of ["leader", "vim"] as const) {
+        const keys = alias.keys[kind];
+        if (keys === undefined) continue;
+        const field = `aliases[${a}].keys.${kind}`;
+        const own = entry.keys[kind];
+        if (own === undefined) {
+          found.push(
+            onEntry(
+              at,
+              "ALIAS",
+              `${field} needs a primary ${KIND_NAMES[kind]} key for its label "Moved to <key>"`,
+            ),
+          );
+          continue;
+        }
+        const label = `Moved to ${own[0]}`;
+        if (label.length > LABEL_MAX) {
+          found.push(
+            onEntry(
+              at,
+              "ALIAS",
+              `${field}: the label ${q(label)} is longer than ${LABEL_MAX} characters`,
+            ),
+          );
+        }
+        keys.forEach((key, i) => {
+          if (own.includes(key)) {
+            found.push(
+              onEntry(
+                at,
+                "ALIAS",
+                `${field}[${i}] ${q(key)} is the entry's own key`,
+              ),
+            );
+          }
+        });
+      }
+      if (!VERSION.test(alias.until)) {
+        found.push(
+          onEntry(
+            at,
+            "ALIAS",
+            `aliases[${a}].until ${q(alias.until)} is not a version x.y.z[-prerelease]`,
+          ),
+        );
+      }
+      return found;
+    });
+  });
 }
 
 const IDES = ["vscode", "intellij"] as const;
