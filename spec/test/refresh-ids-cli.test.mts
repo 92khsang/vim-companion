@@ -339,12 +339,21 @@ async function eventually(check: () => boolean, ms: number): Promise<boolean> {
   return true;
 }
 
-/** Whether a process of the group with the ID in the file `groupFile` is left. */
-function groupRunning(groupFile: string): boolean {
-  const group = textOf(groupFile);
-  if (group === null) return false;
+/**
+ * The process group in the file that the fake xvfb-run writes, or undefined while there is none.
+ * Never 0: process.kill(-0) would signal the process group of the tests.
+ */
+function groupIn(file: string): number | undefined {
+  const group = Number(textOf(file));
+  return Number.isInteger(group) && group > 0 ? group : undefined;
+}
+
+/** Sends a signal (0: none, a check) to the group in `file`; false when it has no process left. */
+function signalGroupIn(file: string, signal: NodeJS.Signals | 0): boolean {
+  const group = groupIn(file);
+  if (group === undefined) return false;
   try {
-    process.kill(-Number(group), 0);
+    process.kill(-group, signal);
     return true;
   } catch {
     return false;
@@ -656,9 +665,7 @@ describe("ids:refresh", () => {
       onTestFinished(() => {
         // Nothing outlives a failed run.
         run.child.kill("SIGKILL");
-        if (groupRunning(xvfb.group)) {
-          process.kill(-Number(textOf(xvfb.group)), "SIGKILL");
-        }
+        signalGroupIn(xvfb.group, "SIGKILL");
       });
       const started = await eventually(
         () => existsSync(pid) || run.child.exitCode !== null,
@@ -666,7 +673,10 @@ describe("ids:refresh", () => {
       );
       run.child.kill(signal);
       const result = await run.exited;
-      const ended = await eventually(() => !groupRunning(xvfb.group), 10_000);
+      const ended = await eventually(
+        () => !signalGroupIn(xvfb.group, 0),
+        10_000,
+      );
       expect({
         started: started && existsSync(pid),
         result,
