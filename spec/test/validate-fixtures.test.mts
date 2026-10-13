@@ -205,4 +205,90 @@ describe("validateFixtures", () => {
       },
     ]);
   });
+
+  test("checks the inline catalog of each fixture file with the catalog rules, without the file stem as its category", () => {
+    const catalogEntry = (files: MiniFixtureFiles, id: string) =>
+      files.catalog[0]!.data.catalog.entries.find((entry) => entry.id === id)!;
+    runCases([
+      {
+        name: "entries of many categories in one fixture file",
+        change: () => {},
+        expected: [],
+      },
+      {
+        name: "an id that does not start with the category",
+        change: (files) => {
+          catalogEntry(files, "file.find").category = "files";
+        },
+        expected: [
+          diagnostic(
+            CATALOG,
+            "file.find",
+            "CATEGORY_MISMATCH",
+            'the id must start with the category: "files."',
+          ),
+        ],
+      },
+      {
+        name: "a missing group label",
+        change: (files) => {
+          const { catalog } = files.catalog[0]!.data;
+          catalog.groups = catalog.groups.filter(
+            (group) => group.keys !== "SPC w m",
+          );
+        },
+        expected: [
+          diagnostic(
+            CATALOG,
+            "SPC w m",
+            "MISSING_GROUP",
+            'no group label for this prefix of "SPC w m h", bound by window.move-left',
+          ),
+        ],
+      },
+      {
+        name: "an id used twice",
+        change: (files) => {
+          const { entries } = files.hintView[0]!.data.catalog;
+          const only = entries.find((entry) => entry.id === "window.only")!;
+          entries.push({
+            ...only,
+            keys: { leader: ["SPC w O"] },
+            label: "Close all other splits",
+          });
+        },
+        expected: [
+          diagnostic(
+            HINT_VIEW,
+            "window.only",
+            "DUPLICATE_ID",
+            "the id is already used in spec/fixtures/hint-view/window.json",
+          ),
+        ],
+      },
+      {
+        name: "no rules for a file that breaks its schema, and the rules for the others",
+        change: (files) => {
+          loose(files.catalog[0]!.data).note = "x";
+          for (const file of [files.catalog[0]!, files.hintView[0]!]) {
+            file.data.catalog.groups.push({ keys: "SPC t", label: "Tab" });
+          }
+        },
+        expected: [
+          diagnostic(
+            CATALOG,
+            "/",
+            "SCHEMA",
+            'must NOT have additional properties: "note"',
+          ),
+          diagnostic(
+            HINT_VIEW,
+            "SPC t",
+            "UNUSED_GROUP",
+            "no leader key is below this prefix",
+          ),
+        ],
+      },
+    ]);
+  });
 });
