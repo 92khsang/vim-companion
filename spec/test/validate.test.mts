@@ -789,9 +789,15 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "a modified function key, a capital ]B and g]",
+        name: "modified function keys, also after F24, a capital ]B and g]",
         change: (files) => {
-          entryOf(files, "diag.next").keys.vim = ["]d", "<S-F8>", "]B", "g]"];
+          entryOf(files, "diag.next").keys.vim = [
+            "]d",
+            "<S-F8>",
+            "<C-F25>",
+            "]B",
+            "g]",
+          ];
         },
         expected: [],
       },
@@ -889,11 +895,44 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "a function key after F24, which design §3 leaves free",
+        name: "a bare function key after F24, which IdeaVim has no name for",
         change: (files) => {
           entryOf(files, "code.hover").keys.vim = ["K", "<F25>"];
         },
-        expected: [],
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<F25>" has the bare function key <F25>',
+          ),
+        ],
+      },
+      {
+        name: "bare function keys of any number, in any case",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["<f30>", "<f99>", "<F100>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[0] "<f30>" has the bare function key <f30>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<f99>" has the bare function key <f99>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[2] "<F100>" has the bare function key <F100>',
+          ),
+        ],
       },
       {
         name: "bare function keys",
