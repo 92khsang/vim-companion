@@ -146,6 +146,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkCategories,
   checkKeySyntax,
   checkForbiddenKeys,
+  checkReservedKeys,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -345,6 +346,21 @@ function forbiddenToken(token: string): string | undefined {
     return "bare function key";
   }
   return undefined;
+}
+
+/** Rule RESERVED_KEY: no leader key uses ?, which the companion keeps for itself. */
+function checkReservedKeys({ uses }: Context): Diagnostic[] {
+  return uses.flatMap((use) =>
+    use.kind === "leader" && use.parsed.ok && use.parsed.tokens.includes("?")
+      ? [
+          onEntry(
+            use.at,
+            "RESERVED_KEY",
+            `${use.field} ${q(use.text)} contains the reserved key ?: SPC ? is the catalog search, and ? below the root shows the hints`,
+          ),
+        ]
+      : [],
+  );
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
