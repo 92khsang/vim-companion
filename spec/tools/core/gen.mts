@@ -306,9 +306,11 @@ function mapBlocks(leaf: Leaf): string[] {
   const { entry } = leaf;
   const intellij = bindingIn(entry, "intellij");
   if (intellij === undefined) {
-    return [
-      `" ${entry.id}: unsupported in IntelliJ: ${entry.support?.intellij?.note}`,
-    ];
+    // On one line: after a line break, IdeaVim would run the rest of the note as a command.
+    const note = (entry.support?.intellij?.note ?? "")
+      .trim()
+      .replace(/\s+/g, " ");
+    return [`" ${entry.id}: unsupported in IntelliJ: ${note}`];
   }
   // IdeaVim runs <Action>(…) only from a recursive map; plugin keys need one too.
   let rhs: string;
