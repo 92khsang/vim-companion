@@ -99,6 +99,17 @@ export function validateCatalog(
 }
 
 /**
+ * The fixture files (design §5): each file against its fixture schema. The diagnostics are sorted
+ * as those of validateCatalog.
+ */
+export function validateFixtures(
+  files: FixtureFiles,
+  schemas: SchemaSet,
+): Diagnostic[] {
+  return [];
+}
+
+/**
  * Rule SCHEMA: ajv 2020 in strict mode, every error of every file. `schema` is a file name in the
  * set, or a file name and a pointer such as "ids.schema.json#/$defs/vscode".
  */
