@@ -14,9 +14,11 @@ import {
 import { newEntry } from "./support/mini-catalog.mts";
 
 const FILE = "spec/catalog/commands/file.json";
+const GIT = "spec/catalog/commands/git.json";
 const WINDOW = "spec/catalog/commands/window.json";
 const VSCODE_IDS = "spec/ids/vscode.json";
 const INTELLIJ_IDS = "spec/ids/intellij.json";
+const SAVE = { command: "workbench.action.files.save" };
 
 /** An entry that runs `vscode` in VS Code and `intellij` in IntelliJ; undefined drops the block. */
 function entry(
@@ -130,6 +132,59 @@ describe("checkIds", () => {
         "file.find",
         "UNKNOWN_COMMAND",
         'vscode.exec.command "workbench.action.quickOpn" is not in spec/ids/vscode.json (did you mean "workbench.action.quickOpen", "workbench.action.files.save" or "whichkey.show"?)',
+      ),
+    ]);
+  });
+
+  test("reports an IntelliJ action that neither the declared nor the runtime IDs have, sorted by file", () => {
+    const files: CommandFile[] = [
+      {
+        path: WINDOW,
+        data: {
+          commands: [
+            entry("window.only", SAVE, { action: "UnsplitAl" }),
+            entry("window.focus-left", SAVE, { ideavimKeys: "<C-w>h" }),
+            entry("window.move-left", SAVE, undefined),
+          ],
+        },
+      },
+      {
+        path: GIT,
+        data: {
+          commands: [
+            entry("git.status", SAVE, { action: "ActivateCommitToolWindow" }),
+          ],
+        },
+      },
+      {
+        path: FILE,
+        data: {
+          commands: [
+            entry("file.find", SAVE, { action: "GotoFle" }),
+            entry("file.save", SAVE, { action: "SaveAll" }),
+          ],
+        },
+      },
+    ];
+    const ids = snapshots(
+      ["whichkey.show", "workbench.action.files.save"],
+      ["GotoFile", "SaveAll", "UnsplitAll"],
+      ["ActivateCommitToolWindow", "Run"],
+    );
+    // From "GotoFle": GotoFile 1, SaveAll 6, Run 7, UnsplitAll 9, ActivateCommitToolWindow 20.
+    // From "UnsplitAl": UnsplitAll 1, GotoFile 8, SaveAll 8, Run 9, ActivateCommitToolWindow 21.
+    expect(checkIds(files, ids, ["whichkey.show"])).toEqual([
+      diagnostic(
+        FILE,
+        "file.find",
+        "UNKNOWN_ACTION",
+        'intellij.action "GotoFle" is not in spec/ids/intellij.json (did you mean "GotoFile", "SaveAll" or "Run"?)',
+      ),
+      diagnostic(
+        WINDOW,
+        "window.only",
+        "UNKNOWN_ACTION",
+        'intellij.action "UnsplitAl" is not in spec/ids/intellij.json (did you mean "UnsplitAll", "GotoFile" or "SaveAll"?)',
       ),
     ]);
   });
