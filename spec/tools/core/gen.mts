@@ -182,8 +182,25 @@ type WhichKeyItem =
     }
   | { key: string; name: string; type: "bindings"; bindings: WhichKeyItem[] };
 
-/** The value of `whichkey.bindings`: the leader keys that VS Code supports. */
+/**
+ * The value of `whichkey.bindings`: the leader keys that VS Code supports. which-key has no modes,
+ * so it throws when two entries bind one key in different modes.
+ */
 function whichKeyBindings(catalog: Catalog, version: string): string {
+  const keys = leaderLeaves(catalog, { version }).filter(
+    ({ entry }) => bindingIn(entry, "vscode") !== undefined,
+  );
+  const clashes = keys
+    .flatMap(({ key, entry }) =>
+      keys
+        .filter((other) => other.key === key && entry.id < other.entry.id)
+        .map(
+          (other) =>
+            `${key}: ${entry.id} and ${other.entry.id} bind it in different modes, which which-key cannot tell apart`,
+        ),
+    )
+    .sort();
+  if (clashes.length > 0) throw new Error(clashes.join("\n"));
   return json(whichKeyItems(leaderTree(catalog, "vscode", version)));
 }
 
