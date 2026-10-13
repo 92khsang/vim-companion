@@ -919,4 +919,90 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("PREFIX_CONFLICT reports a key that starts a longer key of its kind, whatever the modes", () => {
+    const deviation = {
+      shadows: "Vim ]",
+      origin: "Vim",
+      note: "Runs an IDE action instead.",
+    };
+    runCases([
+      {
+        name: "Vim keys that share their first keys",
+        change: (files) => {
+          const entry = newEntry("code.rename", "SPC c r", "Rename symbol");
+          entry.keys = { vim: ["grn"] };
+          entry.deviation = deviation;
+          fileOf(files, "code").data.commands.push(entry);
+        },
+        expected: [],
+      },
+      {
+        name: "a leader key where a group must be",
+        change: (files) => {
+          fileOf(files, "window").data.commands.push(
+            newEntry("window.menu", "SPC w", "Show window menu"),
+          );
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.menu",
+            "PREFIX_CONFLICT",
+            'keys.leader[0] "SPC w" is a prefix of "SPC w h", bound by window.focus-left',
+          ),
+          diagnostic(
+            WINDOW,
+            "window.menu",
+            "PREFIX_CONFLICT",
+            'keys.leader[0] "SPC w" is a prefix of "SPC w m h", bound by window.move-left',
+          ),
+          diagnostic(
+            WINDOW,
+            "window.menu",
+            "PREFIX_CONFLICT",
+            'keys.leader[0] "SPC w" is a prefix of "SPC w o", bound by window.only',
+          ),
+        ],
+      },
+      {
+        name: "a Visual-mode Vim key that starts Normal-mode keys",
+        change: (files) => {
+          const entry = newEntry("diag.menu", "SPC c m", "Show problem menu");
+          entry.keys = { vim: ["]"] };
+          entry.modes = ["x"];
+          entry.deviation = deviation;
+          fileOf(files, "diag").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.menu",
+            "PREFIX_CONFLICT",
+            'keys.vim[0] "]" is a prefix of "]d", bound by diag.next',
+          ),
+          diagnostic(
+            DIAG,
+            "diag.menu",
+            "PREFIX_CONFLICT",
+            'keys.vim[0] "]" is a prefix of "]e", bound by diag.next (alias)',
+          ),
+        ],
+      },
+      {
+        name: "an alias that starts the key of its own entry",
+        change: (files) => {
+          entryOf(files, "diag.next").aliases![0]!.keys.vim = ["]"];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "PREFIX_CONFLICT",
+            'aliases[0].keys.vim[0] "]" is a prefix of "]d", bound by diag.next',
+          ),
+        ],
+      },
+    ]);
+  });
 });
