@@ -910,7 +910,7 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "a bare function key after F24, which IdeaVim has no name for",
+        name: "a bare function key after F24",
         change: (files) => {
           entryOf(files, "code.hover").keys.vim = ["K", "<F25>"];
         },
@@ -1019,7 +1019,7 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "function key chords of F0 and F024, which IdeaVim cannot name either, and of F1 in an alias",
+        name: "function key chords of F0 and F024, and of F1 in an alias",
         change: (files) => {
           entryOf(files, "code.hover").keys.vim = ["K", "<C-F0>", "<C-F024>"];
           entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<C-F1>"];
@@ -1042,6 +1042,42 @@ describe("validateCatalog", () => {
             "diag.next",
             "FORBIDDEN_KEY",
             `aliases[0].keys.vim[0] "<C-F1>" has the function key chord <C-F1>; ${NO_FUNCTION_KEY}`,
+          ),
+        ],
+      },
+      {
+        name: "a diagnostic for each forbidden token and each <leader> of one key",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = [
+            "K",
+            "<F8><S-F8>",
+            "g<leader><Leader>",
+          ];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<F8><S-F8>" has the bare function key <F8>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "<F8><S-F8>" has the function key chord <S-F8>; ${NO_FUNCTION_KEY}`,
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[2] "g<leader><Leader>" contains <Leader>; ${LEADER}`,
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[2] "g<leader><Leader>" contains <leader>; ${LEADER}`,
           ),
         ],
       },
