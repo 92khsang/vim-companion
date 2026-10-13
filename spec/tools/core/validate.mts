@@ -456,8 +456,9 @@ const LEADER_KEYS = "leader keys go in keys.leader, starting with SPC";
 
 /**
  * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space,
- * no bare function key and no leader (<leader>, or <Space> as the first key), and do not
- * redefine a protected key. The keys an engine replays are not bound, so they are not checked.
+ * no bare function key of any number (<F1>, <F25>; a chord such as <S-F8> is allowed) and no
+ * leader (<leader>, or <Space> as the first key), and do not redefine a protected key. The keys an
+ * engine replays are not bound, so they are not checked.
  */
 function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use) => {
@@ -507,9 +508,8 @@ function forbiddenToken(token: string): string | undefined {
   const name = group[2]!.toUpperCase();
   if (/[AM]-/.test(modifiers)) return "Alt chord";
   if (modifiers !== "" && name === "SPACE") return "modifier+Space chord";
-  if (modifiers === "" && /^F(?:[1-9]|1\d|2[0-4])$/.test(name)) {
-    return "bare function key";
-  }
+  // Every number: IdeaVim names no key past <F24> and reads <F25> as the five keys < F 2 5 >.
+  if (modifiers === "" && /^F\d+$/.test(name)) return "bare function key";
   return undefined;
 }
 
