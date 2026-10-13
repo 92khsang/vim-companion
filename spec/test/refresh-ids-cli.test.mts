@@ -224,6 +224,8 @@ function fakeVscode(dir: string) {
       "  setTimeout(() => process.exit(1), 60_000);",
       "  await new Promise(() => {});",
       "}",
+      "// FAKE_CODE_BAD_DUMP: the dump extension writes this text, which is not JSON, as the dump.",
+      "if (env.FAKE_CODE_BAD_DUMP) { writeFileSync(env.VIM_COMPANION_IDS_OUT, env.FAKE_CODE_BAD_DUMP); process.exit(0); }",
       "writeFileSync(env.VIM_COMPANION_IDS_OUT, JSON.stringify({",
       '  vscode: env.FAKE_CODE_VERSION ?? "1.200.0",',
       "  activated,",
@@ -448,7 +450,44 @@ describe("ids:refresh", () => {
       ".vscode/extensions/ms-python.python-2026.8.0/package.json",
     );
     writeText(manifest, text);
-    expect([
+    // The runs below allow-list an extension: without one, the fake VS Code finds no extensions
+    // directory and writes no dump.
+    const vscodeRun = (
+      root: string,
+      fake: ReturnType<typeof fakeVscode>,
+      env: Record<string, string> = {},
+    ) =>
+      refreshWith(
+        { ...fake.env, ...env },
+        "vscode",
+        "--root",
+        root,
+        "--code",
+        fake.code,
+        "--extension",
+        "vscodevim.vim",
+      );
+    // The package.json of VS Code itself, named by its absolute path.
+    const appDir = join(base, "broken-app-package");
+    const appRoot = specIn(appDir);
+    const app = fakeVscode(appDir);
+    const appPackage = join(appDir, "code/resources/app/package.json");
+    writeText(appPackage, text);
+    // The manifest of a built-in extension, which the refresh reads after the dump; named by its
+    // absolute path.
+    const builtinDir = join(base, "broken-builtin-manifest");
+    const builtinRoot = specIn(builtinDir);
+    const builtin = fakeVscode(builtinDir);
+    const builtinManifest = join(
+      builtinDir,
+      "code/resources/app/extensions/git/package.json",
+    );
+    writeText(builtinManifest, text);
+    // The dump, named by its path in the temporary directory of the run.
+    const dumpDir = join(base, "broken-dump");
+    const dumpRoot = specIn(dumpDir);
+    const dump = fakeVscode(dumpDir);
+    const results = [
       intellij(productRoot, product),
       intellij(snapshotRoot, snapshotIde),
       refreshWith(
@@ -459,10 +498,20 @@ describe("ids:refresh", () => {
         "--code",
         vscode.code,
       ),
-    ]).toEqual([
+      vscodeRun(appRoot, app),
+      vscodeRun(builtinRoot, builtin),
+      vscodeRun(dumpRoot, dump, { FAKE_CODE_BAD_DUMP: text }),
+    ];
+    // The fake VS Code logs its arguments, which hold the temporary directory of the run.
+    const log = textOf(dump.log);
+    const temp = dirname(log === null ? "" : JSON.parse(log).args[1]);
+    expect(results).toEqual([
       fails(productInfo),
       fails("spec/ids/intellij.json"),
       fails(manifest),
+      fails(appPackage),
+      fails(builtinManifest),
+      fails(join(temp, "commands.json")),
     ]);
   });
 
