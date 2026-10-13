@@ -14,6 +14,7 @@ import {
   compareKeys,
   ideavimLhs,
   parseVim,
+  sameKey,
   vscodevimBefore,
   vscodevimToken,
   whichKeyKey,
@@ -210,6 +211,14 @@ function vimTokens(key: string): string[] {
   return parsed.tokens;
 }
 
+/**
+ * Whether the engine keys that an IDE replays are the key itself, so its engine runs the key
+ * natively. The engines read a <...> group without case (sameKey), as spec:check does.
+ */
+function native(engineKeys: string, leaf: Leaf): boolean {
+  return sameKey(vimTokens(engineKeys), leaf.tokens);
+}
+
 /** The entry's block for the IDE when the IDE supports the entry. */
 function bindingIn<I extends Ide>(entry: Entry, ide: I): Entry[I] | undefined {
   return entry.support?.[ide]?.level === "none" ? undefined : entry[ide];
@@ -321,7 +330,7 @@ function vimRemaps(catalog: Catalog, version: string): string {
 function vimRemap(leaf: Leaf, exec: VscodeExec): object | undefined {
   const before = vscodevimBefore(leaf.tokens);
   if ("vimKeys" in exec) {
-    return exec.vimKeys === leaf.key
+    return native(exec.vimKeys, leaf)
       ? undefined
       : { before, after: vscodevimKeys(exec.vimKeys) };
   }
@@ -388,7 +397,7 @@ function mapBlocks(leaf: Leaf): string[] {
   if ("action" in intellij) {
     rhs = `<Action>(${intellij.action})`;
     map = "map";
-  } else if (intellij.ideavimKeys === leaf.key) {
+  } else if (native(intellij.ideavimKeys, leaf)) {
     return [];
   } else {
     rhs = intellij.ideavimKeys;
