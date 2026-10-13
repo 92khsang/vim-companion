@@ -85,7 +85,16 @@ export function idSummary(
   generatedCommandIds: readonly string[],
   diagnostics: readonly Diagnostic[],
 ): string {
-  return "";
+  const entries = commands.flatMap(({ data }) => data.commands);
+  const ids = entries.flatMap(idsOf);
+  const checked = (ide: Ide) =>
+    ids.filter((id) => id.ide === ide).length +
+    (ide === "vscode" ? generatedCommandIds.length : 0);
+  const resolved = (ide: Ide) =>
+    `${checked(ide) - diagnostics.filter(({ code }) => code === UNKNOWN[ide]).length}/${checked(ide)}`;
+  const unsupported = (ide: Ide) =>
+    entries.filter((entry) => entry[ide] === undefined).length;
+  return `check-ids: resolved ${resolved("vscode")} VS Code commands and ${resolved("intellij")} IntelliJ actions; unsupported entries: VS Code ${unsupported("vscode")}, IntelliJ ${unsupported("intellij")}`;
 }
 
 const UNKNOWN: Record<Ide, string> = {
