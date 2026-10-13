@@ -158,6 +158,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDeviations,
   checkSemantics,
   checkSupport,
+  checkMotionModes,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -658,6 +659,21 @@ function checkSupport({ placed }: Context): Diagnostic[] {
     }
     return found;
   });
+}
+
+/** Rule MOTION_MODE: an IntelliJ action that acts as a motion stays out of Visual mode. */
+function checkMotionModes({ placed }: Context): Diagnostic[] {
+  return placed.flatMap((at) =>
+    at.entry.intellij?.motionSafe === false && modesOf(at.entry).includes("x")
+      ? [
+          onEntry(
+            at,
+            "MOTION_MODE",
+            '"intellij.motionSafe" is false: IdeaVim cannot run the action in Visual mode, so "modes" must not contain "x"',
+          ),
+        ]
+      : [],
+  );
 }
 
 const IDES = ["vscode", "intellij"] as const;
