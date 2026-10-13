@@ -724,10 +724,70 @@ describe("validateCatalog", () => {
     ]);
   });
 
-  test("FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space or bare function keys, or that redefine a protected key", () => {
+  test("FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space, bare function keys or the leader, or that redefine a protected key", () => {
     const PROTECTED =
       "one of the keys the catalog never redefines: ]b [b ]w [w ]p [p gh gi";
+    const LEADER = "leader keys go in keys.leader, starting with SPC";
     runCases([
+      {
+        name: "a Vim key with <Space> after its first key",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "g<Space>"];
+        },
+        expected: [],
+      },
+      {
+        name: "Vim keys with <leader> in any case, in an alias too",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = [
+            "K",
+            "<leader>d",
+            "g<LEADER>",
+          ];
+          entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<Leader>e"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "<leader>d" contains <leader>; ${LEADER}`,
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[2] "g<LEADER>" contains <LEADER>; ${LEADER}`,
+          ),
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `aliases[0].keys.vim[0] "<Leader>e" contains <Leader>; ${LEADER}`,
+          ),
+        ],
+      },
+      {
+        name: "Vim keys that start with <Space> in any case, in an alias too",
+        change: (files) => {
+          entryOf(files, "code.action").keys.vim = ["gra", "<space>a"];
+          entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<SPACE>e"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.action",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "<space>a" starts with <space>, the leader; ${LEADER}`,
+          ),
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `aliases[0].keys.vim[0] "<SPACE>e" starts with <SPACE>, the leader; ${LEADER}`,
+          ),
+        ],
+      },
       {
         name: "a modified function key, a capital ]B and g]",
         change: (files) => {
