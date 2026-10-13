@@ -3,6 +3,7 @@
 import { join } from "node:path";
 import { readSchemas } from "../../tools/catalog-files.mts";
 import type {
+  Catalog,
   CtrlKey,
   Entry,
   Group,
@@ -224,6 +225,16 @@ export function miniCatalogFiles(): MiniCatalogFiles {
       path: "spec/catalog/retired-ids.json",
       data: { $schema: "../schema/retired-ids.schema.json", ids: ["file.old"] },
     },
+  };
+}
+
+/** The catalog of the files as validateCatalog returns it: the entries in file path order. */
+export function miniCatalog(files = miniCatalogFiles()): Catalog {
+  return {
+    entries: files.commands.flatMap((file) => file.data.commands),
+    groups: files.groups.data.groups,
+    ctrlKeys: files.ctrlKeys.data.keys,
+    retiredIds: files.retiredIds.data.ids,
   };
 }
 

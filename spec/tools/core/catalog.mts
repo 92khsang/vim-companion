@@ -83,6 +83,9 @@ export type Catalog = {
   retiredIds: string[];
 };
 
+/** The entries and groups of a catalog, which bind the keys; a fixture's inline catalog is this. */
+export type KeyCatalog = Pick<Catalog, "entries" | "groups">;
+
 /** `file` is a repo-relative POSIX path; `where` names the entry, case or field. */
 export type Diagnostic = {
   file: string;
