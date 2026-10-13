@@ -80,4 +80,39 @@ describe("resolve", () => {
       { ide: "intellij", keys: ["w", "m"], result: group("Move") },
     ]);
   });
+
+  test("reaches an entry through an alias key while the version is below the alias's until", () => {
+    const search: Resolution = {
+      kind: "leaf",
+      entry: "search.project",
+      supported: true,
+    };
+    expectResults([
+      { ide: "vscode", keys: ["f", "s"], result: search },
+      {
+        ide: "intellij",
+        keys: ["f", "s"],
+        options: { version: "1.0.0-rc.2" },
+        result: search,
+      },
+      {
+        ide: "vscode",
+        keys: ["f", "s"],
+        options: { version: "1.0.0" },
+        result: { kind: "unbound" },
+      },
+      {
+        ide: "intellij",
+        keys: ["f", "s"],
+        options: { version: "2.0.0" },
+        result: { kind: "unbound" },
+      },
+      {
+        ide: "vscode",
+        keys: ["/"],
+        options: { version: "2.0.0" },
+        result: search,
+      },
+    ]);
+  });
 });
