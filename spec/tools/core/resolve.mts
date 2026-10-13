@@ -35,5 +35,7 @@ export function resolve(
       supported: entry.support?.[ide]?.level !== "none",
     };
   }
+  const group = catalog.groups.find((group) => group.keys === key);
+  if (group !== undefined) return { kind: "group", label: group.label };
   return { kind: "unbound" };
 }
