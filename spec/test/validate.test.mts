@@ -3,8 +3,10 @@ import type { Diagnostic } from "../tools/core/catalog.mts";
 import { validateCatalog } from "../tools/core/validate.mts";
 import {
   entryOf,
+  fileOf,
   loadSchemas,
   miniCatalogFiles,
+  newEntry,
   type MiniCatalogFiles,
 } from "./support/mini-catalog.mts";
 
@@ -19,6 +21,13 @@ const RETIRED_IDS = "spec/catalog/retired-ids.json";
 
 const ID_PATTERN = "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$";
 const LABEL_PATTERN = "^[A-Z][A-Za-z0-9 ,.'()/+-]*$";
+
+const diagnostic = (
+  file: string,
+  where: string,
+  code: string,
+  message: string,
+): Diagnostic => ({ file, where, code, message });
 
 /** A view of a typed object that lets a test break its shape. */
 const loose = (value: object) => value as Record<string, unknown>;
@@ -474,6 +483,50 @@ describe("validateCatalog", () => {
             "must NOT have duplicate items (items ## 0 and 1 are identical)",
           ),
           schema(RETIRED_IDS, "/ids/2", `must match pattern "${ID_PATTERN}"`),
+        ],
+      },
+    ]);
+  });
+
+  test("CATEGORY_MISMATCH reports a category that is not the file stem or the first part of the id", () => {
+    runCases([
+      {
+        name: "an id with more than two parts",
+        change: (files) => {
+          fileOf(files, "code").data.commands.push(
+            newEntry("code.refactor.extract", "SPC c e", "Extract to function"),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "a category that is not the file stem",
+        change: (files) => {
+          const entry = entryOf(files, "code.comment");
+          entry.id = "window.comment";
+          entry.category = "window";
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "window.comment",
+            "CATEGORY_MISMATCH",
+            'category "window" differs from the file stem "code"',
+          ),
+        ],
+      },
+      {
+        name: "an id that does not start with the category",
+        change: (files) => {
+          entryOf(files, "code.hover").id = "file.hover";
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "file.hover",
+            "CATEGORY_MISMATCH",
+            'the id must start with the category: "code."',
+          ),
         ],
       },
     ]);

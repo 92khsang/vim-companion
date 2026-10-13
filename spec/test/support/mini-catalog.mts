@@ -227,6 +227,29 @@ export function miniCatalogFiles(): MiniCatalogFiles {
   };
 }
 
+/**
+ * A further entry that passes every rule once it is in the file of its category, if its leader
+ * key is free and its prefix has a group.
+ */
+export function newEntry(id: string, leader: string, label: string): Entry {
+  return entry({
+    id,
+    keys: { leader: [leader] },
+    label,
+    vscode: command("workbench.action.files.save", "editor"),
+    intellij: { action: "SaveAll" },
+  });
+}
+
+/** The command file of a category. */
+export function fileOf(files: MiniCatalogFiles, stem: string) {
+  const found = files.commands.find((file) =>
+    file.path.endsWith(`/${stem}.json`),
+  );
+  if (!found) throw new Error(`no ${stem}.json in the mini catalog`);
+  return found;
+}
+
 /** The entry with this id, to change in place. */
 export function entryOf(files: MiniCatalogFiles, id: string): Entry {
   const found = files.commands
