@@ -151,6 +151,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDuplicateKeys,
   checkPrefixConflicts,
   checkMissingGroups,
+  checkUnusedGroups,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -439,6 +440,33 @@ function checkMissingGroups({ uses, groups }: Context): Diagnostic[] {
     }
   }
   return found;
+}
+
+/** Rule UNUSED_GROUP: each group has a leader key below its prefix. */
+function checkUnusedGroups({ uses, groups }: Context): Diagnostic[] {
+  const leaderKeys = uses.flatMap((use) =>
+    use.kind === "leader" && use.parsed.ok ? [use.parsed.tokens] : [],
+  );
+  return groups.groups.flatMap((group) => {
+    const parsed = parseLeader(group.keys);
+    // A malformed group key is reported by KEY_SYNTAX.
+    if (!parsed.ok) return [];
+    const used = leaderKeys.some(
+      (tokens) =>
+        tokens.length > parsed.tokens.length &&
+        startsWith(tokens, parsed.tokens),
+    );
+    return used
+      ? []
+      : [
+          {
+            file: groups.file,
+            where: group.keys,
+            code: "UNUSED_GROUP",
+            message: "no leader key is below this prefix",
+          },
+        ];
+  });
 }
 
 /** Whether the tokens begin with the tokens of the prefix. */
