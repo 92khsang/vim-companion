@@ -24,5 +24,16 @@ export function resolve(
   options: ResolveOptions = {},
 ): Resolution {
   if (keys.length === 0) return { kind: "group", label: "" };
+  const key = ["SPC", ...keys].join(" ");
+  const entry = catalog.entries.find((entry) =>
+    entry.keys.leader?.includes(key),
+  );
+  if (entry !== undefined) {
+    return {
+      kind: "leaf",
+      entry: entry.id,
+      supported: entry.support?.[ide]?.level !== "none",
+    };
+  }
   return { kind: "unbound" };
 }
