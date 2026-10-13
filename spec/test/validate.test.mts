@@ -1657,4 +1657,76 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("CTRL_KEY reports Ctrl keys that are malformed or listed twice, and handlers IdeaVim cannot split", () => {
+    const HANDLERS =
+      'must be mode:vim or mode:ide tokens such as "a:vim" or "n-v:ide", separated by single spaces';
+    runCases([
+      {
+        name: "mode lists and both handlers",
+        change: (files) => {
+          files.ctrlKeys.data.keys.push(
+            { key: "<C-v>", handler: "n-v:vim i:ide", mac: "a:vim" },
+            { key: "<C-f>", handler: "a:vim i-c-s:ide" },
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "keys that are not Ctrl and a lowercase letter",
+        change: (files) => {
+          files.ctrlKeys.data.keys.push(
+            { key: "<C-A>", handler: "a:vim" },
+            { key: "<c-b>", handler: "a:vim" },
+          );
+        },
+        expected: [
+          diagnostic(
+            CTRL_KEYS,
+            "<C-A>",
+            "CTRL_KEY",
+            "the key must be <C-x> with a lowercase letter x",
+          ),
+          diagnostic(
+            CTRL_KEYS,
+            "<c-b>",
+            "CTRL_KEY",
+            "the key must be <C-x> with a lowercase letter x",
+          ),
+        ],
+      },
+      {
+        name: "a key listed twice",
+        change: (files) => {
+          files.ctrlKeys.data.keys.push({ key: "<C-a>", handler: "n:vim" });
+        },
+        expected: [
+          diagnostic(
+            CTRL_KEYS,
+            "<C-a>",
+            "CTRL_KEY",
+            "the key is already listed",
+          ),
+        ],
+      },
+      {
+        name: "handlers with two spaces or an unknown mode",
+        change: (files) => {
+          files.ctrlKeys.data.keys.push(
+            { key: "<C-x>", handler: "a:vim  x:ide" },
+            { key: "<C-y>", handler: "a:vim", mac: "o:ide" },
+          );
+        },
+        expected: [
+          diagnostic(
+            CTRL_KEYS,
+            "<C-x>",
+            "CTRL_KEY",
+            `handler "a:vim  x:ide" ${HANDLERS}`,
+          ),
+          diagnostic(CTRL_KEYS, "<C-y>", "CTRL_KEY", `mac "o:ide" ${HANDLERS}`),
+        ],
+      },
+    ]);
+  });
 });
