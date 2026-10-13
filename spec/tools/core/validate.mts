@@ -157,6 +157,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDuplicateLabels,
   checkDeviations,
   checkSemantics,
+  checkSupport,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -608,6 +609,54 @@ function checkSemantics({ placed }: Context): Diagnostic[] {
         `${sides}, so ${q(`semantics.${property}`)} is required`,
       ),
     ];
+  });
+}
+
+/**
+ * Rule SUPPORT: an IDE block is absent exactly when the support level there is none; partial and
+ * none say what is missing in a note; every entry runs in at least one IDE.
+ */
+function checkSupport({ placed }: Context): Diagnostic[] {
+  return placed.flatMap((at) => {
+    const { entry } = at;
+    const found: Diagnostic[] = [];
+    for (const ide of IDES) {
+      const support = entry.support?.[ide];
+      const level = q(`support.${ide}.level`);
+      if (entry[ide] === undefined && support?.level !== "none") {
+        found.push(
+          onEntry(
+            at,
+            "SUPPORT",
+            `the entry has no ${q(ide)} block, so ${level} must be "none"`,
+          ),
+        );
+      }
+      if (entry[ide] !== undefined && support?.level === "none") {
+        found.push(
+          onEntry(
+            at,
+            "SUPPORT",
+            `${level} is "none" although the entry has the ${q(ide)} block`,
+          ),
+        );
+      }
+      if (support !== undefined && support.level !== "full" && !support.note) {
+        found.push(
+          onEntry(
+            at,
+            "SUPPORT",
+            `${q(`support.${ide}`)} with level ${q(support.level)} needs a note`,
+          ),
+        );
+      }
+    }
+    if (!IDES.some((ide) => supported(entry, ide))) {
+      found.push(
+        onEntry(at, "SUPPORT", "the entry is supported in neither IDE"),
+      );
+    }
+    return found;
   });
 }
 
