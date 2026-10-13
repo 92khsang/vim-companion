@@ -152,6 +152,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkPrefixConflicts,
   checkMissingGroups,
   checkUnusedGroups,
+  checkDuplicateGroups,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -466,6 +467,26 @@ function checkUnusedGroups({ uses, groups }: Context): Diagnostic[] {
             message: "no leader key is below this prefix",
           },
         ];
+  });
+}
+
+/** Rule DUPLICATE_GROUP: a prefix has one group. */
+function checkDuplicateGroups({ groups }: Context): Diagnostic[] {
+  const first = new Map<string, Group>();
+  return groups.groups.flatMap((group) => {
+    const earlier = first.get(group.keys);
+    if (earlier === undefined) {
+      first.set(group.keys, group);
+      return [];
+    }
+    return [
+      {
+        file: groups.file,
+        where: group.keys,
+        code: "DUPLICATE_GROUP",
+        message: `the prefix already has the group label ${q(earlier.label)}`,
+      },
+    ];
   });
 }
 
