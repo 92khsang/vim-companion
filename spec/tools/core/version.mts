@@ -3,5 +3,5 @@
 
 /** -1, 0 or 1 as `a` sorts before, with or after `b` in SemVer 2.0.0 precedence. */
 export function compareVersions(a: string, b: string): number {
-  return 0;
+  return Number(a > b) - Number(a < b);
 }
