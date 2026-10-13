@@ -4,16 +4,22 @@
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { readCatalogFiles, readSchemas } from "./catalog-files.mts";
+import type { Diagnostic } from "./core/catalog.mts";
 import { validateCatalog } from "./core/validate.mts";
+
+/** Every diagnostic of the spec directory `root`; throws when a file cannot be read. */
+function check(root: string): Diagnostic[] {
+  const schemas = readSchemas(root);
+  const { diagnostics } = validateCatalog(readCatalogFiles(root), schemas);
+  // The fixtures (design §5) join here: each fixture file against its fixture schema, and its
+  // inline catalog with the catalog rules.
+  return diagnostics;
+}
 
 try {
   const { values } = parseArgs({ options: { root: { type: "string" } } });
   const root = resolve(values.root ?? join(import.meta.dirname, ".."));
-  const { diagnostics } = validateCatalog(
-    readCatalogFiles(root),
-    readSchemas(root),
-  );
-  const lines = diagnostics
+  const lines = check(root)
     .map(({ file, where, message }) => `${file}: ${where}: ${message}`)
     .sort();
   for (const line of lines) console.log(line);
