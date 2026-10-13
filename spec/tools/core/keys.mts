@@ -38,9 +38,15 @@ export function parseVim(text: string): ParsedKey {
   };
 }
 
+/** Orders token arrays token by token in code-unit order; a key sorts before its longer keys. */
 export function compareKeys(
   a: readonly string[],
   b: readonly string[],
 ): number {
-  return 0;
+  for (let i = 0; i < a.length && i < b.length; i++) {
+    const x = a[i]!;
+    const y = b[i]!;
+    if (x !== y) return x < y ? -1 : 1;
+  }
+  return a.length - b.length;
 }
