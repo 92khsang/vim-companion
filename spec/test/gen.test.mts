@@ -59,11 +59,49 @@ describe("genIde", () => {
       ]),
     );
   });
+
+  test("leaves out a group with no leaf below it that the IDE supports", () => {
+    // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
+    // does not support it instead.
+    const files = miniCatalogFiles();
+    const entry = entryOf(files, "window.move-left");
+    entry.intellij = { action: "MoveEditorToOppositeTabGroup" };
+    delete entry.vscode;
+    entry.support = {
+      vscode: { level: "none", note: "No command moves a split." },
+    };
+    const window = whichKeyMenu(miniCatalog(files)).find(
+      ({ key }) => key === "w",
+    );
+    expect({
+      intellij: rcLines(miniCatalog()).filter((line) =>
+        line.startsWith("let g:WhichKeyDesc_vimcompanion_group_"),
+      ),
+      vscode: window?.bindings?.map(({ key }) => key),
+    }).toEqual({
+      intellij: [
+        "let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'",
+        "let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'",
+        "let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'",
+      ],
+      vscode: ["h", "o"],
+    });
+  });
 });
 
 /** The lines of the rc that genIde writes for the catalog. */
 function rcLines(catalog: Catalog): string[] {
   return genIde(catalog).get("intellij/vim-companion.ideavimrc")!.split("\n");
+}
+
+/** A which-key menu item, as far as the tests look at it. */
+type MenuItem = { key: string; bindings?: MenuItem[] };
+
+/** The which-key menu that genIde writes for the catalog. */
+function whichKeyMenu(catalog: Catalog): MenuItem[] {
+  return JSON.parse(
+    genIde(catalog).get("vscode/whichkey-bindings.json")!,
+  ) as MenuItem[];
 }
 
 describe("whichKeyArgs", () => {
