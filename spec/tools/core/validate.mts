@@ -456,9 +456,9 @@ const LEADER_KEYS = "leader keys go in keys.leader, starting with SPC";
 
 /**
  * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space,
- * no bare function key of any number (<F1>, <F25>), no chord of a function key past F24 (<C-F25>;
- * <S-F8> and <C-F24> are allowed) and no leader (<leader>, or <Space> as the first key), and do
- * not redefine a protected key. The keys an engine replays are not bound, so they are not checked.
+ * no function key of any number, bare (<F1>, <F25>) or in a function key chord (<S-F8>, <C-F25>),
+ * and no leader (<leader>, or <Space> as the first key), and do not redefine a protected key. The
+ * keys an engine replays are not bound, so they are not checked.
  */
 function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use) => {
@@ -499,7 +499,8 @@ function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
 
 /**
  * What makes a token forbidden, if anything, as the message after the key, such as "has the Alt
- * chord <A-k>". Modifier and key names ignore case, as in Vim.
+ * chord <A-k>". A token has one problem at most, the first that the checks find: <C-A-F25> is an
+ * Alt chord. Modifier and key names ignore case, as in Vim.
  */
 function forbiddenToken(token: string): string | undefined {
   // The name may be empty: a group ends at the first >, so "<M->>" has the token "<M->".
@@ -511,15 +512,15 @@ function forbiddenToken(token: string): string | undefined {
   if (modifiers !== "" && name === "SPACE") {
     return `has the modifier+Space chord ${token}`;
   }
-  const number = /^F(\d+)$/.exec(name)?.[1];
-  if (number === undefined) return undefined;
-  // A bare function key of every number, and a chord of one past F24: IdeaVim names no key past
-  // <F24> and reads <F25> as the five keys < F 2 5 >, and <C-F25> as the seven keys < C - F 2 5 >.
+  // A function key is F and digits, whatever the number, so there is no table of key names; <S-F>
+  // is the letter F with Shift.
+  if (!/^F\d+$/.test(name)) return undefined;
+  // The OS and the IME reserve bare function keys (D4).
   if (modifiers === "") return `has the bare function key ${token}`;
-  if (Number(number) > 24) {
-    return `has the function key chord ${token}; IdeaVim has no name for a function key past F24`;
-  }
-  return undefined;
+  // VS Code hands an extension only the keys of its keybindings and the text typed through the
+  // type command. VSCodeVim 1.32.4 binds no function key, and a function key types no text, so a
+  // remap of a function key chord never fires.
+  return `has the function key chord ${token}; VSCodeVim receives no function key`;
 }
 
 /** Rule RESERVED_KEY: no leader key uses ?, which the companion keeps for itself. */
