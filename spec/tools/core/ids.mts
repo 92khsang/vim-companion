@@ -45,8 +45,33 @@ export function checkIds(
   snapshots: IdSnapshots,
   generatedCommandIds: readonly string[],
 ): Diagnostic[] {
-  return [];
+  const vscode = snapshots.vscode;
+  const known = new Set(vscode.data.commands);
+  return commands.flatMap(({ path, data }) =>
+    data.commands.flatMap((entry) => {
+      const exec = entry.vscode?.exec;
+      if (exec === undefined || !("command" in exec)) return [];
+      if (known.has(exec.command)) return [];
+      return [
+        {
+          file: path,
+          where: entry.id,
+          code: "UNKNOWN_COMMAND",
+          message: `vscode.exec.command ${q(exec.command)} is not in ${vscode.path}${didYouMean(suggest(exec.command, known))}`,
+        },
+      ];
+    }),
+  );
 }
+
+/** " (did you mean "a", "b" or "c"?)". */
+function didYouMean(ids: readonly string[]): string {
+  const quoted = ids.map(q);
+  return ` (did you mean ${quoted.slice(0, -1).join(", ")} or ${quoted.at(-1)}?)`;
+}
+
+/** A value quoted for a message. */
+const q = (value: string): string => JSON.stringify(value);
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
