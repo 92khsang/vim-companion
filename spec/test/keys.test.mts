@@ -288,4 +288,15 @@ describe("ideavimLhs", () => {
       }),
     );
   });
+
+  test("writes a Vim key literally", () => {
+    expect(ideavimLhs(["g", "r", "a"])).toBe("gra");
+    expect(ideavimLhs(["<C-w>", "h"])).toBe("<C-w>h");
+    expect(ideavimLhs(["]", "d"])).toBe("]d");
+    fc.assert(
+      fc.property(vimKey, (tokens) => {
+        expect(parseVim(ideavimLhs(tokens))).toEqual({ ok: true, tokens });
+      }),
+    );
+  });
 });
