@@ -26,14 +26,17 @@ export function rows(
     key.startsWith(parent) && !key.slice(parent.length).includes(" ");
   const byKey = (a: Row, b: Row) => compareKeys([a.key], [b.key]);
   const leaves = leaderLeaves(catalog, options);
-  const entries: Row[] = leaves
-    .filter(({ key }) => child(key))
-    .map(({ key, entry }) => ({
-      key: key.slice(parent.length),
-      label: entry.label,
-      group: false,
-      badge: null,
-    }));
+  const leafRows = (alias: boolean): Row[] =>
+    leaves
+      .filter((leaf) => leaf.alias === alias && child(leaf.key))
+      .map(({ key, entry }) => ({
+        key: key.slice(parent.length),
+        // An alias moves its key to the entry's first leader key.
+        label: alias ? `Moved to ${entry.keys.leader?.[0]}` : entry.label,
+        group: false,
+        badge: null,
+      }))
+      .sort(byKey);
   const groups: Row[] = catalog.groups
     .filter(
       ({ keys }) =>
@@ -45,5 +48,5 @@ export function rows(
       group: true,
       badge: null,
     }));
-  return [...entries.sort(byKey), ...groups.sort(byKey)];
+  return [...leafRows(false), ...leafRows(true), ...groups.sort(byKey)];
 }

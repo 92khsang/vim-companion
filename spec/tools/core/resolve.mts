@@ -44,7 +44,7 @@ export function resolve(
 }
 
 /** A bound leader key: a key of an entry or of one of its active aliases. */
-export type LeaderLeaf = { key: string; entry: Entry };
+export type LeaderLeaf = { key: string; entry: Entry; alias: boolean };
 
 /**
  * The leader keys that the catalog binds with the options: the keys of the entries, of
@@ -60,11 +60,19 @@ export function leaderLeaves(
       (entry) => entry.stage === "stable" || options.experimental === true,
     )
     .flatMap((entry) => [
-      ...(entry.keys.leader ?? []).map((key) => ({ key, entry })),
+      ...(entry.keys.leader ?? []).map((key) => ({
+        key,
+        entry,
+        alias: false,
+      })),
       ...(entry.aliases ?? [])
         .filter((alias) => aliasActive(alias, version))
         .flatMap((alias) =>
-          (alias.keys.leader ?? []).map((key) => ({ key, entry })),
+          (alias.keys.leader ?? []).map((key) => ({
+            key,
+            entry,
+            alias: true,
+          })),
         ),
     ]);
 }
