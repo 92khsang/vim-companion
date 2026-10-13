@@ -69,4 +69,15 @@ describe("resolve", () => {
       { ide: "vscode", keys: ["w", "h", "j"], result: { kind: "unbound" } },
     ]);
   });
+
+  test("returns the label of the group at a leader prefix", () => {
+    const group = (label: string): Resolution => ({ kind: "group", label });
+    expectResults([
+      { ide: "vscode", keys: ["w"], result: group("Window") },
+      { ide: "intellij", keys: ["w"], result: group("Window") },
+      { ide: "vscode", keys: ["c"], result: group("Code") },
+      { ide: "intellij", keys: ["f"], result: group("File") },
+      { ide: "intellij", keys: ["w", "m"], result: group("Move") },
+    ]);
+  });
 });
