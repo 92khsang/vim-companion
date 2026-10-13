@@ -601,9 +601,15 @@ describe("ids:refresh", () => {
       fails(`${join(fake.home, ".vscode/extensions")} has no redhat.java`),
       fails(`the dump is of VS Code 1.199.0, but ${appPackage} has 1.200.0`),
       fails("vscodevim.vim 1.32.4 did not activate in VS Code"),
-      fails(
-        "VS Code wrote no command IDs; the end of its output:\n[main] Window failed to load",
-      ),
+      {
+        status: 2,
+        stdout: "",
+        stderr: [
+          "ids:refresh: VS Code wrote no command IDs; the end of its output:",
+          "ids:refresh: [main] Window failed to load",
+          "",
+        ].join("\n"),
+      },
       null,
     ]);
   });

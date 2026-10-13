@@ -197,4 +197,26 @@ describe("check-ids", () => {
       },
     ]);
   });
+
+  test('starts each line on stderr with "check-ids: ", also in a message of several lines', () => {
+    // V8 quotes the text around a JSON syntax error, line breaks included.
+    const root = writeSpec("json-error-lines", miniCatalogFiles());
+    const text = '{\n  "commands": [\n    x\n  ]\n}\n';
+    writeFileSync(join(root, "catalog/commands/search.json"), text);
+    let message = "";
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain("\n");
+    expect(checkIds("--root", root)).toEqual({
+      status: 2,
+      stdout: "",
+      stderr: `spec/catalog/commands/search.json: ${message}`
+        .split("\n")
+        .map((line) => `check-ids: ${line}\n`)
+        .join(""),
+    });
+  });
 });
