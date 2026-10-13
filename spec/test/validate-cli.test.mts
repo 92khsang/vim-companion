@@ -34,6 +34,16 @@ function writeSpec(name: string, files: MiniCatalogFiles): string {
   return root;
 }
 
+/** A run that could not check: exit 2, nothing on stdout, a spec:check message with `text`. */
+function cannotRun(text: string) {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return {
+    status: 2,
+    stdout: "",
+    stderr: expect.stringMatching(new RegExp(`^spec:check: .*${escaped}`)),
+  };
+}
+
 function specCheck(...args: string[]) {
   const { status, stdout, stderr } = spawnSync(
     process.execPath,
@@ -71,5 +81,24 @@ describe("spec:check", () => {
       ].join("\n"),
       stderr: "",
     });
+  });
+
+  test("exits 2 with a message when it cannot run", () => {
+    const missing = join(base, "missing", "spec");
+    const brokenJson = writeSpec("broken-json", miniCatalogFiles());
+    writeFileSync(join(brokenJson, "catalog/groups.json"), "{\n");
+    const noSchema = writeSpec("no-schema", miniCatalogFiles());
+    rmSync(join(noSchema, "schema/commands.schema.json"));
+    expect([
+      specCheck("--root", missing),
+      specCheck("--rot", missing),
+      specCheck("--root", brokenJson),
+      specCheck("--root", noSchema),
+    ]).toEqual([
+      cannotRun(missing),
+      cannotRun("'--rot'"),
+      cannotRun("spec/catalog/groups.json: "),
+      cannotRun('no schema with key or ref "commands.schema.json"'),
+    ]);
   });
 });
