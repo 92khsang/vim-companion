@@ -1320,4 +1320,75 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("MISSING_SEMANTICS reports engine keys in one IDE and a command in the other without semantics for the engine", () => {
+    runCases([
+      {
+        name: "engine keys in both IDEs",
+        change: (files) => {
+          fileOf(files, "code").data.commands.push(
+            joinEntry({ vimKeys: "gJ" }, { ideavimKeys: "gJ" }),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "engine keys in the only IDE that supports the entry",
+        change: (files) => {
+          const entry = newEntry("window.swap", "SPC w x", "Swap splits");
+          delete entry.vscode;
+          entry.intellij = { ideavimKeys: "<C-w>x" };
+          entry.support = {
+            vscode: { level: "none", note: "VS Code cannot swap groups." },
+          };
+          fileOf(files, "window").data.commands.push(entry);
+        },
+        expected: [],
+      },
+      {
+        name: "IdeaVim keys and a command, without semantics",
+        change: (files) => {
+          delete entryOf(files, "window.focus-left").semantics;
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.focus-left",
+            "MISSING_SEMANTICS",
+            'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.ideavim" is required',
+          ),
+        ],
+      },
+      {
+        name: "VSCodeVim keys and an action, with semantics for the other engine",
+        change: (files) => {
+          entryOf(files, "window.only").semantics = {
+            ideavim: "Runs the UnsplitAll action.",
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.only",
+            "MISSING_SEMANTICS",
+            'VS Code runs VSCodeVim keys and IntelliJ an action, so "semantics.vscodevim" is required',
+          ),
+        ],
+      },
+      {
+        name: "keys of an IdeaVim extension and a command, without semantics",
+        change: (files) => {
+          delete entryOf(files, "code.comment").semantics;
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.comment",
+            "MISSING_SEMANTICS",
+            'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.ideavim" is required',
+          ),
+        ],
+      },
+    ]);
+  });
 });
