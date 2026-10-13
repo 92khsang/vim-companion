@@ -18,7 +18,7 @@ afterAll(() => {
   rmSync(base, { recursive: true, force: true });
 });
 
-/** Every VS Code command of the mini catalog, and the command that pnpm gen writes. */
+/** Every VS Code command of the mini catalog, and the commands that pnpm gen writes for it. */
 const VSCODE: VscodeIds = {
   vscode: "1.141.0",
   extensions: { "VSpaceCode.whichkey": "0.11.4", "vscodevim.vim": "1.32.4" },
@@ -27,6 +27,7 @@ const VSCODE: VscodeIds = {
     "editor.action.marker.next",
     "editor.action.quickFix",
     "editor.action.showHover",
+    "vim.remap",
     "whichkey.show",
     "workbench.action.findInFiles",
     "workbench.action.focusLeftGroup",
@@ -111,7 +112,7 @@ describe("check-ids", () => {
     expect(checkIds("--root", root)).toEqual({
       status: 0,
       stdout:
-        "check-ids: resolved 11/11 VS Code commands and 7/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1\n",
+        "check-ids: resolved 12/12 VS Code commands and 7/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1\n",
       stderr: "",
     });
   });
@@ -130,7 +131,28 @@ describe("check-ids", () => {
       stdout: [
         'spec/catalog/commands/file.json: file.find: intellij.action "GotoFle" is not in spec/ids/intellij.json (did you mean "GotoFile", "Debug" or "Run"?)',
         'spec/catalog/commands/window.json: window.move-left: vscode.exec.command "workbench.action.moveActiveEditorGroupLft" is not in spec/ids/vscode.json (did you mean "workbench.action.moveActiveEditorGroupLeft", "workbench.action.focusLeftGroup" or "workbench.action.findInFiles"?)',
-        "check-ids: resolved 10/11 VS Code commands and 6/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1",
+        "check-ids: resolved 11/12 VS Code commands and 6/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1",
+        "",
+      ].join("\n"),
+      stderr: "",
+    });
+  });
+
+  test("checks vim.remap, which pnpm gen writes for an entry that runs Vim keys in VS Code", () => {
+    // window.only runs <C-w>o through vim.remap. From "vim.remap": whichkey.show 11,
+    // workbench.view.scm 16, editor.action.quickFix 20, editor.action.marker.next 21.
+    const root = writeSpec("vim-remap", miniCatalogFiles(), {
+      vscode: {
+        ...VSCODE,
+        commands: VSCODE.commands.filter((id) => id !== "vim.remap"),
+      },
+      intellij: INTELLIJ,
+    });
+    expect(checkIds("--root", root)).toEqual({
+      status: 1,
+      stdout: [
+        'spec/ids/vscode.json: vim.remap: pnpm gen writes this command, but the snapshot lacks it (did you mean "whichkey.show", "workbench.view.scm" or "editor.action.quickFix"?)',
+        "check-ids: resolved 11/12 VS Code commands and 7/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1",
         "",
       ].join("\n"),
       stderr: "",
