@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { afterAll, describe, expect, test } from "vitest";
 import type { IntellijIds, VscodeIds } from "../tools/core/ids.mts";
 import {
+  entryOf,
   miniCatalogFiles,
   type MiniCatalogFiles,
 } from "./support/mini-catalog.mts";
@@ -101,6 +102,27 @@ describe("check-ids", () => {
       status: 0,
       stdout:
         "check-ids: resolved 11/11 VS Code commands and 7/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1\n",
+      stderr: "",
+    });
+  });
+
+  test("prints the unknown IDs as sorted lines with suggestions, then the summary, and exits 1", () => {
+    const files = miniCatalogFiles();
+    entryOf(files, "window.move-left").vscode!.exec = {
+      command: "workbench.action.moveActiveEditorGroupLft",
+    };
+    entryOf(files, "file.find").intellij = { action: "GotoFle" };
+    const root = writeSpec("unknown", files);
+    // From "GotoFle": GotoFile 1, Debug 7, Run 7, RecentFiles 8. From the VS Code command:
+    // moveActiveEditorGroupLeft 1, focusLeftGroup 15, findInFiles 22, quickOpen 22.
+    expect(checkIds("--root", root)).toEqual({
+      status: 1,
+      stdout: [
+        'spec/catalog/commands/file.json: file.find: intellij.action "GotoFle" is not in spec/ids/intellij.json (did you mean "GotoFile", "Debug" or "Run"?)',
+        'spec/catalog/commands/window.json: window.move-left: vscode.exec.command "workbench.action.moveActiveEditorGroupLft" is not in spec/ids/vscode.json (did you mean "workbench.action.moveActiveEditorGroupLeft", "workbench.action.focusLeftGroup" or "workbench.action.findInFiles"?)',
+        "check-ids: resolved 10/11 VS Code commands and 6/7 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 1",
+        "",
+      ].join("\n"),
       stderr: "",
     });
   });
