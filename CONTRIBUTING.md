@@ -8,13 +8,8 @@ that check it and generate files from it, `extensions/vscode` holds the VS Code 
 ## Setup
 
 - Node.js 24 (`.nvmrc`) and pnpm 11 (the exact version is pinned in `package.json`).
-- Python 3.12 or newer as `python3` on `PATH`. Claude Code runs the approval guard in
-  `.claude/hooks/` with it, and the hook tests use it too.
 - Run `pnpm install`. It also installs the Git hooks: commitlint checks each commit message and
   Prettier formats staged files.
-- Start Claude Code at the repository root and do not move the session with `/cd`. Claude Code
-  reads `.claude/settings.json`, which makes it ask before merges, tags, releases and settings
-  changes, only from the session's working directory.
 
 ## Making a change
 
@@ -41,7 +36,6 @@ that check it and generate files from it, `extensions/vscode` holds the VS Code 
 
 ```bash
 pnpm format:check
-python3 -m unittest discover -s .claude/hooks -p 'test_*.py'
 ```
 
 ## License

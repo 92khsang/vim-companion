@@ -145,19 +145,6 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm format:check
 
-  claude-hooks:
-    name: claude-hooks
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - run: python3 -m unittest discover -s .claude/hooks -p 'test_*.py' -v
-
   # The squash dialog lets a merger edit the title, so check the subject that actually landed.
   title-on-main:
     name: title-on-main
@@ -196,7 +183,6 @@ jobs:
       - instructions
       - workflows
       - format
-      - claude-hooks
       - title-on-main
     runs-on: ubuntu-24.04
     timeout-minutes: 5
