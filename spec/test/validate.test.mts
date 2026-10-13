@@ -1487,4 +1487,40 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("MOTION_MODE reports an IntelliJ action that is not motion-safe in Visual mode", () => {
+    const MESSAGE =
+      '"intellij.motionSafe" is false: IdeaVim cannot run the action in Visual mode, so "modes" must not contain "x"';
+    runCases([
+      {
+        name: "a motion-safe action in Visual mode",
+        change: (files) => {
+          entryOf(files, "code.action").intellij = {
+            action: "ShowIntentionActions",
+            motionSafe: true,
+          };
+        },
+        expected: [],
+      },
+      {
+        name: "a motion action in Normal and Visual mode",
+        change: (files) => {
+          entryOf(files, "diag.next").modes = ["n", "x"];
+        },
+        expected: [diagnostic(DIAG, "diag.next", "MOTION_MODE", MESSAGE)],
+      },
+      {
+        name: "an entry in Visual mode whose action becomes a motion",
+        change: (files) => {
+          entryOf(files, "search.project").intellij = {
+            action: "FindInPath",
+            motionSafe: false,
+          };
+        },
+        expected: [
+          diagnostic(SEARCH, "search.project", "MOTION_MODE", MESSAGE),
+        ],
+      },
+    ]);
+  });
 });
