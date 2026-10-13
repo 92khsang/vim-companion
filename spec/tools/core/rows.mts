@@ -72,9 +72,9 @@ function badge(entry: Entry, ide: Ide): Badge {
   if (level === "none") return "unsupported";
   if (entry.stage === "experimental") return "experimental";
   if (level === "partial") return "fallback";
-  // An IDE that runs the engine's keys behaves as Vim there; one that runs a command or action
-  // differs where the entry says how the engine's own keys behave. A supported entry has the
-  // IDE's block.
+  // An IDE that runs its engine's keys is the Vim that the badge compares with; one that runs a
+  // command or action differs from it when the entry says how its engine's keys behave. A
+  // supported entry has the IDE's block.
   const command =
     ide === "vscode"
       ? "command" in entry.vscode!.exec
