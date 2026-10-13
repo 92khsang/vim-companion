@@ -149,7 +149,14 @@ export type DescriptorIds = {
 
 /** The action, group and tool window IDs of plugin descriptor XML, sorted and without repeats. */
 export function parseDescriptorIds(xml: string): DescriptorIds {
-  return { ids: [], toolWindows: [] };
+  // An ID that only a comment mentions is not declared.
+  const text = xml.replace(/<!--[\s\S]*?-->/g, "");
+  const collect = (pattern: RegExp) =>
+    [...new Set(Array.from(text.matchAll(pattern), (m) => m[1]!))].sort();
+  return {
+    ids: collect(/<(?:action|group)\b[^>]*?\bid\s*=\s*"([^"]+)"/g),
+    toolWindows: collect(/<toolWindow\b[^>]*?\bid\s*=\s*"([^"]+)"/g),
+  };
 }
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
