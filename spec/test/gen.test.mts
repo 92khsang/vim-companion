@@ -212,6 +212,7 @@ describe("genIde", () => {
         '" file.find',
         "if empty(mapcheck('<leader>ff', 'n'))",
         "  nmap <leader>ff <Action>(GotoFile)",
+        "  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'",
         "  let g:WhichKeyDesc_vimcompanion_file_find_l6666 = '<leader>ff Find file'",
         "else",
         "  call add(g:vimcompanion_skipped, 'n <leader>ff file.find')",
@@ -220,6 +221,7 @@ describe("genIde", () => {
         '" file.pick',
         "if empty(mapcheck('<leader>ff', 'x'))",
         "  xmap <leader>ff <Action>(SaveAll)",
+        "  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'",
         "  let g:WhichKeyDesc_vimcompanion_file_pick_l6666 = '<leader>ff Pick file'",
         "else",
         "  call add(g:vimcompanion_skipped, 'x <leader>ff file.pick')",
@@ -256,10 +258,16 @@ describe("genIde", () => {
     const window = whichKeyMenu(miniCatalog(files)).find(
       ({ key }) => key === "w",
     );
+    // A group description sits in the guard of each map below the group, so it can repeat.
+    const groupLines = new Set(
+      rcLines(miniCatalog())
+        .map((line) => line.trim())
+        .filter((line) =>
+          line.startsWith("let g:WhichKeyDesc_vimcompanion_group_"),
+        ),
+    );
     expect({
-      intellij: rcLines(miniCatalog()).filter((line) =>
-        line.startsWith("let g:WhichKeyDesc_vimcompanion_group_"),
-      ),
+      intellij: [...groupLines],
       vscode: window?.bindings?.map(({ key }) => key),
     }).toEqual({
       intellij: [
@@ -269,6 +277,52 @@ describe("genIde", () => {
       ],
       vscode: ["h", "o"],
     });
+  });
+
+  test("sets a group description only in the success branch of each guarded map below the group, outermost group first", () => {
+    // A map of the user's on a group prefix, such as <leader>w, makes mapcheck skip every key
+    // below it. The group description then stays unset, so the user's description of that key
+    // keeps its label. In a copy, IntelliJ supports window.move-left below the group SPC w m.
+    const files = miniCatalogFiles();
+    const entry = entryOf(files, "window.move-left");
+    entry.intellij = { action: "MoveEditorToOppositeTabGroup" };
+    delete entry.support;
+    const lines = rcLines(miniCatalog(files));
+    const rc = lines.join("\n");
+    expect(rc).toContain(
+      [
+        '" search.project',
+        "if empty(mapcheck('<leader>fs', 'n'))",
+        "  nmap <leader>fs <Action>(FindInPath)",
+        "  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'",
+        "  let g:WhichKeyDesc_vimcompanion_search_project_l6673 = '<leader>fs Moved to SPC /'",
+        "else",
+        "  call add(g:vimcompanion_skipped, 'n <leader>fs search.project')",
+        "endif",
+        "if empty(mapcheck('<leader>fs', 'x'))",
+        "  xmap <leader>fs <Action>(FindInPath)",
+        "  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'",
+        "else",
+        "  call add(g:vimcompanion_skipped, 'x <leader>fs search.project')",
+        "endif",
+      ].join("\n"),
+    );
+    expect(rc).toContain(
+      [
+        '" window.move-left',
+        "if empty(mapcheck('<leader>wmh', 'n'))",
+        "  nmap <leader>wmh <Action>(MoveEditorToOppositeTabGroup)",
+        "  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'",
+        "  let g:WhichKeyDesc_vimcompanion_group_l776d = '<leader>wm Move'",
+        "  let g:WhichKeyDesc_vimcompanion_window_move_left_l776d68 = '<leader>wmh Move split left'",
+        "else",
+        "  call add(g:vimcompanion_skipped, 'n <leader>wmh window.move-left')",
+        "endif",
+      ].join("\n"),
+    );
+    expect(
+      lines.filter((line) => line.startsWith("let g:WhichKeyDesc_")),
+    ).toEqual([]);
   });
 });
 

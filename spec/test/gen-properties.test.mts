@@ -339,6 +339,52 @@ function rcDescriptions(rc: string): [string, string][] {
   });
 }
 
+/** The text of a Vim single-quoted string, where '' stands for '. */
+const unquote = (text: string) => text.replaceAll("''", "'");
+
+/** A mapcheck guard of an rc: the key it checks and the lines of its two branches. */
+type Guard = { lhs: string; then: string[]; otherwise: string[] };
+
+/** The mapcheck guards of an rc in order. */
+function guards(rc: string): Guard[] {
+  const found: Guard[] = [];
+  let guard: Guard | undefined;
+  let branch: string[] = [];
+  for (const line of rc.split("\n")) {
+    const open = /^if empty\(mapcheck\('(.*)', '[nx]'\)\)$/.exec(line);
+    if (open !== null) {
+      guard = { lhs: unquote(open[1]!), then: [], otherwise: [] };
+      branch = guard.then;
+    } else if (guard !== undefined && line === "else") {
+      branch = guard.otherwise;
+    } else if (guard !== undefined && line === "endif") {
+      found.push(guard);
+      guard = undefined;
+    } else if (guard !== undefined) {
+      branch.push(line);
+    }
+  }
+  return found;
+}
+
+/**
+ * The value of each which-key description line among the lines, such as "<leader>w Window": of
+ * groups only, or of groups and keys alike.
+ */
+function descriptionValues(
+  lines: readonly string[],
+  of: "groups" | "all",
+): string[] {
+  const name = of === "groups" ? "group_\\w+" : "\\w+";
+  const pattern = new RegExp(
+    `^ {2}let g:WhichKeyDesc_vimcompanion_${name} = '(.*)'$`,
+  );
+  return lines.flatMap((line) => {
+    const match = pattern.exec(line);
+    return match === null ? [] : [unquote(match[1]!)];
+  });
+}
+
 describe("genIde on generated catalogs", () => {
   test("the pool and the catalogs made from it pass the catalog checks", () => {
     const schemas = loadSchemas();
@@ -382,6 +428,48 @@ describe("genIde on generated catalogs", () => {
         const first = lines.findIndex((line) => line.includes("<leader>"));
         expect(leader).toBeGreaterThanOrEqual(0);
         if (first >= 0) expect(leader).toBeLessThan(first);
+      }),
+    );
+  });
+
+  test("the rc sets each which-key description where mapcheck found its key free, and each group above a key there, outermost first", () => {
+    fc.assert(
+      fc.property(generated, ({ catalog, version }) => {
+        const { rc } = texts(catalog, version);
+        const found = guards(rc);
+        // A description outside the success branch of a guard would also label a key the user maps.
+        expect(
+          found.flatMap(({ then }) =>
+            then.filter((line) => line.includes("WhichKeyDesc_")),
+          ),
+        ).toEqual(
+          rc.split("\n").filter((line) => line.includes("WhichKeyDesc_")),
+        );
+        for (const { lhs, then } of found) {
+          // A leader key is <leader> and then <Space> or one character per key.
+          const keys = lhs.startsWith("<leader>")
+            ? [...lhs.slice("<leader>".length).matchAll(/<Space>|./g)].map(
+                ([key]) => key,
+              )
+            : [];
+          const groups = keys.slice(1).map((_, i) => {
+            const prefix = keys.slice(0, i + 1);
+            const label =
+              GROUP_LABELS[
+                [
+                  "SPC",
+                  ...prefix.map((key) => (key === "<Space>" ? "SPC" : key)),
+                ].join(" ")
+              ]!;
+            return `<leader>${prefix.join("")} ${label}`;
+          });
+          expect(descriptionValues(then, "groups")).toEqual(groups);
+          for (const value of descriptionValues(then, "all")) {
+            expect(lhs.startsWith(value.slice(0, value.indexOf(" ")))).toBe(
+              true,
+            );
+          }
+        }
       }),
     );
   });
