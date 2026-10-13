@@ -17,3 +17,7 @@ export function parseLeader(text: string): ParsedKey {
   }
   return { ok: true, tokens: text.split(" ") };
 }
+
+export function parseVim(text: string): ParsedKey {
+  return { ok: false, message: `not implemented: ${text}` };
+}

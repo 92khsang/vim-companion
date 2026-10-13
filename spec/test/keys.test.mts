@@ -1,6 +1,6 @@
 import fc from "fast-check";
 import { describe, expect, test } from "vitest";
-import { parseLeader } from "../tools/core/keys.mts";
+import { parseLeader, parseVim } from "../tools/core/keys.mts";
 
 // The key grammar, written out independently of the implementation.
 const LEADER_CHARS = [
@@ -13,6 +13,33 @@ const leaderToken = fc.oneof(
 const leaderKey = fc
   .array(leaderToken, { minLength: 1, maxLength: 5 })
   .map((rest) => ["SPC", ...rest]);
+const printable = (except: string) =>
+  fc
+    .integer({ min: 0x21, max: 0x7e })
+    .map((code) => String.fromCharCode(code))
+    .filter((char) => !except.includes(char));
+// A Vim key is one or more tokens: a printable ASCII character other than space, "<" and "|", or a
+// <...> group with no space, "<", ">" or "|" inside.
+const vimGroup = fc.oneof(
+  fc.constantFrom(
+    "<C-w>",
+    "<Space>",
+    "<CR>",
+    "<Esc>",
+    "<lt>",
+    "<Bar>",
+    "<C-]>",
+    "<C-\\>",
+    "<F12>",
+  ),
+  fc
+    .array(printable("<>|"), { minLength: 1, maxLength: 6 })
+    .map((chars) => `<${chars.join("")}>`),
+);
+const vimKey = fc.array(fc.oneof(printable("<|"), vimGroup), {
+  minLength: 1,
+  maxLength: 5,
+});
 
 describe("parseLeader", () => {
   test("splits a leader key into its tokens", () => {
@@ -72,6 +99,24 @@ describe("parseLeader", () => {
         expect(parseLeader(`${text.slice(0, at)} ${text.slice(at)}`).ok).toBe(
           false,
         );
+      }),
+    );
+  });
+});
+
+describe("parseVim", () => {
+  test("splits a Vim key into its tokens", () => {
+    expect(parseVim("gra")).toEqual({ ok: true, tokens: ["g", "r", "a"] });
+    expect(parseVim("]d")).toEqual({ ok: true, tokens: ["]", "d"] });
+    expect(parseVim("K")).toEqual({ ok: true, tokens: ["K"] });
+    expect(parseVim("<C-w>h")).toEqual({ ok: true, tokens: ["<C-w>", "h"] });
+    expect(parseVim("<lt><lt>>")).toEqual({
+      ok: true,
+      tokens: ["<lt>", "<lt>", ">"],
+    });
+    fc.assert(
+      fc.property(vimKey, (tokens) => {
+        expect(parseVim(tokens.join(""))).toEqual({ ok: true, tokens });
       }),
     );
   });
