@@ -848,4 +848,75 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("DUPLICATE_KEY reports a key that an earlier key of the same kind binds in a shared mode", () => {
+    const deviation = {
+      shadows: "Vim K",
+      origin: "Vim",
+      note: "Runs an IDE action instead.",
+    };
+    runCases([
+      {
+        name: "the same Vim key in modes that do not overlap",
+        change: (files) => {
+          const entry = newEntry("code.hover-visual", "SPC c v", "Show docs");
+          entry.keys = { vim: ["K"] };
+          entry.modes = ["x"];
+          entry.deviation = deviation;
+          fileOf(files, "code").data.commands.push(entry);
+        },
+        expected: [],
+      },
+      {
+        name: "a leader key that another entry binds",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.open", "SPC f f", "Open file"),
+          );
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.open",
+            "DUPLICATE_KEY",
+            'keys.leader[0] "SPC f f" is also bound by file.find',
+          ),
+        ],
+      },
+      {
+        name: "a Vim key that an alias of another entry binds",
+        change: (files) => {
+          const entry = newEntry("diag.error", "SPC c x", "Go to next error");
+          entry.keys = { vim: ["]e"] };
+          entry.deviation = deviation;
+          fileOf(files, "diag").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.error",
+            "DUPLICATE_KEY",
+            'keys.vim[0] "]e" is also bound by diag.next (alias)',
+          ),
+        ],
+      },
+      {
+        name: "two aliases of one entry with the same key",
+        change: (files) => {
+          entryOf(files, "search.project").aliases!.push({
+            keys: { leader: ["SPC f s"] },
+            until: "2.0.0",
+          });
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "DUPLICATE_KEY",
+            'aliases[1].keys.leader[0] "SPC f s" is also bound by search.project (alias)',
+          ),
+        ],
+      },
+    ]);
+  });
 });
