@@ -291,4 +291,51 @@ describe("validateFixtures", () => {
       },
     ]);
   });
+
+  test("DUPLICATE_CASE_ID reports a case id that an earlier case of the same file uses", () => {
+    runCases([
+      {
+        name: "one id in two files",
+        change: (files) => {
+          files.hintView[0]!.data.cases[0]!.id = "root";
+        },
+        expected: [],
+      },
+      {
+        name: "one id twice in a catalog fixture",
+        change: (files) => {
+          files.catalog[0]!.data.cases[2]!.id = "root";
+        },
+        expected: [
+          diagnostic(
+            CATALOG,
+            "root",
+            "DUPLICATE_CASE_ID",
+            "cases[2] repeats the id of cases[0]",
+          ),
+        ],
+      },
+      {
+        name: "one id three times in a hint view fixture",
+        change: (files) => {
+          const { cases } = files.hintView[0]!.data;
+          cases.push({ ...cases[0]!, ide: "vscode" }, { ...cases[0]! });
+        },
+        expected: [
+          diagnostic(
+            HINT_VIEW,
+            "window-intellij",
+            "DUPLICATE_CASE_ID",
+            "cases[1] repeats the id of cases[0]",
+          ),
+          diagnostic(
+            HINT_VIEW,
+            "window-intellij",
+            "DUPLICATE_CASE_ID",
+            "cases[2] repeats the id of cases[0]",
+          ),
+        ],
+      },
+    ]);
+  });
 });
