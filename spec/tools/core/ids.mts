@@ -205,6 +205,20 @@ function contributedCommands(manifest: unknown): string[] {
     });
 }
 
+/** An installed VS Code extension: "publisher.name" as its manifest writes it. */
+export type Extension = { id: string; version: string; dir: string };
+
+/**
+ * The highest installed version of each wanted extension, matching IDs case-insensitively as VS
+ * Code does, in code-unit order of their IDs; `missing` lists the wanted IDs that none matches.
+ */
+export function pickExtensions(
+  installed: readonly { dir: string; manifest: unknown }[],
+  wanted: readonly string[],
+): { picked: Extension[]; missing: string[] } {
+  return { picked: [], missing: [] };
+}
+
 /** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
 export function pluginVersion(pluginXml: string): string | undefined {
   const text = withoutComments(pluginXml);

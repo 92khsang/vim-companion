@@ -10,6 +10,7 @@ import {
   idSummary,
   mergeVscodeCommands,
   parseDescriptorIds,
+  pickExtensions,
   pluginVersion,
   runtimeIntellijIds,
   suggest,
@@ -410,5 +411,57 @@ describe("pluginVersion", () => {
       pluginVersion(xml),
       pluginVersion("<idea-plugin><id>NoVersion</id></idea-plugin>"),
     ]).toEqual(["2.47.3", undefined]);
+  });
+});
+
+describe("pickExtensions", () => {
+  test("picks the highest installed version of each wanted extension, matching IDs case-insensitively", () => {
+    const vim = (version: string) => ({
+      dir: `/x/vscodevim.vim-${version}`,
+      manifest: { publisher: "vscodevim", name: "vim", version },
+    });
+    const installed = [
+      vim("1.9.0"),
+      vim("1.32.10"),
+      vim("1.32.4"),
+      {
+        dir: "/x/vspacecode.whichkey-0.11.4",
+        manifest: {
+          publisher: "VSpaceCode",
+          name: "whichkey",
+          version: "0.11.4",
+        },
+      },
+      {
+        dir: "/x/ms-python.python-2026.8.0",
+        manifest: {
+          publisher: "ms-python",
+          name: "python",
+          version: "2026.8.0",
+        },
+      },
+      { dir: "/x/no-manifest", manifest: {} },
+    ];
+    const wanted = [
+      "vspacecode.whichkey",
+      "vscodevim.vim",
+      "VSpaceCode.whichkey",
+      "redhat.java",
+    ];
+    expect(pickExtensions(installed, wanted)).toEqual({
+      picked: [
+        {
+          id: "VSpaceCode.whichkey",
+          version: "0.11.4",
+          dir: "/x/vspacecode.whichkey-0.11.4",
+        },
+        {
+          id: "vscodevim.vim",
+          version: "1.32.10",
+          dir: "/x/vscodevim.vim-1.32.10",
+        },
+      ],
+      missing: ["redhat.java"],
+    });
   });
 });
