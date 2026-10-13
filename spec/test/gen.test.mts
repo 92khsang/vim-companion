@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 import type { Catalog } from "../tools/core/catalog.mts";
-import { genIde, whichKeyArgs } from "../tools/core/gen.mts";
+import {
+  generatedCommandIds,
+  genIde,
+  whichKeyArgs,
+} from "../tools/core/gen.mts";
 import {
   entryOf,
   fileOf,
@@ -281,6 +285,20 @@ function whichKeyMenu(catalog: Catalog): MenuItem[] {
     genIde(catalog).get("vscode/whichkey-bindings.json")!,
   ) as MenuItem[];
 }
+
+describe("generatedCommandIds", () => {
+  test("lists whichkey.show, and vim.remap once an entry runs Vim keys in VS Code", () => {
+    // window.only runs <C-w>o through vim.remap in the mini catalog.
+    const files = miniCatalogFiles();
+    entryOf(files, "window.only").vscode!.exec = {
+      command: "workbench.action.closeEditorsInOtherGroups",
+    };
+    expect([
+      generatedCommandIds(miniCatalog(files)),
+      generatedCommandIds(miniCatalog()),
+    ]).toEqual([["whichkey.show"], ["whichkey.show", "vim.remap"]]);
+  });
+});
 
 describe("whichKeyArgs", () => {
   test("passes one truthy argument that is not a list as itself and any other arguments as a list", () => {

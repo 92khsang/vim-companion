@@ -56,6 +56,11 @@ const GENERATORS: Record<
   "vscode/whichkey-bindings.json": whichKeyBindings,
 };
 
+/** The commands that the generated files run besides those of the catalog, for check-ids. */
+export function generatedCommandIds(catalog: Catalog): string[] {
+  return [];
+}
+
 /**
  * The `args` of a which-key item or of a VSCodeVim remap command for the positional arguments of
  * a command. Both spread a list into positional arguments and drop a falsy value, so one truthy
