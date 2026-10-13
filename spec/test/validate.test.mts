@@ -724,11 +724,11 @@ describe("validateCatalog", () => {
     ]);
   });
 
-  test("FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space, bare function keys, function keys past F24 or the leader, or that redefine a protected key", () => {
+  test("FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space, bare function keys, function key chords or the leader, or that redefine a protected key", () => {
     const PROTECTED =
       "one of the keys the catalog never redefines: ]b [b ]w [w ]p [p gh gi";
     const LEADER = "leader keys go in keys.leader, starting with SPC";
-    const PAST_F24 = "IdeaVim has no name for a function key past F24";
+    const NO_FUNCTION_KEY = "VSCodeVim receives no function key";
     runCases([
       {
         name: "a Vim key with <Space> after its first key",
@@ -790,13 +790,12 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "modified function keys up to F24, a capital ]B and g]",
+        name: "chords of the letter F in any case, a capital ]B and g]",
         change: (files) => {
           entryOf(files, "diag.next").keys.vim = [
             "]d",
-            "<S-F8>",
-            "<C-F24>",
-            "<S-f24>",
+            "<S-F>",
+            "<C-f>",
             "]B",
             "g]",
           ];
@@ -848,6 +847,20 @@ describe("validateCatalog", () => {
             "code.hover",
             "FORBIDDEN_KEY",
             'keys.vim[2] "<A->>" has the Alt chord <A->',
+          ),
+        ],
+      },
+      {
+        name: "an Alt chord of a function key, reported once, as an Alt chord",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "<C-A-F25>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<C-A-F25>" has the Alt chord <C-A-F25>',
           ),
         ],
       },
@@ -937,7 +950,38 @@ describe("validateCatalog", () => {
         ],
       },
       {
-        name: "chords of a function key after F24, in any case, in an alias too, which IdeaVim has no name for",
+        name: "function key chords up to F24, in any case",
+        change: (files) => {
+          entryOf(files, "diag.next").keys.vim = [
+            "]d",
+            "<S-F8>",
+            "<C-F24>",
+            "<S-f24>",
+          ];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "<S-F8>" has the function key chord <S-F8>; ${NO_FUNCTION_KEY}`,
+          ),
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `keys.vim[2] "<C-F24>" has the function key chord <C-F24>; ${NO_FUNCTION_KEY}`,
+          ),
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `keys.vim[3] "<S-f24>" has the function key chord <S-f24>; ${NO_FUNCTION_KEY}`,
+          ),
+        ],
+      },
+      {
+        name: "function key chords of any number, in any case, in an alias too",
         change: (files) => {
           entryOf(files, "code.hover").keys.vim = [
             "K",
@@ -952,25 +996,52 @@ describe("validateCatalog", () => {
             CODE,
             "code.hover",
             "FORBIDDEN_KEY",
-            `keys.vim[1] "<C-F25>" has the function key chord <C-F25>; ${PAST_F24}`,
+            `keys.vim[1] "<C-F25>" has the function key chord <C-F25>; ${NO_FUNCTION_KEY}`,
           ),
           diagnostic(
             CODE,
             "code.hover",
             "FORBIDDEN_KEY",
-            `keys.vim[2] "<s-f30>" has the function key chord <s-f30>; ${PAST_F24}`,
+            `keys.vim[2] "<s-f30>" has the function key chord <s-f30>; ${NO_FUNCTION_KEY}`,
           ),
           diagnostic(
             CODE,
             "code.hover",
             "FORBIDDEN_KEY",
-            `keys.vim[3] "g<C-S-F100>" has the function key chord <C-S-F100>; ${PAST_F24}`,
+            `keys.vim[3] "g<C-S-F100>" has the function key chord <C-S-F100>; ${NO_FUNCTION_KEY}`,
           ),
           diagnostic(
             DIAG,
             "diag.next",
             "FORBIDDEN_KEY",
-            `aliases[0].keys.vim[0] "<c-f99>" has the function key chord <c-f99>; ${PAST_F24}`,
+            `aliases[0].keys.vim[0] "<c-f99>" has the function key chord <c-f99>; ${NO_FUNCTION_KEY}`,
+          ),
+        ],
+      },
+      {
+        name: "function key chords of F0 and F024, which IdeaVim cannot name either, and of F1 in an alias",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "<C-F0>", "<C-F024>"];
+          entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<C-F1>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "<C-F0>" has the function key chord <C-F0>; ${NO_FUNCTION_KEY}`,
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            `keys.vim[2] "<C-F024>" has the function key chord <C-F024>; ${NO_FUNCTION_KEY}`,
+          ),
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            `aliases[0].keys.vim[0] "<C-F1>" has the function key chord <C-F1>; ${NO_FUNCTION_KEY}`,
           ),
         ],
       },
