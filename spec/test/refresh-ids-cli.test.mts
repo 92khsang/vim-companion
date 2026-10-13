@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import {
+  chmodSync,
   cpSync,
   existsSync,
   mkdirSync,
@@ -25,10 +26,15 @@ afterAll(() => {
 });
 
 function refresh(...args: string[]) {
+  return refreshWith({}, ...args);
+}
+
+/** A run with these environment variables on top of a home directory of its own. */
+function refreshWith(env: Record<string, string>, ...args: string[]) {
   const { status, stdout, stderr } = spawnSync(
     process.execPath,
     [cli, ...args],
-    { encoding: "utf8", env: { ...process.env, HOME: home } },
+    { encoding: "utf8", env: { ...process.env, HOME: home, ...env } },
   );
   return { status, stdout, stderr };
 }
@@ -124,6 +130,110 @@ function fakeIntellij(dir: string): { ide: string; plugins: string } {
       '<actions><action id="NotAllowListed" class="o.N"/></actions></idea-plugin>',
   });
   return { ide, plugins };
+}
+
+/**
+ * A VS Code install, its built-in extensions and a home directory with installed extensions, under
+ * <dir>. `code` stands in for VS Code with the dump extension: it writes to `log` how it was
+ * started, then the dump of the extensions that its extensions directory holds. `bin` holds an
+ * xvfb-run that runs its command without a display server.
+ */
+function fakeVscode(dir: string) {
+  const app = join(dir, "code/resources/app");
+  const code = join(dir, "code/code.mjs");
+  const bin = join(dir, "bin");
+  const home = join(dir, "home");
+  const json = (path: string, value: unknown) =>
+    writeText(path, JSON.stringify(value));
+  json(join(app, "package.json"), { name: "code-oss-dev", version: "1.200.0" });
+  json(join(app, "extensions/markdown-language-features/package.json"), {
+    contributes: {
+      commands: [
+        { command: "markdown.showPreview" },
+        { command: "_markdown.copyImage" },
+      ],
+    },
+  });
+  json(join(app, "extensions/git/package.json"), {
+    contributes: {
+      keybindings: [{ command: "git.commit", key: "ctrl+enter" }],
+    },
+  });
+  const installed = join(home, ".vscode/extensions");
+  json(join(installed, "vscodevim.vim-1.32.4/package.json"), {
+    publisher: "vscodevim",
+    name: "vim",
+    version: "1.32.4",
+    contributes: {
+      commands: [{ command: "toggleVim" }],
+      keybindings: [{ command: "extension.vim_escape", key: "Escape" }],
+    },
+  });
+  json(join(installed, "vspacecode.whichkey-0.11.4/package.json"), {
+    publisher: "VSpaceCode",
+    name: "whichkey",
+    version: "0.11.4",
+    contributes: { commands: [{ command: "whichkey.show" }] },
+  });
+  json(join(installed, "ms-python.python-2026.8.0/package.json"), {
+    publisher: "ms-python",
+    name: "python",
+    version: "2026.8.0",
+    contributes: { commands: [{ command: "python.execInTerminal" }] },
+  });
+  json(join(installed, "extensions.json"), []);
+  writeText(
+    code,
+    [
+      "#!/usr/bin/env node",
+      'import { readdirSync, readFileSync, writeFileSync } from "node:fs";',
+      'import { join } from "node:path";',
+      "const args = process.argv.slice(2);",
+      "const option = (name) => args[args.indexOf(name) + 1];",
+      'const extensions = option("--extensions-dir");',
+      "const copied = readdirSync(extensions).sort();",
+      'const manifests = copied.map((name) => JSON.parse(readFileSync(join(extensions, name, "package.json"), "utf8")));',
+      'const activated = process.env.VIM_COMPANION_IDS_ACTIVATE.split(",").flatMap((id) => {',
+      "  const found = manifests.find((m) => `${m.publisher}.${m.name}`.toLowerCase() === id.toLowerCase());",
+      "  return found ? [`${found.publisher}.${found.name}@${found.version}`] : [];",
+      "});",
+      "const env = process.env;",
+      "writeFileSync(env.FAKE_CODE_LOG, JSON.stringify({",
+      "  args,",
+      "  home: env.HOME,",
+      "  xdg: [env.XDG_CONFIG_HOME, env.XDG_CACHE_HOME, env.XDG_DATA_HOME, env.XDG_STATE_HOME],",
+      "  wayland: env.WAYLAND_DISPLAY ?? null,",
+      "  inherited: Object.keys(env).filter((name) => /^(VSCODE|ELECTRON)_/.test(name)),",
+      "  copied,",
+      '  settings: JSON.parse(readFileSync(join(option("--user-data-dir"), "User/settings.json"), "utf8")),',
+      "}));",
+      "writeFileSync(env.VIM_COMPANION_IDS_OUT, JSON.stringify({",
+      '  vscode: "1.200.0",',
+      "  activated,",
+      '  commands: ["vim.remap", "workbench.action.quickOpen"],',
+      "}));",
+      "",
+    ].join("\n"),
+  );
+  chmodSync(code, 0o755);
+  writeText(
+    join(bin, "xvfb-run"),
+    '#!/bin/sh\n[ "$1" = "-a" ] && shift\nexec "$@"\n',
+  );
+  chmodSync(join(bin, "xvfb-run"), 0o755);
+  return {
+    code,
+    home,
+    log: join(dir, "run.json"),
+    env: {
+      HOME: home,
+      PATH: [bin, dirname(process.execPath), process.env["PATH"]].join(":"),
+      FAKE_CODE_LOG: join(dir, "run.json"),
+      WAYLAND_DISPLAY: "wayland-1",
+      VSCODE_IPC_HOOK_CLI: join(dir, "vscode.sock"),
+      ELECTRON_RUN_AS_NODE: "1",
+    },
+  };
 }
 
 describe("ids:refresh", () => {
@@ -246,5 +356,93 @@ describe("ids:refresh", () => {
         )}\n`,
       },
     ]);
+  });
+
+  test("vscode writes the dumped commands and the contributed ones, with VS Code in temporary directories", () => {
+    const dir = join(base, "vscode");
+    const root = specIn(dir);
+    const fake = fakeVscode(dir);
+    const result = refreshWith(
+      fake.env,
+      "vscode",
+      "--root",
+      root,
+      "--code",
+      fake.code,
+      "--extension",
+      "vscodevim.vim",
+      "--extension",
+      "vspacecode.whichkey",
+    );
+    const text = textOf(fake.log);
+    const log = text === null ? null : JSON.parse(text);
+    // VS Code ran in one temporary directory, which is gone after the run.
+    const temp = dirname(log?.args?.[1] ?? "");
+    expect({
+      result,
+      written: textOf(join(root, "ids/vscode.json")),
+      log,
+      tempLeft: existsSync(temp),
+    }).toEqual({
+      result: {
+        status: 0,
+        stdout:
+          "ids:refresh: wrote spec/ids/vscode.json: 7 commands from VS Code 1.200.0, VSpaceCode.whichkey 0.11.4, vscodevim.vim 1.32.4\n",
+        stderr: "",
+      },
+      written: `${JSON.stringify(
+        {
+          vscode: "1.200.0",
+          extensions: {
+            "VSpaceCode.whichkey": "0.11.4",
+            "vscodevim.vim": "1.32.4",
+          },
+          commands: [
+            "extension.vim_escape",
+            "git.commit",
+            "markdown.showPreview",
+            "toggleVim",
+            "vim.remap",
+            "whichkey.show",
+            "workbench.action.quickOpen",
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+      log: {
+        args: [
+          "--user-data-dir",
+          join(temp, "user-data"),
+          "--extensions-dir",
+          join(temp, "extensions"),
+          "--extensionDevelopmentPath",
+          join(specDir, "tools/ids/vscode-dump"),
+          "--disable-gpu",
+          "--disable-workspace-trust",
+          "--skip-welcome",
+          "--skip-release-notes",
+          "--password-store=basic",
+          "--new-window",
+          join(temp, "workspace"),
+        ],
+        home: join(temp, "home"),
+        xdg: [".config", ".cache", ".local/share", ".local/state"].map((name) =>
+          join(temp, "home", name),
+        ),
+        wayland: null,
+        inherited: [],
+        copied: ["vscodevim.vim-1.32.4", "vspacecode.whichkey-0.11.4"],
+        settings: {
+          "extensions.autoCheckUpdates": false,
+          "extensions.autoUpdate": false,
+          "telemetry.telemetryLevel": "off",
+          "update.mode": "none",
+          "workbench.enableExperiments": false,
+          "workbench.startupEditor": "none",
+        },
+      },
+      tempLeft: false,
+    });
   });
 });
