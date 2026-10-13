@@ -185,7 +185,24 @@ export function mergeVscodeCommands(
   dumped: readonly string[],
   manifests: readonly unknown[],
 ): string[] {
-  return [];
+  const ids = [...dumped, ...manifests.flatMap(contributedCommands)]
+    // A key binding "-id" removes a binding of the command "id".
+    .map((id) => id.replace(/^-/, ""))
+    // getCommands(true) leaves out the internal "_" commands, so the manifests' ones go too.
+    .filter((id) => !id.startsWith("_"));
+  return [...new Set(ids)].sort();
+}
+
+/** The commands of `contributes.commands` and `contributes.keybindings`: an object or an array. */
+function contributedCommands(manifest: unknown): string[] {
+  const contributes = (manifest as { contributes?: Record<string, unknown> })
+    .contributes;
+  return [contributes?.["commands"], contributes?.["keybindings"]]
+    .flat()
+    .flatMap((item) => {
+      const command = (item as { command?: unknown } | undefined)?.command;
+      return typeof command === "string" ? [command] : [];
+    });
 }
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
