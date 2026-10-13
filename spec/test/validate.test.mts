@@ -868,7 +868,7 @@ describe("validateCatalog", () => {
     ]);
   });
 
-  test("DUPLICATE_KEY reports a key that an earlier key of the same kind binds in a shared mode", () => {
+  test("DUPLICATE_KEY reports a key that an earlier key of the same kind binds, whatever the modes", () => {
     const deviation = {
       shadows: "Vim K",
       origin: "Vim",
@@ -884,7 +884,14 @@ describe("validateCatalog", () => {
           entry.deviation = deviation;
           fileOf(files, "code").data.commands.push(entry);
         },
-        expected: [],
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover-visual",
+            "DUPLICATE_KEY",
+            'keys.vim[0] "K" is also bound by code.hover',
+          ),
+        ],
       },
       {
         name: "a leader key that another entry binds",
@@ -903,10 +910,44 @@ describe("validateCatalog", () => {
         ],
       },
       {
+        name: "a leader key that another entry binds in Visual mode only",
+        change: (files) => {
+          const entry = newEntry("file.pick", "SPC f f", "Pick file");
+          entry.modes = ["x"];
+          fileOf(files, "file").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.pick",
+            "DUPLICATE_KEY",
+            'keys.leader[0] "SPC f f" is also bound by file.find',
+          ),
+        ],
+      },
+      {
         name: "a Vim key that an alias of another entry binds",
         change: (files) => {
           const entry = newEntry("diag.error", "SPC c x", "Go to next error");
           entry.keys = { vim: ["]e"] };
+          entry.deviation = deviation;
+          fileOf(files, "diag").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.error",
+            "DUPLICATE_KEY",
+            'keys.vim[0] "]e" is also bound by diag.next (alias)',
+          ),
+        ],
+      },
+      {
+        name: "a Visual-mode Vim key that an alias of a Normal-mode entry binds",
+        change: (files) => {
+          const entry = newEntry("diag.error", "SPC c x", "Go to next error");
+          entry.keys = { vim: ["]e"] };
+          entry.modes = ["x"];
           entry.deviation = deviation;
           fileOf(files, "diag").data.commands.push(entry);
         },

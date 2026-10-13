@@ -177,7 +177,7 @@ describe("gen", () => {
         status: 2,
         stdout: "",
         stderr:
-          "gen: SPC f f: file.find and file.pick bind it in different modes, which which-key cannot tell apart\n",
+          'gen: spec/catalog/commands/file.json: file.pick: keys.leader[0] "SPC f f" is also bound by file.find\n',
       },
     ]);
     expect([invalid, badVersion, clash].map(generated)).toEqual([{}, {}, {}]);
