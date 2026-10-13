@@ -139,6 +139,19 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
 /** A value quoted for a message. */
 const q = (value: string): string => JSON.stringify(value);
 
+/** The IDs that IntelliJ plugin descriptors declare, from the text of one or more descriptors. */
+export type DescriptorIds = {
+  /** The IDs of <action> and <group> elements. */
+  ids: string[];
+  /** The IDs of <toolWindow> elements, which name runtime actions. */
+  toolWindows: string[];
+};
+
+/** The action, group and tool window IDs of plugin descriptor XML, sorted and without repeats. */
+export function parseDescriptorIds(xml: string): DescriptorIds {
+  return { ids: [], toolWindows: [] };
+}
+
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
   return [...known]

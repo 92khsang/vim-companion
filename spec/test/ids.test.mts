@@ -8,6 +8,7 @@ import type {
 import {
   checkIds,
   idSummary,
+  parseDescriptorIds,
   suggest,
   type CommandFile,
   type IdSnapshots,
@@ -282,5 +283,33 @@ describe("idSummary", () => {
     expect(idSummary(files, ["whichkey.show", "vim.remap"], found)).toBe(
       "check-ids: resolved 4/6 VS Code commands and 3/4 IntelliJ actions; unsupported entries: VS Code 1, IntelliJ 1",
     );
+  });
+});
+
+describe("parseDescriptorIds", () => {
+  test("collects the IDs of actions, groups and tool windows outside XML comments", () => {
+    const xml = [
+      "<idea-plugin>",
+      "  <actions>",
+      '    <action id="GotoFile" class="com.intellij.ide.actions.GotoFileAction"/>',
+      '    <group id="GoToMenu" popup="true">',
+      '      <action class="com.intellij.ide.actions.SaveAllAction"',
+      '              id="SaveAll" text="Save All"/>',
+      '      <reference ref="GotoClass"/>',
+      '      <add-to-group group-id="EditMenu"/>',
+      "    </group>",
+      '    <!-- <action id="Console.TableResult.Find"/> -->',
+      '    <action id="GotoFile"/>',
+      "  </actions>",
+      '  <extensions defaultExtensionNs="com.intellij">',
+      '    <toolWindow id="Backup and Sync History" factoryClass="a.B"/>',
+      '    <toolWindow factoryClass="a.C" id="Project"/>',
+      "  </extensions>",
+      "</idea-plugin>",
+    ].join("\n");
+    expect(parseDescriptorIds(xml)).toEqual({
+      ids: ["GoToMenu", "GotoFile", "SaveAll"],
+      toolWindows: ["Backup and Sync History", "Project"],
+    });
   });
 });
