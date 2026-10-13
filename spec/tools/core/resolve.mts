@@ -36,11 +36,18 @@ export function resolve(
     };
   }
   const group = catalog.groups.find((group) => group.keys === key);
-  const below = leaves.some((leaf) => leaf.key.startsWith(`${key} `));
-  if (group !== undefined && below) {
+  if (group !== undefined && leafBelow(leaves, key)) {
     return { kind: "group", label: group.label };
   }
   return { kind: "unbound" };
+}
+
+/** Whether a bound leaf is below the leader prefix, such as "SPC w"; only then a group shows. */
+export function leafBelow(
+  leaves: readonly LeaderLeaf[],
+  prefix: string,
+): boolean {
+  return leaves.some(({ key }) => key.startsWith(`${prefix} `));
 }
 
 /** A bound leader key: a key of an entry or of one of its active aliases. */

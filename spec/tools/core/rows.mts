@@ -2,7 +2,7 @@
 // its label and badge.
 import type { Entry, Ide, KeyCatalog } from "./catalog.mts";
 import { compareKeys } from "./keys.mts";
-import { leaderLeaves, type ResolveOptions } from "./resolve.mts";
+import { leafBelow, leaderLeaves, type ResolveOptions } from "./resolve.mts";
 
 /** One mark per row, the first that applies in this order; null when none does. */
 export type Badge =
@@ -38,10 +38,7 @@ export function rows(
       }))
       .sort(byKey);
   const groups: Row[] = catalog.groups
-    .filter(
-      ({ keys }) =>
-        child(keys) && leaves.some(({ key }) => key.startsWith(`${keys} `)),
-    )
+    .filter(({ keys }) => child(keys) && leafBelow(leaves, keys))
     .map(({ keys, label }) => ({
       key: keys.slice(parent.length),
       label,
