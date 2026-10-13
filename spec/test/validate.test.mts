@@ -800,4 +800,52 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("RESERVED_KEY reports a leader key with ?", () => {
+    const RESERVED =
+      "contains the reserved key ?: SPC ? is the catalog search, and ? below the root shows the hints";
+    runCases([
+      {
+        name: "a leader key with = and one with /",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.format", "SPC f =", "Format file"),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "? at the root",
+        change: (files) => {
+          fileOf(files, "search").data.commands.push(
+            newEntry("search.catalog", "SPC ?", "Search the catalog"),
+          );
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.catalog",
+            "RESERVED_KEY",
+            `keys.leader[0] "SPC ?" ${RESERVED}`,
+          ),
+        ],
+      },
+      {
+        name: "? below the root, in an alias",
+        change: (files) => {
+          entryOf(files, "search.project").aliases![0]!.keys.leader = [
+            "SPC f ?",
+          ];
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "RESERVED_KEY",
+            `aliases[0].keys.leader[0] "SPC f ?" ${RESERVED}`,
+          ),
+        ],
+      },
+    ]);
+  });
 });
