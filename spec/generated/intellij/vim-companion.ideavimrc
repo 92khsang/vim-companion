@@ -9,12 +9,6 @@ endif
 
 let g:vimcompanion_skipped = []
 
-let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
-let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
-let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
-let g:WhichKeyDesc_vimcompanion_group_l67 = '<leader>g Git'
-let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
-
 " file.find
 if empty(mapcheck('<leader><Space>', 'n'))
   nmap <leader><Space> <Action>(GotoFile)
@@ -39,6 +33,7 @@ endif
 " tab.switch
 if empty(mapcheck('<leader>bb', 'n'))
   nmap <leader>bb <Action>(Switcher)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_switch_l6262 = '<leader>bb Switch tab'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bb tab.switch')
@@ -47,6 +42,7 @@ endif
 " tab.close
 if empty(mapcheck('<leader>bd', 'n'))
   nmap <leader>bd <Action>(CloseContent)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_close_l6264 = '<leader>bd Close tab'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bd tab.close')
@@ -55,6 +51,7 @@ endif
 " tab.next
 if empty(mapcheck('<leader>bn', 'n'))
   nmap <leader>bn <Action>(NextTab)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_next_l626e = '<leader>bn Go to next tab'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bn tab.next')
@@ -63,6 +60,7 @@ endif
 " tab.close-others
 if empty(mapcheck('<leader>bo', 'n'))
   nmap <leader>bo <Action>(CloseAllEditorsButActive)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_close_others_l626f = '<leader>bo Close other tabs'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bo tab.close-others')
@@ -71,6 +69,7 @@ endif
 " tab.prev
 if empty(mapcheck('<leader>bp', 'n'))
   nmap <leader>bp <Action>(PreviousTab)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_prev_l6270 = '<leader>bp Go to previous tab'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bp tab.prev')
@@ -79,6 +78,7 @@ endif
 " tab.reopen
 if empty(mapcheck('<leader>bu', 'n'))
   nmap <leader>bu <Action>(ReopenClosedTab)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_reopen_l6275 = '<leader>bu Reopen closed tab'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bu tab.reopen')
@@ -87,6 +87,7 @@ endif
 " tab.close
 if empty(mapcheck('<leader>bc', 'n'))
   nmap <leader>bc <Action>(CloseContent)
+  let g:WhichKeyDesc_vimcompanion_group_l62 = '<leader>b Buffer'
   let g:WhichKeyDesc_vimcompanion_tab_close_l6263 = '<leader>bc Moved to SPC b d'
 else
   call add(g:vimcompanion_skipped, 'n <leader>bc tab.close')
@@ -95,6 +96,7 @@ endif
 " code.hover
 if empty(mapcheck('<leader>cd', 'n'))
   nnoremap <leader>cd K
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
   let g:WhichKeyDesc_vimcompanion_code_hover_l6364 = '<leader>cd Show documentation'
 else
   call add(g:vimcompanion_skipped, 'n <leader>cd code.hover')
@@ -103,12 +105,14 @@ endif
 " code.format
 if empty(mapcheck('<leader>cf', 'n'))
   nmap <leader>cf <Action>(ReformatCode)
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
   let g:WhichKeyDesc_vimcompanion_code_format_l6366 = '<leader>cf Format file or selection'
 else
   call add(g:vimcompanion_skipped, 'n <leader>cf code.format')
 endif
 if empty(mapcheck('<leader>cf', 'x'))
   xmap <leader>cf <Action>(ReformatCode)
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
 else
   call add(g:vimcompanion_skipped, 'x <leader>cf code.format')
 endif
@@ -116,12 +120,14 @@ endif
 " code.action
 if empty(mapcheck('<leader>cq', 'n'))
   nmap <leader>cq <Action>(ShowIntentionActions)
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
   let g:WhichKeyDesc_vimcompanion_code_action_l6371 = '<leader>cq Show code actions'
 else
   call add(g:vimcompanion_skipped, 'n <leader>cq code.action')
 endif
 if empty(mapcheck('<leader>cq', 'x'))
   xmap <leader>cq <Action>(ShowIntentionActions)
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
 else
   call add(g:vimcompanion_skipped, 'x <leader>cq code.action')
 endif
@@ -129,6 +135,7 @@ endif
 " code.rename
 if empty(mapcheck('<leader>cr', 'n'))
   nmap <leader>cr <Action>(RenameElement)
+  let g:WhichKeyDesc_vimcompanion_group_l63 = '<leader>c Code'
   let g:WhichKeyDesc_vimcompanion_code_rename_l6372 = '<leader>cr Rename symbol'
 else
   call add(g:vimcompanion_skipped, 'n <leader>cr code.rename')
@@ -137,6 +144,7 @@ endif
 " ide.commands
 if empty(mapcheck('<leader>fa', 'n'))
   nmap <leader>fa <Action>(GotoAction)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_ide_commands_l6661 = '<leader>fa Run IDE command'
 else
   call add(g:vimcompanion_skipped, 'n <leader>fa ide.commands')
@@ -145,6 +153,7 @@ endif
 " file.find
 if empty(mapcheck('<leader>ff', 'n'))
   nmap <leader>ff <Action>(GotoFile)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_file_find_l6666 = '<leader>ff Find file'
 else
   call add(g:vimcompanion_skipped, 'n <leader>ff file.find')
@@ -153,6 +162,7 @@ endif
 " file.reveal
 if empty(mapcheck('<leader>fp', 'n'))
   nmap <leader>fp <Action>(SelectInProjectView)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_file_reveal_l6670 = '<leader>fp Reveal file in tree'
 else
   call add(g:vimcompanion_skipped, 'n <leader>fp file.reveal')
@@ -161,6 +171,7 @@ endif
 " file.recent
 if empty(mapcheck('<leader>fr', 'n'))
   nmap <leader>fr <Action>(RecentFiles)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_file_recent_l6672 = '<leader>fr Open recent file'
 else
   call add(g:vimcompanion_skipped, 'n <leader>fr file.recent')
@@ -169,12 +180,14 @@ endif
 " search.project
 if empty(mapcheck('<leader>fs', 'n'))
   nmap <leader>fs <Action>(FindInPath)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_search_project_l6673 = '<leader>fs Moved to SPC /'
 else
   call add(g:vimcompanion_skipped, 'n <leader>fs search.project')
 endif
 if empty(mapcheck('<leader>fs', 'x'))
   xmap <leader>fs <Action>(FindInPath)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
 else
   call add(g:vimcompanion_skipped, 'x <leader>fs search.project')
 endif
@@ -182,6 +195,7 @@ endif
 " tab.switch
 if empty(mapcheck('<leader>ft', 'n'))
   nmap <leader>ft <Action>(Switcher)
+  let g:WhichKeyDesc_vimcompanion_group_l66 = '<leader>f File'
   let g:WhichKeyDesc_vimcompanion_tab_switch_l6674 = '<leader>ft Moved to SPC b b'
 else
   call add(g:vimcompanion_skipped, 'n <leader>ft tab.switch')
@@ -190,6 +204,7 @@ endif
 " git.status
 if empty(mapcheck('<leader>gg', 'n'))
   nmap <leader>gg <Action>(ActivateCommitToolWindow)
+  let g:WhichKeyDesc_vimcompanion_group_l67 = '<leader>g Git'
   let g:WhichKeyDesc_vimcompanion_git_status_l6767 = '<leader>gg Show Git changes'
 else
   call add(g:vimcompanion_skipped, 'n <leader>gg git.status')
@@ -198,6 +213,7 @@ endif
 " window.close
 if empty(mapcheck('<leader>wc', 'n'))
   nnoremap <leader>wc <C-w>c
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_close_l7763 = '<leader>wc Close split'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wc window.close')
@@ -206,6 +222,7 @@ endif
 " window.focus-left
 if empty(mapcheck('<leader>wh', 'n'))
   nnoremap <leader>wh <C-w>h
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_focus_left_l7768 = '<leader>wh Focus split left'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wh window.focus-left')
@@ -214,6 +231,7 @@ endif
 " window.focus-down
 if empty(mapcheck('<leader>wj', 'n'))
   nnoremap <leader>wj <C-w>j
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_focus_down_l776a = '<leader>wj Focus split below'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wj window.focus-down')
@@ -222,6 +240,7 @@ endif
 " window.focus-up
 if empty(mapcheck('<leader>wk', 'n'))
   nnoremap <leader>wk <C-w>k
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_focus_up_l776b = '<leader>wk Focus split above'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wk window.focus-up')
@@ -230,6 +249,7 @@ endif
 " window.focus-right
 if empty(mapcheck('<leader>wl', 'n'))
   nnoremap <leader>wl <C-w>l
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_focus_right_l776c = '<leader>wl Focus split right'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wl window.focus-right')
@@ -238,6 +258,7 @@ endif
 " window.only
 if empty(mapcheck('<leader>wo', 'n'))
   nnoremap <leader>wo <C-w>o
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_only_l776f = '<leader>wo Close other splits'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wo window.only')
@@ -246,6 +267,7 @@ endif
 " window.split-down
 if empty(mapcheck('<leader>ws', 'n'))
   nnoremap <leader>ws <C-w>s
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_split_down_l7773 = '<leader>ws Split down'
 else
   call add(g:vimcompanion_skipped, 'n <leader>ws window.split-down')
@@ -254,6 +276,7 @@ endif
 " window.split-right
 if empty(mapcheck('<leader>wv', 'n'))
   nnoremap <leader>wv <C-w>v
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_split_right_l7776 = '<leader>wv Split right'
 else
   call add(g:vimcompanion_skipped, 'n <leader>wv window.split-right')
@@ -262,6 +285,7 @@ endif
 " window.focus-next
 if empty(mapcheck('<leader>ww', 'n'))
   nnoremap <leader>ww <C-w>w
+  let g:WhichKeyDesc_vimcompanion_group_l77 = '<leader>w Window'
   let g:WhichKeyDesc_vimcompanion_window_focus_next_l7777 = '<leader>ww Focus next split'
 else
   call add(g:vimcompanion_skipped, 'n <leader>ww window.focus-next')

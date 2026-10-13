@@ -125,42 +125,50 @@ type Leaf = {
   /** The entry label, or "Moved to <primary key>" for an alias key. */
   label: string;
   entry: Entry;
+  /** The groups above a leader key, outermost first; none above a Vim key. */
+  groups: GroupLabel[];
 };
 
+/** A leader prefix, such as ["SPC", "w"], and its group label. */
+type GroupLabel = { tokens: string[]; label: string };
+
 /** A leader prefix with a group label and the keys below it. */
-type GroupNode = {
-  kind: "group";
-  tokens: string[];
-  label: string;
-  children: Node[];
-};
+type GroupNode = GroupLabel & { kind: "group"; children: Node[] };
 
 type Node = Leaf | GroupNode;
 
 /**
  * The children of a leader prefix (the keys after SPC) in an IDE, in display order, with the
- * aliases that are active in the version.
+ * aliases that are active in the version. `groups` are the groups down to the prefix.
  */
 function leaderTree(
   catalog: Catalog,
   ide: Ide,
   version: string,
   prefix: readonly string[] = [],
+  groups: readonly GroupLabel[] = [],
 ): Node[] {
   return entryRows(catalog, ide, prefix, { version }).map(
     ({ row, entry }): Node => {
       const keys = [...prefix, row.key];
       const tokens = ["SPC", ...keys];
       if (entry === undefined) {
+        const group = { tokens, label: row.label };
         return {
           kind: "group",
-          tokens,
-          label: row.label,
-          children: leaderTree(catalog, ide, version, keys),
+          ...group,
+          children: leaderTree(catalog, ide, version, keys, [...groups, group]),
         };
       }
       const key = tokens.join(" ");
-      return { kind: "leaf", key, tokens, label: row.label, entry };
+      return {
+        kind: "leaf",
+        key,
+        tokens,
+        label: row.label,
+        entry,
+        groups: [...groups],
+      };
     },
   );
 }
@@ -188,6 +196,7 @@ function vimLeaves(catalog: Catalog, version: string): Leaf[] {
         // An alias moves its key to the entry's first Vim key.
         label: alias ? `Moved to ${entry.keys.vim?.[0]}` : entry.label,
         entry,
+        groups: [],
       }))
       .sort((a, b) => compareKeys(a.tokens, b.tokens));
   return [...leaves(false), ...leaves(true)];
@@ -332,14 +341,13 @@ const LEADER = [
   "endif",
 ];
 
-/** The rc: the leader, the group descriptions, a block per key and mode, then the Ctrl keys. */
+/** The rc: the leader, a block per key and mode, then the Ctrl keys. */
 function ideavimrc(catalog: Catalog, version: string): string {
   const tree = leaderTree(catalog, "intellij", version);
   const sections = [
     HEADER,
     LEADER,
     ["let g:vimcompanion_skipped = []"],
-    groupDescriptions(tree),
     ...[...leavesOf(tree), ...vimLeaves(catalog, version)].map(mapBlocks),
     ctrlKeyLines(catalog.ctrlKeys),
   ];
@@ -350,25 +358,10 @@ function ideavimrc(catalog: Catalog, version: string): string {
     .join("\n\n")}\n`;
 }
 
-/** The idea-which-key description of each group with a key that IntelliJ maps, depth first. */
-function groupDescriptions(nodes: readonly Node[]): string[] {
-  const mapped = (node: GroupNode) =>
-    leavesOf(node.children).some(
-      ({ entry }) => bindingIn(entry, "intellij") !== undefined,
-    );
-  return nodes.flatMap((node) =>
-    node.kind === "group" && mapped(node)
-      ? [
-          `let g:WhichKeyDesc_vimcompanion_group_${keyHex(node.tokens)} = ${quote(`${ideavimLhs(node.tokens)} ${node.label}`)}`,
-          ...groupDescriptions(node.children),
-        ]
-      : [],
-  );
-}
-
 /**
- * The lines of a key: a comment and a guarded map per mode, with the description in the first; a
- * comment alone when IntelliJ does not support the entry; nothing when IdeaVim runs the key itself.
+ * The lines of a key: a comment and, per mode, a mapcheck guard whose success branch maps the key
+ * and sets the descriptions of the groups above it, and in the first mode the key's own; a comment
+ * alone when IntelliJ does not support the entry; nothing when IdeaVim runs the key itself.
  */
 function mapBlocks(leaf: Leaf): string[] {
   const { entry } = leaf;
@@ -393,11 +386,19 @@ function mapBlocks(leaf: Leaf): string[] {
     map = intellij.provider === undefined ? "noremap" : "map";
   }
   const lhs = ideavimLhs(leaf.tokens);
+  // IDEA Which-Key lets the last description of a key win, for every mode. A group is labelled
+  // only where a key below it gets mapped, so a user map on the group prefix, which makes mapcheck
+  // skip every key below it, keeps the user's description. Setting a variable again is harmless.
+  const groups = leaf.groups.map(
+    (group) =>
+      `  let g:WhichKeyDesc_vimcompanion_group_${keyHex(group.tokens)} = ${quote(`${ideavimLhs(group.tokens)} ${group.label}`)}`,
+  );
   return [
     `" ${entry.id}`,
     ...modesOf(entry).flatMap((mode, i) => [
       `if empty(mapcheck(${quote(lhs)}, '${mode}'))`,
       `  ${mode}${map} ${lhs} ${rhs}`,
+      ...groups,
       ...(i === 0
         ? [`  let ${descriptionName(leaf)} = ${quote(`${lhs} ${leaf.label}`)}`]
         : []),
