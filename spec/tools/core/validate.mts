@@ -145,6 +145,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDuplicateIds,
   checkCategories,
   checkKeySyntax,
+  checkForbiddenKeys,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -291,6 +292,59 @@ function checkKeySyntax({ placed, uses, groups }: Context): Diagnostic[] {
     }
   }
   return found;
+}
+
+/** Vim keys that the catalog never redefines, not even as the start of a longer key (D4). */
+const PROTECTED_KEYS = ["]b", "[b", "]w", "[w", "]p", "[p", "gh", "gi"];
+
+/**
+ * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space
+ * and no bare function key, and do not redefine a protected key. The keys an engine replays are
+ * not bound, so they are not checked.
+ */
+function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
+  return uses.flatMap((use) => {
+    if (use.kind !== "vim" || !use.parsed.ok) return [];
+    const subject = `${use.field} ${q(use.text)}`;
+    const found = use.parsed.tokens.flatMap((token) => {
+      const problem = forbiddenToken(token);
+      return problem === undefined
+        ? []
+        : [
+            onEntry(
+              use.at,
+              "FORBIDDEN_KEY",
+              `${subject} has the ${problem} ${token}`,
+            ),
+          ];
+    });
+    for (const key of PROTECTED_KEYS) {
+      if (use.text.startsWith(key)) {
+        found.push(
+          onEntry(
+            use.at,
+            "FORBIDDEN_KEY",
+            `${subject} starts with ${q(key)}, one of the keys the catalog never redefines: ${PROTECTED_KEYS.join(" ")}`,
+          ),
+        );
+      }
+    }
+    return found;
+  });
+}
+
+/** What makes a token forbidden, if anything. Modifier and key names ignore case, as in Vim. */
+function forbiddenToken(token: string): string | undefined {
+  const group = /^<((?:[A-Za-z]-)*)(.+)>$/.exec(token);
+  if (group === null) return undefined;
+  const modifiers = group[1]!.toUpperCase();
+  const name = group[2]!.toUpperCase();
+  if (/[AM]-/.test(modifiers)) return "Alt chord";
+  if (modifiers !== "" && name === "SPACE") return "modifier+Space chord";
+  if (modifiers === "" && /^F(?:[1-9]|1\d|2[0-4])$/.test(name)) {
+    return "bare function key";
+  }
+  return undefined;
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
