@@ -23,5 +23,6 @@ export function resolve(
   keys: readonly string[],
   options: ResolveOptions = {},
 ): Resolution {
+  if (keys.length === 0) return { kind: "group", label: "" };
   return { kind: "unbound" };
 }
