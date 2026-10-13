@@ -704,4 +704,100 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space or bare function keys, or that redefine a protected key", () => {
+    const PROTECTED =
+      "one of the keys the catalog never redefines: ]b [b ]w [w ]p [p gh gi";
+    runCases([
+      {
+        name: "a modified function key, a capital ]B and g]",
+        change: (files) => {
+          entryOf(files, "diag.next").keys.vim = ["]d", "<S-F8>", "]B", "g]"];
+        },
+        expected: [],
+      },
+      {
+        name: "an Alt chord",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "<A-k>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<A-k>" has the Alt chord <A-k>',
+          ),
+        ],
+      },
+      {
+        name: "a Meta chord written in lowercase",
+        change: (files) => {
+          entryOf(files, "code.action").keys.vim = ["gra", "<c-m-a>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.action",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<c-m-a>" has the Alt chord <c-m-a>',
+          ),
+        ],
+      },
+      {
+        name: "an alias with Ctrl+Space",
+        change: (files) => {
+          entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<C-Space>"];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "FORBIDDEN_KEY",
+            'aliases[0].keys.vim[0] "<C-Space>" has the modifier+Space chord <C-Space>',
+          ),
+        ],
+      },
+      {
+        name: "bare function keys",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["<F1>", "<f12>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[0] "<F1>" has the bare function key <F1>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<f12>" has the bare function key <f12>',
+          ),
+        ],
+      },
+      {
+        name: "keys that are or start with a protected key",
+        change: (files) => {
+          entryOf(files, "code.action").keys.vim = ["]b", "gih"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.action",
+            "FORBIDDEN_KEY",
+            `keys.vim[0] "]b" starts with "]b", ${PROTECTED}`,
+          ),
+          diagnostic(
+            CODE,
+            "code.action",
+            "FORBIDDEN_KEY",
+            `keys.vim[1] "gih" starts with "gi", ${PROTECTED}`,
+          ),
+        ],
+      },
+    ]);
+  });
 });
