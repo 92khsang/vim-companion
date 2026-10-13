@@ -48,7 +48,8 @@ export function genIde(
 
 /**
  * The catalog with its entries in id order, so that entries that bind one key in different modes
- * follow their ids, never the catalog order.
+ * follow their ids, never the catalog order. spec:check rejects such a key (DUPLICATE_KEY), but the
+ * output still never depends on the entry order.
  */
 function byId(catalog: Catalog): Catalog {
   return {
@@ -250,7 +251,8 @@ type WhichKeyItem =
 
 /**
  * The value of `whichkey.bindings`: the leader keys that VS Code supports. which-key has no modes,
- * so it throws when two entries bind one key in different modes.
+ * so it throws when two entries bind one key in different modes, a catalog that spec:check
+ * rejects (DUPLICATE_KEY).
  */
 function whichKeyBindings(catalog: Catalog, version: string): string {
   const keys = leaderLeaves(catalog, { version }).filter(
