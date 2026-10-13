@@ -211,4 +211,35 @@ describe("checkIds", () => {
       ),
     ]);
   });
+
+  test("names one suggestion, or none, when a snapshot has fewer IDs", () => {
+    const files: CommandFile[] = [
+      {
+        path: FILE,
+        data: {
+          commands: [
+            entry(
+              "file.find",
+              { command: "workbench.action.quickOpn" },
+              { action: "GotoFle" },
+            ),
+          ],
+        },
+      },
+    ];
+    expect(checkIds(files, snapshots([], ["GotoFile"], []), [])).toEqual([
+      diagnostic(
+        FILE,
+        "file.find",
+        "UNKNOWN_ACTION",
+        'intellij.action "GotoFle" is not in spec/ids/intellij.json (did you mean "GotoFile"?)',
+      ),
+      diagnostic(
+        FILE,
+        "file.find",
+        "UNKNOWN_COMMAND",
+        'vscode.exec.command "workbench.action.quickOpn" is not in spec/ids/vscode.json',
+      ),
+    ]);
+  });
 });
