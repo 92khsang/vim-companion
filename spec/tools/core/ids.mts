@@ -216,7 +216,36 @@ export function pickExtensions(
   installed: readonly { dir: string; manifest: unknown }[],
   wanted: readonly string[],
 ): { picked: Extension[]; missing: string[] } {
-  return { picked: [], missing: [] };
+  const extensions = installed.flatMap(({ dir, manifest }): Extension[] => {
+    const { publisher, name, version } = manifest as Record<string, unknown>;
+    return typeof publisher === "string" &&
+      typeof name === "string" &&
+      typeof version === "string"
+      ? [{ id: `${publisher}.${name}`, version, dir }]
+      : [];
+  });
+  const picked = new Map<string, Extension>();
+  const missing: string[] = [];
+  for (const id of wanted) {
+    const key = id.toLowerCase();
+    const newest = extensions
+      .filter((extension) => extension.id.toLowerCase() === key)
+      .sort((a, b) => compareVersions(b.version, a.version))[0];
+    if (newest === undefined) missing.push(id);
+    else picked.set(key, newest);
+  }
+  return {
+    picked: [...picked.values()].sort((a, b) => compareText(a.id, b.id)),
+    missing,
+  };
+}
+
+/** By the numbers of "major.minor.patch", then in code-unit order. */
+function compareVersions(a: string, b: string): number {
+  const [x, y] = [a, b].map((version) =>
+    version.split(/[.-]/, 3).map(Number),
+  ) as [number[], number[]];
+  return x[0]! - y[0]! || x[1]! - y[1]! || x[2]! - y[2]! || compareText(a, b);
 }
 
 /** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
