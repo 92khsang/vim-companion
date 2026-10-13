@@ -858,6 +858,44 @@ describe("validateCatalog", () => {
         ],
       },
       {
+        name: "Shift+Space alone and with Ctrl, and the last bare function key F24",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = [
+            "K",
+            "<S-Space>",
+            "<C-S-Space>",
+            "<F24>",
+          ];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<S-Space>" has the modifier+Space chord <S-Space>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[2] "<C-S-Space>" has the modifier+Space chord <C-S-Space>',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[3] "<F24>" has the bare function key <F24>',
+          ),
+        ],
+      },
+      {
+        name: "a function key after F24, which design §3 leaves free",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "<F25>"];
+        },
+        expected: [],
+      },
+      {
         name: "bare function keys",
         change: (files) => {
           entryOf(files, "code.hover").keys.vim = ["<F1>", "<f12>"];
@@ -942,6 +980,23 @@ describe("validateCatalog", () => {
             "search.project",
             "RESERVED_KEY",
             `aliases[0].keys.leader[0] "SPC f ?" ${RESERVED}`,
+          ),
+        ],
+      },
+      {
+        name: "? in the middle of a leader key, below a group SPC ?",
+        change: (files) => {
+          fileOf(files, "search").data.commands.push(
+            newEntry("search.help", "SPC ? x", "Search help"),
+          );
+          files.groups.data.groups.push({ keys: "SPC ?", label: "Help" });
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.help",
+            "RESERVED_KEY",
+            `keys.leader[0] "SPC ? x" ${RESERVED}`,
           ),
         ],
       },
@@ -1124,6 +1179,15 @@ describe("validateCatalog", () => {
           entry.keys = { vim: ["grn"] };
           entry.deviation = deviation;
           fileOf(files, "code").data.commands.push(entry);
+        },
+        expected: [],
+      },
+      {
+        name: "the leader key SPC S beside SPC SPC, which share no key after SPC",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.save", "SPC S", "Save all files"),
+          );
         },
         expected: [],
       },
