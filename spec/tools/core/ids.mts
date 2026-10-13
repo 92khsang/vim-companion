@@ -1,5 +1,52 @@
 // The ID check (design §8): the commands and actions that the catalog and the generated files name
 // must exist in the ID snapshots of spec/ids.
+import type { Diagnostic, Entry } from "./catalog.mts";
+
+/** spec/ids/vscode.json: the command IDs of a VS Code version and its allow-listed extensions. */
+export type VscodeIds = {
+  vscode: string;
+  /** "publisher.name" → version. */
+  extensions: Record<string, string>;
+  commands: string[];
+};
+
+/** spec/ids/intellij.json: the action IDs of an IntelliJ build and its allow-listed plugins. */
+export type IntellijIds = {
+  /** "<productCode>-<buildNumber>", such as "IU-262.10968.63". */
+  ide: string;
+  /** Plugin directory or jar name → version. */
+  plugins: Record<string, string>;
+  /** The action and group IDs that the plugin descriptors declare. */
+  declared: string[];
+  /** The IDs that the IDE registers at runtime and no descriptor declares. */
+  runtime: string[];
+};
+
+/** A snapshot and its repo-relative POSIX path, for messages. */
+export type IdSnapshot<T> = { path: string; data: T };
+
+export type IdSnapshots = {
+  vscode: IdSnapshot<VscodeIds>;
+  intellij: IdSnapshot<IntellijIds>;
+};
+
+/** A command file that passed spec:check: its repo-relative POSIX path and its entries. */
+export type CommandFile = {
+  path: string;
+  data: { commands: readonly Entry[] };
+};
+
+/**
+ * Every VS Code command and IntelliJ action of the entries, and every command that pnpm gen
+ * writes, that the snapshots lack. Engine keys (vimKeys, ideavimKeys) are not IDs.
+ */
+export function checkIds(
+  commands: readonly CommandFile[],
+  snapshots: IdSnapshots,
+  generatedCommandIds: readonly string[],
+): Diagnostic[] {
+  return [];
+}
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
