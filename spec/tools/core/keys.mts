@@ -59,6 +59,10 @@ export function whichKeyKey(token: string): string {
   return token === "SPC" ? " " : token;
 }
 
+/** The left-hand side of an IdeaVim map command for the tokens of a key. */
 export function ideavimLhs(tokens: readonly string[]): string {
-  return "";
+  const keys = tokens
+    .slice(1)
+    .map((token) => (token === "SPC" ? "<Space>" : token));
+  return `<leader>${keys.join("")}`;
 }
