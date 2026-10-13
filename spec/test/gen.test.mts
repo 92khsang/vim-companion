@@ -60,6 +60,12 @@ describe("genIde", () => {
     );
   });
 
+  test("writes the Normal mode block before the Visual mode block whatever the order of modes", () => {
+    const files = miniCatalogFiles();
+    entryOf(files, "search.project").modes = ["x", "n"];
+    expect(genIde(miniCatalog(files))).toEqual(genIde(miniCatalog()));
+  });
+
   test("leaves out a group with no leaf below it that the IDE supports", () => {
     // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
     // does not support it instead.
