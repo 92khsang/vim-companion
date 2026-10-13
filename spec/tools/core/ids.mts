@@ -207,7 +207,8 @@ function contributedCommands(manifest: unknown): string[] {
 
 /** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
 export function pluginVersion(pluginXml: string): string | undefined {
-  return undefined;
+  const text = pluginXml.replace(/<!--[\s\S]*?-->/g, "");
+  return /<version>\s*([^<]*?)\s*<\/version>/.exec(text)?.[1];
 }
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
