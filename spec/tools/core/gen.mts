@@ -37,14 +37,21 @@ export function genIde(
   options: GenOptions = {},
 ): Map<string, string> {
   const version = options.version ?? "0.0.0";
-  // Entries that bind one key in different modes follow their ids, never the catalog order.
-  const byId: Catalog = {
+  const sorted = byId(catalog);
+  return new Map(
+    GENERATED_PATHS.map((path) => [path, GENERATORS[path](sorted, version)]),
+  );
+}
+
+/**
+ * The catalog with its entries in id order, so that entries that bind one key in different modes
+ * follow their ids, never the catalog order.
+ */
+function byId(catalog: Catalog): Catalog {
+  return {
     ...catalog,
     entries: [...catalog.entries].sort((a, b) => compareText(a.id, b.id)),
   };
-  return new Map(
-    GENERATED_PATHS.map((path) => [path, GENERATORS[path](byId, version)]),
-  );
 }
 
 const GENERATORS: Record<
@@ -67,13 +74,33 @@ export function generatedCommandIds(catalog: Catalog): string[] {
   return vimKeys ? ["whichkey.show", "vim.remap"] : ["whichkey.show"];
 }
 
-/** A line per key that genIde leaves out of an IDE's files because the IDE does not support it. */
+/**
+ * A line per key that genIde leaves out of an IDE's files because the IDE does not support it, in
+ * the order of the files: "gen: unsupported in VS Code: SPC f l (file.locations)".
+ */
 export function unsupportedLines(
   catalog: Catalog,
   options: GenOptions = {},
 ): string[] {
-  return [];
+  const version = options.version ?? "0.0.0";
+  const sorted = byId(catalog);
+  return (["vscode", "intellij"] as const).flatMap((ide) =>
+    [
+      ...leavesOf(leaderTree(sorted, ide, version)),
+      ...vimLeaves(sorted, version),
+    ]
+      .filter(({ entry }) => bindingIn(entry, ide) === undefined)
+      .map(
+        ({ key, entry }) =>
+          `gen: unsupported in ${IDE_NAMES[ide]}: ${key} (${entry.id})`,
+      ),
+  );
 }
+
+const IDE_NAMES: Record<Ide, string> = {
+  vscode: "VS Code",
+  intellij: "IntelliJ",
+};
 
 /**
  * The `args` of a which-key item or of a VSCodeVim remap command for the positional arguments of
