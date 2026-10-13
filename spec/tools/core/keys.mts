@@ -54,6 +54,7 @@ export function compareKeys(
   return a.length - b.length;
 }
 
+/** The `key` of a which-key menu item for one leader token; which-key reads Space as " ". */
 export function whichKeyKey(token: string): string {
-  return "";
+  return token === "SPC" ? " " : token;
 }
