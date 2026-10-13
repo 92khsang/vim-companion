@@ -13,6 +13,7 @@ import type {
   Mode,
 } from "./catalog.mts";
 import { parseLeader, parseVim, type ParsedKey } from "./keys.mts";
+import { isVersion } from "./version.mts";
 
 /** A parsed catalog file; `path` is repo-relative and POSIX, for messages. */
 export type CatalogFile = { path: string; data: unknown };
@@ -682,10 +683,6 @@ function checkMotionModes({ placed }: Context): Diagnostic[] {
   );
 }
 
-/** SemVer 2.0.0 without build metadata: x.y.z[-prerelease]. */
-const VERSION =
-  /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?$/;
-
 /** The longest label, generated or not. */
 const LABEL_MAX = 24;
 
@@ -738,7 +735,7 @@ function checkAliases({ placed }: Context): Diagnostic[] {
           }
         });
       }
-      if (!VERSION.test(alias.until)) {
+      if (!isVersion(alias.until)) {
         found.push(
           onEntry(
             at,
