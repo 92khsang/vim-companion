@@ -111,6 +111,17 @@ async function refreshVscode(root: string, values: Values): Promise<void> {
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
+  if (dump.vscode !== version) {
+    throw new Error(
+      `the dump is of VS Code ${dump.vscode}, but ${join(app, "package.json")} has ${version}`,
+    );
+  }
+  const activated = new Set(dump.activated.map((id) => id.toLowerCase()));
+  for (const { id, version } of picked) {
+    if (!activated.has(`${id}@${version}`.toLowerCase())) {
+      throw new Error(`${id} ${version} did not activate in VS Code`);
+    }
+  }
   // Commands of extensions that did not activate are missing from the dump, so the declared
   // ones of every built-in and allow-listed extension join them.
   const manifests = [
