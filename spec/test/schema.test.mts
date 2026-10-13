@@ -74,12 +74,13 @@ test("spec:check accepts as a fixture version exactly the strings isVersion acce
     maxLength: 12,
   });
   // spec:check reads each version of the order alone; the conformance runner checks the order.
-  // Many versions per run keep the runs, each of which compiles the schemas, few.
+  // Each run compiles the schemas, so 20 runs of 50 versions check 1000 candidates. minLength is 50
+  // too: by default fast-check draws at most 2 * minLength + 10 items, so minLength 1 gave about 6.
   const message = (version: string, i: number) =>
     `ascending[${i}] ${JSON.stringify(version)} is not a version x.y.z[-prerelease]`;
   fc.assert(
     fc.property(
-      fc.array(fc.oneof(nearVersion, text), { minLength: 1, maxLength: 50 }),
+      fc.array(fc.oneof(nearVersion, text), { minLength: 50, maxLength: 50 }),
       (candidates) => {
         const files = miniFixtureFiles();
         files.versionOrder.data.ascending = ["0.0.0", ...candidates];
