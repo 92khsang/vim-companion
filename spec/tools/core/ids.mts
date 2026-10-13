@@ -159,6 +159,17 @@ export function parseDescriptorIds(xml: string): DescriptorIds {
   };
 }
 
+/**
+ * The action IDs that IntelliJ registers at runtime and that `declared` lacks: one
+ * Activate<id>ToolWindow per tool window, and the Run and Debug executor actions.
+ */
+export function runtimeIntellijIds(
+  toolWindows: readonly string[],
+  declared: readonly string[],
+): string[] {
+  return [];
+}
+
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
   return [...known]

@@ -9,6 +9,7 @@ import {
   checkIds,
   idSummary,
   parseDescriptorIds,
+  runtimeIntellijIds,
   suggest,
   type CommandFile,
   type IdSnapshots,
@@ -311,5 +312,28 @@ describe("parseDescriptorIds", () => {
       ids: ["GoToMenu", "GotoFile", "SaveAll"],
       toolWindows: ["Backup and Sync History", "Project"],
     });
+  });
+});
+
+describe("runtimeIntellijIds", () => {
+  test("derives the tool window and executor actions that no descriptor declares", () => {
+    const toolWindows = [
+      "Project",
+      "Backup and Sync History",
+      "Commit",
+      "Problems View",
+      "Project",
+    ];
+    expect(
+      runtimeIntellijIds(toolWindows, ["ActivateCommitToolWindow", "GotoFile"]),
+    ).toEqual([
+      "ActivateBackupandSyncHistoryToolWindow",
+      "ActivateProblemsViewToolWindow",
+      "ActivateProjectToolWindow",
+      "Debug",
+      "DebugClass",
+      "Run",
+      "RunClass",
+    ]);
   });
 });
