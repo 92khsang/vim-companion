@@ -272,12 +272,14 @@ function ideavimrc(catalog: Catalog, version: string): string {
     LEADER,
     ["let g:vimcompanion_skipped = []"],
     groupDescriptions(tree),
-    ...[...leavesOf(tree), ...vimLeaves(catalog, version)]
-      .map(mapBlocks)
-      .filter((lines) => lines.length > 0),
+    ...[...leavesOf(tree), ...vimLeaves(catalog, version)].map(mapBlocks),
     ctrlKeyLines(catalog.ctrlKeys),
   ];
-  return `${sections.map((lines) => lines.join("\n")).join("\n\n")}\n`;
+  // One blank line between the parts; a part without lines leaves none.
+  return `${sections
+    .filter((lines) => lines.length > 0)
+    .map((lines) => lines.join("\n"))
+    .join("\n\n")}\n`;
 }
 
 /** The idea-which-key description of each group with a key that IntelliJ maps, depth first. */
@@ -362,6 +364,7 @@ function quote(text: string): string {
 
 /** sethandler lines sorted by key; the keys with a macOS value in one if has('mac') block. */
 function ctrlKeyLines(keys: readonly CtrlKey[]): string[] {
+  if (keys.length === 0) return [];
   const sorted = [...keys].sort((a, b) => compareText(a.key, b.key));
   const mac = sorted.filter((key) => key.mac !== undefined);
   return [
