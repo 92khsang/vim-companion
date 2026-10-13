@@ -1,0 +1,52 @@
+name: Command request
+description: Propose a command for the shared key catalog used by both IDEs.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Please write in English. One command per request.
+  - type: textarea
+    id: task
+    attributes:
+      label: What do you want to do?
+      description: The editing or navigation task, in one or two sentences.
+      placeholder: Close every editor except the current one.
+    validations:
+      required: true
+  - type: input
+    id: keys
+    attributes:
+      label: Proposed keys
+      description: Space-leader keys or a Vim key sequence. Leave empty to let the maintainers choose.
+      placeholder: SPC b o
+  - type: textarea
+    id: conventions
+    attributes:
+      label: Where is this command bound today?
+      description: For example Vim itself, LazyVim, Doom Emacs, Spacemacs or the IDE's default keymap. Write "none known" if you know of none.
+    validations:
+      required: true
+  - type: input
+    id: vscode
+    attributes:
+      label: VS Code command ID
+      description: Optional. Find it in Keyboard Shortcuts with "Copy Command ID".
+      placeholder: workbench.action.closeOtherEditors
+  - type: input
+    id: intellij
+    attributes:
+      label: IntelliJ action ID
+      description: Optional. Find it with IdeaVim's `:actionlist`.
+      placeholder: CloseAllEditorsButActive
+  - type: textarea
+    id: differences
+    attributes:
+      label: Differences between IDEs or engines
+      description: Optional. Anything that behaves differently in VS Code and IntelliJ, or in VSCodeVim and IdeaVim.
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and the catalog for this command.
+          required: true

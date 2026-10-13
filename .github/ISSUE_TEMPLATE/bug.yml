@@ -1,0 +1,72 @@
+name: Bug report
+description: vim-companion shows wrong keys, breaks Vim editing, steals focus or fails to install.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Please write in English. For anything visual, attach a screenshot.
+  - type: dropdown
+    id: ide
+    attributes:
+      label: IDE
+      options:
+        - VS Code
+        - IntelliJ IDEA
+        - Both
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - macOS
+        - Windows
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: IDE, Vim engine (VSCodeVim or IdeaVim) and vim-companion.
+      placeholder: VS Code 1.141.0, VSCodeVim 1.32.4, vim-companion 1.0.0-rc.1
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact keys you pressed, starting from Normal mode in a fresh editor if you can.
+      placeholder: |
+        1. Open a Java file in Normal mode.
+        2. Press d, Esc, j.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: dropdown
+    id: without-companion
+    attributes:
+      label: Does the problem go away when vim-companion is disabled?
+      options:
+        - "Yes"
+        - "No"
+        - Not checked
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Logs, screenshots and doctor report
+      description: Output panel or idea.log excerpts, screenshots, and the doctor report if the extension can show one.

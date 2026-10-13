@@ -1,0 +1,50 @@
+name: pr-title
+
+on:
+  pull_request:
+    # `edited` re-runs the check after the title is fixed.
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # No job-level `if`: a skipped job counts as passing, so a skipped run would hide an earlier
+  # failure on the same commit.
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      # The squash merge commit subject is "<title> (#<number>)": lint that line for its length, and
+      # the bare title for the rules the suffix would satisfy, such as a non-empty description. The
+      # title is untrusted input and reaches the shell only through the environment.
+      - name: Lint the PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          printf '%s\n' "${PR_TITLE}" | pnpm exec commitlint --verbose
+          printf '%s (#%s)\n' "${PR_TITLE}" "${PR_NUMBER}" | pnpm exec commitlint --verbose
