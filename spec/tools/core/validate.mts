@@ -517,9 +517,9 @@ function forbiddenToken(token: string): string | undefined {
   if (!/^F\d+$/.test(name)) return undefined;
   // The OS and the IME reserve bare function keys (D4).
   if (modifiers === "") return `has the bare function key ${token}`;
-  // VS Code hands an extension only the keys of its keybindings and the text typed through the
-  // type command. VSCodeVim 1.32.4 binds no function key, and a function key types no text, so a
-  // remap of a function key chord never fires.
+  // VSCodeVim 1.32.4 gets keys only from its package.json keybindings, none of which has an F key,
+  // from typed text and from the after keys of a vim.remap call. A function key types no text and
+  // no generated file passes one to vim.remap, so a remap of a function key chord never fires.
   return `has the function key chord ${token}; VSCodeVim receives no function key`;
 }
 
