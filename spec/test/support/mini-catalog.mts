@@ -1,7 +1,7 @@
 // A small catalog that passes every validator rule. It uses each part of the entry shape, so a test
 // can break one rule by changing one field of a fresh copy.
-import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { readSchemas } from "../../tools/catalog-files.mts";
 import type {
   CtrlKey,
   Entry,
@@ -259,17 +259,7 @@ export function entryOf(files: MiniCatalogFiles, id: string): Entry {
   return found;
 }
 
-const schemaDir = join(import.meta.dirname, "../../schema");
-
 /** The schemas in spec/schema by file name. */
 export function loadSchemas(): SchemaSet {
-  return Object.fromEntries(
-    readdirSync(schemaDir)
-      .filter((name) => name.endsWith(".json"))
-      .sort()
-      .map((name) => [
-        name,
-        JSON.parse(readFileSync(join(schemaDir, name), "utf8")),
-      ]),
-  );
+  return readSchemas(join(import.meta.dirname, "../.."));
 }
