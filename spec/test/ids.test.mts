@@ -10,6 +10,7 @@ import {
   idSummary,
   mergeVscodeCommands,
   parseDescriptorIds,
+  pluginVersion,
   runtimeIntellijIds,
   suggest,
   type CommandFile,
@@ -390,5 +391,24 @@ describe("mergeVscodeCommands", () => {
       "vim.remap",
       "workbench.action.quickOpen",
     ]);
+  });
+});
+
+describe("pluginVersion", () => {
+  test("reads the version of a plugin descriptor outside comments", () => {
+    const xml = [
+      '<idea-plugin url="https://github.com/JetBrains/ideavim">',
+      "  <!-- <version>0.0.1</version> -->",
+      "  <id>IdeaVIM</id>",
+      '  <idea-version since-build="253"/>',
+      "  <version>",
+      "    2.47.3",
+      "  </version>",
+      "</idea-plugin>",
+    ].join("\n");
+    expect([
+      pluginVersion(xml),
+      pluginVersion("<idea-plugin><id>NoVersion</id></idea-plugin>"),
+    ]).toEqual(["2.47.3", undefined]);
   });
 });

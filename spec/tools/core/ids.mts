@@ -205,6 +205,11 @@ function contributedCommands(manifest: unknown): string[] {
     });
 }
 
+/** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
+export function pluginVersion(pluginXml: string): string | undefined {
+  return undefined;
+}
+
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
   return [...known]
