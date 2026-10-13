@@ -1,6 +1,6 @@
 // pnpm spec:check: validates the catalog and the fixtures (design §3, §5). Prints
 // "<file>: <where>: <message>" lines in sorted order; exits 0 when there are none, 1 when there
-// are, and 2 when it cannot run.
+// are, and 2 when it cannot run, with why on stderr, each line after "spec:check: ".
 // --root <dir>: the spec directory to check; by default the one this file is in.
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -10,6 +10,7 @@ import {
   readSchemas,
 } from "./catalog-files.mts";
 import type { Diagnostic } from "./core/catalog.mts";
+import { prefixLines, thrownMessage } from "./core/messages.mts";
 import { validateCatalog, validateFixtures } from "./core/validate.mts";
 
 /** Every diagnostic of the spec directory `root`; throws when a file cannot be read. */
@@ -28,6 +29,8 @@ try {
   for (const line of lines) console.log(line);
   process.exitCode = lines.length > 0 ? 1 : 0;
 } catch (error) {
-  console.error(`spec:check: ${(error as Error).message}`);
+  for (const line of prefixLines("spec:check: ", [thrownMessage(error)])) {
+    console.error(line);
+  }
   process.exitCode = 2;
 }

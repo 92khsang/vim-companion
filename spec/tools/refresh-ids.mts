@@ -1,7 +1,7 @@
 // pnpm ids:refresh vscode|intellij (design §8): rewrites ids/<ide>.json of the spec directory from
-// the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run. Stopped
-// by SIGINT, SIGTERM or SIGHUP, vscode ends VS Code, removes its temporary directory and exits 130,
-// 143 or 129.
+// the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run, with why
+// on stderr, each line after "ids:refresh: ". Stopped by SIGINT, SIGTERM or SIGHUP, vscode ends VS
+// Code, removes its temporary directory and exits 130, 143 or 129.
 //   vscode   [--code <binary>] [--extension <publisher.name>]... [--drop-extension <publisher.name>]...
 //   intellij [--ide-home <dir>] [--plugins-dir <dir>] [--plugin <dir or .jar>]... [--drop-plugin <name>]...
 // The allow-listed extensions or plugins are the ones of the snapshot it replaces, plus
@@ -38,6 +38,7 @@ import {
   type IntellijIds,
   type VscodeIds,
 } from "./core/ids.mts";
+import { prefixLines, thrownMessage } from "./core/messages.mts";
 import { checkSchemas } from "./core/validate.mts";
 
 type Ide = "vscode" | "intellij";
@@ -513,6 +514,8 @@ function readJson(path: string): unknown {
 try {
   await main();
 } catch (error) {
-  console.error(`ids:refresh: ${(error as Error).message}`);
+  for (const line of prefixLines("ids:refresh: ", [thrownMessage(error)])) {
+    console.error(line);
+  }
   process.exitCode = error instanceof Interrupted ? error.status : 2;
 }

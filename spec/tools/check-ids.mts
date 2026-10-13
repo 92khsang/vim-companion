@@ -2,7 +2,8 @@
 // pnpm gen writes, must be in the ID snapshots ids/vscode.json and ids/intellij.json. Prints
 // "<file>: <where>: <message>" lines in sorted order and a summary line; exits 0 when every ID
 // resolves, 1 when some do not, and 2 when it cannot run, such as for a catalog that spec:check
-// rejects or a snapshot that is missing or breaks schema/ids.schema.json.
+// rejects or a snapshot that is missing or breaks schema/ids.schema.json; then it prints why on
+// stderr, each line after "check-ids: ".
 // --root <dir>: the spec directory to check; by default the one this file is in.
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -19,6 +20,7 @@ import {
   type CommandFile,
   type IdSnapshots,
 } from "./core/ids.mts";
+import { prefixLines, thrownMessage } from "./core/messages.mts";
 import { checkSchemas, validateCatalog } from "./core/validate.mts";
 
 /** The exit code of a check of the spec directory that the arguments name. */
@@ -57,14 +59,14 @@ function lines(diagnostics: readonly Diagnostic[]): string[] {
     .sort();
 }
 
-/** Prints why the check cannot run and returns its exit code. */
+/** Prints why the check cannot run, each line after "check-ids: ", and returns its exit code. */
 function cannotRun(messages: readonly string[]): number {
-  for (const message of messages) console.error(`check-ids: ${message}`);
+  for (const line of prefixLines("check-ids: ", messages)) console.error(line);
   return 2;
 }
 
 try {
   process.exitCode = run();
 } catch (error) {
-  process.exitCode = cannotRun([(error as Error).message]);
+  process.exitCode = cannotRun([thrownMessage(error)]);
 }
