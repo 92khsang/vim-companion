@@ -1052,4 +1052,47 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("UNUSED_GROUP reports a group with no leader key below its prefix", () => {
+    runCases([
+      {
+        name: "a group whose only key is an alias",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC f z", label: "Zoom" });
+          entryOf(files, "search.project").aliases![0]!.keys.leader = [
+            "SPC f z s",
+          ];
+        },
+        expected: [],
+      },
+      {
+        name: "a group with no key below it",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC t", label: "Toggle" });
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC t",
+            "UNUSED_GROUP",
+            "no leader key is below this prefix",
+          ),
+        ],
+      },
+      {
+        name: "a group whose prefix is a leaf",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC SPC", label: "Space" });
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC SPC",
+            "UNUSED_GROUP",
+            "no leader key is below this prefix",
+          ),
+        ],
+      },
+    ]);
+  });
 });
