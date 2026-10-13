@@ -324,6 +324,54 @@ describe("genIde", () => {
       lines.filter((line) => line.startsWith("let g:WhichKeyDesc_")),
     ).toEqual([]);
   });
+
+  test("writes <lt>, <Bar> and <Bslash> as <, | and \\ in the VSCodeVim before and after keys and in the vim.remap args, and as names in the rc", () => {
+    // VSCodeVim 1.32.4 has no names for these keys and matches the typed characters; IdeaVim
+    // reads the names.
+    const files = miniCatalogFiles();
+    const only = entryOf(files, "window.only");
+    only.keys = { leader: ["SPC w o"], vim: ["<Bslash>o"] };
+    only.vscode!.exec = { vimKeys: "<LT><bar>" };
+    entryOf(files, "diag.next").keys = { vim: ["]<lt>"] };
+    const out = genIde(miniCatalog(files));
+    const remaps = JSON.parse(out.get("vscode/vim-remaps.json")!) as Record<
+      string,
+      unknown[]
+    >;
+    const menu = JSON.parse(out.get("vscode/whichkey-bindings.json")!) as {
+      key: string;
+      bindings?: { key: string }[];
+    }[];
+    expect({
+      remaps: remaps["vim.normalModeKeyBindingsNonRecursive"],
+      menu: menu
+        .find(({ key }) => key === "w")
+        ?.bindings?.find(({ key }) => key === "o"),
+      rc: rcLines(miniCatalog(files)).filter((line) =>
+        /^ {2}nmap (<Bslash>o|\]<lt>) /.test(line),
+      ),
+    }).toEqual({
+      remaps: [
+        { before: ["<space>"], commands: ["whichkey.show"] },
+        { before: ["\\", "o"], after: ["<", "|"] },
+        { before: ["K"], commands: ["editor.action.showHover"] },
+        { before: ["]", "<"], commands: ["editor.action.marker.next"] },
+        { before: ["g", "r", "a"], commands: ["editor.action.quickFix"] },
+        { before: ["]", "e"], commands: ["editor.action.marker.next"] },
+      ],
+      menu: {
+        key: "o",
+        name: "Close other splits",
+        type: "command",
+        command: "vim.remap",
+        args: { after: ["<", "|"] },
+      },
+      rc: [
+        "  nmap <Bslash>o <Action>(UnsplitAll)",
+        "  nmap ]<lt> <Action>(GotoNextError)",
+      ],
+    });
+  });
 });
 
 /** The lines of the rc that genIde writes for the catalog. */

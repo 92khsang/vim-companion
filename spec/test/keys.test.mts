@@ -360,6 +360,14 @@ describe("ideavimLhs", () => {
 });
 
 describe("vscodevimBefore", () => {
+  // VSCodeVim 1.32.4 has no names for <, | and \: a typed <, | or \ reaches its remapper as the
+  // character. The catalog writes them as <lt>, <Bar> and <Bslash>, as Vim and IdeaVim read them.
+  const CHARACTERS = new Map([
+    ["<lt>", "<"],
+    ["<bar>", "|"],
+    ["<bslash>", "\\"],
+  ]);
+
   test("keeps the tokens of a Vim key and writes SPC as <space>", () => {
     expect(vscodevimBefore(["g", "r", "a"])).toEqual(["g", "r", "a"]);
     expect(vscodevimBefore(["<C-w>", "h"])).toEqual(["<C-w>", "h"]);
@@ -369,10 +377,41 @@ describe("vscodevimBefore", () => {
       "w",
       "<space>",
     ]);
+    // Small alphabets make the three names, in any case, likely.
+    const key = fc.array(
+      fc.oneof(
+        printable("<|"),
+        vimGroup,
+        fc.constantFrom("<LT>", "<bar>", "<Bslash>", "<BSLASH>"),
+      ),
+      { minLength: 1, maxLength: 5 },
+    );
     fc.assert(
-      fc.property(vimKey, (tokens) => {
-        expect(vscodevimBefore(tokens)).toEqual(tokens);
+      fc.property(key, (tokens) => {
+        expect(vscodevimBefore(tokens)).toEqual(
+          tokens.map((token) => CHARACTERS.get(token.toLowerCase()) ?? token),
+        );
       }),
     );
+  });
+
+  test("writes <lt>, <Bar> and <Bslash> as the characters VSCodeVim matches, in any case", () => {
+    expect(
+      vscodevimBefore([
+        "<lt>",
+        "<BAR>",
+        "<bslash>",
+        "<LT>",
+        "<Bar>",
+        "<BSlash>",
+      ]),
+    ).toEqual(["<", "|", "\\", "<", "|", "\\"]);
+    expect(vscodevimBefore(["g", "<lt>", "<C-w>", "<Bar>", ">"])).toEqual([
+      "g",
+      "<",
+      "<C-w>",
+      "|",
+      ">",
+    ]);
   });
 });
