@@ -15,6 +15,7 @@ const schemas = loadSchemas();
 const CODE = "spec/catalog/commands/code.json";
 const FILE = "spec/catalog/commands/file.json";
 const SEARCH = "spec/catalog/commands/search.json";
+const WINDOW = "spec/catalog/commands/window.json";
 const GROUPS = "spec/catalog/groups.json";
 const CTRL_KEYS = "spec/catalog/ctrl-keys.json";
 const RETIRED_IDS = "spec/catalog/retired-ids.json";
@@ -526,6 +527,58 @@ describe("validateCatalog", () => {
             "file.hover",
             "CATEGORY_MISMATCH",
             'the id must start with the category: "code."',
+          ),
+        ],
+      },
+    ]);
+  });
+
+  test("DUPLICATE_ID reports an id that an earlier entry already uses", () => {
+    runCases([
+      {
+        name: "the same name in another category",
+        change: (files) => {
+          fileOf(files, "window").data.commands.push(
+            newEntry("window.next", "SPC w n", "Focus next split"),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "an id used twice in one file",
+        change: (files) => {
+          fileOf(files, "code").data.commands.push(
+            newEntry("code.hover", "SPC c k", "Show signature"),
+          );
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "DUPLICATE_ID",
+            `the id is already used in ${CODE}`,
+          ),
+        ],
+      },
+      {
+        name: "an id used in two files",
+        change: (files) => {
+          const entry = newEntry("code.hover", "SPC w k", "Show hover");
+          entry.category = "window";
+          fileOf(files, "window").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "code.hover",
+            "DUPLICATE_ID",
+            `the id is already used in ${CODE}`,
+          ),
+          diagnostic(
+            WINDOW,
+            "code.hover",
+            "CATEGORY_MISMATCH",
+            'the id must start with the category: "window."',
           ),
         ],
       },
