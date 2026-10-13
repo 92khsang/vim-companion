@@ -154,9 +154,10 @@ function bindingIn<I extends Ide>(entry: Entry, ide: I): Entry[I] | undefined {
   return entry.support?.[ide]?.level === "none" ? undefined : entry[ide];
 }
 
-/** The modes of an entry; "n" when it has none. */
+/** The modes of an entry, Normal before Visual; "n" when it has none. */
 function modesOf(entry: Entry): readonly Mode[] {
-  return entry.modes ?? ["n"];
+  const modes = entry.modes ?? ["n"];
+  return (["n", "x"] as const).filter((mode) => modes.includes(mode));
 }
 
 /** JSON with two-space indentation and a final newline. */
