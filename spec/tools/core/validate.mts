@@ -457,7 +457,8 @@ function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
 
 /** What makes a token forbidden, if anything. Modifier and key names ignore case, as in Vim. */
 function forbiddenToken(token: string): string | undefined {
-  const group = /^<((?:[A-Za-z]-)*)(.+)>$/.exec(token);
+  // The name may be empty: a group ends at the first >, so "<M->>" has the token "<M->".
+  const group = /^<((?:[A-Za-z]-)*)(.*)>$/.exec(token);
   if (group === null) return undefined;
   const modifiers = group[1]!.toUpperCase();
   const name = group[2]!.toUpperCase();
