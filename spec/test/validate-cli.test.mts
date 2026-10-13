@@ -1,8 +1,19 @@
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterAll, describe, expect, test } from "vitest";
+import type {
+  CatalogFixture,
+  HintViewFixture,
+} from "../tools/core/fixtures.mts";
 import {
   entryOf,
   miniCatalogFiles,
@@ -121,5 +132,38 @@ describe("spec:check", () => {
       cannotRun(versionOrder),
       cannotRun("spec/fixtures/hint-view/menu.json: "),
     ]);
+  });
+
+  test("prints the diagnostics of the fixture files sorted with those of the catalog", () => {
+    const files = miniCatalogFiles();
+    files.groups.data.groups.push({ keys: "SPC w", label: "Windows" });
+    const root = writeSpec("invalid-fixtures", files);
+    /** Changes a copied fixture file. */
+    function edit<T>(path: string, change: (data: T) => void) {
+      const file = join(root, "fixtures", path);
+      const data = JSON.parse(readFileSync(file, "utf8")) as T;
+      change(data);
+      writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
+    }
+    edit<CatalogFixture>("catalog/leader.json", (data) => {
+      data.cases[1]!.id = "root";
+    });
+    edit<HintViewFixture>("hint-view/badges.json", (data) => {
+      data.catalog.groups.push({ keys: "SPC t", label: "Tab" });
+    });
+    edit<Record<string, unknown>>("hint-view/menu.json", (data) => {
+      data.note = "x";
+    });
+    expect(specCheck("--root", root)).toEqual({
+      status: 1,
+      stdout: [
+        'spec/catalog/groups.json: SPC w: the prefix already has the group label "Window"',
+        "spec/fixtures/catalog/leader.json: root: cases[1] repeats the id of cases[0]",
+        "spec/fixtures/hint-view/badges.json: SPC t: no leader key is below this prefix",
+        'spec/fixtures/hint-view/menu.json: /: must NOT have additional properties: "note"',
+        "",
+      ].join("\n"),
+      stderr: "",
+    });
   });
 });
