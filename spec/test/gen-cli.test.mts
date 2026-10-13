@@ -12,6 +12,7 @@ import {
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
 import { afterAll, describe, expect, test } from "vitest";
+import type { Entry } from "../tools/core/catalog.mts";
 
 const specDir = join(import.meta.dirname, "..");
 const cli = join(specDir, "tools/gen.mts");
@@ -133,4 +134,69 @@ describe("gen", () => {
     ]);
     expect(generated(root)).toEqual(stale);
   });
+
+  test("exits 2 with a message and writes nothing when it cannot run", () => {
+    const missing = join(base, "missing", "spec");
+    const invalid = writeSpec("invalid-catalog");
+    editCommands(join(invalid, "catalog/commands/search.json"), ([search]) => {
+      search!.aliases![0]!.until = "1.0";
+    });
+    const badVersion = writeSpec("bad-version", "1.0");
+    const clash = writeSpec("clash");
+    editCommands(join(clash, "catalog/commands/file.json"), (commands) => {
+      commands.push({
+        ...commands[0]!,
+        id: "file.pick",
+        keys: { leader: ["SPC f f"] },
+        modes: ["x"],
+        label: "Pick file",
+      });
+    });
+    expect([
+      gen("--root", missing),
+      gen("--rot", missing),
+      gen("--root", invalid),
+      gen("--root", badVersion),
+      gen("--root", clash),
+    ]).toEqual([
+      cannotRun(missing),
+      cannotRun("'--rot'"),
+      {
+        status: 2,
+        stdout: "",
+        stderr:
+          'gen: spec/catalog/commands/search.json: search.project: aliases[0].until "1.0" is not a version x.y.z[-prerelease]\n',
+      },
+      {
+        status: 2,
+        stdout: "",
+        stderr:
+          'gen: spec/package.json: version "1.0" is not a version x.y.z[-prerelease]\n',
+      },
+      {
+        status: 2,
+        stdout: "",
+        stderr:
+          "gen: SPC f f: file.find and file.pick bind it in different modes, which which-key cannot tell apart\n",
+      },
+    ]);
+    expect([invalid, badVersion, clash].map(generated)).toEqual([{}, {}, {}]);
+  });
 });
+
+/** Changes the entries of a command file in place. */
+function editCommands(path: string, edit: (commands: Entry[]) => void): void {
+  const data = JSON.parse(readFileSync(path, "utf8")) as { commands: Entry[] };
+  edit(data.commands);
+  writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+/** A run that could not run: exit 2, nothing on stdout, a gen message with `text`. */
+function cannotRun(text: string) {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return {
+    status: 2,
+    stdout: "",
+    stderr: expect.stringMatching(new RegExp(`^gen: .*${escaped}`)),
+  };
+}
