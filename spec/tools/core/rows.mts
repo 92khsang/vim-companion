@@ -21,29 +21,44 @@ export function rows(
   prefix: readonly string[],
   options: ResolveOptions = {},
 ): Row[] {
+  return entryRows(catalog, ide, prefix, options).map(({ row }) => row);
+}
+
+/** A row of rows() and the entry whose key it is; undefined for a group. */
+export type EntryRow = { row: Row; entry: Entry | undefined };
+
+/** The rows of rows() with their entries, for which a key alone can be ambiguous across modes. */
+export function entryRows(
+  catalog: KeyCatalog,
+  ide: Ide,
+  prefix: readonly string[],
+  options: ResolveOptions = {},
+): EntryRow[] {
   const parent = `${["SPC", ...prefix].join(" ")} `;
   const child = (key: string) =>
     key.startsWith(parent) && !key.slice(parent.length).includes(" ");
-  const byKey = (a: Row, b: Row) => compareKeys([a.key], [b.key]);
+  const byKey = (a: EntryRow, b: EntryRow) =>
+    compareKeys([a.row.key], [b.row.key]);
   const leaves = leaderLeaves(catalog, options);
-  const leafRows = (alias: boolean): Row[] =>
+  const leafRows = (alias: boolean): EntryRow[] =>
     leaves
       .filter((leaf) => leaf.alias === alias && child(leaf.key))
       .map(({ key, entry }) => ({
-        key: key.slice(parent.length),
-        // An alias moves its key to the entry's first leader key.
-        label: alias ? `Moved to ${entry.keys.leader?.[0]}` : entry.label,
-        group: false,
-        badge: badge(entry, ide),
+        row: {
+          key: key.slice(parent.length),
+          // An alias moves its key to the entry's first leader key.
+          label: alias ? `Moved to ${entry.keys.leader?.[0]}` : entry.label,
+          group: false,
+          badge: badge(entry, ide),
+        },
+        entry,
       }))
       .sort(byKey);
-  const groups: Row[] = catalog.groups
+  const groups: EntryRow[] = catalog.groups
     .filter(({ keys }) => child(keys) && leafBelow(leaves, keys))
     .map(({ keys, label }) => ({
-      key: keys.slice(parent.length),
-      label,
-      group: true,
-      badge: null,
+      row: { key: keys.slice(parent.length), label, group: true, badge: null },
+      entry: undefined,
     }));
   return [...leafRows(false), ...leafRows(true), ...groups.sort(byKey)];
 }

@@ -17,7 +17,7 @@ import {
   whichKeyKey,
 } from "./keys.mts";
 import { boundKeys, leaderLeaves } from "./resolve.mts";
-import { rows } from "./rows.mts";
+import { entryRows } from "./rows.mts";
 
 /** The files that genIde returns, relative to spec/generated/, in the order it returns them. */
 export const GENERATED_PATHS = [
@@ -95,23 +95,22 @@ function leaderTree(
   version: string,
   prefix: readonly string[] = [],
 ): Node[] {
-  const leaves = leaderLeaves(catalog, { version });
-  return rows(catalog, ide, prefix, { version }).map((row): Node => {
-    const keys = [...prefix, row.key];
-    const tokens = ["SPC", ...keys];
-    if (row.group) {
-      return {
-        kind: "group",
-        tokens,
-        label: row.label,
-        children: leaderTree(catalog, ide, version, keys),
-      };
-    }
-    const key = tokens.join(" ");
-    const leaf = leaves.find((leaf) => leaf.key === key);
-    if (leaf === undefined) throw new Error(`no entry binds ${key}`);
-    return { kind: "leaf", key, tokens, label: row.label, entry: leaf.entry };
-  });
+  return entryRows(catalog, ide, prefix, { version }).map(
+    ({ row, entry }): Node => {
+      const keys = [...prefix, row.key];
+      const tokens = ["SPC", ...keys];
+      if (entry === undefined) {
+        return {
+          kind: "group",
+          tokens,
+          label: row.label,
+          children: leaderTree(catalog, ide, version, keys),
+        };
+      }
+      const key = tokens.join(" ");
+      return { kind: "leaf", key, tokens, label: row.label, entry };
+    },
+  );
 }
 
 /** The leaves below the nodes in display order. */
