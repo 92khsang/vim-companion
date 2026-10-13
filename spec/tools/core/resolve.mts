@@ -29,11 +29,12 @@ export function resolve(
   const version = options.version ?? "0.0.0";
   const entry = catalog.entries.find(
     (entry) =>
-      entry.keys.leader?.includes(key) ||
-      entry.aliases?.some(
-        (alias) =>
-          aliasActive(alias, version) && alias.keys.leader?.includes(key),
-      ),
+      (entry.stage === "stable" || options.experimental === true) &&
+      (entry.keys.leader?.includes(key) ||
+        entry.aliases?.some(
+          (alias) =>
+            aliasActive(alias, version) && alias.keys.leader?.includes(key),
+        )),
   );
   if (entry !== undefined) {
     return {
