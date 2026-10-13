@@ -18,12 +18,15 @@ function jsonFiles(root: string, dir: string): CatalogFile[] {
     .map((name) => readJsonFile(root, join(dir, name)));
 }
 
-/** A parsed JSON file. */
+/** A parsed JSON file; a syntax error names the file. */
 export function readJsonFile(root: string, path: string): CatalogFile {
-  return {
-    path: repoPath(root, path),
-    data: JSON.parse(readFileSync(path, "utf8")),
-  };
+  const file = repoPath(root, path);
+  const text = readFileSync(path, "utf8");
+  try {
+    return { path: file, data: JSON.parse(text) };
+  } catch (error) {
+    throw new Error(`${file}: ${(error as Error).message}`);
+  }
 }
 
 /** catalog/commands/*.json, groups.json, ctrl-keys.json and retired-ids.json of a spec directory. */
