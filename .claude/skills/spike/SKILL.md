@@ -20,9 +20,8 @@ draft PR and, later, in the engine contract tests built from it.
    ready for review. The branch never merges, so the two-day branch limit in AGENTS.md does not
    apply; the timebox does.
 4. Experiment in sandboxes: a VS Code `--user-data-dir` and `--extensions-dir` under a temporary
-   directory, or the IntelliJ sandbox from `runIde`. Never edit the user's real IDE profiles,
-   `~/.ideavimrc` or desktop settings without a backup and the user's approval. Installing
-   anything on the Mac (`ssh mac`) also needs approval.
+   directory, or the IntelliJ sandbox from `runIde`. Back up the user's real IDE profiles,
+   `~/.ideavimrc` or desktop settings before you edit them.
 
 ## While you experiment
 
