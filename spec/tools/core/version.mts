@@ -50,7 +50,15 @@ function compareText(a: string, b: string): number {
   return Number(a > b) - Number(a < b);
 }
 
+// A number has no leading zeros. A prerelease identifier is a number or [0-9A-Za-z-]+ with at least
+// one letter or hyphen.
+const NUMBER = "(?:0|[1-9][0-9]*)";
+const IDENTIFIER = `(?:${NUMBER}|[0-9]*[A-Za-z-][0-9A-Za-z-]*)`;
+const VERSION = new RegExp(
+  `^${NUMBER}\\.${NUMBER}\\.${NUMBER}(?:-${IDENTIFIER}(?:\\.${IDENTIFIER})*)?$`,
+);
+
 /** Whether the text is a SemVer 2.0.0 version without build metadata. */
 export function isVersion(text: string): boolean {
-  return false;
+  return VERSION.test(text);
 }
