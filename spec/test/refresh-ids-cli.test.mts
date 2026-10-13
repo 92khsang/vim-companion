@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
   chmodSync,
   cpSync,
@@ -12,7 +12,8 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { afterAll, describe, expect, test } from "vitest";
+import { setTimeout as delay } from "node:timers/promises";
+import { afterAll, describe, expect, onTestFinished, test } from "vitest";
 import { writeZip } from "./support/zip.mts";
 
 const specDir = join(import.meta.dirname, "..");
@@ -215,6 +216,14 @@ function fakeVscode(dir: string) {
       "}));",
       "// FAKE_CODE_NO_DUMP: VS Code fails before the dump extension writes anything.",
       'if (env.FAKE_CODE_NO_DUMP) { console.log("[main] Window failed to load"); process.exit(1); }',
+      "// FAKE_CODE_HANG: VS Code never dumps or quits; it writes its PID to that file and stays",
+      "// for a minute at most. FAKE_CODE_IGNORE_TERM: it ignores SIGTERM too.",
+      "if (env.FAKE_CODE_HANG) {",
+      '  if (env.FAKE_CODE_IGNORE_TERM) process.on("SIGTERM", () => {});',
+      "  writeFileSync(env.FAKE_CODE_HANG, `${process.pid}\\n`);",
+      "  setTimeout(() => process.exit(1), 60_000);",
+      "  await new Promise(() => {});",
+      "}",
       "writeFileSync(env.VIM_COMPANION_IDS_OUT, JSON.stringify({",
       '  vscode: env.FAKE_CODE_VERSION ?? "1.200.0",',
       "  activated,",
@@ -226,7 +235,7 @@ function fakeVscode(dir: string) {
   chmodSync(code, 0o755);
   writeText(
     join(bin, "xvfb-run"),
-    '#!/bin/sh\n[ "$1" = "-a" ] && shift\nexec "$@"\n',
+    '#!/bin/sh\n[ "$1" = "-a" ] && shift\n[ "$1" = "--auth-file" ] && shift 2\nexec "$@"\n',
   );
   chmodSync(join(bin, "xvfb-run"), 0o755);
   return {
@@ -248,12 +257,16 @@ function fakeVscode(dir: string) {
  * An xvfb-run under <dir> that works like /usr/bin/xvfb-run with a stand-in for Xvfb: it starts
  * the server in the background, runs its command as a child and, on exit, sends the server
  * SIGTERM without waiting for it. Like Xvfb, the server holds a lock file while it runs and
- * removes it a little while after SIGTERM. The lock file is in `tmp`, the TMPDIR of the run, so
- * that `tmp` is empty once everything has shut down. `path` is the PATH to put it in front of.
+ * removes it a little while after SIGTERM. Like xvfb-run, it keeps the X authority file in a
+ * temporary directory of its own unless --auth-file names one, and removes that directory on
+ * exit. The lock file and that directory are in `tmp`, the TMPDIR of the run, so that `tmp` is
+ * empty once everything has shut down. xvfb-run writes its PID, the process group of the run, to
+ * `group`. `path` is the PATH to put it in front of.
  */
 function fakeXvfbRun(dir: string, path: string) {
   const bin = join(dir, "xvfb");
   const tmp = join(dir, "tmp");
+  const group = join(dir, "xvfb-run.pid");
   mkdirSync(tmp, { recursive: true });
   const server = join(bin, "server.mjs");
   writeText(
@@ -275,8 +288,10 @@ function fakeXvfbRun(dir: string, path: string) {
     join(bin, "xvfb-run"),
     [
       "#!/bin/sh",
+      `echo $$ > '${group}'`,
       '[ "$1" = "-a" ] && shift',
-      "trap 'kill \"$server\"' EXIT",
+      'trap \'[ -z "$auth" ] || rm -r "$auth"; kill "$server"\' EXIT',
+      'if [ "$1" = "--auth-file" ]; then shift 2; else auth=$(mktemp -d -t xvfb-run.XXXXXX); fi',
       'lock="$TMPDIR/.X99-lock"',
       `node '${server}' "$lock" &`,
       "server=$!",
@@ -292,7 +307,48 @@ function fakeXvfbRun(dir: string, path: string) {
     ].join("\n"),
   );
   chmodSync(join(bin, "xvfb-run"), 0o755);
-  return { tmp, env: { PATH: `${bin}:${path}`, TMPDIR: tmp } };
+  return { tmp, group, env: { PATH: `${bin}:${path}`, TMPDIR: tmp } };
+}
+
+/** A run in the background; `exited` settles with what refreshWith returns. */
+function startWith(env: Record<string, string>, ...args: string[]) {
+  const child = spawn(process.execPath, [cli, ...args], {
+    env: { ...process.env, HOME: home, ...env },
+  });
+  let stdout = "";
+  let stderr = "";
+  child.stdout.setEncoding("utf8").on("data", (text) => (stdout += text));
+  child.stderr.setEncoding("utf8").on("data", (text) => (stderr += text));
+  const exited = new Promise<{
+    status: number | null;
+    stdout: string;
+    stderr: string;
+  }>((settle) => {
+    child.on("close", (status) => settle({ status, stdout, stderr }));
+  });
+  return { child, exited };
+}
+
+/** Whether `check` holds within `ms` milliseconds; it is checked every 20 ms. */
+async function eventually(check: () => boolean, ms: number): Promise<boolean> {
+  const deadline = Date.now() + ms;
+  while (!check()) {
+    if (Date.now() > deadline) return false;
+    await delay(20);
+  }
+  return true;
+}
+
+/** Whether a process of the group with the ID in the file `groupFile` is left. */
+function groupRunning(groupFile: string): boolean {
+  const group = textOf(groupFile);
+  if (group === null) return false;
+  try {
+    process.kill(-Number(group), 0);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 describe("ids:refresh", () => {
@@ -565,6 +621,68 @@ describe("ids:refresh", () => {
         status: 0,
         stderr: "",
         left: [],
+      });
+    },
+  );
+
+  test.each([
+    { signal: "SIGINT", status: 130, vscode: "quits on SIGTERM", env: {} },
+    { signal: "SIGTERM", status: 143, vscode: "quits on SIGTERM", env: {} },
+    {
+      signal: "SIGINT",
+      status: 130,
+      vscode: "ignores SIGTERM",
+      env: { FAKE_CODE_IGNORE_TERM: "1" },
+    },
+  ] as const)(
+    "vscode stopped by $signal ends VS Code, which $vscode, removes the temporary directories and exits $status",
+    SLOW,
+    async ({ signal, status, vscode, env }) => {
+      const dir = join(base, `vscode-${signal}-${vscode.split(" ")[0]}`);
+      const root = specIn(dir);
+      const fake = fakeVscode(dir);
+      const xvfb = fakeXvfbRun(dir, fake.env.PATH);
+      const pid = join(dir, "code.pid");
+      const run = startWith(
+        { ...fake.env, ...xvfb.env, ...env, FAKE_CODE_HANG: pid },
+        "vscode",
+        "--root",
+        root,
+        "--code",
+        fake.code,
+        "--extension",
+        "vscodevim.vim",
+      );
+      onTestFinished(() => {
+        // Nothing outlives a failed run.
+        run.child.kill("SIGKILL");
+        if (groupRunning(xvfb.group)) {
+          process.kill(-Number(textOf(xvfb.group)), "SIGKILL");
+        }
+      });
+      const started = await eventually(
+        () => existsSync(pid) || run.child.exitCode !== null,
+        30_000,
+      );
+      run.child.kill(signal);
+      const result = await run.exited;
+      const ended = await eventually(() => !groupRunning(xvfb.group), 10_000);
+      expect({
+        started: started && existsSync(pid),
+        result,
+        ended,
+        left: readdirSync(xvfb.tmp),
+        written: textOf(join(root, "ids/vscode.json")),
+      }).toEqual({
+        started: true,
+        result: {
+          status,
+          stdout: "",
+          stderr: `ids:refresh: interrupted by ${signal}\n`,
+        },
+        ended: true,
+        left: [],
+        written: null,
       });
     },
   );
