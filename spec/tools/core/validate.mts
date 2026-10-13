@@ -156,6 +156,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDuplicateGroups,
   checkDuplicateLabels,
   checkDeviations,
+  checkSemantics,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -582,6 +583,31 @@ function checkDeviations({ placed, uses }: Context): Diagnostic[] {
             `${first.use.field} ${q(first.use.text)} is remapped in ${IDE_NAMES[first.ide]}, so "deviation" is required`,
           ),
         ];
+  });
+}
+
+/**
+ * Rule MISSING_SEMANTICS: when one IDE runs engine keys and the other a command or action, the
+ * entry says how the engine side behaves.
+ */
+function checkSemantics({ placed }: Context): Diagnostic[] {
+  return placed.flatMap((at) => {
+    const { entry } = at;
+    if (entry.vscode === undefined || entry.intellij === undefined) return [];
+    const vscodevim = engineKeys(entry, "vscode") !== undefined;
+    if (vscodevim === (engineKeys(entry, "intellij") !== undefined)) return [];
+    const property = vscodevim ? "vscodevim" : "ideavim";
+    if (entry.semantics?.[property] !== undefined) return [];
+    const sides = vscodevim
+      ? "VS Code runs VSCodeVim keys and IntelliJ an action"
+      : "IntelliJ runs IdeaVim keys and VS Code a command";
+    return [
+      onEntry(
+        at,
+        "MISSING_SEMANTICS",
+        `${sides}, so ${q(`semantics.${property}`)} is required`,
+      ),
+    ];
   });
 }
 
