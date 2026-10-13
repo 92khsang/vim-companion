@@ -5,7 +5,13 @@ import {
   type Resolution,
   type ResolveOptions,
 } from "../tools/core/resolve.mts";
-import { miniCatalog } from "./support/mini-catalog.mts";
+import { validateCatalog } from "../tools/core/validate.mts";
+import {
+  entryOf,
+  loadSchemas,
+  miniCatalog,
+  miniCatalogFiles,
+} from "./support/mini-catalog.mts";
 
 type Case = {
   ide: Ide;
@@ -138,5 +144,39 @@ describe("resolve", () => {
         result: { kind: "leaf", entry: "file.find", supported: true },
       },
     ]);
+  });
+
+  test("finds a group only while a bound leaf is below it", () => {
+    // The alias of search.project in a group of its own, SPC s, which has no other key.
+    const files = miniCatalogFiles();
+    entryOf(files, "search.project").aliases = [
+      { keys: { leader: ["SPC s p"] }, until: "1.0.0" },
+    ];
+    files.groups.data.groups.push({ keys: "SPC s", label: "Search" });
+    expect(validateCatalog(files, loadSchemas()).diagnostics).toEqual([]);
+    expectResults(
+      [
+        { ide: "vscode", keys: ["g"], result: { kind: "unbound" } },
+        {
+          ide: "intellij",
+          keys: ["g"],
+          options: { experimental: true },
+          result: { kind: "group", label: "Git" },
+        },
+        {
+          ide: "vscode",
+          keys: ["s"],
+          options: { version: "1.0.0-rc.1" },
+          result: { kind: "group", label: "Search" },
+        },
+        {
+          ide: "intellij",
+          keys: ["s"],
+          options: { version: "1.0.0" },
+          result: { kind: "unbound" },
+        },
+      ],
+      miniCatalog(files),
+    );
   });
 });
