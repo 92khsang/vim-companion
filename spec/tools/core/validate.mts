@@ -160,6 +160,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkSupport,
   checkMotionModes,
   checkAliases,
+  checkRetiredIds,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -745,6 +746,22 @@ function checkAliases({ placed }: Context): Diagnostic[] {
       return found;
     });
   });
+}
+
+/** Rule RETIRED_ID: no entry takes the id of an entry that was removed. */
+function checkRetiredIds({ placed, retiredIds }: Context): Diagnostic[] {
+  const retired = new Set(retiredIds.ids);
+  return placed.flatMap((at) =>
+    retired.has(at.entry.id)
+      ? [
+          onEntry(
+            at,
+            "RETIRED_ID",
+            `the id is listed in ${retiredIds.file}, so no entry may use it again`,
+          ),
+        ]
+      : [],
+  );
 }
 
 const IDES = ["vscode", "intellij"] as const;
