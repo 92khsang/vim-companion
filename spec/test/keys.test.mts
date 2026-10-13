@@ -1,6 +1,11 @@
 import fc from "fast-check";
 import { describe, expect, test } from "vitest";
-import { compareKeys, parseLeader, parseVim } from "../tools/core/keys.mts";
+import {
+  compareKeys,
+  parseLeader,
+  parseVim,
+  whichKeyKey,
+} from "../tools/core/keys.mts";
 
 // The key grammar, written out independently of the implementation.
 const LEADER_CHARS = [
@@ -238,6 +243,25 @@ describe("compareKeys", () => {
       fc.property(fc.oneof(leaderToken, printable("<|"), vimGroup), (token) => {
         if (token !== "SPC")
           expect(compareKeys(["SPC"], [token])).toBeLessThan(0);
+      }),
+    );
+  });
+});
+
+describe("whichKeyKey", () => {
+  test("renders SPC as a space and every other leader token as itself", () => {
+    expect(["SPC", "w", "/", "W", "0", "?"].map(whichKeyKey)).toEqual([
+      " ",
+      "w",
+      "/",
+      "W",
+      "0",
+      "?",
+    ]);
+    // which-key matches one typed character per menu level.
+    fc.assert(
+      fc.property(leaderToken, (token) => {
+        expect(whichKeyKey(token)).toHaveLength(1);
       }),
     );
   });

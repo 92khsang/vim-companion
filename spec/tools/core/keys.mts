@@ -53,3 +53,7 @@ export function compareKeys(
   }
   return a.length - b.length;
 }
+
+export function whichKeyKey(token: string): string {
+  return "";
+}
