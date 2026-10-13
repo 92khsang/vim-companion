@@ -360,12 +360,13 @@ function quote(text: string): string {
   return `'${text.replaceAll("'", "''")}'`;
 }
 
-/** sethandler lines; the keys with a macOS value in one if has('mac') block. */
+/** sethandler lines sorted by key; the keys with a macOS value in one if has('mac') block. */
 function ctrlKeyLines(keys: readonly CtrlKey[]): string[] {
-  const mac = keys.filter((key) => key.mac !== undefined);
+  const sorted = [...keys].sort((a, b) => compareText(a.key, b.key));
+  const mac = sorted.filter((key) => key.mac !== undefined);
   return [
     '" Ctrl keys: which of the IDE and IdeaVim handles each key; modes left out go to IdeaVim.',
-    ...keys
+    ...sorted
       .filter((key) => key.mac === undefined)
       .map((key) => `sethandler ${key.key} ${key.handler}`),
     "if has('mac')",
@@ -374,4 +375,9 @@ function ctrlKeyLines(keys: readonly CtrlKey[]): string[] {
     ...mac.map((key) => `  sethandler ${key.key} ${key.handler}`),
     "endif",
   ];
+}
+
+/** Code-unit order. */
+function compareText(a: string, b: string): number {
+  return Number(a > b) - Number(a < b);
 }
