@@ -167,7 +167,14 @@ export function runtimeIntellijIds(
   toolWindows: readonly string[],
   declared: readonly string[],
 ): string[] {
-  return [];
+  const known = new Set(declared);
+  const derived = [
+    // ActivateToolWindowAction.getActionIdForToolWindow: Kotlin's replace drops every space.
+    ...toolWindows.map((id) => `Activate${id.replaceAll(" ", "")}ToolWindow`),
+    // The DefaultRunExecutor and DefaultDebugExecutor actions and their context actions.
+    ...["Run", "RunClass", "Debug", "DebugClass"],
+  ];
+  return [...new Set(derived)].filter((id) => !known.has(id)).sort();
 }
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
