@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import {
   cpSync,
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
@@ -95,6 +96,15 @@ describe("gen", () => {
       stdout: [...UNSUPPORTED, ""].join("\n"),
       stderr: "",
     });
+    expect(generated(root)).toEqual(expected());
+  });
+
+  test("deletes the files under generated/ that it no longer writes", () => {
+    const root = writeSpec("delete");
+    mkdirSync(join(root, "generated/old"), { recursive: true });
+    writeFileSync(join(root, "generated/old/stale.json"), "{}\n");
+    writeFileSync(join(root, "generated/whichkey.bindings.json"), "[]\n");
+    expect(gen("--root", root).status).toBe(0);
     expect(generated(root)).toEqual(expected());
   });
 });
