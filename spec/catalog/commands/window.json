@@ -207,7 +207,7 @@
       "category": "window",
       "keys": { "leader": ["SPC w c"] },
       "label": "Close split",
-      "description": "Closes the current split and all of its tabs, like <C-w>c. With a single split, every tab closes.",
+      "description": "Closes the current split with its tabs, like <C-w>c. With a single split, the tabs close and the split remains.",
       "examples": [
         "Two splits, cursor in the right one: SPC w c → only the left split is left"
       ],
@@ -222,7 +222,7 @@
       "intellij": { "ideavimKeys": "<C-w>c" },
       "semantics": {
         "vscodevim": "VSCodeVim's own <C-w>c closes only the active tab; SPC w c closes the editor group with all of its tabs, pinned ones included. With a single group, the tabs close and the empty group remains.",
-        "ideavim": "Runs IdeaVim's own <C-w>c, which closes the current split with all of its tabs; in the last split it closes every tab, where Vim refuses with E444."
+        "ideavim": "Runs IdeaVim's own <C-w>c, which closes the unpinned tabs of the current split and then the split if no tab is left, so a split with a pinned tab stays open. In the last split it closes the unpinned tabs, where Vim refuses with E444."
       },
       "verifiedAgainst": {
         "vscode": "1.141.0",
@@ -249,7 +249,7 @@
       "intellij": { "ideavimKeys": "<C-w>o" },
       "semantics": {
         "vscodevim": "SPC w o closes the unpinned tabs of every other editor group, so a group that holds a pinned tab remains. VSCodeVim's own <C-w>o merges all groups into one instead.",
-        "ideavim": "Runs IdeaVim's own <C-w>o, which closes every other split with all of its tabs."
+        "ideavim": "Runs IdeaVim's own <C-w>o, which closes the unpinned tabs of every other split and then each split left without tabs, so a split with a pinned tab stays open."
       },
       "verifiedAgainst": {
         "vscode": "1.141.0",
