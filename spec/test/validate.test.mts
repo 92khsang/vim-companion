@@ -1,5 +1,10 @@
 import { describe, expect, test } from "vitest";
-import type { Diagnostic } from "../tools/core/catalog.mts";
+import type {
+  Diagnostic,
+  Entry,
+  IntellijBinding,
+  VscodeExec,
+} from "../tools/core/catalog.mts";
 import { validateCatalog } from "../tools/core/validate.mts";
 import {
   entryOf,
@@ -35,6 +40,20 @@ const diagnostic = (
   code: string,
   message: string,
 ): Diagnostic => ({ file, where, code, message });
+
+/** code.join: the Vim key gJ, which each IDE runs as given. */
+function joinEntry(vscode: VscodeExec, intellij: IntellijBinding): Entry {
+  const entry = newEntry("code.join", "SPC c j", "Join lines");
+  entry.keys = { vim: ["gJ"], leader: ["SPC c j"] };
+  entry.vscode = {
+    exec: vscode,
+    exit: "editor",
+    repeatable: false,
+    count: "none",
+  };
+  entry.intellij = intellij;
+  return entry;
+}
 
 /** A view of a typed object that lets a test break its shape. */
 const loose = (value: object) => value as Record<string, unknown>;
@@ -1208,6 +1227,94 @@ describe("validateCatalog", () => {
             "SPC g",
             "DUPLICATE_LABEL",
             'the label "Code" is also used under "SPC" by group "SPC c"',
+          ),
+        ],
+      },
+    ]);
+  });
+
+  test("MISSING_DEVIATION reports an entry without a deviation whose Vim key an IDE remaps", () => {
+    runCases([
+      {
+        name: "a Vim key that both engines run natively",
+        change: (files) => {
+          fileOf(files, "code").data.commands.push(
+            joinEntry({ vimKeys: "gJ" }, { ideavimKeys: "gJ" }),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "a Vim key native in the only IDE that supports the entry",
+        change: (files) => {
+          const entry = newEntry("diag.hunk", "SPC c h", "Go to next change");
+          entry.keys = { vim: ["]c"] };
+          delete entry.vscode;
+          entry.intellij = { ideavimKeys: "]c" };
+          entry.support = {
+            vscode: { level: "none", note: "VS Code has no change motion." },
+          };
+          fileOf(files, "diag").data.commands.push(entry);
+        },
+        expected: [],
+      },
+      {
+        name: "a Vim key that both IDEs run as a command",
+        change: (files) => {
+          delete entryOf(files, "code.action").deviation;
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.action",
+            "MISSING_DEVIATION",
+            'keys.vim[0] "gra" is remapped in VS Code, so "deviation" is required',
+          ),
+        ],
+      },
+      {
+        name: "a Vim key native in IntelliJ but a command in VS Code",
+        change: (files) => {
+          delete entryOf(files, "code.hover").deviation;
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "MISSING_DEVIATION",
+            'keys.vim[0] "K" is remapped in VS Code, so "deviation" is required',
+          ),
+        ],
+      },
+      {
+        name: "an alias Vim key that the engines run as other keys",
+        change: (files) => {
+          const entry = joinEntry({ vimKeys: "gJ" }, { ideavimKeys: "gJ" });
+          entry.aliases = [{ keys: { vim: ["gX"] }, until: "1.0.0" }];
+          fileOf(files, "code").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.join",
+            "MISSING_DEVIATION",
+            'aliases[0].keys.vim[0] "gX" is remapped in VS Code, so "deviation" is required',
+          ),
+        ],
+      },
+      {
+        name: "a Vim key that only IntelliJ runs as an action",
+        change: (files) => {
+          const entry = joinEntry({ vimKeys: "gJ" }, { action: "JoinLines" });
+          entry.semantics = { vscodevim: "Runs VSCodeVim gJ." };
+          fileOf(files, "code").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.join",
+            "MISSING_DEVIATION",
+            'keys.vim[0] "gJ" is remapped in IntelliJ, so "deviation" is required',
           ),
         ],
       },
