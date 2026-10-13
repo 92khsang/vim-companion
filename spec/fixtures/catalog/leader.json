@@ -1,0 +1,374 @@
+{
+  "$schema": "../../schema/fixture-catalog.schema.json",
+  "description": "Where leader keys lead: the root, groups, entries and alias keys; unsupported entries still resolve, experimental entries only with the option, aliases only below their version.",
+  "catalog": {
+    "entries": [
+      {
+        "id": "file.find",
+        "category": "file",
+        "keys": {
+          "leader": ["SPC f f", "SPC SPC"]
+        },
+        "label": "Find file",
+        "description": "Opens a file of the workspace by its name.",
+        "examples": ["SPC f f, main → main.ts opens"],
+        "rationale": "f for file, f for find; SPC SPC for the most used key.",
+        "stage": "stable",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.quickOpen"
+          },
+          "exit": "input",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "GotoFile"
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "search.project",
+        "category": "search",
+        "keys": {
+          "leader": ["SPC /"]
+        },
+        "label": "Search in project",
+        "description": "Searches the text of every file in the workspace.",
+        "examples": ["SPC /, TODO → every TODO of the workspace is listed"],
+        "rationale": "/ searches in Vim.",
+        "stage": "stable",
+        "modes": ["n", "x"],
+        "aliases": [
+          {
+            "keys": {
+              "leader": ["SPC f s"]
+            },
+            "until": "1.0.0"
+          }
+        ],
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.findInFiles"
+          },
+          "exit": "input",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "FindInPath"
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.focus-left",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w h"]
+        },
+        "label": "Focus split left",
+        "description": "Moves the cursor to the split on the left.",
+        "examples": ["SPC w h → the cursor is in the split on the left"],
+        "rationale": "h moves left in Vim.",
+        "stage": "stable",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.focusLeftGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "repeat"
+        },
+        "intellij": {
+          "ideavimKeys": "<C-w>h"
+        },
+        "semantics": {
+          "ideavim": "Runs IdeaVim <C-w>h, which moves between editor splits."
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.maximize",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w m"]
+        },
+        "label": "Maximize split",
+        "description": "Gives the active split the whole editor area, or gives the other splits their share back.",
+        "examples": ["SPC w m → the active split fills the editor area"],
+        "rationale": "m for maximize.",
+        "stage": "stable",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.toggleMaximizeEditorGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "none"
+        },
+        "support": {
+          "intellij": {
+            "level": "none",
+            "note": "This fixture binds it in VS Code only."
+          }
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "git.status",
+        "category": "git",
+        "keys": {
+          "leader": ["SPC g g"]
+        },
+        "label": "Show Git changes",
+        "description": "Lists the changed files of the repository.",
+        "examples": ["SPC g g → the changed files are listed"],
+        "rationale": "g for Git, twice for its main view.",
+        "stage": "experimental",
+        "vscode": {
+          "exec": {
+            "command": "workbench.view.scm"
+          },
+          "exit": "input",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "ActivateCommitToolWindow"
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      }
+    ],
+    "groups": [
+      {
+        "keys": "SPC f",
+        "label": "File"
+      },
+      {
+        "keys": "SPC g",
+        "label": "Git"
+      },
+      {
+        "keys": "SPC w",
+        "label": "Window"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "root",
+      "ide": "vscode",
+      "keys": [],
+      "expect": {
+        "kind": "group",
+        "label": ""
+      }
+    },
+    {
+      "id": "group-w",
+      "ide": "vscode",
+      "keys": ["w"],
+      "expect": {
+        "kind": "group",
+        "label": "Window"
+      }
+    },
+    {
+      "id": "group-f",
+      "ide": "intellij",
+      "keys": ["f"],
+      "expect": {
+        "kind": "group",
+        "label": "File"
+      }
+    },
+    {
+      "id": "leaf-w-h",
+      "ide": "vscode",
+      "keys": ["w", "h"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "window.focus-left",
+        "supported": true
+      }
+    },
+    {
+      "id": "leaf-f-f",
+      "ide": "vscode",
+      "keys": ["f", "f"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "file.find",
+        "supported": true
+      }
+    },
+    {
+      "id": "leaf-spc-spc",
+      "ide": "intellij",
+      "keys": ["SPC"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "file.find",
+        "supported": true
+      }
+    },
+    {
+      "id": "leaf-slash",
+      "ide": "intellij",
+      "keys": ["/"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "search.project",
+        "supported": true
+      }
+    },
+    {
+      "id": "alias-f-s",
+      "ide": "vscode",
+      "keys": ["f", "s"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "search.project",
+        "supported": true
+      }
+    },
+    {
+      "id": "alias-before-until",
+      "ide": "intellij",
+      "options": {
+        "version": "1.0.0-rc.1"
+      },
+      "keys": ["f", "s"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "search.project",
+        "supported": true
+      }
+    },
+    {
+      "id": "alias-expired",
+      "ide": "vscode",
+      "options": {
+        "version": "1.0.0"
+      },
+      "keys": ["f", "s"],
+      "expect": {
+        "kind": "unbound"
+      }
+    },
+    {
+      "id": "group-after-alias-expired",
+      "ide": "vscode",
+      "options": {
+        "version": "1.0.0"
+      },
+      "keys": ["f"],
+      "expect": {
+        "kind": "group",
+        "label": "File"
+      }
+    },
+    {
+      "id": "unbound-x",
+      "ide": "vscode",
+      "keys": ["x"],
+      "expect": {
+        "kind": "unbound"
+      }
+    },
+    {
+      "id": "unbound-below-leaf",
+      "ide": "intellij",
+      "keys": ["w", "h", "j"],
+      "expect": {
+        "kind": "unbound"
+      }
+    },
+    {
+      "id": "unsupported-w-m",
+      "ide": "intellij",
+      "keys": ["w", "m"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "window.maximize",
+        "supported": false
+      }
+    },
+    {
+      "id": "supported-w-m",
+      "ide": "vscode",
+      "keys": ["w", "m"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "window.maximize",
+        "supported": true
+      }
+    },
+    {
+      "id": "experimental-hidden",
+      "ide": "vscode",
+      "keys": ["g", "g"],
+      "expect": {
+        "kind": "unbound"
+      }
+    },
+    {
+      "id": "experimental-group-hidden",
+      "ide": "intellij",
+      "keys": ["g"],
+      "expect": {
+        "kind": "unbound"
+      }
+    },
+    {
+      "id": "experimental-shown",
+      "ide": "vscode",
+      "options": {
+        "experimental": true
+      },
+      "keys": ["g", "g"],
+      "expect": {
+        "kind": "leaf",
+        "entry": "git.status",
+        "supported": true
+      }
+    },
+    {
+      "id": "experimental-group-shown",
+      "ide": "intellij",
+      "options": {
+        "experimental": true
+      },
+      "keys": ["g"],
+      "expect": {
+        "kind": "group",
+        "label": "Git"
+      }
+    }
+  ]
+}

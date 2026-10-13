@@ -3,7 +3,12 @@
 // "spec/catalog/groups.json".
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
-import type { CatalogFile, CatalogFiles, SchemaSet } from "./core/validate.mts";
+import type {
+  CatalogFile,
+  CatalogFiles,
+  FixtureFiles,
+  SchemaSet,
+} from "./core/validate.mts";
 
 /** The path of a file below the spec directory `root`, for messages. */
 export function repoPath(root: string, path: string): string {
@@ -37,6 +42,16 @@ export function readCatalogFiles(root: string): CatalogFiles {
     groups: readJsonFile(root, join(catalog, "groups.json")),
     ctrlKeys: readJsonFile(root, join(catalog, "ctrl-keys.json")),
     retiredIds: readJsonFile(root, join(catalog, "retired-ids.json")),
+  };
+}
+
+/** fixtures/catalog/*.json, fixtures/hint-view/*.json and fixtures/version-order.json of a spec directory. */
+export function readFixtureFiles(root: string): FixtureFiles {
+  const fixtures = join(root, "fixtures");
+  return {
+    catalog: jsonFiles(root, join(fixtures, "catalog")),
+    hintView: jsonFiles(root, join(fixtures, "hint-view")),
+    versionOrder: readJsonFile(root, join(fixtures, "version-order.json")),
   };
 }
 
