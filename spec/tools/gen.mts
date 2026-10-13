@@ -3,7 +3,8 @@
 // no longer writes. Prints a line per key that an IDE leaves out as unsupported.
 // --check: writes nothing; prints "missing|changed|extra <path>" lines and "run: pnpm gen" and
 // exits 1 when generated/ differs from what gen would write, 0 when it does not.
-// Exits 2 when it cannot run, such as for a catalog that spec:check rejects.
+// Exits 2 when it cannot run, such as for a catalog that spec:check rejects, and prints why on
+// stderr, each line after "gen: ".
 // --root <dir>: the spec directory; by default the one this file is in.
 import {
   existsSync,
@@ -116,14 +117,18 @@ function check(
   return 1;
 }
 
-/** Prints why gen cannot run and returns its exit code. */
+/** Prints why gen cannot run, each line after "gen: ", and returns its exit code. */
 function cannotRun(messages: readonly string[]): number {
-  for (const message of messages) console.error(`gen: ${message}`);
+  for (const message of messages) {
+    for (const line of message.split("\n")) console.error(`gen: ${line}`);
+  }
   return 2;
 }
 
 try {
   process.exitCode = run();
 } catch (error) {
-  process.exitCode = cannotRun([(error as Error).message]);
+  process.exitCode = cannotRun([
+    error instanceof Error ? error.message : String(error),
+  ]);
 }
