@@ -22,16 +22,28 @@ export function rows(
   options: ResolveOptions = {},
 ): Row[] {
   const parent = `${["SPC", ...prefix].join(" ")} `;
-  return leaderLeaves(catalog, options)
-    .filter(
-      ({ key }) =>
-        key.startsWith(parent) && !key.slice(parent.length).includes(" "),
-    )
+  const child = (key: string) =>
+    key.startsWith(parent) && !key.slice(parent.length).includes(" ");
+  const byKey = (a: Row, b: Row) => compareKeys([a.key], [b.key]);
+  const leaves = leaderLeaves(catalog, options);
+  const entries: Row[] = leaves
+    .filter(({ key }) => child(key))
     .map(({ key, entry }) => ({
       key: key.slice(parent.length),
       label: entry.label,
       group: false,
       badge: null,
-    }))
-    .sort((a, b) => compareKeys([a.key], [b.key]));
+    }));
+  const groups: Row[] = catalog.groups
+    .filter(
+      ({ keys }) =>
+        child(keys) && leaves.some(({ key }) => key.startsWith(`${keys} `)),
+    )
+    .map(({ keys, label }) => ({
+      key: keys.slice(parent.length),
+      label,
+      group: true,
+      badge: null,
+    }));
+  return [...entries.sort(byKey), ...groups.sort(byKey)];
 }
