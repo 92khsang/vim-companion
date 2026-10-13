@@ -99,10 +99,10 @@ export function validateCatalog(
 }
 
 /**
- * The fixture files (design §5): each file against its fixture schema, then the inline catalog of
- * each file that matches it with the rules of validateCatalog. A fixture file holds entries of
- * any category, so its stem is not compared with them. The diagnostics are sorted as those of
- * validateCatalog.
+ * The fixture files (design §5): each file against its fixture schema, then, in each file that
+ * matches it, the inline catalog with the rules of validateCatalog and the case ids and versions.
+ * A fixture file holds entries of any category, so its stem is not compared with them. The
+ * diagnostics are sorted as those of validateCatalog.
  */
 export function validateFixtures(
   files: FixtureFiles,
@@ -132,7 +132,7 @@ export function validateFixtures(
     .flatMap(({ path, data }) => {
       const { catalog, cases } = data as {
         catalog: KeyCatalog;
-        cases: { id: string }[];
+        cases: FixtureCase[];
       };
       return [
         ...checkRules({
@@ -146,9 +146,52 @@ export function validateFixtures(
           retiredIds: { file: path, ids: [] },
         }),
         ...checkCaseIds(path, cases),
+        ...checkCaseVersions(path, cases),
       ];
     });
-  return sortDiagnostics([...schemaErrors, ...ruleErrors]);
+  const orderErrors = broken.has(files.versionOrder.path)
+    ? []
+    : checkVersionOrder(files.versionOrder);
+  return sortDiagnostics([...schemaErrors, ...ruleErrors, ...orderErrors]);
+}
+
+/** What the rules read of a case of fixtures/catalog/ or fixtures/hint-view/. */
+type FixtureCase = { id: string; options?: { version?: string } };
+
+/** The end of a message about a string that isVersion rejects. */
+const NOT_A_VERSION = "is not a version x.y.z[-prerelease]";
+
+/** Rule VERSION: the version in the options of a case is x.y.z[-prerelease] (isVersion). */
+function checkCaseVersions(file: string, cases: FixtureCase[]): Diagnostic[] {
+  return cases.flatMap(({ id, options }) =>
+    options?.version === undefined || isVersion(options.version)
+      ? []
+      : [
+          {
+            file,
+            where: id,
+            code: "VERSION",
+            message: `options.version ${q(options.version)} ${NOT_A_VERSION}`,
+          },
+        ],
+  );
+}
+
+/** Rule VERSION: each item of fixtures/version-order.json is x.y.z[-prerelease] (isVersion). */
+function checkVersionOrder({ path, data }: CatalogFile): Diagnostic[] {
+  const { ascending } = data as { ascending: string[] };
+  return ascending.flatMap((version, i) =>
+    isVersion(version)
+      ? []
+      : [
+          {
+            file: path,
+            where: "ascending",
+            code: "VERSION",
+            message: `ascending[${i}] ${q(version)} ${NOT_A_VERSION}`,
+          },
+        ],
+  );
 }
 
 /** Rule DUPLICATE_CASE_ID: the cases of a fixture file have different ids. */
@@ -853,7 +896,7 @@ function checkAliases({ placed }: Context): Diagnostic[] {
           onEntry(
             at,
             "ALIAS",
-            `aliases[${a}].until ${q(alias.until)} is not a version x.y.z[-prerelease]`,
+            `aliases[${a}].until ${q(alias.until)} ${NOT_A_VERSION}`,
           ),
         );
       }
