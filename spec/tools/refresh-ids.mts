@@ -23,6 +23,7 @@ import {
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { parseArgs } from "node:util";
 import { readSchemas, repoPath } from "./catalog-files.mts";
 import {
@@ -161,6 +162,9 @@ const SETTINGS = {
 /** The longest wait for VS Code to dump the commands and quit. */
 const TIMEOUT_MS = 120_000;
 
+/** How long the processes of a group get to quit after SIGTERM before they get SIGKILL. */
+const GRACE_MS = 3_000;
+
 /**
  * Runs VS Code with the dump extension in the directory `temp`, with copies of the extensions to
  * activate, and returns the dump.
@@ -240,8 +244,9 @@ async function dumpCommands(
 }
 
 /**
- * Runs a command in a process group of its own with its output in `log`, and kills the group when
- * the command ends or after TIMEOUT_MS.
+ * Runs a command in a process group of its own with its output in `log`. When the command ends,
+ * the processes left in the group get to finish their shutdown (endGroup); after TIMEOUT_MS, the
+ * whole group gets SIGKILL at once.
  */
 function run(
   command: string,
@@ -256,15 +261,8 @@ function run(
       detached: true,
       stdio: ["ignore", output, output],
     });
-    const killGroup = () => {
-      try {
-        process.kill(-child.pid!, "SIGKILL");
-      } catch {
-        // The group has already ended.
-      }
-    };
     const timer = setTimeout(() => {
-      killGroup();
+      signalGroup(child.pid!, "SIGKILL");
       fail(new Error(`VS Code did not quit within ${TIMEOUT_MS / 1000} s`));
     }, TIMEOUT_MS);
     child.on("error", (error) => {
@@ -273,11 +271,35 @@ function run(
     });
     child.on("exit", () => {
       clearTimeout(timer);
-      // Processes that VS Code left behind.
-      killGroup();
-      done();
+      // Processes that VS Code left behind, and Xvfb: xvfb-run sends it SIGTERM on exit without
+      // waiting, and Xvfb removes its lock file and socket in /tmp only as it shuts down.
+      endGroup(child.pid!).then(done, fail);
     });
   }).finally(() => closeSync(output));
+}
+
+/**
+ * Sends SIGTERM to the processes of a group and waits until none is left, at most GRACE_MS; then
+ * kills the ones still there.
+ */
+async function endGroup(group: number): Promise<void> {
+  const deadline = Date.now() + GRACE_MS;
+  let running = signalGroup(group, "SIGTERM");
+  while (running && Date.now() < deadline) {
+    await delay(50);
+    running = signalGroup(group, 0);
+  }
+  if (running) signalGroup(group, "SIGKILL");
+}
+
+/** Sends a signal (0: none, a check) to the processes of a group; false when none is left. */
+function signalGroup(group: number, signal: NodeJS.Signals | 0): boolean {
+  try {
+    process.kill(-group, signal);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** The last lines of a log file. */
