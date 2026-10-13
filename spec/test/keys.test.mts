@@ -120,4 +120,53 @@ describe("parseVim", () => {
       }),
     );
   });
+
+  test("reports a malformed Vim key instead of splitting it", () => {
+    expect(parseVim("g a")).toEqual({
+      ok: false,
+      message:
+        '"g a" is not a Vim key: keys without spaces, each a printable ASCII character other than < and |, or a <...> group such as <C-w>',
+    });
+    const malformed = [
+      "",
+      "g a",
+      "a|b",
+      "<",
+      "<C-w",
+      "<>",
+      "<C w>",
+      "<C-|>",
+      "x<y",
+      "<<",
+      "<a<b>",
+      "é",
+      "a\tb",
+      "a\n",
+      "a\x7f",
+      "\0",
+    ];
+    const accepted = malformed.filter((text) => {
+      const parsed = parseVim(text);
+      return (
+        parsed.ok ||
+        !parsed.message.startsWith(`${JSON.stringify(text)} is not a Vim key: `)
+      );
+    });
+    expect(accepted).toEqual([]);
+    // A space or a "|" anywhere, even inside a group, makes it malformed.
+    fc.assert(
+      fc.property(
+        vimKey,
+        fc.constantFrom(" ", "|"),
+        fc.nat(),
+        (tokens, char, n) => {
+          const text = tokens.join("");
+          const at = n % (text.length + 1);
+          expect(
+            parseVim(`${text.slice(0, at)}${char}${text.slice(at)}`).ok,
+          ).toBe(false);
+        },
+      ),
+    );
+  });
 });
