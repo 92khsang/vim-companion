@@ -30,6 +30,18 @@ describe("genIde", () => {
       genIde(miniCatalog(without(["diag", "git"], ["SPC g"]))),
     );
   });
+
+  test("keeps an alias in the versions before its until and drops it from then on", () => {
+    // ]e of diag.next and SPC f s of search.project are aliases until 1.0.0.
+    const noAliases = miniCatalogFiles();
+    delete entryOf(noAliases, "diag.next").aliases;
+    delete entryOf(noAliases, "search.project").aliases;
+    const catalog = miniCatalog();
+    expect([
+      genIde(catalog, { version: "1.0.0-rc.1" }),
+      genIde(catalog, { version: "1.0.0" }),
+    ]).toEqual([genIde(catalog), genIde(miniCatalog(noAliases))]);
+  });
 });
 
 describe("whichKeyArgs", () => {
