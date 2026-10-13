@@ -2,26 +2,36 @@
 // the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run.
 //   vscode   [--code <binary>] [--extension <publisher.name>]... [--drop-extension <publisher.name>]...
 //   intellij [--ide-home <dir>] [--plugins-dir <dir>] [--plugin <dir or .jar>]... [--drop-plugin <name>]...
-// The allow-listed plugins are the ones of the snapshot it replaces, plus --plugin, minus
-// --drop-plugin.
+// The allow-listed extensions or plugins are the ones of the snapshot it replaces, plus
+// --extension or --plugin, minus --drop-extension or --drop-plugin.
+// VS Code runs under xvfb-run with the dump extension in tools/ids/vscode-dump, in temporary
+// directories with copies of the allow-listed extensions: it never sees the user's own.
 // --root <dir>: the spec directory to write to; by default the one this file is in.
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
+  closeSync,
+  cpSync,
   existsSync,
   mkdirSync,
+  mkdtempSync,
+  openSync,
   readdirSync,
   readFileSync,
+  rmSync,
   statSync,
   writeFileSync,
 } from "node:fs";
-import { homedir } from "node:os";
-import { dirname, join, resolve, sep } from "node:path";
+import { homedir, tmpdir } from "node:os";
+import { basename, dirname, join, resolve, sep } from "node:path";
 import { parseArgs } from "node:util";
 import { readSchemas, repoPath } from "./catalog-files.mts";
 import {
+  mergeVscodeCommands,
   parseDescriptorIds,
+  pickExtensions,
   pluginVersion,
   runtimeIntellijIds,
+  type Extension,
   type IntellijIds,
   type VscodeIds,
 } from "./core/ids.mts";
@@ -57,7 +67,7 @@ function parseOptions() {
   return parseArgs({ options: OPTIONS, allowPositionals: true });
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const { values, positionals } = parseOptions();
   const [ide, ...rest] = positionals;
   if ((ide !== "vscode" && ide !== "intellij") || rest.length > 0) {
@@ -70,13 +80,211 @@ function main(): void {
     }
   }
   const root = resolve(values.root ?? join(import.meta.dirname, ".."));
-  if (ide === "vscode") refreshVscode(values);
+  if (ide === "vscode") await refreshVscode(root, values);
   else refreshIntellij(root, values);
 }
 
-function refreshVscode(values: Values): void {
+async function refreshVscode(root: string, values: Values): Promise<void> {
   const code = resolve(values.code ?? "/usr/share/code/code");
-  readJson(join(dirname(code), "resources/app/package.json"));
+  const app = join(dirname(code), "resources/app");
+  const { version } = readJson(join(app, "package.json")) as {
+    version: string;
+  };
+  const previous = previousSnapshot(root, "vscode") as VscodeIds | undefined;
+  const dropped = new Set(
+    (values["drop-extension"] ?? []).map((id) => id.toLowerCase()),
+  );
+  const wanted = [
+    ...Object.keys(previous?.extensions ?? {}),
+    ...(values.extension ?? []),
+  ].filter((id) => !dropped.has(id.toLowerCase()));
+  const source = join(homedir(), ".vscode/extensions");
+  const installed = manifestsIn(source);
+  const { picked, missing } = pickExtensions(installed, wanted);
+  if (missing.length > 0) {
+    throw new Error(`${source} has no ${missing.join(", ")}`);
+  }
+  const temp = mkdtempSync(join(tmpdir(), "vim-companion-ids-"));
+  let dump: Dump;
+  try {
+    dump = await dumpCommands(code, temp, picked);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
+  // Commands of extensions that did not activate are missing from the dump, so the declared
+  // ones of every built-in and allow-listed extension join them.
+  const manifests = [
+    ...manifestsIn(join(app, "extensions")),
+    ...installed.filter(({ dir }) => picked.some((pick) => pick.dir === dir)),
+  ].map(({ manifest }) => manifest);
+  const snapshot: VscodeIds = {
+    vscode: version,
+    extensions: Object.fromEntries(
+      picked.map(({ id, version }) => [id, version]),
+    ),
+    commands: mergeVscodeCommands(dump.commands, manifests),
+  };
+  const file = writeSnapshot(root, "vscode", snapshot);
+  const from = [
+    `VS Code ${version}`,
+    ...picked.map(({ id, version }) => `${id} ${version}`),
+  ].join(", ");
+  console.log(
+    `ids:refresh: wrote ${file}: ${snapshot.commands.length} commands from ${from}`,
+  );
+}
+
+/** What the dump extension writes. */
+type Dump = { vscode: string; activated: string[]; commands: string[] };
+
+/** Settings of the temporary profile: no updates, so the copies keep their versions; no telemetry. */
+const SETTINGS = {
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "none",
+  "workbench.enableExperiments": false,
+  "workbench.startupEditor": "none",
+};
+
+/** The longest wait for VS Code to dump the commands and quit. */
+const TIMEOUT_MS = 120_000;
+
+/**
+ * Runs VS Code with the dump extension in the directory `temp`, with copies of the extensions to
+ * activate, and returns the dump.
+ */
+async function dumpCommands(
+  code: string,
+  temp: string,
+  extensions: readonly Extension[],
+): Promise<Dump> {
+  const dirs = {
+    userData: join(temp, "user-data"),
+    extensions: join(temp, "extensions"),
+    workspace: join(temp, "workspace"),
+    home: join(temp, "home"),
+  };
+  mkdirSync(join(dirs.userData, "User"), { recursive: true });
+  mkdirSync(dirs.workspace);
+  mkdirSync(dirs.home);
+  writeFileSync(
+    join(dirs.userData, "User/settings.json"),
+    `${JSON.stringify(SETTINGS, null, 2)}\n`,
+  );
+  for (const { dir } of extensions) {
+    cpSync(dir, join(dirs.extensions, basename(dir)), { recursive: true });
+  }
+  const out = join(temp, "commands.json");
+  const env: NodeJS.ProcessEnv = {
+    // Variables of a VS Code terminal or extension host would steer the new instance.
+    ...Object.fromEntries(
+      Object.entries(process.env).filter(
+        ([name]) => !/^(VSCODE|ELECTRON)_/.test(name),
+      ),
+    ),
+    // VS Code reads ~/.vscode/argv.json and the XDG directories; they are temporary too.
+    HOME: dirs.home,
+    XDG_CONFIG_HOME: join(dirs.home, ".config"),
+    XDG_CACHE_HOME: join(dirs.home, ".cache"),
+    XDG_DATA_HOME: join(dirs.home, ".local/share"),
+    XDG_STATE_HOME: join(dirs.home, ".local/state"),
+    VIM_COMPANION_IDS_OUT: out,
+    VIM_COMPANION_IDS_ACTIVATE: extensions.map(({ id }) => id).join(","),
+  };
+  const log = join(temp, "code.log");
+  await run(
+    "xvfb-run",
+    [
+      "-a",
+      // Without a Wayland display, VS Code uses the X display of xvfb-run.
+      "env",
+      "-u",
+      "WAYLAND_DISPLAY",
+      code,
+      "--user-data-dir",
+      dirs.userData,
+      "--extensions-dir",
+      dirs.extensions,
+      "--extensionDevelopmentPath",
+      join(import.meta.dirname, "ids/vscode-dump"),
+      "--disable-gpu",
+      "--disable-workspace-trust",
+      "--skip-welcome",
+      "--skip-release-notes",
+      // Keeps VS Code away from the keyring of the desktop session.
+      "--password-store=basic",
+      "--new-window",
+      dirs.workspace,
+    ],
+    env,
+    log,
+  );
+  if (!existsSync(out)) {
+    throw new Error(
+      `VS Code wrote no command IDs; the end of its output:\n${tail(log)}`,
+    );
+  }
+  return readJson(out) as Dump;
+}
+
+/**
+ * Runs a command in a process group of its own with its output in `log`, and kills the group when
+ * the command ends or after TIMEOUT_MS.
+ */
+function run(
+  command: string,
+  args: string[],
+  env: NodeJS.ProcessEnv,
+  log: string,
+): Promise<void> {
+  const output = openSync(log, "w");
+  return new Promise<void>((done, fail) => {
+    const child = spawn(command, args, {
+      env,
+      detached: true,
+      stdio: ["ignore", output, output],
+    });
+    const killGroup = () => {
+      try {
+        process.kill(-child.pid!, "SIGKILL");
+      } catch {
+        // The group has already ended.
+      }
+    };
+    const timer = setTimeout(() => {
+      killGroup();
+      fail(new Error(`VS Code did not quit within ${TIMEOUT_MS / 1000} s`));
+    }, TIMEOUT_MS);
+    child.on("error", (error) => {
+      clearTimeout(timer);
+      fail(new Error(`${command}: ${error.message}`));
+    });
+    child.on("exit", () => {
+      clearTimeout(timer);
+      // Processes that VS Code left behind.
+      killGroup();
+      done();
+    });
+  }).finally(() => closeSync(output));
+}
+
+/** The last lines of a log file. */
+function tail(path: string): string {
+  return readFileSync(path, "utf8").trimEnd().split("\n").slice(-20).join("\n");
+}
+
+/** The package.json of each directory in `dir` that has one, in code-unit order of the names. */
+function manifestsIn(dir: string): { dir: string; manifest: unknown }[] {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => join(dir, entry.name))
+    .sort()
+    .filter((path) => existsSync(join(path, "package.json")))
+    .map((path) => ({
+      dir: path,
+      manifest: readJson(join(path, "package.json")),
+    }));
 }
 
 function refreshIntellij(root: string, values: Values): void {
@@ -214,7 +422,7 @@ function readJson(path: string): unknown {
 }
 
 try {
-  main();
+  await main();
 } catch (error) {
   console.error(`ids:refresh: ${(error as Error).message}`);
   process.exitCode = 2;
