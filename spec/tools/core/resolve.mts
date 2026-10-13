@@ -26,7 +26,8 @@ export function resolve(
 ): Resolution {
   if (keys.length === 0) return { kind: "group", label: "" };
   const key = ["SPC", ...keys].join(" ");
-  const leaf = leaderLeaves(catalog, options).find((leaf) => leaf.key === key);
+  const leaves = leaderLeaves(catalog, options);
+  const leaf = leaves.find((leaf) => leaf.key === key);
   if (leaf !== undefined) {
     return {
       kind: "leaf",
@@ -35,7 +36,10 @@ export function resolve(
     };
   }
   const group = catalog.groups.find((group) => group.keys === key);
-  if (group !== undefined) return { kind: "group", label: group.label };
+  const below = leaves.some((leaf) => leaf.key.startsWith(`${key} `));
+  if (group !== undefined && below) {
+    return { kind: "group", label: group.label };
+  }
   return { kind: "unbound" };
 }
 
