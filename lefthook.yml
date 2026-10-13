@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://lefthook.dev/schema.json
+pre-commit:
+  jobs:
+    - name: prettier
+      # Prettier skips the files it cannot format, but fails on a symlink named on its command line.
+      file_types: [not symlink]
+      run: pnpm exec prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: pnpm exec commitlint --edit {1}

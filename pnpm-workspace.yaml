@@ -1,0 +1,11 @@
+packages:
+  - spec
+  - extensions/vscode
+
+# pnpm 11 runs a dependency's install script only when it is allowed here, and fails the
+# install (strictDepBuilds) while any script is left undecided.
+allowBuilds:
+  lefthook: true # its postinstall installs the Git hooks; it does nothing when CI is set
+
+# lefthook's postinstall writes .git/hooks outside its package, so a cached build must not skip it.
+sideEffectsCache: false
