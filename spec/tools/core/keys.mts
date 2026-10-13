@@ -71,3 +71,7 @@ export function ideavimLhs(tokens: readonly string[]): string {
     .map((token) => (token === "SPC" ? "<Space>" : token));
   return `<leader>${keys.join("")}`;
 }
+
+export function vscodevimBefore(tokens: readonly string[]): string[] {
+  return [];
+}

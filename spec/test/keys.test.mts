@@ -5,6 +5,7 @@ import {
   ideavimLhs,
   parseLeader,
   parseVim,
+  vscodevimBefore,
   whichKeyKey,
 } from "../tools/core/keys.mts";
 
@@ -296,6 +297,24 @@ describe("ideavimLhs", () => {
     fc.assert(
       fc.property(vimKey, (tokens) => {
         expect(parseVim(ideavimLhs(tokens))).toEqual({ ok: true, tokens });
+      }),
+    );
+  });
+});
+
+describe("vscodevimBefore", () => {
+  test("keeps the tokens of a Vim key and writes SPC as <space>", () => {
+    expect(vscodevimBefore(["g", "r", "a"])).toEqual(["g", "r", "a"]);
+    expect(vscodevimBefore(["<C-w>", "h"])).toEqual(["<C-w>", "h"]);
+    expect(vscodevimBefore(["SPC"])).toEqual(["<space>"]);
+    expect(vscodevimBefore(["SPC", "w", "SPC"])).toEqual([
+      "<space>",
+      "w",
+      "<space>",
+    ]);
+    fc.assert(
+      fc.property(vimKey, (tokens) => {
+        expect(vscodevimBefore(tokens)).toEqual(tokens);
       }),
     );
   });
