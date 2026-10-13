@@ -977,6 +977,56 @@ describe("validateCatalog", () => {
           ),
         ],
       },
+      {
+        name: "a Vim key that another entry binds, with other case inside <...>",
+        change: (files) => {
+          const exchange = newEntry("window.exchange", "SPC w x", "Swap");
+          exchange.keys = { vim: ["<C-w>x"] };
+          exchange.deviation = deviation;
+          const swap = newEntry("window.swap", "SPC w X", "Swap");
+          swap.keys = { vim: ["<c-W>x"] };
+          swap.deviation = deviation;
+          fileOf(files, "window").data.commands.push(exchange, swap);
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.swap",
+            "DUPLICATE_KEY",
+            'keys.vim[0] "<c-W>x" is also bound by window.exchange',
+          ),
+        ],
+      },
+      {
+        name: "two keys of one entry that differ only in case inside <...>",
+        change: (files) => {
+          const entry = newEntry("window.exchange", "SPC w x", "Swap");
+          entry.keys = { vim: ["<C-w>x", "<c-W>x"] };
+          entry.deviation = deviation;
+          fileOf(files, "window").data.commands.push(entry);
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.exchange",
+            "DUPLICATE_KEY",
+            'keys.vim[1] "<c-W>x" is also bound by window.exchange',
+          ),
+        ],
+      },
+      {
+        name: "Vim keys that differ in case outside <...>",
+        change: (files) => {
+          const exchange = newEntry("window.exchange", "SPC w x", "Swap");
+          exchange.keys = { vim: ["<C-w>x"] };
+          exchange.deviation = deviation;
+          const swap = newEntry("window.swap", "SPC w X", "Swap");
+          swap.keys = { vim: ["<C-w>X"] };
+          swap.deviation = deviation;
+          fileOf(files, "window").data.commands.push(exchange, swap);
+        },
+        expected: [],
+      },
     ]);
   });
 
@@ -1060,6 +1110,26 @@ describe("validateCatalog", () => {
             "diag.next",
             "PREFIX_CONFLICT",
             'aliases[0].keys.vim[0] "]" is a prefix of "]d", bound by diag.next',
+          ),
+        ],
+      },
+      {
+        name: "a Vim key that starts a longer key, with other case inside <...>",
+        change: (files) => {
+          const menu = newEntry("window.menu", "SPC w n", "Show window menu");
+          menu.keys = { vim: ["<C-w>"] };
+          menu.deviation = deviation;
+          const exchange = newEntry("window.exchange", "SPC w x", "Swap");
+          exchange.keys = { vim: ["<c-W>x"] };
+          exchange.deviation = deviation;
+          fileOf(files, "window").data.commands.push(menu, exchange);
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.menu",
+            "PREFIX_CONFLICT",
+            'keys.vim[0] "<C-w>" is a prefix of "<c-W>x", bound by window.exchange',
           ),
         ],
       },
@@ -1282,6 +1352,22 @@ describe("validateCatalog", () => {
           fileOf(files, "code").data.commands.push(
             joinEntry({ vimKeys: "gJ" }, { ideavimKeys: "gJ" }),
           );
+        },
+        expected: [],
+      },
+      {
+        name: "a Vim key that both engines run natively, with other case inside <...>",
+        change: (files) => {
+          const entry = newEntry("window.rotate", "SPC w r", "Rotate splits");
+          entry.keys = { vim: ["<C-w>r"] };
+          entry.vscode = {
+            exec: { vimKeys: "<c-w>r" },
+            exit: "editor",
+            repeatable: false,
+            count: "none",
+          };
+          entry.intellij = { ideavimKeys: "<C-W>r" };
+          fileOf(files, "window").data.commands.push(entry);
         },
         expected: [],
       },
@@ -1636,6 +1722,22 @@ describe("validateCatalog", () => {
             "search.project",
             "ALIAS",
             `aliases[0].keys.leader[0] "SPC /" is the entry's own key`,
+          ),
+        ],
+      },
+      {
+        name: "an alias with the entry's own key, with other case inside <...>",
+        change: (files) => {
+          const next = entryOf(files, "diag.next");
+          next.keys.vim = ["<C-w>x"];
+          next.aliases![0]!.keys.vim = ["<c-W>x"];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "ALIAS",
+            `aliases[0].keys.vim[0] "<c-W>x" is the entry's own key`,
           ),
         ],
       },

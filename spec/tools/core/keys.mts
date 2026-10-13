@@ -54,6 +54,11 @@ export function compareKeys(
   return a.length - b.length;
 }
 
+/** Whether two token arrays are the same key. */
+export function sameKey(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && a.every((token, i) => token === b[i]);
+}
+
 /** The `key` of a which-key menu item for one leader token; which-key reads Space as " ". */
 export function whichKeyKey(token: string): string {
   return token === "SPC" ? " " : token;

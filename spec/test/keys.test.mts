@@ -5,6 +5,7 @@ import {
   ideavimLhs,
   parseLeader,
   parseVim,
+  sameKey,
   vscodevimBefore,
   whichKeyKey,
 } from "../tools/core/keys.mts";
@@ -245,6 +246,62 @@ describe("compareKeys", () => {
       fc.property(fc.oneof(leaderToken, printable("<|"), vimGroup), (token) => {
         if (token !== "SPC")
           expect(compareKeys(["SPC"], [token])).toBeLessThan(0);
+      }),
+    );
+  });
+});
+
+describe("sameKey", () => {
+  test("ignores case inside a <...> group, as Vim, IdeaVim and VSCodeVim do, and nowhere else", () => {
+    const pairs: [string[], string[]][] = [
+      [
+        ["<C-w>", "o"],
+        ["<c-W>", "o"],
+      ],
+      [["<Space>"], ["<SPACE>"]],
+      [
+        ["<lt>", "<Bar>"],
+        ["<LT>", "<bar>"],
+      ],
+      [
+        ["SPC", "w", "h"],
+        ["SPC", "w", "h"],
+      ],
+    ];
+    const others: [string[], string[]][] = [
+      [
+        ["g", "O"],
+        ["g", "o"],
+      ],
+      [
+        ["<C-w>", "O"],
+        ["<C-w>", "o"],
+      ],
+      [
+        ["SPC", "w", "H"],
+        ["SPC", "w", "h"],
+      ],
+      [["<C-w>"], ["<C-w>", "o"]],
+      [["SPC"], ["<Space>"]],
+    ];
+    expect(pairs.map(([a, b]) => [sameKey(a, b), sameKey(b, a)])).toEqual(
+      pairs.map(() => [true, true]),
+    );
+    expect(others.map(([a, b]) => [sameKey(a, b), sameKey(b, a)])).toEqual(
+      others.map(() => [false, false]),
+    );
+    // Small alphabets make keys that differ only in case likely.
+    const fold = (token: string) =>
+      token.startsWith("<") ? token.toLowerCase() : token;
+    const key = fc.array(
+      fc.constantFrom("<C-w>", "<c-W>", "<C-x>", "w", "W", "SPC", "<Space>"),
+      { minLength: 1, maxLength: 3 },
+    );
+    fc.assert(
+      fc.property(key, key, (a, b) => {
+        expect(sameKey(a, b)).toBe(
+          a.length === b.length && a.every((t, i) => fold(t) === fold(b[i]!)),
+        );
       }),
     );
   });
