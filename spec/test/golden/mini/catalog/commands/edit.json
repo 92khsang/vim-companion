@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "edit.yank-eol",
+      "category": "edit",
+      "keys": { "vim": ["Y"] },
+      "label": "Yank to end of line",
+      "description": "Copies the text from the cursor to the end of the line into the unnamed register.",
+      "examples": ["Y, on the f of foo(bar) → foo(bar) is in the register"],
+      "rationale": "Neovim maps Y to y$, which matches D and C.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "vimKeys": "y$" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "y$" },
+      "deviation": {
+        "shadows": "Vim Y, which yanks whole lines as yy does",
+        "origin": "Neovim 0.6 default mapping",
+        "note": "Whole lines need yy."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

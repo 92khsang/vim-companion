@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "nav.symbols",
+      "category": "nav",
+      "keys": { "leader": ["SPC f o"], "vim": ["gO"] },
+      "modes": ["n", "x"],
+      "label": "List symbols in file",
+      "description": "Lists the functions, classes and other symbols of the file in a picker.",
+      "examples": ["gO, main → the cursor moves to the main function"],
+      "rationale": "Neovim uses gO for the symbols of the buffer; o for outline in the File group.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.quickOpen", "args": ["@"] },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "FileStructurePopup" },
+      "deviation": {
+        "shadows": "Vim gO, which lists the headings of a help or man page",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "Both IDEs list the symbols of any file."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}
