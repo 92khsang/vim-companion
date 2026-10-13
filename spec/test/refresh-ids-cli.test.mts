@@ -5,6 +5,7 @@ import {
   existsSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -24,6 +25,9 @@ mkdirSync(home);
 afterAll(() => {
   rmSync(base, { recursive: true, force: true });
 });
+
+/** For the tests that wait for processes to shut down: a generous timeout. */
+const SLOW = { timeout: 60_000 };
 
 function refresh(...args: string[]) {
   return refreshWith({}, ...args);
@@ -238,6 +242,57 @@ function fakeVscode(dir: string) {
       ELECTRON_RUN_AS_NODE: "1",
     },
   };
+}
+
+/**
+ * An xvfb-run under <dir> that works like /usr/bin/xvfb-run with a stand-in for Xvfb: it starts
+ * the server in the background, runs its command as a child and, on exit, sends the server
+ * SIGTERM without waiting for it. Like Xvfb, the server holds a lock file while it runs and
+ * removes it a little while after SIGTERM. The lock file is in `tmp`, the TMPDIR of the run, so
+ * that `tmp` is empty once everything has shut down. `path` is the PATH to put it in front of.
+ */
+function fakeXvfbRun(dir: string, path: string) {
+  const bin = join(dir, "xvfb");
+  const tmp = join(dir, "tmp");
+  mkdirSync(tmp, { recursive: true });
+  const server = join(bin, "server.mjs");
+  writeText(
+    server,
+    [
+      'import { rmSync, writeFileSync } from "node:fs";',
+      "const lock = process.argv[2];",
+      "writeFileSync(lock, `${process.pid}\\n`);",
+      'process.on("SIGTERM", () => setTimeout(() => {',
+      "  rmSync(lock, { force: true });",
+      "  process.exit(0);",
+      "}, 300));",
+      "// It never outlives the test by much.",
+      "setTimeout(() => process.exit(1), 60_000);",
+      "",
+    ].join("\n"),
+  );
+  writeText(
+    join(bin, "xvfb-run"),
+    [
+      "#!/bin/sh",
+      '[ "$1" = "-a" ] && shift',
+      "trap 'kill \"$server\"' EXIT",
+      'lock="$TMPDIR/.X99-lock"',
+      `node '${server}' "$lock" &`,
+      "server=$!",
+      "# Like xvfb-run, it waits for the server to start: at most 30 s here.",
+      "tries=600",
+      'until [ -e "$lock" ]; do',
+      "  tries=$((tries - 1))",
+      '  [ "$tries" -gt 0 ] || exit 1',
+      "  sleep 0.05",
+      "done",
+      '"$@"',
+      "",
+    ].join("\n"),
+  );
+  chmodSync(join(bin, "xvfb-run"), 0o755);
+  return { tmp, env: { PATH: `${bin}:${path}`, TMPDIR: tmp } };
 }
 
 describe("ids:refresh", () => {
@@ -487,4 +542,30 @@ describe("ids:refresh", () => {
       null,
     ]);
   });
+
+  test(
+    "vscode lets the processes that outlive VS Code finish their own shutdown",
+    SLOW,
+    () => {
+      const dir = join(base, "vscode-shutdown");
+      const root = specIn(dir);
+      const fake = fakeVscode(dir);
+      const xvfb = fakeXvfbRun(dir, fake.env.PATH);
+      const { status, stderr } = refreshWith(
+        { ...fake.env, ...xvfb.env },
+        "vscode",
+        "--root",
+        root,
+        "--code",
+        fake.code,
+        "--extension",
+        "vscodevim.vim",
+      );
+      expect({ status, stderr, left: readdirSync(xvfb.tmp) }).toEqual({
+        status: 0,
+        stderr: "",
+        left: [],
+      });
+    },
+  );
 });
