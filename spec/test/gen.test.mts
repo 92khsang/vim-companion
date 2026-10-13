@@ -190,6 +190,39 @@ describe("genIde", () => {
     );
   });
 
+  test("maps each of two entries that bind one leader key in different modes in the rc", () => {
+    // which-key shows only file.find, since VS Code does not support file.pick.
+    const files = miniCatalogFiles();
+    const visual = newEntry("file.pick", "SPC f f", "Pick file");
+    visual.modes = ["x"];
+    delete visual.vscode;
+    visual.support = {
+      vscode: { level: "none", note: "No picker takes the selection." },
+    };
+    fileOf(files, "file").data.commands.push(visual);
+    expect(
+      genIde(miniCatalog(files)).get("intellij/vim-companion.ideavimrc"),
+    ).toContain(
+      [
+        '" file.find',
+        "if empty(mapcheck('<leader>ff', 'n'))",
+        "  nmap <leader>ff <Action>(GotoFile)",
+        "  let g:WhichKeyDesc_vimcompanion_file_find_l6666 = '<leader>ff Find file'",
+        "else",
+        "  call add(g:vimcompanion_skipped, 'n <leader>ff file.find')",
+        "endif",
+        "",
+        '" file.pick',
+        "if empty(mapcheck('<leader>ff', 'x'))",
+        "  xmap <leader>ff <Action>(SaveAll)",
+        "  let g:WhichKeyDesc_vimcompanion_file_pick_l6666 = '<leader>ff Pick file'",
+        "else",
+        "  call add(g:vimcompanion_skipped, 'x <leader>ff file.pick')",
+        "endif",
+      ].join("\n"),
+    );
+  });
+
   test("leaves out a group with no leaf below it that the IDE supports", () => {
     // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
     // does not support it instead.
