@@ -1,6 +1,7 @@
 // pnpm ids:refresh vscode|intellij (design §8): rewrites ids/<ide>.json of the spec directory from
 // the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run. Stopped
-// by SIGINT or SIGTERM, vscode ends VS Code, removes its temporary directory and exits 130 or 143.
+// by SIGINT, SIGTERM or SIGHUP, vscode ends VS Code, removes its temporary directory and exits 130,
+// 143 or 129.
 //   vscode   [--code <binary>] [--extension <publisher.name>]... [--drop-extension <publisher.name>]...
 //   intellij [--ide-home <dir>] [--plugins-dir <dir>] [--plugin <dir or .jar>]... [--drop-plugin <name>]...
 // The allow-listed extensions or plugins are the ones of the snapshot it replaces, plus
@@ -167,8 +168,12 @@ const TIMEOUT_MS = 120_000;
 /** How long the processes of a group get to quit after SIGTERM before they get SIGKILL. */
 const GRACE_MS = 3_000;
 
-/** The signals that stop a refresh: Ctrl-C in a terminal, and kill. */
-const STOP_SIGNALS = ["SIGINT", "SIGTERM"] as const;
+/**
+ * The signals that stop a refresh: Ctrl-C in a terminal, kill, and the hang-up of a terminal that
+ * closes. The SIGHUP listener takes nothing from nohup: Node resets SIGHUP to its default action at
+ * startup, so a hang-up ended the refresh at once even under nohup.
+ */
+const STOP_SIGNALS = ["SIGINT", "SIGTERM", "SIGHUP"] as const;
 
 /** A refresh stopped by a signal; `status` is the exit status that a shell reports for it. */
 class Interrupted extends Error {
@@ -182,9 +187,9 @@ class Interrupted extends Error {
 
 /**
  * Runs `work` with an AbortSignal that STOP_SIGNALS abort, with an Interrupted error as the
- * reason. VS Code runs in a session of its own, which a Ctrl-C in the terminal does not reach, and
- * without these handlers this process would end at once, leaving VS Code and its temporary
- * directory behind.
+ * reason. VS Code runs in a session of its own, which neither a Ctrl-C nor the hang-up of the
+ * terminal reaches, and without these handlers this process would end at once, leaving VS Code and
+ * its temporary directory behind.
  */
 async function stoppable<T>(
   work: (stop: AbortSignal) => Promise<T>,
