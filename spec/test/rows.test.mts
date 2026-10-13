@@ -28,6 +28,13 @@ const leaf = (key: string, label: string, badge: Badge = null): Row => ({
   badge,
 });
 
+const group = (key: string, label: string): Row => ({
+  key,
+  label,
+  group: true,
+  badge: null,
+});
+
 describe("rows", () => {
   test("lists the entries at a leader prefix by key, with their labels", () => {
     expectRows([
@@ -42,6 +49,35 @@ describe("rows", () => {
       },
       { ide: "vscode", prefix: ["w", "h"], rows: [] },
       { ide: "intellij", prefix: ["x"], rows: [] },
+    ]);
+  });
+
+  test("lists the groups that have a bound leaf below them after the entries, by key", () => {
+    expectRows([
+      {
+        ide: "vscode",
+        prefix: [],
+        rows: [
+          leaf("SPC", "Find file"),
+          leaf("/", "Search in project"),
+          group("c", "Code"),
+          group("f", "File"),
+          group("w", "Window"),
+        ],
+      },
+      {
+        ide: "intellij",
+        prefix: [],
+        options: { experimental: true },
+        rows: [
+          leaf("SPC", "Find file"),
+          leaf("/", "Search in project"),
+          group("c", "Code"),
+          group("f", "File"),
+          group("g", "Git"),
+          group("w", "Window"),
+        ],
+      },
     ]);
   });
 });
