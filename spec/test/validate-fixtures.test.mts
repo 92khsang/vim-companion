@@ -16,8 +16,6 @@ const VERSION_ORDER = "spec/fixtures/version-order.json";
 // The patterns of fixture-catalog.schema.json.
 const CASE_ID_PATTERN = "^[a-z0-9]+(?:-[a-z0-9]+)*$";
 const KEY_PATTERN = "^(?:SPC|[a-zA-Z0-9/?:=])$";
-const VERSION_PATTERN =
-  "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?$";
 
 const diagnostic = (
   file: string,
@@ -108,13 +106,9 @@ describe("validateFixtures", () => {
             version: "1.0",
           };
         },
+        // The file breaks its schema, so no rule checks it, VERSION included.
         expected: [
           schema(CATALOG, "/cases/1/options/experimental", "must be boolean"),
-          schema(
-            CATALOG,
-            "/cases/1/options/version",
-            `must match pattern "${VERSION_PATTERN}"`,
-          ),
         ],
       },
       {
@@ -190,16 +184,81 @@ describe("validateFixtures", () => {
         change: (files) => {
           files.versionOrder.data.ascending = ["1.0"];
         },
+        // The file breaks its schema, so no rule checks it, VERSION included.
         expected: [
           schema(
             VERSION_ORDER,
             "/ascending",
             "must NOT have fewer than 2 items",
           ),
-          schema(
+        ],
+      },
+    ]);
+  });
+
+  test("VERSION reports a version of a case or of the version order that is not x.y.z[-prerelease]", () => {
+    const NOT_VERSION = "is not a version x.y.z[-prerelease]";
+    runCases([
+      {
+        name: "prerelease versions",
+        change: (files) => {
+          files.catalog[0]!.data.cases[1]!.options = { version: "1.0.0-rc.1" };
+          files.versionOrder.data.ascending = ["0.0.0-dev.1", "1.0.0-rc.1"];
+        },
+        expected: [],
+      },
+      {
+        name: "case versions that are not versions",
+        change: (files) => {
+          files.catalog[0]!.data.cases[1]!.options = { version: "1.0" };
+          files.hintView[0]!.data.cases[0]!.options = {
+            experimental: true,
+            version: "v1.0.0",
+          };
+        },
+        expected: [
+          diagnostic(
+            CATALOG,
+            "leaf-w-h",
+            "VERSION",
+            `options.version "1.0" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            HINT_VIEW,
+            "window-intellij",
+            "VERSION",
+            `options.version "v1.0.0" ${NOT_VERSION}`,
+          ),
+        ],
+      },
+      {
+        name: "a version order with items that are not versions",
+        change: (files) => {
+          files.versionOrder.data.ascending = [
+            "0.0.0",
+            "1.0",
+            "01.0.0",
+            "1.0.0+build",
+          ];
+        },
+        expected: [
+          diagnostic(
             VERSION_ORDER,
-            "/ascending/0",
-            `must match pattern "${VERSION_PATTERN}"`,
+            "ascending",
+            "VERSION",
+            `ascending[1] "1.0" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            VERSION_ORDER,
+            "ascending",
+            "VERSION",
+            `ascending[2] "01.0.0" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            VERSION_ORDER,
+            "ascending",
+            "VERSION",
+            `ascending[3] "1.0.0+build" ${NOT_VERSION}`,
           ),
         ],
       },

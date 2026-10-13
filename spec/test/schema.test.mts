@@ -1,11 +1,12 @@
-import type { AnySchema } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import fc from "fast-check";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "vitest";
+import { validateFixtures } from "../tools/core/validate.mts";
 import { isVersion } from "../tools/core/version.mts";
 import { loadSchemas } from "./support/mini-catalog.mts";
+import { miniFixtureFiles } from "./support/mini-fixtures.mts";
 
 const schemaDir = join(import.meta.dirname, "../schema");
 
@@ -40,13 +41,8 @@ test("every schema is JSON Schema 2020-12 and compiles in ajv strict mode", () =
   ).toEqual([]);
 });
 
-test("the fixture schemas accept as a version exactly the strings isVersion accepts", () => {
-  const ajv = new Ajv2020({ strict: true, allErrors: true });
-  for (const [name, schema] of Object.entries(loadSchemas())) {
-    ajv.addSchema(schema as AnySchema, name);
-  }
-  const version = ajv.getSchema("fixture-catalog.schema.json#/$defs/version");
-  expect(typeof version).toBe("function");
+test("spec:check accepts as a fixture version exactly the strings isVersion accepts", () => {
+  const schemas = loadSchemas();
   // Near-versions: parts with leading zeros, letters or nothing, and build metadata; and short
   // strings of version characters.
   const part = fc.constantFrom(
@@ -77,10 +73,31 @@ test("the fixture schemas accept as a version exactly the strings isVersion acce
     unit: fc.constantFrom(..."01.-+aZ "),
     maxLength: 12,
   });
+  // spec:check reads each version of the order alone; the conformance runner checks the order.
+  // Many versions per run keep the runs, each of which compiles the schemas, few.
+  const message = (version: string, i: number) =>
+    `ascending[${i}] ${JSON.stringify(version)} is not a version x.y.z[-prerelease]`;
   fc.assert(
-    fc.property(fc.oneof(nearVersion, text), (candidate) => {
-      expect(version!(candidate)).toBe(isVersion(candidate));
-    }),
-    { numRuns: 1000 },
+    fc.property(
+      fc.array(fc.oneof(nearVersion, text), { minLength: 1, maxLength: 50 }),
+      (candidates) => {
+        const files = miniFixtureFiles();
+        files.versionOrder.data.ascending = ["0.0.0", ...candidates];
+        expect(validateFixtures(files, schemas)).toEqual(
+          candidates
+            .flatMap((candidate, i) =>
+              isVersion(candidate) ? [] : [message(candidate, i + 1)],
+            )
+            .sort()
+            .map((text) => ({
+              file: "spec/fixtures/version-order.json",
+              where: "ascending",
+              code: "VERSION",
+              message: text,
+            })),
+        );
+      },
+    ),
+    { numRuns: 20 },
   );
 });
