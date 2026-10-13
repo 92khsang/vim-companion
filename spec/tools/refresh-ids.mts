@@ -1,5 +1,6 @@
 // pnpm ids:refresh vscode|intellij (design §8): rewrites ids/<ide>.json of the spec directory from
-// the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run.
+// the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run. Stopped
+// by SIGINT or SIGTERM, vscode ends VS Code, removes its temporary directory and exits 130 or 143.
 //   vscode   [--code <binary>] [--extension <publisher.name>]... [--drop-extension <publisher.name>]...
 //   intellij [--ide-home <dir>] [--plugins-dir <dir>] [--plugin <dir or .jar>]... [--drop-plugin <name>]...
 // The allow-listed extensions or plugins are the ones of the snapshot it replaces, plus
@@ -21,7 +22,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { homedir, tmpdir } from "node:os";
+import { constants, homedir, tmpdir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { parseArgs } from "node:util";
@@ -105,13 +106,14 @@ async function refreshVscode(root: string, values: Values): Promise<void> {
   if (missing.length > 0) {
     throw new Error(`${source} has no ${missing.join(", ")}`);
   }
-  const temp = mkdtempSync(join(tmpdir(), "vim-companion-ids-"));
-  let dump: Dump;
-  try {
-    dump = await dumpCommands(code, temp, picked);
-  } finally {
-    rmSync(temp, { recursive: true, force: true });
-  }
+  const dump = await stoppable(async (stop) => {
+    const temp = mkdtempSync(join(tmpdir(), "vim-companion-ids-"));
+    try {
+      return await dumpCommands(code, temp, picked, stop);
+    } finally {
+      rmSync(temp, { recursive: true, force: true });
+    }
+  });
   if (dump.vscode !== version) {
     throw new Error(
       `the dump is of VS Code ${dump.vscode}, but ${join(app, "package.json")} has ${version}`,
@@ -165,14 +167,48 @@ const TIMEOUT_MS = 120_000;
 /** How long the processes of a group get to quit after SIGTERM before they get SIGKILL. */
 const GRACE_MS = 3_000;
 
+/** The signals that stop a refresh: Ctrl-C in a terminal, and kill. */
+const STOP_SIGNALS = ["SIGINT", "SIGTERM"] as const;
+
+/** A refresh stopped by a signal; `status` is the exit status that a shell reports for it. */
+class Interrupted extends Error {
+  readonly status: number;
+
+  constructor(signal: NodeJS.Signals) {
+    super(`interrupted by ${signal}`);
+    this.status = 128 + constants.signals[signal];
+  }
+}
+
+/**
+ * Runs `work` with an AbortSignal that STOP_SIGNALS abort, with an Interrupted error as the
+ * reason. VS Code runs in a session of its own, which a Ctrl-C in the terminal does not reach, and
+ * without these handlers this process would end at once, leaving VS Code and its temporary
+ * directory behind.
+ */
+async function stoppable<T>(
+  work: (stop: AbortSignal) => Promise<T>,
+): Promise<T> {
+  const stop = new AbortController();
+  const onSignal = (signal: NodeJS.Signals) =>
+    stop.abort(new Interrupted(signal));
+  for (const signal of STOP_SIGNALS) process.on(signal, onSignal);
+  try {
+    return await work(stop.signal);
+  } finally {
+    for (const signal of STOP_SIGNALS) process.off(signal, onSignal);
+  }
+}
+
 /**
  * Runs VS Code with the dump extension in the directory `temp`, with copies of the extensions to
- * activate, and returns the dump.
+ * activate, and returns the dump. When `stop` aborts, it ends VS Code and throws the reason.
  */
 async function dumpCommands(
   code: string,
   temp: string,
   extensions: readonly Extension[],
+  stop: AbortSignal,
 ): Promise<Dump> {
   const dirs = {
     userData: join(temp, "user-data"),
@@ -207,11 +243,17 @@ async function dumpCommands(
     VIM_COMPANION_IDS_OUT: out,
     VIM_COMPANION_IDS_ACTIVATE: extensions.map(({ id }) => id).join(","),
   };
+  // The X authority file of xvfb-run. Without --auth-file, xvfb-run keeps it in a directory of
+  // its own in TMPDIR, which it removes when it exits, but not when a signal ends it.
+  const auth = join(temp, "Xauthority");
+  writeFileSync(auth, "");
   const log = join(temp, "code.log");
   await run(
     "xvfb-run",
     [
       "-a",
+      "--auth-file",
+      auth,
       // Without a Wayland display, VS Code uses the X display of xvfb-run.
       "env",
       "-u",
@@ -234,6 +276,7 @@ async function dumpCommands(
     ],
     env,
     log,
+    stop,
   );
   if (!existsSync(out)) {
     throw new Error(
@@ -245,15 +288,18 @@ async function dumpCommands(
 
 /**
  * Runs a command in a process group of its own with its output in `log`. When the command ends,
- * the processes left in the group get to finish their shutdown (endGroup); after TIMEOUT_MS, the
- * whole group gets SIGKILL at once.
+ * or `stop` aborts first, the processes of the group get to finish their shutdown (endGroup), and
+ * then the run settles: with the abort reason once `stop` has aborted. After TIMEOUT_MS, the whole
+ * group gets SIGKILL at once.
  */
 function run(
   command: string,
   args: string[],
   env: NodeJS.ProcessEnv,
   log: string,
+  stop: AbortSignal,
 ): Promise<void> {
+  stop.throwIfAborted();
   const output = openSync(log, "w");
   return new Promise<void>((done, fail) => {
     const child = spawn(command, args, {
@@ -265,16 +311,21 @@ function run(
       signalGroup(child.pid!, "SIGKILL");
       fail(new Error(`VS Code did not quit within ${TIMEOUT_MS / 1000} s`));
     }, TIMEOUT_MS);
+    let ending: Promise<void> | undefined;
+    // Ends the group once: after the command, or when `stop` aborts. After the command, the group
+    // still holds what VS Code left behind, and Xvfb: xvfb-run sends it SIGTERM on exit without
+    // waiting, and Xvfb removes its lock file and socket in /tmp only as it shuts down.
+    const end = () => {
+      clearTimeout(timer);
+      ending ??= endGroup(child.pid!);
+      ending.then(() => (stop.aborted ? fail(stop.reason) : done()));
+    };
+    stop.addEventListener("abort", end, { once: true });
     child.on("error", (error) => {
       clearTimeout(timer);
       fail(new Error(`${command}: ${error.message}`));
     });
-    child.on("exit", () => {
-      clearTimeout(timer);
-      // Processes that VS Code left behind, and Xvfb: xvfb-run sends it SIGTERM on exit without
-      // waiting, and Xvfb removes its lock file and socket in /tmp only as it shuts down.
-      endGroup(child.pid!).then(done, fail);
-    });
+    child.on("exit", end);
   }).finally(() => closeSync(output));
 }
 
@@ -458,5 +509,5 @@ try {
   await main();
 } catch (error) {
   console.error(`ids:refresh: ${(error as Error).message}`);
-  process.exitCode = 2;
+  process.exitCode = error instanceof Interrupted ? error.status : 2;
 }
