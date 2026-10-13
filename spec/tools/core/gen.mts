@@ -369,11 +369,15 @@ function ctrlKeyLines(keys: readonly CtrlKey[]): string[] {
     ...sorted
       .filter((key) => key.mac === undefined)
       .map((key) => `sethandler ${key.key} ${key.handler}`),
-    "if has('mac')",
-    ...mac.map((key) => `  sethandler ${key.key} ${key.mac}`),
-    "else",
-    ...mac.map((key) => `  sethandler ${key.key} ${key.handler}`),
-    "endif",
+    ...(mac.length === 0
+      ? []
+      : [
+          "if has('mac')",
+          ...mac.map((key) => `  sethandler ${key.key} ${key.mac}`),
+          "else",
+          ...mac.map((key) => `  sethandler ${key.key} ${key.handler}`),
+          "endif",
+        ]),
   ];
 }
 
