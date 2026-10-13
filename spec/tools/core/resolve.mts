@@ -1,5 +1,5 @@
 // Leader key resolution (design §4): where a sequence of leader keys leads in one IDE.
-import type { Ide, KeyCatalog } from "./catalog.mts";
+import type { Entry, Ide, KeyCatalog } from "./catalog.mts";
 import { aliasActive } from "./version.mts";
 
 /**
@@ -26,24 +26,41 @@ export function resolve(
 ): Resolution {
   if (keys.length === 0) return { kind: "group", label: "" };
   const key = ["SPC", ...keys].join(" ");
-  const version = options.version ?? "0.0.0";
-  const entry = catalog.entries.find(
-    (entry) =>
-      (entry.stage === "stable" || options.experimental === true) &&
-      (entry.keys.leader?.includes(key) ||
-        entry.aliases?.some(
-          (alias) =>
-            aliasActive(alias, version) && alias.keys.leader?.includes(key),
-        )),
-  );
-  if (entry !== undefined) {
+  const leaf = leaderLeaves(catalog, options).find((leaf) => leaf.key === key);
+  if (leaf !== undefined) {
     return {
       kind: "leaf",
-      entry: entry.id,
-      supported: entry.support?.[ide]?.level !== "none",
+      entry: leaf.entry.id,
+      supported: leaf.entry.support?.[ide]?.level !== "none",
     };
   }
   const group = catalog.groups.find((group) => group.keys === key);
   if (group !== undefined) return { kind: "group", label: group.label };
   return { kind: "unbound" };
+}
+
+/** A bound leader key: a key of an entry or of one of its active aliases. */
+type LeaderLeaf = { key: string; entry: Entry };
+
+/**
+ * The leader keys that the catalog binds with the options: the keys of the entries, of
+ * experimental ones only with `experimental`, and of their aliases that are active at `version`.
+ */
+function leaderLeaves(
+  catalog: KeyCatalog,
+  options: ResolveOptions,
+): LeaderLeaf[] {
+  const version = options.version ?? "0.0.0";
+  return catalog.entries
+    .filter(
+      (entry) => entry.stage === "stable" || options.experimental === true,
+    )
+    .flatMap((entry) => [
+      ...(entry.keys.leader ?? []).map((key) => ({ key, entry })),
+      ...(entry.aliases ?? [])
+        .filter((alias) => aliasActive(alias, version))
+        .flatMap((alias) =>
+          (alias.keys.leader ?? []).map((key) => ({ key, entry })),
+        ),
+    ]);
 }
