@@ -56,9 +56,15 @@ const GENERATORS: Record<
   "vscode/whichkey-bindings.json": whichKeyBindings,
 };
 
-/** The commands that the generated files run besides those of the catalog, for check-ids. */
+/**
+ * The commands that the generated files run besides those of the catalog, for check-ids:
+ * whichkey.show opens the menu, and vim.remap runs the Vim keys of an entry from it.
+ */
 export function generatedCommandIds(catalog: Catalog): string[] {
-  return [];
+  const vimKeys = catalog.entries.some(
+    ({ vscode }) => vscode !== undefined && "vimKeys" in vscode.exec,
+  );
+  return vimKeys ? ["whichkey.show", "vim.remap"] : ["whichkey.show"];
 }
 
 /**
