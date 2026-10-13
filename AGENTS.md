@@ -22,4 +22,4 @@ printf '%s (#999)\n' 'feat(spec): add window moves' | pnpm exec commitlint   # c
 
 Branch as `<type>/<slug>` and keep each branch under two days; unfinished work ships behind `stage: experimental`.
 PR titles are Conventional Commits checked by `pr-title`; mark a breaking change with `!` in the title, because the squash merge discards the PR body.
-You may push feature branches and open PRs. Ask before merging (including `--auto`), tagging, releasing or changing repository settings; once approved, merge with `gh pr merge --squash` and no `--subject`. Release candidates and releases start only when the user runs `/release`.
+Merge with `gh pr merge --squash` and no `--subject`. Release candidates and releases start only when the user runs `/release`.
