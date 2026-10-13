@@ -9,6 +9,7 @@ import type {
   Entry,
   Group,
   KeySet,
+  Mode,
 } from "./catalog.mts";
 import { parseLeader, parseVim, type ParsedKey } from "./keys.mts";
 
@@ -147,6 +148,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkKeySyntax,
   checkForbiddenKeys,
   checkReservedKeys,
+  checkDuplicateKeys,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -361,6 +363,43 @@ function checkReservedKeys({ uses }: Context): Diagnostic[] {
         ]
       : [],
   );
+}
+
+/** Rule DUPLICATE_KEY: no key sequence is bound twice in a mode, by entries or aliases. */
+function checkDuplicateKeys({ uses }: Context): Diagnostic[] {
+  return uses.flatMap((use, i) => {
+    if (!use.parsed.ok) return [];
+    const modes = modesOf(use.at.entry);
+    const earlier = uses
+      .slice(0, i)
+      .find(
+        (other) =>
+          other.kind === use.kind &&
+          other.text === use.text &&
+          modesOf(other.at.entry).some((mode) => modes.includes(mode)),
+      );
+    return earlier === undefined
+      ? []
+      : [
+          onEntry(
+            use.at,
+            "DUPLICATE_KEY",
+            `${use.field} ${q(use.text)} is also bound by ${owner(earlier)}`,
+          ),
+        ];
+  });
+}
+
+/** The entry that a key belongs to, for messages: "search.project (alias)". */
+function owner(use: KeyUse): string {
+  return use.alias === undefined
+    ? use.at.entry.id
+    : `${use.at.entry.id} (alias)`;
+}
+
+/** The modes of an entry; "n" when it has none. */
+function modesOf(entry: Entry): readonly Mode[] {
+  return entry.modes ?? ["n"];
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
