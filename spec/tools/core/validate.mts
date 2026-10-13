@@ -70,9 +70,8 @@ export function validateCatalog(
       entry,
     })),
   );
-  const context: Context = {
+  const parts: Parts = {
     placed,
-    uses: keyUses(placed),
     groups: {
       file: files.groups.path,
       groups: (files.groups.data as { groups: Group[] }).groups,
@@ -86,14 +85,14 @@ export function validateCatalog(
       ids: (files.retiredIds.data as { ids: string[] }).ids,
     },
   };
-  const diagnostics = sortDiagnostics(RULES.flatMap((rule) => rule(context)));
+  const diagnostics = sortDiagnostics(checkRules(parts));
   if (diagnostics.length > 0) return { diagnostics };
   return {
     catalog: {
-      entries: context.placed.map(({ entry }) => entry),
-      groups: context.groups.groups,
-      ctrlKeys: context.ctrlKeys.keys,
-      retiredIds: context.retiredIds.ids,
+      entries: parts.placed.map(({ entry }) => entry),
+      groups: parts.groups.groups,
+      ctrlKeys: parts.ctrlKeys.keys,
+      retiredIds: parts.retiredIds.ids,
     },
     diagnostics,
   };
@@ -135,20 +134,17 @@ export function validateFixtures(
         catalog: KeyCatalog;
         cases: { id: string }[];
       };
-      const placed = catalog.entries.map((entry) => ({
-        file: path,
-        stem: undefined,
-        entry,
-      }));
-      const context: Context = {
-        placed,
-        uses: keyUses(placed),
-        groups: { file: path, groups: catalog.groups },
-        ctrlKeys: { file: path, keys: [] },
-        retiredIds: { file: path, ids: [] },
-      };
       return [
-        ...RULES.flatMap((rule) => rule(context)),
+        ...checkRules({
+          placed: catalog.entries.map((entry) => ({
+            file: path,
+            stem: undefined,
+            entry,
+          })),
+          groups: { file: path, groups: catalog.groups },
+          ctrlKeys: { file: path, keys: [] },
+          retiredIds: { file: path, ids: [] },
+        }),
         ...checkCaseIds(path, cases),
       ];
     });
@@ -224,14 +220,22 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
 /** An entry and the file it comes from; `stem` is its category, undefined in a fixture file. */
 type Placed = { file: string; stem: string | undefined; entry: Entry };
 
-/** What the rules after SCHEMA see: typed data and the file of each part. */
-type Context = {
+/** A catalog whose files match their schemas: typed data and the file of each part. */
+type Parts = {
   placed: Placed[];
-  uses: KeyUse[];
   groups: { file: string; groups: Group[] };
   ctrlKeys: { file: string; keys: CtrlKey[] };
   retiredIds: { file: string; ids: string[] };
 };
+
+/** What the rules after SCHEMA see: the parts and the parsed keys of the entries. */
+type Context = Parts & { uses: KeyUse[] };
+
+/** The diagnostics of the rules after SCHEMA, unsorted. */
+function checkRules(parts: Parts): Diagnostic[] {
+  const context: Context = { ...parts, uses: keyUses(parts.placed) };
+  return RULES.flatMap((rule) => rule(context));
+}
 
 /** The rules after SCHEMA, in the order of design §3. */
 const RULES: ((context: Context) => Diagnostic[])[] = [
