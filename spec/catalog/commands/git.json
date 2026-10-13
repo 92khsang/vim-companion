@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "git.status",
+      "category": "git",
+      "keys": { "leader": ["SPC g g"] },
+      "label": "Show Git changes",
+      "description": "Shows the changed files and the commit message box.",
+      "examples": ["SPC g g → the modified files and the commit box appear"],
+      "rationale": "Doom Emacs (Magit) and LazyVim (lazygit) use SPC g g to open the Git status.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.view.scm" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "ActivateCommitToolWindow" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

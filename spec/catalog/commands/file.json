@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "file.find",
+      "category": "file",
+      "keys": { "leader": ["SPC f f", "SPC SPC"] },
+      "label": "Find file",
+      "description": "Opens the fuzzy file finder for the project; type part of a file name and press Enter.",
+      "examples": [
+        "SPC f f, type ordsvc, Enter → opens OrderService.java",
+        "SPC SPC → opens the same finder from the root menu"
+      ],
+      "rationale": "Doom Emacs and LazyVim find project files with SPC SPC; LazyVim also uses SPC f f, and VSpaceCode uses SPC p f.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.quickOpen" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "GotoFile" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "file.recent",
+      "category": "file",
+      "keys": { "leader": ["SPC f r"] },
+      "label": "Open recent file",
+      "description": "Lists recently opened files, most recent first; pick one to open it again.",
+      "examples": [
+        "SPC f r, type test → reopens a test file you had open earlier"
+      ],
+      "rationale": "VSpaceCode, Doom Emacs and LazyVim all use SPC f r for recent files.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.quickOpen" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "RecentFiles" },
+      "support": {
+        "vscode": {
+          "level": "partial",
+          "note": "VS Code has no picker for recent files only; Quick Open lists the editor history first and searches all files once a query is typed."
+        }
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "file.reveal",
+      "category": "file",
+      "keys": { "leader": ["SPC f p"] },
+      "label": "Reveal file in tree",
+      "description": "Shows the current file in the project file tree and selects it.",
+      "examples": [
+        "SPC f p → the tree scrolls to the current file and selects it"
+      ],
+      "rationale": "Conventions differ (Doom Emacs SPC o P, VSpaceCode SPC f T), so the key sits in the File group: p for the project tree.",
+      "stage": "stable",
+      "vscode": {
+        "exec": {
+          "command": "workbench.files.action.showActiveFileInExplorer"
+        },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "SelectInProjectView" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

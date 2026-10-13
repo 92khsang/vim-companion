@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "module": "nodenext",
+    // TypeScript 6 defaults `types` to []; the tools and tests use Node globals.
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    // Node needs the `.mts` extension in relative imports; this makes tsc accept it.
+    "rewriteRelativeImportExtensions": true,
+    // Node only strips types, so enums, namespaces and parameter properties must fail type-checking.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
+  },
+  "include": ["tools", "test", "vitest.config.mts"]
+}

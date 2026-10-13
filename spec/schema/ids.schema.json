@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion ID snapshots",
+  "description": "The IDs that pnpm ids:refresh writes to spec/ids: vscode.json follows $defs/vscode and intellij.json follows $defs/intellij.",
+  "$defs": {
+    "vscode": {
+      "description": "The command IDs of one VS Code version and its allow-listed extensions.",
+      "type": "object",
+      "required": ["vscode", "extensions", "commands"],
+      "additionalProperties": false,
+      "properties": {
+        "vscode": { "$ref": "#/$defs/text" },
+        "extensions": { "$ref": "#/$defs/versions" },
+        "commands": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "intellij": {
+      "description": "The action IDs of one IntelliJ build and its allow-listed plugins.",
+      "type": "object",
+      "required": ["ide", "plugins", "declared", "runtime"],
+      "additionalProperties": false,
+      "properties": {
+        "ide": { "$ref": "#/$defs/text" },
+        "plugins": { "$ref": "#/$defs/versions" },
+        "declared": { "$ref": "#/$defs/ids" },
+        "runtime": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "versions": {
+      "description": "Extension or plugin name to version.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/text" }
+    },
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "text": { "type": "string", "minLength": 1 }
+  }
+}

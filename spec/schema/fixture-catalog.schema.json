@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion leader resolution fixture",
+  "description": "An inline catalog and cases: where the leader keys after SPC lead in one IDE.",
+  "type": "object",
+  "required": ["description", "catalog", "cases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "description": { "type": "string", "minLength": 1 },
+    "catalog": { "$ref": "#/$defs/catalog" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "ide", "keys", "expect"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/caseId" },
+          "ide": { "$ref": "#/$defs/ide" },
+          "options": { "$ref": "#/$defs/options" },
+          "keys": { "$ref": "#/$defs/keys" },
+          "expect": {
+            "type": "object",
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["kind", "label"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "const": "group" },
+                  "label": { "type": "string" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["kind", "entry", "supported"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "const": "leaf" },
+                  "entry": { "$ref": "commands.schema.json#/$defs/id" },
+                  "supported": { "type": "boolean" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["kind"],
+                "additionalProperties": false,
+                "properties": { "kind": { "const": "unbound" } }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "catalog": {
+      "description": "A catalog of its own: entries as in a command file and groups as in groups.json.",
+      "type": "object",
+      "required": ["entries", "groups"],
+      "additionalProperties": false,
+      "properties": {
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "commands.schema.json#/$defs/entry" }
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "groups.schema.json#/$defs/group" }
+        }
+      }
+    },
+    "caseId": {
+      "description": "Kebab-case, unique in its file; the global id is <file stem>/<id>.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "ide": { "type": "string", "enum": ["vscode", "intellij"] },
+    "key": {
+      "description": "One leader key after SPC: SPC or one of a-z A-Z 0-9 / ? : =.",
+      "type": "string",
+      "pattern": "^(?:SPC|[a-zA-Z0-9/?:=])$"
+    },
+    "keys": { "type": "array", "items": { "$ref": "#/$defs/key" } },
+    "options": {
+      "description": "experimental: bind experimental entries too. version: the release whose aliases are active; 0.0.0 when absent.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "experimental": { "type": "boolean" },
+        "version": { "$ref": "#/$defs/version" }
+      }
+    },
+    "version": {
+      "description": "SemVer 2.0.0 without build metadata: x.y.z[-prerelease]. spec:check checks the format with isVersion in tools/core/version.mts.",
+      "type": "string"
+    }
+  }
+}

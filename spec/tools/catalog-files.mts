@@ -1,0 +1,78 @@
+// Reads the catalog and the schemas of a spec directory into the shapes the core validates. File
+// paths for messages are relative to the parent of the spec directory and use "/", such as
+// "spec/catalog/groups.json". readJson reads a file anywhere, such as one of an IDE, and names it
+// by the path it was read from.
+import { readdirSync, readFileSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
+import type {
+  CatalogFile,
+  CatalogFiles,
+  FixtureFiles,
+  SchemaSet,
+} from "./core/validate.mts";
+
+/** The path of a file below the spec directory `root`, for messages. */
+export function repoPath(root: string, path: string): string {
+  return relative(dirname(root), path).split(sep).join("/");
+}
+
+/** The parsed JSON files of a directory, in code-unit order of their names. */
+function jsonFiles(root: string, dir: string): CatalogFile[] {
+  return readdirSync(dir)
+    .filter((name) => name.endsWith(".json"))
+    .sort()
+    .map((name) => readJsonFile(root, join(dir, name)));
+}
+
+/**
+ * A parsed JSON file of the spec directory `root`, with its repo path; a syntax error names the
+ * file by that path.
+ */
+export function readJsonFile(root: string, path: string): CatalogFile {
+  const file = repoPath(root, path);
+  return { path: file, data: readJson(path, file) };
+}
+
+/**
+ * The parsed JSON of a file anywhere, such as one of an IDE; a syntax error names the file as
+ * `name`, by default the path it was read from.
+ */
+export function readJson(path: string, name: string = path): unknown {
+  const text = readFileSync(path, "utf8");
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error(`${name}: ${(error as Error).message}`);
+  }
+}
+
+/** catalog/commands/*.json, groups.json, ctrl-keys.json and retired-ids.json of a spec directory. */
+export function readCatalogFiles(root: string): CatalogFiles {
+  const catalog = join(root, "catalog");
+  return {
+    commands: jsonFiles(root, join(catalog, "commands")),
+    groups: readJsonFile(root, join(catalog, "groups.json")),
+    ctrlKeys: readJsonFile(root, join(catalog, "ctrl-keys.json")),
+    retiredIds: readJsonFile(root, join(catalog, "retired-ids.json")),
+  };
+}
+
+/** fixtures/catalog/*.json, fixtures/hint-view/*.json and fixtures/version-order.json of a spec directory. */
+export function readFixtureFiles(root: string): FixtureFiles {
+  const fixtures = join(root, "fixtures");
+  return {
+    catalog: jsonFiles(root, join(fixtures, "catalog")),
+    hintView: jsonFiles(root, join(fixtures, "hint-view")),
+    versionOrder: readJsonFile(root, join(fixtures, "version-order.json")),
+  };
+}
+
+/** The schemas in schema/ of a spec directory, by file name. */
+export function readSchemas(root: string): SchemaSet {
+  return Object.fromEntries(
+    jsonFiles(root, join(root, "schema")).map(({ path, data }) => [
+      path.slice(path.lastIndexOf("/") + 1),
+      data,
+    ]),
+  );
+}

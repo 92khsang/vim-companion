@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "code.comment",
+      "category": "code",
+      "keys": { "leader": ["SPC c"], "vim": ["gcc"] },
+      "label": "Toggle line comment",
+      "description": "Comments out the line under the cursor, or uncomments it when it is a comment.",
+      "examples": ["gcc, on let x = 1 → the line reads // let x = 1"],
+      "rationale": "Vim commentary and Neovim use gcc to toggle a line comment; c for comment.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "vimKeys": "gcc" },
+        "exit": "editor",
+        "repeatable": true,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "gcc", "provider": "commentary" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "code.hover",
+      "category": "code",
+      "keys": { "vim": ["K"] },
+      "label": "Show documentation",
+      "description": "Shows the documentation of the symbol under the cursor in a popup.",
+      "examples": ["K, on parseArgs → the documentation of parseArgs opens"],
+      "rationale": "Vim and Neovim use K to look up the word under the cursor.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "editor.action.showHover" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "K" },
+      "semantics": {
+        "vscodevim": "VSCodeVim has no K; its gh shows the hover.",
+        "ideavim": "IdeaVim runs K as Quick Documentation."
+      },
+      "deviation": {
+        "shadows": "Vim K, which runs keywordprg on the word under the cursor",
+        "origin": "Neovim LSP default mapping",
+        "note": "VS Code shows the hover instead of running keywordprg."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

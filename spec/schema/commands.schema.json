@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion command file",
+  "description": "The catalog entries of one category; the file stem is the category.",
+  "type": "object",
+  "required": ["commands"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "commands": { "type": "array", "items": { "$ref": "#/$defs/entry" } }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "category",
+        "keys",
+        "label",
+        "description",
+        "examples",
+        "rationale",
+        "stage",
+        "verifiedAgainst"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "category": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
+        "keys": { "$ref": "#/$defs/keySet" },
+        "label": { "$ref": "#/$defs/label" },
+        "description": { "$ref": "#/$defs/text" },
+        "examples": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "rationale": { "$ref": "#/$defs/text" },
+        "stage": { "type": "string", "enum": ["stable", "experimental"] },
+        "modes": {
+          "description": "Default [\"n\"]; applies to every key of the entry and of its aliases.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["n", "x"] }
+        },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/alias" } },
+        "vscode": { "$ref": "#/$defs/vscodeBinding" },
+        "intellij": { "$ref": "#/$defs/intellijBinding" },
+        "semantics": {
+          "description": "How the keys of each engine behave. Both are required when one IDE runs engine keys and the other a command or action. An IDE that runs a command or action shows differs-from-vim when the entry has the text of its engine.",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "vscodevim": { "$ref": "#/$defs/text" },
+            "ideavim": { "$ref": "#/$defs/text" }
+          }
+        },
+        "deviation": {
+          "description": "Required when an IDE implements a Vim key of the entry by a remap.",
+          "type": "object",
+          "required": ["shadows", "origin", "note"],
+          "additionalProperties": false,
+          "properties": {
+            "shadows": { "$ref": "#/$defs/text" },
+            "origin": { "$ref": "#/$defs/text" },
+            "note": { "$ref": "#/$defs/text" }
+          }
+        },
+        "support": {
+          "description": "A missing IDE means full when the entry has a block for that IDE.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "vscode": { "$ref": "#/$defs/support" },
+            "intellij": { "$ref": "#/$defs/support" }
+          }
+        },
+        "verifiedAgainst": {
+          "type": "object",
+          "required": ["vscode", "vscodevim", "intellij", "ideavim"],
+          "additionalProperties": false,
+          "properties": {
+            "vscode": { "$ref": "#/$defs/text" },
+            "vscodevim": { "$ref": "#/$defs/text" },
+            "intellij": { "$ref": "#/$defs/text" },
+            "ideavim": { "$ref": "#/$defs/text" }
+          }
+        }
+      }
+    },
+    "id": {
+      "description": "<category>.<name>, such as window.focus-left.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$"
+    },
+    "label": {
+      "description": "An entry label starts with a verb, a group label is a noun.",
+      "type": "string",
+      "maxLength": 24,
+      "pattern": "^[A-Z][A-Za-z0-9 ,.'()/+-]*$"
+    },
+    "text": { "type": "string", "minLength": 1 },
+    "keySet": {
+      "description": "Leader keys such as \"SPC w h\" and Vim keys such as \"gra\"; spec:check checks the notation.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "leader": { "$ref": "#/$defs/keyList" },
+        "vim": { "$ref": "#/$defs/keyList" }
+      }
+    },
+    "keyList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "alias": {
+      "description": "An old key, kept until version until; its label is \"Moved to <primary key>\".",
+      "type": "object",
+      "required": ["keys", "until"],
+      "additionalProperties": false,
+      "properties": {
+        "keys": { "$ref": "#/$defs/keySet" },
+        "until": { "type": "string" }
+      }
+    },
+    "commandId": { "type": "string", "pattern": "^[A-Za-z0-9_.$-]+$" },
+    "vscodeBinding": {
+      "type": "object",
+      "required": ["exec", "exit", "repeatable", "count"],
+      "additionalProperties": false,
+      "properties": {
+        "exec": {
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["command"],
+              "additionalProperties": false,
+              "properties": {
+                "command": { "$ref": "#/$defs/commandId" },
+                "args": {
+                  "description": "The positional arguments of the command.",
+                  "type": "array"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": ["vimKeys"],
+              "additionalProperties": false,
+              "properties": { "vimKeys": { "type": "string" } }
+            }
+          ]
+        },
+        "exit": { "type": "string", "enum": ["input", "editor"] },
+        "repeatable": { "type": "boolean" },
+        "count": { "type": "string", "enum": ["none", "repeat"] }
+      }
+    },
+    "intellijBinding": {
+      "description": "provider: absent for keys built into IdeaVim. motionSafe: default true.",
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["action"],
+          "additionalProperties": false,
+          "properties": {
+            "action": { "$ref": "#/$defs/commandId" },
+            "provider": { "$ref": "#/$defs/text" },
+            "motionSafe": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["ideavimKeys"],
+          "additionalProperties": false,
+          "properties": {
+            "ideavimKeys": { "type": "string" },
+            "provider": { "$ref": "#/$defs/text" },
+            "motionSafe": { "type": "boolean" }
+          }
+        }
+      ]
+    },
+    "support": {
+      "description": "partial and none need a note that says what is missing.",
+      "type": "object",
+      "required": ["level"],
+      "additionalProperties": false,
+      "properties": {
+        "level": { "type": "string", "enum": ["full", "partial", "none"] },
+        "note": { "$ref": "#/$defs/text" }
+      }
+    }
+  }
+}

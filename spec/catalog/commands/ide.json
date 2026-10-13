@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "ide.commands",
+      "category": "ide",
+      "keys": { "leader": ["SPC f a"] },
+      "label": "Run IDE command",
+      "description": "Opens the IDE's command search so you can run any IDE command by name.",
+      "examples": ["SPC f a, type wrap → pick the soft-wrap toggle"],
+      "rationale": "Conventions disagree (VSpaceCode SPC SPC, Doom Emacs SPC :, LazyVim SPC s C), so the key follows IntelliJ's Find Action: a for action.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.showCommands" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "GotoAction" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

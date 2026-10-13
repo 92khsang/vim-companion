@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "file.find",
+      "category": "file",
+      "keys": { "leader": ["SPC f f", "SPC SPC"] },
+      "label": "Find file",
+      "description": "Opens a file of the workspace by its name.",
+      "examples": ["SPC f f, main → main.ts opens"],
+      "rationale": "VSpaceCode, Doom Emacs and LazyVim use SPC f f and SPC SPC to find a file.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.quickOpen" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "GotoFile" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "file.locations",
+      "category": "file",
+      "keys": { "leader": ["SPC f l"] },
+      "label": "Show recent locations",
+      "description": "Lists the code locations visited or changed lately, each with a line of context.",
+      "examples": ["SPC f l, parse → the cursor returns to the edit in parseArgs"],
+      "rationale": "l for locations, next to the other file pickers of the File group.",
+      "stage": "stable",
+      "intellij": { "action": "RecentLocations" },
+      "support": {
+        "vscode": {
+          "level": "none",
+          "note": "VS Code has no list of recent locations; Go Back steps through them one at a time."
+        }
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

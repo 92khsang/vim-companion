@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "window.equalize",
+      "category": "window",
+      "keys": { "leader": ["SPC w ="] },
+      "label": "Equalize split sizes",
+      "description": "Gives every split of the editor area the same width.",
+      "examples": ["SPC w = → the two splits are equally wide again"],
+      "rationale": "Vim uses <C-w>= to give the windows the same size.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.evenEditorWidths" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "support": {
+        "intellij": {
+          "level": "none",
+          "note": "No IntelliJ action gives all splits the same size."
+        }
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.focus-left",
+      "category": "window",
+      "keys": { "leader": ["SPC w h"] },
+      "label": "Focus split left",
+      "description": "Moves the focus to the split on the left.",
+      "examples": ["SPC w h → the cursor is in the left split"],
+      "rationale": "VSpaceCode, Doom Emacs and LazyVim use SPC w h, after Vim <C-w>h.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusLeftGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "<C-w>h" },
+      "semantics": {
+        "vscodevim": "VSCodeVim's own <C-w>h can also leave the editor area.",
+        "ideavim": "IdeaVim runs <C-w>h, which takes a count."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.only",
+      "category": "window",
+      "keys": { "leader": ["SPC w o"] },
+      "label": "Close other splits",
+      "description": "Closes every split except the one with the cursor.",
+      "examples": ["SPC w o → one split is left"],
+      "rationale": "VSpaceCode and Doom Emacs use SPC w o, after Vim <C-w>o.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "vimKeys": "<C-w>o" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "UnsplitAll" },
+      "semantics": {
+        "vscodevim": "VSCodeVim runs <C-w>o, which closes the other editor groups.",
+        "ideavim": "IdeaVim's own <C-w>o closes the other splits as well."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

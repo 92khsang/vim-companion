@@ -1,0 +1,446 @@
+{
+  "$schema": "../../schema/fixture-hint-view.schema.json",
+  "description": "The badge of each row in each IDE: the first that applies of unsupported, experimental, fallback and differs-from-vim, where differs-from-vim needs an IDE that runs a command or action and semantics for its engine; an alias row has the badge of its entry.",
+  "catalog": {
+    "entries": [
+      {
+        "id": "window.close",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w c"]
+        },
+        "label": "Close split",
+        "description": "Closes the active split and its editors.",
+        "examples": ["SPC w c → the active split is gone"],
+        "rationale": "c for close.",
+        "stage": "stable",
+        "aliases": [
+          {
+            "keys": {
+              "leader": ["SPC w d"]
+            },
+            "until": "1.0.0"
+          }
+        ],
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.closeEditorsAndGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "Unsplit"
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.focus-left",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w h"]
+        },
+        "label": "Focus split left",
+        "description": "Moves the cursor to the split on the left.",
+        "examples": ["SPC w h → the cursor is in the split on the left"],
+        "rationale": "h moves left in Vim.",
+        "stage": "stable",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.focusLeftGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "repeat"
+        },
+        "intellij": {
+          "ideavimKeys": "<C-w>h"
+        },
+        "semantics": {
+          "vscodevim": "VSCodeVim's own <C-w>h can also move focus out of the editor area.",
+          "ideavim": "Runs IdeaVim <C-w>h, which moves between editor splits."
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.focus-right",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w l"]
+        },
+        "label": "Focus split right",
+        "description": "Moves the cursor to the split on the right.",
+        "examples": ["SPC w l → the cursor is in the split on the right"],
+        "rationale": "l moves right in Vim.",
+        "stage": "stable",
+        "aliases": [
+          {
+            "keys": {
+              "leader": ["SPC w L"]
+            },
+            "until": "1.0.0"
+          }
+        ],
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.focusRightGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "repeat"
+        },
+        "intellij": {
+          "ideavimKeys": "<C-w>l"
+        },
+        "semantics": {
+          "vscodevim": "VSCodeVim's own <C-w>l can also move focus out of the editor area.",
+          "ideavim": "Runs IdeaVim <C-w>l, which moves between editor splits."
+        },
+        "support": {
+          "vscode": {
+            "level": "partial",
+            "note": "This fixture marks it partial."
+          },
+          "intellij": {
+            "level": "partial",
+            "note": "This fixture marks it partial."
+          }
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.maximize",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w m"]
+        },
+        "label": "Maximize split",
+        "description": "Gives the active split the whole editor area, or gives the other splits their share back.",
+        "examples": ["SPC w m → the active split fills the editor area"],
+        "rationale": "m for maximize.",
+        "stage": "experimental",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.toggleMaximizeEditorGroup"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "none"
+        },
+        "support": {
+          "intellij": {
+            "level": "none",
+            "note": "This fixture binds it in VS Code only."
+          }
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.only",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w o"]
+        },
+        "label": "Close other splits",
+        "description": "Closes every split but the active one.",
+        "examples": ["SPC w o → the active split is the only one"],
+        "rationale": "o for only.",
+        "stage": "stable",
+        "vscode": {
+          "exec": {
+            "vimKeys": "<C-w>o"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "UnsplitAll"
+        },
+        "semantics": {
+          "vscodevim": "Runs VSCodeVim <C-w>o, which merges all editor groups into one.",
+          "ideavim": "IdeaVim's own <C-w>o closes the other splits."
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      },
+      {
+        "id": "window.split-down",
+        "category": "window",
+        "keys": {
+          "leader": ["SPC w s"]
+        },
+        "label": "Split down",
+        "description": "Splits the active editor into a new split below it.",
+        "examples": ["SPC w s → the file is open in a split below"],
+        "rationale": "s for split.",
+        "stage": "experimental",
+        "vscode": {
+          "exec": {
+            "command": "workbench.action.splitEditorDown"
+          },
+          "exit": "editor",
+          "repeatable": false,
+          "count": "none"
+        },
+        "intellij": {
+          "action": "SplitHorizontally"
+        },
+        "semantics": {
+          "vscodevim": "VSCodeVim's own <C-w>s splits in the direction that workbench.editor.openSideBySideDirection sets."
+        },
+        "support": {
+          "intellij": {
+            "level": "partial",
+            "note": "This fixture marks it partial."
+          }
+        },
+        "verifiedAgainst": {
+          "vscode": "1.141.0",
+          "vscodevim": "1.32.4",
+          "intellij": "2026.2.3",
+          "ideavim": "2.47.3"
+        }
+      }
+    ],
+    "groups": [
+      {
+        "keys": "SPC w",
+        "label": "Window"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "each-kind-intellij",
+      "ide": "intellij",
+      "options": {
+        "experimental": true
+      },
+      "prefix": ["w"],
+      "rows": [
+        {
+          "key": "c",
+          "label": "Close split",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "h",
+          "label": "Focus split left",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "l",
+          "label": "Focus split right",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "m",
+          "label": "Maximize split",
+          "group": false,
+          "badge": "unsupported"
+        },
+        {
+          "key": "o",
+          "label": "Close other splits",
+          "group": false,
+          "badge": "differs-from-vim"
+        },
+        {
+          "key": "s",
+          "label": "Split down",
+          "group": false,
+          "badge": "experimental"
+        },
+        {
+          "key": "L",
+          "label": "Moved to SPC w l",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "d",
+          "label": "Moved to SPC w c",
+          "group": false,
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "stable-intellij",
+      "ide": "intellij",
+      "prefix": ["w"],
+      "rows": [
+        {
+          "key": "c",
+          "label": "Close split",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "h",
+          "label": "Focus split left",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "l",
+          "label": "Focus split right",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "o",
+          "label": "Close other splits",
+          "group": false,
+          "badge": "differs-from-vim"
+        },
+        {
+          "key": "L",
+          "label": "Moved to SPC w l",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "d",
+          "label": "Moved to SPC w c",
+          "group": false,
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "each-kind-vscode",
+      "ide": "vscode",
+      "options": {
+        "experimental": true
+      },
+      "prefix": ["w"],
+      "rows": [
+        {
+          "key": "c",
+          "label": "Close split",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "h",
+          "label": "Focus split left",
+          "group": false,
+          "badge": "differs-from-vim"
+        },
+        {
+          "key": "l",
+          "label": "Focus split right",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "m",
+          "label": "Maximize split",
+          "group": false,
+          "badge": "experimental"
+        },
+        {
+          "key": "o",
+          "label": "Close other splits",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "s",
+          "label": "Split down",
+          "group": false,
+          "badge": "experimental"
+        },
+        {
+          "key": "L",
+          "label": "Moved to SPC w l",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "d",
+          "label": "Moved to SPC w c",
+          "group": false,
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "aliases-expired-intellij",
+      "ide": "intellij",
+      "options": {
+        "experimental": true,
+        "version": "1.0.0"
+      },
+      "prefix": ["w"],
+      "rows": [
+        {
+          "key": "c",
+          "label": "Close split",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "h",
+          "label": "Focus split left",
+          "group": false,
+          "badge": null
+        },
+        {
+          "key": "l",
+          "label": "Focus split right",
+          "group": false,
+          "badge": "fallback"
+        },
+        {
+          "key": "m",
+          "label": "Maximize split",
+          "group": false,
+          "badge": "unsupported"
+        },
+        {
+          "key": "o",
+          "label": "Close other splits",
+          "group": false,
+          "badge": "differs-from-vim"
+        },
+        {
+          "key": "s",
+          "label": "Split down",
+          "group": false,
+          "badge": "experimental"
+        }
+      ]
+    }
+  ]
+}

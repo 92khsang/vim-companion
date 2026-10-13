@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "diag.next",
+      "category": "diag",
+      "keys": { "vim": ["]d"] },
+      "label": "Go to next problem",
+      "description": "Jumps to the next error or warning in the file.",
+      "examples": ["]d → the cursor lands on the next problem in this file"],
+      "rationale": "Neovim and LazyVim use ]d for the next diagnostic.",
+      "stage": "stable",
+      "aliases": [{ "keys": { "vim": ["]e"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": { "command": "editor.action.marker.next" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "action": "GotoNextError", "motionSafe": false },
+      "deviation": {
+        "shadows": "Vim ]d, which shows the #define of the word under the cursor",
+        "origin": "Neovim 0.10 default mapping",
+        "note": "Neither engine implements the Vim ]d."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

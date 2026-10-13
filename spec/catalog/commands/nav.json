@@ -1,0 +1,91 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "nav.references",
+      "category": "nav",
+      "keys": { "vim": ["grr"] },
+      "label": "Find references",
+      "description": "Lists every reference to the symbol under the cursor; jumps straight there if there is only one.",
+      "examples": ["Cursor on save, grr → every call of save is listed"],
+      "rationale": "Neovim 0.11 maps grr to references.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "editor.action.goToReferences" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "ShowUsages" },
+      "deviation": {
+        "shadows": "Vim gr{char} (replace virtual characters), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "Clashes with the opt-in ReplaceWithRegister gr and grr (VSCodeVim vim.replaceWithRegister, IdeaVim ReplaceWithRegister)."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "nav.implementation",
+      "category": "nav",
+      "keys": { "vim": ["gri"] },
+      "label": "Go to implementation",
+      "description": "Jumps to the implementation of the interface, abstract method or type under the cursor; lists them if there are several.",
+      "examples": [
+        "Cursor on an interface method, gri → jumps to its implementation"
+      ],
+      "rationale": "Neovim 0.11 maps gri to implementations.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "editor.action.goToImplementation" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "GotoImplementation" },
+      "deviation": {
+        "shadows": "Vim gr{char} (replace virtual characters), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "Clashes with the opt-in ReplaceWithRegister gr and grr (VSCodeVim vim.replaceWithRegister, IdeaVim ReplaceWithRegister)."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "nav.symbols-file",
+      "category": "nav",
+      "keys": { "vim": ["gO"] },
+      "label": "List symbols in file",
+      "description": "Lists the classes, methods and fields of the current file; type to filter and press Enter to jump.",
+      "examples": ["gO, type parse → jumps to parseConfig"],
+      "rationale": "Neovim 0.11 maps gO to document symbols.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.gotoSymbol" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "FileStructurePopup" },
+      "deviation": {
+        "shadows": "VSCodeVim's built-in gO, which focuses the Outline view and leaves the editor",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "IdeaVim has no gO."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

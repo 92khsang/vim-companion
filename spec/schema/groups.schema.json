@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion leader groups",
+  "description": "The label of each leader prefix below the root, such as SPC w.",
+  "type": "object",
+  "required": ["groups"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "groups": { "type": "array", "items": { "$ref": "#/$defs/group" } }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": ["keys", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "keys": { "type": "string" },
+        "label": { "$ref": "commands.schema.json#/$defs/label" }
+      }
+    }
+  }
+}
