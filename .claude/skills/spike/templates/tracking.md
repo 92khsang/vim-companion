@@ -1,9 +1,11 @@
-Tracks the spikes of <phase>. Each row links a spike issue. Update the row when that issue closes.
+Tracks the spikes of Phase {{n}}. Each row links a spike issue. Fill in its verdict and decision when that issue gets its verdict.
 
-| Spike | Question         | Issue     | Verdict | Decision |
-| ----- | ---------------- | --------- | ------- | -------- |
-| <id>  | <short question> | #<number> | open    |          |
+| Spike  | Question           | Issue       | Verdict | Decision |
+| ------ | ------------------ | ----------- | ------- | -------- |
+| {{id}} | {{short question}} | #{{number}} | open    | none yet |
 
 ## User approvals
 
-- <date>: <what the user approved, such as a UI mock-up>
+One line per approval, in the form `YYYY-MM-DD: what the user approved, as shown at <permalink>`.
+
+- none yet

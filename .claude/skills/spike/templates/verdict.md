@@ -1,25 +1,26 @@
-## Verdict: <pass | fail | default>
+## Verdict: {{pass, fail or default}}
 
-<One or two sentences that answer the question.>
+{{One or two findings that answer the question, each starting with Measured:, Documented: or Inferred:.}}
 
-| Criterion   | Threshold   | Measured                            | Result         |
-| ----------- | ----------- | ----------------------------------- | -------------- |
-| <criterion> | <threshold> | <value, with trials and conditions> | <pass or fail> |
+| Criterion     | Threshold     | Measured                                                 | Result                         |
+| ------------- | ------------- | -------------------------------------------------------- | ------------------------------ |
+| {{criterion}} | {{threshold}} | {{value, with trials and conditions, or "not measured"}} | {{pass, fail or not measured}} |
 
 ## Decision
 
-<What the project does now. For fail or default, name the default that applies.>
+{{What the project does now. For fail or default, name the default that applies.}}
 
 ## Evidence
 
-- Harness proof: <how injected keys were shown to reach the target window>
-- Scripts and raw data: <links to commits on the spike branch>
-- Commands: <the exact commands that produced the numbers>
+- Environment: {{"as in the issue", or what changed}}
+- Harness proof: {{how you showed that the harness measures what it claims, or "none: no harness"}}
+- Scripts and raw data: {{permalinks to commits on the spike branch}}
+- Commands: {{the exact commands that produced the numbers}}
 
 ## Behaviour the decision relies on
 
-- <engine or IDE behaviour>: contract test <name, or "to write">
+- {{engine or IDE behaviour}}: contract test {{name, or "to write"}}
 
 ## Unverified
 
-- <what was not checked, and why>
+- {{a condition the question covers that you did not test, and why}}
