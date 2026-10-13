@@ -13,6 +13,7 @@ import {
 const schemas = loadSchemas();
 
 const CODE = "spec/catalog/commands/code.json";
+const DIAG = "spec/catalog/commands/diag.json";
 const FILE = "spec/catalog/commands/file.json";
 const SEARCH = "spec/catalog/commands/search.json";
 const WINDOW = "spec/catalog/commands/window.json";
@@ -22,6 +23,11 @@ const RETIRED_IDS = "spec/catalog/retired-ids.json";
 
 const ID_PATTERN = "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$";
 const LABEL_PATTERN = "^[A-Z][A-Za-z0-9 ,.'()/+-]*$";
+// The notation messages of keys.mts after the quoted key.
+const NOT_LEADER =
+  'is not a leader key: "SPC" and then keys separated by single spaces, each SPC or one of a-z A-Z 0-9 / ? : =';
+const NOT_VIM =
+  "is not a Vim key: keys without spaces, each a printable ASCII character other than < and |, or a <...> group such as <C-w>";
 
 const diagnostic = (
   file: string,
@@ -580,6 +586,120 @@ describe("validateCatalog", () => {
             "CATEGORY_MISMATCH",
             'the id must start with the category: "window."',
           ),
+        ],
+      },
+    ]);
+  });
+
+  test("KEY_SYNTAX reports leader and Vim keys that break the key notation", () => {
+    runCases([
+      {
+        name: "IdeaVim keys that write | as <Bar>",
+        change: (files) => {
+          entryOf(files, "window.focus-left").intellij = {
+            ideavimKeys: "<C-w><Bar>",
+          };
+        },
+        expected: [],
+      },
+      {
+        name: "a leader key with two spaces",
+        change: (files) => {
+          entryOf(files, "file.find").keys.leader = ["SPC f f", "SPC  SPC"];
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.find",
+            "KEY_SYNTAX",
+            `keys.leader[1]: "SPC  SPC" ${NOT_LEADER}`,
+          ),
+        ],
+      },
+      {
+        name: "a Vim key with a space",
+        change: (files) => {
+          entryOf(files, "diag.next").keys.vim = ["] d"];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "KEY_SYNTAX",
+            `keys.vim[0]: "] d" ${NOT_VIM}`,
+          ),
+        ],
+      },
+      {
+        name: "an alias key with a trailing space",
+        change: (files) => {
+          entryOf(files, "search.project").aliases![0]!.keys.leader = [
+            "SPC f s ",
+          ];
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "KEY_SYNTAX",
+            `aliases[0].keys.leader[0]: "SPC f s " ${NOT_LEADER}`,
+          ),
+        ],
+      },
+      {
+        name: "VSCodeVim keys with a < that opens no group",
+        change: (files) => {
+          entryOf(files, "window.only").vscode!.exec = { vimKeys: "<C-w>o<" };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.only",
+            "KEY_SYNTAX",
+            `vscode.exec.vimKeys: "<C-w>o<" ${NOT_VIM}`,
+          ),
+        ],
+      },
+      {
+        name: "IdeaVim keys with a |, which ends a map command",
+        change: (files) => {
+          entryOf(files, "window.focus-left").intellij = {
+            ideavimKeys: "<C-w>|",
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.focus-left",
+            "KEY_SYNTAX",
+            `intellij.ideavimKeys: "<C-w>|" ${NOT_VIM}; write | as <Bar>`,
+          ),
+        ],
+      },
+      {
+        name: "IdeaVim keys with a space",
+        change: (files) => {
+          entryOf(files, "code.comment").intellij = {
+            ideavimKeys: "gc c",
+            provider: "commentary",
+          };
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.comment",
+            "KEY_SYNTAX",
+            `intellij.ideavimKeys: "gc c" ${NOT_VIM}`,
+          ),
+        ],
+      },
+      {
+        name: "a group key without the space between its keys",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC ga", label: "Goto" });
+        },
+        expected: [
+          diagnostic(GROUPS, "SPC ga", "KEY_SYNTAX", `"SPC ga" ${NOT_LEADER}`),
         ],
       },
     ]);
