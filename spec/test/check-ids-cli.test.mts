@@ -86,6 +86,16 @@ function writeSpec(
   return root;
 }
 
+/** A run that could not check: exit 2, nothing on stdout, a check-ids message with `text`. */
+function cannotRun(text: string) {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return {
+    status: 2,
+    stdout: "",
+    stderr: expect.stringMatching(new RegExp(`^check-ids: .*${escaped}`)),
+  };
+}
+
 function checkIds(...args: string[]) {
   const { status, stdout, stderr } = spawnSync(
     process.execPath,
@@ -125,5 +135,44 @@ describe("check-ids", () => {
       ].join("\n"),
       stderr: "",
     });
+  });
+
+  test("exits 2 with a message when it cannot run", () => {
+    const missing = join(base, "missing", "spec");
+    const invalid = miniCatalogFiles();
+    entryOf(invalid, "search.project").aliases![0]!.until = "1.0";
+    const invalidCatalog = writeSpec("invalid-catalog", invalid);
+    const noSnapshot = writeSpec("no-snapshot", miniCatalogFiles());
+    rmSync(join(noSnapshot, "ids/vscode.json"));
+    const brokenSnapshots = writeSpec("broken-snapshots", miniCatalogFiles(), {
+      vscode: { ...VSCODE, extensions: { "vscodevim.vim": 1 } },
+      intellij: { ...INTELLIJ, declared: ["", ...INTELLIJ.declared] },
+    });
+    expect([
+      checkIds("--root", missing),
+      checkIds("--rot", missing),
+      checkIds("--root", invalidCatalog),
+      checkIds("--root", noSnapshot),
+      checkIds("--root", brokenSnapshots),
+    ]).toEqual([
+      cannotRun(missing),
+      cannotRun("'--rot'"),
+      {
+        status: 2,
+        stdout: "",
+        stderr:
+          'check-ids: spec/catalog/commands/search.json: search.project: aliases[0].until "1.0" is not a version x.y.z[-prerelease]\n',
+      },
+      cannotRun("ids/vscode.json"),
+      {
+        status: 2,
+        stdout: "",
+        stderr: [
+          "check-ids: spec/ids/intellij.json: /declared/0: must NOT have fewer than 1 characters",
+          "check-ids: spec/ids/vscode.json: /extensions/vscodevim.vim: must be string",
+          "",
+        ].join("\n"),
+      },
+    ]);
   });
 });
