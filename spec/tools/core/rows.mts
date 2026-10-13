@@ -1,6 +1,6 @@
 // The rows of a hint view (design §4): the children of a leader prefix in display order, each with
 // its label and badge.
-import type { Ide, KeyCatalog } from "./catalog.mts";
+import type { Entry, Ide, KeyCatalog } from "./catalog.mts";
 import { compareKeys } from "./keys.mts";
 import { leaderLeaves, type ResolveOptions } from "./resolve.mts";
 
@@ -34,7 +34,7 @@ export function rows(
         // An alias moves its key to the entry's first leader key.
         label: alias ? `Moved to ${entry.keys.leader?.[0]}` : entry.label,
         group: false,
-        badge: null,
+        badge: badge(entry, ide),
       }))
       .sort(byKey);
   const groups: Row[] = catalog.groups
@@ -49,4 +49,17 @@ export function rows(
       badge: null,
     }));
   return [...leafRows(false), ...leafRows(true), ...groups.sort(byKey)];
+}
+
+/** The engine whose behaviour `semantics` describes for each IDE. */
+const ENGINES = { vscode: "vscodevim", intellij: "ideavim" } as const;
+
+/** The badge of an entry's rows in the IDE. */
+function badge(entry: Entry, ide: Ide): Badge {
+  const level = entry.support?.[ide]?.level;
+  if (level === "none") return "unsupported";
+  if (entry.stage === "experimental") return "experimental";
+  if (level === "partial") return "fallback";
+  if (entry.semantics?.[ENGINES[ide]] !== undefined) return "differs-from-vim";
+  return null;
 }
