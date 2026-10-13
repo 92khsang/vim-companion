@@ -87,8 +87,11 @@ export function validateCatalog(
   };
 }
 
-/** Rule SCHEMA: ajv 2020 in strict mode, every error of every file. */
-function checkSchemas(
+/**
+ * Rule SCHEMA: ajv 2020 in strict mode, every error of every file. `schema` is a file name in the
+ * set, or a file name and a pointer such as "ids.schema.json#/$defs/vscode".
+ */
+export function checkSchemas(
   checks: { file: CatalogFile; schema: string }[],
   schemas: SchemaSet,
 ): Diagnostic[] {
