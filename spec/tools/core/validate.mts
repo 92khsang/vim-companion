@@ -456,9 +456,9 @@ const LEADER_KEYS = "leader keys go in keys.leader, starting with SPC";
 
 /**
  * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space,
- * no bare function key of any number (<F1>, <F25>; a chord such as <S-F8> is allowed) and no
- * leader (<leader>, or <Space> as the first key), and do not redefine a protected key. The keys an
- * engine replays are not bound, so they are not checked.
+ * no bare function key of any number (<F1>, <F25>), no chord of a function key past F24 (<C-F25>;
+ * <S-F8> and <C-F24> are allowed) and no leader (<leader>, or <Space> as the first key), and do
+ * not redefine a protected key. The keys an engine replays are not bound, so they are not checked.
  */
 function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use) => {
@@ -472,9 +472,7 @@ function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
       );
     const found = tokens.flatMap((token) => {
       const problem = forbiddenToken(token);
-      return problem === undefined
-        ? []
-        : [report(`has the ${problem} ${token}`)];
+      return problem === undefined ? [] : [report(problem)];
     });
     // Key names ignore case, as in Vim.
     const first = tokens[0]!;
@@ -499,17 +497,28 @@ function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
   });
 }
 
-/** What makes a token forbidden, if anything. Modifier and key names ignore case, as in Vim. */
+/**
+ * What makes a token forbidden, if anything, as the message after the key, such as "has the Alt
+ * chord <A-k>". Modifier and key names ignore case, as in Vim.
+ */
 function forbiddenToken(token: string): string | undefined {
   // The name may be empty: a group ends at the first >, so "<M->>" has the token "<M->".
   const group = /^<((?:[A-Za-z]-)*)(.*)>$/.exec(token);
   if (group === null) return undefined;
   const modifiers = group[1]!.toUpperCase();
   const name = group[2]!.toUpperCase();
-  if (/[AM]-/.test(modifiers)) return "Alt chord";
-  if (modifiers !== "" && name === "SPACE") return "modifier+Space chord";
-  // Every number: IdeaVim names no key past <F24> and reads <F25> as the five keys < F 2 5 >.
-  if (modifiers === "" && /^F\d+$/.test(name)) return "bare function key";
+  if (/[AM]-/.test(modifiers)) return `has the Alt chord ${token}`;
+  if (modifiers !== "" && name === "SPACE") {
+    return `has the modifier+Space chord ${token}`;
+  }
+  const number = /^F(\d+)$/.exec(name)?.[1];
+  if (number === undefined) return undefined;
+  // A bare function key of every number, and a chord of one past F24: IdeaVim names no key past
+  // <F24> and reads <F25> as the five keys < F 2 5 >, and <C-F25> as the seven keys < C - F 2 5 >.
+  if (modifiers === "") return `has the bare function key ${token}`;
+  if (Number(number) > 24) {
+    return `has the function key chord ${token}; IdeaVim has no name for a function key past F24`;
+  }
   return undefined;
 }
 
