@@ -137,6 +137,15 @@ describe("compareVersions", () => {
       "1.0.0-rc.1 = 1.0.0-rc.1",
     ]);
   });
+
+  test("throws on a string that is not a version", () => {
+    expect(() => compareVersions("1.0", "1.0.0")).toThrow(
+      new Error('"1.0" is not a version x.y.z[-prerelease]'),
+    );
+    expect(() => compareVersions("1.0.0", "1.0.0+build")).toThrow(
+      new Error('"1.0.0+build" is not a version x.y.z[-prerelease]'),
+    );
+  });
 });
 
 describe("isVersion", () => {
