@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import type { Catalog } from "../tools/core/catalog.mts";
 import { genIde, whichKeyArgs } from "../tools/core/gen.mts";
 import {
   entryOf,
@@ -42,7 +43,28 @@ describe("genIde", () => {
       genIde(catalog, { version: "1.0.0" }),
     ]).toEqual([genIde(catalog), genIde(miniCatalog(noAliases))]);
   });
+
+  test("doubles each single quote inside the single-quoted strings of the rc", () => {
+    const files = miniCatalogFiles();
+    const entry = entryOf(files, "diag.next");
+    entry.keys = { vim: ["]'"] };
+    entry.label = "Go to next 'problem'";
+    expect(rcLines(miniCatalog(files))).toEqual(
+      expect.arrayContaining([
+        "if empty(mapcheck(']''', 'n'))",
+        "  nmap ]' <Action>(GotoNextError)",
+        "  let g:WhichKeyDesc_vimcompanion_diag_next_v5d27 = ']'' Go to next ''problem'''",
+        "  call add(g:vimcompanion_skipped, 'n ]'' diag.next')",
+        "  let g:WhichKeyDesc_vimcompanion_diag_next_v5d65 = ']e Moved to ]'''",
+      ]),
+    );
+  });
 });
+
+/** The lines of the rc that genIde writes for the catalog. */
+function rcLines(catalog: Catalog): string[] {
+  return genIde(catalog).get("intellij/vim-companion.ideavimrc")!.split("\n");
+}
 
 describe("whichKeyArgs", () => {
   test("passes one truthy argument that is not a list as itself and any other arguments as a list", () => {
