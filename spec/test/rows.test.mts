@@ -48,8 +48,8 @@ describe("rows", () => {
         ide: "vscode",
         prefix: ["c"],
         rows: [
-          leaf("c", "Toggle line comment"),
-          leaf("d", "Show documentation"),
+          leaf("c", "Toggle line comment", "differs-from-vim"),
+          leaf("d", "Show documentation", "differs-from-vim"),
           leaf("q", "Show code actions"),
         ],
       },
@@ -145,13 +145,16 @@ describe("rows", () => {
   });
 
   test("gives each row the badge of highest precedence for the IDE: unsupported, experimental, fallback, differs-from-vim", () => {
+    // differs-from-vim needs an IDE that runs a command or action and semantics for its engine:
+    // VS Code runs a command for h and VSCodeVim keys for o, IntelliJ IdeaVim keys for h and an
+    // action for o, and both entries have semantics for both engines.
     expectRows([
       {
         ide: "intellij",
         prefix: ["w"],
         rows: [
-          leaf("h", "Focus split left", "differs-from-vim"),
-          leaf("o", "Close other splits"),
+          leaf("h", "Focus split left"),
+          leaf("o", "Close other splits", "differs-from-vim"),
           group("m", "Move"),
         ],
       },
@@ -159,8 +162,8 @@ describe("rows", () => {
         ide: "vscode",
         prefix: ["w"],
         rows: [
-          leaf("h", "Focus split left"),
-          leaf("o", "Close other splits", "differs-from-vim"),
+          leaf("h", "Focus split left", "differs-from-vim"),
+          leaf("o", "Close other splits"),
           group("m", "Move"),
         ],
       },
@@ -199,9 +202,16 @@ describe("rows", () => {
     entryOf(files, "window.focus-left").support = {
       intellij: { level: "partial", note: "Stays in the editor area." },
     };
+    entryOf(files, "window.only").support = {
+      intellij: { level: "partial", note: "Keeps the tool windows open." },
+    };
     entryOf(files, "code.comment").stage = "experimental";
     entryOf(files, "search.project").support = {
       intellij: { level: "partial", note: "Searches the project only." },
+    };
+    // Both IDEs run an action or command for code.action; only IntelliJ's engine has semantics.
+    entryOf(files, "code.action").semantics = {
+      ideavim: "IdeaVim has no gra of its own.",
     };
     expect(validateCatalog(files, loadSchemas()).diagnostics).toEqual([]);
     expectRows(
@@ -230,12 +240,22 @@ describe("rows", () => {
           options: { experimental: true },
           rows: [
             leaf("h", "Focus split left", "fallback"),
-            leaf("o", "Close other splits"),
+            leaf("o", "Close other splits", "fallback"),
             group("m", "Move"),
           ],
         },
         {
           ide: "intellij",
+          prefix: ["c"],
+          options: { experimental: true },
+          rows: [
+            leaf("c", "Toggle line comment", "experimental"),
+            leaf("d", "Show documentation"),
+            leaf("q", "Show code actions", "differs-from-vim"),
+          ],
+        },
+        {
+          ide: "vscode",
           prefix: ["c"],
           options: { experimental: true },
           rows: [

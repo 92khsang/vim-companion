@@ -105,7 +105,10 @@ const POOL: readonly Entry[] = [
     label: "Show documentation",
     vscode: command("editor.action.showHover"),
     intellij: { ideavimKeys: "K" },
-    semantics: { ideavim: "Runs Quick Documentation." },
+    semantics: {
+      vscodevim: "VSCodeVim has no K.",
+      ideavim: "Runs Quick Documentation.",
+    },
     deviation,
   }),
   entry({
@@ -161,7 +164,10 @@ const POOL: readonly Entry[] = [
     label: "Focus split left",
     vscode: command("workbench.action.focusLeftGroup", [false]),
     intellij: { ideavimKeys: "<C-w>h" },
-    semantics: { ideavim: "Takes a count." },
+    semantics: {
+      vscodevim: "Can leave the editor area.",
+      ideavim: "Takes a count.",
+    },
   }),
   entry({
     id: "window.only",
@@ -169,7 +175,10 @@ const POOL: readonly Entry[] = [
     label: "Close other splits",
     vscode: vimKeys("<C-w>o"),
     intellij: { action: "UnsplitAll" },
-    semantics: { vscodevim: "Closes the other editor groups." },
+    semantics: {
+      vscodevim: "Closes the other editor groups.",
+      ideavim: "Closes the other splits.",
+    },
   }),
   entry({
     id: "window.move-left",

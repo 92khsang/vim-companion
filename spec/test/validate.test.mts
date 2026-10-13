@@ -1306,7 +1306,10 @@ describe("validateCatalog", () => {
         name: "a Vim key that only IntelliJ runs as an action",
         change: (files) => {
           const entry = joinEntry({ vimKeys: "gJ" }, { action: "JoinLines" });
-          entry.semantics = { vscodevim: "Runs VSCodeVim gJ." };
+          entry.semantics = {
+            vscodevim: "Runs VSCodeVim gJ.",
+            ideavim: "IdeaVim's own gJ joins the lines as well.",
+          };
           fileOf(files, "code").data.commands.push(entry);
         },
         expected: [
@@ -1321,7 +1324,7 @@ describe("validateCatalog", () => {
     ]);
   });
 
-  test("MISSING_SEMANTICS reports engine keys in one IDE and a command in the other without semantics for the engine", () => {
+  test("MISSING_SEMANTICS reports engine keys in one IDE and a command in the other without semantics for both engines", () => {
     runCases([
       {
         name: "engine keys in both IDEs",
@@ -1357,6 +1360,28 @@ describe("validateCatalog", () => {
             "MISSING_SEMANTICS",
             'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.ideavim" is required',
           ),
+          diagnostic(
+            WINDOW,
+            "window.focus-left",
+            "MISSING_SEMANTICS",
+            'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.vscodevim" is required',
+          ),
+        ],
+      },
+      {
+        name: "IdeaVim keys and a command, with semantics for IdeaVim only",
+        change: (files) => {
+          entryOf(files, "window.focus-left").semantics = {
+            ideavim: "Runs IdeaVim <C-w>h.",
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.focus-left",
+            "MISSING_SEMANTICS",
+            'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.vscodevim" is required',
+          ),
         ],
       },
       {
@@ -1376,6 +1401,22 @@ describe("validateCatalog", () => {
         ],
       },
       {
+        name: "VSCodeVim keys and an action, with semantics for VSCodeVim only",
+        change: (files) => {
+          entryOf(files, "window.only").semantics = {
+            vscodevim: "Runs VSCodeVim <C-w>o.",
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.only",
+            "MISSING_SEMANTICS",
+            'VS Code runs VSCodeVim keys and IntelliJ an action, so "semantics.ideavim" is required',
+          ),
+        ],
+      },
+      {
         name: "keys of an IdeaVim extension and a command, without semantics",
         change: (files) => {
           delete entryOf(files, "code.comment").semantics;
@@ -1386,6 +1427,12 @@ describe("validateCatalog", () => {
             "code.comment",
             "MISSING_SEMANTICS",
             'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.ideavim" is required',
+          ),
+          diagnostic(
+            CODE,
+            "code.comment",
+            "MISSING_SEMANTICS",
+            'IntelliJ runs IdeaVim keys and VS Code a command, so "semantics.vscodevim" is required',
           ),
         ],
       },

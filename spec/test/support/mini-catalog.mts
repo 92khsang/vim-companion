@@ -77,7 +77,10 @@ export function miniCatalogFiles(): MiniCatalogFiles {
           label: "Show documentation",
           vscode: command("editor.action.showHover", "editor"),
           intellij: { ideavimKeys: "K" },
-          semantics: { ideavim: "Runs IdeaVim K, the quick documentation." },
+          semantics: {
+            vscodevim: "VSCodeVim has no K; its gh shows the hover.",
+            ideavim: "Runs IdeaVim K, the quick documentation.",
+          },
           deviation: {
             shadows: "Vim K, which looks the word up with keywordprg",
             origin: "Neovim LSP default mapping",
@@ -95,7 +98,10 @@ export function miniCatalogFiles(): MiniCatalogFiles {
             count: "repeat",
           },
           intellij: { ideavimKeys: "gcc", provider: "commentary" },
-          semantics: { ideavim: "Runs gcc of the commentary extension." },
+          semantics: {
+            vscodevim: "VSCodeVim's own gcc comments the line as well.",
+            ideavim: "Runs gcc of the commentary extension.",
+          },
         }),
       ]),
       commandsFile("diag", [
@@ -169,7 +175,10 @@ export function miniCatalogFiles(): MiniCatalogFiles {
             "repeat",
           ),
           intellij: { ideavimKeys: "<C-w>h" },
-          semantics: { ideavim: "Runs IdeaVim <C-w>h." },
+          semantics: {
+            vscodevim: "VSCodeVim's own <C-w>h can also leave the editor area.",
+            ideavim: "Runs IdeaVim <C-w>h.",
+          },
         }),
         entry({
           id: "window.only",
@@ -182,7 +191,10 @@ export function miniCatalogFiles(): MiniCatalogFiles {
             count: "none",
           },
           intellij: { action: "UnsplitAll" },
-          semantics: { vscodevim: "Runs VSCodeVim <C-w>o." },
+          semantics: {
+            vscodevim: "Runs VSCodeVim <C-w>o.",
+            ideavim: "IdeaVim's own <C-w>o closes the other splits as well.",
+          },
         }),
         entry({
           id: "window.move-left",
