@@ -54,9 +54,17 @@ export function compareKeys(
   return a.length - b.length;
 }
 
-/** Whether two token arrays are the same key. */
+// Vim, IdeaVim and VSCodeVim read the text inside a <...> group without case: <C-w> is <c-W>. Any
+// other token is one character, whose case matters.
+const foldCase = (token: string): string =>
+  token.startsWith("<") ? token.toLowerCase() : token;
+
+/** Whether two token arrays are the same key, reading each <...> group without case. */
 export function sameKey(a: readonly string[], b: readonly string[]): boolean {
-  return a.length === b.length && a.every((token, i) => token === b[i]);
+  return (
+    a.length === b.length &&
+    a.every((token, i) => foldCase(token) === foldCase(b[i]!))
+  );
 }
 
 /** The `key` of a which-key menu item for one leader token; which-key reads Space as " ". */

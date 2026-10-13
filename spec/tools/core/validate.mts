@@ -13,7 +13,7 @@ import type {
   KeySet,
   Mode,
 } from "./catalog.mts";
-import { parseLeader, parseVim, type ParsedKey } from "./keys.mts";
+import { parseLeader, parseVim, sameKey, type ParsedKey } from "./keys.mts";
 import { isVersion } from "./version.mts";
 
 /** A parsed catalog file; `path` is repo-relative and POSIX, for messages. */
@@ -481,12 +481,18 @@ function checkReservedKeys({ uses }: Context): Diagnostic[] {
 function checkDuplicateKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use, i) => {
     if (!use.parsed.ok) return [];
+    const { tokens } = use.parsed;
     const earlier = uses.slice(0, i).find(
       (other) =>
         other.kind === use.kind &&
-        other.text === use.text &&
+        other.parsed.ok &&
+        sameKey(other.parsed.tokens, tokens) &&
         // An alias with a primary key of its own entry is for ALIAS to report.
-        !(other.at === use.at && other.alias === undefined),
+        !(
+          use.alias !== undefined &&
+          other.at === use.at &&
+          other.alias === undefined
+        ),
     );
     return earlier === undefined
       ? []
@@ -669,11 +675,12 @@ function checkDeviations({ placed, uses }: Context): Diagnostic[] {
     if (entry.keys.vim === undefined || entry.deviation !== undefined)
       return [];
     const remapped = uses
-      .filter((use) => use.at === at && use.kind === "vim")
+      // A malformed key is reported by KEY_SYNTAX.
+      .filter((use) => use.at === at && use.kind === "vim" && use.parsed.ok)
       .flatMap((use) =>
-        IDES.filter(
-          (ide) => supported(entry, ide) && engineKeys(entry, ide) !== use.text,
-        ).map((ide) => ({ use, ide })),
+        IDES.filter((ide) => supported(entry, ide) && !native(use, ide)).map(
+          (ide) => ({ use, ide }),
+        ),
       );
     const first = remapped[0];
     return first === undefined
@@ -818,7 +825,7 @@ function checkAliases({ placed }: Context): Diagnostic[] {
           );
         }
         keys.forEach((key, i) => {
-          if (own.includes(key)) {
+          if (own.some((ownKey) => sameText(kind, ownKey, key))) {
             found.push(
               onEntry(
                 at,
@@ -922,12 +929,25 @@ function engineKeys(entry: Entry, ide: Ide): string | undefined {
     : undefined;
 }
 
-/** Whether the tokens begin with the tokens of the prefix. */
+/** Whether the IDE's engine replays the Vim key as it is, so the key is native there. */
+function native(use: KeyUse, ide: Ide): boolean {
+  const keys = engineKeys(use.at.entry, ide);
+  return keys !== undefined && sameText("vim", keys, use.text);
+}
+
+/** Whether two keys of a kind are the same key (sameKey); a malformed key is the same as none. */
+function sameText(kind: KeyKind, a: string, b: string): boolean {
+  const x = PARSE[kind](a);
+  const y = PARSE[kind](b);
+  return x.ok && y.ok && sameKey(x.tokens, y.tokens);
+}
+
+/** Whether the tokens begin with the key of the prefix (sameKey). */
 function startsWith(
   tokens: readonly string[],
   prefix: readonly string[],
 ): boolean {
-  return prefix.every((token, i) => tokens[i] === token);
+  return sameKey(tokens.slice(0, prefix.length), prefix);
 }
 
 /** The entry that a key belongs to, for messages: "search.project (alias)". */
