@@ -688,7 +688,8 @@ function checkDeviations({ placed, uses }: Context): Diagnostic[] {
 
 /**
  * Rule MISSING_SEMANTICS: when one IDE runs engine keys and the other a command or action, the
- * entry says how the engine side behaves.
+ * entry says how the keys of each engine behave: the one IDE runs them, and the other shows how
+ * its command differs from them.
  */
 function checkSemantics({ placed }: Context): Diagnostic[] {
   return placed.flatMap((at) => {
@@ -696,18 +697,18 @@ function checkSemantics({ placed }: Context): Diagnostic[] {
     if (entry.vscode === undefined || entry.intellij === undefined) return [];
     const vscodevim = engineKeys(entry, "vscode") !== undefined;
     if (vscodevim === (engineKeys(entry, "intellij") !== undefined)) return [];
-    const property = vscodevim ? "vscodevim" : "ideavim";
-    if (entry.semantics?.[property] !== undefined) return [];
     const sides = vscodevim
       ? "VS Code runs VSCodeVim keys and IntelliJ an action"
       : "IntelliJ runs IdeaVim keys and VS Code a command";
-    return [
-      onEntry(
-        at,
-        "MISSING_SEMANTICS",
-        `${sides}, so ${q(`semantics.${property}`)} is required`,
-      ),
-    ];
+    return (["vscodevim", "ideavim"] as const)
+      .filter((property) => entry.semantics?.[property] === undefined)
+      .map((property) =>
+        onEntry(
+          at,
+          "MISSING_SEMANTICS",
+          `${sides}, so ${q(`semantics.${property}`)} is required`,
+        ),
+      );
   });
 }
 

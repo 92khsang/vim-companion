@@ -55,8 +55,9 @@ export type Entry = {
   aliases?: Alias[];
   vscode?: VscodeBinding;
   intellij?: IntellijBinding;
-  /** How the engine side behaves; required when one IDE runs engine keys and the other a
-   * command. */
+  /** How the keys of each engine behave. Both are required when one IDE runs engine keys and the
+   * other a command or action; an IDE that runs a command or action shows that it differs from
+   * Vim where its engine has one. */
   semantics?: { vscodevim?: string; ideavim?: string };
   /** Required when an IDE implements one of the entry's Vim keys by a remap instead of natively. */
   deviation?: { shadows: string; origin: string; note: string };
