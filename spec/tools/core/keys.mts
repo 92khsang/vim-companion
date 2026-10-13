@@ -19,5 +19,8 @@ export function parseLeader(text: string): ParsedKey {
 }
 
 export function parseVim(text: string): ParsedKey {
-  return { ok: false, message: `not implemented: ${text}` };
+  return {
+    ok: true,
+    tokens: [...text.matchAll(/<[^>]*>|./g)].map((match) => match[0]),
+  };
 }
