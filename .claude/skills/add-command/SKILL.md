@@ -8,7 +8,8 @@ description: Add, change or remove a command in the key catalog (spec/catalog/) 
 ## 1. Choose the keys
 
 - Fixed choices come first: `SPC w` keys mirror Vim's `<C-w>` keys, tab commands live under
-  `SPC b`, and the LSP Vim keys are `gra`, `grn`, `grr`, `gri`, `gO`, `K`, `]d` and `[d`.
+  `SPC b`, and the LSP Vim keys are `gd`, `grr`, `gri`, `grn`, `gra`, `grt`, `gO`, `K`, `gK`, `]d`
+  and `[d`.
 - Otherwise, follow a convention only when at least three of VSpaceCode (Spacemacs), Doom Emacs,
   LazyVim and Neovim agree on the key. Where they disagree, keep the key the catalog already has, or
   give a new command a mnemonic that fits its group. `rationale` names the conventions, Vim
