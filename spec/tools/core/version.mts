@@ -7,7 +7,7 @@ export function aliasActive(
   alias: Pick<Alias, "until">,
   version: string,
 ): boolean {
-  return false;
+  return compareVersions(version, alias.until) < 0;
 }
 
 /** -1, 0 or 1 as `a` sorts before, with or after `b` in SemVer 2.0.0 precedence. */
