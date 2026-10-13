@@ -78,4 +78,63 @@ describe("compareVersions", () => {
       compareVersions("123456789012345678901.0.0", "123456789012345678902.0.0"),
     ]).toEqual([-1, -1, -1, 0, 1, -1, 1, -1, 1, -1]);
   });
+
+  test("puts a prerelease before its release and compares prerelease identifiers by SemVer rules", () => {
+    const relation = (a: string, b: string): string =>
+      `${a} ${["<", "=", ">"][compareVersions(a, b) + 1]} ${b}`;
+    expect([
+      // The example of semver.org §11.4.
+      relation("1.0.0-alpha", "1.0.0-alpha.1"),
+      relation("1.0.0-alpha.1", "1.0.0-alpha.beta"),
+      relation("1.0.0-alpha.beta", "1.0.0-beta"),
+      relation("1.0.0-beta", "1.0.0-beta.2"),
+      relation("1.0.0-beta.2", "1.0.0-beta.11"),
+      relation("1.0.0-beta.11", "1.0.0-rc.1"),
+      relation("1.0.0-rc.1", "1.0.0"),
+      // The order of design §4.
+      relation("0.0.0-dev.1", "0.0.0"),
+      relation("0.0.0", "1.0.0-rc.1"),
+      relation("1.0.0-rc.1", "1.0.0-rc.2"),
+      relation("1.0.0-rc.2", "1.0.0"),
+      relation("1.0.0", "1.0.1"),
+      // Each rule from both sides.
+      relation("1.0.0", "1.0.0-rc.1"),
+      relation("1.0.1-alpha", "1.0.0"),
+      relation("1.0.0-10", "1.0.0-9"),
+      relation("1.0.0-2", "1.0.0-11"),
+      relation("1.0.0-123456789012345678902", "1.0.0-123456789012345678901"),
+      relation("1.0.0-a", "1.0.0-10"),
+      relation("1.0.0-0.3.7", "1.0.0-x.7.z.92"),
+      relation("1.0.0--", "1.0.0-0a"),
+      relation("1.0.0-B", "1.0.0-a"),
+      relation("1.0.0-a.b", "1.0.0-a-b"),
+      relation("1.0.0-alpha.1.0", "1.0.0-alpha.1"),
+      relation("1.0.0-rc.1", "1.0.0-rc.1"),
+    ]).toEqual([
+      "1.0.0-alpha < 1.0.0-alpha.1",
+      "1.0.0-alpha.1 < 1.0.0-alpha.beta",
+      "1.0.0-alpha.beta < 1.0.0-beta",
+      "1.0.0-beta < 1.0.0-beta.2",
+      "1.0.0-beta.2 < 1.0.0-beta.11",
+      "1.0.0-beta.11 < 1.0.0-rc.1",
+      "1.0.0-rc.1 < 1.0.0",
+      "0.0.0-dev.1 < 0.0.0",
+      "0.0.0 < 1.0.0-rc.1",
+      "1.0.0-rc.1 < 1.0.0-rc.2",
+      "1.0.0-rc.2 < 1.0.0",
+      "1.0.0 < 1.0.1",
+      "1.0.0 > 1.0.0-rc.1",
+      "1.0.1-alpha > 1.0.0",
+      "1.0.0-10 > 1.0.0-9",
+      "1.0.0-2 < 1.0.0-11",
+      "1.0.0-123456789012345678902 > 1.0.0-123456789012345678901",
+      "1.0.0-a > 1.0.0-10",
+      "1.0.0-0.3.7 < 1.0.0-x.7.z.92",
+      "1.0.0-- < 1.0.0-0a",
+      "1.0.0-B < 1.0.0-a",
+      "1.0.0-a.b < 1.0.0-a-b",
+      "1.0.0-alpha.1.0 > 1.0.0-alpha.1",
+      "1.0.0-rc.1 = 1.0.0-rc.1",
+    ]);
+  });
 });
