@@ -7,9 +7,12 @@ description: Add, change or remove a command in the key catalog (spec/catalog/) 
 
 ## 1. Choose the keys
 
-- Follow a convention only when at least three of VSpaceCode (Spacemacs), Doom Emacs, LazyVim and
-  Neovim agree on the key. Where they disagree, keep the key the catalog already has, or give a new
-  command a mnemonic that fits its group. `rationale` names the conventions or the mnemonic.
+- Fixed choices come first: `SPC w` keys mirror Vim's `<C-w>` keys, tab commands live under
+  `SPC b`, and the LSP Vim keys are `gra`, `grn`, `grr`, `gri`, `gO`, `K`, `]d` and `[d`.
+- Otherwise, follow a convention only when at least three of VSpaceCode (Spacemacs), Doom Emacs,
+  LazyVim and Neovim agree on the key. Where they disagree, keep the key the catalog already has, or
+  give a new command a mnemonic that fits its group. `rationale` names the conventions, Vim
+  included, or the mnemonic.
 - Put a leader key under an existing group when one fits. A new group needs the user's agreement and
   a noun label in `spec/catalog/groups.json`.
 - `pnpm spec:check` rejects forbidden and reserved keys, prefix clashes and duplicate labels; change
