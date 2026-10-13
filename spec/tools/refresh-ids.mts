@@ -27,7 +27,12 @@ import { constants, homedir, tmpdir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { parseArgs } from "node:util";
-import { readSchemas, repoPath } from "./catalog-files.mts";
+import {
+  readJson,
+  readJsonFile,
+  readSchemas,
+  repoPath,
+} from "./catalog-files.mts";
 import {
   mergeVscodeCommands,
   parseDescriptorIds,
@@ -454,7 +459,7 @@ function refreshIntellij(root: string, values: Values): void {
 /** The snapshot that a refresh replaces, if there is one. */
 function previousSnapshot(root: string, ide: Ide): unknown {
   const path = join(root, "ids", `${ide}.json`);
-  return existsSync(path) ? readJson(path) : undefined;
+  return existsSync(path) ? readJsonFile(root, path).data : undefined;
 }
 
 /** Writes the snapshot when it passes schema/ids.schema.json; returns its repo path. */
@@ -505,10 +510,6 @@ function unzip(jar: string, patterns: string[]): string {
     throw new Error(`unzip ${jar} exited with ${status}: ${stderr.trim()}`);
   }
   return stdout;
-}
-
-function readJson(path: string): unknown {
-  return JSON.parse(readFileSync(path, "utf8"));
 }
 
 try {

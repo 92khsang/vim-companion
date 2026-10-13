@@ -1,6 +1,7 @@
 // Reads the catalog and the schemas of a spec directory into the shapes the core validates. File
 // paths for messages are relative to the parent of the spec directory and use "/", such as
-// "spec/catalog/groups.json".
+// "spec/catalog/groups.json". readJson reads a file anywhere, such as one of an IDE, and names it
+// by the path it was read from.
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import type {
@@ -23,14 +24,25 @@ function jsonFiles(root: string, dir: string): CatalogFile[] {
     .map((name) => readJsonFile(root, join(dir, name)));
 }
 
-/** A parsed JSON file; a syntax error names the file. */
+/**
+ * A parsed JSON file of the spec directory `root`, with its repo path; a syntax error names the
+ * file by that path.
+ */
 export function readJsonFile(root: string, path: string): CatalogFile {
   const file = repoPath(root, path);
+  return { path: file, data: readJson(path, file) };
+}
+
+/**
+ * The parsed JSON of a file anywhere, such as one of an IDE; a syntax error names the file as
+ * `name`, by default the path it was read from.
+ */
+export function readJson(path: string, name: string = path): unknown {
   const text = readFileSync(path, "utf8");
   try {
-    return { path: file, data: JSON.parse(text) };
+    return JSON.parse(text);
   } catch (error) {
-    throw new Error(`${file}: ${(error as Error).message}`);
+    throw new Error(`${name}: ${(error as Error).message}`);
   }
 }
 
