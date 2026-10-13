@@ -187,6 +187,7 @@ function whichKeyItems(nodes: readonly Node[]): WhichKeyItem[] {
     const key = whichKeyKey(node.tokens[node.tokens.length - 1]!);
     if (node.kind === "group") {
       const bindings = whichKeyItems(node.children);
+      if (bindings.length === 0) return [];
       return [{ key, name: node.label, type: "bindings", bindings }];
     }
     const vscode = bindingIn(node.entry, "vscode");
@@ -278,10 +279,14 @@ function ideavimrc(catalog: Catalog, version: string): string {
   return `${sections.map((lines) => lines.join("\n")).join("\n\n")}\n`;
 }
 
-/** The idea-which-key description of each group, depth first. */
+/** The idea-which-key description of each group with a key that IntelliJ maps, depth first. */
 function groupDescriptions(nodes: readonly Node[]): string[] {
+  const mapped = (node: GroupNode) =>
+    leavesOf(node.children).some(
+      ({ entry }) => bindingIn(entry, "intellij") !== undefined,
+    );
   return nodes.flatMap((node) =>
-    node.kind === "group"
+    node.kind === "group" && mapped(node)
       ? [
           `let g:WhichKeyDesc_vimcompanion_group_${keyHex(node.tokens)} = ${quote(`${ideavimLhs(node.tokens)} ${node.label}`)}`,
           ...groupDescriptions(node.children),
