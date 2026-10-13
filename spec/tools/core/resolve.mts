@@ -1,5 +1,5 @@
 // Leader key resolution (design §4): where a sequence of leader keys leads in one IDE.
-import type { Entry, Ide, KeyCatalog } from "./catalog.mts";
+import type { Entry, Ide, KeyCatalog, KeySet } from "./catalog.mts";
 import { aliasActive } from "./version.mts";
 
 /**
@@ -44,30 +44,40 @@ export function resolve(
 
 /** Whether a bound leaf is below the leader prefix, such as "SPC w"; only then a group shows. */
 export function leafBelow(
-  leaves: readonly LeaderLeaf[],
+  leaves: readonly BoundKey[],
   prefix: string,
 ): boolean {
   return leaves.some(({ key }) => key.startsWith(`${prefix} `));
 }
 
-/** A bound leader key: a key of an entry or of one of its active aliases. */
-export type LeaderLeaf = { key: string; entry: Entry; alias: boolean };
+/** A bound key: a key of an entry or of one of its active aliases. */
+export type BoundKey = { key: string; entry: Entry; alias: boolean };
 
-/**
- * The leader keys that the catalog binds with the options: the keys of the entries, of
- * experimental ones only with `experimental`, and of their aliases that are active at `version`.
- */
+/** The leader keys that the catalog binds with the options (see boundKeys). */
 export function leaderLeaves(
   catalog: KeyCatalog,
   options: ResolveOptions,
-): LeaderLeaf[] {
+): BoundKey[] {
+  return boundKeys(catalog, "leader", options);
+}
+
+/**
+ * The keys of a kind, leader or Vim, that the catalog binds with the options: the keys of the
+ * entries, of experimental ones only with `experimental`, and of their aliases that are active at
+ * `version`.
+ */
+export function boundKeys(
+  catalog: KeyCatalog,
+  kind: keyof KeySet,
+  options: ResolveOptions,
+): BoundKey[] {
   const version = options.version ?? "0.0.0";
   return catalog.entries
     .filter(
       (entry) => entry.stage === "stable" || options.experimental === true,
     )
     .flatMap((entry) => [
-      ...(entry.keys.leader ?? []).map((key) => ({
+      ...(entry.keys[kind] ?? []).map((key) => ({
         key,
         entry,
         alias: false,
@@ -75,7 +85,7 @@ export function leaderLeaves(
       ...(entry.aliases ?? [])
         .filter((alias) => aliasActive(alias, version))
         .flatMap((alias) =>
-          (alias.keys.leader ?? []).map((key) => ({
+          (alias.keys[kind] ?? []).map((key) => ({
             key,
             entry,
             alias: true,

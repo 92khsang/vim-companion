@@ -16,9 +16,8 @@ import {
   vscodevimBefore,
   whichKeyKey,
 } from "./keys.mts";
-import { leaderLeaves } from "./resolve.mts";
+import { boundKeys, leaderLeaves } from "./resolve.mts";
 import { rows } from "./rows.mts";
-import { aliasActive } from "./version.mts";
 
 /** The files that genIde returns, relative to spec/generated/, in the order it returns them. */
 export const GENERATED_PATHS = [
@@ -127,28 +126,20 @@ function leavesOf(nodes: readonly Node[]): Leaf[] {
  * each sorted by key.
  */
 function vimLeaves(catalog: Catalog, version: string): Leaf[] {
-  const leaf = (key: string, entry: Entry, label: string): Leaf => ({
-    kind: "leaf",
-    key,
-    tokens: vimTokens(key),
-    label,
-    entry,
-  });
-  const byKey = (a: Leaf, b: Leaf) => compareKeys(a.tokens, b.tokens);
-  const stable = catalog.entries.filter((entry) => entry.stage === "stable");
-  const primary = stable.flatMap((entry) =>
-    (entry.keys.vim ?? []).map((key) => leaf(key, entry, entry.label)),
-  );
-  const aliases = stable.flatMap((entry) =>
-    (entry.aliases ?? [])
-      .filter((alias) => aliasActive(alias, version))
-      .flatMap((alias) =>
-        (alias.keys.vim ?? []).map((key) =>
-          leaf(key, entry, `Moved to ${entry.keys.vim?.[0]}`),
-        ),
-      ),
-  );
-  return [...primary.sort(byKey), ...aliases.sort(byKey)];
+  const bound = boundKeys(catalog, "vim", { version });
+  const leaves = (alias: boolean): Leaf[] =>
+    bound
+      .filter((key) => key.alias === alias)
+      .map(({ key, entry }): Leaf => ({
+        kind: "leaf",
+        key,
+        tokens: vimTokens(key),
+        // An alias moves its key to the entry's first Vim key.
+        label: alias ? `Moved to ${entry.keys.vim?.[0]}` : entry.label,
+        entry,
+      }))
+      .sort((a, b) => compareKeys(a.tokens, b.tokens));
+  return [...leaves(false), ...leaves(true)];
 }
 
 /** The tokens of a Vim key, which the catalog validation has checked. */
