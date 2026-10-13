@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion hint view fixture",
+  "description": "An inline catalog and cases: the rows of a leader prefix in one IDE, in display order.",
+  "type": "object",
+  "required": ["description", "catalog", "cases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "description": { "type": "string", "minLength": 1 },
+    "catalog": { "$ref": "fixture-catalog.schema.json#/$defs/catalog" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "ide", "prefix", "rows"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "fixture-catalog.schema.json#/$defs/caseId" },
+          "ide": { "$ref": "fixture-catalog.schema.json#/$defs/ide" },
+          "options": { "$ref": "fixture-catalog.schema.json#/$defs/options" },
+          "prefix": { "$ref": "fixture-catalog.schema.json#/$defs/keys" },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["key", "label", "group", "badge"],
+              "additionalProperties": false,
+              "properties": {
+                "key": { "$ref": "fixture-catalog.schema.json#/$defs/key" },
+                "label": {
+                  "description": "As stored, without the + that marks a group on screen.",
+                  "type": "string",
+                  "pattern": "^[^+]"
+                },
+                "group": { "type": "boolean" },
+                "badge": {
+                  "description": "The badge of highest precedence that applies, in this order, or null.",
+                  "enum": [
+                    "unsupported",
+                    "experimental",
+                    "fallback",
+                    "differs-from-vim",
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

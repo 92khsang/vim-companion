@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion version order fixture",
+  "description": "Versions in ascending SemVer 2.0.0 precedence: each sorts strictly before the next.",
+  "type": "object",
+  "required": ["ascending"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "ascending": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "fixture-catalog.schema.json#/$defs/version" }
+    }
+  }
+}

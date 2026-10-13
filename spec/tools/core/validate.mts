@@ -106,7 +106,25 @@ export function validateFixtures(
   files: FixtureFiles,
   schemas: SchemaSet,
 ): Diagnostic[] {
-  return [];
+  return sortDiagnostics(
+    checkSchemas(
+      [
+        ...files.catalog.map((file) => ({
+          file,
+          schema: "fixture-catalog.schema.json",
+        })),
+        ...files.hintView.map((file) => ({
+          file,
+          schema: "fixture-hint-view.schema.json",
+        })),
+        {
+          file: files.versionOrder,
+          schema: "fixture-version-order.schema.json",
+        },
+      ],
+      schemas,
+    ),
+  );
 }
 
 /**
