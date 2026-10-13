@@ -2,6 +2,7 @@ import fc from "fast-check";
 import { describe, expect, test } from "vitest";
 import {
   compareKeys,
+  ideavimLhs,
   parseLeader,
   parseVim,
   whichKeyKey,
@@ -262,6 +263,28 @@ describe("whichKeyKey", () => {
     fc.assert(
       fc.property(leaderToken, (token) => {
         expect(whichKeyKey(token)).toHaveLength(1);
+      }),
+    );
+  });
+});
+
+describe("ideavimLhs", () => {
+  test("writes a leader key as <leader> and its keys, with a later SPC as <Space>", () => {
+    expect(ideavimLhs(["SPC", "w", "h"])).toBe("<leader>wh");
+    expect(ideavimLhs(["SPC", "SPC"])).toBe("<leader><Space>");
+    expect(ideavimLhs(["SPC", "b", "SPC"])).toBe("<leader>b<Space>");
+    expect(ideavimLhs(["SPC", "/"])).toBe("<leader>/");
+    // After <leader> comes Vim notation with one key for each leader token.
+    fc.assert(
+      fc.property(leaderKey, (tokens) => {
+        const lhs = ideavimLhs(tokens);
+        expect(lhs.startsWith("<leader>")).toBe(true);
+        expect(parseVim(lhs.slice("<leader>".length))).toEqual({
+          ok: true,
+          tokens: tokens
+            .slice(1)
+            .map((token) => (token === "SPC" ? "<Space>" : token)),
+        });
       }),
     );
   });

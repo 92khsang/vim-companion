@@ -58,3 +58,7 @@ export function compareKeys(
 export function whichKeyKey(token: string): string {
   return token === "SPC" ? " " : token;
 }
+
+export function ideavimLhs(tokens: readonly string[]): string {
+  return "";
+}
