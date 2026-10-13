@@ -1,6 +1,8 @@
 // pnpm gen (design §7.4): writes spec/generated/ from the catalog and the fixtures: the IDE files of
 // genIde, at the version in package.json, and fixtures-index.json; deletes the files there that it
 // no longer writes. Prints a line per key that an IDE leaves out as unsupported.
+// --check: writes nothing; prints "missing|changed|extra <path>" lines and "run: pnpm gen" and
+// exits 1 when generated/ differs from what gen would write, 0 when it does not.
 // --root <dir>: the spec directory; by default the one this file is in.
 import {
   existsSync,
@@ -16,6 +18,7 @@ import {
   readCatalogFiles,
   readFixtureFiles,
   readSchemas,
+  repoPath,
 } from "./catalog-files.mts";
 import { fixtureIndex } from "./core/fixtures.mts";
 import { genIde, unsupportedLines } from "./core/gen.mts";
@@ -31,7 +34,9 @@ function filesBelow(dir: string): string[] {
     );
 }
 
-const { values } = parseArgs({ options: { root: { type: "string" } } });
+const { values } = parseArgs({
+  options: { root: { type: "string" }, check: { type: "boolean" } },
+});
 const root = resolve(values.root ?? join(import.meta.dirname, ".."));
 const catalog = validateCatalog(
   readCatalogFiles(root),
@@ -46,11 +51,41 @@ const files = new Map([
 ]);
 for (const line of unsupportedLines(catalog, { version })) console.log(line);
 const dir = join(root, "generated");
-for (const path of filesBelow(dir)) {
-  if (!files.has(path)) rmSync(join(dir, path));
+if (values.check === true) {
+  process.exitCode = check(dir, files);
+} else {
+  write(dir, files);
 }
-for (const [path, text] of files) {
-  const file = join(dir, path);
-  mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, text);
+
+/** Writes the files to the directory and deletes the other files there. */
+function write(dir: string, files: ReadonlyMap<string, string>): void {
+  for (const path of filesBelow(dir)) {
+    if (!files.has(path)) rmSync(join(dir, path));
+  }
+  for (const [path, text] of files) {
+    const file = join(dir, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  }
+}
+
+/** Prints how the directory differs from the files and returns the exit code: 1 when it does. */
+function check(dir: string, files: ReadonlyMap<string, string>): number {
+  const onDisk = filesBelow(dir);
+  const stale = [
+    ...[...files].flatMap(([path, text]) => {
+      if (!onDisk.includes(path)) return [{ kind: "missing", path }];
+      const same = readFileSync(join(dir, path), "utf8") === text;
+      return same ? [] : [{ kind: "changed", path }];
+    }),
+    ...onDisk
+      .filter((path) => !files.has(path))
+      .map((path) => ({ kind: "extra", path })),
+  ].sort((a, b) => Number(a.path > b.path) - Number(a.path < b.path));
+  for (const { kind, path } of stale) {
+    console.log(`${kind} ${repoPath(root, join(dir, path))}`);
+  }
+  if (stale.length === 0) return 0;
+  console.log("run: pnpm gen");
+  return 1;
 }
