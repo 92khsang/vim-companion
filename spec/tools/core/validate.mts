@@ -161,6 +161,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkMotionModes,
   checkAliases,
   checkRetiredIds,
+  checkCtrlKeys,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -762,6 +763,45 @@ function checkRetiredIds({ placed, retiredIds }: Context): Diagnostic[] {
         ]
       : [],
   );
+}
+
+/** Ctrl and one lowercase letter, as IdeaVim's sethandler takes it. */
+const CTRL_KEY = /^<C-[a-z]>$/;
+
+/** sethandler arguments: modes joined by "-", then ":vim" or ":ide"; one space between them. */
+const HANDLERS =
+  /^[nivxsca](?:-[nivxsca])*:(?:vim|ide)(?: [nivxsca](?:-[nivxsca])*:(?:vim|ide))*$/;
+
+/**
+ * Rule CTRL_KEY: each Ctrl key is listed once, and its handlers split into tokens on single spaces,
+ * as IdeaVim splits them.
+ */
+function checkCtrlKeys({ ctrlKeys }: Context): Diagnostic[] {
+  const seen = new Set<string>();
+  return ctrlKeys.keys.flatMap((ctrl) => {
+    const found: Diagnostic[] = [];
+    const report = (message: string) =>
+      found.push({
+        file: ctrlKeys.file,
+        where: ctrl.key,
+        code: "CTRL_KEY",
+        message,
+      });
+    if (!CTRL_KEY.test(ctrl.key)) {
+      report("the key must be <C-x> with a lowercase letter x");
+    }
+    if (seen.has(ctrl.key)) report("the key is already listed");
+    seen.add(ctrl.key);
+    for (const field of ["handler", "mac"] as const) {
+      const value = ctrl[field];
+      if (value !== undefined && !HANDLERS.test(value)) {
+        report(
+          `${field} ${q(value)} must be mode:vim or mode:ide tokens such as "a:vim" or "n-v:ide", separated by single spaces`,
+        );
+      }
+    }
+    return found;
+  });
 }
 
 const IDES = ["vscode", "intellij"] as const;
