@@ -399,6 +399,73 @@ describe("ids:refresh", () => {
     ]);
   });
 
+  test('names a JSON file that it cannot parse, with each line on stderr after "ids:refresh: "', () => {
+    // V8 quotes the text around a JSON syntax error, line breaks included.
+    const text = '{\n  "modules": [\n    x\n  ]\n}\n';
+    let message = "";
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain("\n");
+    const fails = (file: string) => ({
+      status: 2,
+      stdout: "",
+      stderr: `${file}: ${message}`
+        .split("\n")
+        .map((line) => `ids:refresh: ${line}\n`)
+        .join(""),
+    });
+    const intellij = (root: string, fake: { ide: string; plugins: string }) =>
+      refresh(
+        "intellij",
+        "--root",
+        root,
+        "--ide-home",
+        fake.ide,
+        "--plugins-dir",
+        fake.plugins,
+      );
+    // A file of the IDE, named by its absolute path.
+    const productDir = join(base, "broken-product-info");
+    const productRoot = specIn(productDir);
+    const product = fakeIntellij(productDir);
+    const productInfo = join(product.ide, "product-info.json");
+    writeText(productInfo, text);
+    // The snapshot that the refresh replaces, named by its repo path.
+    const snapshotDir = join(base, "broken-snapshot");
+    const snapshotRoot = specIn(snapshotDir);
+    const snapshotIde = fakeIntellij(snapshotDir);
+    writeText(join(snapshotRoot, "ids/intellij.json"), text);
+    // The manifest of an installed VS Code extension, which the refresh reads even when the
+    // extension is not allow-listed; named by its absolute path.
+    const vscodeDir = join(base, "broken-manifest");
+    const vscodeRoot = specIn(vscodeDir);
+    const vscode = fakeVscode(vscodeDir);
+    const manifest = join(
+      vscode.home,
+      ".vscode/extensions/ms-python.python-2026.8.0/package.json",
+    );
+    writeText(manifest, text);
+    expect([
+      intellij(productRoot, product),
+      intellij(snapshotRoot, snapshotIde),
+      refreshWith(
+        vscode.env,
+        "vscode",
+        "--root",
+        vscodeRoot,
+        "--code",
+        vscode.code,
+      ),
+    ]).toEqual([
+      fails(productInfo),
+      fails("spec/ids/intellij.json"),
+      fails(manifest),
+    ]);
+  });
+
   test("intellij writes the IDs that the IDE and the allow-listed plugins declare, and the runtime ones", () => {
     const dir = join(base, "intellij");
     const root = specIn(dir);
