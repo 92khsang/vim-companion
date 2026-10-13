@@ -123,7 +123,7 @@ function leavesOf(nodes: readonly Node[]): Leaf[] {
 
 /**
  * The Vim keys of the stable entries, then those of their aliases that are active in the version,
- * each sorted by key.
+ * each sorted by key. Entries that bind one key in different modes follow their ids.
  */
 function vimLeaves(catalog: Catalog, version: string): Leaf[] {
   const bound = boundKeys(catalog, "vim", { version });
@@ -138,7 +138,11 @@ function vimLeaves(catalog: Catalog, version: string): Leaf[] {
         label: alias ? `Moved to ${entry.keys.vim?.[0]}` : entry.label,
         entry,
       }))
-      .sort((a, b) => compareKeys(a.tokens, b.tokens));
+      .sort(
+        (a, b) =>
+          compareKeys(a.tokens, b.tokens) ||
+          compareText(a.entry.id, b.entry.id),
+      );
   return [...leaves(false), ...leaves(true)];
 }
 
