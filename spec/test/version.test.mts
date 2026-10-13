@@ -63,4 +63,19 @@ describe("compareVersions", () => {
       { numRuns: 1000 },
     );
   });
+
+  test("compares major, minor and patch as numbers, in that order", () => {
+    expect([
+      compareVersions("1.0.0", "2.0.0"),
+      compareVersions("2.0.0", "2.1.0"),
+      compareVersions("2.1.0", "2.1.1"),
+      compareVersions("2.1.1", "2.1.1"),
+      compareVersions("2.1.1", "2.1.0"),
+      compareVersions("1.9.0", "1.10.0"),
+      compareVersions("1.0.10", "1.0.9"),
+      compareVersions("9.9.9", "10.0.0"),
+      compareVersions("2.0.0", "1.99.99"),
+      compareVersions("123456789012345678901.0.0", "123456789012345678902.0.0"),
+    ]).toEqual([-1, -1, -1, 0, 1, -1, 1, -1, 1, -1]);
+  });
 });
