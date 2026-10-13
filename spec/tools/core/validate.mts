@@ -48,7 +48,10 @@ export function validateCatalog(
       entry,
     })),
   );
-  const diagnostics = sortDiagnostics([...checkCategories(placed)]);
+  const diagnostics = sortDiagnostics([
+    ...checkCategories(placed),
+    ...checkDuplicateIds(placed),
+  ]);
   if (diagnostics.length > 0) return { diagnostics };
   const catalog: Catalog = {
     entries: placed.map(({ entry }) => entry),
@@ -127,6 +130,26 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   const key = (d: Diagnostic) =>
     [d.file, d.where, d.message, d.code].join("\0");
   return diagnostics.sort((a, b) => compareText(key(a), key(b)));
+}
+
+/** Rule DUPLICATE_ID: an id names one entry in the whole catalog. */
+function checkDuplicateIds(placed: Placed[]): Diagnostic[] {
+  const firstFile = new Map<string, string>();
+  return placed.flatMap(({ file, entry }) => {
+    const first = firstFile.get(entry.id);
+    if (first === undefined) {
+      firstFile.set(entry.id, file);
+      return [];
+    }
+    return [
+      {
+        file,
+        where: entry.id,
+        code: "DUPLICATE_ID",
+        message: `the id is already used in ${first}`,
+      },
+    ];
+  });
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
