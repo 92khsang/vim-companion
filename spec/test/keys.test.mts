@@ -202,4 +202,43 @@ describe("compareKeys", () => {
       }),
     );
   });
+
+  test("sorts SPC as a space, before every other key, and the rest by code unit", () => {
+    const leader = [
+      ["SPC", "w"],
+      ["SPC", "b", "d"],
+      ["SPC", "/"],
+      ["SPC", "SPC"],
+      ["SPC", "B"],
+      ["SPC", "b"],
+    ];
+    expect([...leader].sort(compareKeys)).toEqual([
+      ["SPC", "SPC"],
+      ["SPC", "/"],
+      ["SPC", "B"],
+      ["SPC", "b"],
+      ["SPC", "b", "d"],
+      ["SPC", "w"],
+    ]);
+    const vim = [
+      ["g", "r", "a"],
+      ["]", "d"],
+      ["K"],
+      ["<C-w>", "h"],
+      ["[", "d"],
+    ];
+    expect([...vim].sort(compareKeys)).toEqual([
+      ["<C-w>", "h"],
+      ["K"],
+      ["[", "d"],
+      ["]", "d"],
+      ["g", "r", "a"],
+    ]);
+    fc.assert(
+      fc.property(fc.oneof(leaderToken, printable("<|"), vimGroup), (token) => {
+        if (token !== "SPC")
+          expect(compareKeys(["SPC"], [token])).toBeLessThan(0);
+      }),
+    );
+  });
 });
