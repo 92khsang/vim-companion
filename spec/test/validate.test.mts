@@ -1627,4 +1627,34 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("RETIRED_ID reports an entry with an id from retired-ids.json", () => {
+    runCases([
+      {
+        name: "an id that starts with a retired id",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.old-files", "SPC f o", "Open old files"),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "a retired id",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.old", "SPC f o", "Open old file"),
+          );
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.old",
+            "RETIRED_ID",
+            `the id is listed in ${RETIRED_IDS}, so no entry may use it again`,
+          ),
+        ],
+      },
+    ]);
+  });
 });
