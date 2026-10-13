@@ -59,8 +59,13 @@ export function whichKeyKey(token: string): string {
   return token === "SPC" ? " " : token;
 }
 
-/** The left-hand side of an IdeaVim map command for the tokens of a key. */
+/**
+ * The left-hand side of an IdeaVim map command for the tokens of a key. A leader key (first token
+ * SPC) becomes <leader> and its keys, with a later SPC as <Space>. A Vim key has no SPC token and
+ * is written literally.
+ */
 export function ideavimLhs(tokens: readonly string[]): string {
+  if (tokens[0] !== "SPC") return tokens.join("");
   const keys = tokens
     .slice(1)
     .map((token) => (token === "SPC" ? "<Space>" : token));
