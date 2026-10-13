@@ -824,6 +824,26 @@ describe("validateCatalog", () => {
         ],
       },
       {
+        name: "Meta and Alt chords of >, whose group ends at the first >",
+        change: (files) => {
+          entryOf(files, "code.hover").keys.vim = ["K", "<M->>", "<A->>"];
+        },
+        expected: [
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[1] "<M->>" has the Alt chord <M->',
+          ),
+          diagnostic(
+            CODE,
+            "code.hover",
+            "FORBIDDEN_KEY",
+            'keys.vim[2] "<A->>" has the Alt chord <A->',
+          ),
+        ],
+      },
+      {
         name: "an alias with Ctrl+Space",
         change: (files) => {
           entryOf(files, "diag.next").aliases![0]!.keys.vim = ["<C-Space>"];
