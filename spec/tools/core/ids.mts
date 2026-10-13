@@ -1,5 +1,6 @@
 // The ID check (design §8): the commands and actions that the catalog and the generated files name
-// must exist in the ID snapshots of spec/ids.
+// must exist in the ID snapshots of spec/ids. Below it, the pure parts of pnpm ids:refresh, which
+// writes those snapshots.
 import type { Diagnostic, Entry, Ide } from "./catalog.mts";
 
 /** spec/ids/vscode.json: the command IDs of a VS Code version and its allow-listed extensions. */
@@ -76,9 +77,9 @@ export function checkIds(
 }
 
 /**
- * "check-ids: resolved 4/6 VS Code commands and 3/4 IntelliJ actions; unsupported entries: VS Code 1,
- * IntelliJ 1": how many of the IDs that checkIds checked it found, given its diagnostics, and how
- * many entries have no block for an IDE.
+ * How many of the IDs that checkIds checked it found, given its diagnostics, and how many entries
+ * have no block for an IDE: "check-ids: resolved 4/6 VS Code commands and 3/4 IntelliJ actions;
+ * unsupported entries: VS Code 1, IntelliJ 1".
  */
 export function idSummary(
   commands: readonly CommandFile[],
@@ -138,6 +139,37 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
 
 /** A value quoted for a message. */
 const q = (value: string): string => JSON.stringify(value);
+
+/** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
+export function suggest(id: string, known: Iterable<string>): string[] {
+  return [...known]
+    .map((candidate) => ({ candidate, distance: editDistance(id, candidate) }))
+    .sort(
+      (a, b) =>
+        a.distance - b.distance || compareText(a.candidate, b.candidate),
+    )
+    .slice(0, 3)
+    .map(({ candidate }) => candidate);
+}
+
+/** The Levenshtein distance: the fewest insertions, deletions and substitutions from a to b. */
+function editDistance(a: string, b: string): number {
+  // previous[j] is the distance from the first i - 1 characters of a to the first j of b.
+  let previous = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const current = [i];
+    for (let j = 1; j <= b.length; j++) {
+      const substitution = previous[j - 1]! + Number(a[i - 1] !== b[j - 1]);
+      current.push(
+        Math.min(previous[j]! + 1, current[j - 1]! + 1, substitution),
+      );
+    }
+    previous = current;
+  }
+  return previous[b.length]!;
+}
+
+// The pure parts of pnpm ids:refresh.
 
 /** The IDs that IntelliJ plugin descriptors declare, from the text of one or more descriptors. */
 export type DescriptorIds = {
@@ -260,35 +292,6 @@ export function pluginVersion(pluginXml: string): string | undefined {
 /** XML without its <!-- --> comments. */
 function withoutComments(xml: string): string {
   return xml.replace(/<!--[\s\S]*?-->/g, "");
-}
-
-/** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
-export function suggest(id: string, known: Iterable<string>): string[] {
-  return [...known]
-    .map((candidate) => ({ candidate, distance: editDistance(id, candidate) }))
-    .sort(
-      (a, b) =>
-        a.distance - b.distance || compareText(a.candidate, b.candidate),
-    )
-    .slice(0, 3)
-    .map(({ candidate }) => candidate);
-}
-
-/** The Levenshtein distance: the fewest insertions, deletions and substitutions from a to b. */
-function editDistance(a: string, b: string): number {
-  // previous[j] is the distance from the first i - 1 characters of a to the first j of b.
-  let previous = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    const current = [i];
-    for (let j = 1; j <= b.length; j++) {
-      const substitution = previous[j - 1]! + Number(a[i - 1] !== b[j - 1]);
-      current.push(
-        Math.min(previous[j]! + 1, current[j - 1]! + 1, substitution),
-      );
-    }
-    previous = current;
-  }
-  return previous[b.length]!;
 }
 
 function compareText(a: string, b: string): number {
