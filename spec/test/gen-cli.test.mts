@@ -182,6 +182,29 @@ describe("gen", () => {
     ]);
     expect([invalid, badVersion, clash].map(generated)).toEqual([{}, {}, {}]);
   });
+
+  test('starts each line on stderr with "gen: ", also in a message of several lines', () => {
+    // V8 quotes the text around a JSON syntax error, line breaks included.
+    const root = writeSpec("broken-json");
+    const text = '{\n  "commands": [\n    x\n  ]\n}\n';
+    writeFileSync(join(root, "catalog/commands/search.json"), text);
+    let message = "";
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain("\n");
+    expect(gen("--root", root)).toEqual({
+      status: 2,
+      stdout: "",
+      stderr: `spec/catalog/commands/search.json: ${message}`
+        .split("\n")
+        .map((line) => `gen: ${line}\n`)
+        .join(""),
+    });
+    expect(generated(root)).toEqual({});
+  });
 });
 
 /** Changes the entries of a command file in place. */
