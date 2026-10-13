@@ -420,9 +420,11 @@ describe("pickExtensions", () => {
       dir: `/x/vscodevim.vim-${version}`,
       manifest: { publisher: "vscodevim", name: "vim", version },
     });
+    // A prerelease comes before its release, as in SemVer.
     const installed = [
       vim("1.9.0"),
       vim("1.32.10"),
+      vim("1.32.10-beta"),
       vim("1.32.4"),
       {
         dir: "/x/vspacecode.whichkey-0.11.4",
