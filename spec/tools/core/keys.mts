@@ -38,14 +38,17 @@ export function parseVim(text: string): ParsedKey {
   };
 }
 
+// SPC is the space key, so it sorts as " ", before every printable key.
+const sortText = (token: string): string => (token === "SPC" ? " " : token);
+
 /** Orders token arrays token by token in code-unit order; a key sorts before its longer keys. */
 export function compareKeys(
   a: readonly string[],
   b: readonly string[],
 ): number {
   for (let i = 0; i < a.length && i < b.length; i++) {
-    const x = a[i]!;
-    const y = b[i]!;
+    const x = sortText(a[i]!);
+    const y = sortText(b[i]!);
     if (x !== y) return x < y ? -1 : 1;
   }
   return a.length - b.length;
