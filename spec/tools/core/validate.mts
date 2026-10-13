@@ -25,6 +25,16 @@ export type CatalogFiles = {
   retiredIds: CatalogFile;
 };
 
+/** The parsed fixture files of a spec directory (design §5). */
+export type FixtureFiles = {
+  /** fixtures/catalog/*.json: leader key resolution cases. */
+  catalog: readonly CatalogFile[];
+  /** fixtures/hint-view/*.json: hint view rows cases. */
+  hintView: readonly CatalogFile[];
+  /** fixtures/version-order.json: versions in ascending order. */
+  versionOrder: CatalogFile;
+};
+
 /** Parsed schemas by their file name in spec/schema, such as "commands.schema.json". */
 export type SchemaSet = Readonly<Record<string, unknown>>;
 
@@ -849,7 +859,7 @@ function modesOf(entry: Entry): readonly Mode[] {
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
-function stemOf(path: string): string {
+export function stemOf(path: string): string {
   return path.slice(path.lastIndexOf("/") + 1).replace(/\.json$/, "");
 }
 
