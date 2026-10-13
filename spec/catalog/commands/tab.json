@@ -1,0 +1,149 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "tab.switch",
+      "category": "tab",
+      "keys": { "leader": ["SPC b b"] },
+      "label": "Switch tab",
+      "description": "Lists open tabs, most recently used first, and switches to the one you pick.",
+      "examples": ["SPC b b, type user → switches to the open UserService tab"],
+      "rationale": "VSpaceCode and Doom Emacs use SPC b b to switch buffers.",
+      "stage": "stable",
+      "aliases": [{ "keys": { "leader": ["SPC f t"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": {
+          "command": "workbench.action.showAllEditorsByMostRecentlyUsed"
+        },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "Switcher" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "tab.close",
+      "category": "tab",
+      "keys": { "leader": ["SPC b d"] },
+      "label": "Close tab",
+      "description": "Closes the current tab; the split stays open.",
+      "examples": ["SPC b d → the tab closes; SPC b u brings it back"],
+      "rationale": "VSpaceCode, Doom Emacs and LazyVim all use SPC b d to close a buffer.",
+      "stage": "stable",
+      "aliases": [{ "keys": { "leader": ["SPC b c"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": { "command": "workbench.action.closeActiveEditor" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "CloseContent" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "tab.close-others",
+      "category": "tab",
+      "keys": { "leader": ["SPC b o"] },
+      "label": "Close other tabs",
+      "description": "Closes every other tab in the current split.",
+      "examples": [
+        "Five tabs in one split: SPC b o → only the current tab is left"
+      ],
+      "rationale": "Tab commands live under SPC b; LazyVim uses SPC b o (Doom Emacs SPC b O, VSpaceCode SPC b M).",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.closeOtherEditors" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "CloseAllEditorsButActive" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "tab.reopen",
+      "category": "tab",
+      "keys": { "leader": ["SPC b u"] },
+      "label": "Reopen closed tab",
+      "description": "Reopens the tab you closed most recently.",
+      "examples": ["Closed a tab by mistake: SPC b u → it is open again"],
+      "rationale": "VSpaceCode uses SPC b u to reopen a closed buffer; it pairs with SPC b d.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.reopenClosedEditor" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "ReopenClosedTab" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "tab.next",
+      "category": "tab",
+      "keys": { "leader": ["SPC b n"] },
+      "label": "Go to next tab",
+      "description": "Moves to the next tab in the current split, like gt.",
+      "examples": ["SPC b n → the tab to the right becomes active"],
+      "rationale": "VSpaceCode and Doom Emacs use SPC b n for the next buffer; like gt, it moves only among the tabs of one split.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.nextEditorInGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "action": "NextTab" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "tab.prev",
+      "category": "tab",
+      "keys": { "leader": ["SPC b p"] },
+      "label": "Go to previous tab",
+      "description": "Moves to the previous tab in the current split, like gT.",
+      "examples": ["SPC b p → the tab to the left becomes active"],
+      "rationale": "VSpaceCode and Doom Emacs use SPC b p for the previous buffer; like gT, it moves only among the tabs of one split.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.previousEditorInGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "action": "PreviousTab" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

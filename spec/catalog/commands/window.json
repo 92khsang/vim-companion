@@ -1,0 +1,262 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "window.focus-left",
+      "category": "window",
+      "keys": { "leader": ["SPC w h"] },
+      "label": "Focus split left",
+      "description": "Moves the cursor to the split on the left, like <C-w>h.",
+      "examples": [
+        "Two splits side by side, cursor on the right: SPC w h → cursor is in the left split"
+      ],
+      "rationale": "Mirrors Vim <C-w>h: SPC w is the window map in Doom Emacs and proxies <C-w> in LazyVim, and VSpaceCode uses SPC w h.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusLeftGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "<C-w>h" },
+      "semantics": {
+        "vscodevim": "SPC w h moves only between editor groups and wraps around at the edge; VSCodeVim's own <C-w>h can also move focus out of the editor area.",
+        "ideavim": "Runs IdeaVim's own <C-w>h, which by default moves only between editor splits and stops at the edge, as in Vim."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.focus-down",
+      "category": "window",
+      "keys": { "leader": ["SPC w j"] },
+      "label": "Focus split below",
+      "description": "Moves the cursor to the split below, like <C-w>j.",
+      "examples": [
+        "Two splits, one above the other, cursor in the top one: SPC w j → cursor is in the bottom split"
+      ],
+      "rationale": "Mirrors Vim <C-w>j: SPC w is the window map in Doom Emacs and proxies <C-w> in LazyVim, and VSpaceCode uses SPC w j.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusBelowGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "<C-w>j" },
+      "semantics": {
+        "vscodevim": "SPC w j moves only between editor groups and wraps around at the edge; VSCodeVim's own <C-w>j can also move focus out of the editor area.",
+        "ideavim": "Runs IdeaVim's own <C-w>j, which by default moves only between editor splits and stops at the edge, as in Vim."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.focus-up",
+      "category": "window",
+      "keys": { "leader": ["SPC w k"] },
+      "label": "Focus split above",
+      "description": "Moves the cursor to the split above, like <C-w>k.",
+      "examples": [
+        "Two splits, one above the other, cursor in the bottom one: SPC w k → cursor is in the top split"
+      ],
+      "rationale": "Mirrors Vim <C-w>k: SPC w is the window map in Doom Emacs and proxies <C-w> in LazyVim, and VSpaceCode uses SPC w k.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusAboveGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "<C-w>k" },
+      "semantics": {
+        "vscodevim": "SPC w k moves only between editor groups and wraps around at the edge; VSCodeVim's own <C-w>k can also move focus out of the editor area.",
+        "ideavim": "Runs IdeaVim's own <C-w>k, which by default moves only between editor splits and stops at the edge, as in Vim."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.focus-right",
+      "category": "window",
+      "keys": { "leader": ["SPC w l"] },
+      "label": "Focus split right",
+      "description": "Moves the cursor to the split on the right, like <C-w>l.",
+      "examples": [
+        "Two splits side by side, cursor on the left: SPC w l → cursor is in the right split"
+      ],
+      "rationale": "Mirrors Vim <C-w>l: SPC w is the window map in Doom Emacs and proxies <C-w> in LazyVim, and VSpaceCode uses SPC w l.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusRightGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "ideavimKeys": "<C-w>l" },
+      "semantics": {
+        "vscodevim": "SPC w l moves only between editor groups and wraps around at the edge; VSCodeVim's own <C-w>l can also move focus out of the editor area.",
+        "ideavim": "Runs IdeaVim's own <C-w>l, which by default moves only between editor splits and stops at the edge, as in Vim."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.focus-next",
+      "category": "window",
+      "keys": { "leader": ["SPC w w"] },
+      "label": "Focus next split",
+      "description": "Moves the cursor to the next split, wrapping around, like <C-w>w.",
+      "examples": [
+        "Three splits: SPC w w three times → back where you started"
+      ],
+      "rationale": "Mirrors Vim <C-w>w; VSpaceCode uses SPC w w.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.focusNextGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "<C-w>w" },
+      "semantics": {
+        "vscodevim": "SPC w w moves to the next editor group, wrapping around, and takes no count, while Vim's {count}<C-w>w goes to window {count}.",
+        "ideavim": "Runs IdeaVim's own <C-w>w, which moves to the next split, wrapping around, or with a count to the split with that number."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.split-right",
+      "category": "window",
+      "keys": { "leader": ["SPC w v"] },
+      "label": "Split right",
+      "description": "Opens the current file in a new split on the right and moves there, like <C-w>v.",
+      "examples": [
+        "SPC w v → the file is open side by side, cursor in the new split"
+      ],
+      "rationale": "Mirrors Vim <C-w>v; VSpaceCode uses SPC w v and LazyVim SPC |.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.splitEditorRight" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "<C-w>v" },
+      "semantics": {
+        "vscodevim": "VSCodeVim's own <C-w>v splits in the direction set by workbench.editor.openSideBySideDirection; SPC w v always splits to the right.",
+        "ideavim": "Runs IdeaVim's own <C-w>v, which splits the editor side by side and moves the cursor to the new split."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.split-down",
+      "category": "window",
+      "keys": { "leader": ["SPC w s"] },
+      "label": "Split down",
+      "description": "Opens the current file in a new split below and moves there, like <C-w>s.",
+      "examples": ["SPC w s → the file is open twice, one above the other"],
+      "rationale": "Mirrors Vim <C-w>s; VSpaceCode uses SPC w s and LazyVim SPC -.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.splitEditorDown" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "<C-w>s" },
+      "semantics": {
+        "vscodevim": "VSCodeVim's own <C-w>s splits across the direction set by workbench.editor.openSideBySideDirection; SPC w s always splits down.",
+        "ideavim": "Runs IdeaVim's own <C-w>s, which splits the editor one above the other and moves the cursor to the new split."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.close",
+      "category": "window",
+      "keys": { "leader": ["SPC w c"] },
+      "label": "Close split",
+      "description": "Closes the current split and all of its tabs, like <C-w>c. With a single split, every tab closes.",
+      "examples": [
+        "Two splits, cursor in the right one: SPC w c → only the left split is left"
+      ],
+      "rationale": "Mirrors Vim <C-w>c: SPC w follows <C-w> and tab commands live under SPC b; LazyVim's SPC w d also runs <C-w>c.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.closeEditorsAndGroup" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "<C-w>c" },
+      "semantics": {
+        "vscodevim": "VSCodeVim's own <C-w>c closes only the active tab; SPC w c closes the editor group with all of its tabs, pinned ones included. With a single group, the tabs close and the empty group remains.",
+        "ideavim": "Runs IdeaVim's own <C-w>c, which closes the current split with all of its tabs; in the last split it closes every tab, where Vim refuses with E444."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "window.only",
+      "category": "window",
+      "keys": { "leader": ["SPC w o"] },
+      "label": "Close other splits",
+      "description": "Closes every other split and their tabs, keeping the current split, like <C-w>o.",
+      "examples": ["Three splits: SPC w o → only the current split is left"],
+      "rationale": "Mirrors Vim <C-w>o: SPC w follows <C-w>.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "workbench.action.closeEditorsInOtherGroups" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "<C-w>o" },
+      "semantics": {
+        "vscodevim": "SPC w o closes the unpinned tabs of every other editor group, so a group that holds a pinned tab remains. VSCodeVim's own <C-w>o merges all groups into one instead.",
+        "ideavim": "Runs IdeaVim's own <C-w>o, which closes every other split with all of its tabs."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

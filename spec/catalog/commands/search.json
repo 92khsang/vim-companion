@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "search.project",
+      "category": "search",
+      "keys": { "leader": ["SPC /"] },
+      "label": "Search in project",
+      "description": "Searches for text in all files of the project.",
+      "examples": ["SPC /, type TODO → every TODO in the project is listed"],
+      "rationale": "VSpaceCode, Doom Emacs and LazyVim all use SPC / for project search.",
+      "stage": "stable",
+      "modes": ["n", "x"],
+      "aliases": [{ "keys": { "leader": ["SPC f s"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": { "command": "workbench.action.findInFiles" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "FindInPath" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

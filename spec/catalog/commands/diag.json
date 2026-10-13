@@ -1,0 +1,63 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "diag.next",
+      "category": "diag",
+      "keys": { "vim": ["]d"] },
+      "label": "Go to next problem",
+      "description": "Jumps to the next error or warning in the current file.",
+      "examples": ["]d → the cursor lands on the next problem in this file"],
+      "rationale": "Neovim and LazyVim use ]d for the next diagnostic.",
+      "stage": "stable",
+      "aliases": [{ "keys": { "vim": ["]e"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": { "command": "editor.action.marker.next" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "action": "GotoNextError", "motionSafe": false },
+      "deviation": {
+        "shadows": "Vim ]d (show the #define of the word under the cursor, searching from the cursor line), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.10 default mapping",
+        "note": "Clashes with the ]d and [d jumps of ideavim-anyObject when its letter d is enabled."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "diag.prev",
+      "category": "diag",
+      "keys": { "vim": ["[d"] },
+      "label": "Go to previous problem",
+      "description": "Jumps to the previous error or warning in the current file.",
+      "examples": ["[d → the previous problem"],
+      "rationale": "Neovim and LazyVim use [d for the previous diagnostic.",
+      "stage": "stable",
+      "aliases": [{ "keys": { "vim": ["[e"] }, "until": "1.0.0" }],
+      "vscode": {
+        "exec": { "command": "editor.action.marker.prev" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "repeat"
+      },
+      "intellij": { "action": "GotoPreviousError", "motionSafe": false },
+      "deviation": {
+        "shadows": "Vim [d (show the #define of the word under the cursor, searching from the start of the file), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.10 default mapping",
+        "note": "Clashes with the ]d and [d jumps of ideavim-anyObject when its letter d is enabled."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}

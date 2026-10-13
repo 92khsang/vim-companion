@@ -1,0 +1,126 @@
+{
+  "$schema": "../../schema/commands.schema.json",
+  "commands": [
+    {
+      "id": "code.action",
+      "category": "code",
+      "keys": { "leader": ["SPC c q"], "vim": ["gra"] },
+      "label": "Show code actions",
+      "description": "Shows the quick fixes and refactorings available at the cursor or for the selection.",
+      "examples": [
+        "Cursor on a class name that is not imported: gra → choose the import",
+        "Visual selection, then SPC c q → actions for the selected code"
+      ],
+      "rationale": "Neovim 0.11 maps gra to code actions. Only Doom Emacs and LazyVim use SPC c a, so the leader key is SPC c q: q for quick fix.",
+      "stage": "stable",
+      "modes": ["n", "x"],
+      "vscode": {
+        "exec": { "command": "editor.action.quickFix" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "ShowIntentionActions" },
+      "deviation": {
+        "shadows": "Vim gr{char} (replace virtual characters), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "Clashes with the opt-in ReplaceWithRegister gr and grr (VSCodeVim vim.replaceWithRegister, IdeaVim ReplaceWithRegister)."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "code.rename",
+      "category": "code",
+      "keys": { "leader": ["SPC c r"], "vim": ["grn"] },
+      "label": "Rename symbol",
+      "description": "Renames the symbol under the cursor and updates every reference to it.",
+      "examples": [
+        "Cursor on total, grn, type sum, Enter → every use is renamed"
+      ],
+      "rationale": "Neovim 0.11 maps grn to rename; Doom Emacs and LazyVim use SPC c r.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "editor.action.rename" },
+        "exit": "input",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "RenameElement" },
+      "deviation": {
+        "shadows": "Vim gr{char} (replace virtual characters), which neither VSCodeVim nor IdeaVim implements",
+        "origin": "Neovim 0.11 default mapping",
+        "note": "Clashes with the opt-in ReplaceWithRegister gr and grr (VSCodeVim vim.replaceWithRegister, IdeaVim ReplaceWithRegister)."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "code.format",
+      "category": "code",
+      "keys": { "leader": ["SPC c f"] },
+      "label": "Format file or selection",
+      "description": "Formats the whole file, or only the selection in Visual mode, with the IDE formatter.",
+      "examples": [
+        "SPC c f → the file is reformatted",
+        "vip, then SPC c f → only that paragraph"
+      ],
+      "rationale": "Doom Emacs and LazyVim use SPC c f to format the region or the whole buffer.",
+      "stage": "stable",
+      "modes": ["n", "x"],
+      "vscode": {
+        "exec": { "command": "editor.action.format" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "action": "ReformatCode" },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    },
+    {
+      "id": "code.hover",
+      "category": "code",
+      "keys": { "leader": ["SPC c d"], "vim": ["K"] },
+      "label": "Show documentation",
+      "description": "Shows the documentation and type of the symbol under the cursor.",
+      "examples": ["Cursor on a method call, K → its documentation appears"],
+      "rationale": "Neovim and LazyVim use K for hover documentation; IdeaVim's K already shows it.",
+      "stage": "stable",
+      "vscode": {
+        "exec": { "command": "editor.action.showHover" },
+        "exit": "editor",
+        "repeatable": false,
+        "count": "none"
+      },
+      "intellij": { "ideavimKeys": "K" },
+      "semantics": {
+        "vscodevim": "VSCodeVim has no K of its own (it shows the hover with gh), so K is mapped to the hover.",
+        "ideavim": "Uses IdeaVim's own K, which opens the Quick Documentation popup."
+      },
+      "deviation": {
+        "shadows": "Vim K (look up the word under the cursor with keywordprg)",
+        "origin": "Neovim LSP default mapping; built into IdeaVim",
+        "note": "Only VS Code maps K; IntelliJ runs IdeaVim's own K."
+      },
+      "verifiedAgainst": {
+        "vscode": "1.141.0",
+        "vscodevim": "1.32.4",
+        "intellij": "2026.2.3",
+        "ideavim": "2.47.3"
+      }
+    }
+  ]
+}
