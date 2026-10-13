@@ -1391,4 +1391,100 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("SUPPORT reports support levels that disagree with the IDE blocks or lack a note", () => {
+    runCases([
+      {
+        name: "full support written out",
+        change: (files) => {
+          entryOf(files, "file.find").support = {
+            vscode: { level: "full" },
+            intellij: { level: "full" },
+          };
+        },
+        expected: [],
+      },
+      {
+        name: "no IntelliJ block and no support level",
+        change: (files) => {
+          delete entryOf(files, "window.move-left").support;
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.move-left",
+            "SUPPORT",
+            'the entry has no "intellij" block, so "support.intellij.level" must be "none"',
+          ),
+        ],
+      },
+      {
+        name: "an IntelliJ block with level none",
+        change: (files) => {
+          entryOf(files, "file.find").support = {
+            intellij: { level: "none", note: "Not yet." },
+          };
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.find",
+            "SUPPORT",
+            '"support.intellij.level" is "none" although the entry has the "intellij" block',
+          ),
+        ],
+      },
+      {
+        name: "partial support without a note",
+        change: (files) => {
+          entryOf(files, "file.recent").support = {
+            vscode: { level: "partial" },
+          };
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.recent",
+            "SUPPORT",
+            '"support.vscode" with level "partial" needs a note',
+          ),
+        ],
+      },
+      {
+        name: "level none without a note",
+        change: (files) => {
+          entryOf(files, "window.move-left").support = {
+            intellij: { level: "none" },
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.move-left",
+            "SUPPORT",
+            '"support.intellij" with level "none" needs a note',
+          ),
+        ],
+      },
+      {
+        name: "an entry that neither IDE supports",
+        change: (files) => {
+          const entry = entryOf(files, "window.move-left");
+          delete entry.vscode;
+          entry.support = {
+            vscode: { level: "none", note: "Not yet." },
+            intellij: { level: "none", note: "Not yet." },
+          };
+        },
+        expected: [
+          diagnostic(
+            WINDOW,
+            "window.move-left",
+            "SUPPORT",
+            "the entry is supported in neither IDE",
+          ),
+        ],
+      },
+    ]);
+  });
 });
