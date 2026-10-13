@@ -1523,4 +1523,108 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("ALIAS reports aliases with the entry's own key, no primary key of their kind, a long label or an until that is not a version", () => {
+    const NOT_VERSION = "is not a version x.y.z[-prerelease]";
+    runCases([
+      {
+        name: "prerelease versions and a label of 24 characters",
+        change: (files) => {
+          const next = entryOf(files, "diag.next");
+          next.keys.vim = ["<C-w><C-w><C-w>"];
+          next.aliases![0]!.until = "1.0.0-rc.1";
+          entryOf(files, "search.project").aliases![0]!.until = "0.0.0-dev.1";
+        },
+        expected: [],
+      },
+      {
+        name: "an alias with the entry's own key",
+        change: (files) => {
+          entryOf(files, "search.project").aliases![0]!.keys.leader = ["SPC /"];
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[0].keys.leader[0] "SPC /" is the entry's own key`,
+          ),
+        ],
+      },
+      {
+        name: "a Vim alias of an entry with leader keys only",
+        change: (files) => {
+          entryOf(files, "file.find").aliases = [
+            { keys: { vim: ["gf"] }, until: "1.0.0" },
+          ];
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.find",
+            "ALIAS",
+            'aliases[0].keys.vim needs a primary Vim key for its label "Moved to <key>"',
+          ),
+        ],
+      },
+      {
+        name: "an alias label longer than 24 characters",
+        change: (files) => {
+          entryOf(files, "diag.next").keys.vim = ["<C-w><C-w><C-w>x"];
+        },
+        expected: [
+          diagnostic(
+            DIAG,
+            "diag.next",
+            "ALIAS",
+            'aliases[0].keys.vim: the label "Moved to <C-w><C-w><C-w>x" is longer than 24 characters',
+          ),
+        ],
+      },
+      {
+        name: "until values that are not versions",
+        change: (files) => {
+          entryOf(files, "search.project").aliases = [
+            { keys: { leader: ["SPC f s"] }, until: "1.0" },
+            { keys: { leader: ["SPC f t"] }, until: "1.0.0+build" },
+            { keys: { leader: ["SPC f u"] }, until: "01.0.0" },
+            { keys: { leader: ["SPC f v"] }, until: "1.0.0-" },
+            { keys: { leader: ["SPC f w"] }, until: "1.0.0-01" },
+          ];
+        },
+        expected: [
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[0].until "1.0" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[1].until "1.0.0+build" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[2].until "01.0.0" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[3].until "1.0.0-" ${NOT_VERSION}`,
+          ),
+          diagnostic(
+            SEARCH,
+            "search.project",
+            "ALIAS",
+            `aliases[4].until "1.0.0-01" ${NOT_VERSION}`,
+          ),
+        ],
+      },
+    ]);
+  });
 });
