@@ -23,6 +23,11 @@ export function compareVersions(a: string, b: string): number {
 
 /** Major, minor and patch, and the prerelease identifiers ([] for a release). */
 function parse(text: string): { core: string[]; prerelease: string[] } {
+  if (!isVersion(text)) {
+    throw new Error(
+      `${JSON.stringify(text)} is not a version x.y.z[-prerelease]`,
+    );
+  }
   const dash = text.indexOf("-");
   return dash < 0
     ? { core: text.split("."), prerelease: [] }
