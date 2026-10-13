@@ -41,52 +41,38 @@ export function validateCatalog(
     return { diagnostics: sortDiagnostics(schemaErrors) };
   }
   // Every file matches its schema, so the data has the catalog types from here on.
-  const placed = commands.flatMap((file) =>
-    (file.data as { commands: Entry[] }).commands.map((entry) => ({
-      file: file.path,
-      stem: stemOf(file.path),
-      entry,
-    })),
-  );
-  const diagnostics = sortDiagnostics([
-    ...checkCategories(placed),
-    ...checkDuplicateIds(placed),
-  ]);
-  if (diagnostics.length > 0) return { diagnostics };
-  const catalog: Catalog = {
-    entries: placed.map(({ entry }) => entry),
-    groups: (files.groups.data as { groups: Group[] }).groups,
-    ctrlKeys: (files.ctrlKeys.data as { keys: CtrlKey[] }).keys,
-    retiredIds: (files.retiredIds.data as { ids: string[] }).ids,
+  const context: Context = {
+    placed: commands.flatMap((file) =>
+      (file.data as { commands: Entry[] }).commands.map((entry) => ({
+        file: file.path,
+        stem: stemOf(file.path),
+        entry,
+      })),
+    ),
+    groups: {
+      file: files.groups.path,
+      groups: (files.groups.data as { groups: Group[] }).groups,
+    },
+    ctrlKeys: {
+      file: files.ctrlKeys.path,
+      keys: (files.ctrlKeys.data as { keys: CtrlKey[] }).keys,
+    },
+    retiredIds: {
+      file: files.retiredIds.path,
+      ids: (files.retiredIds.data as { ids: string[] }).ids,
+    },
   };
-  return { catalog, diagnostics };
-}
-
-/** An entry and the command file it comes from. */
-type Placed = { file: string; stem: string; entry: Entry };
-
-/** Rule CATEGORY_MISMATCH: the file stem, the category and the first part of the id agree. */
-function checkCategories(placed: Placed[]): Diagnostic[] {
-  return placed.flatMap(({ file, stem, entry }) => {
-    const found: Diagnostic[] = [];
-    if (entry.category !== stem) {
-      found.push({
-        file,
-        where: entry.id,
-        code: "CATEGORY_MISMATCH",
-        message: `category ${q(entry.category)} differs from the file stem ${q(stem)}`,
-      });
-    }
-    if (!entry.id.startsWith(`${entry.category}.`)) {
-      found.push({
-        file,
-        where: entry.id,
-        code: "CATEGORY_MISMATCH",
-        message: `the id must start with the category: ${q(`${entry.category}.`)}`,
-      });
-    }
-    return found;
-  });
+  const diagnostics = sortDiagnostics(RULES.flatMap((rule) => rule(context)));
+  if (diagnostics.length > 0) return { diagnostics };
+  return {
+    catalog: {
+      entries: context.placed.map(({ entry }) => entry),
+      groups: context.groups.groups,
+      ctrlKeys: context.ctrlKeys.keys,
+      retiredIds: context.retiredIds.ids,
+    },
+    diagnostics,
+  };
 }
 
 /** Rule SCHEMA: ajv 2020 in strict mode, every error of every file. */
@@ -132,23 +118,69 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return diagnostics.sort((a, b) => compareText(key(a), key(b)));
 }
 
+/** An entry and the command file it comes from. */
+type Placed = { file: string; stem: string; entry: Entry };
+
+/** What the rules after SCHEMA see: typed data and the file of each part. */
+type Context = {
+  placed: Placed[];
+  groups: { file: string; groups: Group[] };
+  ctrlKeys: { file: string; keys: CtrlKey[] };
+  retiredIds: { file: string; ids: string[] };
+};
+
+/** The rules after SCHEMA, in the order of design §3. */
+const RULES: ((context: Context) => Diagnostic[])[] = [
+  checkDuplicateIds,
+  checkCategories,
+];
+
+/** A diagnostic on an entry. */
+function onEntry(
+  { file, entry }: Placed,
+  code: string,
+  message: string,
+): Diagnostic {
+  return { file, where: entry.id, code, message };
+}
+
+/** Rule CATEGORY_MISMATCH: the file stem, the category and the first part of the id agree. */
+function checkCategories({ placed }: Context): Diagnostic[] {
+  return placed.flatMap((at) => {
+    const { stem, entry } = at;
+    const found: Diagnostic[] = [];
+    if (entry.category !== stem) {
+      found.push(
+        onEntry(
+          at,
+          "CATEGORY_MISMATCH",
+          `category ${q(entry.category)} differs from the file stem ${q(stem)}`,
+        ),
+      );
+    }
+    if (!entry.id.startsWith(`${entry.category}.`)) {
+      found.push(
+        onEntry(
+          at,
+          "CATEGORY_MISMATCH",
+          `the id must start with the category: ${q(`${entry.category}.`)}`,
+        ),
+      );
+    }
+    return found;
+  });
+}
+
 /** Rule DUPLICATE_ID: an id names one entry in the whole catalog. */
-function checkDuplicateIds(placed: Placed[]): Diagnostic[] {
+function checkDuplicateIds({ placed }: Context): Diagnostic[] {
   const firstFile = new Map<string, string>();
-  return placed.flatMap(({ file, entry }) => {
-    const first = firstFile.get(entry.id);
+  return placed.flatMap((at) => {
+    const first = firstFile.get(at.entry.id);
     if (first === undefined) {
-      firstFile.set(entry.id, file);
+      firstFile.set(at.entry.id, at.file);
       return [];
     }
-    return [
-      {
-        file,
-        where: entry.id,
-        code: "DUPLICATE_ID",
-        message: `the id is already used in ${first}`,
-      },
-    ];
+    return [onEntry(at, "DUPLICATE_ID", `the id is already used in ${first}`)];
   });
 }
 
