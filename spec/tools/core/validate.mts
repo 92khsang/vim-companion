@@ -2,7 +2,15 @@
 // cannot express. It receives parsed files and schemas and reads nothing itself.
 import type { AnySchema, ErrorObject } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
-import type { Catalog, CtrlKey, Diagnostic, Entry, Group } from "./catalog.mts";
+import type {
+  Catalog,
+  CtrlKey,
+  Diagnostic,
+  Entry,
+  Group,
+  KeySet,
+} from "./catalog.mts";
+import { parseLeader, parseVim, type ParsedKey } from "./keys.mts";
 
 /** A parsed catalog file; `path` is repo-relative and POSIX, for messages. */
 export type CatalogFile = { path: string; data: unknown };
@@ -41,14 +49,16 @@ export function validateCatalog(
     return { diagnostics: sortDiagnostics(schemaErrors) };
   }
   // Every file matches its schema, so the data has the catalog types from here on.
+  const placed = commands.flatMap((file) =>
+    (file.data as { commands: Entry[] }).commands.map((entry) => ({
+      file: file.path,
+      stem: stemOf(file.path),
+      entry,
+    })),
+  );
   const context: Context = {
-    placed: commands.flatMap((file) =>
-      (file.data as { commands: Entry[] }).commands.map((entry) => ({
-        file: file.path,
-        stem: stemOf(file.path),
-        entry,
-      })),
-    ),
+    placed,
+    uses: keyUses(placed),
     groups: {
       file: files.groups.path,
       groups: (files.groups.data as { groups: Group[] }).groups,
@@ -124,6 +134,7 @@ type Placed = { file: string; stem: string; entry: Entry };
 /** What the rules after SCHEMA see: typed data and the file of each part. */
 type Context = {
   placed: Placed[];
+  uses: KeyUse[];
   groups: { file: string; groups: Group[] };
   ctrlKeys: { file: string; keys: CtrlKey[] };
   retiredIds: { file: string; ids: string[] };
@@ -133,7 +144,53 @@ type Context = {
 const RULES: ((context: Context) => Diagnostic[])[] = [
   checkDuplicateIds,
   checkCategories,
+  checkKeySyntax,
 ];
+
+type KeyKind = "leader" | "vim";
+
+/** A primary or alias key of an entry, parsed. */
+type KeyUse = {
+  at: Placed;
+  kind: KeyKind;
+  text: string;
+  /** Where the key is in the entry, such as "aliases[0].keys.vim[1]". */
+  field: string;
+  /** The index of the alias the key belongs to; undefined for a primary key. */
+  alias: number | undefined;
+  parsed: ParsedKey;
+};
+
+const PARSE: Record<KeyKind, (text: string) => ParsedKey> = {
+  leader: parseLeader,
+  vim: parseVim,
+};
+
+/** Every key of every entry: its primary keys, then the keys of each alias. */
+function keyUses(placed: Placed[]): KeyUse[] {
+  const uses = (
+    at: Placed,
+    keys: KeySet,
+    base: string,
+    alias: number | undefined,
+  ): KeyUse[] =>
+    (["leader", "vim"] as const).flatMap((kind) =>
+      (keys[kind] ?? []).map((text, i) => ({
+        at,
+        kind,
+        text,
+        field: `${base}.${kind}[${i}]`,
+        alias,
+        parsed: PARSE[kind](text),
+      })),
+    );
+  return placed.flatMap((at) => [
+    ...uses(at, at.entry.keys, "keys", undefined),
+    ...(at.entry.aliases ?? []).flatMap((alias, i) =>
+      uses(at, alias.keys, `aliases[${i}].keys`, i),
+    ),
+  ]);
+}
 
 /** A diagnostic on an entry. */
 function onEntry(
@@ -182,6 +239,58 @@ function checkDuplicateIds({ placed }: Context): Diagnostic[] {
     }
     return [onEntry(at, "DUPLICATE_ID", `the id is already used in ${first}`)];
   });
+}
+
+/**
+ * Rule KEY_SYNTAX: entry, alias and group keys and the keys an engine replays follow the notation
+ * of keys.mts.
+ */
+function checkKeySyntax({ placed, uses, groups }: Context): Diagnostic[] {
+  const found = uses.flatMap((use) =>
+    use.parsed.ok
+      ? []
+      : [onEntry(use.at, "KEY_SYNTAX", `${use.field}: ${use.parsed.message}`)],
+  );
+  for (const at of placed) {
+    const exec = at.entry.vscode?.exec;
+    if (exec !== undefined && "vimKeys" in exec) {
+      const parsed = parseVim(exec.vimKeys);
+      if (!parsed.ok) {
+        found.push(
+          onEntry(at, "KEY_SYNTAX", `vscode.exec.vimKeys: ${parsed.message}`),
+        );
+      }
+    }
+    const intellij = at.entry.intellij;
+    if (intellij !== undefined && "ideavimKeys" in intellij) {
+      const parsed = parseVim(intellij.ideavimKeys);
+      // In the generated rc a | would end the map command.
+      const hint = intellij.ideavimKeys.includes("|")
+        ? "; write | as <Bar>"
+        : "";
+      if (!parsed.ok) {
+        found.push(
+          onEntry(
+            at,
+            "KEY_SYNTAX",
+            `intellij.ideavimKeys: ${parsed.message}${hint}`,
+          ),
+        );
+      }
+    }
+  }
+  for (const group of groups.groups) {
+    const parsed = parseLeader(group.keys);
+    if (!parsed.ok) {
+      found.push({
+        file: groups.file,
+        where: group.keys,
+        code: "KEY_SYNTAX",
+        message: parsed.message,
+      });
+    }
+  }
+  return found;
 }
 
 /** "spec/catalog/commands/code.json" → "code". */
