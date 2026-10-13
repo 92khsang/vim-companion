@@ -18,6 +18,7 @@ import {
 } from "./keys.mts";
 import { leaderLeaves } from "./resolve.mts";
 import { rows } from "./rows.mts";
+import { aliasActive } from "./version.mts";
 
 /** The files that genIde returns, relative to spec/generated/, in the order it returns them. */
 export const GENERATED_PATHS = [
@@ -36,12 +37,16 @@ export function genIde(
   catalog: Catalog,
   options: GenOptions = {},
 ): Map<string, string> {
+  const version = options.version ?? "0.0.0";
   return new Map(
-    GENERATED_PATHS.map((path) => [path, GENERATORS[path](catalog)]),
+    GENERATED_PATHS.map((path) => [path, GENERATORS[path](catalog, version)]),
   );
 }
 
-const GENERATORS: Record<GeneratedPath, (catalog: Catalog) => string> = {
+const GENERATORS: Record<
+  GeneratedPath,
+  (catalog: Catalog, version: string) => string
+> = {
   "intellij/vim-companion.ideavimrc": ideavimrc,
   "vscode/vim-remaps.json": vimRemaps,
   "vscode/whichkey-bindings.json": whichKeyBindings,
@@ -81,14 +86,18 @@ type GroupNode = {
 
 type Node = Leaf | GroupNode;
 
-/** The children of a leader prefix (the keys after SPC) in an IDE, in display order. */
+/**
+ * The children of a leader prefix (the keys after SPC) in an IDE, in display order, with the
+ * aliases that are active in the version.
+ */
 function leaderTree(
   catalog: Catalog,
   ide: Ide,
+  version: string,
   prefix: readonly string[] = [],
 ): Node[] {
-  const leaves = leaderLeaves(catalog, {});
-  return rows(catalog, ide, prefix).map((row): Node => {
+  const leaves = leaderLeaves(catalog, { version });
+  return rows(catalog, ide, prefix, { version }).map((row): Node => {
     const keys = [...prefix, row.key];
     const tokens = ["SPC", ...keys];
     if (row.group) {
@@ -96,7 +105,7 @@ function leaderTree(
         kind: "group",
         tokens,
         label: row.label,
-        children: leaderTree(catalog, ide, keys),
+        children: leaderTree(catalog, ide, version, keys),
       };
     }
     const key = tokens.join(" ");
@@ -113,8 +122,11 @@ function leavesOf(nodes: readonly Node[]): Leaf[] {
   );
 }
 
-/** The Vim keys of the stable entries, then those of their aliases, each sorted by key. */
-function vimLeaves(catalog: Catalog): Leaf[] {
+/**
+ * The Vim keys of the stable entries, then those of their aliases that are active in the version,
+ * each sorted by key.
+ */
+function vimLeaves(catalog: Catalog, version: string): Leaf[] {
   const leaf = (key: string, entry: Entry, label: string): Leaf => ({
     kind: "leaf",
     key,
@@ -128,11 +140,13 @@ function vimLeaves(catalog: Catalog): Leaf[] {
     (entry.keys.vim ?? []).map((key) => leaf(key, entry, entry.label)),
   );
   const aliases = stable.flatMap((entry) =>
-    (entry.aliases ?? []).flatMap((alias) =>
-      (alias.keys.vim ?? []).map((key) =>
-        leaf(key, entry, `Moved to ${entry.keys.vim?.[0]}`),
+    (entry.aliases ?? [])
+      .filter((alias) => aliasActive(alias, version))
+      .flatMap((alias) =>
+        (alias.keys.vim ?? []).map((key) =>
+          leaf(key, entry, `Moved to ${entry.keys.vim?.[0]}`),
+        ),
       ),
-    ),
   );
   return [...primary.sort(byKey), ...aliases.sort(byKey)];
 }
@@ -173,8 +187,8 @@ type WhichKeyItem =
   | { key: string; name: string; type: "bindings"; bindings: WhichKeyItem[] };
 
 /** The value of `whichkey.bindings`: the leader keys that VS Code supports. */
-function whichKeyBindings(catalog: Catalog): string {
-  return json(whichKeyItems(leaderTree(catalog, "vscode")));
+function whichKeyBindings(catalog: Catalog, version: string): string {
+  return json(whichKeyItems(leaderTree(catalog, "vscode", version)));
 }
 
 function whichKeyItems(nodes: readonly Node[]): WhichKeyItem[] {
@@ -206,12 +220,12 @@ function whichKeyCall(exec: VscodeExec): { command: string; args?: unknown } {
 const OPEN_WHICH_KEY = { before: ["<space>"], commands: ["whichkey.show"] };
 
 /** The Normal and Visual mode remaps of VSCodeVim 1.32.4 for the Vim keys VS Code supports. */
-function vimRemaps(catalog: Catalog): string {
+function vimRemaps(catalog: Catalog, version: string): string {
   const remaps: Record<Mode, object[]> = {
     n: [OPEN_WHICH_KEY],
     x: [OPEN_WHICH_KEY],
   };
-  for (const leaf of vimLeaves(catalog)) {
+  for (const leaf of vimLeaves(catalog, version)) {
     const vscode = bindingIn(leaf.entry, "vscode");
     const remap =
       vscode === undefined ? undefined : vimRemap(leaf, vscode.exec);
@@ -258,14 +272,14 @@ const LEADER = [
 ];
 
 /** The rc: the leader, the group descriptions, a block per key and mode, then the Ctrl keys. */
-function ideavimrc(catalog: Catalog): string {
-  const tree = leaderTree(catalog, "intellij");
+function ideavimrc(catalog: Catalog, version: string): string {
+  const tree = leaderTree(catalog, "intellij", version);
   const sections = [
     HEADER,
     LEADER,
     ["let g:vimcompanion_skipped = []"],
     groupDescriptions(tree),
-    ...[...leavesOf(tree), ...vimLeaves(catalog)]
+    ...[...leavesOf(tree), ...vimLeaves(catalog, version)]
       .map(mapBlocks)
       .filter((lines) => lines.length > 0),
     ctrlKeyLines(catalog.ctrlKeys),
