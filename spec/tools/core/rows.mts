@@ -1,7 +1,8 @@
 // The rows of a hint view (design §4): the children of a leader prefix in display order, each with
 // its label and badge.
 import type { Ide, KeyCatalog } from "./catalog.mts";
-import type { ResolveOptions } from "./resolve.mts";
+import { compareKeys } from "./keys.mts";
+import { leaderLeaves, type ResolveOptions } from "./resolve.mts";
 
 /** One mark per row, the first that applies in this order; null when none does. */
 export type Badge =
@@ -20,5 +21,17 @@ export function rows(
   prefix: readonly string[],
   options: ResolveOptions = {},
 ): Row[] {
-  return [];
+  const parent = `${["SPC", ...prefix].join(" ")} `;
+  return leaderLeaves(catalog, options)
+    .filter(
+      ({ key }) =>
+        key.startsWith(parent) && !key.slice(parent.length).includes(" "),
+    )
+    .map(({ key, entry }) => ({
+      key: key.slice(parent.length),
+      label: entry.label,
+      group: false,
+      badge: null,
+    }))
+    .sort((a, b) => compareKeys([a.key], [b.key]));
 }

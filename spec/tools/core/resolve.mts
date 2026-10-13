@@ -44,13 +44,13 @@ export function resolve(
 }
 
 /** A bound leader key: a key of an entry or of one of its active aliases. */
-type LeaderLeaf = { key: string; entry: Entry };
+export type LeaderLeaf = { key: string; entry: Entry };
 
 /**
  * The leader keys that the catalog binds with the options: the keys of the entries, of
  * experimental ones only with `experimental`, and of their aliases that are active at `version`.
  */
-function leaderLeaves(
+export function leaderLeaves(
   catalog: KeyCatalog,
   options: ResolveOptions,
 ): LeaderLeaf[] {
