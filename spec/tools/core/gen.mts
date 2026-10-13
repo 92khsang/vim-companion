@@ -349,9 +349,9 @@ function keyHex(tokens: readonly string[]): string {
   return `${leader ? "l" : "v"}${hex}`;
 }
 
-/** A Vim single-quoted string. */
+/** A Vim single-quoted string: '' stands for each '. */
 function quote(text: string): string {
-  return `'${text}'`;
+  return `'${text.replaceAll("'", "''")}'`;
 }
 
 /** sethandler lines; the keys with a macOS value in one if has('mac') block. */
