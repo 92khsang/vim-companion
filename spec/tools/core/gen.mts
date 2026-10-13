@@ -1,6 +1,7 @@
 // The IDE files that pnpm gen writes from the catalog (design §6, §7): the which-key menu and the
-// VSCodeVim remaps for VS Code, and an IdeaVim rc for IntelliJ. Every list follows the display
-// order of rows(): at each leader prefix the entry keys, the alias keys, then the groups.
+// VSCodeVim remaps for VS Code, and an IdeaVim rc for IntelliJ. Leader keys follow the display
+// order of rows(): at each prefix the entry keys, the alias keys, then the groups. Vim keys come
+// after them: the entry keys, then the alias keys, each sorted by key.
 import type {
   Catalog,
   CtrlKey,
