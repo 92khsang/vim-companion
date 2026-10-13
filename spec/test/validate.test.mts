@@ -1095,4 +1095,44 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("DUPLICATE_GROUP reports a prefix that has a group already", () => {
+    runCases([
+      {
+        name: "one label for groups of two prefixes",
+        change: (files) => {
+          files.groups.data.groups[4]!.label = "Code";
+        },
+        expected: [],
+      },
+      {
+        name: "a prefix with a second, different label",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC w", label: "Windows" });
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC w",
+            "DUPLICATE_GROUP",
+            'the prefix already has the group label "Window"',
+          ),
+        ],
+      },
+      {
+        name: "a group listed twice",
+        change: (files) => {
+          files.groups.data.groups.push({ keys: "SPC c", label: "Code" });
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC c",
+            "DUPLICATE_GROUP",
+            'the prefix already has the group label "Code"',
+          ),
+        ],
+      },
+    ]);
+  });
 });
