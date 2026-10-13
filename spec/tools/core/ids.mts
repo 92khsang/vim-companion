@@ -240,12 +240,15 @@ export function pickExtensions(
   };
 }
 
-/** By the numbers of "major.minor.patch", then in code-unit order. */
+/** By the numbers of "major.minor.patch"; then, as in SemVer, a prerelease before its release. */
 function compareVersions(a: string, b: string): number {
   const [x, y] = [a, b].map((version) =>
     version.split(/[.-]/, 3).map(Number),
   ) as [number[], number[]];
-  return x[0]! - y[0]! || x[1]! - y[1]! || x[2]! - y[2]! || compareText(a, b);
+  const release = (version: string) => Number(!version.includes("-"));
+  return (
+    x[0]! - y[0]! || x[1]! - y[1]! || x[2]! - y[2]! || release(a) - release(b)
+  );
 }
 
 /** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
