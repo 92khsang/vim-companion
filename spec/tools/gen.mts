@@ -25,6 +25,7 @@ import {
 } from "./catalog-files.mts";
 import { fixtureIndex } from "./core/fixtures.mts";
 import { genIde, unsupportedLines } from "./core/gen.mts";
+import { prefixLines, thrownMessage } from "./core/messages.mts";
 import { validateCatalog } from "./core/validate.mts";
 import { isVersion } from "./core/version.mts";
 
@@ -119,16 +120,12 @@ function check(
 
 /** Prints why gen cannot run, each line after "gen: ", and returns its exit code. */
 function cannotRun(messages: readonly string[]): number {
-  for (const message of messages) {
-    for (const line of message.split("\n")) console.error(`gen: ${line}`);
-  }
+  for (const line of prefixLines("gen: ", messages)) console.error(line);
   return 2;
 }
 
 try {
   process.exitCode = run();
 } catch (error) {
-  process.exitCode = cannotRun([
-    error instanceof Error ? error.message : String(error),
-  ]);
+  process.exitCode = cannotRun([thrownMessage(error)]);
 }
