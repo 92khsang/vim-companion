@@ -64,7 +64,15 @@ export function checkIds(
         })),
     ),
   );
-  return sortDiagnostics(found);
+  const generated = generatedCommandIds
+    .filter((id) => !known.vscode.has(id))
+    .map((id) => ({
+      file: snapshots.vscode.path,
+      where: id,
+      code: UNKNOWN.vscode,
+      message: `pnpm gen writes this command, but the snapshot lacks it${didYouMean(suggest(id, known.vscode))}`,
+    }));
+  return sortDiagnostics([...found, ...generated]);
 }
 
 const UNKNOWN: Record<Ide, string> = {
