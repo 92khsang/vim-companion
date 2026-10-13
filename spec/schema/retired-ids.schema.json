@@ -1,5 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "vim-companion retired entry ids",
-  "type": "object"
+  "description": "The ids of removed entries; no entry may use them again.",
+  "type": "object",
+  "required": ["ids"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "commands.schema.json#/$defs/id" }
+    }
+  }
 }
