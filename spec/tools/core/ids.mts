@@ -3,5 +3,33 @@
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
-  return [];
+  return [...known]
+    .map((candidate) => ({ candidate, distance: editDistance(id, candidate) }))
+    .sort(
+      (a, b) =>
+        a.distance - b.distance || compareText(a.candidate, b.candidate),
+    )
+    .slice(0, 3)
+    .map(({ candidate }) => candidate);
+}
+
+/** The Levenshtein distance: the fewest insertions, deletions and substitutions from a to b. */
+function editDistance(a: string, b: string): number {
+  // previous[j] is the distance from the first i - 1 characters of a to the first j of b.
+  let previous = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const current = [i];
+    for (let j = 1; j <= b.length; j++) {
+      const substitution = previous[j - 1]! + Number(a[i - 1] !== b[j - 1]);
+      current.push(
+        Math.min(previous[j]! + 1, current[j - 1]! + 1, substitution),
+      );
+    }
+    previous = current;
+  }
+  return previous[b.length]!;
+}
+
+function compareText(a: string, b: string): number {
+  return Number(a > b) - Number(a < b);
 }
