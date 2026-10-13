@@ -31,4 +31,48 @@ describe("parseLeader", () => {
       }),
     );
   });
+
+  test("reports a malformed leader key instead of splitting it", () => {
+    expect(parseLeader("SPC wh")).toEqual({
+      ok: false,
+      message:
+        '"SPC wh" is not a leader key: "SPC" and then keys separated by single spaces, each SPC or one of a-z A-Z 0-9 / ? : =',
+    });
+    const malformed = [
+      "",
+      "SPC",
+      "spc w",
+      "w h",
+      "SPCw",
+      "SPC  w",
+      " SPC w",
+      "SPC w ",
+      "SPC ,",
+      "SPC\tw",
+      "SPC w\n",
+      "SPC <C-w>",
+      "SPC é",
+      "SPC SPCSPC",
+    ];
+    const accepted = malformed.filter((text) => {
+      const parsed = parseLeader(text);
+      return (
+        parsed.ok ||
+        !parsed.message.startsWith(
+          `${JSON.stringify(text)} is not a leader key: `,
+        )
+      );
+    });
+    expect(accepted).toEqual([]);
+    // A stray space anywhere breaks the single-space rule.
+    fc.assert(
+      fc.property(leaderKey, fc.nat(), (tokens, n) => {
+        const text = tokens.join(" ");
+        const at = n % (text.length + 1);
+        expect(parseLeader(`${text.slice(0, at)} ${text.slice(at)}`).ok).toBe(
+          false,
+        );
+      }),
+    );
+  });
 });
