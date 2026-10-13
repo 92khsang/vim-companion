@@ -408,34 +408,45 @@ function checkKeySyntax({ placed, uses, groups }: Context): Diagnostic[] {
 /** Vim keys that the catalog never redefines, not even as the start of a longer key (D4). */
 const PROTECTED_KEYS = ["]b", "[b", "]w", "[w", "]p", "[p", "gh", "gi"];
 
+/** Where a key that starts with the leader goes instead of keys.vim. */
+const LEADER_KEYS = "leader keys go in keys.leader, starting with SPC";
+
 /**
- * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space
- * and no bare function key, and do not redefine a protected key. The keys an engine replays are
- * not bound, so they are not checked.
+ * Rule FORBIDDEN_KEY (D4): the Vim keys the companion binds have no Alt chord, no modifier+Space,
+ * no bare function key and no leader (<leader>, or <Space> as the first key), and do not
+ * redefine a protected key. The keys an engine replays are not bound, so they are not checked.
  */
 function checkForbiddenKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use) => {
     if (use.kind !== "vim" || !use.parsed.ok) return [];
-    const subject = `${use.field} ${q(use.text)}`;
-    const found = use.parsed.tokens.flatMap((token) => {
+    const { tokens } = use.parsed;
+    const report = (problem: string) =>
+      onEntry(
+        use.at,
+        "FORBIDDEN_KEY",
+        `${use.field} ${q(use.text)} ${problem}`,
+      );
+    const found = tokens.flatMap((token) => {
       const problem = forbiddenToken(token);
       return problem === undefined
         ? []
-        : [
-            onEntry(
-              use.at,
-              "FORBIDDEN_KEY",
-              `${subject} has the ${problem} ${token}`,
-            ),
-          ];
+        : [report(`has the ${problem} ${token}`)];
     });
+    // Key names ignore case, as in Vim.
+    const first = tokens[0]!;
+    if (first.toLowerCase() === "<space>") {
+      found.push(report(`starts with ${first}, the leader; ${LEADER_KEYS}`));
+    }
+    for (const token of tokens) {
+      if (token.toLowerCase() === "<leader>") {
+        found.push(report(`contains ${token}; ${LEADER_KEYS}`));
+      }
+    }
     for (const key of PROTECTED_KEYS) {
       if (use.text.startsWith(key)) {
         found.push(
-          onEntry(
-            use.at,
-            "FORBIDDEN_KEY",
-            `${subject} starts with ${q(key)}, one of the keys the catalog never redefines: ${PROTECTED_KEYS.join(" ")}`,
+          report(
+            `starts with ${q(key)}, one of the keys the catalog never redefines: ${PROTECTED_KEYS.join(" ")}`,
           ),
         );
       }
