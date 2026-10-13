@@ -12,6 +12,7 @@ import {
   readSchemas,
 } from "./catalog-files.mts";
 import type { Diagnostic } from "./core/catalog.mts";
+import { generatedCommandIds } from "./core/gen.mts";
 import {
   checkIds,
   idSummary,
@@ -20,18 +21,14 @@ import {
 } from "./core/ids.mts";
 import { checkSchemas, validateCatalog } from "./core/validate.mts";
 
-// The commands that pnpm gen writes into the VS Code settings. Seam: once tools/core/gen.mts
-// exists, use its GENERATED_COMMAND_IDS instead of this list.
-const GENERATED_COMMAND_IDS = ["whichkey.show"];
-
 /** The exit code of a check of the spec directory that the arguments name. */
 function run(): number {
   const { values } = parseArgs({ options: { root: { type: "string" } } });
   const root = resolve(values.root ?? join(import.meta.dirname, ".."));
   const schemas = readSchemas(root);
   const files = readCatalogFiles(root);
-  const invalid = validateCatalog(files, schemas).diagnostics;
-  if (invalid.length > 0) return cannotRun(lines(invalid));
+  const { catalog, diagnostics } = validateCatalog(files, schemas);
+  if (catalog === undefined) return cannotRun(lines(diagnostics));
   const vscode = readJsonFile(root, join(root, "ids/vscode.json"));
   const intellij = readJsonFile(root, join(root, "ids/intellij.json"));
   const broken = checkSchemas(
@@ -45,9 +42,11 @@ function run(): number {
   // Both checks passed, so the files have the types of the catalog and of the snapshots.
   const commands = files.commands as CommandFile[];
   const snapshots = { vscode, intellij } as IdSnapshots;
-  const found = checkIds(commands, snapshots, GENERATED_COMMAND_IDS);
+  // The commands that pnpm gen writes into the VS Code settings.
+  const generated = generatedCommandIds(catalog);
+  const found = checkIds(commands, snapshots, generated);
   for (const line of lines(found)) console.log(line);
-  console.log(idSummary(commands, GENERATED_COMMAND_IDS, found));
+  console.log(idSummary(commands, generated, found));
   return found.length > 0 ? 1 : 0;
 }
 
