@@ -8,6 +8,7 @@
 - Keep `tools/core/` pure: it imports only `./` modules and `ajv`, never `node:*`, `process` or `fetch`; argv, files and exit codes stay in the `tools/*.mts` shells.
 - Each command lives in `catalog/commands/<category>.json`, where the category is the first segment of its `id`. File order never matters: the tools derive the order at each prefix from the keys (primary keys, then aliases, then groups, each sorted by key).
 - When a command gets a new key, move the old key to `aliases` with `until` set to the first version without it. Its hint reads `Moved to <primary key>`, so the entry needs a primary key of the same kind (leader or Vim).
+- An alias stays in every generated file until it leaves the catalog: `pnpm gen` would drop it once the version in `package.json` reaches its `until`, but that version stays 0.0.0. Remove the alias in a normal PR before the release that its `until` names.
 - Start an entry `label` with a verb, in sentence case, such as `Focus split left`; a group label in `catalog/groups.json` is a noun, such as `Window`. Both IDEs show the label as the hint, so it never names an IDE.
 - Write `description` as one or two present-tense sentences on what happens and, where it matters, where the cursor or focus ends up, and each `examples` item as `<keys>[, <typed text>] → <result>` with concrete names.
 - Put engine differences in `semantics` and a key that shadows a Vim or engine default in `deviation`, never in `description`.

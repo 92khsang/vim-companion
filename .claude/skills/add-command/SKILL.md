@@ -38,8 +38,10 @@ the order at each prefix from the keys (primary keys, then aliases, then groups,
 
 - A new key for an existing command: move the old key to `aliases` with `until` set to the first
   version without it. The alias shows as `Moved to <primary key>`, so the entry needs a primary key of
-  the same kind (leader or Vim). `pnpm gen` drops the alias once the version in `spec/package.json`
-  reaches `until`.
+  the same kind (leader or Vim).
+- An alias stays in every generated file until it leaves the catalog: `pnpm gen` would drop it once
+  the version in `spec/package.json` reaches its `until`, but that version stays 0.0.0. Remove the
+  alias in a normal pull request before the release that its `until` names.
 - No equivalent in one IDE: leave out that IDE's block and set `support.<ide>` to level `none` with a
   `note`. A `partial` level needs a `note` too.
 - Not ready for users: `"stage": "experimental"`; `pnpm gen` leaves the entry out of the IDE files.
