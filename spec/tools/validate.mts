@@ -3,7 +3,11 @@
 // --root <dir>: the spec directory to check; by default the one this file is in.
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { readCatalogFiles, readSchemas } from "./catalog-files.mts";
+import {
+  readCatalogFiles,
+  readFixtureFiles,
+  readSchemas,
+} from "./catalog-files.mts";
 import type { Diagnostic } from "./core/catalog.mts";
 import { validateCatalog } from "./core/validate.mts";
 
@@ -11,8 +15,7 @@ import { validateCatalog } from "./core/validate.mts";
 function check(root: string): Diagnostic[] {
   const schemas = readSchemas(root);
   const { diagnostics } = validateCatalog(readCatalogFiles(root), schemas);
-  // The fixtures (design §5) join here: each fixture file against its fixture schema, and its
-  // inline catalog with the catalog rules.
+  readFixtureFiles(root);
   return diagnostics;
 }
 
