@@ -37,8 +37,13 @@ export function genIde(
   options: GenOptions = {},
 ): Map<string, string> {
   const version = options.version ?? "0.0.0";
+  // Entries that bind one key in different modes follow their ids, never the catalog order.
+  const byId: Catalog = {
+    ...catalog,
+    entries: [...catalog.entries].sort((a, b) => compareText(a.id, b.id)),
+  };
   return new Map(
-    GENERATED_PATHS.map((path) => [path, GENERATORS[path](catalog, version)]),
+    GENERATED_PATHS.map((path) => [path, GENERATORS[path](byId, version)]),
   );
 }
 
