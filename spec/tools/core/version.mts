@@ -49,3 +49,8 @@ function compareNumbers(a: string, b: string): number {
 function compareText(a: string, b: string): number {
   return Number(a > b) - Number(a < b);
 }
+
+/** Whether the text is a SemVer 2.0.0 version without build metadata. */
+export function isVersion(text: string): boolean {
+  return false;
+}

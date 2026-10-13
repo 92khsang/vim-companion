@@ -1,6 +1,6 @@
 import fc from "fast-check";
 import { describe, expect, test } from "vitest";
-import { compareVersions } from "../tools/core/version.mts";
+import { compareVersions, isVersion } from "../tools/core/version.mts";
 
 // SemVer 2.0.0 versions without build metadata, written out independently of the implementation.
 // Most parts come from a few values, so that equal majors, minors, patches and identifiers are
@@ -136,5 +136,46 @@ describe("compareVersions", () => {
       "1.0.0-alpha.1.0 > 1.0.0-alpha.1",
       "1.0.0-rc.1 = 1.0.0-rc.1",
     ]);
+  });
+});
+
+describe("isVersion", () => {
+  test("accepts SemVer 2.0.0 versions without build metadata", () => {
+    const versions = [
+      "0.0.0",
+      "1.2.3",
+      "10.20.30",
+      "123456789012345678901.0.0",
+      "0.0.0-dev.1",
+      "1.0.0-alpha",
+      "1.0.0-0.3.7",
+      "1.0.0-x.7.z.92",
+      "1.0.0-x-y-z.--",
+      "1.0.0-0a.a0",
+    ];
+    const others = [
+      "",
+      "1",
+      "1.2",
+      "1.2.3.4",
+      "01.2.3",
+      "1.02.3",
+      "1.2.03",
+      "-1.2.3",
+      "v1.2.3",
+      " 1.2.3",
+      "1.2.3 ",
+      "1.2.3\n",
+      "1.2.3-",
+      "1.2.3-01",
+      "1.2.3-rc.01",
+      "1.2.3-alpha..1",
+      "1.2.3-alpha.",
+      "1.2.3-alpha_1",
+      "1.2.3-\u03b1",
+      "1.2.3+build",
+      "1.2.3-alpha+build",
+    ];
+    expect([...versions, ...others].filter(isVersion)).toEqual(versions);
   });
 });
