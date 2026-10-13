@@ -1,5 +1,14 @@
 // Versions as the catalog writes them: SemVer 2.0.0 (https://semver.org/spec/v2.0.0.html) without
 // build metadata, x.y.z[-prerelease]. An alias stays active until the version in its `until`.
+import type { Alias } from "./catalog.mts";
+
+/** Whether the alias still binds its keys in a release of `version`: until `until`, exclusive. */
+export function aliasActive(
+  alias: Pick<Alias, "until">,
+  version: string,
+): boolean {
+  return false;
+}
 
 /** -1, 0 or 1 as `a` sorts before, with or after `b` in SemVer 2.0.0 precedence. */
 export function compareVersions(a: string, b: string): number {

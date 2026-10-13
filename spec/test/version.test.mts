@@ -1,6 +1,10 @@
 import fc from "fast-check";
 import { describe, expect, test } from "vitest";
-import { compareVersions, isVersion } from "../tools/core/version.mts";
+import {
+  aliasActive,
+  compareVersions,
+  isVersion,
+} from "../tools/core/version.mts";
 
 // SemVer 2.0.0 versions without build metadata, written out independently of the implementation.
 // Most parts come from a few values, so that equal majors, minors, patches and identifiers are
@@ -186,5 +190,31 @@ describe("isVersion", () => {
       "1.2.3-alpha+build",
     ];
     expect([...versions, ...others].filter(isVersion)).toEqual(versions);
+  });
+});
+
+describe("aliasActive", () => {
+  test("keeps an alias active while the version is below its until", () => {
+    const active = (until: string, version: string): string =>
+      `until ${until} at ${version}: ${aliasActive({ until }, version)}`;
+    expect([
+      active("1.0.0", "0.0.0"),
+      active("1.0.0", "0.9.9"),
+      active("1.0.0", "1.0.0-rc.1"),
+      active("1.0.0", "1.0.0"),
+      active("1.0.0", "1.0.1"),
+      active("1.0.0", "2.0.0-dev.1"),
+      active("0.0.0-dev.1", "0.0.0"),
+      active("0.0.0", "0.0.0-dev.1"),
+    ]).toEqual([
+      "until 1.0.0 at 0.0.0: true",
+      "until 1.0.0 at 0.9.9: true",
+      "until 1.0.0 at 1.0.0-rc.1: true",
+      "until 1.0.0 at 1.0.0: false",
+      "until 1.0.0 at 1.0.1: false",
+      "until 1.0.0 at 2.0.0-dev.1: false",
+      "until 0.0.0-dev.1 at 0.0.0: false",
+      "until 0.0.0 at 0.0.0-dev.1: true",
+    ]);
   });
 });
