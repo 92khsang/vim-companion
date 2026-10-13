@@ -150,6 +150,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkReservedKeys,
   checkDuplicateKeys,
   checkPrefixConflicts,
+  checkMissingGroups,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -415,6 +416,29 @@ function checkPrefixConflicts({ uses }: Context): Diagnostic[] {
         ),
       );
   });
+}
+
+/** Rule MISSING_GROUP: each leader prefix below the root that has keys under it has a group label. */
+function checkMissingGroups({ uses, groups }: Context): Diagnostic[] {
+  const labelled = new Set(groups.groups.map((group) => group.keys));
+  const reported = new Set<string>();
+  const found: Diagnostic[] = [];
+  for (const use of uses) {
+    if (use.kind !== "leader" || !use.parsed.ok) continue;
+    // From "SPC w" up to the prefix just above the leaf.
+    for (let end = 2; end < use.parsed.tokens.length; end++) {
+      const prefix = use.parsed.tokens.slice(0, end).join(" ");
+      if (labelled.has(prefix) || reported.has(prefix)) continue;
+      reported.add(prefix);
+      found.push({
+        file: groups.file,
+        where: prefix,
+        code: "MISSING_GROUP",
+        message: `no group label for this prefix of ${q(use.text)}, bound by ${owner(use)}`,
+      });
+    }
+  }
+  return found;
 }
 
 /** Whether the tokens begin with the tokens of the prefix. */
