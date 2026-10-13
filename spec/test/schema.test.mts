@@ -75,7 +75,7 @@ test("spec:check accepts as a fixture version exactly the strings isVersion acce
   });
   // spec:check reads each version of the order alone; the conformance runner checks the order.
   // Each run compiles the schemas, so 20 runs of 50 versions check 1000 candidates. minLength is 50
-  // too: by default fast-check draws at most 2 * minLength + 10 items, so minLength 1 gave about 6.
+  // too: by default fast-check draws at most 2 * minLength + 10 items, 12 for minLength 1.
   const message = (version: string, i: number) =>
     `ascending[${i}] ${JSON.stringify(version)} is not a version x.y.z[-prerelease]`;
   fc.assert(

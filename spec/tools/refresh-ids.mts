@@ -1,7 +1,7 @@
 // pnpm ids:refresh vscode|intellij (design §8): rewrites ids/<ide>.json of the spec directory from
 // the IDE installed on this machine, and prints what it wrote. Exits 2 when it cannot run, with why
-// on stderr, each line after "ids:refresh: ". Stopped by SIGINT, SIGTERM or SIGHUP, vscode ends VS
-// Code, removes its temporary directory and exits 130, 143 or 129.
+// on stderr, each line after "ids:refresh: ". Stopped by SIGINT, SIGTERM or SIGHUP, vscode ends
+// VS Code, removes its temporary directory and exits 130, 143 or 129.
 //   vscode   [--code <binary>] [--extension <publisher.name>]... [--drop-extension <publisher.name>]...
 //   intellij [--ide-home <dir>] [--plugins-dir <dir>] [--plugin <dir or .jar>]... [--drop-plugin <name>]...
 // The allow-listed extensions or plugins are the ones of the snapshot it replaces, plus
@@ -171,8 +171,8 @@ const GRACE_MS = 3_000;
 
 /**
  * The signals that stop a refresh: Ctrl-C in a terminal, kill, and the hang-up of a terminal that
- * closes. The SIGHUP listener takes nothing from nohup: Node resets SIGHUP to its default action at
- * startup, so a hang-up ended the refresh at once even under nohup.
+ * closes. Listening for SIGHUP takes nothing from nohup: Node resets SIGHUP to its default action
+ * at startup, so under nohup a hang-up still reaches this process.
  */
 const STOP_SIGNALS = ["SIGINT", "SIGTERM", "SIGHUP"] as const;
 
