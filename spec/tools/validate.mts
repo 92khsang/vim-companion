@@ -1,5 +1,6 @@
-// pnpm spec:check: validates the catalog (design §3). Prints "<file>: <where>: <message>" lines in
-// sorted order; exits 0 when there are none, 1 when there are, and 2 when it cannot run.
+// pnpm spec:check: validates the catalog and the fixtures (design §3, §5). Prints
+// "<file>: <where>: <message>" lines in sorted order; exits 0 when there are none, 1 when there
+// are, and 2 when it cannot run.
 // --root <dir>: the spec directory to check; by default the one this file is in.
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -9,14 +10,13 @@ import {
   readSchemas,
 } from "./catalog-files.mts";
 import type { Diagnostic } from "./core/catalog.mts";
-import { validateCatalog } from "./core/validate.mts";
+import { validateCatalog, validateFixtures } from "./core/validate.mts";
 
 /** Every diagnostic of the spec directory `root`; throws when a file cannot be read. */
 function check(root: string): Diagnostic[] {
   const schemas = readSchemas(root);
   const { diagnostics } = validateCatalog(readCatalogFiles(root), schemas);
-  readFixtureFiles(root);
-  return diagnostics;
+  return [...diagnostics, ...validateFixtures(readFixtureFiles(root), schemas)];
 }
 
 try {
