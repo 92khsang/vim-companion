@@ -131,7 +131,10 @@ export function validateFixtures(
   const ruleErrors = [...files.catalog, ...files.hintView]
     .filter(({ path }) => !broken.has(path))
     .flatMap(({ path, data }) => {
-      const { catalog } = data as { catalog: KeyCatalog };
+      const { catalog, cases } = data as {
+        catalog: KeyCatalog;
+        cases: { id: string }[];
+      };
       const placed = catalog.entries.map((entry) => ({
         file: path,
         stem: undefined,
@@ -144,9 +147,32 @@ export function validateFixtures(
         ctrlKeys: { file: path, keys: [] },
         retiredIds: { file: path, ids: [] },
       };
-      return RULES.flatMap((rule) => rule(context));
+      return [
+        ...RULES.flatMap((rule) => rule(context)),
+        ...checkCaseIds(path, cases),
+      ];
     });
   return sortDiagnostics([...schemaErrors, ...ruleErrors]);
+}
+
+/** Rule DUPLICATE_CASE_ID: the cases of a fixture file have different ids. */
+function checkCaseIds(file: string, cases: { id: string }[]): Diagnostic[] {
+  const first = new Map<string, number>();
+  return cases.flatMap(({ id }, i) => {
+    const earlier = first.get(id);
+    if (earlier === undefined) {
+      first.set(id, i);
+      return [];
+    }
+    return [
+      {
+        file,
+        where: id,
+        code: "DUPLICATE_CASE_ID",
+        message: `cases[${i}] repeats the id of cases[${earlier}]`,
+      },
+    ];
+  });
 }
 
 /**
