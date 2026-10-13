@@ -32,7 +32,7 @@
       "category": "tab",
       "keys": { "leader": ["SPC b d"] },
       "label": "Close tab",
-      "description": "Closes the current tab; the split stays open.",
+      "description": "Closes the current tab; the other tabs of the split stay open.",
       "examples": ["SPC b d → the tab closes; SPC b u brings it back"],
       "rationale": "VSpaceCode, Doom Emacs and LazyVim all use SPC b d to close a buffer.",
       "stage": "stable",
@@ -44,6 +44,12 @@
         "count": "none"
       },
       "intellij": { "action": "CloseContent" },
+      "support": {
+        "vscode": {
+          "level": "full",
+          "note": "With workbench.editor.preventPinnedEditorClose at its default, keyboardAndMouse, or at keyboard, a pinned tab does not close. VS Code shows the most recently used unpinned tab instead, from the same split first."
+        }
+      },
       "verifiedAgainst": {
         "vscode": "1.141.0",
         "vscodevim": "1.32.4",
