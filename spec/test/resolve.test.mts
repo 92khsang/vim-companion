@@ -115,4 +115,28 @@ describe("resolve", () => {
       },
     ]);
   });
+
+  test("finds experimental entries only with the experimental option", () => {
+    expectResults([
+      { ide: "vscode", keys: ["g", "g"], result: { kind: "unbound" } },
+      {
+        ide: "vscode",
+        keys: ["g", "g"],
+        options: { experimental: false },
+        result: { kind: "unbound" },
+      },
+      {
+        ide: "intellij",
+        keys: ["g", "g"],
+        options: { experimental: true },
+        result: { kind: "leaf", entry: "git.status", supported: true },
+      },
+      {
+        ide: "vscode",
+        keys: ["f", "f"],
+        options: { experimental: true },
+        result: { kind: "leaf", entry: "file.find", supported: true },
+      },
+    ]);
+  });
 });
