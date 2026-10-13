@@ -150,7 +150,7 @@ export type DescriptorIds = {
 /** The action, group and tool window IDs of plugin descriptor XML, sorted and without repeats. */
 export function parseDescriptorIds(xml: string): DescriptorIds {
   // An ID that only a comment mentions is not declared.
-  const text = xml.replace(/<!--[\s\S]*?-->/g, "");
+  const text = withoutComments(xml);
   const collect = (pattern: RegExp) =>
     [...new Set(Array.from(text.matchAll(pattern), (m) => m[1]!))].sort();
   return {
@@ -207,8 +207,13 @@ function contributedCommands(manifest: unknown): string[] {
 
 /** The <version> of an IntelliJ plugin descriptor (META-INF/plugin.xml), outside comments. */
 export function pluginVersion(pluginXml: string): string | undefined {
-  const text = pluginXml.replace(/<!--[\s\S]*?-->/g, "");
+  const text = withoutComments(pluginXml);
   return /<version>\s*([^<]*?)\s*<\/version>/.exec(text)?.[1];
+}
+
+/** XML without its <!-- --> comments. */
+function withoutComments(xml: string): string {
+  return xml.replace(/<!--[\s\S]*?-->/g, "");
 }
 
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
