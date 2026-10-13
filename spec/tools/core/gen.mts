@@ -49,11 +49,15 @@ const GENERATORS: Record<GeneratedPath, (catalog: Catalog) => string> = {
 
 /**
  * The `args` of a which-key item or of a VSCodeVim remap command for the positional arguments of
- * a command: none without arguments, else the one argument.
+ * a command. Both spread a list into positional arguments and drop a falsy value, so one truthy
+ * argument that is not a list stands alone and any other arguments go in a list.
  */
 export function whichKeyArgs(args: readonly unknown[]): { args?: unknown } {
   if (args.length === 0) return {};
-  return { args: args[0] };
+  if (args.length === 1 && !Array.isArray(args[0]) && Boolean(args[0])) {
+    return { args: args[0] };
+  }
+  return { args: [...args] };
 }
 
 /** A key that a file binds: a leader key or a Vim key of an entry or of one of its aliases. */
