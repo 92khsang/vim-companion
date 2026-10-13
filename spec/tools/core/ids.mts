@@ -98,10 +98,13 @@ function idsOf(entry: Entry): { ide: Ide; field: string; id: string }[] {
   return ids;
 }
 
-/** " (did you mean "a", "b" or "c"?)". */
+/** " (did you mean "a", "b" or "c"?)", " (did you mean "a"?)", or "" without suggestions. */
 function didYouMean(ids: readonly string[]): string {
   const quoted = ids.map(q);
-  return ` (did you mean ${quoted.slice(0, -1).join(", ")} or ${quoted.at(-1)}?)`;
+  const last = quoted.pop();
+  if (last === undefined) return "";
+  const list = quoted.length > 0 ? `${quoted.join(", ")} or ${last}` : last;
+  return ` (did you mean ${list}?)`;
 }
 
 /** By file, place, message and code, in code-unit order. */
