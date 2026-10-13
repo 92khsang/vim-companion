@@ -40,15 +40,50 @@ export function validateCatalog(
   if (schemaErrors.length > 0) {
     return { diagnostics: sortDiagnostics(schemaErrors) };
   }
+  // Every file matches its schema, so the data has the catalog types from here on.
+  const placed = commands.flatMap((file) =>
+    (file.data as { commands: Entry[] }).commands.map((entry) => ({
+      file: file.path,
+      stem: stemOf(file.path),
+      entry,
+    })),
+  );
+  const diagnostics = sortDiagnostics([...checkCategories(placed)]);
+  if (diagnostics.length > 0) return { diagnostics };
   const catalog: Catalog = {
-    entries: commands.flatMap(
-      (file) => (file.data as { commands: Entry[] }).commands,
-    ),
+    entries: placed.map(({ entry }) => entry),
     groups: (files.groups.data as { groups: Group[] }).groups,
     ctrlKeys: (files.ctrlKeys.data as { keys: CtrlKey[] }).keys,
     retiredIds: (files.retiredIds.data as { ids: string[] }).ids,
   };
-  return { catalog, diagnostics: [] };
+  return { catalog, diagnostics };
+}
+
+/** An entry and the command file it comes from. */
+type Placed = { file: string; stem: string; entry: Entry };
+
+/** Rule CATEGORY_MISMATCH: the file stem, the category and the first part of the id agree. */
+function checkCategories(placed: Placed[]): Diagnostic[] {
+  return placed.flatMap(({ file, stem, entry }) => {
+    const found: Diagnostic[] = [];
+    if (entry.category !== stem) {
+      found.push({
+        file,
+        where: entry.id,
+        code: "CATEGORY_MISMATCH",
+        message: `category ${q(entry.category)} differs from the file stem ${q(stem)}`,
+      });
+    }
+    if (!entry.id.startsWith(`${entry.category}.`)) {
+      found.push({
+        file,
+        where: entry.id,
+        code: "CATEGORY_MISMATCH",
+        message: `the id must start with the category: ${q(`${entry.category}.`)}`,
+      });
+    }
+    return found;
+  });
 }
 
 /** Rule SCHEMA: ajv 2020 in strict mode, every error of every file. */
@@ -93,6 +128,14 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
     [d.file, d.where, d.message, d.code].join("\0");
   return diagnostics.sort((a, b) => compareText(key(a), key(b)));
 }
+
+/** "spec/catalog/commands/code.json" → "code". */
+function stemOf(path: string): string {
+  return path.slice(path.lastIndexOf("/") + 1).replace(/\.json$/, "");
+}
+
+/** A value quoted for a message. */
+const q = (value: string): string => JSON.stringify(value);
 
 function compareText(a: string, b: string): number {
   return Number(a > b) - Number(a < b);
