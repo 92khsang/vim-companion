@@ -6,5 +6,5 @@ export type ParsedKey =
   { ok: true; tokens: string[] } | { ok: false; message: string };
 
 export function parseLeader(text: string): ParsedKey {
-  return { ok: false, message: `not implemented: ${text}` };
+  return { ok: true, tokens: text.split(" ") };
 }
