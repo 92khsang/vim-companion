@@ -6,6 +6,7 @@ import {
   fileOf,
   miniCatalog,
   miniCatalogFiles,
+  newEntry,
   type MiniCatalogFiles,
 } from "./support/mini-catalog.mts";
 
@@ -164,6 +165,19 @@ describe("genIde", () => {
     ).toEqual([
       '" window.move-left: unsupported in IntelliJ: No action moves a split.',
     ]);
+  });
+
+  test("orders the entries that bind one Vim key in different modes by id, whatever the entry order", () => {
+    const files = miniCatalogFiles();
+    const visual = newEntry("diag.mark", "SPC f m", "Mark problem");
+    visual.keys = { vim: ["]d"] };
+    visual.modes = ["x"];
+    visual.deviation = entryOf(files, "diag.next").deviation!;
+    fileOf(files, "diag").data.commands.push(visual);
+    const catalog = miniCatalog(files);
+    expect(
+      genIde({ ...catalog, entries: [...catalog.entries].reverse() }),
+    ).toEqual(genIde(catalog));
   });
 
   test("leaves out a group with no leaf below it that the IDE supports", () => {
