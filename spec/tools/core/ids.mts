@@ -75,6 +75,19 @@ export function checkIds(
   return sortDiagnostics([...found, ...generated]);
 }
 
+/**
+ * "check-ids: resolved 4/6 VS Code commands and 3/4 IntelliJ actions; unsupported entries: VS Code 1,
+ * IntelliJ 1": how many of the IDs that checkIds checked it found, given its diagnostics, and how
+ * many entries have no block for an IDE.
+ */
+export function idSummary(
+  commands: readonly CommandFile[],
+  generatedCommandIds: readonly string[],
+  diagnostics: readonly Diagnostic[],
+): string {
+  return "";
+}
+
 const UNKNOWN: Record<Ide, string> = {
   vscode: "UNKNOWN_COMMAND",
   intellij: "UNKNOWN_ACTION",

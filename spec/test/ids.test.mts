@@ -7,6 +7,7 @@ import type {
 } from "../tools/core/catalog.mts";
 import {
   checkIds,
+  idSummary,
   suggest,
   type CommandFile,
   type IdSnapshots,
@@ -241,5 +242,45 @@ describe("checkIds", () => {
         'vscode.exec.command "workbench.action.quickOpn" is not in spec/ids/vscode.json',
       ),
     ]);
+  });
+});
+
+describe("idSummary", () => {
+  test("counts the resolved IDs of each IDE and the entries without an IDE block", () => {
+    const files: CommandFile[] = [
+      {
+        path: WINDOW,
+        data: {
+          commands: [
+            entry(
+              "window.only",
+              { vimKeys: "<C-w>o" },
+              { action: "UnsplitAll" },
+            ),
+            entry("window.focus-left", SAVE, { ideavimKeys: "<C-w>h" }),
+            entry("window.move-left", SAVE, undefined),
+          ],
+        },
+      },
+      {
+        path: FILE,
+        data: {
+          commands: [
+            entry("file.find", SAVE, { action: "GotoFile" }),
+            entry("file.reveal", undefined, { action: "SelectInProjectView" }),
+            entry("file.save", SAVE, { action: "SaveAll" }),
+          ],
+        },
+      },
+    ];
+    // VS Code: 4 entry commands and 2 generated commands; IntelliJ: 4 actions.
+    const found = [
+      diagnostic(FILE, "file.find", "UNKNOWN_COMMAND", "unknown"),
+      diagnostic(FILE, "file.find", "UNKNOWN_ACTION", "unknown"),
+      diagnostic(VSCODE_IDS, "vim.remap", "UNKNOWN_COMMAND", "unknown"),
+    ];
+    expect(idSummary(files, ["whichkey.show", "vim.remap"], found)).toBe(
+      "check-ids: resolved 4/6 VS Code commands and 3/4 IntelliJ actions; unsupported entries: VS Code 1, IntelliJ 1",
+    );
   });
 });
