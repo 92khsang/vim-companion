@@ -37,3 +37,10 @@ export function parseVim(text: string): ParsedKey {
     tokens: [...text.matchAll(VIM_TOKEN)].map((match) => match[0]),
   };
 }
+
+export function compareKeys(
+  a: readonly string[],
+  b: readonly string[],
+): number {
+  return 0;
+}

@@ -1,6 +1,6 @@
 import fc from "fast-check";
 import { describe, expect, test } from "vitest";
-import { parseLeader, parseVim } from "../tools/core/keys.mts";
+import { compareKeys, parseLeader, parseVim } from "../tools/core/keys.mts";
 
 // The key grammar, written out independently of the implementation.
 const LEADER_CHARS = [
@@ -167,6 +167,39 @@ describe("parseVim", () => {
           ).toBe(false);
         },
       ),
+    );
+  });
+});
+
+describe("compareKeys", () => {
+  // Small alphabets make shared prefixes and equal keys likely.
+  const key = fc.oneof(
+    leaderKey,
+    vimKey,
+    fc.array(fc.constantFrom("SPC", "a", "b", "/", "<C-w>"), {
+      minLength: 1,
+      maxLength: 3,
+    }),
+  );
+  const same = (a: readonly string[], b: readonly string[]): boolean =>
+    a.length === b.length && a.every((token, i) => token === b[i]);
+
+  test("is a total order consistent with token equality", () => {
+    fc.assert(
+      fc.property(key, key, (a, b) => {
+        expect(compareKeys(a, [...a])).toBe(0);
+        expect(compareKeys(a, b) === 0).toBe(same(a, b));
+        expect(
+          Math.sign(compareKeys(a, b)) + Math.sign(compareKeys(b, a)),
+        ).toBe(0);
+      }),
+    );
+    fc.assert(
+      fc.property(key, key, key, (a, b, c) => {
+        if (compareKeys(a, b) <= 0 && compareKeys(b, c) <= 0) {
+          expect(compareKeys(a, c)).toBeLessThanOrEqual(0);
+        }
+      }),
     );
   });
 });
