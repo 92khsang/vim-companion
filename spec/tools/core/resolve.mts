@@ -1,5 +1,6 @@
 // Leader key resolution (design §4): where a sequence of leader keys leads in one IDE.
 import type { Ide, KeyCatalog } from "./catalog.mts";
+import { aliasActive } from "./version.mts";
 
 /**
  * `experimental`: experimental entries are bound too. `version`: the release whose aliases are
@@ -25,8 +26,14 @@ export function resolve(
 ): Resolution {
   if (keys.length === 0) return { kind: "group", label: "" };
   const key = ["SPC", ...keys].join(" ");
-  const entry = catalog.entries.find((entry) =>
-    entry.keys.leader?.includes(key),
+  const version = options.version ?? "0.0.0";
+  const entry = catalog.entries.find(
+    (entry) =>
+      entry.keys.leader?.includes(key) ||
+      entry.aliases?.some(
+        (alias) =>
+          aliasActive(alias, version) && alias.keys.leader?.includes(key),
+      ),
   );
   if (entry !== undefined) {
     return {
