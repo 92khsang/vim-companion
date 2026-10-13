@@ -6,9 +6,11 @@ import {
   unsupportedLines,
   whichKeyArgs,
 } from "../tools/core/gen.mts";
+import { validateCatalog } from "../tools/core/validate.mts";
 import {
   entryOf,
   fileOf,
+  loadSchemas,
   miniCatalog,
   miniCatalogFiles,
   newEntry,
@@ -371,6 +373,28 @@ describe("genIde", () => {
         "  nmap ]<lt> <Action>(GotoNextError)",
       ],
     });
+  });
+
+  test("treats a Vim key as native in each IDE whose engine keys differ from it only in case inside <...>", () => {
+    // Vim, IdeaVim and VSCodeVim read <C-w>o, <c-w>o and <C-W>o as one key, so neither IDE maps
+    // the key: the files are those of the catalog without it.
+    const files = (vim?: string[]) => {
+      const copy = miniCatalogFiles();
+      const only = entryOf(copy, "window.only");
+      only.keys = {
+        leader: ["SPC w o"],
+        ...(vim === undefined ? {} : { vim }),
+      };
+      only.vscode!.exec = { vimKeys: "<c-w>o" };
+      only.intellij = { ideavimKeys: "<C-W>o" };
+      return copy;
+    };
+    expect(
+      validateCatalog(files(["<C-w>o"]), loadSchemas()).diagnostics,
+    ).toEqual([]);
+    expect(genIde(miniCatalog(files(["<C-w>o"])))).toEqual(
+      genIde(miniCatalog(files())),
+    );
   });
 });
 
