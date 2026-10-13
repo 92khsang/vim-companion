@@ -27,7 +27,7 @@ export function rows(
 /** A row of rows() and the entry whose key it is; undefined for a group. */
 export type EntryRow = { row: Row; entry: Entry | undefined };
 
-/** The rows of rows() with their entries, for which a key alone can be ambiguous across modes. */
+/** The rows of rows() with the entry whose key each leaf row is. */
 export function entryRows(
   catalog: KeyCatalog,
   ide: Ide,

@@ -473,16 +473,18 @@ function checkReservedKeys({ uses }: Context): Diagnostic[] {
   );
 }
 
-/** Rule DUPLICATE_KEY: no key sequence is bound twice in a mode, by entries or aliases. */
+/**
+ * Rule DUPLICATE_KEY: no key sequence is bound twice, by entries or aliases, whatever the modes.
+ * which-key and IDEA Which-Key keep one menu item or description per key for all modes, so a key
+ * belongs to one entry.
+ */
 function checkDuplicateKeys({ uses }: Context): Diagnostic[] {
   return uses.flatMap((use, i) => {
     if (!use.parsed.ok) return [];
-    const modes = modesOf(use.at.entry);
     const earlier = uses.slice(0, i).find(
       (other) =>
         other.kind === use.kind &&
         other.text === use.text &&
-        modesOf(other.at.entry).some((mode) => modes.includes(mode)) &&
         // An alias with a primary key of its own entry is for ALIAS to report.
         !(other.at === use.at && other.alias === undefined),
     );
