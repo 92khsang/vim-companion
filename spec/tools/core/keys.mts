@@ -18,9 +18,22 @@ export function parseLeader(text: string): ParsedKey {
   return { ok: true, tokens: text.split(" ") };
 }
 
+// One Vim key: a <...> group with no space, "<", ">" or "|" inside (\x21-\x7e without \x3c, \x3e
+// and \x7c), or one printable ASCII character other than space, "<" and "|". Without "|" a key
+// can stand in a vimrc map command, where "|" would end the command.
+const VIM_TOKEN =
+  /<[\x21-\x3b\x3d\x3f-\x7b\x7d\x7e]+>|[\x21-\x3b\x3d-\x7b\x7d\x7e]/g;
+const VIM_KEY = new RegExp(`^(?:${VIM_TOKEN.source})+$`);
+
 export function parseVim(text: string): ParsedKey {
+  if (!VIM_KEY.test(text)) {
+    return {
+      ok: false,
+      message: `${JSON.stringify(text)} is not a Vim key: keys without spaces, each a printable ASCII character other than < and |, or a <...> group such as <C-w>`,
+    };
+  }
   return {
     ok: true,
-    tokens: [...text.matchAll(/<[^>]*>|./g)].map((match) => match[0]),
+    tokens: [...text.matchAll(VIM_TOKEN)].map((match) => match[0]),
   };
 }
