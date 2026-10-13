@@ -25,7 +25,8 @@ description: Add, change or remove a command in the key catalog (spec/catalog/) 
   such as `Activate<ToolWindow>ToolWindow`, `Run` and `Debug`, are listed under `runtime`.
 - When an ID is missing, confirm it in the running IDE (`:actionlist <fragment>` in IdeaVim, "Copy
   Command ID" in the VS Code Keyboard Shortcuts editor), then run `pnpm ids:refresh vscode` or
-  `pnpm ids:refresh intellij` on that machine. Never type an ID into `spec/ids/` by hand.
+  `pnpm ids:refresh intellij` on that machine; the Commands of `spec/AGENTS.md` list what each
+  needs. Never type an ID into `spec/ids/` by hand.
 - When the engines give the key different meanings, or one IDE has no such command, record it in
   `semantics`, `deviation` or an unsupported note; do not force a match.
 

@@ -27,5 +27,6 @@ pnpm gen --check             # writes nothing; exits 1 when generated/ is stale,
 pnpm typecheck               # Node runs tools/*.mts without checking types
 pnpm test --update=new       # writes missing goldens only; works from the root or spec/
 pnpm ids:refresh vscode      # Linux: needs code and xvfb-run
-pnpm ids:refresh intellij    # reads the installed IDE and IdeaVim jars
+pnpm ids:refresh intellij    # Linux: needs unzip, and IDEA Ultimate from Toolbox with the plugins of ids/intellij.json (IdeaVIM)
+pnpm ids:refresh intellij --ide-home <dir> --plugins-dir <dir>    # the same for another Linux install
 ```
