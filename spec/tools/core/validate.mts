@@ -9,6 +9,7 @@ import type {
   Entry,
   Group,
   Ide,
+  KeyCatalog,
   KeySet,
   Mode,
 } from "./catalog.mts";
@@ -99,32 +100,53 @@ export function validateCatalog(
 }
 
 /**
- * The fixture files (design §5): each file against its fixture schema. The diagnostics are sorted
- * as those of validateCatalog.
+ * The fixture files (design §5): each file against its fixture schema, then the inline catalog of
+ * each file that matches it with the rules of validateCatalog. A fixture file holds entries of
+ * any category, so its stem is not compared with them. The diagnostics are sorted as those of
+ * validateCatalog.
  */
 export function validateFixtures(
   files: FixtureFiles,
   schemas: SchemaSet,
 ): Diagnostic[] {
-  return sortDiagnostics(
-    checkSchemas(
-      [
-        ...files.catalog.map((file) => ({
-          file,
-          schema: "fixture-catalog.schema.json",
-        })),
-        ...files.hintView.map((file) => ({
-          file,
-          schema: "fixture-hint-view.schema.json",
-        })),
-        {
-          file: files.versionOrder,
-          schema: "fixture-version-order.schema.json",
-        },
-      ],
-      schemas,
-    ),
+  const schemaErrors = checkSchemas(
+    [
+      ...files.catalog.map((file) => ({
+        file,
+        schema: "fixture-catalog.schema.json",
+      })),
+      ...files.hintView.map((file) => ({
+        file,
+        schema: "fixture-hint-view.schema.json",
+      })),
+      {
+        file: files.versionOrder,
+        schema: "fixture-version-order.schema.json",
+      },
+    ],
+    schemas,
   );
+  // As in validateCatalog, the rules need data that matches its schema.
+  const broken = new Set(schemaErrors.map(({ file }) => file));
+  const ruleErrors = [...files.catalog, ...files.hintView]
+    .filter(({ path }) => !broken.has(path))
+    .flatMap(({ path, data }) => {
+      const { catalog } = data as { catalog: KeyCatalog };
+      const placed = catalog.entries.map((entry) => ({
+        file: path,
+        stem: undefined,
+        entry,
+      }));
+      const context: Context = {
+        placed,
+        uses: keyUses(placed),
+        groups: { file: path, groups: catalog.groups },
+        ctrlKeys: { file: path, keys: [] },
+        retiredIds: { file: path, ids: [] },
+      };
+      return RULES.flatMap((rule) => rule(context));
+    });
+  return sortDiagnostics([...schemaErrors, ...ruleErrors]);
 }
 
 /**
@@ -173,8 +195,8 @@ function sortDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return diagnostics.sort((a, b) => compareText(key(a), key(b)));
 }
 
-/** An entry and the command file it comes from. */
-type Placed = { file: string; stem: string; entry: Entry };
+/** An entry and the file it comes from; `stem` is its category, undefined in a fixture file. */
+type Placed = { file: string; stem: string | undefined; entry: Entry };
 
 /** What the rules after SCHEMA see: typed data and the file of each part. */
 type Context = {
@@ -266,7 +288,7 @@ function checkCategories({ placed }: Context): Diagnostic[] {
   return placed.flatMap((at) => {
     const { stem, entry } = at;
     const found: Diagnostic[] = [];
-    if (entry.category !== stem) {
+    if (stem !== undefined && entry.category !== stem) {
       found.push(
         onEntry(
           at,
