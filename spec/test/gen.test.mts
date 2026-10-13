@@ -153,6 +153,19 @@ describe("genIde", () => {
     );
   });
 
+  test("writes the note of an entry that IntelliJ does not support as one comment line", () => {
+    // A line break in a comment would make IdeaVim run the rest of the note as a command.
+    const files = miniCatalogFiles();
+    entryOf(files, "window.move-left").support = {
+      intellij: { level: "none", note: " No action\n  moves a split. " },
+    };
+    expect(
+      rcLines(miniCatalog(files)).filter((line) => line.includes("moves")),
+    ).toEqual([
+      '" window.move-left: unsupported in IntelliJ: No action moves a split.',
+    ]);
+  });
+
   test("leaves out a group with no leaf below it that the IDE supports", () => {
     // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
     // does not support it instead.
