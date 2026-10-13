@@ -180,6 +180,16 @@ describe("genIde", () => {
     ).toEqual(genIde(catalog));
   });
 
+  test("throws when two entries bind one leader key in different modes, which which-key cannot tell apart", () => {
+    const files = miniCatalogFiles();
+    const visual = newEntry("file.pick", "SPC f f", "Pick file");
+    visual.modes = ["x"];
+    fileOf(files, "file").data.commands.push(visual);
+    expect(() => genIde(miniCatalog(files))).toThrow(
+      "SPC f f: file.find and file.pick bind it in different modes, which which-key cannot tell apart",
+    );
+  });
+
   test("leaves out a group with no leaf below it that the IDE supports", () => {
     // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
     // does not support it instead.
