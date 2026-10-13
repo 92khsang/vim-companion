@@ -8,6 +8,7 @@ import type {
   Diagnostic,
   Entry,
   Group,
+  Ide,
   KeySet,
   Mode,
 } from "./catalog.mts";
@@ -154,6 +155,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkUnusedGroups,
   checkDuplicateGroups,
   checkDuplicateLabels,
+  checkDeviations,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -552,6 +554,59 @@ function checkDuplicateLabels({ uses, groups }: Context): Diagnostic[] {
           ),
         ];
   });
+}
+
+/**
+ * Rule MISSING_DEVIATION: an entry with Vim keys has a deviation when an IDE that supports it
+ * remaps one of them, that is, runs anything but the same keys in its engine.
+ */
+function checkDeviations({ placed, uses }: Context): Diagnostic[] {
+  return placed.flatMap((at) => {
+    const { entry } = at;
+    if (entry.keys.vim === undefined || entry.deviation !== undefined)
+      return [];
+    const remapped = uses
+      .filter((use) => use.at === at && use.kind === "vim")
+      .flatMap((use) =>
+        IDES.filter(
+          (ide) => supported(entry, ide) && engineKeys(entry, ide) !== use.text,
+        ).map((ide) => ({ use, ide })),
+      );
+    const first = remapped[0];
+    return first === undefined
+      ? []
+      : [
+          onEntry(
+            at,
+            "MISSING_DEVIATION",
+            `${first.use.field} ${q(first.use.text)} is remapped in ${IDE_NAMES[first.ide]}, so "deviation" is required`,
+          ),
+        ];
+  });
+}
+
+const IDES = ["vscode", "intellij"] as const;
+
+const IDE_NAMES: Record<Ide, string> = {
+  vscode: "VS Code",
+  intellij: "IntelliJ",
+};
+
+/** Whether the entry runs in the IDE: it has a block there and a support level other than none. */
+function supported(entry: Entry, ide: Ide): boolean {
+  return entry[ide] !== undefined && entry.support?.[ide]?.level !== "none";
+}
+
+/** The keys that the IDE's engine replays for the entry, when it runs engine keys. */
+function engineKeys(entry: Entry, ide: Ide): string | undefined {
+  if (ide === "vscode") {
+    const exec = entry.vscode?.exec;
+    return exec !== undefined && "vimKeys" in exec ? exec.vimKeys : undefined;
+  }
+  const intellij = entry.intellij;
+  return intellij !== undefined && "ideavimKeys" in intellij
+    ? intellij.ideavimKeys
+    : undefined;
 }
 
 /** Whether the tokens begin with the tokens of the prefix. */
