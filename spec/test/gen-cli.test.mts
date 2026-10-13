@@ -107,4 +107,30 @@ describe("gen", () => {
     expect(gen("--root", root).status).toBe(0);
     expect(generated(root)).toEqual(expected());
   });
+
+  test("--check exits 0 when generated/ is up to date and otherwise prints each stale file and exits 1, writing nothing", () => {
+    const root = writeSpec("check");
+    gen("--root", root);
+    const clean = gen("--root", root, "--check");
+    rmSync(join(root, "generated/fixtures-index.json"));
+    writeFileSync(join(root, "generated/vscode/vim-remaps.json"), "{}\n");
+    writeFileSync(join(root, "generated/vscode/old.json"), "{}\n");
+    const stale = generated(root);
+    expect([clean, gen("--root", root, "--check")]).toEqual([
+      { status: 0, stdout: [...UNSUPPORTED, ""].join("\n"), stderr: "" },
+      {
+        status: 1,
+        stdout: [
+          ...UNSUPPORTED,
+          "missing spec/generated/fixtures-index.json",
+          "extra spec/generated/vscode/old.json",
+          "changed spec/generated/vscode/vim-remaps.json",
+          "run: pnpm gen",
+          "",
+        ].join("\n"),
+        stderr: "",
+      },
+    ]);
+    expect(generated(root)).toEqual(stale);
+  });
 });
