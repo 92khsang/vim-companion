@@ -1005,4 +1005,51 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("MISSING_GROUP reports, once, a leader prefix below the root that has no group label", () => {
+    runCases([
+      {
+        name: "a leaf at the root",
+        change: (files) => {
+          fileOf(files, "git").data.commands.push(
+            newEntry("git.blame", "SPC b", "Show line blame"),
+          );
+        },
+        expected: [],
+      },
+      {
+        name: "two keys below a prefix without a group",
+        change: (files) => {
+          fileOf(files, "git").data.commands.push(
+            newEntry("git.log", "SPC x l", "Show Git log"),
+            newEntry("git.push", "SPC x p", "Push commits"),
+          );
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC x",
+            "MISSING_GROUP",
+            'no group label for this prefix of "SPC x l", bound by git.log',
+          ),
+        ],
+      },
+      {
+        name: "an alias two groups deep",
+        change: (files) => {
+          entryOf(files, "search.project").aliases![0]!.keys.leader = [
+            "SPC f z s",
+          ];
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC f z",
+            "MISSING_GROUP",
+            'no group label for this prefix of "SPC f z s", bound by search.project (alias)',
+          ),
+        ],
+      },
+    ]);
+  });
 });
