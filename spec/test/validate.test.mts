@@ -1135,4 +1135,82 @@ describe("validateCatalog", () => {
       },
     ]);
   });
+
+  test("DUPLICATE_LABEL reports a label that another child of the same leader prefix has", () => {
+    runCases([
+      {
+        name: "a group label under another prefix, and alias labels",
+        change: (files) => {
+          fileOf(files, "window").data.commands.push(
+            newEntry("window.new", "SPC w n", "Window"),
+          );
+          entryOf(files, "search.project").aliases!.push({
+            keys: { leader: ["SPC f x"] },
+            until: "1.0.0",
+          });
+        },
+        expected: [],
+      },
+      {
+        name: "two entries with one label below a prefix",
+        change: (files) => {
+          fileOf(files, "file").data.commands.push(
+            newEntry("file.open", "SPC f o", "Find file"),
+          );
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.open",
+            "DUPLICATE_LABEL",
+            'keys.leader[0] "SPC f o": the label "Find file" is also used under "SPC f" by file.find "SPC f f"',
+          ),
+        ],
+      },
+      {
+        name: "one entry twice below a prefix",
+        change: (files) => {
+          entryOf(files, "file.find").keys.leader!.push("SPC f g");
+        },
+        expected: [
+          diagnostic(
+            FILE,
+            "file.find",
+            "DUPLICATE_LABEL",
+            'keys.leader[2] "SPC f g": the label "Find file" is also used under "SPC f" by file.find "SPC f f"',
+          ),
+        ],
+      },
+      {
+        name: "a group with the label of a leaf at the root",
+        change: (files) => {
+          fileOf(files, "git").data.commands.push(
+            newEntry("git.blame", "SPC b", "Git"),
+          );
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC g",
+            "DUPLICATE_LABEL",
+            'the label "Git" is also used under "SPC" by git.blame "SPC b"',
+          ),
+        ],
+      },
+      {
+        name: "two groups with one label below a prefix",
+        change: (files) => {
+          files.groups.data.groups[2]!.label = "Code";
+        },
+        expected: [
+          diagnostic(
+            GROUPS,
+            "SPC g",
+            "DUPLICATE_LABEL",
+            'the label "Code" is also used under "SPC" by group "SPC c"',
+          ),
+        ],
+      },
+    ]);
+  });
 });
