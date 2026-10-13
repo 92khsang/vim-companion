@@ -17,10 +17,16 @@ afterAll(() => {
   rmSync(base, { recursive: true, force: true });
 });
 
-/** Writes the catalog and the real schemas to <base>/<name>/spec and returns that directory. */
+/**
+ * Writes the catalog, the real schemas and the real fixtures to <base>/<name>/spec and returns
+ * that directory.
+ */
 function writeSpec(name: string, files: MiniCatalogFiles): string {
   const root = join(base, name, "spec");
   cpSync(join(specDir, "schema"), join(root, "schema"), { recursive: true });
+  cpSync(join(specDir, "fixtures"), join(root, "fixtures"), {
+    recursive: true,
+  });
   for (const { path, data } of [
     ...files.commands,
     files.groups,
@@ -99,6 +105,21 @@ describe("spec:check", () => {
       cannotRun("'--rot'"),
       cannotRun("spec/catalog/groups.json: "),
       cannotRun('no schema with key or ref "commands.schema.json"'),
+    ]);
+  });
+
+  test("exits 2 with a message when a fixture file is missing or not JSON", () => {
+    const noVersionOrder = writeSpec("no-version-order", miniCatalogFiles());
+    const versionOrder = join(noVersionOrder, "fixtures/version-order.json");
+    rmSync(versionOrder);
+    const brokenFixture = writeSpec("broken-fixture", miniCatalogFiles());
+    writeFileSync(join(brokenFixture, "fixtures/hint-view/menu.json"), "{\n");
+    expect([
+      specCheck("--root", noVersionOrder),
+      specCheck("--root", brokenFixture),
+    ]).toEqual([
+      cannotRun(versionOrder),
+      cannotRun("spec/fixtures/hint-view/menu.json: "),
     ]);
   });
 });
