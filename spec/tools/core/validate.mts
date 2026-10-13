@@ -149,6 +149,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkForbiddenKeys,
   checkReservedKeys,
   checkDuplicateKeys,
+  checkPrefixConflicts,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -388,6 +389,40 @@ function checkDuplicateKeys({ uses }: Context): Diagnostic[] {
           ),
         ];
   });
+}
+
+/**
+ * Rule PREFIX_CONFLICT: no key starts a longer key of its kind, whatever the modes. Below a leader
+ * prefix that starts a longer key there must be a group, not a leaf.
+ */
+function checkPrefixConflicts({ uses }: Context): Diagnostic[] {
+  return uses.flatMap((use) => {
+    if (!use.parsed.ok) return [];
+    const prefix = use.parsed.tokens;
+    return uses
+      .filter(
+        (other) =>
+          other.kind === use.kind &&
+          other.parsed.ok &&
+          other.parsed.tokens.length > prefix.length &&
+          startsWith(other.parsed.tokens, prefix),
+      )
+      .map((other) =>
+        onEntry(
+          use.at,
+          "PREFIX_CONFLICT",
+          `${use.field} ${q(use.text)} is a prefix of ${q(other.text)}, bound by ${owner(other)}`,
+        ),
+      );
+  });
+}
+
+/** Whether the tokens begin with the tokens of the prefix. */
+function startsWith(
+  tokens: readonly string[],
+  prefix: readonly string[],
+): boolean {
+  return prefix.every((token, i) => tokens[i] === token);
 }
 
 /** The entry that a key belongs to, for messages: "search.project (alias)". */
