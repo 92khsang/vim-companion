@@ -193,11 +193,13 @@ function fakeVscode(dir: string) {
       'const extensions = option("--extensions-dir");',
       "const copied = readdirSync(extensions).sort();",
       'const manifests = copied.map((name) => JSON.parse(readFileSync(join(extensions, name, "package.json"), "utf8")));',
-      'const activated = process.env.VIM_COMPANION_IDS_ACTIVATE.split(",").flatMap((id) => {',
-      "  const found = manifests.find((m) => `${m.publisher}.${m.name}`.toLowerCase() === id.toLowerCase());",
-      "  return found ? [`${found.publisher}.${found.name}@${found.version}`] : [];",
-      "});",
       "const env = process.env;",
+      "// FAKE_CODE_SKIP: extensions that fail to activate.",
+      'const skipped = (env.FAKE_CODE_SKIP ?? "").split(",");',
+      'const activated = env.VIM_COMPANION_IDS_ACTIVATE.split(",").flatMap((id) => {',
+      "  const found = manifests.find((m) => `${m.publisher}.${m.name}`.toLowerCase() === id.toLowerCase());",
+      "  return found && !skipped.includes(id) ? [`${found.publisher}.${found.name}@${found.version}`] : [];",
+      "});",
       "writeFileSync(env.FAKE_CODE_LOG, JSON.stringify({",
       "  args,",
       "  home: env.HOME,",
@@ -207,8 +209,10 @@ function fakeVscode(dir: string) {
       "  copied,",
       '  settings: JSON.parse(readFileSync(join(option("--user-data-dir"), "User/settings.json"), "utf8")),',
       "}));",
+      "// FAKE_CODE_NO_DUMP: VS Code fails before the dump extension writes anything.",
+      'if (env.FAKE_CODE_NO_DUMP) { console.log("[main] Window failed to load"); process.exit(1); }',
       "writeFileSync(env.VIM_COMPANION_IDS_OUT, JSON.stringify({",
-      '  vscode: "1.200.0",',
+      '  vscode: env.FAKE_CODE_VERSION ?? "1.200.0",',
       "  activated,",
       '  commands: ["vim.remap", "workbench.action.quickOpen"],',
       "}));",
@@ -444,5 +448,43 @@ describe("ids:refresh", () => {
       },
       tempLeft: false,
     });
+  });
+
+  test("vscode exits 2 when an extension is missing or the dump disagrees with the install", () => {
+    const dir = join(base, "vscode-fails");
+    const root = specIn(dir);
+    const fake = fakeVscode(dir);
+    const run = (env: Record<string, string>, ...extensions: string[]) =>
+      refreshWith(
+        { ...fake.env, ...env },
+        "vscode",
+        "--root",
+        root,
+        "--code",
+        fake.code,
+        ...extensions.flatMap((id) => ["--extension", id]),
+      );
+    const both = ["vscodevim.vim", "VSpaceCode.whichkey"];
+    const appPackage = join(dir, "code/resources/app/package.json");
+    const fails = (message: string) => ({
+      status: 2,
+      stdout: "",
+      stderr: `ids:refresh: ${message}\n`,
+    });
+    expect([
+      run({}, "vscodevim.vim", "redhat.java"),
+      run({ FAKE_CODE_VERSION: "1.199.0" }, ...both),
+      run({ FAKE_CODE_SKIP: "vscodevim.vim" }, ...both),
+      run({ FAKE_CODE_NO_DUMP: "1" }, ...both),
+      textOf(join(root, "ids/vscode.json")),
+    ]).toEqual([
+      fails(`${join(fake.home, ".vscode/extensions")} has no redhat.java`),
+      fails(`the dump is of VS Code 1.199.0, but ${appPackage} has 1.200.0`),
+      fails("vscodevim.vim 1.32.4 did not activate in VS Code"),
+      fails(
+        "VS Code wrote no command IDs; the end of its output:\n[main] Window failed to load",
+      ),
+      null,
+    ]);
   });
 });
