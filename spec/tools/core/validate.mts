@@ -153,6 +153,7 @@ const RULES: ((context: Context) => Diagnostic[])[] = [
   checkMissingGroups,
   checkUnusedGroups,
   checkDuplicateGroups,
+  checkDuplicateLabels,
 ];
 
 type KeyKind = "leader" | "vim";
@@ -487,6 +488,69 @@ function checkDuplicateGroups({ groups }: Context): Diagnostic[] {
         message: `the prefix already has the group label ${q(earlier.label)}`,
       },
     ];
+  });
+}
+
+/**
+ * Rule DUPLICATE_LABEL: the children of a leader prefix, that is the entries at their leader keys
+ * and the groups, have different labels. Alias labels are generated, so aliases are exempt.
+ */
+function checkDuplicateLabels({ uses, groups }: Context): Diagnostic[] {
+  type Child = {
+    parent: string;
+    label: string;
+    name: string;
+    report: (message: string) => Diagnostic;
+  };
+  const parentOf = (tokens: readonly string[]) => tokens.slice(0, -1).join(" ");
+  const children: Child[] = [];
+  for (const use of uses) {
+    if (use.kind !== "leader" || use.alias !== undefined || !use.parsed.ok) {
+      continue;
+    }
+    children.push({
+      parent: parentOf(use.parsed.tokens),
+      label: use.at.entry.label,
+      name: `${use.at.entry.id} ${q(use.text)}`,
+      report: (message) =>
+        onEntry(
+          use.at,
+          "DUPLICATE_LABEL",
+          `${use.field} ${q(use.text)}: ${message}`,
+        ),
+    });
+  }
+  const seen = new Set<string>();
+  for (const group of groups.groups) {
+    const parsed = parseLeader(group.keys);
+    // KEY_SYNTAX and DUPLICATE_GROUP report malformed and repeated groups.
+    if (!parsed.ok || seen.has(group.keys)) continue;
+    seen.add(group.keys);
+    children.push({
+      parent: parentOf(parsed.tokens),
+      label: group.label,
+      name: `group ${q(group.keys)}`,
+      report: (message) => ({
+        file: groups.file,
+        where: group.keys,
+        code: "DUPLICATE_LABEL",
+        message,
+      }),
+    });
+  }
+  return children.flatMap((child, i) => {
+    const first = children
+      .slice(0, i)
+      .find(
+        (other) => other.parent === child.parent && other.label === child.label,
+      );
+    return first === undefined
+      ? []
+      : [
+          child.report(
+            `the label ${q(child.label)} is also used under ${q(child.parent)} by ${first.name}`,
+          ),
+        ];
   });
 }
 
