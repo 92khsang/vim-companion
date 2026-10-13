@@ -85,7 +85,23 @@ export function ideavimLhs(tokens: readonly string[]): string {
   return `<leader>${keys.join("")}`;
 }
 
-/** The `before` array of a VSCodeVim remap: one Vim notation token per key, Space as "<space>". */
+// VSCodeVim 1.32.4 has no names for <, | and \: it matches a typed <, | or \ as the character.
+const VSCODEVIM_CHARACTERS: ReadonlyMap<string, string> = new Map([
+  ["<lt>", "<"],
+  ["<bar>", "|"],
+  ["<bslash>", "\\"],
+]);
+
+/**
+ * A token as a VSCodeVim remap writes it: SPC as "<space>", <lt>, <Bar> and <Bslash> in any case
+ * as <, | and \, and any other token as it is.
+ */
+export function vscodevimToken(token: string): string {
+  if (token === "SPC") return "<space>";
+  return VSCODEVIM_CHARACTERS.get(token.toLowerCase()) ?? token;
+}
+
+/** The `before` array of a VSCodeVim remap: a vscodevimToken per key. */
 export function vscodevimBefore(tokens: readonly string[]): string[] {
-  return tokens.map((token) => (token === "SPC" ? "<space>" : token));
+  return tokens.map(vscodevimToken);
 }

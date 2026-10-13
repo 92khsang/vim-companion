@@ -15,6 +15,7 @@ import {
   ideavimLhs,
   parseVim,
   vscodevimBefore,
+  vscodevimToken,
   whichKeyKey,
 } from "./keys.mts";
 import { boundKeys, leaderLeaves } from "./resolve.mts";
@@ -279,9 +280,17 @@ function whichKeyItems(nodes: readonly Node[]): WhichKeyItem[] {
 /** How which-key runs an exec: its command, or vim.remap with the Vim keys. */
 function whichKeyCall(exec: VscodeExec): { command: string; args?: unknown } {
   if ("vimKeys" in exec) {
-    return { command: "vim.remap", args: { after: vimTokens(exec.vimKeys) } };
+    return {
+      command: "vim.remap",
+      args: { after: vscodevimKeys(exec.vimKeys) },
+    };
   }
   return { command: exec.command, ...whichKeyArgs(exec.args ?? []) };
+}
+
+/** The tokens of Vim keys as VSCodeVim reads them (vscodevimToken). */
+function vscodevimKeys(keys: string): string[] {
+  return vimTokens(keys).map(vscodevimToken);
 }
 
 // VS Code: VSCodeVim remaps (vscode/vim-remaps.json)
@@ -314,7 +323,7 @@ function vimRemap(leaf: Leaf, exec: VscodeExec): object | undefined {
   if ("vimKeys" in exec) {
     return exec.vimKeys === leaf.key
       ? undefined
-      : { before, after: vimTokens(exec.vimKeys) };
+      : { before, after: vscodevimKeys(exec.vimKeys) };
   }
   const call = whichKeyArgs(exec.args ?? []);
   return {
