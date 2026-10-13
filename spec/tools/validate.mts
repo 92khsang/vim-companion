@@ -1,4 +1,5 @@
-// pnpm spec:check: validates the catalog (design §3).
+// pnpm spec:check: validates the catalog (design §3). Prints "<file>: <where>: <message>" lines in
+// sorted order and exits 1 when there are any.
 // --root <dir>: the spec directory to check; by default the one this file is in.
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -11,4 +12,8 @@ const { diagnostics } = validateCatalog(
   readCatalogFiles(root),
   readSchemas(root),
 );
-process.exitCode = diagnostics.length > 0 ? 1 : 0;
+const lines = diagnostics
+  .map(({ file, where, message }) => `${file}: ${where}: ${message}`)
+  .sort();
+for (const line of lines) console.log(line);
+process.exitCode = lines.length > 0 ? 1 : 0;
