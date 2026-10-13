@@ -113,7 +113,7 @@ function leavesOf(nodes: readonly Node[]): Leaf[] {
   );
 }
 
-/** The Vim keys of the entries, then those of their aliases, each sorted by key. */
+/** The Vim keys of the stable entries, then those of their aliases, each sorted by key. */
 function vimLeaves(catalog: Catalog): Leaf[] {
   const leaf = (key: string, entry: Entry, label: string): Leaf => ({
     kind: "leaf",
@@ -123,10 +123,11 @@ function vimLeaves(catalog: Catalog): Leaf[] {
     entry,
   });
   const byKey = (a: Leaf, b: Leaf) => compareKeys(a.tokens, b.tokens);
-  const primary = catalog.entries.flatMap((entry) =>
+  const stable = catalog.entries.filter((entry) => entry.stage === "stable");
+  const primary = stable.flatMap((entry) =>
     (entry.keys.vim ?? []).map((key) => leaf(key, entry, entry.label)),
   );
-  const aliases = catalog.entries.flatMap((entry) =>
+  const aliases = stable.flatMap((entry) =>
     (entry.aliases ?? []).flatMap((alias) =>
       (alias.keys.vim ?? []).map((key) =>
         leaf(key, entry, `Moved to ${entry.keys.vim?.[0]}`),
