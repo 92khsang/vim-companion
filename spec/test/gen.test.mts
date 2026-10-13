@@ -3,6 +3,7 @@ import type { Catalog } from "../tools/core/catalog.mts";
 import {
   generatedCommandIds,
   genIde,
+  unsupportedLines,
   whichKeyArgs,
 } from "../tools/core/gen.mts";
 import {
@@ -297,6 +298,21 @@ describe("generatedCommandIds", () => {
       generatedCommandIds(miniCatalog(files)),
       generatedCommandIds(miniCatalog()),
     ]).toEqual([["whichkey.show"], ["whichkey.show", "vim.remap"]]);
+  });
+});
+
+describe("unsupportedLines", () => {
+  test("lists the keys that the files of each IDE leave out because the IDE does not support them", () => {
+    // In the mini catalog IntelliJ does not support window.move-left; here VS Code loses code.hover.
+    const files = miniCatalogFiles();
+    const hover = entryOf(files, "code.hover");
+    delete hover.vscode;
+    hover.support = { vscode: { level: "none", note: "No hover command." } };
+    expect(unsupportedLines(miniCatalog(files))).toEqual([
+      "gen: unsupported in VS Code: SPC c d (code.hover)",
+      "gen: unsupported in VS Code: K (code.hover)",
+      "gen: unsupported in IntelliJ: SPC w m h (window.move-left)",
+    ]);
   });
 });
 

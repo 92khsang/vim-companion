@@ -67,6 +67,14 @@ export function generatedCommandIds(catalog: Catalog): string[] {
   return vimKeys ? ["whichkey.show", "vim.remap"] : ["whichkey.show"];
 }
 
+/** A line per key that genIde leaves out of an IDE's files because the IDE does not support it. */
+export function unsupportedLines(
+  catalog: Catalog,
+  options: GenOptions = {},
+): string[] {
+  return [];
+}
+
 /**
  * The `args` of a which-key item or of a VSCodeVim remap command for the positional arguments of
  * a command. Both spread a list into positional arguments and drop a falsy value, so one truthy
