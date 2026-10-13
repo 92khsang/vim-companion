@@ -91,6 +91,18 @@ describe("genIde", () => {
     ]);
   });
 
+  test("writes no if has('mac') block when no Ctrl key has a macOS value", () => {
+    const catalog: Catalog = {
+      ...miniCatalog(),
+      ctrlKeys: [{ key: "<C-a>", handler: "a:vim" }],
+    };
+    expect(rcLines(catalog).slice(-3)).toEqual([
+      '" Ctrl keys: which of the IDE and IdeaVim handles each key; modes left out go to IdeaVim.',
+      "sethandler <C-a> a:vim",
+      "",
+    ]);
+  });
+
   test("leaves out a group with no leaf below it that the IDE supports", () => {
     // SPC w m holds only window.move-left, which IntelliJ does not support. In a copy, VS Code
     // does not support it instead.
