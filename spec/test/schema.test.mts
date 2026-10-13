@@ -1,7 +1,11 @@
+import type { AnySchema } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
+import fc from "fast-check";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "vitest";
+import { isVersion } from "../tools/core/version.mts";
+import { loadSchemas } from "./support/mini-catalog.mts";
 
 const schemaDir = join(import.meta.dirname, "../schema");
 
@@ -34,4 +38,49 @@ test("every schema is JSON Schema 2020-12 and compiles in ajv strict mode", () =
   expect(
     refs.filter((ref) => typeof ajv.getSchema(ref) !== "function"),
   ).toEqual([]);
+});
+
+test("the fixture schemas accept as a version exactly the strings isVersion accepts", () => {
+  const ajv = new Ajv2020({ strict: true, allErrors: true });
+  for (const [name, schema] of Object.entries(loadSchemas())) {
+    ajv.addSchema(schema as AnySchema, name);
+  }
+  const version = ajv.getSchema("fixture-catalog.schema.json#/$defs/version");
+  expect(typeof version).toBe("function");
+  // Near-versions: parts with leading zeros, letters or nothing, and build metadata; and short
+  // strings of version characters.
+  const part = fc.constantFrom(
+    "0",
+    "1",
+    "10",
+    "01",
+    "",
+    "a",
+    "-",
+    "rc",
+    "1a",
+    "A-1",
+  );
+  const nearVersion = fc
+    .tuple(
+      part,
+      part,
+      part,
+      fc.array(part, { maxLength: 3 }),
+      fc.constantFrom("", "+b", "+1.2"),
+    )
+    .map(
+      ([major, minor, patch, prerelease, build]) =>
+        `${major}.${minor}.${patch}${prerelease.length > 0 ? `-${prerelease.join(".")}` : ""}${build}`,
+    );
+  const text = fc.string({
+    unit: fc.constantFrom(..."01.-+aZ "),
+    maxLength: 12,
+  });
+  fc.assert(
+    fc.property(fc.oneof(nearVersion, text), (candidate) => {
+      expect(version!(candidate)).toBe(isVersion(candidate));
+    }),
+    { numRuns: 1000 },
+  );
 });
