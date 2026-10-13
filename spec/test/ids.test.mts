@@ -8,6 +8,7 @@ import type {
 import {
   checkIds,
   idSummary,
+  mergeVscodeCommands,
   parseDescriptorIds,
   runtimeIntellijIds,
   suggest,
@@ -334,6 +335,60 @@ describe("runtimeIntellijIds", () => {
       "DebugClass",
       "Run",
       "RunClass",
+    ]);
+  });
+});
+
+describe("mergeVscodeCommands", () => {
+  test("unites the dump with the contributed and key-bound commands, without internal IDs or removal dashes", () => {
+    const manifests: unknown[] = [
+      {
+        name: "markdown-language-features",
+        contributes: {
+          commands: [
+            { command: "markdown.showPreview", title: "Open Preview" },
+            { command: "_markdown.copyImage", title: "Copy Image" },
+          ],
+          keybindings: [
+            { command: "markdown.showPreview", key: "ctrl+shift+v" },
+            { key: "f1" },
+          ],
+        },
+      },
+      {
+        name: "vim",
+        contributes: {
+          commands: [{ command: "toggleVim", title: "Vim: Toggle Vim Mode" }],
+          keybindings: [
+            { command: "-editor.action.selectAll", key: "ctrl+a" },
+            { command: "extension.vim_escape", key: "escape" },
+          ],
+        },
+      },
+      { name: "theme-defaults" },
+      // A manifest may contribute one command or key binding as an object instead of an array.
+      {
+        name: "git",
+        contributes: {
+          commands: { command: "git.openChange", title: "Open Changes" },
+          keybindings: { command: "git.commit", key: "ctrl+enter" },
+        },
+      },
+    ];
+    const dumped = [
+      "workbench.action.quickOpen",
+      "vim.remap",
+      "markdown.showPreview",
+    ];
+    expect(mergeVscodeCommands(dumped, manifests)).toEqual([
+      "editor.action.selectAll",
+      "extension.vim_escape",
+      "git.commit",
+      "git.openChange",
+      "markdown.showPreview",
+      "toggleVim",
+      "vim.remap",
+      "workbench.action.quickOpen",
     ]);
   });
 });

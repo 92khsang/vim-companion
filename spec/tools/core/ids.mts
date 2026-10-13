@@ -177,6 +177,17 @@ export function runtimeIntellijIds(
   return [...new Set(derived)].filter((id) => !known.has(id)).sort();
 }
 
+/**
+ * The command IDs of a VS Code dump (`commands.getCommands(true)`) together with the commands that
+ * extension manifests (package.json) contribute or bind keys to, sorted and without repeats.
+ */
+export function mergeVscodeCommands(
+  dumped: readonly string[],
+  manifests: readonly unknown[],
+): string[] {
+  return [];
+}
+
 /** The three known IDs nearest to `id` by edit distance; ties in code-unit order. */
 export function suggest(id: string, known: Iterable<string>): string[] {
   return [...known]
