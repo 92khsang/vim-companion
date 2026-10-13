@@ -72,6 +72,7 @@ export function ideavimLhs(tokens: readonly string[]): string {
   return `<leader>${keys.join("")}`;
 }
 
+/** The `before` array of a VSCodeVim remap: one Vim notation token per key, Space as "<space>". */
 export function vscodevimBefore(tokens: readonly string[]): string[] {
-  return [];
+  return tokens.map((token) => (token === "SPC" ? "<space>" : token));
 }
