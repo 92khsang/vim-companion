@@ -637,6 +637,7 @@ describe("ids:refresh", () => {
   test.each([
     { signal: "SIGINT", status: 130, vscode: "quits on SIGTERM", env: {} },
     { signal: "SIGTERM", status: 143, vscode: "quits on SIGTERM", env: {} },
+    { signal: "SIGHUP", status: 129, vscode: "quits on SIGTERM", env: {} },
     {
       signal: "SIGINT",
       status: 130,
