@@ -63,7 +63,7 @@
       "category": "file",
       "keys": { "leader": ["SPC f p"] },
       "label": "Reveal file in tree",
-      "description": "Shows the current file in the project file tree and selects it.",
+      "description": "Shows the current file in the project file tree, selects it and moves focus to the tree.",
       "examples": [
         "SPC f p → the tree scrolls to the current file and selects it"
       ],
@@ -78,6 +78,12 @@
         "count": "none"
       },
       "intellij": { "action": "SelectInProjectView" },
+      "support": {
+        "vscode": {
+          "level": "full",
+          "note": "In the Explorer, Escape clears the selection but does not return to the editor; Ctrl+Shift+E (Cmd+Shift+E on macOS) does."
+        }
+      },
       "verifiedAgainst": {
         "vscode": "1.141.0",
         "vscodevim": "1.32.4",
