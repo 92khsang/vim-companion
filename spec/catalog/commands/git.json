@@ -7,7 +7,9 @@
       "keys": { "leader": ["SPC g g"] },
       "label": "Show Git changes",
       "description": "Shows the changed files and the commit message box.",
-      "examples": ["SPC g g → the modified files and the commit box appear"],
+      "examples": [
+        "SPC g g → the changed files and the commit message box appear"
+      ],
       "rationale": "Doom Emacs (Magit) and LazyVim (lazygit) use SPC g g to open the Git status.",
       "stage": "stable",
       "vscode": {
@@ -17,6 +19,12 @@
         "count": "none"
       },
       "intellij": { "action": "ActivateCommitToolWindow" },
+      "support": {
+        "vscode": {
+          "level": "full",
+          "note": "Focus moves to the commit message box, or to the list of changes when a file there is already selected. In the box, Escape erases the message instead of returning to the editor; Ctrl+Z (Cmd+Z on macOS) restores it. Ctrl+Shift+G (also on macOS) returns to the editor."
+        }
+      },
       "verifiedAgainst": {
         "vscode": "1.141.0",
         "vscodevim": "1.32.4",
