@@ -104,6 +104,10 @@ d=open(sys.argv[1],"rb").read(24); print(*struct.unpack(">II", d[16:24]))' "$st/
   stop)
     pid=$(pid_of "$1")
     r "/bin/kill $pid" || true
+    if [ "$1" = intellij ]; then
+      sleep 5
+      r "'$md/scripts/intellij-sandbox.sh' stop-job '$IJ_WORK'" || true
+    fi
     ;;
   *) echo "unknown command $cmd" >&2; exit 2 ;;
 esac

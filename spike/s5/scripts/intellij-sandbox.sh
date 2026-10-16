@@ -51,8 +51,46 @@ case $cmd in
     gh=$1 log=$2
     shift 2
     cd "$b"
-    run_env "$gh" /usr/bin/nohup "$b/gradlew" --no-daemon --console=plain runIde2026_2_3 "$@" > "$log" 2>&1 < /dev/null &
-    echo $!
+    if [ "$os" = Darwin ]; then
+      # Java's AWT refuses to open a window outside the console user's GUI session ("WindowServer
+      # is not available"), and a plain ssh session is outside it. So the run task starts as a
+      # one-shot launchd job in the gui/<uid> domain; the job's plist and label stay in <work dir>.
+      label=s5.intellij.$$
+      plist=$work/launchd.plist
+      {
+        echo '<?xml version="1.0" encoding="UTF-8"?>'
+        echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
+        echo "<plist version=\"1.0\"><dict><key>Label</key><string>$label</string>"
+        echo "<key>WorkingDirectory</key><string>$b</string>"
+        echo "<key>StandardOutPath</key><string>$log</string><key>StandardErrorPath</key><string>$log</string>"
+        echo '<key>RunAtLoad</key><true/><key>ProgramArguments</key><array>'
+        for a in /bin/bash "$0" run-fg "$work" "$gh" runIde2026_2_3 "$@"; do echo "<string>$a</string>"; done
+        echo '</array></dict></plist>'
+      } > "$plist"
+      echo "$label" > "$work/launchd.label"
+      /bin/launchctl bootstrap "gui/$(/usr/bin/id -u)" "$plist"
+      pid=""
+      for _ in 1 2 3 4 5 6 7 8 9 10; do
+        pid=$(/bin/launchctl print "gui/$(/usr/bin/id -u)/$label" 2>/dev/null | /usr/bin/awk '$1=="pid" {print $3; exit}')
+        [ -n "$pid" ] && break
+        /bin/sleep 1
+      done
+      echo "$pid"
+    else
+      run_env "$gh" /usr/bin/nohup "$b/gradlew" --no-daemon --console=plain runIde2026_2_3 "$@" > "$log" 2>&1 < /dev/null &
+      echo $!
+    fi
+    ;;
+  run-fg)
+    # The launchd job of `start` on macOS: one Gradle task in the foreground.
+    gh=$1
+    shift
+    cd "$b"
+    run_env "$gh" "$b/gradlew" --no-daemon --console=plain "$@"
+    ;;
+  stop-job)
+    # Removes the launchd job of `start` on macOS, after the IDE has exited or been killed.
+    [ -f "$work/launchd.label" ] && /bin/launchctl bootout "gui/$(/usr/bin/id -u)/$(/bin/cat "$work/launchd.label")" || true
     ;;
   task)
     gh=$1

@@ -1,0 +1,30 @@
+# Spike S5: can a Java program started over ssh open a window on the Mac? (2026-10-16 18:45 +0900, macOS 27.0.1 26A434)
+# Copied from the agent's terminal. Java is Temurin 25.0.4+7 (aarch64) as unpacked by intellij-sandbox.sh setup.
+# G.java: prints GraphicsEnvironment.isHeadless(), then creates and disposes a java.awt.Frame.
+
+# 1. The IntelliJ sandbox, `intellij-sandbox.sh start` before this change: `gradlew runIde2026_2_3` started with nohup from the ssh session.
+#    The IDE's output in its Gradle log (the log was deleted with the run directory; excerpt from the terminal):
+WARN - #c.i.p.i.b.AppStarter - can't get shell environment
+java.lang.IllegalStateException: 'SHELL' environment variable is not set
+**Start Failed**
+Unable to detect graphics environment.
+> Task :runIde2026_2_3 FAILED
+
+# 2. G.java run directly in the ssh session:
+$ ssh $MAC_HOST '... /usr/bin/env -i HOME="$D" PATH=/usr/bin:/bin "$J" G.java'
+headless=true
+Exception in thread "main" java.awt.HeadlessException:
+The application is not running in a desktop session,
+
+$ ssh $MAC_HOST '... /usr/bin/env -i HOME="$D" PATH=/usr/bin:/bin "$J" -Djava.awt.headless=false G.java'
+headless=false
+Exception in thread "main" java.awt.AWTError: WindowServer is not available
+	at java.desktop/sun.lwawt.macosx.LWCToolkit.<clinit>(LWCToolkit.java:158)
+
+# 3. G.java as a one-shot launchd job in the gui/<uid> domain, bootstrapped from the ssh session
+#    (plist: Label, ProgramArguments = [$J, $D/G.java], WorkingDirectory, StandardOutPath, StandardErrorPath, RunAtLoad):
+$ ssh $MAC_HOST '... /bin/launchctl bootstrap gui/$(/usr/bin/id -u) "$D/job.plist"; /bin/sleep 6; /bin/cat "$D/out.txt"; /bin/launchctl bootout gui/$(/usr/bin/id -u)/$L'
+bootstrap rc=0
+headless=false
+frame ok
+bootout rc=0
