@@ -1,0 +1,49 @@
+### fetch-node: fetch https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz node.tar.gz bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057
+### fetch-pnpm: fetch https://registry.npmjs.org/pnpm/-/pnpm-11.28.5.tgz pnpm.tgz 1ef4e447a68713656064f3f174c0f44719960a043a3fe2299169d08cf1dbf8ee
+### fetch-jdk: fetch https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4%2B7/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4_7.tar.gz jdk.tar.gz 5a101c54abf5a9f16c0f70d8c38ba99e6567c1ba213378f0bb04497284f051bd
+### unpack-node: /usr/bin/tar -xf $TMPDIR/s5run.f3Nd96iP59/dl/node.tar.gz -C $TMPDIR/s5run.f3Nd96iP59/tools
+### mkdir-pnpm: /bin/mkdir -p $TMPDIR/s5run.f3Nd96iP59/tools/pnpm
+### unpack-pnpm: /usr/bin/tar -xzf $TMPDIR/s5run.f3Nd96iP59/dl/pnpm.tgz -C $TMPDIR/s5run.f3Nd96iP59/tools/pnpm
+### unpack-jdk: /usr/bin/tar -xzf $TMPDIR/s5run.f3Nd96iP59/dl/jdk.tar.gz -C $TMPDIR/s5run.f3Nd96iP59/tools
+### install: e $TMPDIR/s5run.f3Nd96iP59/tools/bin/pnpm install --frozen-lockfile --store-dir $TMPDIR/s5run.f3Nd96iP59/cache/pnpm-store
+? Verifying lockfile against supply-chain policies (269 entries)...
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +250
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: $TMPDIR/s5run.f3Nd96iP59/cache/pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 250, reused 0, downloaded 246, added 95
+✓ Lockfile passes supply-chain policies (269 entries in 1s)
+Progress: resolved 250, reused 0, downloaded 250, added 249
+Progress: resolved 250, reused 0, downloaded 250, added 250, done
+
+devDependencies:
++ @vscode/test-cli 0.0.15
++ @vscode/test-electron 3.1.0
++ @vscode/vsce 4.0.0
+
+Done in 2.5s using pnpm v11.28.5
+### test: e $TMPDIR/s5run.f3Nd96iP59/tools/bin/pnpm test
+$ vscode-test
+- Resolving version...
+✔ Validated version: 1.141.0
+- Found at https://update.code.visualstudio.com/1.141.0/darwin-arm64/stable?released=true
+✔ Found at https://update.code.visualstudio.com/1.141.0/darwin-arm64/stable?released=true
+- Downloading (313.56 MB)
+✔ Downloaded VS Code (b224f6bf5a4fcad5fa4c640ed10f179c3b613e48) into $TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0
+WARNING: IPC handle "$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/user-data/1.14-main.sock" is longer than 103 chars, try a shorter --user-data-dir
+[91m[main 2026-10-16T08:28:08.925Z][0m Error: listen EINVAL: invalid argument $TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/user-data/1.14-main.sock
+    at Server.setupListenHandle [as _listen2] (node:net:2306:21)
+    at listenInCluster (node:net:2437:12)
+    at Server.listen (node:net:2579:5)
+    at file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:37:636
+    at new Promise (<anonymous>)
+    at $E (file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:37:587)
+    at WC.claimInstance (file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:190:58591)
+    at file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:190:55872
+    at i.invokeFunction (file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:186:941)
+    at WC.startup (file://$TMPDIR/s5run.f3Nd96iP59/repo/spike/s5/target-c/.vscode-test/vscode-darwin-arm64-1.141.0/Visual%20Studio%20Code.app/Contents/Resources/app/out/mainImpl.js:190:55783)
+Exit code:   1
+[ELIFECYCLE] Test failed. See above for more details.

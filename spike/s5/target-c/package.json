@@ -1,0 +1,52 @@
+{
+  "name": "s5-target-c",
+  "displayName": "S5 Target C Probe",
+  "description": "Spike S5 target (c): a throwaway VS Code extension with one test and a key probe.",
+  "version": "0.0.1",
+  "publisher": "vim-companion-spike",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/92khsang/vim-companion"
+  },
+  "packageManager": "pnpm@11.28.5",
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "S5 probe",
+      "properties": {
+        "s5.report": {
+          "type": "string",
+          "default": "",
+          "description": "File to which the probe appends what VS Code reports."
+        },
+        "s5.fixture": {
+          "type": "string",
+          "default": "",
+          "description": "Fixture file that the probe opens in the editor."
+        },
+        "s5.keylog": {
+          "type": "string",
+          "default": "",
+          "description": "File to which the key probe appends every key it receives."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "vscode-test",
+    "package": "vsce package --no-dependencies --skip-license"
+  },
+  "devDependencies": {
+    "@vscode/test-cli": "0.0.15",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "4.0.0"
+  }
+}

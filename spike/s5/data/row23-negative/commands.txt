@@ -1,0 +1,51 @@
+# Spike S5 rows 2 and 3: negative controls before any grant (2026-10-16 18:36-18:45 +0900, macOS 27.0.1 26A434).
+# Agent host: Ubuntu 26.04.1. $MD is the spike directory on the Mac (under its per-user $TMPDIR),
+# refreshed with mac-push.sh at 18:35 (s5win and s5keys rebuilt with /usr/bin/swiftc).
+# Sandboxes: VS Code 1.141.0 (the Mac's app) with target (c) 0.0.1; the IntelliJ sandbox of target (b)
+# (runIde2026_2_3, IU-262.10968.63) cloned at 2e3635ed9e4ae71650b3dd1f9fcde3019583ef0a.
+
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-awake.sh start 10800
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-push.sh <artifacts>
+R="spike/s5/scripts/mac-row23.sh <state dir>"     # with MAC_HOST and MAC_SPIKE_DIR set
+$R vscode-start                                    # vscode-report.log, vscode-install.log
+$R preflight                                       # preflight.txt
+$R front; $R windows vscode                        # front-vscode.txt, windows-vscode.txt
+$R capture vscode neg-vscode-1                     # captures/
+$R keys vscode 1 1 40 neg-vscode-keys-1            # keys/
+$R intellij-start <commit> $MD/cache/gradle-home   # intellij-setup.log, intellij-report.log (third attempt, see below)
+$R preflight                                       # preflight-2.txt
+$R front; $R windows intellij                      # front-intellij.txt, windows-intellij.txt
+$R capture intellij neg-intellij-1
+$R keys intellij 1 1 40 neg-intellij-keys-1
+ssh $MAC_HOST '/usr/bin/log show --start "2026-10-16 18:36:20" --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"AUTHREQ\" OR eventMessage CONTAINS \"Publishing\")"'
+    # tcc-spike.txt: only the requests whose responsible process is com.apple.sshd-keygen-wrapper;
+    # other apps' requests are left out.
+
+# The IntelliJ sandbox: attempt 1 passed an empty Gradle user home by mistake and failed before the IDE
+# started. Attempt 2 started `gradlew runIde2026_2_3` with nohup in the ssh session; the IDE printed
+# "Unable to detect graphics environment" (awt-over-ssh.txt). Attempt 3 used intellij-sandbox.sh at this
+# commit, which starts the run task as a one-shot launchd job in the gui/<uid> domain.
+
+# Both key runs stopped before key 1 with exit code 4: s5keys requires the input source
+# com.apple.keylayout.ABC, and the Mac's was com.apple.inputmethod.Korean.2SetKorean. No key was posted.
+
+# Rerun after the user switched the input source to ABC and granted Screen Recording only
+# (2026-10-16 18:50-18:52 +0900; the TCC log shows the grant at 18:50:01 as a Modify of
+# kTCCServiceScreenCapture for the path /usr/libexec/sshd-keygen-wrapper). Accessibility not granted.
+# Same sandboxes and $MD as above; every line is a new ssh session.
+$R preflight                                       # preflight-3.txt: screenCapture=true, postEvent=false, axTrusted=false, ABC
+ssh $MAC_HOST "$MD/bin/s5win activate <IntelliJ pid>"   # activate-intellij-2.txt
+$R keys intellij 1 1 40 neg-intellij-keys-2        # keys/
+ssh $MAC_HOST "$MD/bin/s5win activate <VS Code pid>"    # activate-vscode-2.txt
+$R front                                           # front-vscode-2.txt
+$R keys vscode 1 1 40 neg-vscode-keys-2            # keys/
+ssh $MAC_HOST '/usr/bin/log show --start "2026-10-16 18:45:00" --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"AUTHREQ\" OR eventMessage CONTAINS \"Publishing\")"'
+    # tcc-spike-2.txt: the requests whose responsible process is com.apple.sshd-keygen-wrapper and the
+    # Publishing events for that path. ScreenCapture: authValue=2 (allowed); PostEvent, Accessibility
+    # and ListenEvent: authValue=0 (denied). No kTCCServiceAppleEvents (Automation) request.
+
+# s5win activate: the AX call fails with -25211 (no Accessibility), and its fallback
+# NSRunningApplication.activate brought each sandbox IDE to the front from an ssh session; the user
+# clicked nothing. s5keys then found the IDE in front and the input source ABC, posted key 1 (`r`) with
+# exit code 0, and neither probe recorded it (no key log file was created). VS Code's probe reported
+# probe-focus true at the activation, before the key was sent.

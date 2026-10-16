@@ -1,0 +1,7 @@
+# Makes target (c) its own pnpm workspace, apart from the repository's root workspace.
+packages:
+  - .
+
+# vsce-sign downloads a signing binary in its install script; packaging a VSIX does not need it.
+allowBuilds:
+  '@vscode/vsce-sign': false
