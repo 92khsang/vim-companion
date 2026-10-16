@@ -1,0 +1,466 @@
+[
+  {
+    "id": "normal [\"m\"]",
+    "title": "After m",
+    "keys": ["m"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Set mark {a-z A-Z} at the cursor",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "sample": "a"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"f\"]",
+    "title": "After f",
+    "keys": ["f"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Move to the next {char} on the line",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 22],
+          "mode": "normal"
+        },
+        "sample": "e"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"F\"]",
+    "title": "After F",
+    "keys": ["F"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Move to the previous {char} on the line",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "sample": "o"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"t\"]",
+    "title": "After t",
+    "keys": ["t"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Move to just before the next {char}",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 21],
+          "mode": "normal"
+        },
+        "sample": "e"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"T\"]",
+    "title": "After T",
+    "keys": ["T"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Move to just after the previous {char}",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 7],
+          "mode": "normal"
+        },
+        "sample": "o"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"r\"]",
+    "title": "After r",
+    "keys": ["r"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Replace the character under the cursor with {char}",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tXo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "sample": "X"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"'\"]",
+    "title": "After '",
+    "keys": ["'"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Jump to the first non-blank of the line of mark {char}",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 2],
+          "mode": "normal"
+        },
+        "sample": "a",
+        "setup": ["m", "a", "0"]
+      }
+    ]
+  },
+  {
+    "id": "normal [\"`\"]",
+    "title": "After `",
+    "keys": ["`"],
+    "rows": [
+      {
+        "key": "{<character>}",
+        "label": "Jump to mark {char}",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "sample": "a",
+        "setup": ["m", "a", "0"]
+      }
+    ]
+  },
+  {
+    "id": "normal [\"\\\"\"]",
+    "title": "After \"",
+    "keys": ["\""],
+    "rows": [
+      {
+        "key": "{<register>}",
+        "label": "Use register {char} for the next command",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "sample": "a"
+      }
+    ]
+  },
+  {
+    "id": "normal [\"d\",\"i\"]",
+    "title": "After di",
+    "keys": ["d", "i"],
+    "rows": [
+      {
+        "key": "\"",
+        "label": "Delete inside double quotes",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"\", [three]) { four(five) }"
+          },
+          "cursor": [1, 12],
+          "mode": "normal",
+          "registers": {
+            "\"": "two",
+            "-": "two"
+          }
+        }
+      },
+      {
+        "key": "'",
+        "label": "Delete inside single quotes",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "(",
+        "label": "Delete inside parentheses",
+        "expect": {
+          "text": {
+            "1": "  if () { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal",
+          "registers": {
+            "\"": "one, \"two\", [three]",
+            "-": "one, \"two\", [three]"
+          }
+        }
+      },
+      {
+        "key": ")",
+        "label": "Delete inside parentheses",
+        "expect": {
+          "text": {
+            "1": "  if () { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal",
+          "registers": {
+            "\"": "one, \"two\", [three]",
+            "-": "one, \"two\", [three]"
+          }
+        }
+      },
+      {
+        "key": "<",
+        "label": "Delete inside angle brackets",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": ">",
+        "label": "Delete inside angle brackets",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "B",
+        "label": "Delete inside braces",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "W",
+        "label": "Delete the WORD under the cursor",
+        "expect": {
+          "text": {
+            "1": "  if (one,  [three]) { four(five) }"
+          },
+          "cursor": [1, 11],
+          "mode": "normal",
+          "registers": {
+            "\"": "\"two\",",
+            "-": "\"two\","
+          }
+        }
+      },
+      {
+        "key": "[",
+        "label": "Delete inside square brackets",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "]",
+        "label": "Delete inside square brackets",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "`",
+        "label": "Delete inside backticks",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "a",
+        "label": "Delete the argument under the cursor",
+        "expect": {
+          "text": {
+            "1": "  if (one, , [three]) { four(five) }"
+          },
+          "cursor": [1, 11],
+          "mode": "normal",
+          "registers": {
+            "\"": "\"two\"",
+            "-": "\"two\""
+          }
+        }
+      },
+      {
+        "key": "b",
+        "label": "Delete inside parentheses",
+        "expect": {
+          "text": {
+            "1": "  if () { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal",
+          "registers": {
+            "\"": "one, \"two\", [three]",
+            "-": "one, \"two\", [three]"
+          }
+        }
+      },
+      {
+        "key": "e",
+        "label": "Delete the entire buffer except leading and trailing blank lines",
+        "expect": {
+          "text": [""],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "\"": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu",
+            "1": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu"
+          }
+        }
+      },
+      {
+        "key": "i",
+        "label": "Delete the lines of the cursor's indentation level",
+        "expect": {
+          "text": [
+            "alpha beta gamma delta",
+            "epsilon zeta eta theta",
+            "iota kappa lambda mu"
+          ],
+          "cursor": [1, 0],
+          "mode": "normal",
+          "registers": {
+            "\"": "  if (one, \"two\", [three]) { four(five) }",
+            "1": "  if (one, \"two\", [three]) { four(five) }"
+          }
+        }
+      },
+      {
+        "key": "l",
+        "label": "Wait for the object of the last-object prefix (targets)",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "n",
+        "label": "Wait for the object of the next-object prefix (targets)",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "p",
+        "label": "Delete the paragraph",
+        "expect": {
+          "text": [""],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "\"": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu",
+            "1": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu"
+          }
+        }
+      },
+      {
+        "key": "q",
+        "label": "Delete inside the nearest quotes (targets)",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"\", [three]) { four(five) }"
+          },
+          "cursor": [1, 12],
+          "mode": "normal",
+          "registers": {
+            "\"": "two",
+            "-": "two"
+          }
+        },
+        "when": {
+          "vim.targets.enable": true
+        }
+      },
+      {
+        "key": "s",
+        "label": "Delete the sentence",
+        "expect": {
+          "text": [""],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "\"": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu",
+            "1": "alpha beta gamma delta\n  if (one, \"two\", [three]) { four(five) }\nepsilon zeta eta theta\niota kappa lambda mu"
+          }
+        }
+      },
+      {
+        "key": "t",
+        "label": "Delete inside the tag",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "w",
+        "label": "Delete the word under the cursor",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"\", [three]) { four(five) }"
+          },
+          "cursor": [1, 12],
+          "mode": "normal",
+          "registers": {
+            "\"": "two",
+            "-": "two"
+          }
+        }
+      },
+      {
+        "key": "{",
+        "label": "Delete inside braces",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "}",
+        "label": "Delete inside braces",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        }
+      },
+      {
+        "key": "{<leader>}",
+        "label": "Wait for w: delete the camelCase part of a word (camelCaseMotion, i<leader>w)",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "sample": "\\",
+        "when": {
+          "vim.camelCaseMotion.enable": true
+        }
+      }
+    ]
+  }
+]

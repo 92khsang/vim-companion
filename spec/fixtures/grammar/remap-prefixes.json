@@ -1,0 +1,176 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Strict prefixes of the generated remaps: gr (of gra, gri, grn and grr in Normal mode and gra in Visual mode), [ (of [d and [e) and ] (of ]d and ]e). Before the mapping timeout the engine waits for the rest of a mapping; after it, Vim runs the typed keys as built-in commands, and gr, [ and ] each still wait for a character or a second key.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "gr-normal",
+      "description": "gr in Normal mode: a prefix of the gra, gri, grn and grr remaps, and after the timeout the built-in gr{char} that waits for a character.",
+      "help": ["map-typing", "map-ambiguous", "gr"],
+      "steps": [
+        {
+          "key": "g",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "r",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g", "r"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["g", "r"],
+          "operator": null,
+          "count": null,
+          "register": null
+        },
+        "engines": {
+          "vscodevim": {
+            "expect": {
+              "mode": "normal",
+              "pending": [],
+              "operator": null,
+              "count": null,
+              "register": null
+            },
+            "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), when vim.timeout ran out after gr, VSCodeVim ran g and r as actions, found no gr action (vim.replaceWithRegister is off by default) and dropped both keys, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. Vim's built-in gr{char} still waits for a character."
+          }
+        }
+      }
+    },
+    {
+      "id": "bracket-left-normal",
+      "description": "[ in Normal mode: a prefix of the [d and [e remaps, and after the timeout the built-in [ prefix.",
+      "help": ["map-typing", "map-ambiguous", "["],
+      "steps": [
+        {
+          "key": "[",
+          "expect": {
+            "mode": "normal",
+            "pending": ["["],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["["],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "bracket-right-normal",
+      "description": "] in Normal mode: a prefix of the ]d and ]e remaps, and after the timeout the built-in ] prefix.",
+      "help": ["map-typing", "map-ambiguous", "]"],
+      "steps": [
+        {
+          "key": "]",
+          "expect": {
+            "mode": "normal",
+            "pending": ["]"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["]"],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "gr-visual",
+      "description": "gr in Visual mode: a prefix of the gra remap, and after the timeout the built-in gr{char}, which in Visual mode replaces every selected character like r{char}.",
+      "help": ["map-typing", "map-ambiguous", "gr", "v_r"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "g",
+          "expect": {
+            "mode": "visual",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "r",
+          "expect": {
+            "mode": "visual",
+            "pending": ["g", "r"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "visual",
+          "pending": ["g", "r"],
+          "operator": null,
+          "count": null,
+          "register": null
+        },
+        "engines": {
+          "vscodevim": {
+            "expect": {
+              "mode": "visual",
+              "pending": [],
+              "operator": null,
+              "count": null,
+              "register": null
+            },
+            "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), when vim.timeout ran out after gr in Visual mode, VSCodeVim ran g and r as actions, found no Visual-mode gr action and dropped both keys, staying in Visual mode, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. Vim's built-in gr{char} still waits for a character."
+          }
+        }
+      }
+    }
+  ]
+}

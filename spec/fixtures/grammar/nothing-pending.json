@@ -1,0 +1,113 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "States with nothing pending: after <Esc> cancels a command, after a completed command, and in Insert mode.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "escape-cancels-operator",
+      "description": "<Esc> cancels a pending operator and leaves Normal mode with nothing pending.",
+      "help": ["mode-switching", "d"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["d"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held d in its remap buffer as a prefix of its default surround mapping ds (vim.surround is on by default) and had not started the d operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "<Esc>",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "completed-command",
+      "description": "dw deletes a word; after the motion nothing is pending.",
+      "help": ["d", "w"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["d"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held d in its remap buffer as a prefix of its default surround mapping ds (vim.surround is on by default) and had not started the d operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "w",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "insert-mode",
+      "description": "i enters Insert mode with nothing pending.",
+      "help": ["i"],
+      "steps": [
+        {
+          "key": "i",
+          "expect": {
+            "mode": "insert",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}

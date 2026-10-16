@@ -1,0 +1,228 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Text-object prefixes i and a after an operator and in Visual mode.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "delete-inner",
+      "description": "di waits for the text object.",
+      "help": ["text-objects", "d"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["d"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held d in its remap buffer as a prefix of its default surround mapping ds (vim.surround is on by default) and had not started the d operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "i",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d", "i"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "delete-around",
+      "description": "da waits for the text object.",
+      "help": ["text-objects", "d"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["d"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held d in its remap buffer as a prefix of its default surround mapping ds (vim.surround is on by default) and had not started the d operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d", "a"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "change-inner",
+      "description": "ci waits for the text object.",
+      "help": ["text-objects", "c"],
+      "steps": [
+        {
+          "key": "c",
+          "expect": {
+            "mode": "normal",
+            "pending": ["c"],
+            "operator": "c",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["c"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held c in its remap buffer as a prefix of its default surround mapping cs (vim.surround is on by default) and had not started the c operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "i",
+          "expect": {
+            "mode": "normal",
+            "pending": ["c", "i"],
+            "operator": "c",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "yank-inner",
+      "description": "yi waits for the text object.",
+      "help": ["text-objects", "y"],
+      "steps": [
+        {
+          "key": "y",
+          "expect": {
+            "mode": "normal",
+            "pending": ["y"],
+            "operator": "y",
+            "count": null,
+            "register": null
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["y"],
+                "operator": null,
+                "count": null,
+                "register": null
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held y in its remap buffer as a prefix of its default surround mapping ys (vim.surround is on by default) and had not started the y operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        },
+        {
+          "key": "i",
+          "expect": {
+            "mode": "normal",
+            "pending": ["y", "i"],
+            "operator": "y",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-inner",
+      "description": "i in Visual mode waits for the text object that extends the selection.",
+      "help": ["text-objects", "v_iw", "v"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "i",
+          "expect": {
+            "mode": "visual",
+            "pending": ["i"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-around",
+      "description": "a in Visual mode waits for the text object that extends the selection.",
+      "help": ["text-objects", "v_aw", "v"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "visual",
+            "pending": ["a"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}
