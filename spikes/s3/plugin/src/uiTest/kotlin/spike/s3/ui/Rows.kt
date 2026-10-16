@@ -46,7 +46,10 @@ object Rows {
       val keysLogged = s.h.deliveredKeys().split('\t')
       val want = keys.map { if (it is Step.Type && it.c == ' ') " " else it.label }
       val pass = keysLogged == want && !line.contains("\"delivered\":false")
-      s.log(J.obj("event" to "delivery-check", "sequence" to name, "logged" to keysLogged, "want" to want, "pass" to pass))
+      s.log(J.obj(
+        "event" to "delivery-check", "sequence" to name, "logged" to keysLogged, "want" to want, "pass" to pass,
+        "shell" to s.shellState(), "windows" to J.Raw(s.h.windows()), "focusOwner" to s.h.focusOwner(),
+      ))
       ok = ok && pass
     }
     return ok
@@ -129,7 +132,8 @@ object DotRow {
 
   val cases = listOf(
     Case("SPC c f", "Reformat.java", "class Reformat {\nint   a=1;\n  void f( ){int b =2 ;}\n}\n", 17, Step.keys(" cf")),
-    Case("]d", "Errors.java", "class Errors {\n  void f() {\n    int a = ;\n    int b = ;\n  }\n}\n", 0, Step.keys("]d")),
+    // `x` deletes a character inside a comment, so that it adds no error and `]d` always goes to the same error.
+    Case("]d", "Errors.java", "// note x\nclass Errors {\n  void f() {\n    int a = ;\n    int b = ;\n  }\n}\n", 8, Step.keys("]d")),
   )
 
   fun run(s: Session) {
@@ -155,7 +159,10 @@ object DotRow {
     s.h.beginTrial()
     var expected = 0
     val steps = ArrayList<StepResult>()
-    for (step in listOf<Step>(Step.Type('x')) + c.action) {
+    expected += 1
+    steps += s.send(Step.Type('x'), expected, checkFocus = false)
+    if (c.file == "Errors.java") waitErrorsStable(s)
+    for (step in c.action) {
       expected += step.expectedKeys
       steps += s.send(step, expected, checkFocus = false)
     }
@@ -181,6 +188,23 @@ object DotRow {
     ))
   }
 
+  /** Waits until the daemon has published the same error count for 1 s, at most 15 s. */
+  private fun waitErrorsStable(s: Session) {
+    var last = -2
+    var since = System.nanoTime()
+    val end = System.nanoTime() + 15_000_000_000L
+    while (System.nanoTime() < end) {
+      val n = s.h.errorCount()
+      if (n != last) {
+        last = n
+        since = System.nanoTime()
+      } else if (n >= 2 && System.nanoTime() - since > 1_000_000_000L) {
+        return
+      }
+      Thread.sleep(100)
+    }
+  }
+
   /** Waits until the text and caret have not changed for 600 ms, at most 10 s. */
   private fun waitStable(s: Session) {
     var last = ""
@@ -195,6 +219,98 @@ object DotRow {
         return
       }
       Thread.sleep(50)
+    }
+  }
+}
+
+/**
+ * Hangul rows with real IBus and ibus-hangul in the GNOME harness. Every sequence starts in Normal mode and in
+ * ibus-hangul's Hangul mode. Steps do not wait for an expected key count, because whether and when a key reaches
+ * IdeaVim is what these rows measure; each step waits a fixed time and records what arrived.
+ */
+object HangulIbus {
+  class Seq(val name: String, val steps: List<Pair<Step, Long>>)
+
+  private const val SETTLE = 400L
+  private const val TIMEOUT = 1500L // longer than IdeaVim's default 'timeoutlen' of 1000 ms
+
+  val sequences = listOf(
+    Seq("SPC g", listOf(Step.Type(' ') to SETTLE, Step.Type('g') to TIMEOUT, Step.ESC to SETTLE)),
+    Seq("SPC SPC", listOf(Step.Type(' ') to SETTLE, Step.Type(' ') to TIMEOUT)),
+    Seq("SPC /", listOf(Step.Type(' ') to SETTLE, Step.Type('/') to TIMEOUT)),
+    Seq("SPC Shift+Space", listOf(Step.Type(' ') to SETTLE, Step.SHIFT_SPACE to TIMEOUT)),
+    Seq("SPC Esc", listOf(Step.Type(' ') to SETTLE, Step.ESC to SETTLE)),
+    Seq("SPC Ctrl+[", listOf(Step.Type(' ') to SETTLE, Step.CTRL_BRACKET to SETTLE)),
+  )
+
+  fun run(s: Session) {
+    val hosts = if (Env.pluginOff) listOf("off") else Env.hosts
+    for (host in hosts) {
+      if (!Env.pluginOff) s.h.setHost(host, true)
+      for (n in 1..Env.trials) {
+        for (seq in sequences) {
+          try {
+            one(s, host, n, seq)
+          } catch (e: Throwable) {
+            s.log(J.obj("case" to "hangul-ibus:${seq.name}", "host" to host, "trial" to n, "error" to e.toString()))
+          }
+          s.closePopups()
+        }
+      }
+    }
+  }
+
+  private fun one(s: Session, host: String, n: Int, seq: Seq) {
+    s.reset(Rows.TEXT, 9)
+    val before = s.ensureHangulMode()
+    val ibusFrom = s.ibusEvents.size
+    if (!Env.pluginOff) s.h.beginTrial()
+    val steps = ArrayList<String>()
+    for ((step, wait) in seq.steps) {
+      s.keys.press(step)
+      Thread.sleep(wait)
+      steps += J.obj(
+        "step" to step.label, "shell" to J.Raw(s.shellState().ifEmpty { "null" }),
+        "delivered" to (if (Env.pluginOff) null else s.h.deliveredKeys()),
+        "hostShowing" to (if (Env.pluginOff) null else s.h.hostShowing()),
+      )
+    }
+    val state = if (Env.pluginOff) RemoteState.state(s.driver) else s.h.report()
+    s.log(J.obj(
+      "case" to "hangul-ibus:${seq.name}", "host" to host, "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit,
+      "variant" to System.getProperty("s3.rcExtra").orEmpty(), "pluginOff" to Env.pluginOff, "time" to s.now(),
+      "shellBefore" to J.Raw(before.ifEmpty { "null" }), "steps" to J.Raw(steps.joinToString(",", "[", "]")),
+      "ibusEvents" to s.ibusEvents.toList().drop(ibusFrom), "state" to J.Raw(state),
+    ))
+  }
+
+  /** Committed Hangul through real ibus-hangul: `ㅎ`, `한` and `한글` typed in Hangul mode in Normal mode. */
+  fun commits(s: Session) {
+    if (!Env.pluginOff) s.h.setHost(Env.hosts.firstOrNull() ?: "layer", true)
+    val texts = listOf("ㅎ" to "g", "한" to "gks", "한글" to "gksrmf")
+    for (n in 1..Env.trials) {
+      for ((text, keys) in texts) {
+        try {
+          s.reset(Rows.TEXT, 0)
+          val before = s.ensureHangulMode()
+          s.h.beginTrial()
+          for (c in keys) {
+            s.keys.press(Step.Type(c))
+            Thread.sleep(30)
+          }
+          // Shift+Space leaves Hangul mode, which makes ibus-hangul commit what it is still composing.
+          s.keys.press(Step.SHIFT_SPACE)
+          s.waitUntil(1500) { s.h.deliveredCount() >= text.length }
+          Thread.sleep(150)
+          s.log(J.obj(
+            "case" to "commit-ibus:$text", "host" to (Env.hosts.firstOrNull() ?: "layer"), "trial" to n,
+            "ideavim" to Env.ideavim, "toolkit" to Env.toolkit, "time" to s.now(), "shellBefore" to J.Raw(before.ifEmpty { "null" }),
+            "steps" to J.Raw("[]"), "report" to J.Raw(s.h.report()),
+          ))
+        } catch (e: Throwable) {
+          s.log(J.obj("case" to "commit-ibus:$text", "trial" to n, "error" to e.toString()))
+        }
+      }
     }
   }
 }

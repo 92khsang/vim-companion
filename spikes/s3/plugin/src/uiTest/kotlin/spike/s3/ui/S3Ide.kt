@@ -57,6 +57,30 @@ object Env {
   /** First of three ports for JMX, RMI and the IDE's web server. */
   val portBase: Int = (prop("s3.portBase") ?: "9531").toInt()
   val display: String? = System.getenv("DISPLAY")
+
+  /** "xvfb" (Driver robot keys under Xvfb) or "gnome" (keys from the GNOME harness injector). */
+  val mode: String = prop("s3.mode") ?: "xvfb"
+
+  /** Command that starts the GNOME harness key injector in serve mode, split on spaces. */
+  val inject: List<String> = prop("s3.inject")?.split(' ') ?: emptyList()
+
+  /** Command that prints the GNOME harness state JSON, split on spaces. */
+  val shellState: List<String> = prop("s3.shellState")?.split(' ') ?: emptyList()
+
+  /** Command that prints IBus global engine changes (gnome-harness ibus-monitor.py), split on spaces. */
+  val ibusMonitor: List<String> = prop("s3.ibusMonitor")?.split(' ') ?: emptyList()
+
+  /** The harness's `ibus` command, split on spaces; arguments are appended. */
+  val ibusCmd: List<String> = prop("s3.ibusCmd")?.split(' ') ?: emptyList()
+
+  /** Extra lines appended to the sandbox ideavimrc, separated by `|`, e.g. `set keep-english-in-normal`. */
+  val rcExtra: List<String> = prop("s3.rcExtra")?.split('|')?.filter { it.isNotBlank() } ?: emptyList()
+
+  /** Plugin directories or archives to install besides IdeaVim and the spike plugin, separated by spaces. */
+  val extraPlugins: List<String> = prop("s3.extraPlugins")?.split(' ')?.filter { it.isNotBlank() } ?: emptyList()
+
+  /** When true, the spike plugin is not installed: the reference runs "with the spike plugin off". */
+  val pluginOff: Boolean = prop("s3.pluginOff") == "true"
   val versionTag: String = ideavim.substringAfter(':').substringBefore('@')
 }
 
@@ -104,6 +128,10 @@ interface HarnessRemote {
   fun report(): String
   fun errorCount(): Int
   fun openFile(relativePath: String): String
+  fun closeAllEditors(): String
+  fun focusEditor(): String
+  fun vimMode(): String
+  fun windows(): String
 }
 
 object S3Ide {
@@ -139,21 +167,36 @@ object S3Ide {
     val home = Env.work.resolve("home").createDirectories()
     val rcDir = Env.work.resolve("rc").createDirectories()
     val rc = rcDir.resolve("ideavimrc")
-    rc.writeText("source ${Env.rc.absolutePathString()}\n")
+    rc.writeText((listOf("source ${Env.rc.absolutePathString()}") + Env.rcExtra).joinToString("\n", postfix = "\n"))
     val ctx = Starter.newContext(name, TestCase(info, LocalProjectInfo(project())))
+    // Credentials stay in memory: the IDE never asks a Secret Service (keyring) for anything.
+    ctx.setProviderMemoryOnlyOnLinux()
+    // No notification balloons: under a window manager they can open windows of their own that take focus.
+    ctx.paths.configDir.resolve("options").createDirectories().resolve("notifications.xml")
+      .writeText("<application>\n  <component name=\"NotificationConfiguration\" showBalloons=\"false\" />\n</application>\n")
     ctx.pluginConfigurator.installPluginFromDir(ideavimDir)
-    ctx.pluginConfigurator.installPluginFromDir(spikeDir)
+    if (!Env.pluginOff) ctx.pluginConfigurator.installPluginFromDir(spikeDir)
+    for (extra in Env.extraPlugins) {
+      val path = Path(extra)
+      if (path.isDirectory()) ctx.pluginConfigurator.installPluginFromDir(path) else ctx.pluginConfigurator.installPluginFromPath(path)
+    }
     ctx.applyVMOptionsPatch {
-      // Isolation from the user's IDE and settings: own home, XDG directories and ideavimrc.
+      // Isolation from the user's IDE and settings: own user.home and ideavimrc. Under Xvfb the IDE also gets its own
+      // HOME and XDG directories; in the GNOME harness it keeps the harness's, which are already private, because
+      // IBus and the ibus command find the harness's IBus through them.
       addSystemProperty("user.home", home)
-      withEnv("HOME", home.absolutePathString())
-      withEnv("XDG_CONFIG_HOME", home.resolve(".config").createDirectories().absolutePathString())
-      withEnv("XDG_DATA_HOME", home.resolve(".local/share").createDirectories().absolutePathString())
-      withEnv("XDG_CACHE_HOME", home.resolve(".cache").createDirectories().absolutePathString())
+      if (Env.mode != "gnome") {
+        withEnv("HOME", home.absolutePathString())
+        withEnv("XDG_CONFIG_HOME", home.resolve(".config").createDirectories().absolutePathString())
+        withEnv("XDG_DATA_HOME", home.resolve(".local/share").createDirectories().absolutePathString())
+        withEnv("XDG_CACHE_HOME", home.resolve(".cache").createDirectories().absolutePathString())
+        Env.display?.let { withEnv("DISPLAY", it) }
+      }
       withEnv("IDEA_VIM_CUSTOM_VIMRC", rc.absolutePathString())
-      Env.display?.let { withEnv("DISPLAY", it) }
       addSystemProperty("awt.toolkit.name", Env.toolkit)
       addSystemProperty("idea.trust.all.projects", true)
+      // No embedded browser (JCEF): it would ask a Secret Service for a key and the IDE does not need it here.
+      addSystemProperty("ide.browser.jcef.enabled", false)
       addSystemProperty("ide.show.tips.on.startup.default.value", false)
       addSystemProperty("jb.consents.confirmation.enabled", false)
       addSystemProperty("jb.privacy.policy.text", "<!--999.999-->")

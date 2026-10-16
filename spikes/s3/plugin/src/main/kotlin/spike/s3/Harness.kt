@@ -14,6 +14,7 @@ import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.startup.ProjectActivity
 import com.maddyhome.idea.vim.VimPlugin
 import com.maddyhome.idea.vim.newapi.vim
+import com.maddyhome.idea.vim.state.mode.toVimNotation
 import java.awt.Component
 import java.awt.KeyboardFocusManager
 import java.awt.Toolkit
@@ -79,6 +80,33 @@ class Harness : Disposable {
     n
   }
 
+  /** Visible AWT windows with their focus state, to see where focus went. */
+  fun windows(): String = edt {
+    Json.arr(java.awt.Window.getWindows().filter { it.isShowing }.map { w ->
+      Json.Raw(Json.obj(
+        "class" to w.javaClass.name, "title" to ((w as? java.awt.Frame)?.title ?: (w as? java.awt.Dialog)?.title),
+        "focused" to w.isFocused, "active" to w.isActive, "focusableWindowState" to w.focusableWindowState,
+        "bounds" to w.bounds.toString(),
+      ))
+    })
+  }
+
+  /** Asks the IDE's focus manager to focus the selected editor. Harness setup only; no host calls this. */
+  fun focusEditor(): String = edt {
+    val e = editor() ?: return@edt "no editor"
+    com.intellij.openapi.wm.IdeFocusManager.getGlobalInstance().requestFocus(e.contentComponent, true)
+    "requested"
+  }
+
+  /** Closes every open editor, such as a start page the IDE opened by itself, and returns their names. */
+  fun closeAllEditors(): String = edt {
+    val p = ProjectManager.getInstance().openProjects.firstOrNull() ?: return@edt "no project"
+    val m = FileEditorManager.getInstance(p)
+    val names = m.openFiles.joinToString(",") { it.name }
+    for (f in m.openFiles) m.closeFile(f)
+    names
+  }
+
   /** Opens [relativePath] of the first open project in the editor, with focus. */
   fun openFile(relativePath: String): String = edt {
     val p = ProjectManager.getInstance().openProjects.firstOrNull() ?: return@edt "no project"
@@ -112,6 +140,9 @@ class Harness : Disposable {
   fun caretLine(): Int = edt { editor()?.caretModel?.logicalPosition?.line ?: -1 }
 
   fun mode(): String = edt { editor()?.let { Observer.modeName(it.vim.mode) } ?: "?" }
+
+  /** IdeaVim's mode in Vim's `mode()` notation, as the reference runs without the spike plugin read it. */
+  fun vimMode(): String = edt { editor()?.let { it.vim.mode.toVimNotation() } ?: "?" }
 
   fun snapshot(): String = edt { editor()?.let { Observer.read(it).json() } ?: "null" }
 
@@ -155,12 +186,14 @@ class Harness : Disposable {
       "observer" to Json.Raw(Json.arr(Observer.records.toList().map { Json.Raw(it.json()) })),
       "focusChanges" to Probe.focusChanges.toList(),
       "dotReplay" to Observer.dotReplayEvents.toList(),
+      "silentEvents" to Observer.silentEvents.toList(),
       "host" to Observer.host.name,
       "hostCounts" to Observer.host.counts.toList(),
       "hostShowing" to Observer.host.showing,
       "text" to (e?.document?.text),
       "caret" to (e?.caretModel?.offset ?: -1),
       "line" to (e?.caretModel?.logicalPosition?.line ?: -1),
+      "vimMode" to (e?.vim?.mode?.toVimNotation()),
       "now" to Json.Raw(e?.let { Observer.read(it).json() } ?: "null"),
       "focusOwnerIsEditor" to (e != null && KeyboardFocusManager.getCurrentKeyboardFocusManager().focusOwner === e.contentComponent),
       "popupStack" to Observer.popupStackSize(),

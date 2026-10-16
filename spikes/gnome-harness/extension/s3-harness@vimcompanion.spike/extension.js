@@ -1,0 +1,86 @@
+// Test-only extension for the headless GNOME Shell harness. It reads what the top bar would show, selects an input
+// source when the harness asks (as a user would from the top bar), and saves screenshots of the virtual monitor.
+import Gio from "gi://Gio";
+import Shell from "gi://Shell";
+import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import * as Keyboard from "resource:///org/gnome/shell/ui/status/keyboard.js";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+
+const IFACE = `<node><interface name="org.vimcompanion.S3Harness">
+  <method name="State"><arg type="s" direction="out" name="json"/></method>
+  <method name="HideOverview"/>
+  <method name="SelectSource"><arg type="s" direction="in" name="id"/><arg type="b" direction="out" name="found"/></method>
+  <method name="Screenshot"><arg type="s" direction="in" name="path"/></method>
+</interface></node>`;
+
+function findInputMode(props) {
+  if (!props) return null;
+  for (let i = 0; ; i++) {
+    const p = props.get(i);
+    if (!p) return null;
+    if (p.get_key() === "InputMode") {
+      const symbol = p.get_symbol ? p.get_symbol() : null;
+      return {
+        symbol: symbol ? symbol.get_text() : null,
+        label: p.get_label() ? p.get_label().get_text() : null,
+        state: p.get_state(),
+      };
+    }
+    const sub = findInputMode(p.get_sub_props());
+    if (sub) return sub;
+  }
+}
+
+export default class S3HarnessExtension extends Extension {
+  enable() {
+    this._dbus = Gio.DBusExportedObject.wrapJSObject(IFACE, this);
+    this._dbus.export(Gio.DBus.session, "/org/vimcompanion/S3Harness");
+    this._startupId = Main.layoutManager.connect("startup-complete", () =>
+      Main.overview.hide(),
+    );
+    if (!Main.layoutManager._startingUp) Main.overview.hide();
+  }
+
+  disable() {
+    this._dbus?.unexport();
+    this._dbus = null;
+    if (this._startupId) Main.layoutManager.disconnect(this._startupId);
+    this._startupId = 0;
+  }
+
+  State() {
+    const ism = Keyboard.getInputSourceManager();
+    const src = ism.currentSource;
+    const win = global.display.focus_window;
+    return JSON.stringify({
+      source: src ? `${src.type}:${src.id}` : null,
+      inputMode: src ? findInputMode(src.properties) : null,
+      overview: Main.overview.visible,
+      focusWindow: win ? win.get_title() : null,
+      focusWmClass: win ? win.get_wm_class() : null,
+    });
+  }
+
+  HideOverview() {
+    Main.overview.hide();
+  }
+
+  SelectSource(id) {
+    const ism = Keyboard.getInputSourceManager();
+    for (const src of Object.values(ism.inputSources)) {
+      if (`${src.type}:${src.id}` === id) {
+        src.activate(false);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Screenshot(path) {
+    const file = Gio.File.new_for_path(path);
+    const stream = file.replace(null, false, Gio.FileCreateFlags.NONE, null);
+    new Shell.Screenshot()
+      .screenshot(false, stream)
+      .finally(() => stream.close(null));
+  }
+}

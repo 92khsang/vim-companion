@@ -1,0 +1,150 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Counts before and after an operator. A count after an operator multiplies the count before it.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": { "line": 1, "column": 13 }
+  },
+  "cases": [
+    {
+      "id": "count-3",
+      "description": "3 starts a count.",
+      "help": ["count"],
+      "steps": [
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "count-30",
+      "description": "0 after a digit extends the count instead of moving to the first column.",
+      "help": ["count", "0"],
+      "steps": [
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        },
+        {
+          "key": "0",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3", "0"],
+            "operator": null,
+            "count": 30,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "count-then-operator",
+      "description": "3d: the operator keeps the count typed before it.",
+      "help": ["count", "operator"],
+      "steps": [
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        },
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3", "d"],
+            "operator": "d",
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "operator-then-count",
+      "description": "d3: a count after the operator applies to the motion.",
+      "help": ["operator", "count"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d", "3"],
+            "operator": "d",
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "counts-multiply",
+      "description": "2d3: the count before the operator and the count after it multiply, so 2d3w deletes six words.",
+      "help": ["motion-count-multiplied"],
+      "steps": [
+        {
+          "key": "2",
+          "expect": {
+            "mode": "normal",
+            "pending": ["2"],
+            "operator": null,
+            "count": 2,
+            "register": null
+          }
+        },
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["2", "d"],
+            "operator": "d",
+            "count": 2,
+            "register": null
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["2", "d", "3"],
+            "operator": "d",
+            "count": 6,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}

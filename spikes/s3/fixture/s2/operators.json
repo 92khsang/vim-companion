@@ -1,0 +1,181 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Operators waiting for a motion or a text object.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": { "line": 1, "column": 13 }
+  },
+  "cases": [
+    {
+      "id": "delete",
+      "description": "d waits for a motion.",
+      "help": ["operator", "d"],
+      "steps": [
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["d"],
+            "operator": "d",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "change",
+      "description": "c waits for a motion.",
+      "help": ["operator", "c"],
+      "steps": [
+        {
+          "key": "c",
+          "expect": {
+            "mode": "normal",
+            "pending": ["c"],
+            "operator": "c",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "yank",
+      "description": "y waits for a motion.",
+      "help": ["operator", "y"],
+      "steps": [
+        {
+          "key": "y",
+          "expect": {
+            "mode": "normal",
+            "pending": ["y"],
+            "operator": "y",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "shift-right",
+      "description": "> waits for a motion.",
+      "help": ["operator", ">"],
+      "steps": [
+        {
+          "key": ">",
+          "expect": {
+            "mode": "normal",
+            "pending": [">"],
+            "operator": ">",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "shift-left",
+      "description": "< waits for a motion.",
+      "help": ["operator", "<"],
+      "steps": [
+        {
+          "key": "<",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<"],
+            "operator": "<",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "switch-case",
+      "description": "g~ waits for a motion; after g alone nothing is an operator yet.",
+      "help": ["operator", "g~", "g"],
+      "steps": [
+        {
+          "key": "g",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "~",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g", "~"],
+            "operator": "g~",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "lowercase",
+      "description": "gu waits for a motion.",
+      "help": ["operator", "gu", "g"],
+      "steps": [
+        {
+          "key": "g",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "u",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g", "u"],
+            "operator": "gu",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "uppercase",
+      "description": "gU waits for a motion.",
+      "help": ["operator", "gU", "g"],
+      "steps": [
+        {
+          "key": "g",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "U",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g", "U"],
+            "operator": "gU",
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}

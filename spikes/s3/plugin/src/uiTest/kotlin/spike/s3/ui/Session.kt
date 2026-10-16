@@ -1,7 +1,6 @@
 package spike.s3.ui
 
 import com.intellij.driver.client.Driver
-import com.intellij.driver.sdk.openFile
 import com.intellij.driver.sdk.ui.components.common.JEditorUiComponent
 import com.intellij.driver.sdk.ui.components.common.codeEditor
 import com.intellij.driver.sdk.ui.components.common.ideFrame
@@ -12,6 +11,8 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 import java.io.File
 import java.time.Instant
+import com.intellij.driver.sdk.openFile
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -53,37 +54,160 @@ class StepResult(
   )
 }
 
-/** A running IDE with the spike plugin, driven through the Driver. */
-class Session(val driver: Driver, val name: String) {
-  val h: HarnessRemote = driver.service(HarnessRemote::class)
-  lateinit var editor: JEditorUiComponent
-  private val outFile = File(Env.out.toFile(), "$name.jsonl")
+/** Where keys come from: the Driver's robot (AWT, XTEST under Xvfb) or the GNOME harness injector (Mutter). */
+interface Keys {
+  fun press(step: Step)
+  fun close() {}
+}
 
-  fun open(file: String) {
-    driver.waitForIndicators(5.minutes)
-    driver.openFile(file, waitForCodeAnalysis = false)
-    editor = driver.ui.ideFrame().codeEditor()
-    log(J.obj("event" to "open", "file" to file, "install" to h.install(), "toolkit" to h.toolkit(), "ideavim" to h.ideaVimVersion()))
+class RobotKeys(private val editor: () -> JEditorUiComponent) : Keys {
+  override fun press(step: Step) {
+    val robot = editor().robot
+    when (step) {
+      is Step.Type -> robot.type(step.c)
+      is Step.Code -> if (step.modifiers == 0) robot.pressAndReleaseKey(step.keyCode) else robot.pressAndReleaseKey(step.keyCode, step.modifiers)
+      else -> error("not a key: ${step.label}")
+    }
+  }
+}
+
+/** Keys through `inject.py serve` in the GNOME harness: X keysyms that Mutter sends from a virtual keyboard. */
+class InjectorKeys(cmd: List<String>) : Keys {
+  private val process = ProcessBuilder(cmd).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+  private val input = process.outputStream.bufferedWriter()
+  private val output = process.inputStream.bufferedReader()
+
+  init {
+    val first = output.readLine()
+    check(first == "ready") { "injector did not start: $first" }
   }
 
-  /** Gives the IDE frame X input focus with `xdotool windowfocus --sync`, then checks that the editor owns focus. */
-  fun focusWindow(): String {
-    val pid = h.pid()
-    val ids = exec("xdotool", "search", "--onlyvisible", "--pid", pid.toString()).trim().lines().filter { it.isNotBlank() }
-    val r = StringBuilder("windows=$ids")
-    for (id in ids) {
-      val name = exec("xdotool", "getwindowname", id).trim()
-      if (name.contains("project") || ids.size == 1) {
-        r.append(" focus=").append(id).append(" '").append(name).append("' ")
-        r.append(exec("xdotool", "windowfocus", "--sync", id).trim())
+  fun command(line: String) {
+    input.write(line)
+    input.newLine()
+    input.flush()
+    val answer = output.readLine()
+    check(answer == "ok") { "injector: $answer for $line" }
+  }
+
+  override fun press(step: Step) {
+    val chord = when (step) {
+      is Step.Type -> when (step.c) {
+        ' ' -> "space"
+        '/' -> "slash"
+        '.' -> "period"
+        '[' -> "bracketleft"
+        ']' -> "bracketright"
+        '"' -> "Shift_L+apostrophe"
+        ':' -> "Shift_L+semicolon"
+        else -> if (step.c.isLetterOrDigit() && step.c.code < 128) step.c.toString() else error("no keysym for ${step.c}")
       }
+      Step.ESC -> "Escape"
+      Step.CTRL_BRACKET -> "Control_L+bracketleft"
+      Step.SHIFT_SPACE -> "Shift_L+space"
+      else -> error("not a key: ${step.label}")
     }
-    editor.click()
-    Thread.sleep(500)
-    r.append(" editorHasFocus=").append(h.editorHasFocus())
+    command("key $chord")
+  }
+
+  override fun close() {
+    runCatching { input.write("quit\n"); input.flush() }
+    process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
+    process.destroy()
+  }
+}
+
+/** A running IDE with the spike plugin (or, with `s3.pluginOff`, without it), driven through the Driver. */
+class Session(val driver: Driver, val name: String) {
+  private val harness: HarnessRemote? = if (Env.pluginOff) null else driver.service(HarnessRemote::class)
+  val h: HarnessRemote get() = harness ?: error("the spike plugin is off in this run")
+  lateinit var editor: JEditorUiComponent
+  val keys: Keys = if (Env.inject.isNotEmpty()) InjectorKeys(Env.inject) else RobotKeys { editor }
+  private val outFile = File(Env.out.toFile(), "$name.jsonl")
+
+  /**
+   * Opens [file] as the only editor. The IDE can open a start page of its own (such as a trial page) a few seconds
+   * after the project opens; it is closed so that the fixture file's editor is the one that gets the keys.
+   */
+  fun open(file: String) {
+    driver.waitForIndicators(5.minutes)
+    Thread.sleep(8000)
+    val closed: String
+    if (harness != null) {
+      closed = harness.closeAllEditors()
+      harness.openFile(file)
+    } else {
+      closed = RemoteState.closeAll(driver)
+      driver.openFile(file, waitForCodeAnalysis = false)
+    }
+    Thread.sleep(1000)
+    editor = driver.ui.ideFrame().codeEditor()
+    log(J.obj(
+      "event" to "open", "file" to file, "closed" to closed, "mode" to Env.mode, "pluginOff" to Env.pluginOff,
+      "install" to harness?.install(), "toolkit" to harness?.toolkit(), "ideavim" to (harness?.ideaVimVersion() ?: Env.ideavim),
+    ))
+  }
+
+  /**
+   * Under Xvfb: gives the IDE frame X input focus with `xdotool windowfocus --sync`. In the GNOME harness the shell
+   * focuses the new window itself; the harness only asks the IDE to focus the editor inside it if needed.
+   */
+  fun focusWindow(): String {
+    val r = StringBuilder()
+    if (Env.mode == "gnome") {
+      r.append("shell=").append(shellState())
+      if (harness != null && !harness.editorHasFocus()) r.append(" focusEditor=").append(harness.focusEditor())
+      Thread.sleep(500)
+    } else {
+      val pid = harness?.pid() ?: RemoteState.pid(driver)
+      val ids = exec("xdotool", "search", "--onlyvisible", "--pid", pid.toString()).trim().lines().filter { it.isNotBlank() }
+      r.append("windows=").append(ids)
+      for (id in ids) {
+        val name = exec("xdotool", "getwindowname", id).trim()
+        if (name.contains("project") || ids.size == 1) {
+          r.append(" focus=").append(id).append(" '").append(name).append("' ")
+          r.append(exec("xdotool", "windowfocus", "--sync", id).trim())
+        }
+      }
+      editor.click()
+      Thread.sleep(500)
+    }
+    r.append(" editorHasFocus=").append(harness?.editorHasFocus() ?: runCatching { editor.shouldHaveFocus(timeout = 2.seconds); true }.getOrDefault(false))
+    if (harness != null) r.append(" windows=").append(harness.windows())
     log(J.obj("event" to "focus", "detail" to r.toString()))
     return r.toString()
   }
+
+  /** IBus global engine changes seen by the harness's ibus-monitor.py, as `<monotonic-ns> <engine>` lines. */
+  val ibusEvents: MutableList<String> = java.util.Collections.synchronizedList(ArrayList())
+  private val ibusMonitor: Process? = if (Env.ibusMonitor.isEmpty()) null else
+    ProcessBuilder(Env.ibusMonitor).redirectError(ProcessBuilder.Redirect.DISCARD).start().also { p ->
+      Thread {
+        p.inputStream.bufferedReader().forEachLine { ibusEvents += it }
+      }.apply { isDaemon = true; start() }
+    }
+
+  fun ibus(vararg args: String): String = if (Env.ibusCmd.isEmpty()) "" else exec(*(Env.ibusCmd + args).toTypedArray()).trim()
+
+  /**
+   * Puts the input method into ibus-hangul's Hangul mode, as a user would: the engine back to `hangul` if something
+   * switched it, then `Shift+Space` (ibus-hangul's switch key, which it consumes) until the shell shows 한.
+   * Returns the shell state afterwards.
+   */
+  fun ensureHangulMode(): String {
+    if (ibus("engine") != "hangul") ibus("engine", "hangul")
+    var state = shellState()
+    var tries = 0
+    while (!state.contains("\"symbol\":\"한\"") && tries++ < 3) {
+      keys.press(Step.SHIFT_SPACE)
+      Thread.sleep(150)
+      state = shellState()
+    }
+    return state
+  }
+
+  /** The GNOME harness's view: input source, ibus-hangul InputMode label, focused window. Empty under Xvfb. */
+  fun shellState(): String = if (Env.shellState.isEmpty()) "" else exec(*Env.shellState.toTypedArray()).trim()
 
   fun exec(vararg cmd: String): String {
     val p = ProcessBuilder(*cmd).redirectErrorStream(true).start()
@@ -94,23 +218,27 @@ class Session(val driver: Driver, val name: String) {
 
   /**
    * Sends one step and waits until the probe has logged the expected number of delivered keys, or until [timeoutMs].
-   * With [checkFocus], `shouldHaveFocus()` on the editor must pass after the key.
+   * With [checkFocus], `shouldHaveFocus()` on the editor must pass after the key. Without the spike plugin there is no
+   * probe; the step then waits [timeoutMs] for the IDE to settle.
    */
   fun send(step: Step, expectedTotal: Int, checkFocus: Boolean, timeoutMs: Long = 3000): StepResult {
     val t0 = System.nanoTime()
     when (step) {
-      is Step.Type -> editor.robot.type(step.c)
-      is Step.Code -> if (step.modifiers == 0) editor.robot.pressAndReleaseKey(step.keyCode) else editor.robot.pressAndReleaseKey(step.keyCode, step.modifiers)
       is Step.Ime -> h.postIme(step.steps)
       Step.WaitHost -> {
         val ok = waitUntil(timeoutMs) { h.hostShowing() }
         return StepResult(step.label, ok, h.deliveredCount(), null, ok, (System.nanoTime() - t0) / 1_000_000)
       }
+      else -> keys.press(step)
+    }
+    if (harness == null) {
+      Thread.sleep(timeoutMs)
+      return StepResult(step.label, true, -1, null, false, (System.nanoTime() - t0) / 1_000_000)
     }
     var count = 0
-    val delivered = waitUntil(timeoutMs) { count = h.deliveredCount(); count >= expectedTotal }
+    val delivered = waitUntil(timeoutMs) { count = harness.deliveredCount(); count >= expectedTotal }
     val focusOk = if (checkFocus) runCatching { editor.shouldHaveFocus(timeout = 2.seconds); true }.getOrDefault(false) else null
-    return StepResult(step.label, delivered && count == expectedTotal, count, focusOk, h.hostShowing(), (System.nanoTime() - t0) / 1_000_000)
+    return StepResult(step.label, delivered && count == expectedTotal, count, focusOk, harness.hostShowing(), (System.nanoTime() - t0) / 1_000_000)
   }
 
   fun waitUntil(timeoutMs: Long, cond: () -> Boolean): Boolean {
@@ -124,20 +252,26 @@ class Session(val driver: Driver, val name: String) {
 
   /** Returns IdeaVim to Normal mode with real `Esc` keys and resets the text and caret. */
   fun reset(text: String, caret: Int) {
+    if (harness == null) {
+      repeat(2) { keys.press(Step.ESC); Thread.sleep(100) }
+      RemoteState.reset(driver, text, caret)
+      return
+    }
     var tries = 0
-    while (h.mode() != "NORMAL" || h.snapshot().let { it.contains("\"pendingKeys\":\"\"").not() || it.contains("\"mappingKeys\":\"\"").not() }) {
-      editor.robot.pressAndReleaseKey(KeyEvent.VK_ESCAPE)
+    while (harness.mode() != "NORMAL" || harness.snapshot().let { it.contains("\"pendingKeys\":\"\"").not() || it.contains("\"mappingKeys\":\"\"").not() }) {
+      keys.press(Step.ESC)
       Thread.sleep(50)
       if (++tries > 10) break
     }
-    h.resetEditor(text, caret)
+    harness.resetEditor(text, caret)
   }
 
   /** Closes a dialog or popup that an action opened, with `Esc`, until the editor owns focus again. */
   fun closePopups() {
     var tries = 0
-    while (!h.editorHasFocus() && tries++ < 5) {
-      editor.robot.pressAndReleaseKey(KeyEvent.VK_ESCAPE)
+    val focused = { harness?.editorHasFocus() ?: runCatching { editor.shouldHaveFocus(timeout = 300.milliseconds); true }.getOrDefault(false) }
+    while (!focused() && tries++ < 5) {
+      keys.press(Step.ESC)
       Thread.sleep(200)
     }
   }
@@ -147,6 +281,11 @@ class Session(val driver: Driver, val name: String) {
   }
 
   fun now(): String = Instant.now().toString()
+
+  fun close() {
+    keys.close()
+    ibusMonitor?.destroy()
+  }
 }
 
 /** JSON writer for the test side. */

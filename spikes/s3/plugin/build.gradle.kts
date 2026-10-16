@@ -107,6 +107,7 @@ intellijPlatformTesting.testIde.register("test262") {
     providers.gradleProperty("s3.debugActions").orNull?.let { systemProperty("s3.debugActions", it) }
     systemProperty("s3.repeat", providers.gradleProperty("s3.repeat").orElse("1").get())
     systemProperty("s3.rc", rootDir.resolve("../../../spec/generated/intellij/vim-companion.ideavimrc").canonicalPath)
+    systemProperty("s3.fixtures", providers.gradleProperty("s3.fixtures").orElse(rootDir.resolve("../fixture").canonicalPath).get())
   }
 }
 
@@ -126,7 +127,10 @@ val uiTest = intellijPlatformTesting.testIdeUi.register("uiTest") {
     systemProperty("s3.out", providers.gradleProperty("s3.out").orElse(layout.buildDirectory.dir("s3-out").get().asFile.path).get())
     systemProperty("s3.work", providers.gradleProperty("s3.work").orElse(layout.buildDirectory.dir("s3-work").get().asFile.path).get())
     systemProperty("s3.rc", rootDir.resolve("../../../spec/generated/intellij/vim-companion.ideavimrc").canonicalPath)
-    for (key in listOf("s3.trials", "s3.hosts", "s3.case", "s3.toolkit", "s3.portBase")) {
+    for (key in listOf(
+      "s3.trials", "s3.hosts", "s3.case", "s3.toolkit", "s3.portBase", "s3.mode", "s3.inject", "s3.shellState",
+      "s3.ibusMonitor", "s3.ibusCmd", "s3.rcExtra", "s3.extraPlugins", "s3.pluginOff",
+    )) {
       providers.gradleProperty(key).orNull?.let { systemProperty(key, it) }
     }
     systemProperty("s3.ideavim", ideavim)

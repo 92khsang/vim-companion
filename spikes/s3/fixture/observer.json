@@ -1,0 +1,496 @@
+{
+  "$schema": "./fixture-observer.schema.json",
+  "description": "Spike S3's own observer cases. Same format as spike S2's grammar fixture (copied unchanged in s2/), with two extensions for the states in which T1 stays silent: the mode cmdline for an open : or / prompt, and an optional observer object per step with prompt, recording and during (the silent states that must be seen while the key runs). Every expected state is written from Vim's documented behaviour, with the generated IntelliJ remaps in place.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "leader",
+      "description": "<Space> is the leader: a strict prefix of the generated leader mappings. After the timeout, Vim runs <Space> as the built-in motion and nothing is pending.",
+      "help": ["mapleader", "map-typing", "map-ambiguous", "<Space>"],
+      "steps": [
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "leader-window",
+      "description": "<Space> w: a strict prefix of the window mappings. After the timeout, Vim runs <Space> and w as built-in motions and nothing is pending.",
+      "help": ["map-typing", "map-ambiguous", "w"],
+      "steps": [
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "w",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>", "w"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "leader-buffer",
+      "description": "<Space> b: a strict prefix of the buffer mappings. After the timeout, Vim runs <Space> and b as built-in motions.",
+      "help": ["map-typing", "map-ambiguous", "b"],
+      "steps": [
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "b",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>", "b"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "leader-visual",
+      "description": "<Space> in Visual mode: a strict prefix of the Visual leader mappings; Visual mode stays on after the timeout.",
+      "help": ["mapmode-x", "map-typing", "v_<Space>"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "visual",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "visual",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "leader-cancel",
+      "description": "<Esc> after <Space> w: the keys are not a mapping, so Vim runs <Space> and w as built-in motions and <Esc> cancels nothing; nothing is pending.",
+      "help": ["map-typing", "i_esc", "<Esc>"],
+      "steps": [
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "w",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>", "w"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "<Esc>",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "count-leader",
+      "description": "A count before the leader: both are pending. After the timeout, Vim runs 3<Space> as the built-in motion.",
+      "help": ["count", "map-typing"],
+      "steps": [
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        },
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["3", "<Space>"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "macro-record",
+      "description": "qa starts recording into register a, x is recorded, q stops. T1 stays silent while a macro is recorded.",
+      "help": ["q", "recording"],
+      "steps": [
+        {
+          "key": "q",
+          "expect": {
+            "mode": "normal",
+            "pending": ["q"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": "a"
+          }
+        },
+        {
+          "key": "x",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": "a"
+          }
+        },
+        {
+          "key": "q",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "macro-replay",
+      "description": "@a replays register a. T1 stays silent while the macro runs.",
+      "help": ["@", "q"],
+      "steps": [
+        {
+          "key": "q",
+          "expect": {
+            "mode": "normal",
+            "pending": ["q"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": "a"
+          }
+        },
+        {
+          "key": "x",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": "a"
+          }
+        },
+        {
+          "key": "q",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "recording": null
+          }
+        },
+        {
+          "key": "@",
+          "expect": {
+            "mode": "normal",
+            "pending": ["@"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "during": ["macro"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "dot-repeat",
+      "description": ". repeats x. T1 stays silent while . runs.",
+      "help": [".", "x"],
+      "steps": [
+        {
+          "key": "x",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": ".",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "during": ["dot"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "mapping-runs",
+      "description": "<Space> c f completes a generated mapping that runs an IDE action. T1 stays silent while the mapping runs.",
+      "help": ["map-typing", "mapleader"],
+      "steps": [
+        {
+          "key": "<Space>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "c",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<Space>", "c"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "f",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "during": ["mapping"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "prompt-command",
+      "description": ": opens the command-line prompt; <Esc> abandons it. T1 stays silent while a prompt is open.",
+      "help": [":", "c_<Esc>"],
+      "steps": [
+        {
+          "key": ":",
+          "expect": {
+            "mode": "cmdline",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "prompt": ":"
+          }
+        },
+        {
+          "key": "<Esc>",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "prompt": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "prompt-search",
+      "description": "/ opens the search prompt; <Esc> abandons it.",
+      "help": ["/", "c_<Esc>"],
+      "steps": [
+        {
+          "key": "/",
+          "expect": {
+            "mode": "cmdline",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "prompt": "/"
+          }
+        },
+        {
+          "key": "<Esc>",
+          "expect": {
+            "mode": "normal",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          },
+          "observer": {
+            "prompt": null
+          }
+        }
+      ]
+    }
+  ]
+}

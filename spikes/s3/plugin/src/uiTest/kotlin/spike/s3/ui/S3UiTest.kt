@@ -17,10 +17,12 @@ class S3UiTest {
       val s = Session(this, name)
       s.open("fixture.txt")
       s.focusWindow()
-      val delivered = Rows.deliveryCheck(s)
+      // A run without the spike plugin has no probe; it only gives the reference state for the Hangul rows.
+      val delivered = if (Env.pluginOff) true else Rows.deliveryCheck(s)
       s.log(J.obj("event" to "run-start", "deliveryCheck" to delivered, "case" to Env.case, "hosts" to Env.hosts, "trials" to Env.trials))
       assertTrue(delivered, "delivery check failed")
       when (Env.case) {
+        "check" -> Unit
         "smoke" -> {
           Rows.focus(s)
           Rows.esc(s)
@@ -33,9 +35,12 @@ class S3UiTest {
         "commit" -> Rows.commit(s)
         "hangul-ime" -> Rows.hangulIme(s)
         "dot" -> DotRow.run(s)
+        "hangul-ibus" -> HangulIbus.run(s)
+        "commit-ibus" -> HangulIbus.commits(s)
         else -> error("unknown case ${Env.case}")
       }
       s.log(J.obj("event" to "run-end", "time" to s.now()))
+      s.close()
     }
   }
 }
