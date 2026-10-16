@@ -56,10 +56,10 @@ object Probe {
   var installed = false
     private set
 
-  /** Focus owner changes, as seen by the keyboard focus manager. */
+  /** Focus owner changes, as seen by the keyboard focus manager, each prefixed with `t=<System.nanoTime()>`. */
   val focusChanges: MutableList<String> = Collections.synchronizedList(ArrayList())
   private val focusListener = PropertyChangeListener { e ->
-    focusChanges += "${e.propertyName}: ${describe(e.oldValue)} -> ${describe(e.newValue)}"
+    focusChanges += "t=${System.nanoTime()} ${e.propertyName}: ${describe(e.oldValue)} -> ${describe(e.newValue)}"
   }
 
   @Synchronized

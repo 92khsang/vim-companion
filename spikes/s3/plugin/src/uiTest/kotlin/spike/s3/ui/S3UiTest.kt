@@ -23,6 +23,8 @@ class S3UiTest {
       assertTrue(delivered, "delivery check failed")
       when (Env.case) {
         "check" -> Unit
+        "ime-proof" -> ImeProof.run(s)
+        "fixture" -> FixtureRow.run(s)
         "smoke" -> {
           Rows.focus(s)
           Rows.esc(s)
@@ -33,7 +35,7 @@ class S3UiTest {
         "esc" -> Rows.esc(s)
         "control" -> Rows.control(s)
         "commit" -> Rows.commit(s)
-        "hangul-ime" -> Rows.hangulIme(s)
+        "hangul-ime" -> HangulIbus.run(s)
         "dot" -> DotRow.run(s)
         "hangul-ibus" -> HangulIbus.run(s)
         "commit-ibus" -> HangulIbus.commits(s)

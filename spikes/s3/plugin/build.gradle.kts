@@ -59,6 +59,7 @@ dependencies {
   uiTestImplementation("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
   uiTestImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
   uiTestImplementation("org.jetbrains.teamcity:serviceMessages:2024.07")
+  uiTestImplementation("com.google.code.gson:gson:2.13.1")
   uiTestRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
   uiTestImplementation("org.kodein.di:kodein-di-jvm:7.26.1")
   uiTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
@@ -127,6 +128,7 @@ val uiTest = intellijPlatformTesting.testIdeUi.register("uiTest") {
     systemProperty("s3.out", providers.gradleProperty("s3.out").orElse(layout.buildDirectory.dir("s3-out").get().asFile.path).get())
     systemProperty("s3.work", providers.gradleProperty("s3.work").orElse(layout.buildDirectory.dir("s3-work").get().asFile.path).get())
     systemProperty("s3.rc", rootDir.resolve("../../../spec/generated/intellij/vim-companion.ideavimrc").canonicalPath)
+    systemProperty("s3.fixtures", rootDir.resolve("../fixture").canonicalPath)
     for (key in listOf(
       "s3.trials", "s3.hosts", "s3.case", "s3.toolkit", "s3.portBase", "s3.mode", "s3.inject", "s3.shellState",
       "s3.ibusMonitor", "s3.ibusCmd", "s3.rcExtra", "s3.extraPlugins", "s3.pluginOff",

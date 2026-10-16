@@ -16,7 +16,7 @@ tag="$(echo "$ideavim" | sed -e 's/^IdeaVIM://' -e 's/@.*//')"
 run_id="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-xvfb-$case_-$tag}"
 out="$here/../data/$run_id"
 mkdir -p "$out"
-build_dir="build-$tag"
+build_dir="build-$tag-x$disp"
 ide_home="$(ls -d "$HOME"/.gradle/caches/*/transforms/*/transformed/idea-2026.2.3 | head -1)"
 rt="$(mktemp -d)"
 chmod 700 "$rt"
@@ -54,7 +54,7 @@ dbus_pid="$(cat "$rt/dbus.pid")"
 
 printf 'spikes/s3/scripts/xvfb-case.sh %s\n' "$*" >"$out/command.txt"
 cd "$plugin"
-"${run_env[@]}" taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag" uiTest \
+"${run_env[@]}" taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-x$disp" uiTest \
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
   -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work-$disp" \
   -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" \

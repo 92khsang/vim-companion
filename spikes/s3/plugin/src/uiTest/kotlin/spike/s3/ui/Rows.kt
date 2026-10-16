@@ -97,30 +97,6 @@ object Rows {
       }
     }
   }
-
-  /** Hangul input without an input method: letters arrive as committed jamo, other keys as keys. */
-  fun hangulIme(s: Session) {
-    for (host in Env.hosts) {
-      s.h.setHost(host, true)
-      for (n in 1..Env.trials) hangulTrial(s, host, n)
-    }
-  }
-
-  fun hangulTrial(s: Session, host: String, n: Int) {
-    val seqs = listOf(
-      "SPC g" to listOf(Step.Type(' '), Step.Ime("c:ㅎ|C:ㅎ", 1)),
-      "SPC SPC" to listOf(Step.Type(' '), Step.Type(' ')),
-      "SPC /" to listOf(Step.Type(' '), Step.Type('/')),
-      "SPC Shift+Space" to listOf(Step.Type(' '), Step.SHIFT_SPACE),
-      "SPC Esc" to listOf(Step.Type(' '), Step.ESC),
-      "SPC Ctrl+[" to listOf(Step.Type(' '), Step.CTRL_BRACKET),
-    )
-    for ((name, steps) in seqs) {
-      s.reset(TEXT, 9)
-      trial(s, "hangul:$name", host, n, steps, checkFocus = false)
-      s.closePopups()
-    }
-  }
 }
 
 /**
@@ -233,26 +209,43 @@ object HangulIbus {
 
   private const val SETTLE = 400L
   private const val TIMEOUT = 1500L // longer than IdeaVim's default 'timeoutlen' of 1000 ms
+  private const val ACTION = 800L // the IDE action of a leader mapping opens its popup or dialog
 
-  val sequences = listOf(
-    Seq("SPC g", listOf(Step.Type(' ') to SETTLE, Step.Type('g') to TIMEOUT, Step.ESC to SETTLE)),
-    Seq("SPC SPC", listOf(Step.Type(' ') to SETTLE, Step.Type(' ') to TIMEOUT)),
-    Seq("SPC /", listOf(Step.Type(' ') to SETTLE, Step.Type('/') to TIMEOUT)),
+  /**
+   * Xvfb without an input method: the Driver posts the input-method events that commit the jamo; every other key is
+   * a real key, including `Shift+Space`, which reaches the IDE because no input method consumes it.
+   */
+  val sequencesNoIme = listOf(
+    Seq("SPC g", listOf(Step.Type(' ') to SETTLE, Step.Ime("c:ㅎ|C:ㅎ", 1) to TIMEOUT)),
+    Seq("SPC SPC", listOf(Step.Type(' ') to SETTLE, Step.Type(' ') to ACTION)),
+    Seq("SPC /", listOf(Step.Type(' ') to SETTLE, Step.Type('/') to ACTION)),
     Seq("SPC Shift+Space", listOf(Step.Type(' ') to SETTLE, Step.SHIFT_SPACE to TIMEOUT)),
     Seq("SPC Esc", listOf(Step.Type(' ') to SETTLE, Step.ESC to SETTLE)),
     Seq("SPC Ctrl+[", listOf(Step.Type(' ') to SETTLE, Step.CTRL_BRACKET to SETTLE)),
   )
 
-  fun run(s: Session) {
+  /** Real IBus: `g` in Hangul mode starts composing ㅎ; `Esc`, ibus-hangul's off key, commits it and reaches IdeaVim. */
+  val sequences = listOf(
+    Seq("SPC g", listOf(Step.Type(' ') to SETTLE, Step.Type('g') to TIMEOUT, Step.ESC to SETTLE)),
+    Seq("SPC SPC", listOf(Step.Type(' ') to SETTLE, Step.Type(' ') to ACTION)),
+    Seq("SPC /", listOf(Step.Type(' ') to SETTLE, Step.Type('/') to ACTION)),
+    Seq("SPC Shift+Space", listOf(Step.Type(' ') to SETTLE, Step.SHIFT_SPACE to TIMEOUT)),
+    Seq("SPC Esc", listOf(Step.Type(' ') to SETTLE, Step.ESC to SETTLE)),
+    Seq("SPC Ctrl+[", listOf(Step.Type(' ') to SETTLE, Step.CTRL_BRACKET to SETTLE)),
+  )
+
+  fun run(s: Session) = runAll(s, if (Env.mode == "gnome") sequences else sequencesNoIme, if (Env.mode == "gnome") "hangul-ibus" else "hangul-ime")
+
+  private fun runAll(s: Session, seqs: List<Seq>, row: String) {
     val hosts = if (Env.pluginOff) listOf("off") else Env.hosts
     for (host in hosts) {
       if (!Env.pluginOff) s.h.setHost(host, true)
       for (n in 1..Env.trials) {
-        for (seq in sequences) {
+        for (seq in seqs) {
           try {
-            one(s, host, n, seq)
+            one(s, row, host, n, seq)
           } catch (e: Throwable) {
-            s.log(J.obj("case" to "hangul-ibus:${seq.name}", "host" to host, "trial" to n, "error" to e.toString()))
+            s.log(J.obj("case" to "$row:${seq.name}", "host" to host, "trial" to n, "error" to e.toString()))
           }
           s.closePopups()
         }
@@ -260,24 +253,28 @@ object HangulIbus {
     }
   }
 
-  private fun one(s: Session, host: String, n: Int, seq: Seq) {
+  private fun one(s: Session, row: String, host: String, n: Int, seq: Seq) {
     s.reset(Rows.TEXT, 9)
-    val before = s.ensureHangulMode()
+    val before = if (Env.mode == "gnome") s.ensureHangulMode() else ""
     val ibusFrom = s.ibusEvents.size
     if (!Env.pluginOff) s.h.beginTrial()
     val steps = ArrayList<String>()
     for ((step, wait) in seq.steps) {
-      s.keys.press(step)
+      when (step) {
+        is Step.Ime -> if (Env.pluginOff) RemoteState.postIme(s.driver, step.steps) else s.h.postIme(step.steps)
+        else -> s.keys.press(step)
+      }
       Thread.sleep(wait)
       steps += J.obj(
         "step" to step.label, "shell" to J.Raw(s.shellState().ifEmpty { "null" }),
         "delivered" to (if (Env.pluginOff) null else s.h.deliveredKeys()),
         "hostShowing" to (if (Env.pluginOff) null else s.h.hostShowing()),
+        "focusOwner" to (if (Env.pluginOff) null else s.h.focusOwner()),
       )
     }
     val state = if (Env.pluginOff) RemoteState.state(s.driver) else s.h.report()
     s.log(J.obj(
-      "case" to "hangul-ibus:${seq.name}", "host" to host, "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit,
+      "case" to "$row:${seq.name}", "host" to host, "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit,
       "variant" to System.getProperty("s3.rcExtra").orEmpty(), "pluginOff" to Env.pluginOff, "time" to s.now(),
       "shellBefore" to J.Raw(before.ifEmpty { "null" }), "steps" to J.Raw(steps.joinToString(",", "[", "]")),
       "ibusEvents" to s.ibusEvents.toList().drop(ibusFrom), "state" to J.Raw(state),
@@ -312,5 +309,107 @@ object HangulIbus {
         }
       }
     }
+  }
+}
+
+/**
+ * Part 2 of the GNOME harness proof: Hangul typed in Hangul mode is composed by ibus-hangul and committed to the
+ * editor. In Insert mode, `gksrmf` in Dubeolsik must insert 한글.
+ */
+object ImeProof {
+  fun run(s: Session) {
+    for (n in 1..Env.trials) {
+      try {
+        s.reset(Rows.TEXT, 0)
+        s.keys.press(Step.Type('i'))
+        Thread.sleep(200)
+        val before = s.ensureHangulMode()
+        for (c in "gksrmf") {
+          s.keys.press(Step.Type(c))
+          Thread.sleep(30)
+        }
+        // Escape is ibus-hangul's off key: it commits the syllable being composed and still reaches IdeaVim.
+        s.keys.press(Step.ESC)
+        Thread.sleep(400)
+        val text = s.h.editorText()
+        s.log(J.obj(
+          "case" to "ime-proof", "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit, "time" to s.now(),
+          "shellBefore" to J.Raw(before.ifEmpty { "null" }), "shellAfter" to J.Raw(s.shellState().ifEmpty { "null" }),
+          "inserted" to text.removeSuffix(Rows.TEXT), "ok" to (text == "한글" + Rows.TEXT), "mode" to s.h.mode(),
+        ))
+      } catch (e: Throwable) {
+        s.log(J.obj("case" to "ime-proof", "trial" to n, "error" to e.toString()))
+      }
+    }
+  }
+}
+
+/**
+ * The observer fixture through the Driver under Xvfb: keys go through AWT key dispatch. Each case logs the
+ * observer's record after every key (and after the mapping timeout); scripts/fixture_check.py compares them with the
+ * fixture.
+ */
+object FixtureRow {
+  fun run(s: Session) {
+    val dir = java.io.File(System.getProperty("s3.fixtures") ?: error("s3.fixtures"))
+    val files = dir.walk().filter { it.isFile && it.name.endsWith(".json") && !it.name.contains("schema") && it.name != "ideavim-deviations.json" }
+      .sortedBy { it.relativeTo(dir).path }.toList()
+    s.h.setHost(Env.hosts.firstOrNull() ?: "layer", true)
+    for (n in 1..Env.trials) {
+      for (f in files) {
+        val doc = com.google.gson.JsonParser.parseString(f.readText()).asJsonObject
+        val start = doc.getAsJsonObject("start")
+        val lines = start.getAsJsonArray("lines").map { it.asString }
+        val cursor = start.getAsJsonObject("cursor")
+        val text = lines.joinToString("\n", postfix = "\n")
+        val offset = lines.take(cursor["line"].asInt).sumOf { it.length + 1 } + cursor["column"].asInt
+        for (case in doc.getAsJsonArray("cases").map { it.asJsonObject }) {
+          try {
+            one(s, n, f.relativeTo(dir).path, case, text, offset)
+          } catch (e: Throwable) {
+            s.log(J.obj("case" to "fixture:${case["id"].asString}", "file" to f.relativeTo(dir).path, "trial" to n, "error" to e.toString()))
+          }
+          s.closePopups()
+          if (s.h.snapshot().contains("\"recording\":\"")) s.keys.press(Step.Type('q'))
+        }
+      }
+    }
+  }
+
+  private fun one(s: Session, n: Int, file: String, case: com.google.gson.JsonObject, text: String, offset: Int) {
+    s.reset(text, offset)
+    s.h.beginTrial()
+    val records = ArrayList<String>()
+    var expected = 0
+    for (stepEl in case.getAsJsonArray("steps")) {
+      val key = stepEl.asJsonObject["key"].asString
+      expected++
+      val r = s.send(step(key), expected, checkFocus = false)
+      Thread.sleep(60)
+      records += J.obj("key" to key, "delivered" to r.delivered, "report" to J.Raw(s.h.report()))
+    }
+    val after = if (case.has("afterTimeout")) {
+      Thread.sleep(1600)
+      s.h.report()
+    } else "null"
+    s.log(J.obj(
+      "case" to "fixture:${case["id"].asString}", "file" to file, "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit,
+      "time" to s.now(), "steps" to J.Raw(records.joinToString(",", "[", "]")), "afterTimeout" to J.Raw(after),
+    ))
+  }
+
+  @Suppress("DEPRECATION")
+  fun step(key: String): Step = when {
+    key == "<Space>" -> Step.Type(' ')
+    key == "<Esc>" -> Step.ESC
+    key == "<CR>" -> Step.Code(key, java.awt.event.KeyEvent.VK_ENTER)
+    key == "<Tab>" -> Step.Code(key, java.awt.event.KeyEvent.VK_TAB)
+    key == "<BS>" -> Step.Code(key, java.awt.event.KeyEvent.VK_BACK_SPACE)
+    key == "<C-[>" -> Step.CTRL_BRACKET
+    key == "<C-]>" -> Step.Code(key, java.awt.event.KeyEvent.VK_CLOSE_BRACKET, java.awt.event.InputEvent.CTRL_MASK)
+    key.startsWith("<C-") && key.length == 5 ->
+      Step.Code(key, java.awt.event.KeyEvent.VK_A + (key[3] - 'a'), java.awt.event.InputEvent.CTRL_MASK)
+    key.length == 1 -> Step.Type(key[0])
+    else -> error("unsupported key $key")
   }
 }

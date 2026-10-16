@@ -38,6 +38,53 @@ interface ProcessHandleRef {
   fun pid(): Long
 }
 
+@Remote("java.awt.KeyboardFocusManager")
+interface KeyboardFocusManagerStatic {
+  fun getCurrentKeyboardFocusManager(): KeyboardFocusManagerRef
+}
+
+@Remote("java.awt.KeyboardFocusManager")
+interface KeyboardFocusManagerRef {
+  fun getFocusOwner(): AwtComponentRef?
+}
+
+@Remote("java.awt.Component")
+interface AwtComponentRef
+
+@Remote("java.awt.Toolkit")
+interface ToolkitStatic {
+  fun getDefaultToolkit(): ToolkitRef
+}
+
+@Remote("java.awt.Toolkit")
+interface ToolkitRef {
+  fun getSystemEventQueue(): EventQueueRef
+}
+
+@Remote("java.awt.EventQueue")
+interface EventQueueRef {
+  fun postEvent(event: InputMethodEventRef)
+}
+
+@Remote("java.text.AttributedString")
+interface AttributedStringRef {
+  fun getIterator(): CharIteratorRef
+}
+
+@Remote("java.text.AttributedCharacterIterator")
+interface CharIteratorRef
+
+@Remote("java.awt.font.TextHitInfo")
+interface TextHitInfoStatic {
+  fun leading(charIndex: Int): TextHitInfoRef
+}
+
+@Remote("java.awt.font.TextHitInfo")
+interface TextHitInfoRef
+
+@Remote("java.awt.event.InputMethodEvent")
+interface InputMethodEventRef
+
 /**
  * Reads and resets the editor through the Driver alone, for the reference runs without the spike plugin. It uses only
  * platform APIs and IdeaVim's own mode notation, so the spike plugin's code plays no part in these runs.
@@ -72,4 +119,21 @@ object RemoteState {
   }
 
   fun pid(driver: Driver): Long = driver.utility(ProcessHandleStatic::class).current().pid()
+
+  /** Posts input-method events to the focus owner, like Harness.postIme, with platform classes only. */
+  fun postIme(driver: Driver, steps: String) {
+    driver.withContext(OnDispatcher.EDT) {
+      val owner = utility(KeyboardFocusManagerStatic::class).getCurrentKeyboardFocusManager().getFocusOwner() ?: error("no focus owner")
+      val queue = utility(ToolkitStatic::class).getDefaultToolkit().getSystemEventQueue()
+      for (step in steps.split('|')) {
+        if (step.length < 2) continue
+        val text = step.substring(2)
+        val committed = if (step.startsWith("C:")) text.length else 0
+        val it = new(AttributedStringRef::class, text).getIterator()
+        val caret = utility(TextHitInfoStatic::class).leading(if (committed > 0) 0 else text.length)
+        // 1100 is InputMethodEvent.INPUT_METHOD_TEXT_CHANGED.
+        queue.postEvent(new(InputMethodEventRef::class, owner, 1100, it, committed, caret, null))
+      }
+    }
+  }
 }

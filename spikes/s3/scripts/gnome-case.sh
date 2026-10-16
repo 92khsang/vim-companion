@@ -16,7 +16,7 @@ vtag="$(echo "${variant:-base}" | tr ',' '+')"
 run_id="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-gnome-$case_-$tag-$toolkit-$vtag}"
 out="$here/../data/$run_id"
 mkdir -p "$out"
-build_dir="build-$tag-g"
+build_dir="build-$tag-g$port"
 ide_home="$(ls -d "$HOME"/.gradle/caches/*/transforms/*/transformed/idea-2026.2.3 | head -1)"
 ext_dir="${S3_IDEAVIM_EXTENSION:-}"
 
@@ -54,9 +54,9 @@ cp "$root/settings.ini" "$out/harness-settings.ini"
 
 cd "$plugin"
 "$gh/gnome-harness.sh" run "$root" env PATH="$PATH" XMODIFIERS=@im=ibus GTK_IM_MODULE=ibus \
-  taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-g" uiTest \
+  taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-g$port" uiTest \
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
-  -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work-gnome-$port" \
+  -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work" \
   -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" -Ps3.toolkit="$toolkit" \
   -Ps3.mode=gnome -Ps3.inject="$gh/gnome-harness.sh run $root /usr/bin/python3 -I $gh/inject.py serve" \
   -Ps3.shellState="$gh/gnome-harness.sh state $root" \

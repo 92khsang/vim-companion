@@ -224,7 +224,7 @@ class Session(val driver: Driver, val name: String) {
   fun send(step: Step, expectedTotal: Int, checkFocus: Boolean, timeoutMs: Long = 3000): StepResult {
     val t0 = System.nanoTime()
     when (step) {
-      is Step.Ime -> h.postIme(step.steps)
+      is Step.Ime -> if (harness != null) harness.postIme(step.steps) else RemoteState.postIme(driver, step.steps)
       Step.WaitHost -> {
         val ok = waitUntil(timeoutMs) { h.hostShowing() }
         return StepResult(step.label, ok, h.deliveredCount(), null, ok, (System.nanoTime() - t0) / 1_000_000)
