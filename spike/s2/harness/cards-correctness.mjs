@@ -5,6 +5,8 @@
 //   expect.text:      "unchanged", or { "<line index>": "<new line>" }, or ["<line>", ...]
 //   expect.cursor:    [line, column] of the primary cursor (0-based)
 //   expect.mode:      fixture mode name
+//   expect.shiftNumbered: true when the key shifts the numbered registers 1-8 to 2-9
+//   setup:            optional keys typed after the reset and before the card's keys
 //   expect.registers: { "<name>": "<text>" } for the registers the key writes; every other
 //                     register must hold what it held before the key
 // Usage: node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <cards.json> <trials> <out.jsonl> [card ids, comma-separated]
@@ -114,6 +116,11 @@ try {
         await code.probe.call("reset", START);
         await sleep(200);
         const before = await code.probe.call("registers");
+        // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
+        if (row.setup) {
+          typeKeys(display, row.setup, 30);
+          await sleep(200);
+        }
         const typed = [...card.keys, row.sample ?? row.key];
         typeKeys(display, typed, 30);
         await sleep(400);
@@ -125,6 +132,15 @@ try {
           ) ?? snap.editors.find((e) => e.uri === snap.active);
         const state = (await code.probe.call("vimState")).state;
         const after = await code.probe.call("registers");
+        // expect.shiftNumbered: the key shifts the numbered registers (:help quote_number), so
+        // register n+1 must hold what register n held before, for n = 1..8.
+        const expectedRegisters = { ...(row.expect.registers ?? {}) };
+        if (row.expect.shiftNumbered) {
+          for (let n = 8; n >= 1; n--) {
+            if (regText(before[String(n)]) !== undefined)
+              expectedRegisters[String(n + 1)] = regText(before[String(n)]);
+          }
+        }
         const got = {
           text: active ? active.text.replace(/\n$/, "").split("\n") : null,
           cursor: active ? active.selections[0].slice(2) : null,
@@ -133,7 +149,7 @@ try {
             [...new Set([...Object.keys(before), ...Object.keys(after)])]
               .filter(
                 (k) =>
-                  k in (row.expect.registers ?? {}) ||
+                  k in expectedRegisters ||
                   regText(before[k]) !== regText(after[k]),
               )
               .map((k) => [k, regText(after[k]) ?? null]),
@@ -145,7 +161,7 @@ try {
           text: expectedText(row.expect),
           cursor: row.expect.cursor,
           mode: row.expect.mode,
-          registers: row.expect.registers ?? {},
+          registers: expectedRegisters,
         };
         const sortEntries = (o) => JSON.stringify(Object.entries(o).sort());
         const ok =

@@ -17,3 +17,13 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
 - `visual-hidden-state/`: `flaky-*.jsonl` from `S2_CASES=... S2_RESET_SETTLE=<ms> fixture-run.mjs ... reader 30 10,60 last`
   (and `30 10,30,60 last` for `flaky-vreset`); `repeat-*.json` from
   `[S2_PER_KEY=1] [S2_RESET_KEYS="..."] node spike/s2/harness/repeat-keys.mjs 1.141.0 :121 9521 60 <n> V '"' a`.
+- `cards-reference/`: `node spike/s2/harness/cards-extract.mjs <version> <display> <cdpPort> <set> <out>`
+  for the 11 settings sets of `SETTINGS_SETS` on each version (gzip). Per state of the grammar
+  fixture: VSCodeVim's real state, and the keys after which an action of its action table applies
+  (its own `doesActionApply`) or is a proper prefix of a longer key sequence that could still apply
+  (`couldActionApply`). The two versions gave identical output for every set.
+- `../cards/cards.json`: `S2_CARDS_PREFIX=cards2 node spike/s2/harness/cards-build.mjs 1.141.0 <out>`
+  (59 cards, 3,663 rows, 222 with a `when` condition; the build from 1.134.0 is identical).
+- `cards-complete/`: `node spike/s2/harness/cards-complete.mjs <version> <display> <cdpPort> <defaults|extensions> spike/s2/cards/cards.json <reference> <out>`.
+- `cards-pilot/`: `node spike/s2/harness/cards-correctness.mjs 1.141.0 :123 9523 <defaults|extensions> spike/s2/cards/pilot.json 3 <out>`,
+  the first pass of hand-written expectations for 10 cards.

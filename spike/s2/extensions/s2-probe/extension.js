@@ -139,15 +139,18 @@ const methods = {
     const Register = await reader.registerClass();
     const out = {};
     for (const [name, contents] of Register.registers) {
-      out[name] = contents.map((c) => ({
-        text:
-          typeof c.text === "string"
-            ? c.text
-            : Array.isArray(c.text)
+      // A register holds a list of contents (one per cursor) or, for some registers, one content.
+      out[name] = (Array.isArray(contents) ? contents : [contents]).map(
+        (c) => ({
+          text:
+            typeof c.text === "string"
               ? c.text
-              : "<recorded keys>",
-        mode: c.registerMode,
-      }));
+              : Array.isArray(c.text)
+                ? c.text
+                : "<recorded keys>",
+          mode: c.registerMode,
+        }),
+      );
     }
     return out;
   },

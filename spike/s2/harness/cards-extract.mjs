@@ -33,6 +33,21 @@ export const SETTINGS_SETS = {
   camelcase: { "vim.camelCaseMotion.enable": true },
   sneak: { "vim.sneak": true },
   "replace-with-register": { "vim.replaceWithRegister": true },
+  // Pairs with replaceWithRegister: gr is an operator only with it, so motions and objects of the
+  // other settings reach the gr cards only together with it.
+  "rwr-surround-off": {
+    "vim.replaceWithRegister": true,
+    "vim.surround": false,
+  },
+  "rwr-targets": {
+    "vim.replaceWithRegister": true,
+    "vim.targets.enable": true,
+  },
+  "rwr-camelcase": {
+    "vim.replaceWithRegister": true,
+    "vim.camelCaseMotion.enable": true,
+  },
+  "rwr-sneak": { "vim.replaceWithRegister": true, "vim.sneak": true },
 };
 
 export function cardStates() {
