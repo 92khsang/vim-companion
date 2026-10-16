@@ -28,3 +28,24 @@ ssh $MAC_HOST '/usr/bin/log show --start "2026-10-16 18:36:20" --style compact -
 
 # Both key runs stopped before key 1 with exit code 4: s5keys requires the input source
 # com.apple.keylayout.ABC, and the Mac's was com.apple.inputmethod.Korean.2SetKorean. No key was posted.
+
+# Rerun after the user switched the input source to ABC and granted Screen Recording only
+# (2026-10-16 18:50-18:52 +0900; the TCC log shows the grant at 18:50:01 as a Modify of
+# kTCCServiceScreenCapture for the path /usr/libexec/sshd-keygen-wrapper). Accessibility not granted.
+# Same sandboxes and $MD as above; every line is a new ssh session.
+$R preflight                                       # preflight-3.txt: screenCapture=true, postEvent=false, axTrusted=false, ABC
+ssh $MAC_HOST "$MD/bin/s5win activate <IntelliJ pid>"   # activate-intellij-2.txt
+$R keys intellij 1 1 40 neg-intellij-keys-2        # keys/
+ssh $MAC_HOST "$MD/bin/s5win activate <VS Code pid>"    # activate-vscode-2.txt
+$R front                                           # front-vscode-2.txt
+$R keys vscode 1 1 40 neg-vscode-keys-2            # keys/
+ssh $MAC_HOST '/usr/bin/log show --start "2026-10-16 18:45:00" --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"AUTHREQ\" OR eventMessage CONTAINS \"Publishing\")"'
+    # tcc-spike-2.txt: the requests whose responsible process is com.apple.sshd-keygen-wrapper and the
+    # Publishing events for that path. ScreenCapture: authValue=2 (allowed); PostEvent, Accessibility
+    # and ListenEvent: authValue=0 (denied). No kTCCServiceAppleEvents (Automation) request.
+
+# s5win activate: the AX call fails with -25211 (no Accessibility), and its fallback
+# NSRunningApplication.activate brought each sandbox IDE to the front from an ssh session; the user
+# clicked nothing. s5keys then found the IDE in front and the input source ABC, posted key 1 (`r`) with
+# exit code 0, and neither probe recorded it (no key log file was created). VS Code's probe reported
+# probe-focus true at the activation, before the key was sent.
