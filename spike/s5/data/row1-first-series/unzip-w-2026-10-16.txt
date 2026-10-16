@@ -1,0 +1,8 @@
+# Spike S5: does macOS's /usr/bin/unzip accept -W? (2026-10-16 18:40 +0900, macOS 27.0.1 26A434, arm64)
+# Copied from the agent's terminal. t.zip holds one file, a, made with /usr/bin/zip.
+
+$ ssh $MAC_HOST 'D=$(/usr/bin/mktemp -d /tmp/s5unzip.XXXXXX); cd "$D" && echo a > a && /usr/bin/zip -q t.zip a && /usr/bin/unzip -p t.zip "a*" > /dev/null 2>&1; echo "unzip -p t.zip a* exit=$?"; /usr/bin/unzip -W -p t.zip "a*" > /dev/null 2>&1; echo "unzip -W -p t.zip a* exit=$?"; /usr/bin/unzip -W -p t.zip "a*" 2>&1 | /usr/bin/head -2; cd /; /bin/rm -rf "$D"'
+unzip -p t.zip a* exit=0
+unzip -W -p t.zip a* exit=10
+UnZip 6.00 of 20 April 2009, by Info-ZIP, with modifications by Apple Inc.
+Please report bugs to Apple.

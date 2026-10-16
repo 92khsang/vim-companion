@@ -1,0 +1,299 @@
+### fetch-node: fetch https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz node.tar.gz bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057
+### fetch-pnpm: fetch https://registry.npmjs.org/pnpm/-/pnpm-11.28.5.tgz pnpm.tgz 1ef4e447a68713656064f3f174c0f44719960a043a3fe2299169d08cf1dbf8ee
+### fetch-jdk: fetch https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4%2B7/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4_7.tar.gz jdk.tar.gz 5a101c54abf5a9f16c0f70d8c38ba99e6567c1ba213378f0bb04497284f051bd
+### unpack-node: /usr/bin/tar -xf $TMPDIR/s5run.1VEMp7kgjg/dl/node.tar.gz -C $TMPDIR/s5run.1VEMp7kgjg/tools
+### mkdir-pnpm: /bin/mkdir -p $TMPDIR/s5run.1VEMp7kgjg/tools/pnpm
+### unpack-pnpm: /usr/bin/tar -xzf $TMPDIR/s5run.1VEMp7kgjg/dl/pnpm.tgz -C $TMPDIR/s5run.1VEMp7kgjg/tools/pnpm
+### unpack-jdk: /usr/bin/tar -xzf $TMPDIR/s5run.1VEMp7kgjg/dl/jdk.tar.gz -C $TMPDIR/s5run.1VEMp7kgjg/tools
+### install: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm install --frozen-lockfile --ignore-scripts --store-dir $TMPDIR/s5run.1VEMp7kgjg/cache/pnpm-store
+Scope: all 2 workspace projects
+? Verifying lockfile against supply-chain policies (157 entries)...
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +124
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: $TMPDIR/s5run.1VEMp7kgjg/cache/pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 124, reused 0, downloaded 119, added 119
+✓ Lockfile passes supply-chain policies (157 entries in 1.4s)
+Progress: resolved 124, reused 0, downloaded 124, added 123
+Progress: resolved 124, reused 0, downloaded 124, added 124, done
+
+devDependencies:
++ @commitlint/cli 21.2.3
++ @commitlint/config-conventional 21.2.3
++ lefthook 2.2.1
++ prettier 3.9.10
+
+Done in 2.6s using pnpm v11.28.5
+### typecheck: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm typecheck
+$ pnpm -F @vim-companion/spec --fail-if-no-match typecheck
+$ tsc
+### spec-check: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm spec:check
+$ pnpm -F @vim-companion/spec --fail-if-no-match spec:check
+$ node tools/validate.mts
+### check-ids: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm check-ids
+$ pnpm -F @vim-companion/spec --fail-if-no-match check-ids
+$ node tools/check-ids.mts
+check-ids: resolved 31/31 VS Code commands and 20/20 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 0
+### gen-check: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm gen --check
+$ pnpm -F @vim-companion/spec --fail-if-no-match gen --check
+$ node tools/gen.mts --check
+### test: e $TMPDIR/s5run.1VEMp7kgjg/tools/bin/pnpm test --coverage
+$ pnpm -F @vim-companion/spec --fail-if-no-match test --coverage
+$ vitest --coverage
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.4 [39m[90m$TMPDIR/s5run.1VEMp7kgjg/repo/spec[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m test/ids.test.mts [2m([22m[2m11 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/keys.test.mts [2m([22m[2m12 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m test/gen.test.mts [2m([22m[2m19 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m test/rows.test.mts [2m([22m[2m4 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m test/version.test.mts [2m([22m[2m6 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m test/resolve.test.mts [2m([22m[2m6 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m test/conformance.test.mts [2m([22m[2m35 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m test/validate-fixtures.test.mts [2m([22m[2m4 tests[22m[2m)[22m[33m 768[2mms[22m[39m
+   [32m✓[39m validateFixtures [2m(4)[22m
+     [33m[2m✓[22m[39m SCHEMA reports the path and the problem where a fixture file breaks its schema[33m 405[2mms[22m[39m
+ [32m✓[39m test/root-scripts.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/golden.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m test/messages.test.mts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/fixtures.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/schema.test.mts [2m([22m[2m2 tests[22m[2m)[22m[33m 877[2mms[22m[39m
+   [33m[2m✓[22m[39m spec:check accepts as a fixture version exactly the strings isVersion accepts[33m 792[2mms[22m[39m
+ [32m✓[39m test/core-purity.test.mts [2m([22m[2m10 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/gen-properties.test.mts [2m([22m[2m7 tests[22m[2m)[22m[33m 1492[2mms[22m[39m
+   [32m✓[39m genIde on generated catalogs [2m(7)[22m
+     [33m[2m✓[22m[39m the pool and the catalogs made from it pass the catalog checks[33m 1320[2mms[22m[39m
+ [32m✓[39m test/check-ids-cli.test.mts [2m([22m[2m5 tests[22m[2m)[22m[33m 1976[2mms[22m[39m
+   [32m✓[39m check-ids [2m(5)[22m
+     [33m[2m✓[22m[39m prints the summary and exits 0 when every ID resolves[33m 327[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 912[2mms[22m[39m
+ [32m✓[39m test/validate-cli.test.mts [2m([22m[2m6 tests[22m[2m)[22m[33m 1944[2mms[22m[39m
+   [32m✓[39m spec:check [2m(6)[22m
+     [33m[2m✓[22m[39m prints nothing and exits 0 for a valid catalog[33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m prints the diagnostics as sorted lines and exits 1 for an invalid catalog[33m 332[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 603[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when a fixture file is missing or not JSON[33m 314[2mms[22m[39m
+ [32m✓[39m test/gen-cli.test.mts [2m([22m[2m5 tests[22m[2m)[22m[33m 2220[2mms[22m[39m
+   [32m✓[39m gen [2m(5)[22m
+     [33m[2m✓[22m[39m writes the IDE files and the fixture index to generated/ and prints the unsupported keys[33m 322[2mms[22m[39m
+     [33m[2m✓[22m[39m --check exits 0 when generated/ is up to date and otherwise prints each stale file and exits 1, writing nothing[33m 743[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message and writes nothing when it cannot run[33m 706[2mms[22m[39m
+ [32m✓[39m test/validate.test.mts [2m([22m[2m20 tests[22m[2m)[22m[33m 2510[2mms[22m[39m
+   [32m✓[39m validateCatalog [2m(20)[22m
+     [33m[2m✓[22m[39m SCHEMA reports the path and the problem where a file breaks its schema[33m 630[2mms[22m[39m
+     [33m[2m✓[22m[39m FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space, bare function keys, function key chords or the leader, or that redefine a protected key[33m 363[2mms[22m[39m
+ [31m❯[39m test/refresh-ids-cli.test.mts [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 11462[2mms[22m[39m
+   [31m❯[39m ids:refresh [2m(10)[22m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 1145[2mms[22m[39m
+     [33m[2m✓[22m[39m names a JSON file that it cannot parse, with each line on stderr after "ids:refresh: "[33m 1526[2mms[22m[39m
+[31m     [31m×[31m intellij writes the IDs that the IDE and the allow-listed plugins declare, and the runtime ones[39m[33m 324[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode writes the dumped commands and the contributed ones, with VS Code in temporary directories[33m 342[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode exits 2 when an extension is missing or the dump disagrees with the install[33m 702[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode lets the processes that outlive VS Code finish their own shutdown[33m 957[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGINT ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 130[33m 889[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGTERM ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 143[33m 905[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGHUP ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 129[33m 896[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGINT ends VS Code, which ignores SIGTERM, removes the temporary directories and exits 130[33m 3632[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/refresh-ids-cli.test.mts[2m > [22mids:refresh[2m > [22mintellij writes the IDs that the IDE and the allow-listed plugins declare, and the runtime ones
+[31m[1mAssertionError[22m: expected [ …(3) ] to deeply equal [ { status: +0, …(3) }, …(2) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    {[22m
+[32m-     "status": 0,[39m
+[32m-     "stderr": "",[39m
+[32m-     "stdout": "ids:refresh: wrote spec/ids/intellij.json: 7 declared and 6 runtime IDs from IU-262.1.2, IdeaVIM 9.9.9[39m
+[31m+     "status": 2,[39m
+[31m+     "stderr": "ids:refresh: unzip $TMPDIR/s5run.1VEMp7kgjg/tmp/refresh-ids-HEpgEc/intellij/plugins/IdeaVIM/lib/IdeaVIM-9.9.9.jar exited with 10: UnZip 6.00 of 20 April 2009, by Info-ZIP, with modifications by Apple Inc.[39m
+[31m+ ids:refresh: Please report bugs to Apple.[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh: Usage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir][39m
+[31m+ ids:refresh:   Default action is to extract files in list, except those in xlist, to exdir;[39m
+[31m+ ids:refresh:   file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh:   -p  extract files to pipe, no messages     -l  list files (short format)[39m
+[31m+ ids:refresh:   -f  freshen existing files, create none    -t  test compressed archive data[39m
+[31m+ ids:refresh:   -u  update files, create if necessary      -z  display archive comment only[39m
+[31m+ ids:refresh:   -v  list verbosely/show version info       -T  timestamp archive to latest[39m
+[31m+ ids:refresh:   -x  exclude files that follow (in xlist)   -d  extract files into exdir[39m
+[31m+ ids:refresh: modifiers:[39m
+[31m+ ids:refresh:   -n  never overwrite existing files         -q  quiet mode (-qq => quieter)[39m
+[31m+ ids:refresh:   -o  overwrite files WITHOUT prompting      -a  auto-convert any text files[39m
+[31m+ ids:refresh:   -j  junk paths (do not make directories)   -aa treat ALL files as text[39m
+[31m+ ids:refresh:   -C  match filenames case-insensitively     -L  make (some) names lowercase[39m
+[31m+ ids:refresh:   -X  restore UID/GID info                   -V  retain VMS version numbers[39m
+[31m+ ids:refresh:   -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager[39m
+[31m+ ids:refresh: See \"unzip -hh\" or unzip.txt for more help.  Examples:[39m
+[31m+ ids:refresh:   unzip data1 -x joe   => extract all files except joe from zipfile data1.zip[39m
+[31m+ ids:refresh:   unzip -p foo | more  => send contents of foo.zip via pipe into program more[39m
+[31m+ ids:refresh:   unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer[39m
+[2m  ",[22m
+[32m-     "written": "{[39m
+[32m-   \"ide\": \"IU-262.1.2\",[39m
+[32m-   \"plugins\": {[39m
+[32m-     \"IdeaVIM\": \"9.9.9\"[39m
+[32m-   },[39m
+[32m-   \"declared\": [[39m
+[32m-     \"ActivateCommitToolWindow\",[39m
+[32m-     \"Git.Commit\",[39m
+[32m-     \"GoToMenu\",[39m
+[32m-     \"GotoClass\",[39m
+[32m-     \"GotoFile\",[39m
+[32m-     \"VimFindActionIdAction\",[39m
+[32m-     \"VimShortcutKeyAction\"[39m
+[32m-   ],[39m
+[32m-   \"runtime\": [[39m
+[32m-     \"ActivateProblemsViewToolWindow\",[39m
+[32m-     \"ActivateProjectToolWindow\",[39m
+[32m-     \"Debug\",[39m
+[32m-     \"DebugClass\",[39m
+[32m-     \"Run\",[39m
+[32m-     \"RunClass\"[39m
+[32m-   ][39m
+[32m- }[39m
+[32m- ",[39m
+[31m+     "stdout": "",[39m
+[31m+     "written": null,[39m
+[2m    },[22m
+[2m    {[22m
+[32m-     "status": 0,[39m
+[32m-     "stderr": "",[39m
+[32m-     "stdout": "ids:refresh: wrote spec/ids/intellij.json: 7 declared and 6 runtime IDs from IU-262.1.2, IdeaVIM 9.9.9[39m
+[31m+     "status": 2,[39m
+[31m+     "stderr": "ids:refresh: unzip $TMPDIR/s5run.1VEMp7kgjg/tmp/refresh-ids-HEpgEc/intellij/ide/lib/app.jar exited with 10: UnZip 6.00 of 20 April 2009, by Info-ZIP, with modifications by Apple Inc.[39m
+[31m+ ids:refresh: Please report bugs to Apple.[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh: Usage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir][39m
+[31m+ ids:refresh:   Default action is to extract files in list, except those in xlist, to exdir;[39m
+[31m+ ids:refresh:   file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh:   -p  extract files to pipe, no messages     -l  list files (short format)[39m
+[31m+ ids:refresh:   -f  freshen existing files, create none    -t  test compressed archive data[39m
+[31m+ ids:refresh:   -u  update files, create if necessary      -z  display archive comment only[39m
+[31m+ ids:refresh:   -v  list verbosely/show version info       -T  timestamp archive to latest[39m
+[31m+ ids:refresh:   -x  exclude files that follow (in xlist)   -d  extract files into exdir[39m
+[31m+ ids:refresh: modifiers:[39m
+[31m+ ids:refresh:   -n  never overwrite existing files         -q  quiet mode (-qq => quieter)[39m
+[31m+ ids:refresh:   -o  overwrite files WITHOUT prompting      -a  auto-convert any text files[39m
+[31m+ ids:refresh:   -j  junk paths (do not make directories)   -aa treat ALL files as text[39m
+[31m+ ids:refresh:   -C  match filenames case-insensitively     -L  make (some) names lowercase[39m
+[31m+ ids:refresh:   -X  restore UID/GID info                   -V  retain VMS version numbers[39m
+[31m+ ids:refresh:   -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager[39m
+[31m+ ids:refresh: See \"unzip -hh\" or unzip.txt for more help.  Examples:[39m
+[31m+ ids:refresh:   unzip data1 -x joe   => extract all files except joe from zipfile data1.zip[39m
+[31m+ ids:refresh:   unzip -p foo | more  => send contents of foo.zip via pipe into program more[39m
+[31m+ ids:refresh:   unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer[39m
+[2m  ",[22m
+[32m-     "written": "{[39m
+[32m-   \"ide\": \"IU-262.1.2\",[39m
+[32m-   \"plugins\": {[39m
+[32m-     \"IdeaVIM\": \"9.9.9\"[39m
+[32m-   },[39m
+[32m-   \"declared\": [[39m
+[32m-     \"ActivateCommitToolWindow\",[39m
+[32m-     \"Git.Commit\",[39m
+[32m-     \"GoToMenu\",[39m
+[32m-     \"GotoClass\",[39m
+[32m-     \"GotoFile\",[39m
+[32m-     \"VimFindActionIdAction\",[39m
+[32m-     \"VimShortcutKeyAction\"[39m
+[32m-   ],[39m
+[32m-   \"runtime\": [[39m
+[32m-     \"ActivateProblemsViewToolWindow\",[39m
+[32m-     \"ActivateProjectToolWindow\",[39m
+[32m-     \"Debug\",[39m
+[32m-     \"DebugClass\",[39m
+[32m-     \"Run\",[39m
+[32m-     \"RunClass\"[39m
+[32m-   ][39m
+[32m- }[39m
+[32m- ",[39m
+[31m+     "stdout": "",[39m
+[31m+     "written": null,[39m
+[2m    },[22m
+[2m    {[22m
+[32m-     "status": 0,[39m
+[32m-     "stderr": "",[39m
+[32m-     "stdout": "ids:refresh: wrote spec/ids/intellij.json: 6 declared and 6 runtime IDs from IU-262.1.2, Which-Key-1.0.jar 1.0[39m
+[31m+     "status": 2,[39m
+[31m+     "stderr": "ids:refresh: unzip $TMPDIR/s5run.1VEMp7kgjg/tmp/refresh-ids-HEpgEc/intellij/plugins/Which-Key-1.0.jar exited with 10: UnZip 6.00 of 20 April 2009, by Info-ZIP, with modifications by Apple Inc.[39m
+[31m+ ids:refresh: Please report bugs to Apple.[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh: Usage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir][39m
+[31m+ ids:refresh:   Default action is to extract files in list, except those in xlist, to exdir;[39m
+[31m+ ids:refresh:   file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).[39m
+[31m+ ids:refresh: [39m
+[31m+ ids:refresh:   -p  extract files to pipe, no messages     -l  list files (short format)[39m
+[31m+ ids:refresh:   -f  freshen existing files, create none    -t  test compressed archive data[39m
+[31m+ ids:refresh:   -u  update files, create if necessary      -z  display archive comment only[39m
+[31m+ ids:refresh:   -v  list verbosely/show version info       -T  timestamp archive to latest[39m
+[31m+ ids:refresh:   -x  exclude files that follow (in xlist)   -d  extract files into exdir[39m
+[31m+ ids:refresh: modifiers:[39m
+[31m+ ids:refresh:   -n  never overwrite existing files         -q  quiet mode (-qq => quieter)[39m
+[31m+ ids:refresh:   -o  overwrite files WITHOUT prompting      -a  auto-convert any text files[39m
+[31m+ ids:refresh:   -j  junk paths (do not make directories)   -aa treat ALL files as text[39m
+[31m+ ids:refresh:   -C  match filenames case-insensitively     -L  make (some) names lowercase[39m
+[31m+ ids:refresh:   -X  restore UID/GID info                   -V  retain VMS version numbers[39m
+[31m+ ids:refresh:   -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager[39m
+[31m+ ids:refresh: See \"unzip -hh\" or unzip.txt for more help.  Examples:[39m
+[31m+ ids:refresh:   unzip data1 -x joe   => extract all files except joe from zipfile data1.zip[39m
+[31m+ ids:refresh:   unzip -p foo | more  => send contents of foo.zip via pipe into program more[39m
+[31m+ ids:refresh:   unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer[39m
+[2m  ",[22m
+[32m-     "written": "{[39m
+[32m-   \"ide\": \"IU-262.1.2\",[39m
+[32m-   \"plugins\": {[39m
+[32m-     \"Which-Key-1.0.jar\": \"1.0\"[39m
+[32m-   },[39m
+[32m-   \"declared\": [[39m
+[32m-     \"ActivateCommitToolWindow\",[39m
+[32m-     \"Git.Commit\",[39m
+[32m-     \"GoToMenu\",[39m
+[32m-     \"GotoClass\",[39m
+[32m-     \"GotoFile\",[39m
+[32m-     \"WhichKey.Show\"[39m
+[32m-   ],[39m
+[32m-   \"runtime\": [[39m
+[32m-     \"ActivateProblemsViewToolWindow\",[39m
+[32m-     \"ActivateProjectToolWindow\",[39m
+[32m-     \"Debug\",[39m
+[32m-     \"DebugClass\",[39m
+[32m-     \"Run\",[39m
+[32m-     \"RunClass\"[39m
+[32m-   ][39m
+[32m- }[39m
+[32m- ",[39m
+[31m+     "stdout": "",[39m
+[31m+     "written": null,[39m
+[2m    },[22m
+[2m  ][22m
+
+[36m [2m❯[22m test/refresh-ids-cli.test.mts:[2m572:8[22m[39m
+    [90m570|[39m       run(),
+    [90m571|[39m       run("--drop-plugin", "IdeaVIM", "--plugin", "Which-Key-1.0.jar"),
+    [90m572|[39m     ]).toEqual([
+    [90m   |[39m        [31m^[39m
+    [90m573|[39m       withIdeaVim,
+    [90m574|[39m       withIdeaVim,
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m167 passed[39m[22m[90m (168)[39m
+[2m   Start at [22m 17:26:20
+[2m   Duration [22m 11.73s[2m (tests 92%, transform 4%, import 3%, worker 1%)[22m
+
+$TMPDIR/s5run.1VEMp7kgjg/repo/spec:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @vim-companion/spec@0.0.0 test: `vitest --coverage`
+Exit status 1
+[ELIFECYCLE] Test failed. See above for more details.
