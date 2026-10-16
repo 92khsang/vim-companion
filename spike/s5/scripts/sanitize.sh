@@ -9,12 +9,14 @@ dir=$1
 words=("$USER" "$(hostname)")
 IFS=: read -r -a extra <<< "${S5_SCRUB:-}"
 words+=("${extra[@]}")
-grep -rlI -E -e "/Users/|/home/|192\.168\.|10\.[0-9]+\.[0-9]+\.[0-9]+" "$dir" 2>/dev/null | while read -r f; do
-  sed -i -E -e 's#/Users/[^/ "]+#~#g' -e "s#/home/[^/ \"]+#~#g" -e 's#192\.168\.[0-9]+\.[0-9]+#<private-ip>#g' "$f"
+# The per-user temporary directory of macOS (/var/folders/<xx>/<id>/T) becomes $TMPDIR.
+grep -rlI -E -e "/Users/|/home/|192\.168\.|/var/folders/" "$dir" 2>/dev/null | while read -r f; do
+  sed -i -E -e 's#(/private)?/var/folders/[^/]+/[^/]+/T#$TMPDIR#g' -e 's#/Users/[^/ "]+#~#g' \
+    -e "s#/home/[^/ \"]+#~#g" -e 's#192\.168\.[0-9]+\.[0-9]+#[private-ip]#g' "$f"
 done || true
 for w in "${words[@]}"; do
   [ -n "$w" ] || continue
   grep -rlI -F -e "$w" "$dir" 2>/dev/null | while read -r f; do
-    sed -i -e "s#$w#<redacted>#g" "$f"
+    sed -i -e "s#$w#[redacted]#g" "$f"
   done || true
 done || true

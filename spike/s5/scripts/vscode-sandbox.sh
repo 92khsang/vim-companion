@@ -2,6 +2,7 @@
 # Starts a sandbox VS Code: its own user data, extensions and HOME under <sandbox dir>.
 # Runs on macOS (/bin/bash 3.2) and Linux. Every program is named by an absolute path.
 #   vscode-sandbox.sh install <code cli> <sandbox dir> <vsix or extension id>...
+#   vscode-sandbox.sh uninstall <code cli> <sandbox dir> <extension id>
 #   vscode-sandbox.sh list    <code cli> <sandbox dir>
 #   vscode-sandbox.sh start   <electron binary> <sandbox dir> <folder or -> <file or -> [report] [keylog]
 # start prints the PID of the VS Code main process and returns; the caller stops it. It passes
@@ -40,6 +41,10 @@ case $cmd in
       HOME="$sb/home" "$bin" --user-data-dir "$sb/user-data" --extensions-dir "$sb/extensions" \
         --install-extension "$ext" --force
     done
+    ;;
+  uninstall)
+    HOME="$sb/home" "$bin" --user-data-dir "$sb/user-data" --extensions-dir "$sb/extensions" \
+      --uninstall-extension "$1"
     ;;
   list)
     HOME="$sb/home" "$bin" --user-data-dir "$sb/user-data" --extensions-dir "$sb/extensions" \

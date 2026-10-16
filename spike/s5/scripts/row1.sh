@@ -43,6 +43,12 @@ case $where in
       *) echo "unexpected run dir '$run_dir'" >&2; exit 1 ;;
     esac
     scp -q -r -o BatchMode=yes "$MAC_HOST:$run_dir/results" "$out/" || true
+    # Keep only the console state from the ioreg dumps: they hold far more than that.
+    for p in "$out"/results/console-*.plist; do
+      [ -f "$p" ] || continue
+      echo "$(basename "$p" .plist): $(python3 -I "$here/console-state.py" "$p")" >> "$out/results/console-state.txt"
+      rm -f "$p"
+    done
     ssh -o BatchMode=yes "$MAC_HOST" "/bin/ps -axo pid,command | /usr/bin/grep -F '$run_dir' | /usr/bin/grep -v grep" > "$out/leftover-processes.txt" || true
     ssh -o BatchMode=yes "$MAC_HOST" "/bin/rm -rf '$run_dir' && echo deleted" > "$out/cleanup.txt"
     ;;
