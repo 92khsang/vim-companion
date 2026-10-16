@@ -1,0 +1,18 @@
+<idea-plugin>
+  <id>dev.vimcompanion.spike.s5</id>
+  <name>S5 Target B Probe</name>
+  <vendor>vim-companion spike</vendor>
+  <description><![CDATA[
+    Spike S5 target (b). A throwaway probe: it reports its version, opens a fixture file and logs
+    every key press it receives, each only when the matching s5.* system property is set.
+  ]]></description>
+  <depends>com.intellij.modules.platform</depends>
+
+  <applicationListeners>
+    <listener class="dev.vimcompanion.spike.s5.S5AppListener" topic="com.intellij.ide.AppLifecycleListener"/>
+  </applicationListeners>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="dev.vimcompanion.spike.s5.S5ProjectActivity"/>
+  </extensions>
+</idea-plugin>
