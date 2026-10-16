@@ -5,6 +5,7 @@ Usage: python3 -I analyze.py <run-dir-or-jsonl> [...]
 Prints one JSON object per (row, host, IdeaVim version, toolkit) with trial and failure counts, and the first failure
 reasons. A trial fails on the first condition it breaks; every condition is listed in CHECKS below.
 """
+import gzip
 import json
 import sys
 from collections import defaultdict
@@ -13,12 +14,17 @@ from pathlib import Path
 TEXT = "line one\nline two\nline three\nline four\nline five\nline six\n"
 
 
+def open_jsonl(f):
+    """Opens a JSONL file, gzip-compressed (.jsonl.gz) or not."""
+    return gzip.open(f, "rt", encoding="utf-8") if str(f).endswith(".gz") else open(f, encoding="utf-8")
+
+
 def lines(paths):
     for p in paths:
         p = Path(p)
-        files = sorted(p.glob("*.jsonl")) if p.is_dir() else [p]
+        files = sorted(list(p.glob("*.jsonl")) + list(p.glob("*.jsonl.gz"))) if p.is_dir() else [p]
         for f in files:
-            for n, line in enumerate(f.open(encoding="utf-8"), 1):
+            for n, line in enumerate(open_jsonl(f), 1):
                 line = line.strip()
                 if line:
                     yield f, n, json.loads(line)
@@ -123,27 +129,63 @@ def check_commit(d):
     return None
 
 
-CHECKS = {"focus": check_focus, "esc": check_esc, "commit": check_commit}
+CHECKS = {"focus": check_focus, "esc": check_esc, "commit": check_commit, "commit-ibus": check_commit}
+
+
+def dot_outcomes(rows):
+    """Classifies what `.` did after x and an <Action> mapping, using the two reference variants of the same trial."""
+    by = defaultdict(dict)
+    for d in rows:
+        by[(d["case"], d.get("ideavim"), d["trial"])][d["variant"]] = d
+    out = defaultdict(lambda: {"trials": 0, "outcomes": defaultdict(int), "dotSeen": 0, "hostShows": 0, "refsOk": 0})
+    for (case, ver, n), v in sorted(by.items()):
+        if not {"dot", "ref-x", "ref-action"} <= set(v) or any("error" in x for x in v.values()):
+            out[(case, ver)]["outcomes"]["incomplete"] += 1
+            continue
+        b, a = v["dot"]["beforeLast"], v["dot"]["after"]
+        x_text = b["text"][: b["caret"]] + b["text"][b["caret"] + 1 :]
+        rx, ra = v["ref-x"]["after"], v["ref-action"]["after"]
+        if a["text"] == x_text and a["text"] == rx["text"]:
+            outcome = "repeats x"
+        elif a["text"] == ra["text"] and a["caret"] == ra["caret"]:
+            outcome = "repeats the action"
+        elif a["text"] == b["text"] and a["caret"] == b["caret"]:
+            outcome = "does nothing"
+        else:
+            outcome = "other"
+        g = out[(case, ver)]
+        g["trials"] += 1
+        g["outcomes"][outcome] += 1
+        g["dotSeen"] += 1 if a.get("dotReplay") else 0
+        g["hostShows"] += a["hostCounts"][0]
+        g["refsOk"] += 1 if rx["text"] == x_text else 0
+    for (case, ver), g in sorted(out.items()):
+        print(json.dumps({"row": "dot", "case": case, "ideavim": ver, "trials": g["trials"], "outcomes": dict(g["outcomes"]),
+                          "observerSawDot": g["dotSeen"], "hostShowsDuringDot": g["hostShows"], "refXMatchesX": g["refsOk"]}))
 
 
 def main(argv):
     groups = defaultdict(lambda: {"trials": 0, "failures": 0, "reasons": defaultdict(int), "examples": []})
     events = []
+    dots = []
     for f, n, d in lines(argv[1:]):
+        if d.get("case", "").startswith("dot:") and "variant" in d:
+            dots.append(d)
+            continue
         if "event" in d:
             if d["event"] in ("delivery-check", "run-start", "open"):
                 events.append({"file": f.name, **{k: d[k] for k in d if k in ("event", "sequence", "pass", "deliveryCheck", "install")}})
             continue
         case = d.get("case", "")
         row = case.split(":", 1)[0]
-        if row == "delivery-check":
+        if row in ("delivery-check", "hangul-ibus", "hangul-ime", "ime-proof", "fixture"):
             continue
         host = d.get("host", "")
         if row == "esc" and host == "control":
             row, check = "control", check_control
         else:
             check = CHECKS.get(row)
-        key = (row, case if row in ("commit", "focus") else row, host, d.get("ideavim", ""), d.get("toolkit", ""))
+        key = (row, case if row in ("commit", "commit-ibus", "focus") else row, host, d.get("ideavim", ""), d.get("toolkit", ""))
         g = groups[key]
         g["trials"] += 1
         why = d["error"] if "error" in d else (check(d) if check else "no check for row")
@@ -154,6 +196,7 @@ def main(argv):
                 g["examples"].append("%s:%d" % (f.name, n))
     for e in events:
         print(json.dumps(e, ensure_ascii=False))
+    dot_outcomes(dots)
     for key in sorted(groups):
         g = groups[key]
         print(json.dumps({

@@ -1,0 +1,35 @@
+{
+  "description": "IdeaVim deviations from the expected states of the observer fixture, in the engines.ideavim form of spike S2's format, kept apart so that the S2 files stay unchanged. Each entry names a case, the step (step <n> or afterTimeout), and the state IdeaVim has instead, with the measurement behind it.",
+  "deviations": [
+    {
+      "file": "s2/remap-prefixes.json",
+      "case": "gr-normal",
+      "at": "afterTimeout",
+      "ideavim": {
+        "expect": {
+          "mode": "normal",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        },
+        "deviation": "Measured: after the mapping timeout of gr, IdeaVim 2.47.3 and 2.48.0-eap.2 had nothing pending in 10 of 10 VIA_IDE runs each and in the one Driver run under Xvfb each (spike S3, 2026-10-16), where Vim keeps gr pending for its character. IdeaVim has no built-in gr: the command table of IdeaVim 2.47.3 (vim-engine/src/main/resources/ksp-generated/engine_commands.json) has no gr entry, so the replayed g and r are dropped."
+      }
+    },
+    {
+      "file": "s2/remap-prefixes.json",
+      "case": "gr-visual",
+      "at": "afterTimeout",
+      "ideavim": {
+        "expect": {
+          "mode": "visual",
+          "pending": [],
+          "operator": null,
+          "count": null,
+          "register": null
+        },
+        "deviation": "Measured: after the mapping timeout of gr, IdeaVim 2.47.3 and 2.48.0-eap.2 had nothing pending in 10 of 10 VIA_IDE runs each and in the one Driver run under Xvfb each (spike S3, 2026-10-16), where Vim keeps gr pending for its character. IdeaVim has no built-in gr: the command table of IdeaVim 2.47.3 (vim-engine/src/main/resources/ksp-generated/engine_commands.json) has no gr entry, so the replayed g and r are dropped."
+      }
+    }
+  ]
+}

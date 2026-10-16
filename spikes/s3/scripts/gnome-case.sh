@@ -18,7 +18,7 @@ out="$here/../data/$run_id"
 mkdir -p "$out"
 build_dir="build-$tag-g$port"
 ide_home="$(ls -d "$HOME"/.gradle/caches/*/transforms/*/transformed/idea-2026.2.3 | head -1)"
-ext_dir="${S3_IDEAVIM_EXTENSION:-}"
+ext_dir="${S3_IDEAVIM_EXTENSION:+$(realpath "$S3_IDEAVIM_EXTENSION")}"
 
 root="$(mktemp -d)"
 cleanup() {
@@ -39,7 +39,7 @@ if [ -n "$ext_dir" ]; then extra_plugins="$ext_dir"; fi
 plugin_off="false"
 if [[ ",$variant," == *",plugin-off,"* ]]; then plugin_off="true"; fi
 
-"$gh/gnome-harness.sh" start "$root" >"$out/harness-start.txt"
+taskset -c 16-27 "$gh/gnome-harness.sh" start "$root" >"$out/harness-start.txt"
 sleep 5
 "$gh/gnome-harness.sh" select "$root" ibus:hangul >>"$out/harness-start.txt"
 shots_pid=""
@@ -65,3 +65,5 @@ cd "$plugin"
   -Ps3.rcExtra="$rc_extra" -Ps3.extraPlugins="$extra_plugins" -Ps3.pluginOff="$plugin_off" \
   >"$out/gradle.log" 2>&1 || echo "gradle exit $?" >>"$out/harness-start.txt"
 "$gh/gnome-harness.sh" state "$root" >"$out/harness-state-end.json" || true
+# Raw data over 1 MB is kept gzip-compressed; the analysis scripts read .jsonl and .jsonl.gz.
+find "$out" -name '*.jsonl' -size +1M -exec gzip -9 {} \;

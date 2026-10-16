@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Runs one Driver row of spike S3 under its own Xvfb display, with no window manager and no input method.
-# Usage: xvfb-case.sh <display-number> <case> <ideavim-notation> <trials> [hosts] [port-base]
+# Usage: xvfb-case.sh <display-number> <case> <ideavim-notation> <trials> [hosts] [port-base] [variant]
 #   e.g. xvfb-case.sh 131 focus IdeaVIM:2.47.3 1000 balloon,layer 9531
+#   variant: plugin-off runs without the spike plugin (the reference runs of the Hangul row)
 # Output: spikes/s3/data/<run-id>/ (JSONL per run, the command, and the Gradle log, which git ignores).
 #
 # Isolation: Gradle, the test JVM and the IDE run with an empty environment plus the variables below. They get their
@@ -9,7 +10,9 @@
 # user's session bus, keyring, notifications or input method, and starts no keyring of its own. Only PATH and LANG
 # come from the caller.
 set -euo pipefail
-disp="$1"; case_="$2"; ideavim="$3"; trials="$4"; hosts="${5:-balloon,layer}"; port="${6:-9531}"
+disp="$1"; case_="$2"; ideavim="$3"; trials="$4"; hosts="${5:-balloon,layer}"; port="${6:-9531}"; variant="${7:-}"
+plugin_off="false"
+if [[ ",$variant," == *",plugin-off,"* ]]; then plugin_off="true"; fi
 here="$(cd "$(dirname "$0")" && pwd)"
 plugin="$(cd "$here/../plugin" && pwd)"
 tag="$(echo "$ideavim" | sed -e 's/^IdeaVIM://' -e 's/@.*//')"
@@ -57,5 +60,7 @@ cd "$plugin"
 "${run_env[@]}" taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-x$disp" uiTest \
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
   -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work-$disp" \
-  -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" \
+  -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" -Ps3.pluginOff="$plugin_off" \
   >"$out/gradle.log" 2>&1
+# Raw data over 1 MB is kept gzip-compressed; the analysis scripts read .jsonl and .jsonl.gz.
+find "$out" -name '*.jsonl' -size +1M -exec gzip -9 {} \;

@@ -55,6 +55,7 @@ class Harness : Disposable {
   fun beginTrial(): String = edt {
     Probe.clear()
     Observer.clear()
+    HostPaints.times.clear()
     Observer.host.resetCounts()
     "ok"
   }
@@ -187,6 +188,7 @@ class Harness : Disposable {
       "focusChanges" to Probe.focusChanges.toList(),
       "dotReplay" to Observer.dotReplayEvents.toList(),
       "silentEvents" to Observer.silentEvents.toList(),
+      "hostPaints" to HostPaints.times.toList(),
       "host" to Observer.host.name,
       "hostCounts" to Observer.host.counts.toList(),
       "hostShowing" to Observer.host.showing,

@@ -413,3 +413,27 @@ object FixtureRow {
     else -> error("unsupported key $key")
   }
 }
+
+/**
+ * For the runs with IdeaVimExtension's keep-english-in-normal on: confirms that the extension switches the IBus engine
+ * when Insert mode ends. Each try enters Insert mode in Hangul mode and leaves it with `Esc`, and records the IBus
+ * global engine changes in the next second.
+ */
+object KeepEnglishCheck {
+  fun run(s: Session, tries: Int = 5) {
+    for (n in 1..tries) {
+      s.reset(Rows.TEXT, 0)
+      s.keys.press(Step.Type('i'))
+      Thread.sleep(300)
+      val inInsert = s.ensureHangulMode()
+      val from = s.ibusEvents.size
+      s.keys.press(Step.ESC)
+      Thread.sleep(1000)
+      s.log(J.obj(
+        "event" to "keep-english-check", "try" to n, "shellInInsert" to J.Raw(inInsert.ifEmpty { "null" }),
+        "ibusEventsAfterEsc" to s.ibusEvents.toList().drop(from), "shellAfter" to J.Raw(s.shellState().ifEmpty { "null" }),
+        "engineAfter" to s.ibus("engine"), "mode" to (if (Env.pluginOff) null else s.h.mode()),
+      ))
+    }
+  }
+}

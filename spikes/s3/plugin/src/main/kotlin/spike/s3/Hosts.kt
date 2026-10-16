@@ -41,7 +41,19 @@ object NoHost : HintHost {
   override fun hide() {}
 }
 
-private fun hintPanel(label: JBLabel): JPanel = JPanel(BorderLayout()).apply {
+/** Times (System.nanoTime) at which a host's panel painted, to show when a hint was actually on screen. */
+object HostPaints {
+  val times: MutableList<Long> = java.util.Collections.synchronizedList(ArrayList())
+}
+
+private class PaintLoggingPanel : JPanel(BorderLayout()) {
+  override fun paintComponent(g: java.awt.Graphics) {
+    HostPaints.times += System.nanoTime()
+    super.paintComponent(g)
+  }
+}
+
+private fun hintPanel(label: JBLabel): JPanel = PaintLoggingPanel().apply {
   isFocusable = false
   label.isFocusable = false
   isOpaque = true

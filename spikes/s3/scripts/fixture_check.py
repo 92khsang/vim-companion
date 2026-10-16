@@ -7,11 +7,18 @@ afterTimeout, must equal the expected state: the step's engines.ideavim.expect w
 <fixture-dir>/ideavim-deviations.json gives one, else expect. Every key must have been delivered to IdeaVim through
 TypedAction or VimShortcutKeyAction. Prints one JSON line per failure and a summary line.
 """
+import gzip
 import json
+import re
 import sys
 from pathlib import Path
 
 FIELDS = ("mode", "pending", "operator", "count", "register")
+
+
+def open_jsonl(f):
+    """Opens a JSONL file, gzip-compressed (.jsonl.gz) or not."""
+    return gzip.open(f, "rt", encoding="utf-8") if str(f).endswith(".gz") else open(f, encoding="utf-8")
 
 
 def load_fixture(root):
@@ -40,7 +47,7 @@ def last_record(report, poll_ok):
     return recs[-1] if recs else None
 
 
-def compare(where, got, want, observer, silent, problems):
+def compare(where, got, want, observer, silent, problems, record=None, paints=()):
     for k in FIELDS:
         if got.get(k) != want[k]:
             problems.append("%s: %s %r, want %r" % (where, k, got.get(k), want[k]))
@@ -52,8 +59,14 @@ def compare(where, got, want, observer, silent, problems):
             seen = [e for e in silent if state in e.split(" ", 1)[0].split("+")]
             if not seen:
                 problems.append("%s: no '%s' state seen" % (where, state))
-            if any(e.endswith("hostShowing=true") for e in seen):
+            # A hint of the key that started the state (such as @ or <Space> c) can still show at the state's first
+            # event, where the observer hides it; it must not show at any later event of the state.
+            if any(e.endswith("hostShowing=true") for e in seen[1:]):
                 problems.append("%s: host showed during '%s'" % (where, state))
+            # No host may paint from the state's first event until the observer's record after the key.
+            times = [int(m.group(1)) for e in seen for m in [re.search(r" t=(\d+) ", e)] if m]
+            if times and record is not None and any(min(times) <= p <= record["t"] for p in paints):
+                problems.append("%s: a host painted during '%s'" % (where, state))
 
 
 def main(argv):
@@ -61,8 +74,8 @@ def main(argv):
     total = failed = 0
     for p in argv[2:]:
         p = Path(p)
-        for f in (sorted(p.glob("*.jsonl")) if p.is_dir() else [p]):
-            for line in f.open(encoding="utf-8"):
+        for f in (sorted(list(p.glob("*.jsonl")) + list(p.glob("*.jsonl.gz"))) if p.is_dir() else [p]):
+            for line in open_jsonl(f):
                 d = json.loads(line)
                 if not d.get("case", "").startswith("fixture:"):
                     continue
@@ -83,7 +96,8 @@ def main(argv):
                             continue
                         silent = rec["report"].get("silentEvents", [])[silent_seen:]
                         silent_seen = len(rec["report"].get("silentEvents", []))
-                        compare(where, r["snapshot"]["fixture"], expected(step), step.get("observer"), silent, problems)
+                        compare(where, r["snapshot"]["fixture"], expected(step), step.get("observer"), silent, problems,
+                                record=r, paints=rec["report"].get("hostPaints", []))
                     probe = [e for e in d["steps"][-1]["report"]["probe"] if e["nested"] == 0] if d["steps"] else []
                     if any(e["via"] not in ("TypedAction", "VimShortcutKeyAction") for e in probe):
                         problems.append("a key entered IdeaVim through another path")

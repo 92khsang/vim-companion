@@ -102,6 +102,7 @@ object Probe {
       when {
         c.startsWith("com.maddyhome.idea.vim.command.MappingProcessor") &&
           (m.contains("replayUnhandledKeys") || m.contains("onUnfinishedMappingSequenceTimeout")) -> return "MappingReplay"
+        c == "com.maddyhome.idea.vim.action.change.RepeatChangeAction" -> return "DotReplay"
         c == "com.maddyhome.idea.vim.VimTypedActionHandler" && m == "execute" -> return "TypedAction"
         c == SHORTCUT_ACTION && m == "actionPerformed" -> return "VimShortcutKeyAction"
         c.startsWith("com.maddyhome.idea.vim.ui.ex.ExTextField") -> return "ExTextField"

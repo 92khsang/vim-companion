@@ -54,7 +54,7 @@ object Env {
   val case: String = prop("s3.case") ?: "smoke"
   val toolkit: String = prop("s3.toolkit") ?: "XToolkit"
 
-  /** First of three ports for JMX, RMI and the IDE's web server. */
+  /** First of two ports: JMX and its RMI server share the first, the IDE's web server takes the second. */
   val portBase: Int = (prop("s3.portBase") ?: "9531").toInt()
   val display: String? = System.getenv("DISPLAY")
 
@@ -213,8 +213,8 @@ object S3Ide {
   fun run(ctx: IDETestContext, runTimeout: Duration = 12.hours): BackgroundRun {
     val host = InetAddress.getLoopbackAddress()
     val jmx = Env.portBase
-    val rmi = Env.portBase + 1
-    val web = Env.portBase + 2
+    val rmi = Env.portBase
+    val web = Env.portBase + 1
     val props = mapOf(
       "java.rmi.server.hostname" to host.hostAddress,
       "com.sun.management.jmxremote.host" to host.hostAddress,

@@ -16,6 +16,13 @@ import javax.swing.KeyStroke
 class ObserverFixtureTest : ViaIdeCase() {
   private class Outcome(val ok: Boolean, val line: String)
 
+  private companion object {
+    const val DEVIATIONS = "ideavim-deviations.json"
+  }
+
+  /** IdeaVim deviations by (file, case, `step <n>` or `afterTimeout`), from [DEVIATIONS]. */
+  private var deviations: Map<Triple<String, String, String>, JsonObject> = emptyMap()
+
   override fun setUp() {
     super.setUp()
     Observer.startPolling()
@@ -30,8 +37,12 @@ class ObserverFixtureTest : ViaIdeCase() {
     val dir = File(System.getProperty("s3.fixtures") ?: error("s3.fixtures not set"))
     val out = File(System.getProperty("s3.out") ?: "build/s3-out").apply { mkdirs() }
     val repeat = (System.getProperty("s3.repeat") ?: "1").toInt()
-    val files = dir.walk().filter { it.isFile && it.name.endsWith(".json") && !it.name.contains("schema") }
+    val files = dir.walk().filter { it.isFile && it.name.endsWith(".json") && !it.name.contains("schema") && it.name != DEVIATIONS }
       .sortedBy { it.relativeTo(dir).path }.toList()
+    deviations = File(dir, DEVIATIONS).takeIf { it.isFile }?.let { f ->
+      JsonParser.parseString(f.readText()).asJsonObject.getAsJsonArray("deviations").map { it.asJsonObject }
+        .associateBy { Triple(it["file"].asString, it["case"].asString, it["at"].asString) }
+    } ?: emptyMap()
     check(files.isNotEmpty()) { "no fixture files in $dir" }
     val version = Harness().ideaVimVersion()
     val lines = ArrayList<String>()
@@ -81,7 +92,7 @@ class ObserverFixtureTest : ViaIdeCase() {
         continue
       }
       got += rec.snapshot.fixture.json()
-      compare("step ${i + 1} $key", rec.snapshot.fixture, expectation(step), step.getAsJsonObject("observer"),
+      compare("step ${i + 1} $key", rec.snapshot.fixture, expectation(step, file, case["id"].asString, "step ${i + 1}"), step.getAsJsonObject("observer"),
         Observer.silentEvents.drop(silentBefore), problems)
     }
     case.getAsJsonObject("afterTimeout")?.let { after ->
@@ -94,7 +105,7 @@ class ObserverFixtureTest : ViaIdeCase() {
       val rec = Observer.records.drop(recordsBefore).lastOrNull() ?: Observer.records.lastOrNull()
       if (rec == null) problems += "afterTimeout: no observer record" else {
         got += rec.snapshot.fixture.json()
-        compare("afterTimeout", rec.snapshot.fixture, expectation(after), null, emptyList(), problems)
+        compare("afterTimeout", rec.snapshot.fixture, expectation(after, file, case["id"].asString, "afterTimeout"), null, emptyList(), problems)
       }
     }
     val delivery = Delivery.check(sent, Probe.entries.toList())
@@ -110,9 +121,14 @@ class ObserverFixtureTest : ViaIdeCase() {
     return Outcome(problems.isEmpty(), line)
   }
 
-  /** The expected state for IdeaVim: an `engines.ideavim` deviation when the fixture gives one, else `expect`. */
-  private fun expectation(step: JsonObject): JsonObject =
-    step.getAsJsonObject("engines")?.getAsJsonObject("ideavim")?.getAsJsonObject("expect") ?: step.getAsJsonObject("expect")
+  /**
+   * The expected state for IdeaVim: an `engines.ideavim` deviation when the fixture or [DEVIATIONS] gives one, else
+   * `expect`.
+   */
+  private fun expectation(step: JsonObject, file: String, case: String, at: String): JsonObject =
+    deviations[Triple(file, case, at)]?.getAsJsonObject("ideavim")?.getAsJsonObject("expect")
+      ?: step.getAsJsonObject("engines")?.getAsJsonObject("ideavim")?.getAsJsonObject("expect")
+      ?: step.getAsJsonObject("expect")
 
   private fun compare(
     where: String, s: FixtureState, want: JsonObject, observer: JsonObject?, silent: List<String>, problems: MutableList<String>,
@@ -131,7 +147,9 @@ class ObserverFixtureTest : ViaIdeCase() {
       observer.getAsJsonArray("during")?.map { it.asString }?.forEach { state ->
         val seen = silent.filter { ev -> ev.substringBefore(' ').split('+').contains(state) }
         if (seen.isEmpty()) problems += "$where: observer saw no '$state' state while the key ran"
-        if (seen.any { it.endsWith("hostShowing=true") }) problems += "$where: host showed during '$state'"
+        // A hint of the key that started the state can still show at the state's first event, where the observer
+        // hides it; it must not show at any later event of the state.
+        if (seen.drop(1).any { it.endsWith("hostShowing=true") }) problems += "$where: host showed during '$state'"
       }
     }
   }

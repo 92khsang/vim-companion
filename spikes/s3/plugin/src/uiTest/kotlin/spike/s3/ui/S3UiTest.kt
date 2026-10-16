@@ -21,6 +21,7 @@ class S3UiTest {
       val delivered = if (Env.pluginOff) true else Rows.deliveryCheck(s)
       s.log(J.obj("event" to "run-start", "deliveryCheck" to delivered, "case" to Env.case, "hosts" to Env.hosts, "trials" to Env.trials))
       assertTrue(delivered, "delivery check failed")
+      if (Env.rcExtra.any { it.contains("keep-english") }) KeepEnglishCheck.run(s)
       when (Env.case) {
         "check" -> Unit
         "ime-proof" -> ImeProof.run(s)

@@ -204,8 +204,12 @@ object Observer {
     poller = null
   }
 
-  fun afterKey(editor: Editor?, trigger: String) {
-    if (editor == null || editor.isDisposed) return
+  /**
+   * Called after each key that IdeaVim got through an IDE entry point. A key typed into IdeaVim's command line (`:`
+   * or `/`) has no editor in its data context; the observer then reads the editor of the previous key.
+   */
+  fun afterKey(eventEditor: Editor?, trigger: String) {
+    val editor = eventEditor?.takeUnless { it.isDisposed } ?: lastEditor?.takeUnless { it.isDisposed } ?: return
     lastEditor = editor
     val s = read(editor)
     lastPolled = s
@@ -214,28 +218,37 @@ object Observer {
 
   fun beforeOtherAction(action: AnAction, event: AnActionEvent) {
     val what = "action:" + (event.actionManager.getId(action) ?: action.javaClass.name)
-    if (injector.vimState.isDotRepeatInProgress) {
+    if (dotRunning()) {
       dotReplayEvents += "$what hostShowing=" + host.showing
     }
     silent(what)
   }
 
   fun onDocumentChanged() {
-    if (injector.vimState.isDotRepeatInProgress) {
+    if (dotRunning()) {
       dotReplayEvents += "document hostShowing=" + host.showing
     }
     silent("document")
   }
 
+  private fun dotRunning(): Boolean = injector.vimState.isDotRepeatInProgress ||
+    Thread.currentThread().stackTrace.any { it.className == "com.maddyhome.idea.vim.action.change.RepeatChangeAction" }
+
   /** Records a silent state seen during an event and hides the host, which must show nothing while it lasts. */
   private fun silent(what: String) {
+    // IdeaVim 2.47.3 sets isDotRepeatInProgress while `.` runs; the 2.48 EAP replays the keys of the last change
+    // through the key handler instead and sets it only for extension handlers, so `.` is also recognised by
+    // IdeaVim's repeat action on the stack. The entry names which signal saw it: dot(flag), dot(stack) or both.
+    val flag = injector.vimState.isDotRepeatInProgress
+    val stack = Thread.currentThread().stackTrace.any { it.className == "com.maddyhome.idea.vim.action.change.RepeatChangeAction" }
     val states = buildList {
-      if (injector.vimState.isDotRepeatInProgress) add("dot")
+      if (flag || stack) add("dot")
       if (injector.macro.isExecutingMacro) add("macro")
       if (KeyHandler.getInstance().keyHandlerState.mappingState.isExecutingMap()) add("mapping")
     }
     if (states.isEmpty()) return
-    silentEvents += states.joinToString("+") + " " + what + " hostShowing=" + host.showing
+    val dotSignal = if (flag || stack) " dot(" + listOfNotNull("flag".takeIf { flag }, "stack".takeIf { stack }).joinToString(",") + ")" else ""
+    silentEvents += states.joinToString("+") + " " + what + dotSignal + " t=" + System.nanoTime() + " hostShowing=" + host.showing
     if (host.showing) host.hide()
   }
 

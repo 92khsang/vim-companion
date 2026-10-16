@@ -19,3 +19,5 @@ env -i "PATH=$PATH" "LANG=${LANG:-C.UTF-8}" "HOME=$HOME" \
   taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-v" test262 --tests "$filter" \
   -Pideavim="$ideavim" -Ps3.buildDir="build-$tag-v" -Ps3.out="$out" -Ps3.repeat="$repeat" \
   >"$out/gradle.log" 2>&1 || echo "gradle exit $?" >"$out/exit.txt"
+# Raw data over 1 MB is kept gzip-compressed; the analysis scripts read .jsonl and .jsonl.gz.
+find "$out" -name '*.jsonl' -size +1M -exec gzip -9 {} \;
