@@ -24,6 +24,7 @@ public final class S5AppListener implements AppLifecycleListener {
         IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId(PLUGIN_ID));
         ApplicationInfo info = ApplicationInfo.getInstance();
         S5Log.report("started\tpluginVersion=" + (plugin == null ? "none" : plugin.getVersion())
+                + "\tpluginPath=" + (plugin == null ? "none" : plugin.getPluginPath())
                 + "\tide=" + info.getFullVersion() + "\tbuild=" + info.getBuild().asString()
                 + "\tpid=" + ProcessHandle.current().pid()
                 + "\tjava=" + System.getProperty("java.runtime.version"));

@@ -45,7 +45,7 @@ case $where in
     ssh -o BatchMode=yes "$MAC_HOST" "/bin/rm -rf '$run_dir' && echo deleted" > "$out/cleanup.txt"
     ;;
   linux)
-    run_dir=$(mktemp -d /tmp/s5run.XXXXXX)
+    run_dir=$(mktemp -d "${S5_LINUX_RUN_ROOT:-/tmp}/s5run.XXXXXX")
     env -i HOME="$run_dir" PATH=/usr/bin:/bin git clone --quiet "$repo_url" "$run_dir/repo"
     env -i HOME="$run_dir" PATH=/usr/bin:/bin git -C "$run_dir/repo" -c advice.detachedHead=false checkout --quiet "$commit"
     start=$(date +%s)

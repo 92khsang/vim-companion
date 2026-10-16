@@ -91,5 +91,11 @@ intellijPlatformTesting {
             }
             argumentProviders += CommandLineArgumentProvider { listOfNotNull(projectDir.orNull) }
         }
+        // Stand-ins for checks 2 and 3 install the plugin zip into this sandbox by hand;
+        // -Ps5.keepSandboxPlugins keeps it instead of copying the freshly built plugin over it.
+        prepareSandboxTask {
+            val keep = providers.gradleProperty("s5.keepSandboxPlugins")
+            onlyIf { !keep.isPresent }
+        }
     }
 }
