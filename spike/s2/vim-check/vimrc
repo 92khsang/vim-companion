@@ -1,0 +1,22 @@
+" Vim with the generated remaps' left-hand sides (spec/generated), for the grammar fixture cross-check.
+set nocompatible
+set showcmd showmode noruler laststatus=0 shortmess+=I
+set timeout timeoutlen=1000 ttimeout ttimeoutlen=10
+nnoremap [d <Cmd>echo "remap [d"<CR>
+nnoremap ]d <Cmd>echo "remap ]d"<CR>
+nnoremap [e <Cmd>echo "remap [e"<CR>
+nnoremap ]e <Cmd>echo "remap ]e"<CR>
+nnoremap gO <Cmd>echo "remap gO"<CR>
+nnoremap gra <Cmd>echo "remap gra"<CR>
+nnoremap gri <Cmd>echo "remap gri"<CR>
+nnoremap grn <Cmd>echo "remap grn"<CR>
+nnoremap grr <Cmd>echo "remap grr"<CR>
+nnoremap K <Cmd>echo "remap K"<CR>
+nnoremap <Space> <Cmd>echo "remap leader"<CR>
+xnoremap <Space> <Cmd>echo "remap leader"<CR>
+xnoremap gra <Cmd>echo "remap gra"<CR>
+function S2Tick(timer)
+  call writefile([mode(1) .. '|' .. state() .. '|' .. v:operator], $S2_LOG)
+endfunction
+call timer_start(20, 'S2Tick', {'repeat': -1})
+call cursor(2, 14)

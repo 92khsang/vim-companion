@@ -1,0 +1,143 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Registers named with \" before a command, alone and with a count and an operator.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": { "line": 1, "column": 13 }
+  },
+  "cases": [
+    {
+      "id": "register-a",
+      "description": "\"a names register a for the next command.",
+      "help": ["quote", "quote_alpha"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-plus",
+      "description": "\"+ names the clipboard register for the next command.",
+      "help": ["quote", "quote+"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "+",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "+"],
+            "operator": null,
+            "count": null,
+            "register": "+"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-blackhole",
+      "description": "\"_ names the black hole register for the next command.",
+      "help": ["quote", "quote_"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "_",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "_"],
+            "operator": null,
+            "count": null,
+            "register": "_"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-count-operator",
+      "description": "\"a3d: a register, then a count, then an operator.",
+      "help": ["quote", "quote_alpha", "count", "operator"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a", "3"],
+            "operator": null,
+            "count": 3,
+            "register": "a"
+          }
+        },
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a", "3", "d"],
+            "operator": "d",
+            "count": 3,
+            "register": "a"
+          }
+        }
+      ]
+    }
+  ]
+}
