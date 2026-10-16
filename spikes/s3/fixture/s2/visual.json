@@ -1,0 +1,207 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Visual, Visual Line and Visual Block modes, each with a count pending and with a register pending.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": { "line": 1, "column": 13 }
+  },
+  "cases": [
+    {
+      "id": "visual-count",
+      "description": "A count in Visual mode.",
+      "help": ["v", "count"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "visual",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-register",
+      "description": "A register in Visual mode.",
+      "help": ["v", "quote", "quote_alpha"],
+      "steps": [
+        {
+          "key": "v",
+          "expect": {
+            "mode": "visual",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "visual",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "visual",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-line-count",
+      "description": "A count in Visual Line mode.",
+      "help": ["V", "count"],
+      "steps": [
+        {
+          "key": "V",
+          "expect": {
+            "mode": "visual-line",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "visual-line",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-line-register",
+      "description": "A register in Visual Line mode.",
+      "help": ["V", "quote", "quote_alpha"],
+      "steps": [
+        {
+          "key": "V",
+          "expect": {
+            "mode": "visual-line",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "visual-line",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "visual-line",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-block-count",
+      "description": "A count in Visual Block mode.",
+      "help": ["CTRL-V", "count"],
+      "steps": [
+        {
+          "key": "<C-v>",
+          "expect": {
+            "mode": "visual-block",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "visual-block",
+            "pending": ["3"],
+            "operator": null,
+            "count": 3,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "visual-block-register",
+      "description": "A register in Visual Block mode.",
+      "help": ["CTRL-V", "quote", "quote_alpha"],
+      "steps": [
+        {
+          "key": "<C-v>",
+          "expect": {
+            "mode": "visual-block",
+            "pending": [],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "visual-block",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "visual-block",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        }
+      ]
+    }
+  ]
+}

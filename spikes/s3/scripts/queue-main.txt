@@ -1,0 +1,57 @@
+# Main queue of spike S3 (run with queue.sh). {port} and {disp} come from the slot.
+# GNOME harness proof for the 2.48 EAP, both toolkits (parts 1 and 2)
+./gnome-case.sh check IdeaVIM:2.48.0-eap.2@eap WLToolkit 0 layer {port}
+./gnome-case.sh ime-proof IdeaVIM:2.48.0-eap.2@eap WLToolkit 20 layer {port}
+./gnome-case.sh ime-proof IdeaVIM:2.48.0-eap.2@eap XToolkit 20 layer {port}
+# Driver run of the observer fixture, once per version
+./xvfb-case.sh {disp} fixture IdeaVIM:2.47.3 1 layer {port}
+./xvfb-case.sh {disp} fixture IdeaVIM:2.48.0-eap.2@eap 1 layer {port}
+# WLToolkit focus, Esc and control rows
+./gnome-case.sh focus IdeaVIM:2.47.3 WLToolkit 1000 balloon,layer {port}
+./gnome-case.sh esc IdeaVIM:2.47.3 WLToolkit 1000 balloon,layer {port}
+./gnome-case.sh control IdeaVIM:2.47.3 WLToolkit 100 control {port}
+./gnome-case.sh focus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 balloon,layer {port}
+./gnome-case.sh esc IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 balloon,layer {port}
+./gnome-case.sh control IdeaVIM:2.48.0-eap.2@eap WLToolkit 100 control {port}
+# Hangul references without the spike plugin, 200 trials each
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 200 off {port} plugin-off
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 200 off {port} plugin-off,keep-english
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 200 off {port} plugin-off
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 200 off {port} plugin-off,keep-english
+./xvfb-case.sh {disp} hangul-ime IdeaVIM:2.47.3 200 off {port} plugin-off
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 200 off {port} plugin-off
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 200 off {port} plugin-off,keep-english
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 200 off {port} plugin-off
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 200 off {port} plugin-off,keep-english
+./xvfb-case.sh {disp} hangul-ime IdeaVIM:2.48.0-eap.2@eap 200 off {port} plugin-off
+# Committed Hangul with real ibus-hangul, word-commit off and on
+./gnome-case.sh commit-ibus IdeaVIM:2.47.3 WLToolkit 1000 layer {port}
+./gnome-case.sh commit-ibus IdeaVIM:2.47.3 WLToolkit 1000 layer {port} word-commit
+./gnome-case.sh commit-ibus IdeaVIM:2.47.3 XToolkit 1000 layer {port}
+./gnome-case.sh commit-ibus IdeaVIM:2.47.3 XToolkit 1000 layer {port} word-commit
+./gnome-case.sh commit-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 layer {port}
+./gnome-case.sh commit-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 layer {port} word-commit
+./gnome-case.sh commit-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port}
+./gnome-case.sh commit-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port} word-commit
+# Hangul rows: 1000 trials per host, toolkit, keep-english setting and version
+./xvfb-case.sh {disp} hangul-ime IdeaVIM:2.47.3 1000 balloon,layer {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 balloon {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 layer {port}
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 balloon {port} keep-english
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 layer {port} keep-english
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 balloon {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 layer {port}
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 balloon {port} keep-english
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 layer {port} keep-english
+./xvfb-case.sh {disp} hangul-ime IdeaVIM:2.48.0-eap.2@eap 1000 balloon,layer {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 balloon {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 layer {port}
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 balloon {port} keep-english
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 layer {port} keep-english
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 balloon {port}
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port}
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 balloon {port} keep-english
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port} keep-english
+# Driver fixture again after the observer read the editor for command-line keys (prompt cases)
+./xvfb-case.sh {disp} fixture IdeaVIM:2.47.3 1 layer {port}
+./xvfb-case.sh {disp} fixture IdeaVIM:2.48.0-eap.2@eap 1 layer {port}

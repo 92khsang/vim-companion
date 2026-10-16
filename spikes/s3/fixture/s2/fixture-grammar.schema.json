@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion grammar fixture",
+  "description": "Keys typed in an editor that starts in Normal mode with nothing pending, and the engine state after each key: mode, pending keys, operator, count and register. Every expected state is written by hand from Vim's documented behaviour, with the generated remaps of spec/generated in place. A step can add the state of one engine where that engine differs from Vim; the difference is a documented deviation backed by a Measured: finding.",
+  "type": "object",
+  "required": ["description", "start", "cases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "description": { "type": "string", "minLength": 1 },
+    "start": { "$ref": "#/$defs/start" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "$defs": {
+    "start": {
+      "description": "The buffer and cursor that every case starts from, in Normal mode with nothing pending. Lines and columns count from 0; a column counts UTF-16 code units.",
+      "type": "object",
+      "required": ["lines", "cursor"],
+      "additionalProperties": false,
+      "properties": {
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "cursor": {
+          "type": "object",
+          "required": ["line", "column"],
+          "additionalProperties": false,
+          "properties": {
+            "line": { "type": "integer", "minimum": 0 },
+            "column": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "required": ["id", "description", "help", "steps"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Kebab-case, unique in its file; the global id is <file stem>/<id>.",
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "description": { "type": "string", "minLength": 1 },
+        "help": {
+          "description": "The Vim help tags that the expected states rest on, such as motion-count-multiplied.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "steps": {
+          "description": "One step per typed key, in order; expect is the state after that key.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/step" }
+        },
+        "afterTimeout": {
+          "description": "Only for a case whose last key leaves a strict prefix of a mapping: the state after the mapping timeout ('timeoutlen' in Vim, vim.timeout in VSCodeVim) has run out with no further key.",
+          "$ref": "#/$defs/expectation"
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["key", "expect"],
+      "additionalProperties": false,
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "expect": { "$ref": "#/$defs/state" },
+        "engines": { "$ref": "#/$defs/engines" }
+      }
+    },
+    "expectation": {
+      "type": "object",
+      "required": ["expect"],
+      "additionalProperties": false,
+      "properties": {
+        "expect": { "$ref": "#/$defs/state" },
+        "engines": { "$ref": "#/$defs/engines" }
+      }
+    },
+    "engines": {
+      "description": "The state of an engine that differs from expect. A check of that engine uses this state instead of expect.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "vscodevim": { "$ref": "#/$defs/deviation" },
+        "ideavim": { "$ref": "#/$defs/deviation" }
+      }
+    },
+    "deviation": {
+      "type": "object",
+      "required": ["expect", "deviation"],
+      "additionalProperties": false,
+      "properties": {
+        "expect": { "$ref": "#/$defs/state" },
+        "deviation": {
+          "description": "The finding that documents the difference: what was measured, in which versions, with how many trials.",
+          "type": "string",
+          "pattern": "^Measured: "
+        }
+      }
+    },
+    "key": {
+      "description": "One key: a printable ASCII character other than space, or a name from Vim's key notation in angle brackets. A lone < is the less-than key.",
+      "type": "string",
+      "pattern": "^(?:[!-~]|<(?:Esc|Space|CR|Tab|BS|C-[a-z]|C-\\[|C-\\])>)$"
+    },
+    "state": {
+      "type": "object",
+      "required": ["mode", "pending", "operator", "count", "register"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "description": "The major mode. Operator-pending is Normal mode with an operator; mode(1) in Vim reports it as no.",
+          "enum": [
+            "normal",
+            "insert",
+            "replace",
+            "visual",
+            "visual-line",
+            "visual-block"
+          ]
+        },
+        "pending": {
+          "description": "The keys of the command that is not complete yet, in typed order; empty when nothing is pending. Keys that only switched the mode, such as v, are not pending.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/key" }
+        },
+        "operator": {
+          "description": "The keys of the pending operator, such as d or g~, or null.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^(?:[cdy<>!=]|g[~uU?qw@]|zf|gr)$" }
+          ]
+        },
+        "count": {
+          "description": "The count that the pending command uses when it completes, or null when none was typed. Counts typed before and after an operator multiply (motion-count-multiplied).",
+          "anyOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }]
+        },
+        "register": {
+          "description": "The register named with \" for the pending command, or null.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[\"0-9a-zA-Z\\-*+_/:.%#=]$" }
+          ]
+        }
+      }
+    }
+  }
+}

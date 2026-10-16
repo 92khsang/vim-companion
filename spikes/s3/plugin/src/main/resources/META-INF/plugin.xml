@@ -1,0 +1,14 @@
+<idea-plugin>
+  <id>spike.s3</id>
+  <name>S3 Spike Observer</name>
+  <vendor>vim-companion spike</vendor>
+  <description>Throwaway spike S3: observer and hint hosts. Never released.</description>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>IdeaVIM</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="spike.s3.HarnessStartup"/>
+  </extensions>
+  <applicationListeners>
+    <listener class="spike.s3.ProbeActionListener" topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+  </applicationListeners>
+</idea-plugin>

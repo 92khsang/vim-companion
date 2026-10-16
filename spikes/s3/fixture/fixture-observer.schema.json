@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "vim-companion observer fixture (spike S3)",
+  "description": "Spike S2's grammar fixture format (s2/fixture-grammar.schema.json) with two extensions for the IntelliJ observer: the mode cmdline for an open : or / prompt, and an optional observer object per step. observer.prompt is the open prompt (: or /) or null; observer.recording is the register being recorded or null; observer.during lists the states in which T1 stays silent (macro, dot, mapping) that the observer must see while the key runs. A field left out of observer is not checked.",
+  "allOf": [{ "$ref": "s2/fixture-grammar.schema.json" }],
+  "$comment": "The extensions are checked by the S3 fixture runner; the S2 schema itself rejects them, so this file documents them rather than validating them."
+}

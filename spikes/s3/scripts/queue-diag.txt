@@ -1,0 +1,14 @@
+# Short jobs before the main queue: Driver fixture after the observer fix for command-line keys, and diagnostic runs
+# of the `.` row (cases alone and in reverse order) after one EAP `]d` trial repeated an older change.
+./xvfb-case.sh {disp} fixture IdeaVIM:2.47.3 1 layer {port}
+./xvfb-case.sh {disp} fixture IdeaVIM:2.48.0-eap.2@eap 1 layer {port}
+S3_DOT_CASES=']d' RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.48.0-eap.2-dot-d-only" ./xvfb-case.sh {disp} dot IdeaVIM:2.48.0-eap.2@eap 20 layer {port}
+S3_DOT_CASES=']d,SPC c f' RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.48.0-eap.2-dot-reversed" ./xvfb-case.sh {disp} dot IdeaVIM:2.48.0-eap.2@eap 20 layer {port}
+S3_DOT_CASES=']d,SPC c f' RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.47.3-dot-reversed" ./xvfb-case.sh {disp} dot IdeaVIM:2.47.3 20 layer {port}
+# VIA_IDE again after the observer fixes and with the IdeaVim deviation overlay (light tests: no port or display)
+./via-ide.sh IdeaVIM:2.47.3 10
+./via-ide.sh IdeaVIM:2.48.0-eap.2@eap 10
+# Does the EAP outlier (first ]d trial after the SPC c f case) reproduce? Original order, 3 trials per case, twice per version.
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.48.0-eap.2-dot-repro-a" ./xvfb-case.sh {disp} dot IdeaVIM:2.48.0-eap.2@eap 3 layer {port}
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.48.0-eap.2-dot-repro-b" ./xvfb-case.sh {disp} dot IdeaVIM:2.48.0-eap.2@eap 3 layer {port}
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-xvfb-2.47.3-dot-repro-a" ./xvfb-case.sh {disp} dot IdeaVIM:2.47.3 3 layer {port}
