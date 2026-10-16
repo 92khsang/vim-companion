@@ -1,0 +1,35 @@
+{
+  "name": "s2-cards",
+  "displayName": "S2 cards",
+  "description": "Spike S2 candidate (b): static per-state grammar cards in a webview view.",
+  "publisher": "vim-companion-spike",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onView:s2.cards"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "s2cards",
+          "title": "S2 Cards",
+          "icon": "$(keyboard)"
+        }
+      ]
+    },
+    "views": {
+      "s2cards": [
+        {
+          "type": "webview",
+          "id": "s2.cards",
+          "name": "Grammar cards"
+        }
+      ]
+    }
+  }
+}

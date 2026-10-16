@@ -8,7 +8,10 @@
       "epsilon zeta eta theta",
       "iota kappa lambda mu"
     ],
-    "cursor": { "line": 1, "column": 13 }
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
   },
   "cases": [
     {
@@ -95,7 +98,7 @@
     {
       "id": "register-count-operator",
       "description": "\"a3d: a register, then a count, then an operator.",
-      "help": ["quote", "quote_alpha", "count", "operator"],
+      "help": ["quote", "quote_alpha", "count", "operator", "map-typing"],
       "steps": [
         {
           "key": "\"",
@@ -137,7 +140,16 @@
             "register": "a"
           }
         }
-      ]
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["\"", "a", "3", "d"],
+          "operator": "d",
+          "count": 3,
+          "register": "a"
+        }
+      }
     }
   ]
 }

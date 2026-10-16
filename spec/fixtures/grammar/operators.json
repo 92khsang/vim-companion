@@ -8,13 +8,16 @@
       "epsilon zeta eta theta",
       "iota kappa lambda mu"
     ],
-    "cursor": { "line": 1, "column": 13 }
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
   },
   "cases": [
     {
       "id": "delete",
       "description": "d waits for a motion.",
-      "help": ["operator", "d"],
+      "help": ["operator", "d", "map-typing"],
       "steps": [
         {
           "key": "d",
@@ -26,12 +29,21 @@
             "register": null
           }
         }
-      ]
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["d"],
+          "operator": "d",
+          "count": null,
+          "register": null
+        }
+      }
     },
     {
       "id": "change",
       "description": "c waits for a motion.",
-      "help": ["operator", "c"],
+      "help": ["operator", "c", "map-typing"],
       "steps": [
         {
           "key": "c",
@@ -43,12 +55,21 @@
             "register": null
           }
         }
-      ]
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["c"],
+          "operator": "c",
+          "count": null,
+          "register": null
+        }
+      }
     },
     {
       "id": "yank",
       "description": "y waits for a motion.",
-      "help": ["operator", "y"],
+      "help": ["operator", "y", "map-typing"],
       "steps": [
         {
           "key": "y",
@@ -60,7 +81,16 @@
             "register": null
           }
         }
-      ]
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["y"],
+          "operator": "y",
+          "count": null,
+          "register": null
+        }
+      }
     },
     {
       "id": "shift-right",

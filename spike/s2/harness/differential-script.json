@@ -1,0 +1,205 @@
+{
+  "description": "The differential script of issue #11. Each item is typed in one burst at the injected key delay, with a pause between items. Items cover every grammar fixture case completed with a motion, a text object or a character, then the extra items the issue lists. u undoes the edits of an item, so that later items find the text they expect.",
+  "items": [
+    {
+      "case": "nothing-pending/escape-cancels-operator",
+      "keys": ["d", "<Esc>"]
+    },
+    {
+      "case": "nothing-pending/completed-command",
+      "keys": ["g", "g", "d", "w", "u"]
+    },
+    {
+      "case": "nothing-pending/insert-mode",
+      "keys": ["i", "x", "y", "z", "<Esc>", "u"]
+    },
+    { "case": "counts/count-3", "keys": ["3", "l"] },
+    { "case": "counts/count-30", "keys": ["3", "0", "l", "0"] },
+    {
+      "case": "counts/count-then-operator",
+      "keys": ["g", "g", "3", "d", "w", "u"]
+    },
+    {
+      "case": "counts/operator-then-count",
+      "keys": ["g", "g", "d", "3", "w", "u"]
+    },
+    {
+      "case": "counts/counts-multiply",
+      "keys": ["g", "g", "2", "d", "3", "w", "u"]
+    },
+    { "case": "registers/register-a", "keys": ["\"", "a", "y", "w"] },
+    { "case": "registers/register-plus", "keys": ["\"", "+", "y", "w"] },
+    {
+      "case": "registers/register-blackhole",
+      "keys": ["\"", "_", "d", "w", "u"]
+    },
+    {
+      "case": "registers/register-count-operator",
+      "keys": ["j", "\"", "a", "3", "d", "w", "u"]
+    },
+    { "case": "operators/delete", "keys": ["d", "d", "u"] },
+    {
+      "case": "operators/change",
+      "keys": ["c", "w", "n", "e", "w", "<Esc>", "u"]
+    },
+    { "case": "operators/yank", "keys": ["y", "$"] },
+    { "case": "operators/shift-right", "keys": [">", ">", "u"] },
+    { "case": "operators/shift-left", "keys": ["j", "<", "<", "u"] },
+    { "case": "operators/switch-case", "keys": ["g", "~", "w", "u"] },
+    { "case": "operators/lowercase", "keys": ["g", "u", "w", "u"] },
+    { "case": "operators/uppercase", "keys": ["g", "U", "w", "u"] },
+    {
+      "case": "text-objects/delete-inner",
+      "keys": ["g", "g", "j", "0", "1", "3", "l", "d", "i", "(", "u"]
+    },
+    {
+      "case": "text-objects/delete-around",
+      "keys": ["g", "g", "j", "0", "1", "3", "l", "d", "a", "\"", "u"]
+    },
+    {
+      "case": "text-objects/change-inner",
+      "keys": [
+        "g",
+        "g",
+        "j",
+        "0",
+        "1",
+        "3",
+        "l",
+        "c",
+        "i",
+        "w",
+        "X",
+        "<Esc>",
+        "u"
+      ]
+    },
+    {
+      "case": "text-objects/yank-inner",
+      "keys": ["g", "g", "j", "0", "2", "0", "l", "y", "i", "["]
+    },
+    { "case": "text-objects/visual-inner", "keys": ["v", "i", "w", "<Esc>"] },
+    { "case": "text-objects/visual-around", "keys": ["v", "a", "w", "<Esc>"] },
+    { "case": "prefixes/g", "keys": ["g", "g"] },
+    { "case": "prefixes/z", "keys": ["z", "z"] },
+    { "case": "prefixes/window", "keys": ["<C-w>", "l"] },
+    { "case": "prefixes/window", "keys": ["<C-w>", "h"] },
+    {
+      "case": "character-arguments/find-forward",
+      "keys": ["g", "g", "f", "e"]
+    },
+    { "case": "character-arguments/find-backward", "keys": ["$", "F", "a"] },
+    { "case": "character-arguments/till-forward", "keys": ["0", "t", "e"] },
+    { "case": "character-arguments/till-backward", "keys": ["$", "T", "a"] },
+    {
+      "case": "character-arguments/replace-character",
+      "keys": ["r", "X", "u"]
+    },
+    { "case": "character-arguments/set-mark", "keys": ["m", "a"] },
+    {
+      "case": "character-arguments/jump-mark-line",
+      "keys": ["j", "j", "'", "a"]
+    },
+    { "case": "character-arguments/jump-mark-exact", "keys": ["j", "`", "a"] },
+    {
+      "case": "character-arguments/record-macro",
+      "keys": ["q", "b", "l", "q"]
+    },
+    { "case": "character-arguments/execute-register", "keys": ["@", "b"] },
+    {
+      "case": "character-arguments/register-name",
+      "keys": ["\"", "a", "p", "u"]
+    },
+    {
+      "case": "remap-prefixes/gr-normal",
+      "keys": ["g", "g", "g", "r", "x", "u"]
+    },
+    { "case": "remap-prefixes/bracket-left-normal", "keys": ["j", "[", "("] },
+    { "case": "remap-prefixes/bracket-right-normal", "keys": ["]", ")"] },
+    {
+      "case": "remap-prefixes/gr-visual",
+      "keys": ["v", "g", "r", "x", "<Esc>", "u"]
+    },
+    { "case": "visual/visual-count", "keys": ["v", "3", "l", "d", "u"] },
+    { "case": "visual/visual-register", "keys": ["v", "\"", "a", "y"] },
+    { "case": "visual/visual-line-count", "keys": ["V", "2", "j", "d", "u"] },
+    { "case": "visual/visual-line-register", "keys": ["V", "\"", "b", "y"] },
+    {
+      "case": "visual/visual-block-count",
+      "keys": ["<C-v>", "2", "j", "l", "d", "u"]
+    },
+    {
+      "case": "visual/visual-block-register",
+      "keys": ["<C-v>", "j", "\"", "c", "y"]
+    },
+    {
+      "case": "extra/3dw-dot",
+      "keys": ["g", "g", "3", "d", "w", ".", "u", "u"]
+    },
+    { "case": "extra/macro", "keys": ["q", "a", "w", "w", "q", "@", "a"] },
+    { "case": "extra/visual-operator", "keys": ["v", "e", "d", "u"] },
+    { "case": "extra/visual-line-operator", "keys": ["V", "j", ">", "u"] },
+    {
+      "case": "extra/visual-block-operator",
+      "keys": ["<C-v>", "j", "l", "c", "Z", "Z", "<Esc>", "u"]
+    },
+    { "case": "extra/escape-register", "keys": ["\"", "a", "<Esc>"] },
+    { "case": "extra/escape-count-operator", "keys": ["2", "d", "<Esc>"] },
+    { "case": "extra/escape-prefix", "keys": ["g", "<Esc>"] },
+    { "case": "extra/find-space", "keys": ["0", "f", "<Space>"] },
+    { "case": "extra/delete-space", "keys": ["d", "<Space>", "u"] },
+    { "case": "extra/count-leader", "keys": ["3", "<Space>", "b", "n"] },
+    {
+      "case": "extra/visual-leader",
+      "keys": ["v", "<Space>", "<Esc>", "<Esc>"]
+    },
+    { "case": "extra/escape-leader", "keys": ["<Space>", "b", "<Esc>"] },
+    {
+      "case": "extra/leader-macro",
+      "keys": ["<C-w>", "l", "q", "a", "<Space>", "w", "h", "q", "@", "a"]
+    }
+  ],
+  "registers": [
+    "\"",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "-",
+    ".",
+    ":",
+    "/"
+  ]
+}

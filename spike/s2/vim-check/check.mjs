@@ -74,9 +74,10 @@ for (const name of readdirSync(dir)
       const [mode, state, op] = readFileSync(log, "utf8").trim().split("|");
       const wantPending = expect.pending.map(showcmdText).join("");
       const visual = expect.mode.startsWith("visual");
+      // In Visual mode showcmd starts with the size of the selection, such as 1 or 2x3.
       const pendingOk =
         showcmd === wantPending ||
-        (visual && wantPending === "" && /^\d+(x\d+)?$/.test(showcmd));
+        (visual && showcmd.replace(/^\d+(x\d+)?/, "") === wantPending);
       const wantMode = {
         normal: expect.operator ? "no" : "n",
         insert: "i",

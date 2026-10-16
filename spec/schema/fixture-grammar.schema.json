@@ -6,13 +6,22 @@
   "required": ["description", "start", "cases"],
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
-    "description": { "type": "string", "minLength": 1 },
-    "start": { "$ref": "#/$defs/start" },
+    "$schema": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "start": {
+      "$ref": "#/$defs/start"
+    },
     "cases": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/case" }
+      "items": {
+        "$ref": "#/$defs/case"
+      }
     }
   },
   "$defs": {
@@ -25,15 +34,23 @@
         "lines": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "cursor": {
           "type": "object",
           "required": ["line", "column"],
           "additionalProperties": false,
           "properties": {
-            "line": { "type": "integer", "minimum": 0 },
-            "column": { "type": "integer", "minimum": 0 }
+            "line": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "column": {
+              "type": "integer",
+              "minimum": 0
+            }
           }
         }
       }
@@ -48,21 +65,29 @@
           "type": "string",
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
         },
-        "description": { "type": "string", "minLength": 1 },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
         "help": {
           "description": "The Vim help tags that the expected states rest on, such as motion-count-multiplied.",
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "steps": {
           "description": "One step per typed key, in order; expect is the state after that key.",
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/step" }
+          "items": {
+            "$ref": "#/$defs/step"
+          }
         },
         "afterTimeout": {
-          "description": "Only for a case whose last key leaves a strict prefix of a mapping: the state after the mapping timeout ('timeoutlen' in Vim, vim.timeout in VSCodeVim) has run out with no further key.",
+          "description": "The state after the mapping timeout ('timeoutlen' in Vim, vim.timeout in VSCodeVim) has run out with no further key. Only for a case whose last key can leave a strict prefix of a mapping: of the generated remaps, or of a default mapping of an engine. VSCodeVim 1.32.4 maps ds, cs and ys for its surround plugin by default, so it also waits after d, c and y.",
           "$ref": "#/$defs/expectation"
         }
       }
@@ -72,9 +97,15 @@
       "required": ["key", "expect"],
       "additionalProperties": false,
       "properties": {
-        "key": { "$ref": "#/$defs/key" },
-        "expect": { "$ref": "#/$defs/state" },
-        "engines": { "$ref": "#/$defs/engines" }
+        "key": {
+          "$ref": "#/$defs/key"
+        },
+        "expect": {
+          "$ref": "#/$defs/state"
+        },
+        "engines": {
+          "$ref": "#/$defs/engines"
+        }
       }
     },
     "expectation": {
@@ -82,8 +113,12 @@
       "required": ["expect"],
       "additionalProperties": false,
       "properties": {
-        "expect": { "$ref": "#/$defs/state" },
-        "engines": { "$ref": "#/$defs/engines" }
+        "expect": {
+          "$ref": "#/$defs/state"
+        },
+        "engines": {
+          "$ref": "#/$defs/engines"
+        }
       }
     },
     "engines": {
@@ -92,8 +127,12 @@
       "minProperties": 1,
       "additionalProperties": false,
       "properties": {
-        "vscodevim": { "$ref": "#/$defs/deviation" },
-        "ideavim": { "$ref": "#/$defs/deviation" }
+        "vscodevim": {
+          "$ref": "#/$defs/deviation"
+        },
+        "ideavim": {
+          "$ref": "#/$defs/deviation"
+        }
       }
     },
     "deviation": {
@@ -101,7 +140,9 @@
       "required": ["expect", "deviation"],
       "additionalProperties": false,
       "properties": {
-        "expect": { "$ref": "#/$defs/state" },
+        "expect": {
+          "$ref": "#/$defs/state"
+        },
         "deviation": {
           "description": "The finding that documents the difference: what was measured, in which versions, with how many trials.",
           "type": "string",
@@ -133,24 +174,44 @@
         "pending": {
           "description": "The keys of the command that is not complete yet, in typed order; empty when nothing is pending. Keys that only switched the mode, such as v, are not pending.",
           "type": "array",
-          "items": { "$ref": "#/$defs/key" }
+          "items": {
+            "$ref": "#/$defs/key"
+          }
         },
         "operator": {
           "description": "The keys of the pending operator, such as d or g~, or null.",
           "anyOf": [
-            { "type": "null" },
-            { "type": "string", "pattern": "^(?:[cdy<>!=]|g[~uU?qw@]|zf|gr)$" }
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^(?:[cdy<>!=]|g[~uU?qw@]|zf|gr)$"
+            }
           ]
         },
         "count": {
           "description": "The count that the pending command uses when it completes, or null when none was typed. Counts typed before and after an operator multiply (motion-count-multiplied).",
-          "anyOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }]
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
         },
         "register": {
           "description": "The register named with \" for the pending command, or null.",
           "anyOf": [
-            { "type": "null" },
-            { "type": "string", "pattern": "^[\"0-9a-zA-Z\\-*+_/:.%#=]$" }
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[\"0-9a-zA-Z\\-*+_/:.%#=]$"
+            }
           ]
         }
       }

@@ -8,7 +8,10 @@
       "epsilon zeta eta theta",
       "iota kappa lambda mu"
     ],
-    "cursor": { "line": 1, "column": 13 }
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
   },
   "cases": [
     {
@@ -58,7 +61,7 @@
     {
       "id": "count-then-operator",
       "description": "3d: the operator keeps the count typed before it.",
-      "help": ["count", "operator"],
+      "help": ["count", "operator", "map-typing"],
       "steps": [
         {
           "key": "3",
@@ -80,7 +83,16 @@
             "register": null
           }
         }
-      ]
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["3", "d"],
+          "operator": "d",
+          "count": 3,
+          "register": null
+        }
+      }
     },
     {
       "id": "operator-then-count",
