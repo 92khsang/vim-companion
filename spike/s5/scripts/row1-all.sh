@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Spike S5 row 1 driver: the Mac runs in order, one at a time, then nothing else.
-#   MAC_HOST=<host> MAC_SPIKE_DIR=<dir> row1-all.sh <commit> <out dir> <run>...
+#   MAC_HOST=<host> MAC_SPIKE_DIR=<dir> [MAC_CACHE_DIR=<dir>] row1-all.sh <commit> <out dir> <run>...
 # Each <run> is <target>-<n>, such as b-2; run 1 of a target is fresh, runs 2 and 3 use the
-# shared cache in $MAC_SPIKE_DIR/cache.
+# shared cache in $MAC_CACHE_DIR (default $MAC_SPIKE_DIR/cache).
 set -uo pipefail
 commit=$1 out=$2
 shift 2

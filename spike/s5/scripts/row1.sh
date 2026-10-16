@@ -16,14 +16,16 @@ case $where in
     : "${MAC_HOST:?set MAC_HOST}"
     if [ "$cache_mode" = shared ]; then
       : "${MAC_SPIKE_DIR:?set MAC_SPIKE_DIR to the spike directory on the Mac}"
-      cache="$MAC_SPIKE_DIR/cache"
+      cache="${MAC_CACHE_DIR:-$MAC_SPIKE_DIR/cache}"
     else
       cache=fresh
     fi
     # Target (c) starts VS Code at the console: keep the display awake while it runs.
     caf=-i
     [ "$target" = c ] && caf=-di
-    boot="R=\$(/usr/bin/mktemp -d -t s5run); echo RUN_DIR=\$R; cd \"\$R\" || exit 1;"
+    # A short run directory: on macOS VS Code puts its IPC socket in the user data directory of the
+    # test run, and a socket path longer than 103 bytes fails (see mac-c-1 under /var/folders).
+    boot="R=\$(/usr/bin/mktemp -d /tmp/s5run.XXXXXX); echo RUN_DIR=\$R; cd \"\$R\" || exit 1;"
     boot+=" /usr/sbin/ioreg -n Root -d1 -a > \"\$R/console-before.plist\";"
     boot+=" /usr/bin/env -i HOME=\"\$R\" PATH=/usr/bin:/bin /usr/bin/git clone --quiet $repo_url repo &&"
     boot+=" /usr/bin/env -i HOME=\"\$R\" PATH=/usr/bin:/bin /usr/bin/git -C repo -c advice.detachedHead=false checkout --quiet $commit &&"
@@ -37,7 +39,7 @@ case $where in
     echo "seconds=$(($(date +%s) - start))" >> "$out/ssh.out"
     run_dir=$(sed -n 's/^RUN_DIR=//p' "$out/ssh.out")
     case $run_dir in
-      /var/folders/*/T/s5run.*) ;;
+      /var/folders/*/T/s5run.* | /tmp/s5run.*) ;;
       *) echo "unexpected run dir '$run_dir'" >&2; exit 1 ;;
     esac
     scp -q -r -o BatchMode=yes "$MAC_HOST:$run_dir/results" "$out/" || true
