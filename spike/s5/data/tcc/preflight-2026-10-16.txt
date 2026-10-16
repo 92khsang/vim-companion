@@ -1,0 +1,16 @@
+# Spike S5: what a program run over ssh may do, before any grant (2026-10-16 17:14 +0900, macOS 27.0.1 26A434).
+# Copied from the agent's terminal; the Mac's per-user temporary directory is written as $TMPDIR.
+
+$ ssh $MAC_HOST "$MAC_SPIKE_DIR/bin/s5win preflight"
+screenCapture=false	postEvent=false	axTrusted=false	inputSource=com.apple.inputmethod.Korean.2SetKorean	screenLocked=false
+
+$ ssh $MAC_HOST '/usr/bin/log show --last 6m --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"msgID=48810.\")"' (filtered)
+tccd [com.apple.TCC:access] AUTHREQ_CTX: msgID=48810.1, function=<private>, service=kTCCServiceScreenCapture, preflight=yes, query=1
+tccd [com.apple.TCC:access] AUTHREQ_RESULT: msgID=48810.1, authValue=1, authReason=5, authVersion=1, desired_auth=0, error=(null),
+tccd [com.apple.TCC:access] AUTHREQ_CTX: msgID=48810.2, function=<private>, service=kTCCServicePostEvent, preflight=yes, query=1
+tccd [com.apple.TCC:access] AUTHREQ_RESULT: msgID=48810.2, authValue=1, authReason=5, authVersion=1, desired_auth=0, error=(null),
+tccd [com.apple.TCC:access] AUTHREQ_CTX: msgID=48810.3, function=<private>, service=kTCCServiceAccessibility, preflight=yes, query=1
+tccd [com.apple.TCC:access] AUTHREQ_RESULT: msgID=48810.3, authValue=1, authReason=5, authVersion=1, desired_auth=0, error=(null),
+tccd [com.apple.TCC:access] AUTHREQ_ATTRIBUTION: msgID=48810.4, attribution={responsible={TCCDProcess: identifier=com.apple.sshd-keygen-wrapper, pid=48783, auid=501, euid=0, responsible_path=/usr/libexec/sshd-keygen-wrapper, binary_path=/usr/libexec/sshd-session}, accessing={TCCDProcess: identifier=s5win, pid=48810, auid=501, euid=501, binary_path=$TMPDIR/s5spike.oeQyVsL3kv/bin/s5win
+tccd [com.apple.TCC:access] AUTHREQ_SUBJECT: msgID=48810.4, subject=/usr/libexec/sshd-keygen-wrapper,
+tccd [com.apple.TCC:events] Publishing <TCCDEvent: type=Modify, service=kTCCServiceAccessibility, identifier_type=Path, identifier=/usr/libexec/sshd-keygen-wrapper> to 0 subscribers
