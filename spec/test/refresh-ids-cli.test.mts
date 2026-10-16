@@ -105,6 +105,8 @@ function fakeIntellij(dir: string): { ide: string; plugins: string } {
     ].join("\n"),
     // Below the jar root: a keymap refers to actions and declares none.
     "keymaps/Default.xml": '<keymap><action id="KeymapOnly"/></keymap>',
+    // Below META-INF: not a descriptor that the IDE loads.
+    "META-INF/nested/extra.xml": descriptor("NestedOnly"),
     "intellij.platform.vcs.xml":
       '<idea-plugin><actions><action id="ActivateCommitToolWindow" class="a.C"/></actions>' +
       '<extensions defaultExtensionNs="com.intellij"><toolWindow id="Commit" factoryClass="a.D"/></extensions></idea-plugin>',
@@ -596,6 +598,70 @@ describe("ids:refresh", () => {
         )}\n`,
       },
     ]);
+  });
+
+  test("intellij reads the jars with an unzip that has no -W, like the one in macOS", () => {
+    const dir = join(base, "intellij-no-w");
+    const root = specIn(dir);
+    const { ide, plugins } = fakeIntellij(dir);
+    // macOS's /usr/bin/unzip rejects -W with exit 10; this one hands every other call to unzip.
+    const bin = join(dir, "bin");
+    const realUnzip = spawnSync("sh", ["-c", "command -v unzip"], {
+      encoding: "utf8",
+    }).stdout.trim();
+    writeText(
+      join(bin, "unzip"),
+      `#!/bin/sh\nfor a in "$@"; do [ "$a" = "-W" ] && { echo "unzip: -W: invalid option" >&2; exit 10; }; done\nexec ${realUnzip} "$@"\n`,
+    );
+    chmodSync(join(bin, "unzip"), 0o755);
+
+    const run = refreshWith(
+      { PATH: [bin, process.env["PATH"]].join(":") },
+      "intellij",
+      "--root",
+      root,
+      "--ide-home",
+      ide,
+      "--plugins-dir",
+      plugins,
+      "--plugin",
+      "IdeaVIM",
+    );
+
+    expect({
+      ...run,
+      written: textOf(join(root, "ids/intellij.json")),
+    }).toEqual({
+      status: 0,
+      stdout:
+        "ids:refresh: wrote spec/ids/intellij.json: 7 declared and 6 runtime IDs from IU-262.1.2, IdeaVIM 9.9.9\n",
+      stderr: "",
+      written: `${JSON.stringify(
+        {
+          ide: "IU-262.1.2",
+          plugins: { IdeaVIM: "9.9.9" },
+          declared: [
+            "ActivateCommitToolWindow",
+            "Git.Commit",
+            "GoToMenu",
+            "GotoClass",
+            "GotoFile",
+            "VimFindActionIdAction",
+            "VimShortcutKeyAction",
+          ],
+          runtime: [
+            "ActivateProblemsViewToolWindow",
+            "ActivateProjectToolWindow",
+            "Debug",
+            "DebugClass",
+            "Run",
+            "RunClass",
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    });
   });
 
   test("vscode writes the dumped commands and the contributed ones, with VS Code in temporary directories", () => {
