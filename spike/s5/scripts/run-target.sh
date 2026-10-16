@@ -87,7 +87,7 @@ e() {
   # Runs a command in a clean environment; every directory in PATH is absolute.
   /usr/bin/env -i HOME="$run/home" TMPDIR="$run/tmp/" PATH="$path" LANG=en_US.UTF-8 CI=true \
     JAVA_HOME="$java_home" GRADLE_USER_HOME="$gradle_home" \
-    JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=$run/tmp -Duser.home=$run/home" $extra "$@"
+    JAVA_TOOL_OPTIONS="-XX:-UsePerfData -Djava.io.tmpdir=$run/tmp -Duser.home=$run/home" $extra "$@"
 }
 
 {

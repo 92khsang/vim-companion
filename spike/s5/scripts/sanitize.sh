@@ -11,10 +11,10 @@ IFS=: read -r -a extra <<< "${S5_SCRUB:-}"
 words+=("${extra[@]}")
 grep -rlI -E -e "/Users/|/home/|192\.168\.|10\.[0-9]+\.[0-9]+\.[0-9]+" "$dir" 2>/dev/null | while read -r f; do
   sed -i -E -e 's#/Users/[^/ "]+#~#g' -e "s#/home/[^/ \"]+#~#g" -e 's#192\.168\.[0-9]+\.[0-9]+#<private-ip>#g' "$f"
-done
+done || true
 for w in "${words[@]}"; do
   [ -n "$w" ] || continue
   grep -rlI -F -e "$w" "$dir" 2>/dev/null | while read -r f; do
     sed -i -e "s#$w#<redacted>#g" "$f"
-  done
-done
+  done || true
+done || true
