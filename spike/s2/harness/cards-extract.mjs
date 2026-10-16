@@ -136,6 +136,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         ...card,
         bufferedBefore: before.bufferedKeys,
         resolvedState: nk.state,
+        actionKeys: nk.prefix,
         brokeOnTimeout,
         actionRows: brokeOnTimeout ? {} : nk.rows,
       });

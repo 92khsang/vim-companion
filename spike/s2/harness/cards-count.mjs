@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { REPO } from "./lib.mjs";
 
 const PLACEHOLDERS = new Set([
+  "<leader>",
   "<character>",
   "<register>",
   "<number>",
@@ -38,14 +39,13 @@ export function remapRows(card, settings) {
       : card.mode.startsWith("visual")
         ? visual
         : [];
+  // VSCodeVim checks remaps for the next key only when no action is waiting for a key, and the
+  // Normal-mode remaps only when no operator is pending (modeHandler.ts L504, remapper.ts L108). Keys buffered for
+  // a remap (bufferedBefore) continue only that remap.
   const b = card.bufferedBefore;
+  const waiting = (card.actionKeys ?? []).length > 0;
   const opPending = card.resolvedState.operator !== null;
-  if (
-    b.length === 0 &&
-    (opPending ||
-      (card.resolvedState.pending.some((k) => !/^[0-9"]$/.test(k)) &&
-        !/^["0-9a-z+_]$/.test(card.resolvedState.pending.at(-1) ?? "")))
-  )
+  if (b.length === 0 && (waiting || opPending || card.mode === "insert"))
     return [];
   const keys = new Set();
   for (const before of table) {

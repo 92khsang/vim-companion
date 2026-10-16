@@ -175,4 +175,29 @@ async function actionMap(modeHandler) {
   throw new Error("action table not found");
 }
 
-module.exports = { describeVimModule, modeHandlerMap, actionMap };
+let cachedRegister;
+/** VSCodeVim's Register class, from the closure of the module export deactivate. Test-only. */
+async function registerClass() {
+  if (cachedRegister) return cachedRegister;
+  const path = vimModulePath();
+  if (!path) throw new Error("VSCodeVim module not in require.cache");
+  for (const { value } of await closureValues(
+    require.cache[path].exports.deactivate,
+  )) {
+    if (
+      value &&
+      typeof value === "object" &&
+      typeof value.Register === "function"
+    ) {
+      return (cachedRegister = value.Register);
+    }
+  }
+  throw new Error("Register not found in the closure of deactivate");
+}
+
+module.exports = {
+  describeVimModule,
+  modeHandlerMap,
+  actionMap,
+  registerClass,
+};

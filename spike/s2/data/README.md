@@ -9,6 +9,11 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
 - `fixture-reader-v1/`: `node spike/s2/harness/fixture-run.mjs <version> <display> <cdpPort> reader 10 10,30,60 all <out>`
   with the first reset (`<Esc> <Esc>`, probe reset). Superseded by the run with
   `<Esc> <Esc> v <Esc>`, because of the hidden state in `visual-hidden-state/`.
+- `fixture-reader-v2/`: the same command with the reset `<Esc> <Esc> v <Esc>`, 10 trials per read
+  at 10, 30 and 60 ms on each version (2,820 reads per version). `fixture-summary.mjs` gives the
+  summaries; `node spike/s2/tools/add-deviations.mjs <both jsonl>` wrote the 15 VSCodeVim
+  deviations into `spec/fixtures/grammar`. Against the fixture with them, 5,640 of 5,640 reads
+  matched.
 - `visual-hidden-state/`: `flaky-*.jsonl` from `S2_CASES=... S2_RESET_SETTLE=<ms> fixture-run.mjs ... reader 30 10,60 last`
   (and `30 10,30,60 last` for `flaky-vreset`); `repeat-*.json` from
   `[S2_PER_KEY=1] [S2_RESET_KEYS="..."] node spike/s2/harness/repeat-keys.mjs 1.141.0 :121 9521 60 <n> V '"' a`.

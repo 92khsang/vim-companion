@@ -133,6 +133,24 @@ const methods = {
   adapter: adapterReport,
   time: () => Date.now(),
   vimModule: () => reader.describeVimModule(),
+  // Test-only: the contents of VSCodeVim's registers (its Register.registers map, read as fields;
+  // + and * live in the clipboard, which clipboardRead covers).
+  registers: async () => {
+    const Register = await reader.registerClass();
+    const out = {};
+    for (const [name, contents] of Register.registers) {
+      out[name] = contents.map((c) => ({
+        text:
+          typeof c.text === "string"
+            ? c.text
+            : Array.isArray(c.text)
+              ? c.text
+              : "<recorded keys>",
+        mode: c.registerMode,
+      }));
+    }
+    return out;
+  },
   // Test-only: every key token of VSCodeVim's action table, over all modes.
   tableKeys: async () => {
     const map = await reader.modeHandlerMap();
@@ -183,7 +201,19 @@ const methods = {
           does = a.doesActionApply(vs, keys);
         } catch {}
         try {
-          could = a.couldActionApply(vs, keys);
+          // Only a proper prefix counts as "could still apply": for a full-length sequence
+          // couldActionApply skips the checks of doesActionApply (such as a setting that is off).
+          const seqs = Array.isArray(a.keys[0]) ? a.keys : [a.keys];
+          let Base = a.constructor;
+          while (Base && typeof Base.CompareKeypressSequence !== "function")
+            Base = Object.getPrototypeOf(Base);
+          const longer = seqs
+            .filter((q) => q.length > keys.length)
+            .map((q) => q.slice(0, keys.length));
+          could =
+            longer.length > 0 &&
+            Base.CompareKeypressSequence(longer, keys) &&
+            a.couldActionApply(vs, keys);
         } catch {}
         if (does || could)
           (rows[k] ??= []).push({
