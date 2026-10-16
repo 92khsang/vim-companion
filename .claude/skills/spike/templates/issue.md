@@ -12,10 +12,11 @@
 | ------------- | ------------------------------------------- | --------------------------------------------- |
 | {{criterion}} | {{number with unit, or an exact condition}} | {{harness, conditions, trials per condition}} |
 
-## Timebox and default
+## Estimate and default
 
-- Timebox: {{n}} working days, from {{YYYY-MM-DD}} to {{YYYY-MM-DD}}
-- Default if the timebox runs out: {{what the project does instead}}
+- Estimate: {{n}} working days. It is not a deadline.
+- Started: {{YYYY-MM-DD}}
+- Default if the question cannot be answered: {{what the project does instead}}
 
 ## Environment
 
