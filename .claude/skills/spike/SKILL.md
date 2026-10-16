@@ -1,6 +1,6 @@
 ---
 name: spike
-description: Run a time-boxed spike that answers one technical question with experiments against real IDEs and engines, and record it in GitHub issues from fixed templates. Use when a decision depends on unverified engine, IDE or OS behaviour (for example the Phase 2 spikes S1-S6 and the U1 UI mock-up), and whenever you write to an issue labelled spike, including the user's approval of a mock-up.
+description: Run a spike that answers one technical question with experiments against real IDEs and engines, and record it in GitHub issues from fixed templates. Use when a decision depends on unverified engine, IDE or OS behaviour (for example the Phase 2 spikes S1-S6 and the U1 UI mock-up), and whenever you write to an issue labelled spike, including the user's approval of a mock-up.
 ---
 
 # Spike
@@ -26,10 +26,10 @@ Before you post it, run `grep -n '{{' <file>`; it must print nothing.
 2. Open the spike issue from [templates/issue.md](templates/issue.md) with
    `gh issue create --label spike --title "Spike <id>: <question>" --body-file <file>`, and add its
    row to the tracking issue.
-   - For a planned spike, translate the question, pass criteria, timebox and default from the plan
-     into English. Keep every number and condition. Do not loosen a criterion.
+   - For a planned spike, translate the question, pass criteria, estimate and default from the
+     plan into English. Keep every number and condition. Do not loosen a criterion.
 3. Create a branch `spike/<id>-<slug>` from `main`. Spike branches are the exception to the
-   `<type>/<slug>` rule and the two-day limit in AGENTS.md; the timebox applies instead.
+   `<type>/<slug>` rule and the two-day limit in AGENTS.md; they live until the verdict.
    - Commit messages use a Conventional Commits type and an allowed scope, such as
      `test(vscode): add the S1 key probe`.
    - Push the first commit, then open a draft PR with
@@ -45,7 +45,7 @@ Before you post it, run `grep -n '{{' <file>`; it must print nothing.
   target window, for example with a probe command that records what it received.
   - On Linux, run the IDE as an X11 app under Xvfb with `WAYLAND_DISPLAY` unset.
   - Send keys with `xdotool` (XTEST), and set focus explicitly with `xdotool windowfocus --sync`.
-  - Check native Wayland by hand.
+  - Check native Wayland by hand, unless a harness that you proved first reaches it.
 - Count; do not sample by eye. When the criterion is "no leaks", run at least 1000 trials per
   condition. Zero failures in 1000 trials puts the 95% upper bound near 0.3% (rule of three).
 - Commit the scripts and raw data to the spike branch, with the exact commands that produced them.
@@ -55,8 +55,10 @@ Before you post it, run `grep -n '{{' <file>`; it must print nothing.
   no other progress comments.
 - A criterion that cannot be measured as written is not a mistake to fix. Ask the user, and change
   it only after they agree.
-- Stop on the end date in the issue. If a criterion has no result by then, the planned default
-  applies.
+- The plan's duration is an estimate, not a deadline. Never cut trials, versions or checks to
+  finish sooner, and cut manual checks by automating them, not by dropping them.
+- If the work grows well beyond the estimate, or a criterion cannot be measured at all, post a note
+  and ask the user whether to continue, change the criterion or take the default.
 
 ## Finish
 
@@ -68,7 +70,7 @@ Before you post it, run `grep -n '{{' <file>`; it must print nothing.
    verdict is one of three words:
    - `pass`: every criterion passed.
    - `fail`: at least one criterion failed.
-   - `default`: the timebox ended before every criterion had a result, and none failed.
+   - `default`: the user agreed to stop before every criterion had a result, and none failed.
 3. The verdict lists every engine or IDE behaviour that the decision relies on. Each one becomes an
    engine contract test: it is written test-first when the real code is built, and it runs in the
    weekly canary.
@@ -110,7 +112,7 @@ messages and every file on the spike branch. The repository is public.
   checks.
 - If a spike finds a new question, post a note and open a new spike issue titled
   `Spike: <question>`, with a branch `spike/<issue number>-<slug>`, and add it to the tracking
-  issue. Start it only after the user agrees to its timebox.
+  issue. Start it only after the user agrees to it and to its estimate.
 - Do not change a spike issue's body after you open it, except to fix a mistake. Then post a note
   that says what changed and why.
 - Edit the tracking issue's table and approvals in place. Read its body just before you edit it,
