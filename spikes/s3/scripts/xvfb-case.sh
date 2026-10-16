@@ -61,6 +61,7 @@ cd "$plugin"
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
   -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work-$disp" \
   -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" -Ps3.pluginOff="$plugin_off" \
+  ${S3_DOT_CASES:+-Ps3.dotCases="$S3_DOT_CASES"} \
   >"$out/gradle.log" 2>&1
 # Raw data over 1 MB is kept gzip-compressed; the analysis scripts read .jsonl and .jsonl.gz.
 find "$out" -name '*.jsonl' -size +1M -exec gzip -9 {} \;

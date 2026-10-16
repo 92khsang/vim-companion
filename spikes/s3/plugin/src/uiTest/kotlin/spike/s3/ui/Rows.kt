@@ -114,7 +114,10 @@ object DotRow {
 
   fun run(s: Session) {
     s.h.setHost(Env.hosts.firstOrNull() ?: "layer", true)
-    for (c in cases) {
+    // s3.dotCases picks and orders the cases by name, separated by commas (diagnostic runs); default: both, in order.
+    val names = System.getProperty("s3.dotCases")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }
+    val chosen = if (names == null) cases else names.map { n -> cases.single { it.name == n } }
+    for (c in chosen) {
       s.log(J.obj("event" to "open", "detail" to s.h.openFile(c.file)))
       Thread.sleep(1000)
       for (n in 1..Env.trials) {

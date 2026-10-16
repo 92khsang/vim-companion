@@ -135,10 +135,10 @@ CHECKS = {"focus": check_focus, "esc": check_esc, "commit": check_commit, "commi
 def dot_outcomes(rows):
     """Classifies what `.` did after x and an <Action> mapping, using the two reference variants of the same trial."""
     by = defaultdict(dict)
-    for d in rows:
-        by[(d["case"], d.get("ideavim"), d["trial"])][d["variant"]] = d
+    for f, d in rows:
+        by[(d["case"], d.get("ideavim"), str(f), d["trial"])][d["variant"]] = d
     out = defaultdict(lambda: {"trials": 0, "outcomes": defaultdict(int), "dotSeen": 0, "hostShows": 0, "refsOk": 0})
-    for (case, ver, n), v in sorted(by.items()):
+    for (case, ver, _f, n), v in sorted(by.items()):
         if not {"dot", "ref-x", "ref-action"} <= set(v) or any("error" in x for x in v.values()):
             out[(case, ver)]["outcomes"]["incomplete"] += 1
             continue
@@ -170,7 +170,7 @@ def main(argv):
     dots = []
     for f, n, d in lines(argv[1:]):
         if d.get("case", "").startswith("dot:") and "variant" in d:
-            dots.append(d)
+            dots.append((f, d))
             continue
         if "event" in d:
             if d["event"] in ("delivery-check", "run-start", "open"):
