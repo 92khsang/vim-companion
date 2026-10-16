@@ -60,6 +60,34 @@ class Harness : Disposable {
 
   fun hostShowing(): Boolean = edt { Observer.host.showing }
 
+  /** Keys delivered to IdeaVim through an IDE entry point since [beginTrial]; replays inside a key are not counted. */
+  fun deliveredCount(): Int = Probe.entries.count { it.nested == 0 && it.ideKind != null }
+
+  /** Keys delivered since [beginTrial], in Vim notation, joined by a tab. */
+  fun deliveredKeys(): String = Probe.entries.filter { it.nested == 0 && it.ideKind != null }.joinToString("\t") { it.ideKey ?: "?" }
+
+  fun pid(): Long = ProcessHandle.current().pid()
+
+  /** Error highlights in the selected editor's document, as the daemon has published them. */
+  fun errorCount(): Int = edt {
+    val e = editor() ?: return@edt -1
+    val p = e.project ?: return@edt -1
+    var n = 0
+    com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx.processHighlights(
+      e.document, p, com.intellij.lang.annotation.HighlightSeverity.ERROR, 0, e.document.textLength,
+    ) { n++; true }
+    n
+  }
+
+  /** Opens [relativePath] of the first open project in the editor, with focus. */
+  fun openFile(relativePath: String): String = edt {
+    val p = ProjectManager.getInstance().openProjects.firstOrNull() ?: return@edt "no project"
+    val base = p.basePath ?: return@edt "no base path"
+    val vf = com.intellij.openapi.vfs.LocalFileSystem.getInstance().refreshAndFindFileByPath("$base/$relativePath") ?: return@edt "no file"
+    FileEditorManager.getInstance(p).openFile(vf, true)
+    "opened " + vf.name
+  }
+
   fun toolkit(): String = Toolkit.getDefaultToolkit().javaClass.name
 
   fun ideaVimVersion(): String = try {

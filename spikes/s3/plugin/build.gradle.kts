@@ -31,6 +31,13 @@ kotlin {
   }
 }
 
+sourceSets {
+  create("uiTest")
+}
+
+val uiTestImplementation: Configuration by configurations.getting
+val uiTestRuntimeOnly: Configuration by configurations.getting
+
 repositories {
   mavenCentral()
   intellijPlatform { defaultRepositories() }
@@ -42,11 +49,26 @@ dependencies {
     plugins(ideavim)
     testFramework(TestFrameworkType.Platform)
   }
+  intellijPlatform {
+    // Starter and Driver from the build of the IDE under test.
+    testFramework(TestFrameworkType.Starter, version = "262.10968.63", configurationName = "uiTestImplementation")
+  }
+  // The plugin itself takes the IDE's Kotlin runtime (kotlin.stdlib.default.dependency=false); the test JVM needs one
+  // that matches kotlin-reflect from Starter's dependencies.
+  uiTestImplementation("org.jetbrains.kotlin:kotlin-stdlib:2.4.21")
+  uiTestImplementation("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
+  uiTestImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
+  uiTestImplementation("org.jetbrains.teamcity:serviceMessages:2024.07")
+  uiTestRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
+  uiTestImplementation("org.kodein.di:kodein-di-jvm:7.26.1")
+  uiTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
   testImplementation("junit:junit:4.13.2")
   testImplementation("org.opentest4j:opentest4j:1.3.0")
 }
 
 intellijPlatform {
+  // Keep the sandboxes under the build directory, so that each IdeaVim version has its own.
+  sandboxContainer = layout.buildDirectory.dir("sandbox")
   pluginConfiguration {
     ideaVersion { sinceBuild = "261" }
   }
@@ -85,5 +107,29 @@ intellijPlatformTesting.testIde.register("test262") {
     providers.gradleProperty("s3.debugActions").orNull?.let { systemProperty("s3.debugActions", it) }
     systemProperty("s3.repeat", providers.gradleProperty("s3.repeat").orElse("1").get())
     systemProperty("s3.rc", rootDir.resolve("../../../spec/generated/intellij/vim-companion.ideavimrc").canonicalPath)
+  }
+}
+
+// End-to-end runs: Starter and Driver (JUnit 5) against the 2026.2.3 IDE, with the spike plugin and IdeaVim from the
+// runIde262 sandbox. Keys go through AWT key dispatch (java.awt.Robot under Xvfb).
+val uiTest = intellijPlatformTesting.testIdeUi.register("uiTest") {
+  task {
+    val uiSourceSet = sourceSets["uiTest"]
+    testClassesDirs = uiSourceSet.output.classesDirs
+    classpath = uiSourceSet.runtimeClasspath
+    useJUnitPlatform { excludeEngines("junit-vintage") }
+    dependsOn("prepareSandbox_runIde262")
+    outputs.upToDateWhen { false }
+    val sandboxPlugins = layout.buildDirectory.dir("sandbox").get().asFile
+    systemProperty("s3.sandbox", sandboxPlugins.path)
+    systemProperty("s3.ide.home", providers.gradleProperty("s3.ideHome").orElse("").get())
+    systemProperty("s3.out", providers.gradleProperty("s3.out").orElse(layout.buildDirectory.dir("s3-out").get().asFile.path).get())
+    systemProperty("s3.work", providers.gradleProperty("s3.work").orElse(layout.buildDirectory.dir("s3-work").get().asFile.path).get())
+    systemProperty("s3.rc", rootDir.resolve("../../../spec/generated/intellij/vim-companion.ideavimrc").canonicalPath)
+    for (key in listOf("s3.trials", "s3.hosts", "s3.case", "s3.toolkit", "s3.portBase")) {
+      providers.gradleProperty(key).orNull?.let { systemProperty(key, it) }
+    }
+    systemProperty("s3.ideavim", ideavim)
+    testLogging { events("failed", "passed"); showStandardStreams = true; exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL }
   }
 }

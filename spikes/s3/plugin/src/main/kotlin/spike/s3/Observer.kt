@@ -170,8 +170,8 @@ object Observer {
     val reg = injector.registerGroup
     return Snapshot(
       mode = modeName(editor.vim.mode),
-      pendingKeys = injector.parser.toKeyNotation(cb.keys.toList()),
-      mappingKeys = injector.parser.toKeyNotation(ms.keys.toList()),
+      pendingKeys = notation(cb.keys.toList()),
+      mappingKeys = notation(ms.keys.toList()),
       count = cb.calculateCount0Snapshot(),
       register = cb.registerSnapshot,
       registerPending = cb.isRegisterPending,
@@ -182,6 +182,9 @@ object Observer {
       dotRepeat = injector.vimState.isDotRepeatInProgress,
     )
   }
+
+  /** IdeaVim writes an empty key list as `<Nop>`; the snapshot uses an empty string. */
+  private fun notation(keys: List<javax.swing.KeyStroke>): String = if (keys.isEmpty()) "" else injector.parser.toKeyNotation(keys)
 
   fun modeName(m: Mode): String = when (m) {
     is Mode.NORMAL -> "NORMAL"
