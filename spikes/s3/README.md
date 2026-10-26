@@ -109,6 +109,14 @@ in a sandbox IDE on the Mac's screen. Only those two rows are in scope there; th
   `awt.toolkit.name` is not set (it selects XToolkit or WLToolkit on Linux); the `open` event logs the toolkit the IDE
   runs on, expected `sun.lwawt.macosx.LWCToolkit`, and `s3.toolkit=LWCToolkit` names the run. The delivery check
   (`SPC w Esc` and `d i Esc` logged 100%) and the host wait before `Esc` are the same code as on Linux.
+- The input source. The user's Mac used a Korean input source; before the runs of 2026-10-27 it was switched to
+  `com.apple.keylayout.ABC` with `mac/s3input.swift` (built on the Mac with `/usr/bin/swiftc -O -o $MAC_SPIKE_DIR/bin/s3input`;
+  `s3input select <id>` calls `TISSelectInputSource` in the console user's session from ssh), and switched back after
+  the last run. `s3keys` refuses every key while the input source is not ABC.
+- The runs of 2026-10-27, from `scripts/` with `MAC_HOST` and `MAC_SPIKE_DIR` set: `mac-case.sh focus IdeaVIM:2.47.3 1`
+  and `esc ... 1` (dry runs), `focus ... 1000`, `esc ... 1000` (trial 248 of `balloon` received a `<Left>` that
+  `s3keys` never posted, so `analyze.py` reports it as not delivered), and `esc ... 1000` again. Each data directory
+  holds its exact command in `command.txt`. `ide-logs/` stayed empty in every run: the IDE's logs were not copied.
 - Keys. `s3keys serve --socket <run dir>/keys.sock` runs in an ssh session (`ssh -n $MAC_HOST ...`), listens on a Unix
   socket, and speaks `inject.py`'s protocol (`key <keysym>[+<keysym>]`, `ok`/`error <text>`), plus `pid <n>`,
   `activate <n>`, `front` and `preflight`. `Session.InjectorKeys` connects to the socket (`-Ps3.inject=unix:<path>`)
