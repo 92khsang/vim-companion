@@ -88,7 +88,7 @@ d=open(sys.argv[1],"rb").read(24); print(*struct.unpack(">II", d[16:24]))' "$st/
   keys)
     ide=$1 first=$2 count=$3 delay=$4 label=$5
     if [ "$ide" = vscode ]; then log=$VS_SB/keys.log; else log=$IJ_WORK/keys.log; fi
-    before=$(r "/usr/bin/wc -l < '$log' 2>/dev/null || echo 0" | tr -d ' ')
+    before=$(r "if [ -f '$log' ]; then /usr/bin/wc -l < '$log'; else echo 0; fi" | tr -d ' ')
     set +e
     r "'$md/bin/s5keys' $(pid_of "$ide") '$md/keys/sequence.txt' $delay $first $count" > "$st/keys/$label.sent" 2> "$st/keys/$label.err"
     rc=$?
@@ -99,7 +99,7 @@ d=open(sys.argv[1],"rb").read(24); print(*struct.unpack(">II", d[16:24]))' "$st/
     python3 -I "$here/compare-keys.py" "$here/../keys/sequence.txt" "$st/keys/$label.received" "$first" "$count" > "$st/keys/$label.compare"
     set -e
     sent=$(grep -c -v '^#' "$st/keys/$label.sent" || true)
-    printf '%s\t%s\t%s\tsender_rc=%s\tsent=%s\t%s\n' "$(date -Is)" "$label" "$ide" "$rc" "$sent" "$(head -1 "$st/keys/$label.compare")" | tee -a "$st/keys/index.tsv"
+    printf '%s\t%s\t%s\tsender_rc=%s\tsender_sent=%s\t%s\n' "$(date -Is)" "$label" "$ide" "$rc" "$sent" "$(head -1 "$st/keys/$label.compare")" | tee -a "$st/keys/index.tsv"
     ;;
   stop)
     pid=$(pid_of "$1")

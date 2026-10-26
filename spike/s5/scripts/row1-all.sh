@@ -8,6 +8,7 @@
 set -uo pipefail
 commit=$1 out=$2
 shift 2
+mkdir -p "$out"
 here=$(cd "$(dirname "$0")" && pwd)
 console() {
   ssh -o BatchMode=yes "$MAC_HOST" "/usr/sbin/ioreg -n Root -d1 -a" | python3 -I -c '
