@@ -27,6 +27,9 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   candidate (a).
 - `extensions/s2-adapter`: candidate (a), inspector build (option 2 of the note on #11).
 - `extensions/s2-cards`: candidate (b), static cards in a webview view.
+- `engine-history/`: `run.sh` fingerprints, at every VSCodeVim release since 2020, the internals
+  that the inspector adapter reads (`fingerprint.sh`), and checks the published packages for their
+  names (`bundle_check.py`); it clones VSCodeVim and downloads packages, and executes neither.
 - `harness/prove.mjs`: harness proof. `harness/fixture-run.mjs` + `fixture-summary.mjs`: the
   grammar fixture against VSCodeVim (reader or adapter). `harness/cards-extract.mjs`,
   `cards-count.mjs`, `cards-build.mjs`: the completeness reference and the card rows.

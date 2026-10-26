@@ -163,3 +163,21 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   line); the shifted registers 2-9 follow the shift rule in `dip` (21 compared) and `dis` (24
   compared over 3 trials); Vim's `.` after `rX` is noted and not compared. Identical on both
   versions.
+- `engine-history/`: `GH_TOKEN=... spike/s2/engine-history/run.sh <empty work dir> spike/s2/data/engine-history`
+  on 2026-10-27: how often VSCodeVim changed the internals that the inspector adapter reads.
+  `tags.txt` lists the 100 release tags with their dates (the last release is v1.32.4 of
+  2025-12-14; `default-branch.txt` is the default branch head read the same day, 114 commits after
+  it). `fingerprints/<ref>.txt` holds one normalized line per item of the adapter's dependency
+  surface (the export `getAndUpdateModeHandler`, the `ModeHandlerMap` export and its
+  `modeHandlerMap` field, `vimState.modeData` and `recordedState`, the 8 `RecordedState` fields,
+  the `Mode` enum, the `actionType`, `isCompleteAction` and `keysPressed` action fields, the
+  `cmd_register` name and the webpack optimization lines) at each of the 72 release tags since
+  2020 and at the default branch; `changes.txt` lists the releases where a line changed. The last
+  change that alters what the adapter reads is v1.25.1 (2023-03-01, the register action name);
+  v1.26.0 (2023-09-09) only drops one use of `ModeHandlerMap.` in `extensionBase.ts`; the 20
+  releases from v1.26.0 to v1.32.4 and the default branch have identical fingerprints.
+  `bundle-check.txt`: a static read of `extension/out/extension.js` in the published packages of
+  1.22.2, 1.25.2 and 1.26.0 to 1.32.4: every name the adapter reads is present, unmangled, in
+  1.25.2 and later, the export is present in all of them, and `ModeHandlerMap` occurs 10 times in
+  every package from 1.26.0 to 1.32.4; 1.22.2 lacks `modeData`, `actionType` and `cmd_register`.
+  This is a check of names, not of their meaning; the meaning is measured on 1.32.4 only.

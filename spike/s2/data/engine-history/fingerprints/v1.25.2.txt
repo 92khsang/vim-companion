@@ -1,0 +1,22 @@
+export: 1
+base-fn: export async function getAndUpdateModeHandler(
+base-map-use: 9
+map-field: private modeHandlerMap = new Map<Uri, ModeHandler>();
+map-export: export const ModeHandlerMap = new ModeHandlerMapImpl();
+vimState.modeData: public modeData: ModeData = { mode: Mode.Normal };
+vimState.recordedState: public recordedState = new RecordedState();
+recorded.actionsRun: public actionsRun: IBaseAction[] = [];
+recorded.actionsRunPressedKeys: public actionsRunPressedKeys: string[] = [];
+recorded.actionKeys: public actionKeys: string[] = [];
+recorded.bufferedKeys: public bufferedKeys: string[] = [];
+recorded.count: public count: number = 0;
+recorded.operatorCount: public operatorCount: number = 0;
+recorded.registerName: public registerName: string;
+recorded.hasRunOperator: public hasRunOperator = false;
+modeData-type: import { ModeData } from '../mode/modeData';|public modeData: ModeData = { mode: Mode.Normal };|return this.modeData.mode;|
+mode-enum: exportenumMode{Normal,Insert,Visual,VisualBlock,VisualLine,SearchInProgressMode,CommandlineInProgress,Replace,EasyMotionMode,EasyMotionInputMode,SurroundInputMode,OperatorPendingMode,//Pseudo-Mode,usedonlywhenremapping.DON'TSETTOTHISMODEDisabled,}
+base.actionType: abstract readonly actionType: ActionType;
+base.isCompleteAction: public isCompleteAction = true;
+base.keysPressed: public keysPressed: string[] = [];
+register-name: override name = 'cmd_register';
+webpack-opt: mode: 'production',|devtoolModuleFilenameTemplate: '../[resource-path]',|minimize: true,|mode: 'development',|minimize: true,|
