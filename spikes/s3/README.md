@@ -48,3 +48,6 @@ python3 -I hangul_check.py --on ../data/<runs> --off ../data/<plugin-off runs>
 
 `gnome-case.sh` with keep-english needs `S3_IDEAVIM_EXTENSION=<IdeaVimExtension-1.7.4.zip>` (from the JetBrains
 Marketplace, plugin 9615, SHA-256 `bdc647dbbb7bdb5e6dcd4121002278beab8aa39993ee15fc50f0ebb9e04c4daf`).
+
+`S3_CPUS` (default `16-27`) is the core set that `xvfb-case.sh`, `gnome-case.sh` and `via-ide.sh` pin Gradle, the test JVM
+and the IDE to, so that a smoke run can use other cores: `S3_CPUS=28-31 ./xvfb-case.sh 135 focus IdeaVIM:2.47.3 2 layer 9541`.

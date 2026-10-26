@@ -39,7 +39,7 @@ if [ -n "$ext_dir" ]; then extra_plugins="$ext_dir"; fi
 plugin_off="false"
 if [[ ",$variant," == *",plugin-off,"* ]]; then plugin_off="true"; fi
 
-taskset -c 16-27 "$gh/gnome-harness.sh" start "$root" >"$out/harness-start.txt"
+taskset -c "${S3_CPUS:-16-27}" "$gh/gnome-harness.sh" start "$root" >"$out/harness-start.txt"
 sleep 5
 "$gh/gnome-harness.sh" select "$root" ibus:hangul >>"$out/harness-start.txt"
 shots_pid=""
@@ -54,7 +54,7 @@ cp "$root/settings.ini" "$out/harness-settings.ini"
 
 cd "$plugin"
 "$gh/gnome-harness.sh" run "$root" env PATH="$PATH" XMODIFIERS=@im=ibus GTK_IM_MODULE=ibus \
-  taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-g$port" uiTest \
+  taskset -c "${S3_CPUS:-16-27}" ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-g$port" uiTest \
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
   -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work" \
   -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" -Ps3.toolkit="$toolkit" \

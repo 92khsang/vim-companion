@@ -57,7 +57,7 @@ dbus_pid="$(cat "$rt/dbus.pid")"
 
 printf 'spikes/s3/scripts/xvfb-case.sh %s\n' "$*" >"$out/command.txt"
 cd "$plugin"
-"${run_env[@]}" taskset -c 16-27 ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-x$disp" uiTest \
+"${run_env[@]}" taskset -c "${S3_CPUS:-16-27}" ./gradlew --no-daemon --project-cache-dir "$plugin/.gradle-$tag-x$disp" uiTest \
   -Pideavim="$ideavim" -Ps3.buildDir="$build_dir" -Ps3.ideHome="$ide_home" \
   -Ps3.out="$out" -Ps3.work="$plugin/$build_dir/s3-work-$disp" \
   -Ps3.case="$case_" -Ps3.trials="$trials" -Ps3.hosts="$hosts" -Ps3.portBase="$port" -Ps3.pluginOff="$plugin_off" \
