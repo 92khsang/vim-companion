@@ -17,14 +17,17 @@ Throwaway code for spike S3 (issue #12). It is never merged.
   `d2e3275f2f7e4b9bc0ce4067fc4bb61f6c42b33f`), `observer.json` S3's own cases, `ideavim-deviations.json` the measured
   IdeaVim deviations in S2's `engines.ideavim` form.
 - `scripts/`: run and analysis scripts. `data/`: raw data, one directory per run, each with `command.txt`.
+- `mac/`: the Swift helpers of the macOS mode, built on the Mac with `/usr/bin/swiftc`: `s3keys` (the key injector,
+  from spike S5's `s5keys`) and `s5win` (permission preflight and window queries, spike S5's helper unchanged).
 - The GNOME harness is in `../gnome-harness/`.
 
 ## Isolation
 
 Every IDE run uses an empty environment plus the variables the run needs, its own `user.home`, HOME and XDG
-directories (or the GNOME harness's), `IDEA_VIM_CUSTOM_VIMRC` pointing at a sandbox rc that sources
-`spec/generated/intellij/vim-companion.ideavimrc`, credentials in memory only, no notification balloons and no embedded
-browser. Xvfb runs get a private D-Bus session bus without services.
+directories (or the GNOME harness's; on macOS HOME and `user.home` only), `IDEA_VIM_CUSTOM_VIMRC` pointing at a sandbox
+rc that sources `spec/generated/intellij/vim-companion.ideavimrc`, credentials in memory only, no notification balloons
+and no embedded browser. Xvfb runs get a private D-Bus session bus without services. On macOS nothing of the run uses
+the Mac's JDK, IDE profile, keychain or settings: see the macOS mode below.
 
 ## Commands
 
@@ -51,3 +54,77 @@ Marketplace, plugin 9615, SHA-256 `bdc647dbbb7bdb5e6dcd4121002278beab8aa39993ee1
 
 `S3_CPUS` (default `16-27`) is the core set that `xvfb-case.sh`, `gnome-case.sh` and `via-ide.sh` pin Gradle, the test JVM
 and the IDE to, so that a smoke run can use other cores: `S3_CPUS=28-31 ./xvfb-case.sh 135 focus IdeaVIM:2.47.3 2 layer 9541`.
+
+## macOS mode
+
+The `mac` mode of the uiTest harness (`-Ps3.mode=mac`) runs the focus and `d Esc j` rows on the user's Mac over ssh,
+in a sandbox IDE on the Mac's screen. Only those two rows are in scope there; the hosts are `balloon` and `layer`.
+
+- What runs where. `mac-prepare.sh` (no window) copies `plugin/`, `fixture/`, `scripts/`, `mac/` and the generated
+  ideavimrc to `$MAC_SPIKE_DIR` on the Mac at their repository paths, builds `s3keys` and `s5win` with `/usr/bin/swiftc`,
+  unpacks Temurin 25.0.4 (pinned SHA-256) under `$MAC_SPIKE_DIR/tools`, and runs `prepareSandbox_runIde262` and
+  `compileUiTestKotlin` with Gradle's user home under `$MAC_SPIKE_DIR/gradle-home`; that downloads IntelliJ IDEA
+  2026.1.5 (build target) and 2026.2.3 (the IDE under test) as macOS installers, which the IntelliJ Platform Gradle
+  Plugin unpacks with `hdiutil` and `rsync` into `gradle-home/caches/<gradle>/transforms/<hash>/transformed/idea-2026.2.3-aarch64/`:
+  the contents of the dmg's `IntelliJ IDEA.app/Contents` (`Info.plist`, `MacOS/idea`, `Resources/build.txt`, `jbr/`,
+  `plugins/`) without the `.app` directory.
+  `mac-case.sh` (a window) keeps the Mac awake with `caffeinate`, requires the console state `on-console unlocked`
+  (`console-state.py`), calls `mac-prepare.sh`, requires `s5win preflight` to print `axTrusted=true`,
+  `postEvent=true` and `inputSource=com.apple.keylayout.ABC`, creates a run directory `/tmp/s3run.XXXXXX`, starts the
+  key injector, and starts `gradlew uiTest` as a one-shot launchd job in `gui/<uid>` (`mac-job.sh start`), because
+  Java AWT cannot open a window from an ssh session. The job runs `env -i` with HOME, TMPDIR and `user.home` under the
+  run directory and the JDK and Gradle home by absolute path; the test JVM starts the IDE through the Starter from the
+  unpacked IDE (`S3Ide.CopiedIdeInstaller` copies it once to `$MAC_SPIKE_DIR/work/ide/IntelliJ IDEA.app/Contents`, the
+  layout Starter's macOS distribution expects, and the IDE starts through `Contents/MacOS/idea`) with the same isolation as the
+  Linux modes: own HOME and `user.home` under the work directory, own config, system, plugins and log directories,
+  credentials in memory (the Starter writes `options/security.xml` on Linux only, so the mode writes it itself), no
+  balloons, no JCEF, no tips, trust all projects, `-Xmx2g`, and the port base for JMX, RMI and the IDE's web server.
+  `awt.toolkit.name` is not set (it selects XToolkit or WLToolkit on Linux); the `open` event logs the toolkit the IDE
+  runs on, expected `sun.lwawt.macosx.LWCToolkit`, and `s3.toolkit=LWCToolkit` names the run. The delivery check
+  (`SPC w Esc` and `d i Esc` logged 100%) and the host wait before `Esc` are the same code as on Linux.
+- Keys. `s3keys serve --socket <run dir>/keys.sock` runs in an ssh session (`ssh -n $MAC_HOST ...`), listens on a Unix
+  socket, and speaks `inject.py`'s protocol (`key <keysym>[+<keysym>]`, `ok`/`error <text>`), plus `pid <n>`,
+  `activate <n>`, `front` and `preflight`. `Session.InjectorKeys` connects to the socket (`-Ps3.inject=unix:<path>`)
+  from the test JVM in the launchd job. The injector posts each key as CGEvents to the HID event tap (12 ms hold, the
+  GNOME injector's timing) and refuses every key, with `error`, unless the sandbox IDE named by `pid` owns the
+  frontmost app and the topmost normal window and the input source is ABC; it reports every posted or refused key on
+  stderr, which `mac-case.sh` keeps as `injector.log`. The split (server in the ssh session, client in the job) is
+  forced by macOS's permissions: spike S5 measured that TCC attributes the programs of an ssh session to
+  `/usr/libexec/sshd-keygen-wrapper`, which holds the Accessibility grant, while a launchd job's processes are
+  attributed to their own binaries, which hold nothing.
+- Focus. `Session.focusWindow()` sends `pid` and then `activate` (AX `kAXFrontmostAttribute`, with an
+  `NSRunningApplication.activate` fallback: the code of `s5win activate`) up to 5 times until the reply shows
+  `frontPid` and `topWindowPid` equal to the IDE's pid, logs the reply with `frontIsIde`, and asks the IDE to focus the
+  editor if it does not own focus. No robot click: `java.awt.Robot` in the IDE would need the permission the IDE does
+  not have.
+- Output. `data/<UTC stamp>-mac-<case>-<version>-LWCToolkit/`: the JSONL (the `open` event has the IDE's toolkit
+  and IdeaVim version, `run-start` the build the Starter read), `command.txt`, `ide.txt` (app path, build, toolkit,
+  IdeaVim version, macOS version, Gradle result), `preflight.txt`, `prepare.log`, `injector.log`, `gradle.log`,
+  `ide-logs/` (the IDE's `idea.log`), `mac-case.log` and `leftover-processes.txt` (expected empty). `sanitize.sh`
+  rewrites home directories, the Mac's per-user temporary directory, the run directory, the Mac's host, computer
+  and user names (read from the Mac at run time, never written here) and private addresses; JSONL over 1 MB is
+  gzipped; the run directory is removed; `$MAC_SPIKE_DIR/work/tests` (the IDE profiles) is removed after each run,
+  `$MAC_SPIKE_DIR` itself stays until it is deleted by hand (`ssh $MAC_HOST /bin/rm -rf $MAC_SPIKE_DIR`).
+- What differs from the row's text in issue #12. The row says keys are sent with `osascript` through System Events.
+  This mode posts CGEvents from `s3keys` instead, the path spike S5 proved (1000 of 1000 keys, no Apple Events
+  request in the TCC log, issue #14): it needs only the Accessibility grant the user gave to `sshd-keygen-wrapper`,
+  where `osascript` would also need the Automation grant for System Events. The measured environment is therefore
+  "CGEvents posted from an ssh session", not "osascript through System Events". The focus activation is the AX call of
+  `s5win activate`, issued through the injector rather than a separate `s5win` process. Everything else in the row
+  (sandbox IDE 2026.2.3, IdeaVim 2.47.3, the spike plugin, the delivery check, the wait for the host, `SPC w Esc`,
+  `d i Esc`, `d Esc j`, 1000 trials per host) is as written.
+
+```sh
+MD=$(ssh $MAC_HOST /usr/bin/mktemp -d -t s3spike)                                   # once; MAC_HOST is the ssh alias
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD ./mac-prepare.sh IdeaVIM:2.47.3                 # no window; prints the .app and the preflight
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD ./mac-case.sh focus IdeaVIM:2.47.3 1 balloon,layer 9531   # dry run: an IDE window opens
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD ./mac-case.sh esc IdeaVIM:2.47.3 1 balloon,layer 9531
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD ./mac-case.sh focus IdeaVIM:2.47.3 1000 balloon,layer 9531
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD ./mac-case.sh esc IdeaVIM:2.47.3 1000 balloon,layer 9531
+python3 -I analyze.py ../data/<run>
+```
+
+While `mac-case.sh` runs nothing else may come to the front on the Mac: the injector refuses keys as soon as another
+app or window is in front, and those trials fail with `error`. `S3_MAC_TIMEOUT` (seconds, default 21600) ends a run
+that hangs. The `mac` mode never uses `pkill`, kills only the processes of its run, and changes no setting or input
+source on the Mac; `mac-awake.sh` is spike S5's `caffeinate` wrapper.
