@@ -1,0 +1,123 @@
+### fetch-node: fetch https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz node.tar.gz bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057
+### fetch-pnpm: fetch https://registry.npmjs.org/pnpm/-/pnpm-11.28.5.tgz pnpm.tgz 1ef4e447a68713656064f3f174c0f44719960a043a3fe2299169d08cf1dbf8ee
+### fetch-jdk: fetch https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4%2B7/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4_7.tar.gz jdk.tar.gz 5a101c54abf5a9f16c0f70d8c38ba99e6567c1ba213378f0bb04497284f051bd
+### unpack-node: /usr/bin/tar -xf /tmp/s5run.A4HJFZ/dl/node.tar.gz -C /tmp/s5run.A4HJFZ/tools
+### mkdir-pnpm: /bin/mkdir -p /tmp/s5run.A4HJFZ/tools/pnpm
+### unpack-pnpm: /usr/bin/tar -xzf /tmp/s5run.A4HJFZ/dl/pnpm.tgz -C /tmp/s5run.A4HJFZ/tools/pnpm
+### unpack-jdk: /usr/bin/tar -xzf /tmp/s5run.A4HJFZ/dl/jdk.tar.gz -C /tmp/s5run.A4HJFZ/tools
+### install: e /tmp/s5run.A4HJFZ/tools/bin/pnpm install --frozen-lockfile --ignore-scripts --store-dir $TMPDIR/s5spike.oeQyVsL3kv/cache-final/pnpm-store
+Scope: all 2 workspace projects
+? Verifying lockfile against supply-chain policies (157 entries)...
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +124
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: $TMPDIR/s5spike.oeQyVsL3kv/cache-final/pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+✓ Lockfile passes supply-chain policies (157 entries in 897ms)
+Progress: resolved 124, reused 124, downloaded 0, added 123
+Progress: resolved 124, reused 124, downloaded 0, added 124, done
+
+devDependencies:
++ @commitlint/cli 21.2.3
++ @commitlint/config-conventional 21.2.3
++ lefthook 2.2.1
++ prettier 3.9.10
+
+Done in 1.8s using pnpm v11.28.5
+### typecheck: e /tmp/s5run.A4HJFZ/tools/bin/pnpm typecheck
+$ pnpm -F @vim-companion/spec --fail-if-no-match typecheck
+$ tsc
+### spec-check: e /tmp/s5run.A4HJFZ/tools/bin/pnpm spec:check
+$ pnpm -F @vim-companion/spec --fail-if-no-match spec:check
+$ node tools/validate.mts
+### check-ids: e /tmp/s5run.A4HJFZ/tools/bin/pnpm check-ids
+$ pnpm -F @vim-companion/spec --fail-if-no-match check-ids
+$ node tools/check-ids.mts
+check-ids: resolved 31/31 VS Code commands and 20/20 IntelliJ actions; unsupported entries: VS Code 0, IntelliJ 0
+### gen-check: e /tmp/s5run.A4HJFZ/tools/bin/pnpm gen --check
+$ pnpm -F @vim-companion/spec --fail-if-no-match gen --check
+$ node tools/gen.mts --check
+### test: e /tmp/s5run.A4HJFZ/tools/bin/pnpm test --coverage
+$ pnpm -F @vim-companion/spec --fail-if-no-match test --coverage
+$ vitest --coverage
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.4 [39m[90m/private/tmp/s5run.A4HJFZ/repo/spec[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m test/ids.test.mts [2m([22m[2m11 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/keys.test.mts [2m([22m[2m12 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m test/gen.test.mts [2m([22m[2m19 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m test/rows.test.mts [2m([22m[2m4 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+ [32m✓[39m test/version.test.mts [2m([22m[2m6 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m test/resolve.test.mts [2m([22m[2m6 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m test/conformance.test.mts [2m([22m[2m35 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [32m✓[39m test/validate-fixtures.test.mts [2m([22m[2m4 tests[22m[2m)[22m[33m 690[2mms[22m[39m
+   [32m✓[39m validateFixtures [2m(4)[22m
+     [33m[2m✓[22m[39m SCHEMA reports the path and the problem where a fixture file breaks its schema[33m 426[2mms[22m[39m
+ [32m✓[39m test/root-scripts.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/golden.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m test/fixtures.test.mts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/messages.test.mts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/core-purity.test.mts [2m([22m[2m10 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/gen-properties.test.mts [2m([22m[2m7 tests[22m[2m)[22m[33m 1380[2mms[22m[39m
+   [32m✓[39m genIde on generated catalogs [2m(7)[22m
+     [33m[2m✓[22m[39m the pool and the catalogs made from it pass the catalog checks[33m 1211[2mms[22m[39m
+ [32m✓[39m test/schema.test.mts [2m([22m[2m2 tests[22m[2m)[22m[33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m spec:check accepts as a fixture version exactly the strings isVersion accepts[33m 757[2mms[22m[39m
+ [32m✓[39m test/check-ids-cli.test.mts [2m([22m[2m5 tests[22m[2m)[22m[33m 1872[2mms[22m[39m
+   [32m✓[39m check-ids [2m(5)[22m
+     [33m[2m✓[22m[39m prints the summary and exits 0 when every ID resolves[33m 315[2mms[22m[39m
+     [33m[2m✓[22m[39m checks vim.remap, which pnpm gen writes for an entry that runs Vim keys in VS Code[33m 330[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 824[2mms[22m[39m
+ [32m✓[39m test/validate-cli.test.mts [2m([22m[2m6 tests[22m[2m)[22m[33m 1837[2mms[22m[39m
+   [32m✓[39m spec:check [2m(6)[22m
+     [33m[2m✓[22m[39m prints nothing and exits 0 for a valid catalog[33m 302[2mms[22m[39m
+     [33m[2m✓[22m[39m prints the diagnostics as sorted lines and exits 1 for an invalid catalog[33m 313[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 573[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message when a fixture file is missing or not JSON[33m 318[2mms[22m[39m
+ [32m✓[39m test/gen-cli.test.mts [2m([22m[2m5 tests[22m[2m)[22m[33m 2113[2mms[22m[39m
+   [32m✓[39m gen [2m(5)[22m
+     [33m[2m✓[22m[39m writes the IDE files and the fixture index to generated/ and prints the unsupported keys[33m 320[2mms[22m[39m
+     [33m[2m✓[22m[39m deletes the files under generated/ that it no longer writes[33m 386[2mms[22m[39m
+     [33m[2m✓[22m[39m --check exits 0 when generated/ is up to date and otherwise prints each stale file and exits 1, writing nothing[33m 616[2mms[22m[39m
+     [33m[2m✓[22m[39m exits 2 with a message and writes nothing when it cannot run[33m 653[2mms[22m[39m
+ [32m✓[39m test/validate.test.mts [2m([22m[2m20 tests[22m[2m)[22m[33m 2408[2mms[22m[39m
+   [32m✓[39m validateCatalog [2m(20)[22m
+     [33m[2m✓[22m[39m SCHEMA reports the path and the problem where a file breaks its schema[33m 510[2mms[22m[39m
+     [33m[2m✓[22m[39m FORBIDDEN_KEY reports Vim keys with Alt, modifier+Space, bare function keys, function key chords or the leader, or that redefine a protected key[33m 421[2mms[22m[39m
+ [32m✓[39m test/refresh-ids-cli.test.mts [2m([22m[2m11 tests[22m[2m)[22m[33m 11266[2mms[22m[39m
+   [32m✓[39m ids:refresh [2m(11)[22m
+     [33m[2m✓[22m[39m exits 2 with a message when it cannot run[33m 1200[2mms[22m[39m
+     [33m[2m✓[22m[39m names a JSON file that it cannot parse, with each line on stderr after "ids:refresh: "[33m 1144[2mms[22m[39m
+     [33m[2m✓[22m[39m intellij writes the IDs that the IDE and the allow-listed plugins declare, and the runtime ones[33m 432[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode writes the dumped commands and the contributed ones, with VS Code in temporary directories[33m 302[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode exits 2 when an extension is missing or the dump disagrees with the install[33m 635[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode lets the processes that outlive VS Code finish their own shutdown[33m 878[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGINT ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 130[33m 854[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGTERM ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 143[33m 844[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGHUP ends VS Code, which quits on SIGTERM, removes the temporary directories and exits 129[33m 939[2mms[22m[39m
+     [33m[2m✓[22m[39m vscode stopped by SIGINT ends VS Code, which ignores SIGTERM, removes the temporary directories and exits 130[33m 3614[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[32m169 passed[39m[22m[90m (169)[39m
+[2m   Start at [22m 15:51:55
+[2m   Duration [22m 11.52s[2m (tests 91%, transform 5%, import 3%, worker 1%)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+--------------|---------|----------|---------|---------|-------------------
+File          | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------|---------|----------|---------|---------|-------------------
+All files     |   99.85 |    99.51 |     100 |     100 |                   
+ catalog.mts  |       0 |        0 |       0 |       0 |                   
+ fixtures.mts |     100 |      100 |     100 |     100 |                   
+ gen.mts      |   99.24 |     97.4 |     100 |     100 | 211,391           
+ ids.mts      |     100 |      100 |     100 |     100 |                   
+ keys.mts     |     100 |      100 |     100 |     100 |                   
+ messages.mts |     100 |      100 |     100 |     100 |                   
+ resolve.mts  |     100 |      100 |     100 |     100 |                   
+ rows.mts     |     100 |      100 |     100 |     100 |                   
+ validate.mts |     100 |      100 |     100 |     100 |                   
+ version.mts  |     100 |      100 |     100 |     100 |                   
+--------------|---------|----------|---------|---------|-------------------

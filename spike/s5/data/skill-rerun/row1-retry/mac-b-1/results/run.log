@@ -1,0 +1,79 @@
+### fetch-node: fetch https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz node.tar.gz bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057
+### fetch-pnpm: fetch https://registry.npmjs.org/pnpm/-/pnpm-11.28.5.tgz pnpm.tgz 1ef4e447a68713656064f3f174c0f44719960a043a3fe2299169d08cf1dbf8ee
+### fetch-jdk: fetch https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4%2B7/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4_7.tar.gz jdk.tar.gz 5a101c54abf5a9f16c0f70d8c38ba99e6567c1ba213378f0bb04497284f051bd
+### unpack-node: /usr/bin/tar -xf /tmp/s5run.key7oD/dl/node.tar.gz -C /tmp/s5run.key7oD/tools
+### mkdir-pnpm: /bin/mkdir -p /tmp/s5run.key7oD/tools/pnpm
+### unpack-pnpm: /usr/bin/tar -xzf /tmp/s5run.key7oD/dl/pnpm.tgz -C /tmp/s5run.key7oD/tools/pnpm
+### unpack-jdk: /usr/bin/tar -xzf /tmp/s5run.key7oD/dl/jdk.tar.gz -C /tmp/s5run.key7oD/tools
+### gradle: e /tmp/s5run.key7oD/repo/spike/s5/target-b/gradlew --no-daemon --console=plain buildPlugin testOn2026_2_3
+Picked up JAVA_TOOL_OPTIONS: -XX:-UsePerfData -Djava.io.tmpdir=/tmp/s5run.key7oD/tmp -Duser.home=/tmp/s5run.key7oD/home
+Fetching distribution.
+Downloading https://services.gradle.org/distributions/gradle-9.8.0-bin.zip
+..............10%..............20%...............30%..............40%...............50%..............60%...............70%..............80%...............90%..............100%
+
+Welcome to Gradle 9.8.0!
+
+Here are the highlights of this release:
+ - Java 27 support
+ - Maven mirror settings reuse
+ - Linked problem locations in build output
+
+For more details see https://docs.gradle.org/9.8.0/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+w: file:///private/tmp/s5run.key7oD/repo/spike/s5/target-b/build.gradle.kts:22:49: 'fun provideDelegate(thisRef: Any?, property: KProperty<*>): ExistingDomainObjectDelegate<Configuration>' is deprecated. Use 'val element = create(name)' instead. See the Gradle 9.6 upgrading guide.
+w: file:///private/tmp/s5run.key7oD/repo/spike/s5/target-b/build.gradle.kts:22:49: 'val <T : Any> NamedDomainObjectContainer<T>.creating: NamedDomainObjectContainerCreatingDelegateProvider<T>' is deprecated. Use 'val element = create(name)' instead. See the Gradle 9.6 upgrading guide.
+w: file:///private/tmp/s5run.key7oD/repo/spike/s5/target-b/build.gradle.kts:22:49: 'fun <T> ExistingDomainObjectDelegate<out T>.getValue(receiver: Any?, property: KProperty<*>): T' is deprecated. Use the named() API instead. See the Gradle 9.6 upgrading guide.
+
+> Task :initializeIntellijPlatformPlugin
+> Task :patchPluginXml
+> Task :generateManifest
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :composedJar
+> Task :prepareSandbox
+> Task :buildSearchableOptions SKIPPED
+> Task :prepareJarSearchableOptions SKIPPED
+> Task :jarSearchableOptions SKIPPED
+> Task :buildPlugin
+> Task :compileTestJava
+> Task :processTestResources
+> Task :testClasses
+> Task :instrumentTestCode SKIPPED
+> Task :prepareSandbox_testOn2026_2_3
+
+> Task :testOn2026_2_3
+Picked up JAVA_TOOL_OPTIONS: -XX:-UsePerfData -Djava.io.tmpdir=/tmp/s5run.key7oD/tmp -Duser.home=/tmp/s5run.key7oD/home
+
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: Index dispose started
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: StubIndexExtension-s were unloaded
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: Start shutting down /private/tmp/s5run.key7oD/repo/spike/s5/target-b/.intellijPlatform/sandbox/s5-target-b/IU-2026.1.5/system_testOn2026_2_3/index/rep.names
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: Finished shutting down /private/tmp/s5run.key7oD/repo/spike/s5/target-b/.intellijPlatform/sandbox/s5-target-b/IU-2026.1.5/system_testOn2026_2_3/index/rep.names
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: Index dispose completed in 13ms.
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: VFS disconnect started
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: VFS closing
+10월 26, 2026 4:28:28 오후 com.intellij.openapi.diagnostic.AsyncLogKt logNow
+정보: VFS disconnect completed in 1 ms.
+
+[Incubating] Problems report is available at: file:///private/tmp/s5run.key7oD/repo/spike/s5/target-b/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 4m 26s
+13 actionable tasks: 13 executed

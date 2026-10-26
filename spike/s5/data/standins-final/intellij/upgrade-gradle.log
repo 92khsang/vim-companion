@@ -1,0 +1,166 @@
+Picked up JAVA_TOOL_OPTIONS: -XX:-UsePerfData -Djava.io.tmpdir=/tmp/s5ijsi.tEoqN6/tmp -Duser.home=/tmp/s5ijsi.tEoqN6/home
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :initializeIntellijPlatformPlugin
+> Task :patchPluginXml UP-TO-DATE
+> Task :generateManifest UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :composedJar UP-TO-DATE
+> Task :prepareSandbox_runIde2026_2_3 SKIPPED
+
+> Task :runIde2026_2_3
+[org.jetbrains.intellij.platform] IDE logs: /private/tmp/s5ijsi.tEoqN6/repo/spike/s5/target-b/.intellijPlatform/sandbox/s5-target-b/IU-2026.1.5/log_runIde2026_2_3/idea.log
+Picked up JAVA_TOOL_OPTIONS: -XX:-UsePerfData -Djava.io.tmpdir=/tmp/s5ijsi.tEoqN6/tmp -Duser.home=/tmp/s5ijsi.tEoqN6/home
+2026-10-26 15:52:02,850 [      8]   WARN - #c.i.p.i.b.AppStarter - can't get shell environment
+java.lang.IllegalStateException: 'SHELL' environment variable is not set
+	at com.intellij.util.ShellEnvironmentReader.shellCommand(ShellEnvironmentReader.java:62)
+	at com.intellij.util.ShellEnvironmentReader.shellCommand(ShellEnvironmentReader.java:49)
+	at com.intellij.platform.ide.bootstrap.StartupUtil.loadEnvironment(startup.kt:717)
+	at com.intellij.platform.ide.bootstrap.StartupUtil.access$loadEnvironment(startup.kt:1)
+	at com.intellij.platform.ide.bootstrap.StartupUtil$startApplication$6$1.invokeSuspend(startup.kt:235)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.SoftLimitedDispatcher$Worker.run(SoftLimitedDispatcher.kt:130)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:610)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:1188)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:775)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:762)
+2026-10-26 15:52:03,241 [    399]   WARN - #c.i.i.p.PluginManager - Problems found loading plugins:
+  Plugin 'AOP Pointcut Language' (com.intellij.aop) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Dev Containers' (org.jetbrains.plugins.docker.gateway) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Kubernetes' (com.intellij.kubernetes) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Cron Expressions' (com.intellij.cron) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'FreeMarker' (com.intellij.freemarker) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Remote Development Gateway' (com.jetbrains.gateway) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Hibernate' (com.intellij.hibernate) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Application Servers' (com.intellij.javaee.app.servers.integration) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'WildFly' (JBoss) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Tomcat and TomEE' (Tomcat) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Bean Validation' (com.intellij.beanValidation) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Contexts and Dependency Injection (CDI)' (com.intellij.cdi) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Messaging (JMS)' (com.intellij.javaee.extensions) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Data' (com.intellij.javaee.jakarta.data) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: RESTful Web Services (JAX-RS)' (com.jetbrains.restWebServices) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Jakarta EE: Persistence (JPA)' (com.intellij.javaee.jpa) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'JVM Persistence Frameworks' (com.intellij.persistence) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Reverse Engineering' (com.intellij.javaee.reverseEngineering) has dependency on 'Jakarta EE: Persistence (JPA)' which cannot be loaded
+  Plugin 'Jakarta EE: Web/Servlets' (com.intellij.javaee.web) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Karma' (Karma) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Less' (org.jetbrains.plugins.less) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Micronaut' (com.intellij.micronaut) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Next.js' (intellij.nextjs) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Node.js' (NodeJS) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Node.js Remote Interpreter' (org.jetbrains.plugins.node-remote-interpreter) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'In-Editor Performance Hints' (com.intellij.LineProfiler) has dependency on 'Java' which cannot be loaded
+  Plugin 'Quarkus' (com.intellij.quarkus) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'SSH Remote Run' (org.jetbrains.plugins.remote-run) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Sass' (org.jetbrains.plugins.sass) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Cloud' (com.intellij.spring.cloud) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Data' (com.intellij.spring.data) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Integration Patterns' (com.intellij.spring.integration) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Messaging' (com.intellij.spring.messaging) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Modulith' (com.intellij.spring.modulith) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Web' (com.intellij.spring.mvc) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Spring Security' (com.intellij.spring.security) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Styled Components & Styled JSX' (com.deadlock.scsyntax) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Tailwind CSS' (com.intellij.tailwindcss) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Apache Velocity' (com.intellij.velocity) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'FTP/SFTP/WebDAV Connectivity' (com.jetbrains.plugins.webDeployment) requires plugin with id=com.intellij.modules.ultimate to be enabled
+  Plugin 'Refactor-X' (Refactor-X) requires plugin with id=com.intellij.modules.ultimate to be enabled
+2026-10-26 15:52:03,272 [    430]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Incorrect override for com.intellij.modcommand.ModCommandExecutor: com.jetbrains.rdserver.ui.intentions.RemoteModCommandExecutor overrides com.intellij.lang.impl.modcommand.ModCommandExecutorImpl even though the existing implementation is not overridable (not declared as 'open=true')
+2026-10-26 15:52:03,273 [    431]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Incorrect override for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory overrides com.intellij.configurationStore.PlatformLangProjectStoreFactory even though the existing implementation is not overridable (not declared as 'open=true')
+2026-10-26 15:52:03,426 [    584]   WARN - #c.i.o.a.Application - No URL bundle (CFBundleURLTypes) is defined in the main bundle.
+To be able to open external links, specify protocols in the app layout section of the build file.
+Example: args.urlSchemes = ["your-protocol"] will handle following links: your-protocol://open?file=file&line=line
+2026-10-26 15:52:03,729 [    887] SEVERE - #c.i.d.LoadingState - Should be called at least in the state COMPONENTS_LOADED, the current state is: CONFIGURATION_STORE_INITIALIZED
+Current violators count: 1
+
+
+java.lang.Throwable
+	at com.intellij.diagnostic.LoadingState.logStateError(LoadingState.java:64)
+	at com.intellij.diagnostic.LoadingState.checkOccurred(LoadingState.java:60)
+	at com.intellij.openapi.util.registry.Registry$Companion.getInstance(Registry.kt:206)
+	at com.intellij.openapi.util.registry.Registry$Companion.is(Registry.kt:100)
+	at com.intellij.openapi.progress.impl.PlatformTaskSupportKt.isRhizomeProgressModelEnabled(PlatformTaskSupport.kt:95)
+	at com.intellij.openapi.progress.impl.TaskInfoEntityCollectorKt$showTaskIndicator$1$1.invokeSuspend(TaskInfoEntityCollector.kt:67)
+	at com.intellij.openapi.progress.impl.TaskInfoEntityCollectorKt$showTaskIndicator$1$1.invoke(TaskInfoEntityCollector.kt)
+	at com.intellij.openapi.progress.impl.TaskInfoEntityCollectorKt$showTaskIndicator$1$1.invoke(TaskInfoEntityCollector.kt)
+	at fleet.kernel.rete.ReteKt$withPredicate$2.invokeSuspend(Rete.kt:589)
+	at fleet.kernel.rete.ReteKt$withPredicate$2.invoke(Rete.kt)
+	at fleet.kernel.rete.ReteKt$withPredicate$2.invoke(Rete.kt)
+	at fleet.kernel.rete.ReteKt$withMatch$2$1.invokeSuspend(Rete.kt:228)
+	at fleet.kernel.rete.ReteKt$withMatch$2$1.invoke(Rete.kt)
+	at fleet.kernel.rete.ReteKt$withMatch$2$1.invoke(Rete.kt)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2$def$1.invokeSuspend(ObservableMatch.kt:128)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2$def$1.invoke(ObservableMatch.kt)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2$def$1.invoke(ObservableMatch.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:20)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:360)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.async(Builders.common.kt:88)
+	at kotlinx.coroutines.BuildersKt.async(Unknown Source)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2.invokeSuspend(ObservableMatch.kt:112)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2.invoke(ObservableMatch.kt)
+	at fleet.kernel.rete.impl.ObservableMatchKt$withObservableMatches$2.invoke(ObservableMatch.kt)
+	at fleet.kernel.rete.ReteKt$withReteDbSource$3$1.invokeSuspend(Rete.kt:411)
+	at fleet.kernel.rete.ReteKt$withReteDbSource$3$1.invoke(Rete.kt)
+	at fleet.kernel.rete.ReteKt$withReteDbSource$3$1.invoke(Rete.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndspatched(Undispatched.kt:67)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:43)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:165)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at fleet.kernel.rete.ReteKt.withReteDbSource(Rete.kt:410)
+	at fleet.kernel.rete.impl.ObservableMatchKt.withObservableMatches(ObservableMatch.kt:110)
+	at fleet.kernel.rete.ReteKt.withMatch(Rete.kt:228)
+	at fleet.kernel.rete.ReteKt$withCurrentMatchIfAny$$inlined$map$1$2.emit(Emitters.kt:67)
+	at kotlinx.coroutines.flow.internal.SafeCollectorKt$emitFun$1.invoke(SafeCollector.kt:11)
+	at kotlinx.coroutines.flow.internal.SafeCollectorKt$emitFun$1.invoke(SafeCollector.kt:11)
+	at kotlinx.coroutines.flow.internal.SafeCollector.emit(SafeCollector.kt:115)
+	at kotlinx.coroutines.flow.internal.SafeCollector.emit(SafeCollector.kt:84)
+	at fleet.kernel.rete.ReteKt$tokenSetsFlow$1$1$1.invokeSuspend(Rete.kt:485)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:610)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runDefaultDispatcherTask(CoroutineScheduler.kt:1194)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:906)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:775)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:762)
+2026-10-26 15:52:03,731 [    889] SEVERE - #c.i.d.LoadingState - IntelliJ IDEA 2026.2.3  Build #IU-262.10968.63
+2026-10-26 15:52:03,731 [    889] SEVERE - #c.i.d.LoadingState - JDK: 25.0.4; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2026-10-26 15:52:03,731 [    889] SEVERE - #c.i.d.LoadingState - OS: Mac OS X
+2026-10-26 15:52:03,731 [    889] SEVERE - #c.i.d.LoadingState - Last Action: 
+2026-10-26 15:52:03,744 [    902]   WARN - #c.i.s.c.i.StationSocketConnectionLoop - Discovery connection failed with AnnotatedSocketException(SocketException) (No such file or directory: /tmp/s5ijsi.tEoqN6/tmp/jb.station.[redacted].sock)
+2026-10-26 15:52:03,918 [   1076]   WARN - #c.i.o.e.c.i.EditorColorsManagerImpl - Cannot find scheme: Classic Light from plugins: com.intellij
+2026-10-26 15:52:03,974 [   1132]   WARN - #c.i.i.SystemHealthMonitor - issue detected: vm.options.env.vars
+2026-10-26 15:52:03,978 [   1136] SEVERE - #c.i.i.SystemHealthMonitor - null
+java.lang.NullPointerException
+	at com.intellij.idea.SystemHealthMonitor.checkEnvironment(SystemHealthMonitor.kt:249)
+	at com.intellij.idea.SystemHealthMonitor.start$intellij_platform_ide_bootstrap(SystemHealthMonitor.kt:78)
+	at com.intellij.idea.SystemHealthMonitor$start$1.invokeSuspend(SystemHealthMonitor.kt)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:610)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runDefaultDispatcherTask(CoroutineScheduler.kt:1194)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:906)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:775)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:762)
+2026-10-26 15:52:03,979 [   1137] SEVERE - #c.i.i.SystemHealthMonitor - IntelliJ IDEA 2026.2.3  Build #IU-262.10968.63
+2026-10-26 15:52:03,979 [   1137] SEVERE - #c.i.i.SystemHealthMonitor - JDK: 25.0.4; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2026-10-26 15:52:03,979 [   1137] SEVERE - #c.i.i.SystemHealthMonitor - OS: Mac OS X
+2026-10-26 15:52:03,979 [   1137] SEVERE - #c.i.i.SystemHealthMonitor - Last Action: 
+2026-10-26 15:52:04,183 [   1341]   WARN - #c.i.s.c.i.StationSocketConnectionLoop - RecentProjects connection failed with AnnotatedSocketException(SocketException) (No such file or directory: /tmp/s5ijsi.tEoqN6/tmp/jb.station.[redacted].sock)
+
+[Incubating] Problems report is available at: file:///private/tmp/s5ijsi.tEoqN6/repo/spike/s5/target-b/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 10s
+8 actionable tasks: 2 executed, 6 up-to-date

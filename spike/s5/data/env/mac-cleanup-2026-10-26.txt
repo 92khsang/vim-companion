@@ -1,0 +1,11 @@
+# Spike S5: what the spike left on the Mac after the skill rerun and the cleanup, measured over ssh on 2026-10-26 17:25:55 +0900.
+# Each block starts with the command that produced it. The spike directories were named /tmp/s5run.*, /tmp/s5ide.*, /tmp/s5vsc.*, /tmp/s5fx.*, /tmp/s5ijsi.*, $TMPDIR/s5spike.* and $TMPDIR/s5vim-standin.*.
+$ for d in /tmp/s5* "$TMPDIR"s5*; do [ -e "$d" ] && echo "LEFT: $d"; done; echo done
+done
+$ /bin/ps -axo pid,command | /usr/bin/grep -F -e s5run -e s5spike -e s5ide -e s5vsc -e s5ijsi -e s5vim -e jetbrainsd -e caffeinate | /usr/bin/grep -v grep; echo "exit=$?" (1 = none)
+exit=1
+$ /usr/bin/plutil -extract CFBundleShortVersionString raw "/Applications/IntelliJ IDEA.app/Contents/Info.plist"; /usr/bin/plutil -extract CFBundleVersion raw "/Applications/IntelliJ IDEA.app/Contents/Info.plist"
+2026.2.3
+IU-262.10968.63
+$ /bin/cat "/Applications/IntelliJ IDEA.app/Contents/Resources/build.txt"
+IU-262.10968.63
