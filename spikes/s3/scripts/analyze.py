@@ -145,8 +145,11 @@ def dot_outcomes(rows):
         b, a = v["dot"]["beforeLast"], v["dot"]["after"]
         x_text = b["text"][: b["caret"]] + b["text"][b["caret"] + 1 :]
         rx, ra = v["ref-x"]["after"], v["ref-action"]["after"]
-        if a["text"] == x_text and a["text"] == rx["text"]:
+        # The criterion compares the buffer and the caret after `.` with `x` alone: both must equal the ref-x variant's.
+        if a["text"] == x_text and a["text"] == rx["text"] and a["caret"] == rx["caret"]:
             outcome = "repeats x"
+        elif a["text"] == x_text and a["text"] == rx["text"]:
+            outcome = "repeats x, caret differs from x alone"
         elif a["text"] == ra["text"] and a["caret"] == ra["caret"]:
             outcome = "repeats the action"
         elif a["text"] == b["text"] and a["caret"] == b["caret"]:
@@ -158,7 +161,7 @@ def dot_outcomes(rows):
         g["outcomes"][outcome] += 1
         g["dotSeen"] += 1 if a.get("dotReplay") else 0
         g["hostShows"] += a["hostCounts"][0]
-        g["refsOk"] += 1 if rx["text"] == x_text else 0
+        g["refsOk"] += 1 if rx["text"] == x_text and rx["caret"] == b["caret"] else 0
     for (case, ver), g in sorted(out.items()):
         print(json.dumps({"row": "dot", "case": case, "ideavim": ver, "trials": g["trials"], "outcomes": dict(g["outcomes"]),
                           "observerSawDot": g["dotSeen"], "hostShowsDuringDot": g["hostShows"], "refXMatchesX": g["refsOk"]}))

@@ -10,11 +10,16 @@ plugin, conditions (1)-(3) of issue #12's Hangul row are checked:
   (3) the text, the caret and IdeaVim's mode after the sequence equal the reference's.
 The reference value of each field is its most common value over the reference trials; its share is printed too. The
 first trial of each sequence in an IDE session is compared with the reference's first trial, the others with the rest.
+The reference groups (sequence, toolkit, IdeaVim version, variant, first trial or not) are printed first, with a
+warning when their trials disagree; a measured condition without a reference group gets a warning line (and every
+one of its trials fails with "no reference run"), and the script then exits with status 1, so that a pass can never be
+vacuous. The last line is a summary of the group and trial counts.
 """
 import argparse
 import gzip
 import json
 import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -147,12 +152,21 @@ def main():
     ap.add_argument("--off", nargs="+", required=True)
     a = ap.parse_args()
     ref = reference(list(trials(a.off)))
-    for k, g in sorted(ref.items()):
-        print(json.dumps({"reference": list(k), "trials": sum(g["final"].values()),
-                          "finalShare": round(mode_of(g["final"])[1], 4), "switchesShare": round(mode_of(g["switches"])[1], 4)},
-                         ensure_ascii=False))
+    for k, g in sorted(ref.items(), key=lambda kv: [str(x) for x in kv[0]]):
+        final_share = mode_of(g["final"])[1]
+        switches_share = mode_of(g["switches"])[1]
+        print(json.dumps({
+            "reference": {"case": k[0], "toolkit": k[1], "ideavim": k[2], "variant": k[3], "first": k[4]},
+            "trials": sum(g["final"].values()), "finalShare": round(final_share, 4), "switchesShare": round(switches_share, 4),
+            "warning": None if final_share == 1.0 and switches_share == 1.0 else "reference trials disagree; the most common value is the reference",
+        }, ensure_ascii=False))
     groups = defaultdict(lambda: {"trials": 0, "failures": 0, "reasons": Counter()})
+    needed = Counter()
+    measured = 0
     for t in trials(a.on):
+        measured += 1
+        if "error" not in t:
+            needed[group_key(t)] += 1
         k = (t["case"], t.get("host"), t.get("toolkit"), t.get("ideavim"), t.get("variant", ""))
         g = groups[k]
         g["trials"] += 1
@@ -161,10 +175,23 @@ def main():
             g["failures"] += 1
             for x in p:
                 g["reasons"][re.sub(r"\d+ times|\(keys .*\)", "", x)[:120]] += 1
-    for k, g in sorted(groups.items()):
+    without = 0
+    for k, n in sorted(needed.items(), key=lambda kv: [str(x) for x in kv[0]]):
+        if k in ref:
+            continue
+        without += n
+        line = json.dumps({"warning": "no reference group: these trials have nothing to compare with and all fail",
+                           "case": k[0], "toolkit": k[1], "ideavim": k[2], "variant": k[3], "first": k[4], "trials": n}, ensure_ascii=False)
+        print(line)
+        print("WARNING " + line, file=sys.stderr)
+    for k, g in sorted(groups.items(), key=lambda kv: [str(x) for x in kv[0]]):
         print(json.dumps({"case": k[0], "host": k[1], "toolkit": k[2], "ideavim": k[3], "variant": k[4],
                           "trials": g["trials"], "failures": g["failures"], "reasons": dict(g["reasons"].most_common(6))},
                          ensure_ascii=False))
+    print(json.dumps({"summary": {"referenceGroups": len(ref), "measuredGroups": len(groups), "measuredTrials": measured,
+                                  "trialsWithoutReference": without}}))
+    if without:
+        sys.exit(1)
 
 
 if __name__ == "__main__":
