@@ -3,7 +3,10 @@
 // and b.txt open in two editor groups. At the end of each run the probe reads the text, cursors and
 // selections of every open editor and which editor is active; then every register of the issue is
 // pasted into the active editor, and the probe reads the text again and the clipboard.
-// Usage: node spike/s2/harness/differential.mjs <version> <display> <runs> <first arm on|off> <out.jsonl> [arms on|off|both]
+// Usage: node spike/s2/harness/differential.mjs <version> <display> <runs> <first arm on|off> <out.jsonl> [arms on|off|both] [cdpPort]
+// Environment: S2_WHICHKEY_SETTLE=1 turns on the which-key settle rule of whichkey-settle.mjs
+// (needs cdpPort; the run record then carries `settle`); S2_NAME_PREFIX names the instances
+// (default `diff`); S2_DIFF_TRACE=1 is the diagnostic trace described below.
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -16,15 +19,34 @@ import {
   typeKeys,
   focusWindow,
 } from "./lib.mjs";
+import {
+  SETTLE_CAP_MS,
+  loadWhichKey,
+  WhichKeyMatcher,
+  QuickInputWatcher,
+  typeKeysSettling,
+} from "./whichkey-settle.mjs";
 
-const [version, display, runsArg, firstArm, outFile, armsArg = "both"] =
-  process.argv.slice(2);
+const [
+  version,
+  display,
+  runsArg,
+  firstArm,
+  outFile,
+  armsArg = "both",
+  cdpPortArg,
+] = process.argv.slice(2);
+const cdpPort = cdpPortArg ? Number(cdpPortArg) : undefined;
 const script = JSON.parse(
   readFileSync(join(REPO, "spike/s2/harness/differential-script.json"), "utf8"),
 );
 const DELAY = 30;
 const PAUSE = 200;
 const ADAPTER = "vim-companion-spike.s2-adapter";
+const SETTLE = process.env.S2_WHICHKEY_SETTLE === "1";
+if (SETTLE && !cdpPort) throw new Error("S2_WHICHKEY_SETTLE=1 needs cdpPort");
+const whichKey = SETTLE ? loadWhichKey() : undefined;
+const NAME_PREFIX = process.env.S2_NAME_PREFIX ?? "diff";
 // Records name the sandbox root as $S2_ROOT and the home directory as $HOME (editor URIs, error
 // stacks), so that the data files carry no machine-specific path.
 const portable = (text) =>
@@ -35,9 +57,10 @@ const portable = (text) =>
 const write = (rec) =>
   appendFileSync(outFile, portable(JSON.stringify(rec)) + "\n");
 
-let xvfb, code;
+let xvfb, code, watcher;
 for (const sig of ["SIGTERM", "SIGINT"]) {
   process.on(sig, async () => {
+    watcher?.close();
     if (code) await stopCode(code);
     if (xvfb)
       try {
@@ -62,9 +85,10 @@ try {
       code = await openSession({
         version,
         display,
-        name: `diff-${version}-${display.slice(1)}`,
+        name: `${NAME_PREFIX}-${version}-${display.slice(1)}`,
         spikeExtensions: ["s2-probe", "s2-adapter"],
         disable: arm === "off" ? [ADAPTER] : [],
+        cdpPort,
       });
       await code.probe.call("clipboardWrite", { text: "" });
       await sleep(300);
@@ -95,11 +119,25 @@ try {
       // part. The reads lengthen the gap between items, so a trace run is a diagnostic, not a
       // determinism run.
       const trace = [];
+      // With the settle rule, one CDP connection per run reads the quick input widget, and one
+      // matcher per run follows the which-key paths through the script.
+      const matcher = SETTLE ? new WhichKeyMatcher(whichKey) : undefined;
+      if (SETTLE) watcher = await QuickInputWatcher.connect(cdpPort);
+      const waits = [];
       for (const item of script.items) {
         const t1 = Date.now();
         if (process.env.S2_DIFF_TRACE)
           await code.probe.call("events", { clear: true });
-        typeKeys(display, item.keys, DELAY);
+        if (SETTLE) {
+          for (const w of await typeKeysSettling(
+            display,
+            item.keys,
+            DELAY,
+            matcher,
+            watcher,
+          ))
+            waits.push({ item: item.case, ...w });
+        } else typeKeys(display, item.keys, DELAY);
         await sleep(PAUSE);
         if (process.env.S2_DIFF_TRACE) {
           const s = await code.probe.call("snapshot");
@@ -149,6 +187,17 @@ try {
         pasted,
         clipboard,
         ms: Date.now() - t0,
+        ...(SETTLE
+          ? {
+              settle: {
+                capMs: SETTLE_CAP_MS,
+                count: waits.length,
+                totalMs: waits.reduce((s, w) => s + w.waitMs, 0),
+                maxMs: Math.max(0, ...waits.map((w) => w.waitMs)),
+                waits,
+              },
+            }
+          : {}),
         ...(trace.length ? { trace } : {}),
       });
     } catch (e) {
@@ -163,6 +212,8 @@ try {
           .join(" | "),
       });
     } finally {
+      watcher?.close();
+      watcher = undefined;
       if (code) await stopCode(code);
       code = undefined;
       try {

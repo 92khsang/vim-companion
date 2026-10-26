@@ -48,6 +48,32 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   runs nothing moves and the `.` register still holds item 55. The difference follows
   `<Space> w h`, which runs through which-key's quick pick, so it reads as the quick pick closing
   asynchronously against the 30 ms key spacing, not as a harness focus or reset effect.
+- `differential/off-only-<version>-settle.jsonl`: the opt-in which-key settle rule
+  (`spike/s2/harness/whichkey-settle.mjs`),
+  `S2_WHICHKEY_SETTLE=1 S2_NAME_PREFIX=f2-diff node spike/s2/harness/differential.mjs <version> <display> 10 off <out> off <cdpPort>`,
+  1.141.0 on `:125` with CDP port 9525 and then 1.134.0 on `:126` with 9526 (one VS Code at a
+  time), compared with `node spike/s2/harness/differential-compare.mjs <both files>`. After a typed
+  key that completes a which-key binding path the harness waits until `.quick-input-widget` is
+  hidden (cap 1000 ms) before the next key; the script has two such keys per run, `n` of item 61
+  (`extra/count-leader`, `3 <Space> b n`) and `h` of item 64 (`extra/leader-macro`), and the
+  matcher's false path after `0 f <Space>` (item 59) ends on the next item's `d`. Result: 10 of 10
+  runs agree on each version, 0 waits capped, and the outcome is the majority outcome of the runs
+  without the settle (a.txt pasted length 335). Waits (per leaf, first poll about 35 ms after the
+  key): 1.141.0 mean 130.8 ms, 106-157 ms, 24-33 polls, the widget visible and in its closing
+  animation (class `quick-input-widget-closing`, 150 ms in both versions' workbench CSS) at the
+  first poll in 20 of 20 waits, with the focus already back in the editor (`document.activeElement`
+  outside the widget) in 20 of 20; 1.134.0 mean 1.9 ms, 1-5 ms, the widget already hidden at the
+  first poll in 20 of 20. So the rule waits for the end of 1.141.0's closing animation, about 100 ms
+  after the focus return. Item 64 ends the same way in the settled runs as in the no-settle
+  majority, and not as the item intends: `q a` starts the recording in the VimState of b.txt, where
+  it is typed; after `<Space> w h` moves the focus to a.txt, `q` reaches a.txt's ModeHandler, whose
+  VimState records no macro (VSCodeVim 1.32.4 keeps `vimState.macro` per ModeHandler and
+  `ModeHandlerMap` is a `Map<Uri, ModeHandler>`; `QuitRecordMacro.doesActionApply` needs
+  `vimState.macro !== undefined`), so `q @` matches nothing (`<macro>` is `[0-9a-zA-Z]`), `a`
+  appends, and the `<Esc> <Esc>` after the script completes it; register `a` holds an empty
+  recording in every trace run, so `@a` can replay nothing in any outcome. The no-settle minority
+  is the run where `q`, typed 30 ms after `h`, still reached the closing quick pick; a one-run
+  control with the CDP port and no settle reproduced each outcome once (scratch only).
 - `vim-expect-pilot/`: `node spike/s2/vim-check/expect.mjs <short dir> <set> spike/s2/cards/pilot.json <out>`
   on 2026-10-26 for both settings sets (`expect-<set>.jsonl`; Vim 9.1 with patches 1-948 and
   950-2141, tmux 3.6, `taskset -c 28-31`, one fresh Vim per row): the Vim-generated expectations of

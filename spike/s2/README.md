@@ -31,6 +31,17 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   grammar fixture against VSCodeVim (reader or adapter). `harness/cards-extract.mjs`,
   `cards-count.mjs`, `cards-build.mjs`: the completeness reference and the card rows.
   `harness/differential.mjs` + `differential-compare.mjs`: the differential test.
+- `harness/whichkey-settle.mjs`: the opt-in which-key settle rule of the differential test
+  (`S2_WHICHKEY_SETTLE=1`, with a CDP port as the last argument; off by default and then without
+  effect). A syntactic matcher walks the generated which-key bindings with the typed keys: a leader
+  (a remap whose only command is `whichkey.show`) opens a path, a submenu key descends, a leaf key
+  ends the path, and any other key (a mismatch, `<Esc>`, a chord) ends it without a wait. After a
+  leaf the harness types the burst so far, then polls the renderer over one CDP connection until
+  `.quick-input-widget` is hidden (`display: none`; both versions first run a 150 ms closing
+  animation, class `quick-input-widget-closing`, during which the focus is already back in the
+  editor), capped at 1000 ms, and types the rest. Every other key keeps the 30 ms delay; xdotool
+  sleeps the delay after the last key of a burst too. The run record carries `settle` with one entry
+  per wait (item, key, path, wait, polls, what the first poll saw) and the counts.
 
 ## Vim oracle for the card expectations
 
