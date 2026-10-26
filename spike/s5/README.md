@@ -61,7 +61,11 @@ MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD MAC_CACHE_DIR=$MD/cache-final \
 S5_LINUX_RUN_ROOT=<disk dir> spike/s5/scripts/row1.sh linux a $C fresh <out>/linux-a   # and b, c (c: Xvfb :141)
 ```
 
-Rows 2 and 3 after the grant (`data/row23-post/`): the commands are in its `commands.txt`.
+Rows 2 and 3 after the grant (`data/row23-post/`): the commands are in its `commands.txt`. Its
+`tcc-rows23.txt` is the raw TCC log of that window cut down by `scripts/tcc-excerpt.py` to the requests
+whose responsible process is `com.apple.sshd-keygen-wrapper` or the sandbox JDK's `java`, then
+sanitized. `data/env/mac-2026-10-26.txt` records the Mac's shell startup files, sleep log, boot time,
+VS Code build and registered JDKs, with the commands that produced them.
 
 Stand-ins, final (`data/standins-final/`), with the artifacts built at `edb8b25` as above; the
 IntelliJ sandbox starts as a launchd job in the console user's GUI session:

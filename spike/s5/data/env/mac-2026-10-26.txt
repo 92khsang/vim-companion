@@ -1,0 +1,25 @@
+# Spike S5: the Mac's shell startup files, sleep log, boot time, VS Code build and registered JDKs, measured over ssh on 2026-10-26 17:01:45 +0900.
+# Each block starts with the command that produced it.
+$ /bin/ls -la /etc/zshenv ~/.zshenv
+ls: /etc/zshenv: No such file or directory
+ls: ~/.zshenv: No such file or directory
+$ /usr/bin/pmset -g log | /usr/bin/grep -E "^2026-10-26 1[5-6]:[0-9:]+ \+0900 (Sleep|Wake|DarkWake|Start) "
+2026-10-26 15:05:12 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to NUB.SPMISw3IRQ nub-spmi0.0x02 rtc/SleepService Using BATT (Charge:36%) 3 secs    
+2026-10-26 15:05:15 +0900 Sleep               	Entering Sleep state due to 'Sleep Service Back to Sleep':TCPKeepAlive=active Using Batt (Charge:36%) 682 secs  
+2026-10-26 15:05:17 +0900 Wake Requests       	[process=mDNSResponder request=Maintenance deltaSecs=7200 wakeAt=2026-10-26 17:05:17 info="upkeep wake"] [process=dasd request=SleepService deltaSecs=1057 wakeAt=2026-10-26 15:22:55 info="com.apple.dasd:501:com.apple.GenerativeFunctions.PeriodicTasks.SystemAppInstall.PostBuddy"] [process=powerd request=TCPKATurnOff deltaSecs=67414 wakeAt=2026-10-27 09:48:51] [*process=powerd request=CSPNEvaluation deltaSecs=680 wakeAt=2026-10-26 15:16:37] [process=powerd request=UserWake deltaSecs=21895 wakeAt=2026-10-26 21:10:13 info="com.apple.alarm.user-invisible-com.apple.calaccessd.travelEngine.periodicRefreshTimer,971"]           
+2026-10-26 15:16:37 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to NUB.SPMISw3IRQ nub-spmi0.0x02 nub-spmi0.0x3E rtc/Maintenance Using BATT (Charge:36%) 6 secs    
+2026-10-26 15:16:43 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using Batt (Charge:36%) 853 secs  
+2026-10-26 15:16:44 +0900 Wake Requests       	[process=mDNSResponder request=Maintenance deltaSecs=7198 wakeAt=2026-10-26 17:16:43 info="upkeep wake"] [*process=dasd request=SleepService deltaSecs=950 wakeAt=2026-10-26 15:32:35 info="com.apple.dasd:501:com.apple.GenerativeFunctions.PeriodicTasks.SystemAppInstall.PostBuddy"] [process=powerd request=TCPKATurnOff deltaSecs=66727 wakeAt=2026-10-27 09:48:51] [process=powerd request=CSPNEvaluation deltaSecs=3653 wakeAt=2026-10-26 16:17:37] [process=powerd request=UserWake deltaSecs=21208 wakeAt=2026-10-26 21:10:13 info="com.apple.alarm.user-invisible-com.apple.calaccessd.travelEngine.periodicRefreshTimer,971"]           
+2026-10-26 15:30:56 +0900 Wake                	Wake from Deep Idle [CDNVA] : due to smc.sysState.Wake(0x70070000) lid SMC.OutboxNotEmpty/HID Activity Using BATT (Charge:36%)           
+$ /usr/sbin/sysctl -n kern.boottime; /usr/bin/uptime
+{ sec = 1791862085, usec = 320882 } Tue Oct 13 12:28:05 2026
+17:01  up 13 days,  4:34, 4 users, load averages: 4.83 3.49 3.72
+$ /usr/bin/plutil -extract commit raw "/Applications/Visual Studio Code.app/Contents/Resources/app/product.json"; /usr/bin/plutil -extract version raw ".../package.json"
+2a59476c9bfcb90b3ddc372c36762471b7dfad1c
+1.141.0
+$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (3):
+    25.0.4 (arm64) "Eclipse Adoptium" - "OpenJDK 25.0.4" ~/Library/Java/JavaVirtualMachines/mise-temurin-25.jdk/Contents/Home
+    21.0.12 (arm64) "Eclipse Adoptium" - "OpenJDK 21.0.12" ~/Library/Java/JavaVirtualMachines/mise-temurin-21.jdk/Contents/Home
+    11.0.32.1 (arm64) "Eclipse Adoptium" - "OpenJDK 11.0.32.1" ~/Library/Java/JavaVirtualMachines/mise-temurin-11.jdk/Contents/Home
+~/Library/Java/JavaVirtualMachines/mise-temurin-25.jdk/Contents/Home
