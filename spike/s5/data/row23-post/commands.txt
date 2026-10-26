@@ -1,0 +1,39 @@
+# Spike S5 rows 2 and 3 after the grant (2026-10-26 15:36-15:49 +0900, macOS 27.0.1 26A434).
+# Agent host: Ubuntu 26.04.1. $MD is the spike directory on the Mac (under its per-user $TMPDIR), refreshed with
+# mac-push.sh at 15:36 (s5win and s5keys rebuilt with /usr/bin/swiftc) after macOS's periodic temporary-file
+# cleanup had removed its files. Sandboxes: VS Code 1.141.0 (the Mac's app) with target (c) 0.0.1; the IntelliJ
+# sandbox of target (b) (runIde2026_2_3, IU-262.10968.63) cloned at aefaca468a573c676871e6dbc0f1ecee74ace008 and
+# started as a launchd job in gui/<uid>, with $MD/cache/gradle-home prewarmed by prepareSandbox_runIde2026_2_3.
+# Input source com.apple.keylayout.ABC; the user logged in at the console with the screen unlocked.
+
+# 15:36 preflight before the grant: screenCapture=true (granted on 2026-10-16), postEvent=false, axTrusted=false.
+# 15:43:39 the user turned on /usr/libexec/sshd-keygen-wrapper under System Settings > Privacy & Security >
+# Device Control and Data Access, which is macOS 27's name for the Accessibility pane (Korean UI: 기기 제어 및
+# 데이터 접근; the entry is called ACCESSIBILITY in the SecurityPrivacyExtension localization table). The pane was
+# opened on the Mac's screen from ssh with:
+#   /usr/bin/open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+R="spike/s5/scripts/mac-row23.sh <state dir>"     # with MAC_HOST and MAC_SPIKE_DIR set; every line is a new ssh session
+$R preflight                                       # preflight-post-grant.txt: all three true, ABC
+ssh $MAC_HOST '/usr/bin/log show --start "2026-10-26 15:36:39" --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"sshd-keygen-wrapper\" OR eventMessage CONTAINS \"Publishing\")"'
+    # tcc-grant.txt: one Modify of kTCCServiceAccessibility for the path at 15:43:39, no PostEvent or ScreenCapture
+    # row changed; after it CGPreflightPostEventAccess returned true as well.
+$R vscode-start                                    # vscode-report.log, vscode-install.log
+$R intellij-start aefaca468a573c676871e6dbc0f1ecee74ace008 $MD/cache/gradle-home   # intellij-setup.log, intellij-report.log
+for i in 1..10: $R capture vscode post-vscode-$i; $R capture intellij post-intellij-$i   # captures/
+tesseract captures/<png> - | grep -c 'S5 FIXTURE LINE ONE'    # printed 1 for each of the 20 PNGs
+$R front; $R windows vscode; $R windows intellij   # front-before-keys.txt, windows-*.txt
+ssh $MAC_HOST "$MD/bin/s5win activate <IntelliJ pid>"   # activate-intellij.txt: axError=0 (AX activation works now)
+$R keys intellij 1 1000 40 post-intellij-keys-1    # keys/: 1000 of 1000 in order, none extra
+ssh $MAC_HOST "$MD/bin/s5win activate <VS Code pid>"    # activate-vscode.txt: axError=0
+$R keys vscode 1 1000 40 post-vscode-keys-1        # keys/: 1000 of 1000 in order, none extra
+ssh $MAC_HOST '/usr/bin/log show --start "2026-10-26 15:44:00" --style compact --predicate "subsystem == \"com.apple.TCC\" AND (eventMessage CONTAINS \"AUTHREQ\" OR eventMessage CONTAINS \"Publishing\")"'
+    # tcc-rows23.txt: the requests whose responsible process is com.apple.sshd-keygen-wrapper, which include the
+    # two sandbox IDEs started over ssh; no kTCCServiceAppleEvents (Automation) request in the whole window.
+$R stop vscode; $R stop intellij
+
+# Every PNG was opened: 10 reviewer agents read 2 PNGs each and the main agent 2 more. Each shows one IDE window
+# edge to edge (2880 by 1800 px for the 1440 by 900 pt VS Code window, 2800 by 2000 px for the 1400 by 1000 pt
+# IntelliJ window) with `S5 FIXTURE LINE ONE 2026` legible on line 1 and no desktop, menu bar, Dock or other
+# window. The IntelliJ sandbox showed three of its own balloons in the empty editor area (a Korean language
+# offer, "IDE error occurred", and the JAVA_TOOL_OPTIONS warning); the cause of the error balloon was not
+# recorded before the sandbox was removed.
