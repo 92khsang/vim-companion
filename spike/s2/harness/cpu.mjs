@@ -45,7 +45,7 @@ try {
   code = await openSession({
     version,
     display,
-    name: `cpu-${scenario}-${arm}-${version}-${display.slice(1)}`,
+    name: `${process.env.S2_NAME_PREFIX ?? ""}cpu-${scenario}-${arm}-${version}-${display.slice(1)}`,
     spikeExtensions: ["s2-probe", "s2-adapter"],
     disable: arm === "off" ? ["vim-companion-spike.s2-adapter"] : [],
   });

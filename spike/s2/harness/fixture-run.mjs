@@ -120,7 +120,7 @@ try {
   code = await openSession({
     version,
     display,
-    name: `fx-${source}-${version}-${display.slice(1)}`,
+    name: `${process.env.S2_NAME_PREFIX ?? ""}fx-${source}-${version}-${display.slice(1)}`,
     cdpPort: Number(cdpPort),
     spikeExtensions:
       source === "adapter" ? ["s2-probe", "s2-adapter"] : ["s2-probe"],

@@ -1,15 +1,22 @@
 // Summarizes fixture-run output: per case read, how many trials matched the Vim expectation, the
-// VSCodeVim expectation where the case has one, and which other states were seen.
+// VSCodeVim expectation where the case has one, and which other states were seen. The last line,
+// ROW, states the (a) grammar fixture row of issue #11 for the runs read: 100% of cases, in every
+// trial the reported mode, pending keys, operator, count and register equal the case's expected
+// state (the VSCodeVim value where the case records a documented deviation), at every delay and
+// after vim.timeout for the cases that wait for it; a reset failure or an error is a trial that
+// did not run, so the row then does not pass.
 // Usage: node spike/s2/harness/fixture-summary.mjs <run.jsonl>...
 import { readFileSync } from "node:fs";
 
 const groups = new Map();
+const metas = [];
 let resets = 0;
 let errors = [];
 let meta = [];
 for (const file of process.argv.slice(2)) {
   for (const line of readFileSync(file, "utf8").split("\n").filter(Boolean)) {
     const r = JSON.parse(line);
+    if (r.type === "meta") metas.push(r);
     if (r.type === "meta")
       meta.push(
         `${r.version} ${r.source} trials=${r.trials} delays=${r.delays} steps=${r.steps} poll=${r.poll}`,
@@ -54,3 +61,27 @@ for (const [key, g] of groups) {
   );
 }
 console.log(`${pass}/${total} reads matched the expected value`);
+
+// The row. Every read group must hold one read per trial and delay of every run read.
+const want = metas.reduce((n, m) => n + m.trials * m.delays.length, 0);
+const cases = new Set([...groups.keys()].map((k) => k.split(" #")[0]));
+const short = [...groups.values()].filter((g) => g.n !== want).length;
+const mismatched = [...groups.values()].filter(
+  (g) => (g.vscodevim ? g.engine : g.vim) !== g.n,
+).length;
+const label = [
+  ...new Set(metas.map((m) => `${m.version} ${m.source} ${m.steps}`)),
+].join(", ");
+const rowPass =
+  metas.length > 0 &&
+  groups.size > 0 &&
+  short === 0 &&
+  mismatched === 0 &&
+  resets === 0 &&
+  errors.length === 0;
+console.log(
+  `ROW (a) grammar fixture (${label}): ${cases.size} cases, ${groups.size} read points, ` +
+    `${total} reads (want ${want} per read point; ${short} read points short), ` +
+    `${mismatched} read points with a mismatch, reset failures ${resets}, errors ${errors.length}: ` +
+    `${rowPass ? "pass" : "not pass"}`,
+);

@@ -36,25 +36,55 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   `harness/cards-complete.mjs`: check (2) of candidate (b). `harness/cards-correctness.mjs`:
   check (1). `harness/cards-registers.mjs`: a direct check of the probe's register reader.
   `harness/differential.mjs` + `differential-compare.mjs`: the differential test.
-- `harness/whichkey-settle.mjs`: the opt-in which-key settle rule of the differential test
-  (`S2_WHICHKEY_SETTLE=1`, with a CDP port as the last argument; off by default and then without
-  effect). A syntactic matcher walks the generated which-key bindings with the typed keys: a leader
-  (a remap whose only command is `whichkey.show`) opens a path, a submenu key descends, a leaf key
-  ends the path, and any other key (a mismatch, `<Esc>`, a chord) ends it without a wait. After a
-  leaf the harness types the burst so far, then polls the renderer over one CDP connection until
-  `.quick-input-widget` is hidden (`display: none`), capped at 1000 ms, and types the rest. Both
-  workbench bundles carry the 150 ms closing animation (class `quick-input-widget-closing`); in the
-  recorded runs 1.141.0 showed that class at the first poll in 20 of 20 waits, while 1.134.0 was
-  already hidden at the first poll in 20 of 20. Read in the minified bundles, not verified at run
-  time: the animation is gated by `workbench.experimental.modernUI`, registered with the default
-  `false` in 1.134.0 and `true` in 1.141.0, which the sandbox does not pin. Design note: VS Code's quick input `hide()`
-  refocuses the element that opened the pick before which-key runs the leaf command, so a wait that
-  ends when the focus leaves the widget would reintroduce the race; the hidden-widget wait works on
-  1.141.0 because the animation outlasts the command, and a rule that waits for the leaf command's
-  observable effect (for `w h`, the active editor group) would not depend on that. Every other key
-  keeps the 30 ms delay; xdotool sleeps the delay after the last key of a burst too. The run record
-  carries `settle` with one entry per wait (item, key, path, wait, polls, what the first poll saw)
-  and the counts.
+- `harness/whichkey-settle.mjs`: the opt-in which-key settle rules of the differential test (with
+  a CDP port as the last argument; off by default and then without effect). A syntactic matcher
+  walks the generated which-key bindings with the typed keys: a leader (a remap whose only command
+  is `whichkey.show`) opens a path, a submenu key descends, a leaf key ends the path, and any other
+  key (a mismatch, `<Esc>`, a chord) ends it without a wait. After a leaf the harness types the
+  burst so far, waits as the rule says, and types the rest; every other key keeps the 30 ms delay
+  (xdotool sleeps the delay after the last key of a burst too).
+  - `S2_WHICHKEY_SETTLE=1` (or `effect`), the user's choice of 2026-10-27: the effect rule. No key
+    is sent after a leaf until the leaf command's effect is observed through the probe: the probe's
+    snapshot at the start of the run gives the active editor and the group of every visible editor,
+    and its `active` events give the later changes (a file visible in two groups at once is refused).
+    The state the command starts from is the active editor just before the earliest time the leaf
+    can have been typed (the burst's start plus the leaf's index times 30 ms), and only changes at or
+    after that time count. `SPC w h` (`workbench.action.focusLeftGroup`) and `SPC w l` expect the
+    active editor of the neighbouring group; a move with no target (no group on that side, or
+    `SPC b n` / `SPC b p` with one editor in the active group, read from the renderer's tabs) expects
+    no change, and the wait then ends when the quick input widget is closing or hidden and the focus
+    is out of it, because a command that changes nothing cannot send a later key elsewhere; a change
+    seen where none is expected, a leaf command without a rule or an effect not seen within 2000 ms
+    throws, so the run ends as a `run-error` record. The run record carries `settle` with
+    `rule: "effect"` and one entry per wait: item, key, path, command, `from`, `expected`,
+    `observed`, `eventAfterLeafMs` (the effect's probe time after the earliest leaf time), `changes`,
+    `waitMs` (from the end of the leaf's burst), `polls`, and the quick input state when the wait
+    ended. `S2_DIFF_TRACE=1` with this rule restarts the tracker at every item, because the trace
+    clears the probe's events there.
+  - `S2_WHICHKEY_SETTLE=hidden`: the earlier rule, which polls until `.quick-input-widget` is hidden
+    (`display: none`), capped at 1000 ms; it reproduces `off-only-<version>-settle.jsonl`. Both
+    workbench bundles carry a 150 ms closing animation (class `quick-input-widget-closing`); in the
+    recorded runs 1.141.0 showed that class at the first poll in 20 of 20 waits, while 1.134.0 was
+    already hidden at the first poll in 20 of 20, so this rule waited 1 to 5 ms on 1.134.0. Read in
+    the minified bundles, not verified at run time: the animation is gated by
+    `workbench.experimental.modernUI`, registered with the default `false` in 1.134.0 and `true` in
+    1.141.0, which the sandbox does not pin.
+- `batch/`: the batch scripts of the (a) rows, run from the repository root with the S2
+  environment exported; each runs one sandbox VS Code at a time on `S2_BATCH_DISPLAY` (default
+  `:121`) and `S2_BATCH_PORT` (default 9521) with `S2_NAME_PREFIX` (default `a-`), holds a lock on
+  that display, appends every harness command to its data directory's `command.txt`, ends with a
+  leftover check and the line `batch finished`, and continues where it stopped when it is run
+  again (`fixture-adapter.sh` reruns an incomplete version from the start). `precheck.sh`: 100
+  adapter-off runs per version with the effect rule must all agree (`spike/s2/data/precheck/`).
+  `fixture-adapter.sh`: the grammar fixture row, `fixture-run.mjs <version> :121 9521 adapter 10
+10,30,60 last <out> 50`, and `fixture-summary.mjs`, whose `ROW` line states the row's pass
+  condition (`spike/s2/data/fixture-adapter/`). `cpu.sh`: the polling CPU row, per version the idle
+  and the typing scenario, 3 windows of 10 minutes on and 3 off in the order off, on, off, on, off,
+  on, then `batch/cpu-summary.mjs` (`spike/s2/data/cpu/`). `differential.sh`: the differential row,
+  1000 runs on and 1000 off per version, alternating, in chunks of 50 with `S2_DIFF_START`, until
+  each arm has 1000 completed runs (at most 2100 attempts), then `differential-compare.mjs` with
+  `S2_DIFF_EXPECT=1000`, whose `ROW` line states the pass condition per version
+  (`spike/s2/data/differential-row/`).
 
 ## Cards reference and register convention
 
