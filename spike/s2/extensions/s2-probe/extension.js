@@ -75,6 +75,37 @@ function snapshot() {
   };
 }
 
+// VSCodeVim's RegisterMode (src/register/register.ts): CharacterWise, LineWise, BlockWise.
+const REGISTER_MODES = { 0: "character", 1: "line", 2: "block" };
+
+/**
+ * The per-cursor contents of one register. VSCodeVim 1.32.4 stores a register as an
+ * IRegisterContent[] but shifts the numbered registers with `{ ...previous }`
+ * (src/register/register.ts L248-254), so a shifted register is an object with the array's
+ * numeric keys; Register.get reads it by index, and so does this.
+ */
+function registerContents(contents) {
+  const list = Array.isArray(contents)
+    ? contents
+    : contents &&
+        typeof contents === "object" &&
+        Object.keys(contents).every((k) => /^\d+$/.test(k))
+      ? Object.keys(contents)
+          .map(Number)
+          .sort((a, b) => a - b)
+          .map((i) => contents[i])
+      : [contents];
+  return list.map((c) => ({
+    text:
+      typeof c?.text === "string"
+        ? c.text
+        : Array.isArray(c?.text?.actionsRunPressedKeys)
+          ? { keys: c.text.actionsRunPressedKeys.join("") }
+          : `<unreadable ${typeof c?.text}>`,
+    mode: REGISTER_MODES[c?.registerMode] ?? `other-${c?.registerMode}`,
+  }));
+}
+
 function adapterReport() {
   const ext = vscode.extensions.getExtension(ADAPTER_ID);
   if (
@@ -134,26 +165,24 @@ const methods = {
   time: () => Date.now(),
   vimModule: () => reader.describeVimModule(),
   // Test-only: the contents of VSCodeVim's registers (its Register.registers map, read as fields;
-  // + and * live in the clipboard, which clipboardRead covers).
+  // + and * live in the clipboard, which clipboardRead covers). Per register, one entry per cursor
+  // with the text (a recorded macro as { keys }) and the RegisterMode name.
   registers: async () => {
     const Register = await reader.registerClass();
     const out = {};
-    for (const [name, contents] of Register.registers) {
-      // A register holds a list of contents (one per cursor) or, for some registers, one content.
-      out[name] = (Array.isArray(contents) ? contents : [contents]).map(
-        (c) => ({
-          text:
-            typeof c.text === "string"
-              ? c.text
-              : Array.isArray(c.text)
-                ? c.text
-                : Array.isArray(c.text?.actionsRunPressedKeys)
-                  ? { keys: c.text.actionsRunPressedKeys.join("") }
-                  : "<recorded keys>",
-          mode: c.registerMode,
-        }),
-      );
-    }
+    for (const [name, contents] of Register.registers)
+      out[name] = registerContents(contents);
+    return out;
+  },
+  // Test-only: how each register's content list is stored (an array, or the object that a shift
+  // of the numbered registers leaves).
+  registerShapes: async () => {
+    const Register = await reader.registerClass();
+    const out = {};
+    for (const [name, contents] of Register.registers)
+      out[name] = Array.isArray(contents)
+        ? "array"
+        : `${typeof contents}:${Object.keys(contents ?? {}).join(",")}`;
     return out;
   },
   // Test-only: every key token of VSCodeVim's action table, over all modes.

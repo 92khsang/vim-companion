@@ -92,3 +92,11 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   class of every row of `cards.json` per settings set: defaults 3,455 rows = 3,051 Vim + 35 remap +
   337 own + 32 plugin; extensions 3,649 = 3,013 Vim + 35 remap + 345 own + 256 plugin; 3,051
   distinct Vim rows over both sets (3,013 in both).
+- `cards-registers/registers-1.141.0.json`: `S2_NAME_PREFIX=f1- node spike/s2/harness/cards-registers.mjs 1.141.0 :123 9523 <out>`
+  on 2026-10-26, a direct check of the probe's register reader after it was changed to read a
+  shifted numbered register, which VSCodeVim 1.32.4 stores as `{ ...previous }` (an object with
+  the array's numeric keys, `src/register/register.ts` L248-254), as the array it was, and to
+  report each register's `RegisterMode` name: after `dd`, `"` and `1` hold the if-line linewise;
+  after the second `dd`, `1` holds `epsilon zeta eta theta` and `2` the if-line, both linewise, `2`
+  stored as `object:0` and read as one entry; after `yy`, `0` and `"` hold `iota kappa lambda mu`
+  linewise. The probe of 2026-10-16 rendered such a shifted register as `<recorded keys>`.
