@@ -215,6 +215,24 @@ object HangulIbus {
   private const val ACTION = 800L // the IDE action of a leader mapping opens its popup or dialog
 
   /**
+   * `s3.hangulTiming` selects the timing of the real-IBus `SPC g` sequence. `default` (the sequences above): the letter
+   * comes 400 ms after `SPC` and `Esc` 1500 ms later, so the committed jamo reaches IdeaVim about 2000 ms after `SPC`,
+   * when IdeaVim's 1000 ms mapping timeout has already dropped `SPC` and the host has hidden. `fast`: the letter comes
+   * 200 ms after `SPC` and `Esc` 300 ms after the letter, so the jamo reaches IdeaVim at about 600 ms (the recording
+   * between steps adds about 50 ms per step), while `SPC` is still pending; this is the case condition (2) of the
+   * Hangul row describes. The `fast` variant runs the `SPC g` sequence only, because the other sequences commit
+   * nothing. Each step's wait is unchanged in `default`.
+   */
+  val timing: String = System.getProperty("s3.hangulTiming")?.takeIf { it.isNotBlank() } ?: "default"
+  private const val FAST_LETTER = 200L
+  private const val FAST_ESC = 300L
+  private const val FAST_SETTLE = 1000L // long enough to also record a mapping timeout, should the jamo come late
+
+  /** The run's variant label: the extra rc lines (keep-english) and, when it is not the default, the timing. */
+  private val variant: String =
+    listOf(System.getProperty("s3.rcExtra").orEmpty(), if (timing == "default") "" else timing).filter { it.isNotEmpty() }.joinToString("+")
+
+  /**
    * Xvfb without an input method: the Driver posts the input-method events that commit the jamo; every other key is
    * a real key, including `Shift+Space`, which reaches the IDE because no input method consumes it.
    */
@@ -237,7 +255,17 @@ object HangulIbus {
     Seq("SPC Ctrl+[", listOf(Step.Type(' ') to SETTLE, Step.CTRL_BRACKET to SETTLE)),
   )
 
-  fun run(s: Session) = runAll(s, if (Env.mode == "gnome") sequences else sequencesNoIme, if (Env.mode == "gnome") "hangul-ibus" else "hangul-ime")
+  val sequencesFast = listOf(
+    Seq("SPC g", listOf(Step.Type(' ') to FAST_LETTER, Step.Type('g') to FAST_ESC, Step.ESC to FAST_SETTLE)),
+  )
+
+  fun run(s: Session) = when {
+    Env.mode != "gnome" && timing != "default" -> error("s3.hangulTiming=$timing needs the gnome mode (real IBus)")
+    Env.mode != "gnome" -> runAll(s, sequencesNoIme, "hangul-ime")
+    timing == "default" -> runAll(s, sequences, "hangul-ibus")
+    timing == "fast" -> runAll(s, sequencesFast, "hangul-ibus")
+    else -> error("unknown s3.hangulTiming $timing (default or fast)")
+  }
 
   private fun runAll(s: Session, seqs: List<Seq>, row: String) {
     val hosts = if (Env.pluginOff) listOf("off") else Env.hosts
@@ -278,7 +306,7 @@ object HangulIbus {
     val state = if (Env.pluginOff) RemoteState.state(s.driver) else s.h.report()
     s.log(J.obj(
       "case" to "$row:${seq.name}", "host" to host, "trial" to n, "ideavim" to Env.ideavim, "toolkit" to Env.toolkit,
-      "variant" to System.getProperty("s3.rcExtra").orEmpty(), "pluginOff" to Env.pluginOff, "time" to s.now(),
+      "variant" to variant, "pluginOff" to Env.pluginOff, "time" to s.now(),
       "shellBefore" to J.Raw(before.ifEmpty { "null" }), "steps" to J.Raw(steps.joinToString(",", "[", "]")),
       "ibusEvents" to s.ibusEvents.toList().drop(ibusFrom), "state" to J.Raw(state),
     ))

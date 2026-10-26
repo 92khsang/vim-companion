@@ -3,7 +3,8 @@
 # Usage: xvfb-case.sh <display-number> <case> <ideavim-notation> <trials> [hosts] [port-base] [variant]
 #   e.g. xvfb-case.sh 131 focus IdeaVIM:2.47.3 1000 balloon,layer 9531
 #   variant: plugin-off runs without the spike plugin (the reference runs of the Hangul row)
-# Output: spikes/s3/data/<run-id>/ (JSONL per run, the command, and the Gradle log, which git ignores).
+# Output: spikes/s3/data/<run-id>/ (JSONL per run, the command, and the Gradle log, which git ignores). The run id
+# ends with the variant (base when none), like gnome-case.sh's, so that a reference run is told apart by its name.
 #
 # Isolation: Gradle, the test JVM and the IDE run with an empty environment plus the variables below. They get their
 # own XDG_RUNTIME_DIR and a private D-Bus session bus that offers no activatable services, so the IDE cannot reach the
@@ -16,7 +17,8 @@ if [[ ",$variant," == *",plugin-off,"* ]]; then plugin_off="true"; fi
 here="$(cd "$(dirname "$0")" && pwd)"
 plugin="$(cd "$here/../plugin" && pwd)"
 tag="$(echo "$ideavim" | sed -e 's/^IdeaVIM://' -e 's/@.*//')"
-run_id="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-xvfb-$case_-$tag}"
+vtag="$(echo "${variant:-base}" | tr ',' '+')"
+run_id="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-xvfb-$case_-$tag-$vtag}"
 out="$here/../data/$run_id"
 mkdir -p "$out"
 build_dir="build-$tag-x$disp"

@@ -131,7 +131,7 @@ val uiTest = intellijPlatformTesting.testIdeUi.register("uiTest") {
     systemProperty("s3.fixtures", rootDir.resolve("../fixture").canonicalPath)
     for (key in listOf(
       "s3.trials", "s3.hosts", "s3.case", "s3.toolkit", "s3.portBase", "s3.mode", "s3.inject", "s3.shellState",
-      "s3.ibusMonitor", "s3.ibusCmd", "s3.rcExtra", "s3.extraPlugins", "s3.pluginOff", "s3.dotCases",
+      "s3.ibusMonitor", "s3.ibusCmd", "s3.rcExtra", "s3.extraPlugins", "s3.pluginOff", "s3.dotCases", "s3.hangulTiming",
     )) {
       providers.gradleProperty(key).orNull?.let { systemProperty(key, it) }
     }

@@ -4,7 +4,9 @@
 # Usage: gnome-case.sh <case> <ideavim-notation> <toolkit> <trials> [hosts] [port-base] [variant]
 #   toolkit: WLToolkit (native Wayland) or XToolkit (through the harness's Xwayland)
 #   variant: comma-separated options: word-commit (ibus-hangul word-commit on), keep-english (IdeaVimExtension's
-#            keep-english-in-normal on), plugin-off (no spike plugin: reference run)
+#            keep-english-in-normal on), plugin-off (no spike plugin: reference run), fast (hangul-ibus only: the
+#            `SPC g` sequence with the letter 200 ms after SPC and Esc 300 ms after the letter, so that the committed
+#            jamo reaches IdeaVim while SPC is still pending; the other sequences are skipped)
 # Output: spikes/s3/data/<run-id>/
 set -euo pipefail
 case_="$1"; ideavim="$2"; toolkit="$3"; trials="$4"; hosts="${5:-balloon,layer}"; port="${6:-9537}"; variant="${7:-}"
@@ -38,6 +40,11 @@ if [[ ",$variant," == *",keep-english,"* ]]; then rc_extra="set keep-english-in-
 if [ -n "$ext_dir" ]; then extra_plugins="$ext_dir"; fi
 plugin_off="false"
 if [[ ",$variant," == *",plugin-off,"* ]]; then plugin_off="true"; fi
+hangul_timing=""
+if [[ ",$variant," == *",fast,"* ]]; then hangul_timing="fast"; fi
+for v in ${variant//,/ }; do
+  case "$v" in word-commit|keep-english|plugin-off|fast) ;; *) echo "unknown variant $v" >&2; exit 2 ;; esac
+done
 
 taskset -c "${S3_CPUS:-16-27}" "$gh/gnome-harness.sh" start "$root" >"$out/harness-start.txt"
 sleep 5
@@ -63,6 +70,7 @@ cd "$plugin"
   -Ps3.ibusMonitor="$gh/gnome-harness.sh run $root /usr/bin/python3 -I $gh/ibus-monitor.py" \
   -Ps3.ibusCmd="$gh/gnome-harness.sh run $root ibus" \
   -Ps3.rcExtra="$rc_extra" -Ps3.extraPlugins="$extra_plugins" -Ps3.pluginOff="$plugin_off" \
+  ${hangul_timing:+-Ps3.hangulTiming="$hangul_timing"} \
   >"$out/gradle.log" 2>&1 || echo "gradle exit $?" >>"$out/harness-start.txt"
 "$gh/gnome-harness.sh" state "$root" >"$out/harness-state-end.json" || true
 # Raw data over 1 MB is kept gzip-compressed; the analysis scripts read .jsonl and .jsonl.gz.
