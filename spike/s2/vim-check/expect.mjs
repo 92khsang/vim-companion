@@ -11,12 +11,16 @@
 //                     register that differs from the fresh Vim's (empty) registers, except the
 //                     shifted numbered registers 2-9 (expect.shiftNumbered says that "1 was written)
 // Rows whose key plain Vim lacks (generated remaps, VSCodeVim's own keys, plugin keys) are
-// reported as `not-vim` with a reason and not generated.
+// reported as `not-vim` with a reason and not generated. The record of a Vim row also carries
+// `vim.outside`: the state outside the four compared fields that the key changed (windows, view,
+// folds, command-line window, marks, jump list, last error, last message; see expect.vimrc), and
+// `vim.curswant` (getcurpos()[4], v:maxcol after `$`).
 // Usage:
 //   node spike/s2/vim-check/expect.mjs <work dir> <defaults|extensions> <cards.json> <out.jsonl> [card ids, comma-separated]
 //   node spike/s2/vim-check/expect.mjs --count <cards.json>      (classify every row, no Vim)
 // The work directory holds the tmux socket, so keep its path short (mktemp -d /tmp/s2v.XXXXXX).
-// Vim runs under taskset on S2_VIM_CPUS (default 28-31).
+// Vim runs under taskset on S2_VIM_CPUS (default 28-31). S2_VIMRC names another vimrc in
+// vim-check/ (default expect.vimrc), such as expect-sw2.vimrc.
 import { execFileSync, spawnSync } from "node:child_process";
 import {
   appendFileSync,
@@ -78,16 +82,16 @@ function vimRuntime() {
   if (!value) throw new Error("could not read $VIMRUNTIME from vim");
   return value;
 }
-const VIMRUNTIME = vimRuntime();
+export const VIMRUNTIME = vimRuntime();
 
-const normToken = (t) => {
+export const normToken = (t) => {
   if (t === "\n") return "<cr>";
   if (t === " ") return "<space>";
   if (!t.startsWith("<")) return t;
   const l = t.toLowerCase();
   return { "<c-[>": "<esc>", "<c-6>": "<c-^>", "<nl>": "<c-j>" }[l] ?? l;
 };
-function tokenize(s) {
+export function tokenize(s) {
   s = s
     .replace(/CTRL-<(\w+)>/g, "<C-$1>")
     .replace(/CTRL-(.)/g, (_, c) => `<C-${c}>`)
@@ -433,7 +437,10 @@ export function countRows(cardsFile) {
 
 // ---------- the oracle ----------
 
+// VSCodeVim writes <CR> as "\n" (src/configuration/notation.ts L14), so "\n" is Enter, not the
+// line feed that `send-keys -l` would send (Vim reads that as <NL>, CTRL-J).
 const NAMED_KEYS = {
+  "\n": "Enter",
   "<Esc>": "Escape",
   "<C-[>": "Escape",
   "<CR>": "Enter",
@@ -464,6 +471,9 @@ export function tmuxKeyArgs(key) {
   if (NAMED_KEYS[key]) return [NAMED_KEYS[key]];
   const ctrl = /^<C-([a-z])>$/.exec(key);
   if (ctrl) return [`C-${ctrl[1]}`];
+  // tmux takes a lone ";" argument as its command separator and sends nothing; "\;" is the
+  // literal semicolon.
+  if (key === ";") return ["-l", "\\;"];
   if (key.length === 1) return ["-l", key];
   throw new Error(`no tmux key for ${JSON.stringify(key)}`);
 }
@@ -560,7 +570,10 @@ async function main() {
   };
   const dumpFile = join(work, "dump.json");
   const bufferFile = join(work, "buffer.txt");
-  const vimrc = join(import.meta.dirname, "expect.vimrc");
+  const vimrcName = process.env.S2_VIMRC ?? "expect.vimrc";
+  if (!/^[\w.-]+\.vimrc$/.test(vimrcName))
+    throw new Error(`S2_VIMRC must name a .vimrc file in vim-check/`);
+  const vimrc = join(import.meta.dirname, vimrcName);
   const cpus = process.env.S2_VIM_CPUS ?? "28-31";
   const readDump = () => {
     try {
@@ -583,10 +596,10 @@ async function main() {
     settings: SETTINGS_SETS[set],
     cards: cardsFile,
     vim: version,
-    vimrc: "spike/s2/vim-check/expect.vimrc",
+    vimrc: `spike/s2/vim-check/${vimrcName}`,
     command: vimCommand(START.cursor)
       .replace(work, "<work>")
-      .replace(vimrc, "spike/s2/vim-check/expect.vimrc"),
+      .replace(vimrc, `spike/s2/vim-check/${vimrcName}`),
     tmux: execFileSync("tmux", ["-V"], { encoding: "utf8" }).trim(),
     cpus,
     keyGapMs: KEY_GAP_MS,
@@ -713,7 +726,20 @@ async function main() {
                 operator: dump.operator,
                 pos: dump.pos,
                 vpos: dump.vpos,
+                curswant: dump.curswant,
                 recording: dump.recording,
+                // State outside the four compared fields that the key changed: { field: [before, after] }.
+                outside: Object.fromEntries(
+                  Object.keys({ ...baseline.outside, ...dump.outside })
+                    .filter(
+                      (k) =>
+                        !sameJson(baseline.outside?.[k], dump.outside?.[k]),
+                    )
+                    .map((k) => [
+                      k,
+                      [baseline.outside?.[k], dump.outside?.[k]],
+                    ]),
+                ),
                 registers: Object.fromEntries(
                   Object.entries(dump.regs)
                     .map(([k, v]) => [k, regValue(v)])

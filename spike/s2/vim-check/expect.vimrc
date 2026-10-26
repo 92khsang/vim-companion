@@ -24,9 +24,38 @@ set belloff=all noshowmode showcmd noruler laststatus=0 shortmess+=I
 set keywordprg=:echo nomodeline
 
 " Every 50 ms: the state the harness compares (buffer, cursor, mode, registers) as one JSON line,
-" written to $S2_DUMP through a rename so that a reader never sees a partial file.
+" written to $S2_DUMP through a rename so that a reader never sees a partial file. `outside` holds
+" state that check (1) does not compare, so that expect.mjs can name a row whose effect lies there:
+" windows and tab pages, the view (top line, left column), folds (the highest fold level and the
+" number of lines in closed folds), the command-line window, marks a-z and A-Z, the jump list
+" (length and position), the last error and the last message.
 let g:s2_seq = 0
 let s:regs = split('" 0 1 2 3 4 5 6 7 8 9 - a b c d e f g h i j k l m n o p q r s t u v w x y z . : /')
+function S2Outside()
+  try
+    return S2OutsideState()
+  catch
+    return {'failed': v:exception}
+  endtry
+endfunction
+function S2OutsideState()
+  let view = winsaveview()
+  let marks = getmarklist(bufnr())->filter({_, m -> m.mark =~# "^'[a-z]$"})
+        \ + getmarklist()->filter({_, m -> m.mark =~# "^'[A-Z]$"})
+  let jumps = getjumplist()
+  let msgs = split(execute('messages'), "\n")
+  return {
+        \ 'windows': [winnr('$'), winnr(), tabpagenr('$'), tabpagenr(), winheight(0), winwidth(0)],
+        \ 'view': [view.topline, view.leftcol, view.skipcol],
+        \ 'folds': [max(map(range(1, line('$')), {_, l -> foldlevel(l)})),
+        \           len(filter(range(1, line('$')), {_, l -> foldclosed(l) != -1}))],
+        \ 'cmdwin': getcmdwintype(),
+        \ 'marks': map(marks, {_, m -> [m.mark, m.pos[1], m.pos[2]]}),
+        \ 'jumps': [len(jumps[0]), jumps[1]],
+        \ 'error': v:errmsg,
+        \ 'message': empty(msgs) ? '' : msgs[-1],
+        \ }
+endfunction
 function S2Dump(timer)
   let regs = {}
   for name in s:regs
@@ -39,9 +68,11 @@ function S2Dump(timer)
         \ 'operator': v:operator,
         \ 'pos': getpos('.'),
         \ 'vpos': getpos('v'),
+        \ 'curswant': getcurpos()[4],
         \ 'recording': reg_recording(),
         \ 'lines': getline(1, '$'),
         \ 'regs': regs,
+        \ 'outside': S2Outside(),
         \ }
   let g:s2_seq += 1
   call writefile([json_encode(d)], $S2_DUMP .. '.tmp')
