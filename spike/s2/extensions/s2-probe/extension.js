@@ -147,7 +147,9 @@ const methods = {
               ? c.text
               : Array.isArray(c.text)
                 ? c.text
-                : "<recorded keys>",
+                : Array.isArray(c.text?.actionsRunPressedKeys)
+                  ? { keys: c.text.actionsRunPressedKeys.join("") }
+                  : "<recorded keys>",
           mode: c.registerMode,
         }),
       );

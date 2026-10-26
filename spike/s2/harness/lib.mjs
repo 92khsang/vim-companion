@@ -301,8 +301,9 @@ export async function startCode({
   inst,
 }) {
   const sock = join(RUN(), `${name}.sock`);
-  const rt = join(RUN(), `${name}.rt`);
-  rmSync(rt, { recursive: true, force: true });
+  // A new runtime directory per start: D-Bus services that the sandbox activated (the document
+  // portal, gvfsd) can keep FUSE mounts in the old one for a moment after VS Code stops.
+  const rt = join(RUN(), `${name}.${Date.now().toString(36)}.rt`);
   mkdirSync(rt, { recursive: true, mode: 0o700 });
   const home = join(inst, "home");
   const env = {
@@ -335,17 +336,12 @@ export async function startCode({
     ...(cdpPort ? [`--remote-debugging-port=${cdpPort}`] : []),
     join(inst, "ws"),
   ];
+  // `detached` starts the child in a new session, so its pid is the process group of everything
+  // the session starts (dbus-daemon, VS Code, the services the bus activates). The setsid binary
+  // would fork again here, because the child is already a group leader, and leave a stale pid.
   const p = spawn(
-    "setsid",
-    [
-      "taskset",
-      "-c",
-      CPUS(),
-      "dbus-run-session",
-      "--",
-      codeBinary(version),
-      ...args,
-    ],
+    "taskset",
+    ["-c", CPUS(), "dbus-run-session", "--", codeBinary(version), ...args],
     {
       env,
       detached: true,
@@ -363,13 +359,20 @@ export async function startCode({
     probe = await new Probe(sock).connect();
     hello = await probe.call("hello");
   } catch (e) {
-    await stopCode({ pid: p.pid });
+    await stopCode({ pid: p.pid, rt });
     throw e;
   }
   let wid;
   for (let i = 0; i < 100 && !wid; i++) {
     try {
-      wid = xdo(display, ["search", "--onlyvisible", "--class", "code"])
+      // The workbench window carries the title "... - Visual Studio Code"; Electron also maps
+      // helper windows of the same class.
+      wid = xdo(display, [
+        "search",
+        "--onlyvisible",
+        "--name",
+        "Visual Studio Code",
+      ])
         .trim()
         .split("\n")
         .at(-1);
@@ -377,7 +380,7 @@ export async function startCode({
       await sleep(200);
     }
   }
-  return { pid: p.pid, probe, wid, inst, hello, display };
+  return { pid: p.pid, probe, wid, inst, hello, display, rt };
 }
 
 export function focus(code) {
@@ -388,23 +391,78 @@ export function focusWindow(code) {
   xdo(code.display, ["windowfocus", "--sync", code.wid]);
 }
 
-/** Stops a sandboxed VS Code by its process group (setsid made the spawned pid the group leader). */
+/** Pids of the processes whose environment names the given runtime directory. */
+function sessionPids(rt) {
+  const marker = `XDG_RUNTIME_DIR=${rt}\0`;
+  const pids = [];
+  for (const d of readdirSync("/proc")) {
+    if (!/^\d+$/.test(d) || Number(d) === process.pid) continue;
+    try {
+      if (readFileSync(`/proc/${d}/environ`, "latin1").includes(marker))
+        pids.push(Number(d));
+    } catch {}
+  }
+  return pids;
+}
+
+/**
+ * Stops a sandboxed VS Code by its process group (the spawned pid leads it), then every process
+ * that still carries the session's runtime directory in its environment: the bus the session
+ * started and the services it activated (gvfsd and its FUSE mount, the portals, at-spi).
+ */
 export async function stopCode(code) {
   code.probe?.close();
   try {
     process.kill(-code.pid, "SIGTERM");
   } catch {}
-  for (let i = 0; i < 50; i++) {
+  let gone = false;
+  for (let i = 0; i < 50 && !gone; i++) {
     try {
       process.kill(-code.pid, 0);
       await sleep(200);
     } catch {
-      return;
+      gone = true;
     }
   }
-  try {
-    process.kill(-code.pid, "SIGKILL");
-  } catch {}
+  if (!gone) {
+    try {
+      process.kill(-code.pid, "SIGKILL");
+    } catch {}
+  }
+  if (code.rt) {
+    for (let i = 0; i < 50; i++) {
+      const pids = sessionPids(code.rt);
+      if (pids.length === 0) break;
+      for (const pid of pids) {
+        try {
+          process.kill(pid, i < 25 ? "SIGTERM" : "SIGKILL");
+        } catch {}
+      }
+      await sleep(200);
+    }
+  }
+  // Helpers that left the process group (crashpad, a file watcher) still name the sandbox
+  // directory in their arguments; they are this sandbox's own processes.
+  if (code.inst) {
+    for (let i = 0; i < 50; i++) {
+      let pids = [];
+      try {
+        pids = execFileSync("pgrep", ["-f", code.inst], { encoding: "utf8" })
+          .trim()
+          .split("\n")
+          .filter(Boolean)
+          .map(Number);
+      } catch {
+        return;
+      }
+      for (const pid of pids) {
+        try {
+          process.kill(pid, i < 25 ? "SIGTERM" : "SIGKILL");
+        } catch {}
+      }
+      await sleep(200);
+    }
+  }
 }
 
 // ---------- CDP (renderer DOM) ----------

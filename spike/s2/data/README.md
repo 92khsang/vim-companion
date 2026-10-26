@@ -27,3 +27,24 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
 - `cards-complete/`: `node spike/s2/harness/cards-complete.mjs <version> <display> <cdpPort> <defaults|extensions> spike/s2/cards/cards.json <reference> <out>`.
 - `cards-pilot/`: `node spike/s2/harness/cards-correctness.mjs 1.141.0 :123 9523 <defaults|extensions> spike/s2/cards/pilot.json 3 <out>`,
   the first pass of hand-written expectations for 10 cards.
+- `harness-proof/proof-<version>-2026-10-26.json`: the same command on 2026-10-26 on a rebuilt
+  sandbox root (VS Code 1.134.0 downloaded again, SHA-256 checked against the update API): the
+  same six checks, the four pass checks passing on both versions.
+- `differential/`: `node spike/s2/harness/differential.mjs <version> <display> 10 off <out> off`
+  (adapter off only, 10 runs, the two versions at the same time on `:121` and `:122`), then
+  `node spike/s2/harness/differential-compare.mjs <out>`. Records name the sandbox root `$S2_ROOT`.
+  `off-only-<version>.jsonl`: the first 10 runs, with a `stopCode` that signalled a stale process
+  group (the `setsid` binary had forked), so every session left its D-Bus bus and the services it
+  activated behind; the records are valid and were rewritten with the `$S2_ROOT` placeholder.
+  `off-only-<version>-trace.jsonl`: the same runs with `S2_DIFF_TRACE=1`, which reads the active
+  editor, VSCodeVim's registers and the editor events after every item (the reads lengthen the gap
+  between items). `off-only-<version>-rerun.jsonl`: the valid determinism run, 10 runs with the
+  committed harness. Result: 1.134.0 agrees in 30 of 30 runs, 1.141.0 in 27 of 30 (9 of 10 in each
+  file), and the majority outcome is the same on both versions. The 1.141.0 minority runs part at
+  item 64 (`extra/leader-macro`, `<C-w> l q a <Space> w h q @ a`): in the majority runs the cursor
+  of a.txt moves one column right with a Command selection event about 320 ms after the item's
+  first key, and the `.` register pasted at the end holds the insertion `a<Esc>`, so an `a` reached
+  VSCodeVim in Normal mode and the `<Esc> <Esc>` after the script completed it; in the minority
+  runs nothing moves and the `.` register still holds item 55. The difference follows
+  `<Space> w h`, which runs through which-key's quick pick, so it reads as the quick pick closing
+  asynchronously against the 30 ms key spacing, not as a harness focus or reset effect.
