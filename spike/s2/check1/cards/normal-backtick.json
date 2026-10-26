@@ -16,11 +16,15 @@
       "key": "{<register>}",
       "sets": ["defaults", "extensions"],
       "sample": "a",
-      "source": "hand",
-      "reason": "state: mark or jump; `{<register>} reads a mark",
-      "label": "TODO",
-      "labelIndex": "index.txt L381 |`|",
-      "expect": "TODO"
+      "setup": ["m", "a", "0"],
+      "source": "vim-oracle",
+      "label": "Jump to mark {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
     }
   ]
 }

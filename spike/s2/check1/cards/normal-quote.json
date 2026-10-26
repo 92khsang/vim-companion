@@ -16,11 +16,15 @@
       "key": "{<register>}",
       "sets": ["defaults", "extensions"],
       "sample": "a",
-      "source": "hand",
-      "reason": "state: mark or jump; '{<register>} reads a mark",
-      "label": "TODO",
-      "labelIndex": "index.txt L265 |'|",
-      "expect": "TODO"
+      "setup": ["m", "a", "0"],
+      "source": "vim-oracle",
+      "label": "Jump to the first non-blank of the line of mark {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      }
     }
   ]
 }

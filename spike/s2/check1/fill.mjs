@@ -74,9 +74,20 @@ const bump = (set, k) => {
 };
 const uncoveredState = [];
 
+/**
+ * The id of a row in pilot.json and in the pilot's oracle run: pilot.json names the placeholder
+ * after m, ' and ` {<character>}, the rebuilt cards.json {<register>}; they are the same row.
+ */
+function pilotIdOf(card, row) {
+  const id = `${card.id}\0${row.key}`;
+  const alias = `${card.id}\0{<character>}`;
+  if (!pilotRow.has(id) && row.key === "{<register>}" && pilotRow.has(alias))
+    return alias;
+  return id;
+}
 /** The resolved fields of a row under one settings set. */
 function resolve(card, row, set) {
-  const id = `${card.id}\0${row.key}`;
+  const id = pilotIdOf(card, row);
   const p = pilotRow.get(id);
   const sample = p?.sample;
   const setup = p?.setup;
@@ -112,13 +123,17 @@ function resolve(card, row, set) {
         ...(lab.index ? { labelIndex: lab.index } : {}),
         ...(lab.review ? { labelReview: lab.review } : {}),
       };
+  // A pilot row keeps its hand-written label and expectation (checked in VS Code on 2026-10-26).
   const hand = (reason) => ({
     ...base,
     source: "hand",
     reason,
-    label: "TODO",
-    ...(lab.index ? { labelIndex: lab.index } : {}),
-    expect: "TODO",
+    ...(p?.label
+      ? { label: p.label, labelFrom: "pilot" }
+      : { label: "TODO", ...(lab.index ? { labelIndex: lab.index } : {}) }),
+    ...(p?.expect
+      ? { expect: p.expect, expectFrom: "pilot" }
+      : { expect: "TODO" }),
   });
   if (rec.vim?.exited)
     return hand("oracle: Vim exits (the key closes its only window)");
@@ -129,9 +144,13 @@ function resolve(card, row, set) {
       `null-mode: Vim ends in mode(1) ${JSON.stringify(rec.vim.mode1)} (${rec.vim.mode1 === "c" ? "the command line or a search prompt" : "the hit-enter prompt"}), which the fixture has no mode name for`,
     );
   const aRec = oracleOf("expect", set, `normal ["\\"","a"]\0${row.key}`);
-  const st = staticReason(card, row, {
-    writesA: Boolean(aRec?.expect?.registers?.a),
-  });
+  const st = staticReason(
+    card,
+    { ...row, setup },
+    {
+      writesA: Boolean(aRec?.expect?.registers?.a),
+    },
+  );
   const pre = oracleOf("expect-prestate", set, id);
   const preDiffers = pre && !sameJson(pre.expect, rec.expect);
   if (st) {
@@ -142,7 +161,8 @@ function resolve(card, row, set) {
     return hand("outside: window; Vim opens or changes a window");
   if (out.view) return hand("outside: view; Vim scrolls the window");
   if (out.folds) return hand("outside: fold; Vim changes a fold");
-  if (out.marks) return hand("outside: mark; Vim sets a mark");
+  // A setup may set a mark itself (m a before a jump to it); that is not the row's effect.
+  if (out.marks && !setup) return hand("outside: mark; Vim sets a mark");
   if (preDiffers) {
     uncoveredState.push(`${set}\t${card.id}\t${row.key}`);
     return hand(

@@ -226,6 +226,6 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
     400 registered action classes with file, line, modes and keys (41 with keys built at run time,
     easymotion and the targets next/last objects).
   - `hand-rows.tsv`: `node spike/s2/check1/rows.mjs`, every `hand` and pending row per set with
-    its reason after `fill.mjs` (defaults 2,427 `vim-oracle`, 55 pending, 960 `hand`: 404 not Vim,
-    94 null-mode, 221 outside, 239 state, 2 oracle; extensions 2,404, 55, 1,174: 620, 94, 219,
-    239, 2).
+    its reason after `fill.mjs` (defaults 2,429 `vim-oracle`, 55 pending, 958 `hand`: 404 not Vim,
+    94 null-mode, 221 outside, 237 state, 2 oracle; extensions 2,406, 55, 1,172: 620, 94, 219,
+    237, 2).
