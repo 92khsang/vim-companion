@@ -1,26 +1,26 @@
 # Spike S5: the 12 macOS checks, classified
 
-Status: draft. The final classification is made once, at the end of the spike, and copied into
-the local skill `mac-remote-verify`.
+Final classification, made once at the end of the spike on 2026-10-26 and copied into the local
+skill `mac-remote-verify`.
 
 A check counts as run over ssh only if this spike ran it over ssh. Checks 2, 3 and 4 count as run
-over ssh if the spike ran their stand-ins. Every other check is manual and lists its steps and its
-expected result. `$MAC_HOST` is the Mac; `$MAC_SPIKE_DIR` is the spike's temporary directory on it.
+over ssh because the spike ran their stand-ins. Every other check is manual and lists its steps and
+its expected result. `$MAC_HOST` is the Mac; `$MAC_SPIKE_DIR` is the spike's temporary directory on it.
 
-| #   | Check                                                                     | Class                    | Evidence or steps        |
-| --- | ------------------------------------------------------------------------- | ------------------------ | ------------------------ |
-| 1   | Build and test the targets of row 1                                       | run over ssh             | row 1 runs, `data/row1/` |
-| 2   | Copy a CI build to the Mac with `scp` and smoke-test it                   | run over ssh (stand-in)  | `data/standins/`         |
-| 3   | Download a release candidate, check it, install, upgrade and roll back it | run over ssh (stand-in)  | `data/standins/`         |
-| 4   | Prepare the Mac for user tests                                            | run over ssh (stand-in)  | `data/standins/vim/`     |
-| 5   | Grant Screen Recording and Accessibility (and Automation if asked)        | manual                   | below                    |
-| 6   | Capture screenshots of both IDEs                                          | pending: needs the grant | row 2                    |
-| 7   | The Mac's part of the user-test checklist in both IDEs                    | manual                   | below                    |
-| 8   | The hint UI at the Mac's 2× normal display density                        | manual                   | below                    |
-| 9   | A theme switch while a hint shows, 125% zoom and long labels              | manual                   | below                    |
-| 10  | VS Code with Modern UI on and off                                         | manual                   | below                    |
-| 11  | VoiceOver smoke                                                           | manual                   | below                    |
-| 12  | Revoke the permissions of check 5 by v1.0.0 at the latest                 | manual                   | below                    |
+| #   | Check                                                                     | Class                   | Evidence or steps                                                                                                                                              |
+| --- | ------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Build and test the targets of row 1                                       | run over ssh            | `data/row1-final/`: 3 runs per target on the Mac and 1 per target on Linux at `aefaca4`                                                                        |
+| 2   | Copy a CI build to the Mac with `scp` and smoke-test it                   | run over ssh (stand-in) | `data/standins/vscode/` and `data/standins-final/intellij/`: the VSIX and the plugin zip, copied with `scp` and installed in the sandbox IDEs                  |
+| 3   | Download a release candidate, check it, install, upgrade and roll back it | run over ssh (stand-in) | the same runs: `shasum -a 256 -c` on the copied files, then 0.0.1, 0.0.2 and 0.0.1 again in the sandbox VS Code and in the IntelliJ sandbox                    |
+| 4   | Prepare the Mac for user tests                                            | run over ssh (stand-in) | `data/standins/vim/` and `data/standins-final/vim/`: VSCodeVim 1.32.4 in a separate sandbox VS Code whose settings turn updates off, as the probe reports them |
+| 5   | Grant Screen Recording and Accessibility (Automation was never asked)     | manual                  | below                                                                                                                                                          |
+| 6   | Capture screenshots of both IDEs                                          | run over ssh            | `data/row23-post/captures/`: 10 per IDE                                                                                                                        |
+| 7   | The Mac's part of the user-test checklist in both IDEs                    | manual                  | below                                                                                                                                                          |
+| 8   | The hint UI at the Mac's 2× normal display density                        | manual                  | below                                                                                                                                                          |
+| 9   | A theme switch while a hint shows, 125% zoom and long labels              | manual                  | below                                                                                                                                                          |
+| 10  | VS Code with Modern UI on and off                                         | manual                  | below                                                                                                                                                          |
+| 11  | VoiceOver smoke                                                           | manual                  | below                                                                                                                                                          |
+| 12  | Revoke the permissions of check 5 by v1.0.0 at the latest                 | manual                  | below                                                                                                                                                          |
 
 ## Manual checks
 
@@ -28,19 +28,32 @@ expected result. `$MAC_HOST` is the Mac; `$MAC_SPIKE_DIR` is the spike's tempora
 
 Measured on macOS 27.0.1: TCC attributes every program that runs over ssh to the responsible
 process `/usr/libexec/sshd-keygen-wrapper` (identifier `com.apple.sshd-keygen-wrapper`), so the
-permissions go to that program.
+permissions go to that program. This includes the sandbox IDEs that an agent starts over ssh: their
+TCC requests carry the same responsible process (`data/row23-post/tcc-rows23.txt`).
+
+Measured on macOS 27.0.1: System Settings names the Accessibility pane `Device Control and Data
+Access` (Korean UI: `기기 제어 및 데이터 접근`) and the Screen Recording pane `Screen & System Audio
+Recording` (`화면 및 시스템 오디오 녹음`); the localization table of `SecurityPrivacyExtension.appex`
+keeps the keys `ACCESSIBILITY` and `SCREEN_CAPTURE`. Each pane opens on the Mac's screen from ssh:
+
+```bash
+ssh $MAC_HOST '/usr/bin/open "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"'
+ssh $MAC_HOST '/usr/bin/open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"'
+```
 
 Steps:
 
-1. Open System Settings > Privacy & Security > Screen & System Audio Recording. Click `+`, press
-   `Cmd+Shift+G`, type `/usr/libexec/sshd-keygen-wrapper`, press Return, click Open, and turn its
-   switch on.
-2. Open System Settings > Privacy & Security > Accessibility. If `sshd-keygen-wrapper` is listed,
-   turn its switch on; otherwise add it with `+` as in step 1 and turn it on.
-3. If a dialog asks whether `sshd-keygen-wrapper` may control System Events, click Allow.
+1. In Privacy & Security > Screen & System Audio Recording, click `+`, press `Cmd+Shift+G`, type
+   `/usr/libexec/sshd-keygen-wrapper`, press Return, click Open, and turn its switch on.
+2. In Privacy & Security > Device Control and Data Access, turn `sshd-keygen-wrapper` on if it is
+   listed; otherwise add it with `+` as in step 1 and turn it on.
+3. If a dialog asks whether `sshd-keygen-wrapper` may control System Events, click Allow. The
+   spike's key sender posts CGEvents and never triggered that dialog; only `osascript` would.
 
 Expected result: `ssh $MAC_HOST "$MAC_SPIKE_DIR/bin/s5win preflight"` prints `screenCapture=true`,
-`postEvent=true` and `axTrusted=true`.
+`postEvent=true` and `axTrusted=true`. Measured: the Accessibility grant alone turned `postEvent`
+true as well; the TCC log showed one Modify of `kTCCServiceAccessibility` and no PostEvent row
+(`data/row23-post/tcc-grant.txt`).
 
 ### 7. The Mac's part of the user-test checklist in both IDEs
 
@@ -90,11 +103,12 @@ dismissed from the keyboard.
 ### 12. Revoke the permissions by v1.0.0 at the latest
 
 Inferred: until then, any ssh login of that Mac user can record the screen and send keys, because
-the permissions go to the program behind every ssh session.
+the permissions go to the program behind every ssh session, and so can any sandbox IDE or other
+program that such a login starts.
 
 Steps: in System Settings > Privacy & Security, select `sshd-keygen-wrapper` under Screen & System
-Audio Recording and under Accessibility, and remove it with `-` (or turn its switch off). Under
-Automation, turn off System Events for it if it is listed.
+Audio Recording and under Device Control and Data Access, and remove it with `-` (or turn its
+switch off). Under Automation, turn off System Events for it if it is listed.
 
 Expected result: `ssh $MAC_HOST "$MAC_SPIKE_DIR/bin/s5win preflight"` prints
 `screenCapture=false`, `postEvent=false` and `axTrusted=false`.

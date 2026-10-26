@@ -50,6 +50,28 @@ MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-standins.sh vscode <ou
 MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-standins.sh vim <out>/vim
 ```
 
+Row 1, final series at `aefaca468a573c676871e6dbc0f1ecee74ace008` (`data/row1-final/`; main `e4322e9`
+merged into the spike branch, so `ids:refresh` no longer needs `unzip -W`). Mac run directories are
+`/tmp/s5run.XXXXXX`; run 1 of each target has fresh caches, runs 2 and 3 share `$MD/cache-final`:
+
+```bash
+C=aefaca468a573c676871e6dbc0f1ecee74ace008
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD MAC_CACHE_DIR=$MD/cache-final \
+  spike/s5/scripts/row1-all.sh $C <out> a-1 a-2 a-3 b-1 b-2 b-3 c-1 c-2 c-3
+S5_LINUX_RUN_ROOT=<disk dir> spike/s5/scripts/row1.sh linux a $C fresh <out>/linux-a   # and b, c (c: Xvfb :141)
+```
+
+Rows 2 and 3 after the grant (`data/row23-post/`): the commands are in its `commands.txt`.
+
+Stand-ins, final (`data/standins-final/`), with the artifacts built at `edb8b25` as above; the
+IntelliJ sandbox starts as a launchd job in the console user's GUI session:
+
+```bash
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-standins.sh intellij <out>/intellij $C $MD/cache/gradle-home
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-standins.sh vim <out>/vim
+MAC_HOST=$MAC_HOST MAC_SPIKE_DIR=$MD spike/s5/scripts/mac-standins.sh vim-report <out>/vim
+```
+
 Harness proof on Linux (Xvfb `:141`, xdotool XTEST, sandbox IDEs started with
 `scripts/linux-x11-env.sh`): both probes recorded 1000 of 1000 keys of `keys/sequence.txt` in the
 order sent with none extra, at 30 ms between keys.
