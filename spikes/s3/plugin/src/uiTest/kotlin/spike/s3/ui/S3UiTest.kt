@@ -19,7 +19,10 @@ class S3UiTest {
       s.focusWindow()
       // A run without the spike plugin has no probe; it only gives the reference state for the Hangul rows.
       val delivered = if (Env.pluginOff) true else Rows.deliveryCheck(s)
-      s.log(J.obj("event" to "run-start", "deliveryCheck" to delivered, "case" to Env.case, "hosts" to Env.hosts, "trials" to Env.trials))
+      s.log(J.obj(
+        "event" to "run-start", "deliveryCheck" to delivered, "case" to Env.case, "hosts" to Env.hosts, "trials" to Env.trials,
+        "ideBuild" to ctx.ide.build, "mode" to Env.mode,
+      ))
       assertTrue(delivered, "delivery check failed")
       if (Env.rcExtra.any { it.contains("keep-english") }) KeepEnglishCheck.run(s)
       when (Env.case) {

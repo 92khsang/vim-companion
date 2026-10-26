@@ -58,10 +58,16 @@ object Env {
   val portBase: Int = (prop("s3.portBase") ?: "9531").toInt()
   val display: String? = System.getenv("DISPLAY")
 
-  /** "xvfb" (Driver robot keys under Xvfb) or "gnome" (keys from the GNOME harness injector). */
+  /**
+   * "xvfb" (Driver robot keys under Xvfb), "gnome" (keys from the GNOME harness injector) or "mac" (the IDE in the
+   * console user's GUI session on macOS, keys from the `s3keys` injector in an ssh session, focus through it as well).
+   */
   val mode: String = prop("s3.mode") ?: "xvfb"
 
-  /** Command that starts the GNOME harness key injector in serve mode, split on spaces. */
+  /**
+   * Command that starts the key injector in serve mode, split on spaces, or `unix:<path>`: the Unix socket on which
+   * an injector that is already running listens (the `mac` mode).
+   */
   val inject: List<String> = prop("s3.inject")?.split(' ') ?: emptyList()
 
   /** Command that prints the GNOME harness state JSON, split on spaces. */
@@ -89,17 +95,39 @@ class S3Paths : GlobalPaths(Env.work)
 
 /**
  * Uses the IntelliJ IDEA 2026.2.3 installation that the Gradle build already unpacked. It is copied once into the work
- * directory, because Starter writes a `.vmoptions` file next to the installation.
+ * directory, because Starter writes a `.vmoptions` file next to the installation. On Linux [source] is the unpacked
+ * tar, with `build.txt` at its root. On macOS the IntelliJ Platform Gradle Plugin unpacks the dmg installer's
+ * `IntelliJ IDEA.app/Contents` without the `.app` directory (`Info.plist`, `MacOS/idea` and `Resources/build.txt` at
+ * the root); Starter's macOS distribution looks for `*.app` in the parent and reads `Contents/Resources/build.txt`, so
+ * that layout is copied to `IntelliJ IDEA.app/Contents`. A `.app` bundle is copied under its own name.
  */
 class CopiedIdeInstaller(private val source: Path) : IdeInstaller {
   override suspend fun install(ideInfo: IdeInfo): Pair<String, InstalledIde> {
     val parent = Env.work.resolve("ide").createDirectories()
-    val dest = parent.resolve(source.name)
-    if (!dest.resolve("build.txt").exists()) {
-      val p = ProcessBuilder("cp", "-a", source.absolutePathString(), parent.absolutePathString()).inheritIO().start()
+    val dest: Path
+    val buildTxt: Path
+    when {
+      source.resolve("Info.plist").exists() && source.resolve("Resources/build.txt").exists() -> {
+        dest = parent.resolve("IntelliJ IDEA.app").resolve("Contents")
+        buildTxt = dest.resolve("Resources/build.txt")
+      }
+      source.name.endsWith(".app") -> {
+        dest = parent.resolve(source.name)
+        buildTxt = dest.resolve("Contents/Resources/build.txt")
+      }
+      else -> {
+        dest = parent.resolve(source.name)
+        buildTxt = dest.resolve("build.txt")
+      }
+    }
+    if (!buildTxt.exists()) {
+      // An incomplete copy from an interrupted run would make `cp` nest the source inside it.
+      dest.toFile().deleteRecursively()
+      dest.parent.createDirectories()
+      val p = ProcessBuilder("cp", "-a", source.absolutePathString(), dest.absolutePathString()).inheritIO().start()
       check(p.waitFor() == 0) { "copy of the IDE failed" }
     }
-    val build = Files.readString(dest.resolve("build.txt")).trim().substringAfter('-')
+    val build = Files.readString(buildTxt).trim().substringAfter('-')
     return build to di.direct.instance<IdeDistributionFactory>().installIDE(parent, ideInfo.executableFileName)
   }
 }
@@ -171,6 +199,11 @@ object S3Ide {
     val ctx = Starter.newContext(name, TestCase(info, LocalProjectInfo(project())))
     // Credentials stay in memory: the IDE never asks a Secret Service (keyring) for anything.
     ctx.setProviderMemoryOnlyOnLinux()
+    if (Env.mode == "mac") {
+      // Starter's helper above writes this on Linux only; on macOS the same file keeps the IDE away from the keychain.
+      ctx.paths.configDir.resolve("options").createDirectories().resolve("security.xml")
+        .writeText("<application>\n  <component name=\"PasswordSafe\">\n    <option name=\"PROVIDER\" value=\"MEMORY_ONLY\" />\n  </component>\n</application>\n")
+    }
     // No notification balloons: under a window manager they can open windows of their own that take focus.
     ctx.paths.configDir.resolve("options").createDirectories().resolve("notifications.xml")
       .writeText("<application>\n  <component name=\"NotificationConfiguration\" showBalloons=\"false\" />\n</application>\n")
@@ -183,17 +216,21 @@ object S3Ide {
     ctx.applyVMOptionsPatch {
       // Isolation from the user's IDE and settings: own user.home and ideavimrc. Under Xvfb the IDE also gets its own
       // HOME and XDG directories; in the GNOME harness it keeps the harness's, which are already private, because
-      // IBus and the ibus command find the harness's IBus through them.
+      // IBus and the ibus command find the harness's IBus through them. On macOS it gets its own HOME (the daemons it
+      // starts live under ~/Library) and no X11 variables.
       addSystemProperty("user.home", home)
       if (Env.mode != "gnome") {
         withEnv("HOME", home.absolutePathString())
-        withEnv("XDG_CONFIG_HOME", home.resolve(".config").createDirectories().absolutePathString())
-        withEnv("XDG_DATA_HOME", home.resolve(".local/share").createDirectories().absolutePathString())
-        withEnv("XDG_CACHE_HOME", home.resolve(".cache").createDirectories().absolutePathString())
-        Env.display?.let { withEnv("DISPLAY", it) }
+        if (Env.mode != "mac") {
+          withEnv("XDG_CONFIG_HOME", home.resolve(".config").createDirectories().absolutePathString())
+          withEnv("XDG_DATA_HOME", home.resolve(".local/share").createDirectories().absolutePathString())
+          withEnv("XDG_CACHE_HOME", home.resolve(".cache").createDirectories().absolutePathString())
+          Env.display?.let { withEnv("DISPLAY", it) }
+        }
       }
       withEnv("IDEA_VIM_CUSTOM_VIMRC", rc.absolutePathString())
-      addSystemProperty("awt.toolkit.name", Env.toolkit)
+      // awt.toolkit.name selects XToolkit or WLToolkit in JetBrains Runtime on Linux; macOS has only LWCToolkit.
+      if (Env.mode != "mac") addSystemProperty("awt.toolkit.name", Env.toolkit)
       addSystemProperty("idea.trust.all.projects", true)
       // No embedded browser (JCEF): it would ask a Secret Service for a key and the IDE does not need it here.
       addSystemProperty("ide.browser.jcef.enabled", false)

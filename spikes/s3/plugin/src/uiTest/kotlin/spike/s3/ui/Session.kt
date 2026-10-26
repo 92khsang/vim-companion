@@ -9,7 +9,13 @@ import com.intellij.driver.sdk.ui.ui
 import com.intellij.driver.sdk.waitForIndicators
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
+import java.io.BufferedReader
+import java.io.BufferedWriter
 import java.io.File
+import java.net.StandardProtocolFamily
+import java.net.UnixDomainSocketAddress
+import java.nio.channels.Channels
+import java.nio.channels.SocketChannel
 import java.time.Instant
 import com.intellij.driver.sdk.openFile
 import kotlin.time.Duration.Companion.milliseconds
@@ -54,7 +60,10 @@ class StepResult(
   )
 }
 
-/** Where keys come from: the Driver's robot (AWT, XTEST under Xvfb) or the GNOME harness injector (Mutter). */
+/**
+ * Where keys come from: the Driver's robot (AWT, XTEST under Xvfb), the GNOME harness injector (Mutter) or the macOS
+ * injector (CGEvents from an ssh session).
+ */
 interface Keys {
   fun press(step: Step)
   fun close() {}
@@ -71,23 +80,49 @@ class RobotKeys(private val editor: () -> JEditorUiComponent) : Keys {
   }
 }
 
-/** Keys through `inject.py serve` in the GNOME harness: X keysyms that Mutter sends from a virtual keyboard. */
+/**
+ * Keys through an injector that speaks the protocol of the GNOME harness's `inject.py serve` (`key <keysym>[+...]`,
+ * answered with `ok` or `error <text>`). In the GNOME harness the injector is a child process, and the keysyms are
+ * what Mutter sends from a virtual keyboard. In the `mac` mode [cmd] is `unix:<path>`, the socket of `s3keys serve`,
+ * which posts the same names as CGEvents; it runs in an ssh session on the Mac, outside this JVM's launchd job,
+ * because macOS grants the Accessibility permission to the programs of ssh sessions (spike S5), and it refuses every
+ * key unless the sandbox IDE named with `pid` owns the frontmost app and the topmost window.
+ */
 class InjectorKeys(cmd: List<String>) : Keys {
-  private val process = ProcessBuilder(cmd).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-  private val input = process.outputStream.bufferedWriter()
-  private val output = process.inputStream.bufferedReader()
+  private val process: Process?
+  private val channel: SocketChannel?
+  private val input: BufferedWriter
+  private val output: BufferedReader
 
   init {
+    val socket = cmd.singleOrNull()?.takeIf { it.startsWith("unix:") }?.removePrefix("unix:")
+    if (socket != null) {
+      process = null
+      channel = SocketChannel.open(StandardProtocolFamily.UNIX).also { it.connect(UnixDomainSocketAddress.of(socket)) }
+      input = Channels.newOutputStream(channel).bufferedWriter()
+      output = Channels.newInputStream(channel).bufferedReader()
+    } else {
+      process = ProcessBuilder(cmd).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+      channel = null
+      input = process.outputStream.bufferedWriter()
+      output = process.inputStream.bufferedReader()
+    }
     val first = output.readLine()
     check(first == "ready") { "injector did not start: $first" }
   }
 
-  fun command(line: String) {
+  /** Sends one command and returns what follows `ok` (empty for a bare `ok`); an `error` answer throws. */
+  fun query(line: String): String {
     input.write(line)
     input.newLine()
     input.flush()
-    val answer = output.readLine()
-    check(answer == "ok") { "injector: $answer for $line" }
+    val answer = output.readLine() ?: error("injector closed on $line")
+    check(answer == "ok" || answer.startsWith("ok ")) { "injector: $answer for $line" }
+    return answer.removePrefix("ok").trim()
+  }
+
+  fun command(line: String) {
+    query(line)
   }
 
   override fun press(step: Step) {
@@ -112,8 +147,9 @@ class InjectorKeys(cmd: List<String>) : Keys {
 
   override fun close() {
     runCatching { input.write("quit\n"); input.flush() }
-    process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
-    process.destroy()
+    process?.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
+    process?.destroy()
+    runCatching { channel?.close() }
   }
 }
 
@@ -150,11 +186,29 @@ class Session(val driver: Driver, val name: String) {
 
   /**
    * Under Xvfb: gives the IDE frame X input focus with `xdotool windowfocus --sync`. In the GNOME harness the shell
-   * focuses the new window itself; the harness only asks the IDE to focus the editor inside it if needed.
+   * focuses the new window itself; the harness only asks the IDE to focus the editor inside it if needed. On macOS the
+   * injector brings the IDE to the front (`activate`, Accessibility with an NSRunningApplication fallback) and reports
+   * the frontmost app and the owner of the topmost normal window; `frontIsIde` says whether both are the sandbox IDE.
    */
   fun focusWindow(): String {
     val r = StringBuilder()
-    if (Env.mode == "gnome") {
+    if (Env.mode == "mac") {
+      val pid = harness?.pid() ?: RemoteState.pid(driver)
+      val inj = keys as InjectorKeys
+      inj.command("pid $pid")
+      var state = ""
+      var frontIsIde = false
+      for (attempt in 1..5) {
+        state = inj.query("activate $pid")
+        val fields = state.split(' ').mapNotNull { f -> f.split('=', limit = 2).takeIf { it.size == 2 }?.let { it[0] to it[1] } }.toMap()
+        frontIsIde = fields["frontPid"] == pid.toString() && fields["topWindowPid"] == pid.toString()
+        if (frontIsIde) break
+        Thread.sleep(1000)
+      }
+      r.append("activate=").append(state).append(" frontIsIde=").append(frontIsIde)
+      if (harness != null && !harness.editorHasFocus()) r.append(" focusEditor=").append(harness.focusEditor())
+      Thread.sleep(500)
+    } else if (Env.mode == "gnome") {
       r.append("shell=").append(shellState())
       if (harness != null && !harness.editorHasFocus()) r.append(" focusEditor=").append(harness.focusEditor())
       Thread.sleep(500)
