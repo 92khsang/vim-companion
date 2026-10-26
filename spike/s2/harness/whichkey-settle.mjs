@@ -141,10 +141,16 @@ export class QuickInputWatcher {
           polls,
           hidden: r.hidden,
           visibleAtFirstPoll: !first.hidden,
-          // Both versions close the widget with a 150 ms animation (class
-          // quick-input-widget-closing, pointer-events none) and set display none at its end,
-          // while the focus goes back to the editor when the animation starts; the first poll
-          // records both, so that the wait can be read against the focus.
+          // Both workbench bundles carry a 150 ms closing animation (class
+          // quick-input-widget-closing, pointer-events none) that ends in display none. In the
+          // recorded runs 1.141.0 showed the class at the first poll in 20 of 20 waits, while
+          // 1.134.0 was already hidden at the first poll in 20 of 20. The first poll records the
+          // class and the focus, so that the wait can be read against both. The focus is no
+          // settle condition: VS Code's quick input hide() refocuses the opener before which-key
+          // runs the leaf command, so a wait that ends when the focus leaves the widget would
+          // reintroduce the race; the hidden-widget wait works on 1.141.0 because the animation
+          // outlasts the command, and a wait for the leaf command's observable effect (for `w h`,
+          // the active editor group) would not depend on that.
           closingAtFirstPoll: first.closing,
           focusInQuickAtFirstPoll: first.inQuick,
           active: r.active,

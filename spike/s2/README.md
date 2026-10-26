@@ -39,11 +39,17 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   (a remap whose only command is `whichkey.show`) opens a path, a submenu key descends, a leaf key
   ends the path, and any other key (a mismatch, `<Esc>`, a chord) ends it without a wait. After a
   leaf the harness types the burst so far, then polls the renderer over one CDP connection until
-  `.quick-input-widget` is hidden (`display: none`; both versions first run a 150 ms closing
-  animation, class `quick-input-widget-closing`, during which the focus is already back in the
-  editor), capped at 1000 ms, and types the rest. Every other key keeps the 30 ms delay; xdotool
-  sleeps the delay after the last key of a burst too. The run record carries `settle` with one entry
-  per wait (item, key, path, wait, polls, what the first poll saw) and the counts.
+  `.quick-input-widget` is hidden (`display: none`), capped at 1000 ms, and types the rest. Both
+  workbench bundles carry the 150 ms closing animation (class `quick-input-widget-closing`); in the
+  recorded runs 1.141.0 showed that class at the first poll in 20 of 20 waits, while 1.134.0 was
+  already hidden at the first poll in 20 of 20. Design note: VS Code's quick input `hide()`
+  refocuses the element that opened the pick before which-key runs the leaf command, so a wait that
+  ends when the focus leaves the widget would reintroduce the race; the hidden-widget wait works on
+  1.141.0 because the animation outlasts the command, and a rule that waits for the leaf command's
+  observable effect (for `w h`, the active editor group) would not depend on that. Every other key
+  keeps the 30 ms delay; xdotool sleeps the delay after the last key of a burst too. The run record
+  carries `settle` with one entry per wait (item, key, path, wait, polls, what the first poll saw)
+  and the counts.
 
 ## Cards reference and register convention
 

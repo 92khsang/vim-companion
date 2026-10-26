@@ -125,11 +125,29 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
 - `../cards/cards.json`: rebuilt from cards3 with
   `S2_CARDS_PREFIX=cards3 S2_CARDS_DIR=<reference dir> node spike/s2/harness/cards-build.mjs 1.141.0 <out>`
   (59 cards, 3,663 rows, 251 with a `when` condition, 0 unexplained): the same rows as the build
-  from cards2 with 30 more conditions, `vim.sneak` on the 14 `z` rows (`g r` `z` now needs
-  `vim.replaceWithRegister` and `vim.sneak`) and `vim.surround` on the 16 `<plugds>`/`<plugcs>`
-  rows, so 3,442 rows are in force under defaults and 3,633 under extensions.
+  from cards2 with 30 `when` changes: 29 rows newly gain a condition (`vim.sneak` on 13 `z` rows
+  and `vim.surround` on the 16 `<plugds>`/`<plugcs>` rows, so 222 conditional rows become 251),
+  and the existing condition of `g r` then `z` (`vim.replaceWithRegister`) gains `vim.sneak` as a
+  second key; 3,442 rows are in force under defaults and 3,633 under extensions.
   `../cards/cards-v1.json` is the build from cards2, kept for the record.
 - `cards-complete/complete-<set>-<version>-v2.json`: check (2) again on 2026-10-26 with the rebuilt
   cards against the cards3 reference of the same version and set (`S2_NAME_PREFIX=f1-`, `:123`,
   9523, one VS Code at a time): 59 of 59 cards rendered, 0 missing and 0 extra keys, on both
   versions and both sets (3,442 rows compared under defaults, 3,633 under extensions).
+- `cards-pilot-v2/pilot-<set>-<version>.jsonl`: check (1)'s pilot again on 2026-10-26 (10:55-11:02Z)
+  with the corrected expectations of `pilot.json` and the (mode, lines) register convention,
+  `S2_NAME_PREFIX=f1- node spike/s2/harness/cards-correctness.mjs <version> :123 9523 <defaults|extensions> spike/s2/cards/pilot.json 3 <out>`
+  (3 trials at 30 ms, CDP port 9523, one VS Code at a time), both sets on both versions: 33 rows
+  under defaults (99 trials, 96 ok, 32 rows pass every trial) and 34 under extensions (102 trials,
+  99 ok, 33 rows pass), the same on 1.134.0 and 1.141.0. The single failing row is `dis`, in the
+  registers only: `"` and `1` are charwise with a trailing empty line in VSCodeVim 1.32.4 and
+  linewise in Vim 9.1 (`SelectInnerSentence` sets no register mode, `src/textobject/textobject.ts`
+  L436, while `SelectInnerParagraph` sets `LineWise`, L523); text, cursor, mode and the shifted
+  registers 2-9 pass.
+- `vim-expect-pilot/compare-<set>-<version>-v2.txt`: `node spike/s2/vim-check/compare-pilot.mjs <expect> spike/s2/data/cards-pilot-v2/pilot-<set>-<version>.jsonl <out>`
+  with the compare script reading the (mode, lines) records (regenerated after that change): 26 of
+  27 Vim rows agree in text, cursor, mode and registers as (mode, lines); `dis` deviates in `"` and
+  `1` (Vim line with the four lines, VSCodeVim character with the four lines and a trailing empty
+  line); the shifted registers 2-9 follow the shift rule in `dip` (21 compared) and `dis` (24
+  compared over 3 trials); Vim's `.` after `rX` is noted and not compared. Identical on both
+  versions.
