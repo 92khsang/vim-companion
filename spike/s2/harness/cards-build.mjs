@@ -3,7 +3,8 @@
 // smallest conjunction of setting values (none, one or two) that predicts the row's presence in
 // every measured settings set: VSCodeVim's defaults, each setting changed alone, replaceWithRegister
 // paired with each other setting, and all five changed. Labels stay empty until written by hand.
-// Usage: S2_CARDS_PREFIX=cards2 node spike/s2/harness/cards-build.mjs <version> <out cards.json>
+// Usage: S2_CARDS_PREFIX=cards2 [S2_CARDS_DIR=<dir>] node spike/s2/harness/cards-build.mjs <version> <out cards.json>
+// (the reference files are read from S2_CARDS_DIR, default $S2_ROOT/runs)
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { rowsOf } from "./cards-count.mjs";
@@ -11,6 +12,7 @@ import { SETTINGS_SETS } from "./cards-extract.mjs";
 
 const [version, outFile] = process.argv.slice(2);
 const prefix = process.env.S2_CARDS_PREFIX ?? "cards";
+const dir = process.env.S2_CARDS_DIR ?? join(process.env.S2_ROOT, "runs");
 const DEFAULTS = {
   "vim.surround": true,
   "vim.targets.enable": false,
@@ -22,10 +24,7 @@ const sets = Object.keys(SETTINGS_SETS).map((set) => ({
   set,
   config: { ...DEFAULTS, ...SETTINGS_SETS[set] },
   data: JSON.parse(
-    readFileSync(
-      join(process.env.S2_ROOT, "runs", `${prefix}-${set}-${version}.json`),
-      "utf8",
-    ),
+    readFileSync(join(dir, `${prefix}-${set}-${version}.json`), "utf8"),
   ),
 }));
 const names = Object.keys(DEFAULTS);

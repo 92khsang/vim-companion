@@ -47,6 +47,13 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
 
 ## Cards reference and register convention
 
+- A key is in the reference of a state when VSCodeVim's own `doesActionApply` accepts the keys so
+  far plus that key, or when the key is a proper prefix of a longer sequence that still applies:
+  `couldActionApply` on the prefix and `doesActionApply` on the sequence completed with sample
+  keys (`a`, `:`, `"`, `x` for `<character>`/`<any>`, the leader for `<leader>`), because
+  `couldActionApply` compares keys only and does not consult a setting that is off (for example
+  `vim.targets.enable`). The keys that only `couldActionApply` accepted are recorded as
+  `prefixOnlyRows` and are not rows.
 - Registers are compared and recorded as (mode, lines): VSCodeVim's `RegisterMode` (`character`,
   `line`, `block`) and the register text split at `\n`, which is what Vim's `getregtype()` and
   `getreg(name, 1, 1)` give. A linewise register holding `line` is `{ "mode": "line", "lines":

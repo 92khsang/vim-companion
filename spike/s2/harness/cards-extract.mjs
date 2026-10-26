@@ -1,7 +1,11 @@
 // Completeness reference for candidate (b): for each distinct state of the grammar fixture, the keys
 // that may follow in VSCodeVim 1.32.4 under one settings set:
-//   - action rows: keys after which an action of VSCodeVim's action table applies or could still
-//     apply (VSCodeVim's own doesActionApply/couldActionApply on its real state, test-only reader);
+//   - action rows: keys after which an action of VSCodeVim's action table applies (VSCodeVim's own
+//     doesActionApply on its real state, test-only reader), or which are a proper prefix of a
+//     longer key sequence that still applies (couldActionApply on the prefix, and doesActionApply
+//     on the sequence completed with sample keys: couldActionApply alone does not consult a
+//     setting that is off, such as vim.targets.enable); the keys that only couldActionApply
+//     accepted are kept apart as `prefixOnlyRows`;
 //   - remap rows: keys that continue a remap (the generated remaps and VSCodeVim's default plugin
 //     mappings that the settings turn on).
 // Usage: node spike/s2/harness/cards-extract.mjs <version> <display> <cdpPort> <defaults|extensions> <out.json>
@@ -100,7 +104,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     code = await openSession({
       version,
       display,
-      name: `cards-${set}-${version}-${display.slice(1)}`,
+      name: `${process.env.S2_NAME_PREFIX ?? ""}cards-${set}-${version}-${display.slice(1)}`,
       cdpPort: Number(cdpPort),
       settings,
     });
@@ -154,6 +158,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         actionKeys: nk.prefix,
         brokeOnTimeout,
         actionRows: brokeOnTimeout ? {} : nk.rows,
+        prefixOnlyRows: brokeOnTimeout ? {} : nk.prefixOnly,
       });
     }
   } catch (e) {

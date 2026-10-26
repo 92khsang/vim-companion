@@ -30,7 +30,7 @@ try {
   code = await openSession({
     version,
     display,
-    name: `complete-${set}-${version}-${display.slice(1)}`,
+    name: `${process.env.S2_NAME_PREFIX ?? ""}complete-${set}-${version}-${display.slice(1)}`,
     cdpPort: Number(cdpPort),
     settings,
     spikeExtensions: ["s2-probe", "s2-cards"],

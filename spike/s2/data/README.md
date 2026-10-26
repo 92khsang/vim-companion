@@ -100,3 +100,36 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   after the second `dd`, `1` holds `epsilon zeta eta theta` and `2` the if-line, both linewise, `2`
   stored as `object:0` and read as one entry; after `yy`, `0` and `"` hold `iota kappa lambda mu`
   linewise. The probe of 2026-10-16 rendered such a shifted register as `<recorded keys>`.
+- `cards-reference/cards3-*`: the extraction command again on 2026-10-26 (`S2_NAME_PREFIX=f1-`,
+  `:123`, CDP port 9523, one VS Code at a time) with the reference rule changed: a key is a row
+  when VSCodeVim's `doesActionApply` accepts the keys so far plus that key, or when it is a proper
+  prefix of a longer sequence that still applies (`couldActionApply` on the prefix and
+  `doesActionApply` on the sequence completed with sample keys), because `couldActionApply`
+  compares keys only and does not consult a setting that is off; the keys that only
+  `couldActionApply` accepted are recorded as `prefixOnlyRows`. The 11 sets on 1.141.0, and
+  defaults and extensions on 1.134.0, which are identical to 1.141.0 in cards, rows and
+  `prefixOnlyRows`. Rows per set, cards2 to cards3 (1.141.0): defaults 3,455 to 3,442, extensions
+  3,649 to 3,633, surround-off 3,441 to 3,412, targets 3,455 to 3,442, camelcase 3,472 to 3,459,
+  sneak 3,468 to 3,468, replace-with-register 3,629 to 3,615, rwr-surround-off 3,616 to 3,586,
+  rwr-targets 3,629 to 3,615, rwr-camelcase 3,647 to 3,633, rwr-sneak 3,644 to 3,644; no row
+  added. Every removed row is one of two kinds: `z` after an operator with sneak off (13 rows per
+  set, 14 with replaceWithRegister, which adds `g r`: Normal `3d d d3 2d 2d3 c y > < g~ gu gU "a3d`;
+  the only completions are the `zh zl zH zL` motions, which refuse an operator because the Sneak
+  plugin uses `<operator>z`, `src/actions/motion.ts` L1209-1268), and `<plugds>`/`<plugcs>` with
+  surround off (16 rows: the 8 Normal cards with nothing, a count or a register pending;
+  `CommandSurround.doesActionApply` needs `vim.surround`, `src/actions/plugins/surround.ts`
+  L194-201). The `n`/`l` rows after `di da ci yi` and Visual `i a` stay in every set: the bracket
+  next/last objects need `vim.targets.enable` (`lastNextObjectHelper.ts` L28-30), but the
+  smart-quote ones (`in'`, `in"`, ``in` ``, `inq` and the `l` forms, `smartQuotes.ts`) have no
+  setting check, so the prefix completes under defaults too.
+- `../cards/cards.json`: rebuilt from cards3 with
+  `S2_CARDS_PREFIX=cards3 S2_CARDS_DIR=<reference dir> node spike/s2/harness/cards-build.mjs 1.141.0 <out>`
+  (59 cards, 3,663 rows, 251 with a `when` condition, 0 unexplained): the same rows as the build
+  from cards2 with 30 more conditions, `vim.sneak` on the 14 `z` rows (`g r` `z` now needs
+  `vim.replaceWithRegister` and `vim.sneak`) and `vim.surround` on the 16 `<plugds>`/`<plugcs>`
+  rows, so 3,442 rows are in force under defaults and 3,633 under extensions.
+  `../cards/cards-v1.json` is the build from cards2, kept for the record.
+- `cards-complete/complete-<set>-<version>-v2.json`: check (2) again on 2026-10-26 with the rebuilt
+  cards against the cards3 reference of the same version and set (`S2_NAME_PREFIX=f1-`, `:123`,
+  9523, one VS Code at a time): 59 of 59 cards rendered, 0 missing and 0 extra keys, on both
+  versions and both sets (3,442 rows compared under defaults, 3,633 under extensions).

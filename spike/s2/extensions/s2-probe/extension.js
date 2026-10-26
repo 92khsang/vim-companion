@@ -106,6 +106,29 @@ function registerContents(contents) {
   }));
 }
 
+// Sample keys for the placeholders of an action's key sequence, to complete a proper prefix into
+// a full sequence that doesActionApply can judge: a pair that is a default digraph (a:) and a
+// quote and a bracket for the surround targets.
+const PLACEHOLDER_SAMPLES = {
+  "<character>": ["a", ":", '"', "x"],
+  "<any>": ["a", ":", '"', "x"],
+  "<number>": ["1"],
+  "<alpha>": ["a"],
+  "<register>": ["a"],
+  "<macro>": ["a"],
+};
+/** Every completion of the key sequence tail with sample keys in place of its placeholders. */
+function completionsOf(tail, leader) {
+  let out = [[]];
+  for (const key of tail) {
+    const samples =
+      key === "<leader>" ? [leader] : (PLACEHOLDER_SAMPLES[key] ?? [key]);
+    out = out.flatMap((c) => samples.map((s) => [...c, s]));
+    if (out.length > 256) out = out.slice(0, 256);
+  }
+  return out;
+}
+
 function adapterReport() {
   const ext = vscode.extensions.getExtension(ADAPTER_ID);
   if (
@@ -208,8 +231,11 @@ const methods = {
     return { actions, modes: [...table.keys()], tokens: [...tokens].sort() };
   },
   // Test-only: for the active editor's real VSCodeVim state, the keys of the universe after which
-  // an action of the action table applies or could still apply (VSCodeVim's own doesActionApply
-  // and couldActionApply), with the action's keys and type.
+  // an action of the action table applies (VSCodeVim's own doesActionApply) or is a proper prefix
+  // of a longer key sequence that still applies (couldActionApply on the prefix, and
+  // doesActionApply on the sequence completed with sample keys), with the action's keys and type.
+  // `prefixOnly` holds the keys that only couldActionApply accepted: a proper prefix of a sequence
+  // whose completion does not apply under the settings in force.
   nextKeys: async ({ universe }) => {
     const map = await reader.modeHandlerMap();
     const e = vscode.window.activeTextEditor;
@@ -219,7 +245,10 @@ const methods = {
     const vs = h.vimState;
     const mode = vs.modeData.mode;
     const prefix = [...vs.recordedState.actionKeys];
+    const leader =
+      vscode.workspace.getConfiguration("vim").get("leader") ?? "\\";
     const rows = {};
+    const prefixOnly = {};
     for (const C of table.get(mode) ?? []) {
       let a;
       try {
@@ -231,6 +260,7 @@ const methods = {
         const keys = [...prefix, k];
         let does = false;
         let could = false;
+        let completed = null;
         try {
           does = a.doesActionApply(vs, keys);
         } catch {}
@@ -241,21 +271,45 @@ const methods = {
           let Base = a.constructor;
           while (Base && typeof Base.CompareKeypressSequence !== "function")
             Base = Object.getPrototypeOf(Base);
-          const longer = seqs
-            .filter((q) => q.length > keys.length)
-            .map((q) => q.slice(0, keys.length));
+          const longer = seqs.filter((q) => q.length > keys.length);
           could =
             longer.length > 0 &&
-            Base.CompareKeypressSequence(longer, keys) &&
+            Base.CompareKeypressSequence(
+              longer.map((q) => q.slice(0, keys.length)),
+              keys,
+            ) &&
             a.couldActionApply(vs, keys);
+          // couldActionApply compares the keys typed so far only; a setting that is off, or a
+          // condition on the keys still to come, shows only in doesActionApply of the completed
+          // sequence. The prefix stays only if some completion applies.
+          if (could) {
+            for (const q of longer) {
+              if (!Base.CompareKeypressSequence(q.slice(0, keys.length), keys))
+                continue;
+              for (const tail of completionsOf(q.slice(keys.length), leader)) {
+                let ok = false;
+                try {
+                  ok = a.doesActionApply(vs, [...keys, ...tail]);
+                } catch {}
+                if (ok) {
+                  completed = [...keys, ...tail];
+                  break;
+                }
+              }
+              if (completed) break;
+            }
+          }
         } catch {}
-        if (does || could)
+        if (does || completed)
           (rows[k] ??= []).push({
             keys: a.keys,
             type: a.actionType,
             does,
-            could,
+            could: Boolean(completed),
+            ...(completed && !does ? { completed } : {}),
           });
+        else if (could)
+          (prefixOnly[k] ??= []).push({ keys: a.keys, type: a.actionType });
       }
     }
     return {
@@ -264,6 +318,7 @@ const methods = {
       bufferedKeys: [...vs.recordedState.bufferedKeys],
       state: toState(fieldsOf(h)),
       rows,
+      prefixOnly,
     };
   },
   // Test-only: VSCodeVim's real state for the active editor, read through the inspector.
