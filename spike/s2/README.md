@@ -80,8 +80,13 @@ apart, and records `expect` in the format of `cards-correctness.mjs`: text, 0-ba
 fixture mode name (null for the command line, Select mode and prompts, which the fixture does not
 name), and registers as (mode, lines) for every register that differs from the fresh Vim's empty
 ones, with `shiftNumbered` when `"1` was written (the shifted 2-9 are not listed). The vimrc mirrors
-the sandbox and VSCodeVim's defaults where Vim's differ: no auto indent, `expandtab shiftwidth=4`,
-`ignorecase smartcase textwidth=80`, `timeoutlen=1000`.
+the sandbox and VSCodeVim's defaults where Vim's differ: `autoindent` (VSCodeVim's `vim.autoindent`
+defaults to true and the sandbox does not override it; its `ChangeOperator` keeps the first line's
+indent on a linewise change, `src/actions/operator.ts` L679-694) with no smart, C or expression
+indenting (`editor.autoIndent` is `none` in the sandbox), `expandtab shiftwidth=4`,
+`ignorecase smartcase textwidth=80`, `nrformats=octal,hex` (VSCodeVim 1.32.4 parses a leading-zero
+number as octal and has no binary numbers, `src/common/number/numericString.ts` L14-34) and
+`timeoutlen=1000`.
 
 A row is `not-vim`, reported and not generated, when its key completes a generated remap
 (`spec/generated/vscode/vim-remaps.json`; a key that only starts one, such as `g` or `[`, waits in
@@ -93,6 +98,11 @@ command of Vim's `index.txt` for the state (for example `ia ie ii` after an oper
 - Generate: `node spike/s2/vim-check/expect.mjs "$(mktemp -d /tmp/s2v.XXXXXX)" <defaults|extensions> <cards.json> <out.jsonl> [card ids]`
 - Classify every row without Vim: `node spike/s2/vim-check/expect.mjs --count <cards.json>`
 - Compare with a pilot record: `node spike/s2/vim-check/compare-pilot.mjs <expect.jsonl> <pilot.jsonl> <out.txt>`
+  (a record of 2026-10-16 holds register text without a mode and its shifted 2-9 are skipped; a
+  record of 2026-10-26 or later holds (mode, lines), compared with Vim's, and its 2-9 are checked
+  against the shift rule). Vim's `.` after `r{char}` is noted and not compared: VSCodeVim defines
+  a read-only `.` register (`src/register/register.ts` L37 and L103) that `r{char}` does not write,
+  while Vim writes `".`.
 
 Limits: Vim answers only what the buffer, cursor, mode and registers show, so window, tab, scroll,
 fold and jump-list effects and IDE commands do not appear; `+` and `*` are unavailable in this Vim
@@ -100,4 +110,12 @@ fold and jump-list effects and IDE commands do not appear; `+` and `*` are unava
 VSCodeVim implements differently (`gd`, `K`, `<C-]>`, undo, `%`, word motions over punctuation, …)
 gets Vim's answer, which the comparison then reports as a deviation to review by hand; a Visual-mode
 cursor is Vim's inclusive position, not VS Code's exclusive selection end; the sample key of a
-placeholder row is a hand choice.
+placeholder row is a hand choice. In numbers (a hand count over `cards.json`): about 197
+nothing-pending Vim rows per set (the `<C-w>` card's 29, the `z` card's 19, and
+`<C-o> <C-i> <C-g> <C-^> <C-]> <C-t> <C-b> <C-d> <C-e> <C-f> <C-u> <C-y>`) read `unchanged` or
+depend on the window geometry (tmux 100x12 against the editor height), the 82 command-line rows
+have no fixture mode name, and the `"+` card (142 rows) needs a Vim with clipboard support; these
+need hand-written expectations or a rule before the oracle's output is used. Unverified: VS Code's
+`editor.detectIndentation` is not pinned in the sandbox settings, and the fixture's second line is
+indented by two spaces, so the shift width of the `>>`, `<<` and `=` rows must be checked before
+those rows are generated.

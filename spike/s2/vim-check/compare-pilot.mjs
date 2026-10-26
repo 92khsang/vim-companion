@@ -1,12 +1,16 @@
 // Compares the expectations Vim generated (expect.mjs) with the outcomes VSCodeVim gave in the
-// pilot of check (1) (spike/s2/data/cards-pilot/*.jsonl, cards-correctness.mjs records).
-// Per row: agree, deviation (Vim and VSCodeVim side by side) or not comparable (why).
+// pilot of check (1) (cards-correctness.mjs records: spike/s2/data/cards-pilot/*.jsonl and
+// cards-pilot-v2/*.jsonl). Per row: agree, deviation (Vim and VSCodeVim side by side) or not
+// comparable (why).
 // Text, cursor and mode of the pilot records are reliable. Registers are not entirely: a record
 // lists only the registers that changed in the trial (or were expected), so the value after a
 // trial is replayed from the records in order (VSCodeVim's registers start empty in the fresh
-// sandbox and the reset between trials does not clear them); the shifted numbered registers 2-9
-// were mis-read by the probe of 2026-10-16 ("<recorded keys>"), so they are never compared; the
-// records hold register text without a mode, so the register mode is reported from Vim only.
+// sandbox and the reset between trials does not clear them). A record of 2026-10-16 (v1) holds a
+// register as its text without a mode, and the probe of that day mis-read the shifted numbered
+// registers 2-9 ("<recorded keys>"), so for v1 only the text is compared and 2-9 are skipped. A
+// record of 2026-10-26 or later (v2) holds { mode, lines } (a recorded macro: { mode, keys }),
+// which is compared with Vim's (mode, lines), and its registers 2-9 are checked against the shift
+// rule (register n after the key equals register n-1 before it when Vim wrote "1, else unchanged).
 // Usage: node spike/s2/vim-check/compare-pilot.mjs <expect.jsonl> <pilot.jsonl> <out.txt>
 import { readFileSync, writeFileSync } from "node:fs";
 import { START } from "../harness/lib.mjs";
@@ -19,15 +23,44 @@ const rows = (file) =>
     .map((l) => JSON.parse(l));
 const rowKey = (r) => `${r.card}\0${r.key}`;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const SHIFTED = ["2", "3", "4", "5", "6", "7", "8", "9"];
 
-// VSCodeVim trials, with the replayed register table after each trial.
+// A register of a pilot record: v1 text, v2 { mode, lines } or { mode, keys }; else unreadable.
+const regOf = (v) => {
+  if (v === undefined || v === null) return undefined;
+  if (typeof v === "string") return { text: v };
+  if (Array.isArray(v?.lines)) return { mode: v.mode, lines: v.lines };
+  if (typeof v?.keys === "string") return { mode: v.mode, keys: v.keys };
+  return { unreadable: v };
+};
+const show = (r) =>
+  r === undefined
+    ? "unset"
+    : r.text !== undefined
+      ? JSON.stringify(r.text)
+      : r.lines
+        ? `${r.mode} ${JSON.stringify(r.lines)}`
+        : r.keys !== undefined
+          ? `${r.mode} macro keys ${JSON.stringify(r.keys)}`
+          : `unreadable ${JSON.stringify(r.unreadable)}`;
+const vimShow = (reg) => `${reg.mode} ${JSON.stringify(reg.lines)}`;
+
+// VSCodeVim trials, with the replayed register table before and after each trial.
 const trials = new Map();
 const vsRegs = {};
 let pilotMeta = null;
+const forms = new Set();
 for (const r of rows(pilotFile)) {
   if (r.type === "meta") pilotMeta = r;
   if (r.type !== "trial") continue;
-  for (const [k, v] of Object.entries(r.got.registers)) vsRegs[k] = v;
+  const before = { ...vsRegs };
+  for (const [k, v] of Object.entries(r.got.registers)) {
+    if (v === null) delete vsRegs[k];
+    else {
+      vsRegs[k] = v;
+      forms.add(typeof v === "string" ? "v1" : "v2");
+    }
+  }
   const list = trials.get(rowKey(r)) ?? [];
   list.push({
     trial: r.trial,
@@ -35,10 +68,13 @@ for (const r of rows(pilotFile)) {
     cursor: r.got.cursor,
     mode: r.got.mode,
     changed: Object.keys(r.got.registers),
+    before,
     after: { ...vsRegs },
   });
   trials.set(rowKey(r), list);
 }
+const form =
+  forms.size === 1 ? [...forms][0] : forms.size === 0 ? "none" : "mixed";
 
 const expectRows = rows(expectFile);
 const meta = expectRows.find((r) => r.type === "meta");
@@ -49,8 +85,6 @@ const linesOf = (text) => {
   for (const [i, l] of Object.entries(text)) lines[Number(i)] = l;
   return lines;
 };
-const vimText = (reg) => reg.lines.join("\n");
-const unreadable = (v) => typeof v !== "string";
 
 const out = [];
 const summary = {
@@ -66,6 +100,9 @@ say(
   `# Vim (${meta.vim}) vs VSCodeVim (${pilotMeta.version}, set ${pilotMeta.set}, ${pilotMeta.trials} trials per row)`,
 );
 say(`# expectations: ${expectFile}; pilot: ${pilotFile}`);
+say(
+  `# pilot registers: ${form === "v1" ? "v1 (text without a mode; the shifted 2-9 are not compared)" : form === "v2" ? "v2 (mode, lines; the shifted 2-9 are compared with the shift rule)" : form}`,
+);
 say("");
 for (const r of expectRows.filter((r) => r.type === "row")) {
   summary.rows += 1;
@@ -135,7 +172,7 @@ for (const r of expectRows.filter((r) => r.type === "row")) {
       ts.map((t) => t.mode),
       (v) => v === e.mode,
     );
-  // Registers: every register Vim wrote or VSCodeVim changed, except the shifted 2-9.
+  // Registers: every register Vim wrote or VSCodeVim changed, except the shifted 2-9 (below).
   const names = [
     ...new Set([...Object.keys(e.registers), ...ts.flatMap((t) => t.changed)]),
   ]
@@ -144,53 +181,116 @@ for (const r of expectRows.filter((r) => r.type === "row")) {
   const notes = [];
   for (const name of names) {
     const vim = e.registers[name];
-    const vsValues = ts.map((t) => t.after[name]);
+    const vsValues = ts.map((t) => regOf(t.after[name]));
+    const vs = [...new Set(vsValues.map(show))].join(" / ");
+    const reg = JSON.stringify(name);
     if (!vim) {
       if (vsValues.every((v) => v === undefined)) continue;
       deviates = true;
-      parts.push(
-        `register ${JSON.stringify(name)} DIFF Vim unchanged vs VSCodeVim ${JSON.stringify(vsValues[0])}`,
-      );
+      parts.push(`register ${reg} DIFF Vim unchanged vs VSCodeVim ${vs}`);
       continue;
     }
-    const text = vimText(vim);
     if (
       vsValues.every((v) => v === undefined) &&
       [".", ":", "/"].includes(name)
     ) {
       notes.push(
-        `register ${JSON.stringify(name)} Vim ${vim.mode} ${JSON.stringify(text)}; VSCodeVim keeps no such register (not compared)`,
+        `register ${reg} Vim ${vimShow(vim)}; not in the pilot record (a read-only register that VSCodeVim writes itself; not compared)`,
       );
       continue;
     }
-    if (vsValues.some(unreadable)) {
+    if (vsValues.some((v) => v?.unreadable !== undefined)) {
+      notes.push(`register ${reg} unreadable in the pilot record: ${vs}`);
+      continue;
+    }
+    if (vsValues.some((v) => v?.keys !== undefined)) {
       notes.push(
-        `register ${JSON.stringify(name)} unreadable in the pilot record (probe bug)`,
+        `register ${reg} is a recorded macro in the pilot record (${vs}); Vim ${vimShow(vim)} (not compared)`,
       );
       continue;
     }
-    if (vsValues.every((v) => v === text))
-      parts.push(
-        `register ${JSON.stringify(name)} text agree (Vim mode ${vim.mode}; the pilot record has no register mode)`,
-      );
-    else if (vsValues.every((v) => v === text + "\n")) {
+    if (vsValues.every((v) => v?.lines)) {
+      // v2: (mode, lines) on both sides.
+      const modeAgree = vsValues.every((v) => v.mode === vim.mode);
+      const linesAgree = vsValues.every((v) => same(v.lines, vim.lines));
+      if (modeAgree && linesAgree) {
+        parts.push(`register ${reg} agree (${vim.mode})`);
+        continue;
+      }
       deviates = true;
+      const what =
+        !modeAgree && !linesAgree
+          ? "mode and lines"
+          : !modeAgree
+            ? "mode"
+            : "lines";
       parts.push(
-        `register ${JSON.stringify(name)} DIFF trailing newline: Vim ${vim.mode} ${JSON.stringify(text)} vs VSCodeVim ${JSON.stringify(vsValues[0])}`,
+        `register ${reg} DIFF ${what}: Vim ${vimShow(vim)} vs VSCodeVim ${vs}`,
       );
-    } else {
-      deviates = true;
-      parts.push(
-        `register ${JSON.stringify(name)} DIFF Vim ${vim.mode} ${JSON.stringify(text)} vs VSCodeVim ${[...new Set(vsValues.map((v) => JSON.stringify(v)))].join(" / ")}`,
-      );
+      continue;
     }
+    if (vsValues.every((v) => v?.text !== undefined)) {
+      // v1: text without a mode.
+      const text = vim.lines.join("\n");
+      if (vsValues.every((v) => v.text === text))
+        parts.push(
+          `register ${reg} text agree (Vim mode ${vim.mode}; the pilot record has no register mode)`,
+        );
+      else if (vsValues.every((v) => v.text === text + "\n")) {
+        deviates = true;
+        parts.push(
+          `register ${reg} DIFF trailing newline: Vim ${vim.mode} ${JSON.stringify(text)} vs VSCodeVim ${vs}`,
+        );
+      } else {
+        deviates = true;
+        parts.push(
+          `register ${reg} DIFF Vim ${vim.mode} ${JSON.stringify(text)} vs VSCodeVim ${vs}`,
+        );
+      }
+      continue;
+    }
+    // Unset in some trial, or mixed record forms.
+    deviates = true;
+    parts.push(`register ${reg} DIFF Vim ${vimShow(vim)} vs VSCodeVim ${vs}`);
   }
+  // The shifted numbered registers 2-9.
   const vsShifted = ts.some((t) => t.changed.some((n) => /^[2-9]$/.test(n)));
   if (e.shiftNumbered || vsShifted) {
-    notes.push(
-      `numbered registers: Vim ${e.shiftNumbered ? 'wrote "1 (shift)' : "did not shift"}; VSCodeVim ${vsShifted ? "shifted (2-9 changed; their values are not compared: probe bug)" : "did not shift"}`,
+    const v1 = ts.some((t) =>
+      Object.values(t.after).some((v) => typeof v === "string"),
     );
-    if (Boolean(e.shiftNumbered) !== vsShifted) deviates = true;
+    if (v1) {
+      notes.push(
+        `numbered registers: Vim ${e.shiftNumbered ? 'wrote "1 (shift)' : "did not shift"}; VSCodeVim ${vsShifted ? "shifted (2-9 changed; their values are not compared: v1 record, probe bug)" : "did not shift"}`,
+      );
+      if (Boolean(e.shiftNumbered) !== vsShifted) deviates = true;
+    } else {
+      let compared = 0;
+      const bad = [];
+      for (const t of ts)
+        for (const n of SHIFTED) {
+          const got = regOf(t.after[n]);
+          const want = e.shiftNumbered
+            ? regOf(t.before[String(Number(n) - 1)])
+            : regOf(t.before[n]);
+          if (got === undefined && want === undefined) continue;
+          compared += 1;
+          if (!same(got, want))
+            bad.push(
+              `trial ${t.trial} register ${JSON.stringify(n)} ${show(got)}, expected ${show(want)}`,
+            );
+        }
+      const vimDid = e.shiftNumbered ? 'wrote "1 and shifted' : "did not shift";
+      if (bad.length) {
+        deviates = true;
+        parts.push(
+          `shifted registers 2-9 DIFF (Vim ${vimDid}): ${bad.join("; ")}`,
+        );
+      } else
+        parts.push(
+          `shifted registers 2-9 agree (Vim ${vimDid}; ${compared} compared over ${ts.length} trials)`,
+        );
+    }
   }
   if (notes.length) summary.registerNotes += 1;
   const verdict = deviates ? "deviation" : "agree";

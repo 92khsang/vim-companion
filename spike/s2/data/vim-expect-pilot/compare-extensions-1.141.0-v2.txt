@@ -1,39 +1,40 @@
 # Vim (VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Aug 24 2026 22:11:12) / Included patches: 1-948, 950-2141) vs VSCodeVim (1.141.0, set extensions, 3 trials per row)
 # expectations: spike/s2/data/vim-expect-pilot/expect-extensions.jsonl; pilot: spike/s2/data/cards-pilot-v2/pilot-extensions-1.141.0.jsonl
+# pilot registers: v2 (mode, lines; the shifted 2-9 are compared with the shift rule)
 
 agree           normal ["m"] "{<character>}" typed ["m","a"]: text agree | cursor agree | mode agree
 agree           normal ["f"] "{<character>}" typed ["f","e"]: text agree | cursor agree | mode agree
 agree           normal ["F"] "{<character>}" typed ["F","o"]: text agree | cursor agree | mode agree
 agree           normal ["t"] "{<character>}" typed ["t","e"]: text agree | cursor agree | mode agree
 agree           normal ["T"] "{<character>}" typed ["T","o"]: text agree | cursor agree | mode agree
-agree           normal ["r"] "{<character>}" typed ["r","X"]: text agree | cursor agree | mode agree || register "." Vim character "X"; VSCodeVim keeps no such register (not compared)
+agree           normal ["r"] "{<character>}" typed ["r","X"]: text agree | cursor agree | mode agree || register "." Vim character ["X"]; not in the pilot record (a read-only register that VSCodeVim writes itself; not compared)
 agree           normal ["'"] "{<character>}" typed ["m","a","0","'","a"]: text agree | cursor agree | mode agree
 agree           normal ["`"] "{<character>}" typed ["m","a","0","`","a"]: text agree | cursor agree | mode agree
 agree           normal ["\""] "{<register>}" typed ["\"","a"]: text agree | cursor agree | mode agree
-agree           normal ["d","i"] "\"" typed ["d","i","\""]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
+agree           normal ["d","i"] "\"" typed ["d","i","\""]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
 agree           normal ["d","i"] "'" typed ["d","i","'"]: text agree | cursor agree | mode agree
-agree           normal ["d","i"] "(" typed ["d","i","("]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] ")" typed ["d","i",")"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
+agree           normal ["d","i"] "(" typed ["d","i","("]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] ")" typed ["d","i",")"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
 agree           normal ["d","i"] "<" typed ["d","i","<"]: text agree | cursor agree | mode agree
 agree           normal ["d","i"] ">" typed ["d","i",">"]: text agree | cursor agree | mode agree
-agree           normal ["d","i"] "B" typed ["d","i","B"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] "W" typed ["d","i","W"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] "[" typed ["d","i","["]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] "]" typed ["d","i","]"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
+agree           normal ["d","i"] "B" typed ["d","i","B"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] "W" typed ["d","i","W"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] "[" typed ["d","i","["]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] "]" typed ["d","i","]"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
 agree           normal ["d","i"] "`" typed ["d","i","`"]: text agree | cursor agree | mode agree
 not-comparable  normal ["d","i"] "a": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text ["alpha beta gamma delta","  if (one, , [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu"], cursor [1,11], mode normal, registers changed ["\"","-"]
-agree           normal ["d","i"] "b" typed ["d","i","b"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
+agree           normal ["d","i"] "b" typed ["d","i","b"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
 not-comparable  normal ["d","i"] "e": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text [""], cursor [0,0], mode normal, registers changed ["1","\""]
 not-comparable  normal ["d","i"] "i": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text ["alpha beta gamma delta","epsilon zeta eta theta","iota kappa lambda mu"], cursor [1,0], mode normal, registers changed ["1","2","3","4","\""]
 not-comparable  normal ["d","i"] "l": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text unchanged, cursor [1,13], mode normal, registers changed []
 not-comparable  normal ["d","i"] "n": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text unchanged, cursor [1,13], mode normal, registers changed []
-agree           normal ["d","i"] "p" typed ["d","i","p"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "1" unreadable in the pilot record (probe bug); numbered registers: Vim wrote "1 (shift); VSCodeVim shifted (2-9 changed; their values are not compared: probe bug)
-not-comparable  normal ["d","i"] "q": not-vim: plugin:targets (row exists only with vim.targets.enable); VSCodeVim trial 0: text ["alpha beta gamma delta","  if (one, \"\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu"], cursor [1,12], mode normal, registers changed ["\"","-"]
-agree           normal ["d","i"] "s" typed ["d","i","s"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "1" unreadable in the pilot record (probe bug); numbered registers: Vim wrote "1 (shift); VSCodeVim shifted (2-9 changed; their values are not compared: probe bug)
+agree           normal ["d","i"] "p" typed ["d","i","p"]: text agree | cursor agree | mode agree | register "\"" agree (line) | register "1" agree (line) | shifted registers 2-9 agree (Vim wrote "1 and shifted; 21 compared over 3 trials)
+not-comparable  normal ["d","i"] "q": not-vim: own (not a command of Vim's index.txt); VSCodeVim trial 0: text ["alpha beta gamma delta","  if (one, \"\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu"], cursor [1,12], mode normal, registers changed ["\"","-"]
+deviation       normal ["d","i"] "s" typed ["d","i","s"]: text agree | cursor agree | mode agree | register "\"" DIFF mode and lines: Vim line ["alpha beta gamma delta","  if (one, \"two\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu"] vs VSCodeVim character ["alpha beta gamma delta","  if (one, \"two\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu",""] | register "1" DIFF mode and lines: Vim line ["alpha beta gamma delta","  if (one, \"two\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu"] vs VSCodeVim character ["alpha beta gamma delta","  if (one, \"two\", [three]) { four(five) }","epsilon zeta eta theta","iota kappa lambda mu",""] | shifted registers 2-9 agree (Vim wrote "1 and shifted; 24 compared over 3 trials)
 agree           normal ["d","i"] "t" typed ["d","i","t"]: text agree | cursor agree | mode agree
-agree           normal ["d","i"] "w" typed ["d","i","w"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] "{" typed ["d","i","{"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
-agree           normal ["d","i"] "}" typed ["d","i","}"]: text agree | cursor agree | mode agree || register "\"" unreadable in the pilot record (probe bug); register "-" unreadable in the pilot record (probe bug)
+agree           normal ["d","i"] "w" typed ["d","i","w"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] "{" typed ["d","i","{"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
+agree           normal ["d","i"] "}" typed ["d","i","}"]: text agree | cursor agree | mode agree | register "\"" agree (character) | register "-" agree (character)
 not-comparable  normal ["d","i"] "{<leader>}": not-vim: plugin:leader (camelCaseMotion or easymotion leader key); VSCodeVim trial 0: text unchanged, cursor [1,13], mode normal, registers changed []
 
-# summary: {"rows":34,"vim":27,"agree":27,"deviation":0,"notComparable":{"not-vim: own (not a command of Vim's index.txt)":5,"not-vim: plugin:targets (row exists only with vim.targets.enable)":1,"not-vim: plugin:leader (camelCaseMotion or easymotion leader key)":1},"registerNotes":14}
+# summary: {"rows":34,"vim":27,"agree":26,"deviation":1,"notComparable":{"not-vim: own (not a command of Vim's index.txt)":6,"not-vim: plugin:leader (camelCaseMotion or easymotion leader key)":1},"registerNotes":1}

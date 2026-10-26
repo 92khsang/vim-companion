@@ -1,15 +1,21 @@
 " Vim as the oracle for the card expectations of candidate (b) (spike/s2/vim-check/expect.mjs).
-" Options follow the S2 sandbox (spike/s2/harness/lib.mjs sandboxSettings: no auto indent, no
-" auto closing, no format on type) and VSCodeVim 1.32.4's defaults where Vim's defaults differ.
+" Options follow the S2 sandbox (spike/s2/harness/lib.mjs sandboxSettings: editor.autoIndent none,
+" no auto closing, no format on type) and VSCodeVim 1.32.4's own defaults where Vim's defaults differ.
 " The start cursor comes from the command line (-c "call cursor(...)"), after the file is read.
 set nocompatible
 set encoding=utf-8
-set noautoindent nosmartindent nocindent indentexpr=
+" vim.autoindent defaults to true in VSCodeVim 1.32.4 and the sandbox does not override it: its
+" ChangeOperator keeps the first line's indent on a linewise change (src/actions/operator.ts
+" L679-694), as Vim's 'autoindent' does for cc and S. No smart, C or expression indenting
+" (editor.autoIndent is none in the sandbox).
+set autoindent nosmartindent nocindent indentexpr=
 set backspace=indent,eol,start
 " editor.insertSpaces and editor.tabSize defaults of VS Code.
 set expandtab shiftwidth=4 softtabstop=4 tabstop=4
-" vim.ignorecase, vim.smartcase, vim.textwidth defaults of VSCodeVim; no octal for CTRL-A.
-set ignorecase smartcase textwidth=80 nrformats=bin,hex
+" vim.ignorecase, vim.smartcase, vim.textwidth defaults of VSCodeVim. CTRL-A and CTRL-X: VSCodeVim
+" 1.32.4 parses a leading-zero number as octal and has no binary numbers
+" (src/common/number/numericString.ts L14-34), so octal and hex, not Vim's default bin,hex.
+set ignorecase smartcase textwidth=80 nrformats=octal,hex
 " As the grammar fixture (spec/fixtures/grammar) and vim-check/vimrc.
 set timeout timeoutlen=1000 ttimeout ttimeoutlen=10
 set belloff=all noshowmode showcmd noruler laststatus=0 shortmess+=I
