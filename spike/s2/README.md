@@ -31,3 +31,38 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   grammar fixture against VSCodeVim (reader or adapter). `harness/cards-extract.mjs`,
   `cards-count.mjs`, `cards-build.mjs`: the completeness reference and the card rows.
   `harness/differential.mjs` + `differential-compare.mjs`: the differential test.
+
+## Vim oracle for the card expectations
+
+`vim-check/expect.mjs` generates the `expect` of a card row from Vim 9.1 itself instead of by hand.
+Per row it starts a fresh `vim --noplugin -u vim-check/expect.vimrc -i NONE -N -n` on the fixture
+start buffer in a private tmux server, pinned to `S2_VIM_CPUS` (default 28-31), types the row's
+`setup`, the card's keys and the row's key (its `sample` for a placeholder row, else a fixed default
+such as `e` for `{<character>}`) with 60 ms between keys and 200 ms after `<Esc>`, waits until the
+state that a timer in the vimrc writes every 50 ms (`mode(1)`, `getpos('.')`, the buffer lines,
+`getreg(name, 1, 1)` and `getregtype()` of `" 0-9 - a-z . : /`) is the same in two reads 100 ms
+apart, and records `expect` in the format of `cards-correctness.mjs`: text, 0-based cursor, the
+fixture mode name (null for the command line, Select mode and prompts, which the fixture does not
+name), and registers as (mode, lines) for every register that differs from the fresh Vim's empty
+ones, with `shiftNumbered` when `"1` was written (the shifted 2-9 are not listed). The vimrc mirrors
+the sandbox and VSCodeVim's defaults where Vim's differ: no auto indent, `expandtab shiftwidth=4`,
+`ignorecase smartcase textwidth=80`, `timeoutlen=1000`.
+
+A row is `not-vim`, reported and not generated, when its key completes a generated remap
+(`spec/generated/vscode/vim-remaps.json`; a key that only starts one, such as `g` or `[`, waits in
+both engines and keeps Vim's answer), is a plugin row (`when` on a plugin setting, `<plug…>`,
+`{<leader>}`, sneak's `s S` and operator-pending `z Z`, surround's Visual `S`), is a key token of
+VSCodeVim's own (`<D-…>`, `<C-alt+…>`, `<copy>`, …), redefines a Vim key (`gh`, `gd`), or is no
+command of Vim's `index.txt` for the state (for example `ia ie ii` after an operator).
+
+- Generate: `node spike/s2/vim-check/expect.mjs "$(mktemp -d /tmp/s2v.XXXXXX)" <defaults|extensions> <cards.json> <out.jsonl> [card ids]`
+- Classify every row without Vim: `node spike/s2/vim-check/expect.mjs --count <cards.json>`
+- Compare with a pilot record: `node spike/s2/vim-check/compare-pilot.mjs <expect.jsonl> <pilot.jsonl> <out.txt>`
+
+Limits: Vim answers only what the buffer, cursor, mode and registers show, so window, tab, scroll,
+fold and jump-list effects and IDE commands do not appear; `+` and `*` are unavailable in this Vim
+(built without clipboard, so `"+` falls back to the unnamed register); a key that Vim has but
+VSCodeVim implements differently (`gd`, `K`, `<C-]>`, undo, `%`, word motions over punctuation, …)
+gets Vim's answer, which the comparison then reports as a deviation to review by hand; a Visual-mode
+cursor is Vim's inclusive position, not VS Code's exclusive selection end; the sample key of a
+placeholder row is a hand choice.

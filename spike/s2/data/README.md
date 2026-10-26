@@ -48,3 +48,21 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   runs nothing moves and the `.` register still holds item 55. The difference follows
   `<Space> w h`, which runs through which-key's quick pick, so it reads as the quick pick closing
   asynchronously against the 30 ms key spacing, not as a harness focus or reset effect.
+- `vim-expect-pilot/`: `node spike/s2/vim-check/expect.mjs <short dir> <set> spike/s2/cards/pilot.json <out>`
+  on 2026-10-26 for both settings sets (`expect-<set>.jsonl`; Vim 9.1 with patches 1-948 and
+  950-2141, tmux 3.6, `taskset -c 28-31`, one fresh Vim per row): the Vim-generated expectations of
+  the 10 pilot cards, 27 Vim rows per set (the other 5 and 7 rows are `not-vim`: `a e i l n` after
+  `di`, and `q` and `{<leader>}` under the extensions set), every row settled, 27 rows in 14.9 s
+  (median 562 ms per row; three servers at once ran at the same per-row time); a second defaults run
+  gave identical expectations.
+  `compare-<set>.txt`: `node spike/s2/vim-check/compare-pilot.mjs <expect> spike/s2/data/cards-pilot/pilot-<set>-1.141.0.jsonl <out>`,
+  Vim against the pilot's VSCodeVim outcomes: 26 of 27 Vim rows agree in text, cursor, mode and
+  register text (the five bracket rows `di[ di] diB di{ di}` included, and `dip` with the numbered
+  shift on both sides); `dis` deviates in the register only: Vim deletes the sentence linewise
+  (`"1` and `""` linewise, four lines), VSCodeVim charwise with a trailing newline. The shifted
+  registers 2-9 of the pilot record are not compared (probe bug), and the record has no register
+  mode.
+  `count-cards.txt`: `node spike/s2/vim-check/expect.mjs --count spike/s2/cards/cards.json`, the
+  class of every row of `cards.json` per settings set: defaults 3,455 rows = 3,051 Vim + 35 remap +
+  337 own + 32 plugin; extensions 3,649 = 3,013 Vim + 35 remap + 345 own + 256 plugin; 3,051
+  distinct Vim rows over both sets (3,013 in both).
