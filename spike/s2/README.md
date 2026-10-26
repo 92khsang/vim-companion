@@ -122,7 +122,84 @@ nothing-pending cards), plus the `<C-w>` card's 29 and the `z` card's 19 waiting
 `unchanged` or depend on the window geometry (tmux 100x12 against the editor height), the 82
 command-line rows
 have no fixture mode name, and the `"+` card (142 rows) needs a Vim with clipboard support; these
-need hand-written expectations or a rule before the oracle's output is used. Unverified: VS Code's
-`editor.detectIndentation` is not pinned in the sandbox settings, and the fixture's second line is
-indented by two spaces, so the shift width of the `>>`, `<<` and `=` rows must be checked before
-those rows are generated.
+need hand-written expectations or a rule before the oracle's output is used; the rules are in
+"Check (1) input" below. VS Code's `editor.detectIndentation` is not pinned in the sandbox
+settings: on 1.141.0 the fixture buffer gets "Spaces: 2" while `editor.tabSize` is 4, and
+VSCodeVim's `>>` indents the second line from 2 to 4 spaces where `expect.vimrc` (shiftwidth 4)
+gives 6 (`check1/observe.mjs`); `expect-sw2.vimrc` mirrors the detected size.
+
+Since 2026-10-27 the dump also holds `outside`, the state that check (1) does not compare (windows
+and tab pages, the view, folds, the command-line window, marks a-z and A-Z, the jump list, the last
+error and message), and `curswant`; a row's record carries `vim.outside` with what the key changed.
+`S2_VIMRC` picks another vimrc in `vim-check/`: `expect-sw2.vimrc` (shiftwidth 2) and
+`expect-prestate.vimrc` (every register, a search pattern, an f/t character, marks, two jumps and a
+Visual area set at start, so that a row whose answer reads such state answers differently). Two
+key fixes: tmux takes a lone `;` argument as its command separator and sent nothing, and `"\n"`
+(VSCodeVim's `<CR>`) went out as a line feed (Vim's `<NL>`); the rows typed with them in
+the first runs of that day were wrong (31 rows per set with each) and the runs were repeated.
+
+## Check (1) input
+
+`check1/cards/<card>.json` holds, for each of the 59 cards of `cards/cards.json`, every row with
+what check (1) needs; one file per card so that hand authors can own disjoint cards. A row:
+
+- `key`, `when` (as in `cards.json`) and `sets`: the settings sets of check (1) (`defaults`,
+  `extensions`) under which the row is in force.
+- `sample` (a placeholder row: the key typed for it) and `setup` (keys typed after the reset and
+  before the card's keys), as `cards-correctness.mjs` reads them.
+- `label`: the effect the row states, with `labelFrom` (`index`: a first label from Vim's
+  `index.txt` line `labelIndex`; `pilot`; else hand) and `labelReview` when the index line was not
+  plain and a hand review is due.
+- `source`: `vim-oracle` (the expectation is Vim 9.1's answer from `vim-check/expect.mjs`) or
+  `hand`, with `reason`.
+- `expect`: the expectation in the format of `cards-correctness.mjs`, except that in a Visual mode
+  `cursor` may be `{ "vim": [line, column], "visualStart": [line, column], "toLineEnd": true }`,
+  Vim's own cursor and Visual start (`getpos('.')`, `getpos('v')`, 0-based; `toLineEnd` after `$`),
+  which the builder converts to what the harness reads: the active end of VS Code's primary
+  selection, which VSCodeVim 1.32.4 draws as the cursor plus one character for a forward
+  selection (through the line break at the line end), the cursor itself for a backward one, the
+  line end or column 0 of the cursor line in Visual Line mode, and in Visual Block mode the top
+  line at the right column plus one (the line end after `$`); see `harnessCursor` in
+  `check1/lib.mjs`. A mode is a fixture name or the probe's `other-<n>` for VSCodeVim's `Mode`
+  value n: after `:` the probe reads `other-6` (CommandlineInProgress), after `/` and `?`
+  `other-5` (SearchInProgressMode), with text and cursor unchanged.
+- `pending`: the row waits for a decision, with `variants` holding the candidate expectations.
+- `bySet`: the fields that differ between the sets (for example `s`, Vim's substitute under the
+  defaults and sneak under the second set); the other fields apply to every set in `sets`.
+
+"TODO" marks what a hand author writes; the builder refuses a row that still holds one.
+
+Rules (`check1/rules.mjs`, `check1/fill.mjs`). A row whose key is no Vim command (expect.mjs
+classifies it: a generated remap, a key of VSCodeVim's own, a plugin row) is `hand`. A Vim-command
+row is `hand`, not `vim-oracle`, when Vim exits or does not settle (`oracle`); when Vim ends in the
+command line, a search prompt or the hit-enter prompt (`null-mode`); when the row states an effect
+outside text, cursor, mode and registers (`outside`: the CTRL-W and z cards, scroll keys, the jump
+list keys, marks, macro recording, messages, files and tags, and the `"+` card's commands that use
+a register); or when its answer reads session state that a fresh Vim lacks and VSCodeVim keeps
+from earlier rows of a run (`state`: puts, `n N ; ,`, `.`, undo, `&`, `gv`, `gi`, marks, `@`). The
+`state` list covers every row whose answer changed under `expect-prestate.vimrc` (0 rows outside
+it). A row whose answer differs between `expect.vimrc` and `expect-sw2.vimrc` (55 per set: the `>`
+operator and Visual `>`) is `vim-oracle` with `pending: "indentation"` until the coordinator
+chooses; `fill.mjs --indent <vimrc>` then writes that answer.
+
+- Run the oracle over a set on several tmux servers:
+  `[S2_VIMRC=<vimrc>] node spike/s2/check1/oracle-run.mjs <set> <workers> <run dir> [<part>/<parts>] [cards.json]`,
+  then `node spike/s2/check1/oracle-merge.mjs <run dir> <vimrc base> <set> <out.jsonl.gz> [cards.json]`.
+- Write the input files: `node spike/s2/check1/fill.mjs [--force] [--indent <vimrc>]` (it keeps
+  existing files without `--force`).
+- Validate: `node spike/s2/check1/build.mjs --check`; build the correctness input and the labeled
+  cards per set: `node spike/s2/check1/build.mjs <out dir> [--partial]`, then
+  `node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <out dir>/correctness-<set>.json 3 <out.jsonl>`.
+- List the rows by reason: `node spike/s2/check1/rows.mjs [reason prefix]`; split the hand rows
+  into work lists: `node spike/s2/check1/worklists.mjs <n> <out dir>` (the VSCodeVim actions come
+  from `node spike/s2/check1/vscodevim-actions.mjs <VSCodeVim v1.32.4 checkout> <out.json>`, a
+  static read of its sources).
+- The observations behind the rules: `node spike/s2/check1/observe.mjs <version> <display> <cdpPort> <out.json> [trials]`
+  (one sandbox VS Code: the buffer's indentation, then the keys of `check1/observe-sequences.json`)
+  and `node spike/s2/check1/observe-compare.mjs cards|compare ...`.
+
+Open for check (1): `harness/lib.mjs` `keysym` cannot type 693 in-force rows under the defaults
+and 712 under the second set (`" "`, `"\n"`, the arrows, `<Home>`, `<End>`, `<Del>`, `<Insert>`,
+`<C-Home>`, `<C-End>`, `<C-left>`, `<C-right>`, `<C-[>`, `<C-]>`, `<C-^>`, `<C-6>` and VSCodeVim's
+own tokens such as `<D-...>`, `<C-alt+...>`, `<copy>`, `<plugds>`), and `typeKeys` throws on the
+first one, which ends a `cards-correctness.mjs` run (`build.mjs --check` lists them).

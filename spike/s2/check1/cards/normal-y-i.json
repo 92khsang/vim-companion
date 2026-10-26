@@ -1,0 +1,451 @@
+{
+  "card": "normal [\"y\",\"i\"]",
+  "title": "normal after yi",
+  "keys": ["y", "i"],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank double quoted string without the quotes",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L509 |v_iquote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank single quoted string without the quotes",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L510 |v_i'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 6],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 6],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L513 |v_i<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L513 |v_i<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 28],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner WORD",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L516 |v_iW|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 11],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["\"two\","]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["\"two\","]
+          }
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L517 |v_i[|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 19],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["three"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["three"]
+          }
+        }
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L517 |v_i[|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 19],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["three"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["three"]
+          }
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank string in backticks without the backticks",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L519 |v_i`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 6],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner paragraph",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L521 |v_ip|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "s",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner sentence",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L522 |v_is|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner tag block",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L523 |v_it|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner word",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L524 |v_iw|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 28],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "TODO",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 28],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    }
+  ]
+}

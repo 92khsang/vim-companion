@@ -1,0 +1,33 @@
+{
+  "card": "normal [\"f\"]",
+  "title": "normal after f",
+  "keys": ["f"],
+  "rows": [
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to Nth occurrence of f to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 29],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "e",
+      "source": "vim-oracle",
+      "label": "Move to the next {char} on the line",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 22],
+        "mode": "normal"
+      }
+    }
+  ]
+}

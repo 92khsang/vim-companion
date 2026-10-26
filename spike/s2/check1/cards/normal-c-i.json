@@ -1,0 +1,475 @@
+{
+  "card": "normal [\"c\",\"i\"]",
+  "title": "normal after ci",
+  "keys": ["c", "i"],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change double quoted string without the quotes",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L509 |v_iquote|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change single quoted string without the quotes",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L510 |v_i'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": {
+          "1": "  if () { four(five) }"
+        },
+        "cursor": [1, 6],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": {
+          "1": "  if () { four(five) }"
+        },
+        "cursor": [1, 6],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L513 |v_i<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L513 |v_i<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) {}"
+        },
+        "cursor": [1, 28],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner WORD",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L516 |v_iW|",
+      "expect": {
+        "text": {
+          "1": "  if (one,  [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\"two\","]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["\"two\","]
+          }
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L517 |v_i[|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", []) { four(five) }"
+        },
+        "cursor": [1, 19],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["three"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["three"]
+          }
+        }
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L517 |v_i[|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", []) { four(five) }"
+        },
+        "cursor": [1, 19],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["three"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["three"]
+          }
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change string in backticks without the backticks",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L519 |v_i`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner block from [( to ])",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L520 |v_ib|",
+      "expect": {
+        "text": {
+          "1": "  if () { four(five) }"
+        },
+        "cursor": [1, 6],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["one, \"two\", [three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner paragraph",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L521 |v_ip|",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "insert",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "s",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner sentence",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L522 |v_is|",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "insert",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner tag block",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L523 |v_it|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner word",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L524 |v_iw|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) {}"
+        },
+        "cursor": [1, 28],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "TODO",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change inner Block from [{ and ]}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L515 |v_iB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) {}"
+        },
+        "cursor": [1, 28],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" four(five) "]
+          }
+        }
+      }
+    }
+  ]
+}

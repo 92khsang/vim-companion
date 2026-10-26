@@ -1,0 +1,1634 @@
+{
+  "card": "normal [\"\\\"\",\"a\",\"3\",\"d\"]",
+  "title": "normal after \"a3d",
+  "keys": ["\"", "a", "3", "d"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR 3 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete search backward for the 3rd occurrence of the ident under the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L256 |#|",
+      "labelReview": "the motion's description starts with a verb",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          },
+          "a": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of 3rd next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete go to 3 percentage in the file",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L263 |N%|",
+      "labelReview": "the motion's description starts with a verb",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR on the line with mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 sentences backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 sentences forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete search forward for the 3rd occurrence of the ident under the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L291 |star|",
+      "labelReview": "the motion's description starts with a verb",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          },
+          "a": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR 3 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "TODO",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": "TODO"
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR 3 lines higher",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "TODO",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": "TODO"
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to line 3, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"t",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
+          },
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to line 3, default first line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR 3 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tfour(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          }
+        }
+      }
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of 3rd next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 WORDS backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete forward to the end of WORD 3",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", [three]) {"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) {"]
+          }
+        }
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the 3rd occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to line 3, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to line 3 from top of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to line 3 from bottom of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "a": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to middle line of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "a": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; N reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": "TODO"
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete till after 3rd occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 WORDS forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tfour(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          }
+        }
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first CHAR 3 - 1 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  if (onewo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 9],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": [", \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [", \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "d",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines into register a",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L400 |dd|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete forward to the end of word 3",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tthree]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          }
+        }
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to 3rd occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "a": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; n reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": "TODO"
+    },
+    {
+      "key": "s",
+      "when": {
+        "vim.surround": true
+      },
+      "sets": ["defaults"],
+      "source": "hand",
+      "reason": "plugin:surround: row exists only with vim.surround",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete till before 3rd occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tthree]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          }
+        }
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 paragraphs backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "TODO",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Add a digit to the count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to column 3",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 paragraphs forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    }
+  ]
+}

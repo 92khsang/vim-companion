@@ -1,0 +1,33 @@
+{
+  "card": "normal [\"F\"]",
+  "title": "normal after F",
+  "keys": ["F"],
+  "rows": [
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the Nth occurrence of F to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "o",
+      "source": "vim-oracle",
+      "label": "Move to the previous {char} on the line",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 6],
+        "mode": "normal"
+      }
+    }
+  ]
+}

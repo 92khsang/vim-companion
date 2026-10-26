@@ -1,0 +1,40 @@
+{
+  "card": "visual-line [\"\\\"\"]",
+  "title": "visual-line after V\"",
+  "keys": ["V", "\""],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Use \" for next delete, yank or put ({.%#:} only work with put)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-line"
+      }
+    },
+    {
+      "key": "{<register>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "a",
+      "source": "vim-oracle",
+      "label": "Use {register} for next delete, yank or put ({.%#:} only work with put)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-line"
+      }
+    }
+  ]
+}

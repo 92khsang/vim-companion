@@ -1,0 +1,1503 @@
+{
+  "card": "normal [\">\"]",
+  "title": "normal after >",
+  "keys": [">"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right search backward for the Nth occurrence of the ident under the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L256 |#|",
+      "labelReview": "the motion's description starts with a verb",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["\\<two\\>"]
+            }
+          }
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["\\<two\\>"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the end of Nth next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L259 |%|",
+      "labelReview": "the index description is long",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR on the line with mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N sentences backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L289 |(|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N sentences forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L290 |)|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta",
+            "3": "    iota kappa lambda mu"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta",
+            "3": "  iota kappa lambda mu"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right search forward for the Nth occurrence of the ident under the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L291 |star|",
+      "labelReview": "the motion's description starts with a verb",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["\\<two\\>"]
+            }
+          }
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["\\<two\\>"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "TODO",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": "TODO"
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR N lines higher",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L297 |-|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "TODO",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": "TODO"
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to line N, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta",
+            "3": "    iota kappa lambda mu"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta",
+            "3": "  iota kappa lambda mu"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to line N, default first line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L787 |gg|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<D-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the end of Nth next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift N lines one 'shiftwidth' rightwards",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L325 |>>|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N WORDS backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L334 |B|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right forward to the end of WORD N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L341 |E|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to line N, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta",
+            "3": "    iota kappa lambda mu"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta",
+            "3": "  iota kappa lambda mu"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to line N from top of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L345 |H|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to line N from bottom of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L351 |L|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta",
+            "3": "    iota kappa lambda mu"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta",
+            "3": "  iota kappa lambda mu"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to middle line of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L352 |M|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; N reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": "TODO"
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right till after Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N WORDS forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L369 |W|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L379 |^|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the first CHAR N - 1 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L380 |_|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to the mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right forward to the end of word N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L403 |e|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; n reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": "TODO"
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right till before Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N paragraphs backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L437 |{|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "0": "    alpha beta gamma delta",
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 4],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "0": "  alpha beta gamma delta",
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [0, 2],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "TODO",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Start a count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right to column N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L438 |bar|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift right N paragraphs forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L439 |}|",
+      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
+      "variants": {
+        "expect.vimrc": {
+          "text": {
+            "1": "      if (one, \"two\", [three]) { four(five) }",
+            "2": "    epsilon zeta eta theta",
+            "3": "    iota kappa lambda mu"
+          },
+          "cursor": [1, 6],
+          "mode": "normal"
+        },
+        "expect-sw2.vimrc": {
+          "text": {
+            "1": "    if (one, \"two\", [three]) { four(five) }",
+            "2": "  epsilon zeta eta theta",
+            "3": "  iota kappa lambda mu"
+          },
+          "cursor": [1, 4],
+          "mode": "normal"
+        }
+      }
+    }
+  ]
+}

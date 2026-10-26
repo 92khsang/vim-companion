@@ -1,0 +1,500 @@
+{
+  "card": "insert []",
+  "title": "insert after i",
+  "keys": ["i"],
+  "rows": [
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete character before the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L56 |i_<BS>|",
+      "labelReview": "several index lines",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-[>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "End insert mode (unless 'insertmode' set)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L103 |i_<Esc>|",
+      "labelReview": "several index lines",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last insert; inserts the previously inserted text",
+      "label": "TODO",
+      "labelIndex": "index.txt L39 |i_CTRL-A|",
+      "expect": "TODO"
+    },
+    {
+      "key": "<C-c>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Quit insert mode, without checking for abbreviation, unless 'insertmode' set",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L41 |i_CTRL-C|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-d>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete one shiftwidth of indent in the current line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L43 |i_CTRL-D|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-e>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert the character which is below the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L45 |i_CTRL-E|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tewo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-g>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a <C-g> command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-h>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Same as <BS>",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L59 |i_CTRL-H|",
+      "labelReview": "unresolved \"same as <BS>\"",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Begin new line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L67 |i_<CR>|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"t",
+          "  wo\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [2, 2],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-k>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Enter digraph",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L64 |i_CTRL-K|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Begin new line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L67 |i_<CR>|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"t",
+          "  wo\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [2, 2],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Find next match for keyword in front of the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L69 |i_CTRL-N|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"threewo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-o>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Execute a single command and return to insert mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L71 |i_CTRL-O|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Find previous match for keyword in front of the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L73 |i_CTRL-P|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"thetawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-r>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert the contents of a register",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L79 |i_CTRL-R|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-shift+2>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<C-t>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert one shiftwidth of indent in current line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L90 |i_CTRL-T|",
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-u>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete all entered characters in the current line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L92 |i_CTRL-U|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-v>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert next non-digit literally",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L94 |i_CTRL-V|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-w>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete word before the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L99 |i_CTRL-W|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-x>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a <C-x> command: waits for the next key",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L100 |i_CTRL-X|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<C-y>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert the character which is above the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L101 |i_CTRL-Y|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tmwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<D-d>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<Del>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete character under the cursor",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L122 |i_<Del>|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "insert"
+      }
+    },
+    {
+      "key": "<Esc>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "End insert mode (unless 'insertmode' set)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L103 |i_<Esc>|",
+      "labelReview": "several index lines",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<ExtensionDisable>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<Insert>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Toggle Insert/Replace mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L145 |i_<Insert>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "replace"
+      }
+    },
+    {
+      "key": "<copy>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Cursor one line down",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L135 |i_<Down>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 13],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Cursor one character left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L127 |i_<Left>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Cursor one character right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L130 |i_<Right>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 14],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Cursor one line up",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L133 |i_<Up>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": [""]
+          }
+        }
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "e",
+      "source": "vim-oracle",
+      "label": "Insert the typed character",
+      "labelFrom": "index",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tewo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "insert"
+      }
+    }
+  ]
+}

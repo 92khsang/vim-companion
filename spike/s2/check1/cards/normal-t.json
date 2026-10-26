@@ -1,0 +1,33 @@
+{
+  "card": "normal [\"t\"]",
+  "title": "normal after t",
+  "keys": ["t"],
+  "rows": [
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move till before Nth occurrence of t to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 18],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "e",
+      "source": "vim-oracle",
+      "label": "Move to just before the next {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 21],
+        "mode": "normal"
+      }
+    }
+  ]
+}

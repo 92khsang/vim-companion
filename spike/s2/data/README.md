@@ -183,3 +183,49 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   1.25.2 and later, the export is present in all of them, and `ModeHandlerMap` occurs 10 times in
   every package from 1.26.0 to 1.32.4; 1.22.2 lacks `modeData`, `actionType` and `cmd_register`.
   This is a check of names, not of their meaning; the meaning is measured on 1.32.4 only.
+- `check1/`: the material for check (1) of candidate (b) on 2026-10-27 (README section "Check (1)
+  input"). Every Vim run used Vim 9.1 (patches 1-948 and 950-2141), tmux 3.6 and `taskset -c 28-31`.
+  - `observe-1.141.0.json`: `S2_CPUS=28-31 S2_NAME_PREFIX=b- node spike/s2/check1/observe.mjs 1.141.0 :136 9546 <out> 2`
+    (one sandbox VS Code, defaults set, 21:44-21:45Z). `editor.detectIndentation` true,
+    `editor.tabSize` 4 and `editor.insertSpaces` true as configured, and the status bar entry
+    `status.editor.indentation` read "Spaces: 2" for a.txt and for b.txt: VS Code detects an
+    indentation of 2 from the fixture's second line. In 2 of 2 trials each: `>>` makes the second
+    line's indent 4 spaces with the cursor at column 4 (Vim with shiftwidth 4: 6 spaces, column 6;
+    with shiftwidth 2: 4 spaces, column 4), `<<` 0 spaces (both), `==` leaves the line and puts
+    the cursor at column 2 (Vim: 0 spaces, column 0), `i <C-t>` 4 spaces, column 15 (both).
+    `:` ends in probe mode `other-6`, `/` and `?` in `other-5`, `v :` in `other-6` with the
+    selection reversed to (1,14)-(1,13), all with text and cursor unchanged; `q :` and `q /` leave
+    VSCodeVim in Normal mode with `q :` or `q /` pending.
+  - `observe-oracle-defaults.jsonl.gz`: the same sequences through the oracle (as cards from
+    `observe-compare.mjs cards`), and `observe-compare-1.141.0.txt`:
+    `node spike/s2/check1/observe-compare.mjs compare <oracle> observe-1.141.0.json`. With the
+    cursor rule of `check1/lib.mjs`, 31 of 34 Visual-mode trials agree with VS Code in mode and
+    cursor (`v`, `v e`, `v b`, `v $`, `v j`, `v k`, `v h`, `V`, `V j`, `V k`, `<C-v>`, `<C-v> j l`,
+    `<C-v> k h`, `<C-v> j $`, `<C-v> h` in 2 of 2, `V h` in 1 of 2); in the other 3 (`V h` trial 1,
+    `V l` trials 0 and 1) VSCodeVim ended in Normal mode at the cursor that `h` or `l` gives in
+    Normal mode. Inferred, not verified: each of the 3 followed a trial that left the cursor on
+    the start line at another column, so the probe reset moved the cursor within that line
+    through the API before `V`; trials after a reset that moved it to another line did not fail.
+  - `oracle/<vimrc>-<set>.jsonl.gz`: `[S2_VIMRC=<vimrc>] node spike/s2/check1/oracle-run.mjs <set> 4 <run dir> <part>/2`
+    for parts 1 and 2 one after the other, then `oracle-merge.mjs` (`run-*.json`: the runner's
+    summary per part). `expect` for both sets, `expect-sw2` and `expect-prestate` for the defaults
+    (whose Vim rows include every Vim row of the second set). Each pass took 491-503 s on 4 tmux
+    servers (sum of the row times 1,859-1,890 s, median 611-613 ms, max 1,611 ms). Rows per class
+    (expect.mjs): defaults 3,038 Vim + 35 remap + 337 own + 17 leader + 15 surround; extensions
+    3,013 Vim + 35 remap + 329 own + 63 sneak + 36 leader + 157 replaceWithRegister. Of the Vim
+    rows 3,036 settled and 2 exited Vim (`<C-w> q`, `<C-w> <C-q>`); 94 ended with no fixture mode
+    (86 in the command line or a search prompt, 8 at the hit-enter prompt after `<C-]>`). The
+    3,013 rows in force in both sets gave the same expectation in both runs. The `expect-sw2`
+    answer differs in 55 rows (the `>` card's motions and `>` in the Visual cards); the
+    `expect-prestate` answer in 165 (`n N ; , p P <C-o>`, mark jumps, `@a`, `gv`). The runs of
+    21:56Z-22:39Z on 2026-10-26 were discarded: they came before the `;` and `"\n"` fixes, and one
+    `expect-prestate` run left the preferred column changed (`j` and `k` answered differently).
+    `pilot-<vimrc>-<set>.jsonl.gz`: the same over `cards/pilot.json`, for the pilot's samples and
+    setups.
+  - `vscodevim-actions-1.32.4.json`: `node spike/s2/check1/vscodevim-actions.mjs <VSCodeVim v1.32.4 checkout> <out>`:
+    400 registered action classes with file, line, modes and keys (41 with keys built at run time,
+    easymotion and the targets next/last objects).
+  - `hand-rows.tsv`: `node spike/s2/check1/rows.mjs`, every `hand` and pending row per set with
+    its reason after `fill.mjs` (defaults 2,427 `vim-oracle`, 55 pending, 960 `hand`: 404 not Vim,
+    94 null-mode, 221 outside, 239 state, 2 oracle; extensions 2,404, 55, 1,174: 620, 94, 219,
+    239, 2).

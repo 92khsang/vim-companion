@@ -1,0 +1,472 @@
+{
+  "card": "normal [\"d\",\"a\"]",
+  "title": "normal after da",
+  "keys": ["d", "a"],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete double quoted string",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L491 |v_aquote|",
+      "expect": {
+        "text": {
+          "1": "  if (one,, [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"two\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"two\""]
+          }
+        }
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete single quoted string",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L492 |v_a'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a block from [( to ]) (with braces)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L502 |v_ab|",
+      "expect": {
+        "text": {
+          "1": "  if  { four(five) }"
+        },
+        "cursor": [1, 5],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          }
+        }
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a block from [( to ]) (with braces)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L502 |v_ab|",
+      "expect": {
+        "text": {
+          "1": "  if  { four(five) }"
+        },
+        "cursor": [1, 5],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          }
+        }
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L495 |v_a<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a <> from '<' to the matching '>'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L495 |v_a<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a Block from [{ to ]} (with brackets)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L497 |v_aB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) "
+        },
+        "cursor": [1, 26],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          }
+        }
+      }
+    },
+    {
+      "key": "I",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a WORD (with white space)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L498 |v_aW|",
+      "expect": {
+        "text": {
+          "1": "  if (one, [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\"two\", "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["\"two\", "]
+          }
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L499 |v_a[|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", ) { four(five) }"
+        },
+        "cursor": [1, 18],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["[three]"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["[three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a [] from '[' to the matching ']'",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L499 |v_a[|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", ) { four(five) }"
+        },
+        "cursor": [1, 18],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["[three]"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["[three]"]
+          }
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete string in backticks",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L501 |v_a`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a block from [( to ]) (with braces)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L502 |v_ab|",
+      "expect": {
+        "text": {
+          "1": "  if  { four(five) }"
+        },
+        "cursor": [1, 5],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["(one, \"two\", [three])"]
+          }
+        }
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Same as \":diffput\"",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L402 |dp|",
+      "labelReview": "unresolved \"same as :diffput\"",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "s",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a sentence (with white space)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L504 |v_as|",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a tag block (with white space)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L505 |v_at|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a word (with white space)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L506 |v_aw|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a Block from [{ to ]} (with brackets)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L497 |v_aB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) "
+        },
+        "cursor": [1, 26],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          }
+        }
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a Block from [{ to ]} (with brackets)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L497 |v_aB|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [three]) "
+        },
+        "cursor": [1, 26],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["{ four(five) }"]
+          }
+        }
+      }
+    }
+  ]
+}

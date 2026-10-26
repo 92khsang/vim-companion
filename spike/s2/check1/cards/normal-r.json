@@ -1,0 +1,49 @@
+{
+  "card": "normal [\"r\"]",
+  "title": "normal after r",
+  "keys": ["r"],
+  "rows": [
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Replace N chars with r",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L424 |r|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tro\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": ["r"]
+          }
+        }
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "X",
+      "source": "vim-oracle",
+      "label": "Replace the character under the cursor with {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tXo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": ["X"]
+          }
+        }
+      }
+    }
+  ]
+}

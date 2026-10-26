@@ -1,0 +1,490 @@
+{
+  "card": "visual [\"g\"]",
+  "title": "visual after vg",
+  "keys": ["v", "g"],
+  "rows": [
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"#\", but without using \"\\<\" and \"\\>\"",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L728 |g#|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move when 'wrap' off go to rightmost character of the current line that is on the screen; when 'wrap' on go to the rightmost character of the current screen line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L729 |g$|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"*\", but without using \"\\<\" and \"\\>\"",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L736 |gstar|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move when 'wrap' off go to leftmost character of the current line that is on the screen; when 'wrap' on go to the leftmost character of the current screen line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L740 |g0|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "<C-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Add N to number in highlighted text",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L981 |v_g_CTRL-A|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "<C-x>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Subtract N from number in highlighted text",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L982 |v_g_CTRL-X|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L790 |gj|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L792 |gk|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Rot13 encoding operator",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L748 |g?|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tjo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "C",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go backwards to the end of the previous WORD",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L753 |gE|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 9],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "J",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Join the highlighted lines without inserting spaces",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L983 |v_gJ|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 41],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; gN reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L758 |gN|",
+      "expect": "TODO"
+    },
+    {
+      "key": "P",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: register; gP reads the register",
+      "label": "TODO",
+      "labelIndex": "index.txt L760 |gP|",
+      "expect": "TODO"
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "outside: window; gT (window)",
+      "label": "TODO",
+      "labelIndex": "index.txt L764 |gT|",
+      "expect": "TODO"
+    },
+    {
+      "key": "U",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the highlighted text uppercase",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L765 |gU|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move when 'wrap' off go to leftmost non-white character of the current line that is on the screen; when 'wrap' on go to the leftmost non-white character of the current screen line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L770 |g^|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 2],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last CHAR N - 1 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L775 |g_|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 40],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "c",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go backwards to the end of the previous word",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L780 |ge|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 11],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "outside: file or tag; gf (file or tag)",
+      "label": "TODO",
+      "labelIndex": "index.txt L782 |gf|",
+      "expect": "TODO"
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to line N, default first line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L790 |gj|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L792 |gk|",
+      "labelReview": "the index description has a condition or a reference",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "m",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go to character at middle of the screenline",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L794 |gm|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: last search; gn reads the last search",
+      "label": "TODO",
+      "labelIndex": "index.txt L796 |gn|",
+      "expect": "TODO"
+    },
+    {
+      "key": "o",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to byte N in the buffer",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L798 |go|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      }
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "state: register; gp reads the register",
+      "label": "TODO",
+      "labelIndex": "index.txt L799 |gp|",
+      "expect": "TODO"
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Format the highlighted lines",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L985 |v_gq|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Virtual replace N chars with {char}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L802 |gr|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "replace"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "outside: window; gt (window)",
+      "label": "TODO",
+      "labelIndex": "index.txt L804 |gt|",
+      "expect": "TODO"
+    },
+    {
+      "key": "u",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the highlighted text lowercase",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L805 |gu|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    },
+    {
+      "key": "x",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "TODO",
+      "expect": "TODO"
+    },
+    {
+      "key": "~",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Swap case for the highlighted text",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L809 |g~|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      }
+    }
+  ]
+}
