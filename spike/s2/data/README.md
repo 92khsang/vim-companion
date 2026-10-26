@@ -78,6 +78,21 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   between the pick's hide (VS Code refocuses the editor that opened it) and the `focusLeftGroup`
   command, where it stopped the recording; the records fit both. Two trace controls with the CDP
   port and no settle reproduced one outcome each (scratch only, too few to say anything).
+- `differential/smoke-effect-<version>.jsonl`: the which-key effect rule (the user's choice of
+  2026-10-27, `spike/s2/harness/whichkey-settle.mjs`), `S2_WHICHKEY_SETTLE=1 S2_NAME_PREFIX=a- node
+  spike/s2/harness/differential.mjs <version> :121 10 off <out> both 9521` on 2026-10-26 23:34-23:47Z
+  (1.141.0 first, then 1.134.0; one VS Code at a time on cores 8-15): 10 runs per version, adapter
+  off on even run numbers and on on odd ones. Per version the 5 adapter-off runs gave 1 outcome, the
+  5 adapter-on runs the same one, 0 run errors, 2 waits per run; with the earlier unsettled runs
+  (`off-only-<version>.jsonl` and `-rerun.jsonl`) the outcome is the majority one (1.141.0: 23 of 25
+  with the 2 minority runs of before; 1.134.0: 25 of 25). `SPC b n`: expected and observed no
+  change (one editor in group 1), the wait ended at the first poll after 1 to 7 ms (1.141.0) and 2 to
+  15 ms (1.134.0). `SPC w h`: from b.txt in group 2 to a.txt in group 1 in 20 of 20 waits, seen 49
+  to 72 ms (1.141.0) and 45 to 68 ms (1.134.0) after the earliest leaf time, waits of 1 to 20 ms and
+  1 to 16 ms, 1 or 2 polls. At the end of every wait the quick input widget was still visible in its
+  closing animation on 1.141.0 (10 of 10 per leaf) and hidden on 1.134.0 (0 of 10), with the focus
+  out of it in 40 of 40. `node spike/s2/harness/differential-compare.mjs <file>` prints the `ROW`
+  line (`pass` for both files; 5 runs per arm, not the row's 1000).
 - `vim-expect-pilot/`: `node spike/s2/vim-check/expect.mjs <short dir> <set> spike/s2/cards/pilot.json <out>`
   on 2026-10-26 for both settings sets (`expect-<set>.jsonl`; Vim 9.1 with patches 1-948 and
   950-2141, tmux 3.6, `taskset -c 28-31`, one fresh Vim per row): the Vim-generated expectations of

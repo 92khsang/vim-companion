@@ -4,9 +4,11 @@
 // selections of every open editor and which editor is active; then every register of the issue is
 // pasted into the active editor, and the probe reads the text again and the clipboard.
 // Usage: node spike/s2/harness/differential.mjs <version> <display> <runs> <first arm on|off> <out.jsonl> [arms on|off|both] [cdpPort]
-// Environment: S2_WHICHKEY_SETTLE=1 turns on the which-key settle rule of whichkey-settle.mjs
-// (needs cdpPort; the run record then carries `settle`); S2_NAME_PREFIX names the instances
-// (default `diff`); S2_DIFF_TRACE=1 is the diagnostic trace described below.
+// Environment: S2_WHICHKEY_SETTLE=1 (or `effect`) turns on the effect rule of whichkey-settle.mjs,
+// S2_WHICHKEY_SETTLE=hidden the earlier hidden-widget rule (both need cdpPort; the run record then
+// carries `settle`); S2_NAME_PREFIX names the instances (default `diff`); S2_DIFF_START=<n> numbers
+// the first run n, so that a resumed batch keeps the run numbers and the alternation of the arms;
+// S2_DIFF_TRACE=1 is the diagnostic trace described below.
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -20,10 +22,12 @@ import {
   focusWindow,
 } from "./lib.mjs";
 import {
-  SETTLE_CAP_MS,
+  HIDDEN_CAP_MS,
+  EFFECT_CAP_MS,
   loadWhichKey,
   WhichKeyMatcher,
   QuickInputWatcher,
+  EditorTracker,
   typeKeysSettling,
 } from "./whichkey-settle.mjs";
 
@@ -43,8 +47,14 @@ const script = JSON.parse(
 const DELAY = 30;
 const PAUSE = 200;
 const ADAPTER = "vim-companion-spike.s2-adapter";
-const SETTLE = process.env.S2_WHICHKEY_SETTLE === "1";
-if (SETTLE && !cdpPort) throw new Error("S2_WHICHKEY_SETTLE=1 needs cdpPort");
+const SETTLE_ENV = process.env.S2_WHICHKEY_SETTLE ?? "";
+const RULE = { 1: "effect", effect: "effect", hidden: "hidden" }[SETTLE_ENV];
+if (SETTLE_ENV && !RULE)
+  throw new Error(`S2_WHICHKEY_SETTLE=${SETTLE_ENV}: use 1, effect or hidden`);
+const SETTLE = Boolean(RULE);
+if (SETTLE && !cdpPort) throw new Error("S2_WHICHKEY_SETTLE needs cdpPort");
+const TRACE = Boolean(process.env.S2_DIFF_TRACE);
+const START = Number(process.env.S2_DIFF_START ?? 0);
 const whichKey = SETTLE ? loadWhichKey() : undefined;
 const NAME_PREFIX = process.env.S2_NAME_PREFIX ?? "diff";
 // Records name the sandbox root as $S2_ROOT and the home directory as $HOME (editor URIs, error
@@ -71,7 +81,7 @@ for (const sig of ["SIGTERM", "SIGINT"]) {
 }
 
 try {
-  for (let i = 0; i < Number(runsArg); i++) {
+  for (let i = START; i < START + Number(runsArg); i++) {
     // A fresh X server per run, so that no window of an earlier run can hold the focus.
     xvfb = await startXvfb(display);
     const arm =
@@ -121,25 +131,34 @@ try {
       const trace = [];
       // With the settle rule, one CDP connection per run reads the quick input widget, and one
       // matcher per run follows the which-key paths through the script.
+      // The effect rule follows the active editor through the probe's events from here on; in the
+      // trace mode, which clears the probe's events at every item, it starts again at every item.
       const matcher = SETTLE ? new WhichKeyMatcher(whichKey) : undefined;
       if (SETTLE) watcher = await QuickInputWatcher.connect(cdpPort);
+      const tracker =
+        RULE === "effect"
+          ? new EditorTracker(code.probe, { keepEvents: TRACE })
+          : undefined;
+      if (tracker) await tracker.sync();
       const waits = [];
       for (const item of script.items) {
         const t1 = Date.now();
-        if (process.env.S2_DIFF_TRACE)
+        if (TRACE) {
           await code.probe.call("events", { clear: true });
+          if (tracker) await tracker.sync();
+        }
         if (SETTLE) {
           for (const w of await typeKeysSettling(
             display,
             item.keys,
             DELAY,
             matcher,
-            watcher,
+            { watcher, tracker, rule: RULE },
           ))
             waits.push({ item: item.case, ...w });
         } else typeKeys(display, item.keys, DELAY);
         await sleep(PAUSE);
-        if (process.env.S2_DIFF_TRACE) {
+        if (TRACE) {
           const s = await code.probe.call("snapshot");
           const a = s.editors.find(
             (e) => e.uri === s.active && e.viewColumn === s.activeViewColumn,
@@ -190,7 +209,8 @@ try {
         ...(SETTLE
           ? {
               settle: {
-                capMs: SETTLE_CAP_MS,
+                rule: RULE,
+                capMs: RULE === "effect" ? EFFECT_CAP_MS : HIDDEN_CAP_MS,
                 count: waits.length,
                 totalMs: waits.reduce((s, w) => s + w.waitMs, 0),
                 maxMs: Math.max(0, ...waits.map((w) => w.waitMs)),

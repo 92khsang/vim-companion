@@ -1,10 +1,21 @@
-// Opt-in settle rule for the differential harness (S2_WHICHKEY_SETTLE=1): after a typed key
-// completes a which-key binding path (a leaf, not a submenu prefix), the harness waits until the
-// quick input widget of the renderer is hidden before it types the next key, with a cap. which-key
-// 0.11.4 hides its quick pick (`await this.hide()`, which waits for the quick pick's onDidHide) and
-// only then runs the leaf's command; that hide travels from the extension host to the renderer
-// asynchronously, so a key typed 30 ms after the leaf sometimes reaches the closing quick pick and
-// sometimes the editor.
+// Opt-in settle rules for the differential harness. After a typed key completes a which-key
+// binding path (a leaf, not a submenu prefix), the harness types nothing until the rule's condition
+// holds, then types the rest of the burst with the usual delay. which-key 0.11.4 hides its quick
+// pick (`await this.hide()`, which waits for the quick pick's onDidHide) and only then runs the
+// leaf's command; VS Code's quick input hide() refocuses the editor that opened the pick first. A
+// key typed 30 ms after the leaf therefore sometimes reaches the closing quick pick or the editor
+// that opened it, and sometimes the editor that the command moves to.
+//
+// - S2_WHICHKEY_SETTLE=1 (or `effect`): the effect rule. The harness waits until the leaf
+//   command's effect is observed through the probe (the active editor and its group), capped at
+//   EFFECT_CAP_MS; a missing effect throws, so the run ends as a run-error record. The expected
+//   effect follows from the leaf's command and the state before the leaf: a group move expects the
+//   active editor of the neighbouring group; a move that has no target (no group on that side, one
+//   editor in the group) expects no change, and the wait then ends when the quick input widget is
+//   closing or hidden and the focus is out of it, because a command that changes nothing cannot
+//   send a later key elsewhere. A leaf command without a rule throws.
+// - S2_WHICHKEY_SETTLE=hidden: the earlier rule, which waits until the widget is hidden (cap
+//   HIDDEN_CAP_MS); it reproduces the committed `off-only-<version>-settle.jsonl` runs.
 //
 // The matcher is syntactic: it walks the generated which-key bindings with the typed keys and does
 // not know VSCodeVim's state. A leader that VSCodeVim consumes as a character argument or a motion
@@ -18,8 +29,23 @@ import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { REPO, typeKeys } from "./lib.mjs";
 
-export const SETTLE_CAP_MS = 1000;
+export const HIDDEN_CAP_MS = 1000;
+export const EFFECT_CAP_MS = 2000;
+// Kept for the records of the hidden rule.
+export const SETTLE_CAP_MS = HIDDEN_CAP_MS;
 const POLL_SLEEP_MS = 4;
+
+// The effects of the leaf commands that the differential script reaches (spec/generated/vscode/
+// whichkey-bindings.json): `SPC w h` and `SPC w l` move between editor groups; `SPC b n` and
+// `SPC b p` move between the editors of the active group.
+const GROUP_MOVES = {
+  "workbench.action.focusLeftGroup": -1,
+  "workbench.action.focusRightGroup": 1,
+};
+const EDITOR_MOVES = new Set([
+  "workbench.action.nextEditorInGroup",
+  "workbench.action.previousEditorInGroup",
+]);
 
 // Harness key notation (lib.mjs keysym) to the `key` field of a which-key binding.
 const toWhichKey = (key) => {
@@ -81,6 +107,7 @@ export class WhichKeyMatcher {
       return "menu";
     }
     this.menu = null;
+    this.leaf = b ?? null; // the binding of the leaf, for the effect rule
     return b ? "leaf" : "close";
   }
 }
@@ -126,8 +153,12 @@ export class QuickInputWatcher {
   read() {
     return this.evaluate(QUICK_INPUT_JS);
   }
-  /** Polls until the quick input widget is hidden or the cap elapses. */
-  async waitHidden(capMs = SETTLE_CAP_MS) {
+  /** { groups, activeIndex, tabs }: editor groups and the tabs of the active one (renderer DOM). */
+  groups() {
+    return this.evaluate(GROUPS_JS);
+  }
+  /** Polls until the quick input widget is hidden or the cap elapses (the hidden rule). */
+  async waitHidden(capMs = HIDDEN_CAP_MS) {
     const t0 = Date.now();
     let polls = 0;
     let first;
@@ -144,13 +175,9 @@ export class QuickInputWatcher {
           // Both workbench bundles carry a 150 ms closing animation (class
           // quick-input-widget-closing, pointer-events none) that ends in display none. In the
           // recorded runs 1.141.0 showed the class at the first poll in 20 of 20 waits, while
-          // 1.134.0 was already hidden at the first poll in 20 of 20. The first poll records the
-          // class and the focus, so that the wait can be read against both. The focus is no
-          // settle condition: VS Code's quick input hide() refocuses the opener before which-key
-          // runs the leaf command, so a wait that ends when the focus leaves the widget would
-          // reintroduce the race; the hidden-widget wait works on 1.141.0 because the animation
-          // outlasts the command, and a wait for the leaf command's observable effect (for `w h`,
-          // the active editor group) would not depend on that.
+          // 1.134.0 was already hidden at the first poll in 20 of 20. The hidden-widget wait works
+          // on 1.141.0 because the animation outlasts the command and waits 1 to 5 ms on 1.134.0;
+          // the effect rule below does not depend on the animation.
           closingAtFirstPoll: first.closing,
           focusInQuickAtFirstPoll: first.inQuick,
           active: r.active,
@@ -176,11 +203,148 @@ const QUICK_INPUT_JS = `(() => {
   return { hidden, active, closing, inQuick };
 })()`;
 
+// The editor groups of the workbench and the tabs of the active group.
+const GROUPS_JS = `(() => {
+  const groups = [...document.querySelectorAll('.editor-group-container')];
+  const active = document.querySelector('.editor-group-container.active');
+  const tabs = active ? active.querySelectorAll('.tabs-container > .tab').length : -1;
+  return { groups: groups.length, activeIndex: groups.indexOf(active), tabs };
+})()`;
+
+/**
+ * The active editor over time, from the probe: a snapshot at sync() gives the active editor and
+ * the group (viewColumn) of every visible editor, and the probe's `active` events give the later
+ * changes. A file shown in two groups at once would make the group of an event ambiguous, so
+ * sync() refuses it. With keepEvents (the trace mode, which clears the probe's events itself) the
+ * events are read without clearing them.
+ */
+export class EditorTracker {
+  constructor(probe, { keepEvents = false } = {}) {
+    this.probe = probe;
+    this.keepEvents = keepEvents;
+  }
+  async sync() {
+    const s = await this.probe.call("snapshot");
+    this.columns = new Map();
+    for (const e of s.editors) {
+      if (this.columns.has(e.uri) && this.columns.get(e.uri) !== e.viewColumn)
+        throw new Error(`${e.uri} is visible in two editor groups`);
+      this.columns.set(e.uri, e.viewColumn);
+    }
+    await this.probe.call("events", { clear: true });
+    this.seen = 0;
+    this.timeline = [
+      { t: Date.now(), uri: s.active, viewColumn: s.activeViewColumn },
+    ];
+  }
+  async poll() {
+    const ev = await this.probe.call(
+      "events",
+      this.keepEvents ? {} : { clear: true },
+    );
+    if (this.keepEvents && ev.length < this.seen) this.seen = 0;
+    const fresh = this.keepEvents ? ev.slice(this.seen) : ev;
+    this.seen = this.keepEvents ? ev.length : 0;
+    for (const e of fresh)
+      if (e.type === "active")
+        this.timeline.push({
+          t: e.t,
+          uri: e.uri,
+          viewColumn: e.uri ? (this.columns.get(e.uri) ?? null) : null,
+        });
+  }
+  /** The active editor just before time t. */
+  before(t) {
+    return this.timeline.filter((x) => x.t < t).at(-1) ?? this.timeline[0];
+  }
+  /** The changes of the active editor at or after time t. */
+  since(t) {
+    return this.timeline.filter((x) => x.t >= t);
+  }
+}
+
+const base = (uri) => uri?.replace(/^.*\//, "") ?? null;
+const at = (x) => (x ? `${base(x.uri)}:${x.viewColumn}` : null);
+
+/**
+ * The effect rule: polls until the leaf command's effect is observed, then returns the record of
+ * the wait; throws when it is not observed within the cap. tLeaf is the earliest time at which the
+ * leaf can have been typed (the start of its burst plus its index times the key delay): the state
+ * before it is the state the command starts from, and only changes at or after it count.
+ */
+async function waitEffect({ watcher, tracker, binding, path, tLeaf }) {
+  const command =
+    binding.command ?? (binding.commands ?? []).join(",") ?? String(binding);
+  const t0 = Date.now();
+  let polls = 0;
+  for (;;) {
+    await tracker.poll();
+    polls++;
+    const from = tracker.before(tLeaf);
+    const changes = tracker.since(tLeaf);
+    let expected;
+    let observed = null;
+    if (command in GROUP_MOVES) {
+      const dir = GROUP_MOVES[command];
+      const cols = [...new Set(tracker.columns.values())].sort((a, b) => a - b);
+      const side = cols.filter((c) =>
+        dir < 0 ? c < from.viewColumn : c > from.viewColumn,
+      );
+      const target = dir < 0 ? side.at(-1) : side[0];
+      if (target === undefined)
+        expected = `no change: no group ${dir < 0 ? "left" : "right"} of group ${from.viewColumn}`;
+      else {
+        expected = `active editor in group ${target}`;
+        observed = changes.find((x) => x.viewColumn === target) ?? null;
+      }
+    } else if (EDITOR_MOVES.has(command)) {
+      const g = await watcher.groups();
+      if (g.tabs !== 1)
+        throw new Error(
+          `which-key leaf ${path}: ${command} with ${g.tabs} tabs in the active group has no effect rule`,
+        );
+      expected = `no change: one editor in group ${from.viewColumn}`;
+    } else
+      throw new Error(`which-key leaf ${path}: no effect rule for ${command}`);
+    const q = await watcher.read();
+    const none = expected.startsWith("no change");
+    if (none && changes.length)
+      throw new Error(
+        `which-key leaf ${path}: expected ${expected} from ${at(from)}, saw ${changes.map(at).join(", ")}`,
+      );
+    const done = none
+      ? (q.hidden || q.closing) && !q.inQuick
+      : Boolean(observed);
+    if (done)
+      return {
+        rule: "effect",
+        command,
+        from: at(from),
+        expected,
+        observed: observed ? at(observed) : "no change",
+        eventAfterLeafMs: observed ? observed.t - tLeaf : null,
+        changes: changes.length,
+        waitMs: Date.now() - t0,
+        polls,
+        quickVisible: !q.hidden,
+        quickClosing: q.closing,
+        focusInQuick: q.inQuick,
+        active: q.active,
+      };
+    if (Date.now() - t0 >= EFFECT_CAP_MS)
+      throw new Error(
+        `which-key leaf ${path}: ${command} expected ${expected} from ${at(from)}; not observed within ${EFFECT_CAP_MS} ms (changes: ${changes.map(at).join(", ") || "none"}; quick input hidden ${q.hidden}, closing ${q.closing}, focus in it ${q.inQuick})`,
+      );
+    await sleep(POLL_SLEEP_MS);
+  }
+}
+
 /**
  * Types the keys with the given delay as the plain typeKeys does, except that the burst ends after
- * a key that completes a which-key path, and the next burst starts once the quick input widget is
- * hidden (or the cap elapsed). xdotool sleeps the delay after every key including the last, so the
- * key after a leaf comes at least the delay plus the wait after the leaf. Returns one record per
+ * a key that completes a which-key path, and the next burst starts once the rule's condition holds
+ * (rule `effect`: the leaf command's effect, see waitEffect; rule `hidden`: the quick input widget
+ * is hidden or the cap elapsed). xdotool sleeps the delay after every key including the last, so
+ * the key after a leaf comes at least the delay plus the wait after the leaf. Returns one record per
  * wait: the key index, the path, the wait, and the gap from the end of the leaf burst to the start
  * of the next burst (or the end of the item).
  */
@@ -189,7 +353,7 @@ export async function typeKeysSettling(
   keys,
   delayMs,
   matcher,
-  watcher,
+  { watcher, tracker, rule = "effect" },
 ) {
   const waits = [];
   let burst = [];
@@ -202,13 +366,23 @@ export async function typeKeysSettling(
     burst.push(key);
     if (matcher.feed(key) !== "leaf") continue;
     resume();
+    const path = matcher.path.join(" ");
+    const tLeaf = Date.now() + (burst.length - 1) * delayMs;
     typeKeys(display, burst, delayMs);
     const t = Date.now();
     const rec = {
       index,
       key,
-      path: matcher.path.join(" "),
-      ...(await watcher.waitHidden()),
+      path,
+      ...(rule === "hidden"
+        ? await watcher.waitHidden()
+        : await waitEffect({
+            watcher,
+            tracker,
+            binding: matcher.leaf,
+            path,
+            tLeaf,
+          })),
     };
     waits.push(rec);
     last = { rec, t };

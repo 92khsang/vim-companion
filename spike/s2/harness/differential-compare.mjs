@@ -3,8 +3,12 @@
 // own sandbox directory. Per version, the report counts the majority and minority adapter-off
 // outcomes and names, for each minority run, the first item at which it parts from the majority:
 // from the trace digests (S2_DIFF_TRACE=1 records) when the runs carry a trace, otherwise from the
-// final snapshot fields that differ. Runs with the settle rule (`settle` in the record) get a wait
-// summary.
+// final snapshot fields that differ. Runs with a settle rule (`settle` in the record) get a wait
+// summary per rule. Last, per version, one ROW line states the differential row's pass condition
+// as issue #11 writes it: the adapter-off runs all agree, and 0 adapter-on runs differ from them;
+// comparisons stay within one version. A run-error record is a run that did not complete; the row
+// does not count until it is rerun. With S2_DIFF_EXPECT=<n>, the row also needs n completed runs
+// per arm and version.
 // Usage: node spike/s2/harness/differential-compare.mjs <runs.jsonl>...
 import { readFileSync } from "node:fs";
 
@@ -129,8 +133,16 @@ for (const version of versions) {
   );
   for (const r of minority)
     console.log(`  minority run ${r.i}: ${firstDifference(r, majority)}`);
-  const settled = vOff.filter((r) => r.settle);
-  if (settled.length) {
+  const settledAll = vOff.filter((r) => r.settle);
+  const rules = [...new Set(settledAll.map((r) => r.settle.rule ?? "hidden"))];
+  for (const rule of rules) {
+    const settled = settledAll.filter(
+      (r) => (r.settle.rule ?? "hidden") === rule,
+    );
+    if (rule === "effect") {
+      effectSummary(settled);
+      continue;
+    }
     const waits = settled.flatMap((r) => r.settle.waits);
     const ms = waits.map((w) => w.waitMs);
     const mean = (xs) =>
@@ -155,4 +167,68 @@ for (const version of versions) {
         `    ${k}: ${xs.length} waits, mean ${mean(xs)} ms, min ${Math.min(...xs)}, max ${Math.max(...xs)}`,
       );
   }
+}
+
+function effectSummary(settled) {
+  const mean = (xs) =>
+    xs.length ? (xs.reduce((a, b) => a + b, 0) / xs.length).toFixed(1) : "-";
+  const range = (xs) =>
+    xs.length
+      ? `mean ${mean(xs)} min ${Math.min(...xs)} max ${Math.max(...xs)}`
+      : "-";
+  const waits = settled.flatMap((r) => r.settle.waits);
+  console.log(
+    `  settle effect rule (${settled.length} adapter-off runs, cap ${settled[0].settle.capMs} ms): ` +
+      `waits per run ${[...new Set(settled.map((r) => r.settle.count))].join("/")}`,
+  );
+  const byKey = new Map();
+  for (const w of waits) {
+    const k = `${w.item} ${w.path} (${w.command})`;
+    (byKey.get(k) ?? byKey.set(k, []).get(k)).push(w);
+  }
+  for (const [k, ws] of byKey) {
+    const kinds = [...new Set(ws.map((w) => `${w.from} -> ${w.observed}`))];
+    const ev = ws.map((w) => w.eventAfterLeafMs).filter((x) => x !== null);
+    console.log(
+      `    ${k}: ${ws.length} waits; ${kinds.join(", ")}; wait ms ${range(ws.map((w) => w.waitMs))}; ` +
+        `polls ${range(ws.map((w) => w.polls))}; effect ms after the earliest leaf time ${range(ev)}; ` +
+        `quick input visible when the wait ended ${ws.filter((w) => w.quickVisible).length}, ` +
+        `focus in it ${ws.filter((w) => w.focusInQuick).length}`,
+    );
+  }
+}
+
+// ---------- the row, per version ----------
+
+const expectRuns = process.env.S2_DIFF_EXPECT
+  ? Number(process.env.S2_DIFF_EXPECT)
+  : undefined;
+const allVersions = [
+  ...new Set([...ok, ...errors].map((r) => r.version)),
+].sort();
+for (const version of allVersions) {
+  const vOff = off.filter((r) => r.version === version);
+  const vOn = on.filter((r) => r.version === version);
+  const vErr = errors.filter((r) => r.version === version);
+  const outcomes = new Set(vOff.map(key));
+  const vKey = mostCommon(vOff.map(key));
+  const differ = vOn.filter((r) => key(r) !== vKey);
+  const complete =
+    expectRuns === undefined ||
+    (vOn.length >= expectRuns && vOff.length >= expectRuns);
+  const pass =
+    vOff.length > 0 &&
+    vOn.length > 0 &&
+    outcomes.size === 1 &&
+    differ.length === 0 &&
+    vErr.length === 0 &&
+    complete;
+  console.log(
+    `ROW differential ${version}: ${vOn.length} on, ${vOff.length} off` +
+      (expectRuns === undefined ? "" : ` (need ${expectRuns} each)`) +
+      `, run errors ${vErr.length} (on ${vErr.filter((r) => r.arm === "on").length}, off ${vErr.filter((r) => r.arm === "off").length})` +
+      `, adapter-off outcomes ${outcomes.size}, adapter-on runs that differ ${differ.length}` +
+      `: ${pass ? "pass" : "not pass"}` +
+      (differ.length ? ` (runs ${differ.map((r) => r.i).join(", ")})` : ""),
+  );
 }
