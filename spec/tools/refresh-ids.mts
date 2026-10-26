@@ -496,19 +496,41 @@ function jarsIn(dir: string): string[] {
     .sort();
 }
 
-/** The concatenated text of the jar entries that match the patterns; "" when none does. */
+/**
+ * The concatenated text of the jar entries that match the patterns; "" when none does. In a pattern,
+ * "*" does not match "/", so "*.xml" is only the jar root. The entries are listed and matched here
+ * because macOS's unzip has no -W, the option that makes unzip match that way.
+ */
 function unzip(jar: string, patterns: string[]): string {
-  // -W: "*" does not match "/", so "*.xml" is only the jar root.
-  const { status, stdout, stderr, error } = spawnSync(
-    "unzip",
-    ["-W", "-p", jar, ...patterns],
-    { encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
+  const matchers = patterns.map(
+    (pattern) =>
+      new RegExp(
+        `^${pattern
+          .split("*")
+          .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, "\\$&"))
+          .join("[^/]*")}$`,
+      ),
   );
+  const names = runUnzip(jar, ["-Z1", jar])
+    .split("\n")
+    .filter((name) => matchers.some((matcher) => matcher.test(name)));
+  if (names.length === 0) return "";
+  // unzip reads "*", "?" and "[" in a name as wildcards; a bracket makes each one literal.
+  return runUnzip(jar, [
+    "-p",
+    jar,
+    ...names.map((name) => name.replace(/[*?[]/g, "[$&]")),
+  ]);
+}
+
+function runUnzip(jar: string, args: string[]): string {
+  const { status, stdout, stderr, error } = spawnSync("unzip", args, {
+    encoding: "utf8",
+    maxBuffer: 256 * 1024 * 1024,
+  });
   if (error !== undefined) throw new Error(`unzip: ${error.message}`);
-  // 11: a pattern matches no entry; the entries that the other patterns match are still there.
-  if (status !== 0 && status !== 11) {
+  if (status !== 0)
     throw new Error(`unzip ${jar} exited with ${status}: ${stderr.trim()}`);
-  }
   return stdout;
 }
 
