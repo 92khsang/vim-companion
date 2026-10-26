@@ -255,9 +255,21 @@
         "key": "B",
         "label": "Delete inside braces",
         "expect": {
-          "text": "unchanged",
-          "cursor": [1, 13],
-          "mode": "normal"
+          "text": {
+            "1": "  if (one, \"two\", [three]) {}"
+          },
+          "cursor": [1, 28],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            }
+          }
         }
       },
       {
@@ -285,18 +297,42 @@
         "key": "[",
         "label": "Delete inside square brackets",
         "expect": {
-          "text": "unchanged",
-          "cursor": [1, 13],
-          "mode": "normal"
+          "text": {
+            "1": "  if (one, \"two\", []) { four(five) }"
+          },
+          "cursor": [1, 19],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["three"]
+            },
+            "-": {
+              "mode": "character",
+              "lines": ["three"]
+            }
+          }
         }
       },
       {
         "key": "]",
         "label": "Delete inside square brackets",
         "expect": {
-          "text": "unchanged",
-          "cursor": [1, 13],
-          "mode": "normal"
+          "text": {
+            "1": "  if (one, \"two\", []) { four(five) }"
+          },
+          "cursor": [1, 19],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["three"]
+            },
+            "-": {
+              "mode": "character",
+              "lines": ["three"]
+            }
+          }
         }
       },
       {
@@ -376,7 +412,8 @@
                 "iota kappa lambda mu"
               ]
             }
-          }
+          },
+          "shiftNumbered": true
         }
       },
       {
@@ -393,13 +430,14 @@
           "registers": {
             "\"": {
               "mode": "character",
-              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
             },
             "1": {
               "mode": "character",
-              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
             }
-          }
+          },
+          "shiftNumbered": true
         }
       },
       {
@@ -429,7 +467,7 @@
           "mode": "normal",
           "registers": {
             "\"": {
-              "mode": "character",
+              "mode": "line",
               "lines": [
                 "alpha beta gamma delta",
                 "  if (one, \"two\", [three]) { four(five) }",
@@ -438,7 +476,7 @@
               ]
             },
             "1": {
-              "mode": "character",
+              "mode": "line",
               "lines": [
                 "alpha beta gamma delta",
                 "  if (one, \"two\", [three]) { four(five) }",
@@ -446,7 +484,8 @@
                 "iota kappa lambda mu"
               ]
             }
-          }
+          },
+          "shiftNumbered": true
         }
       },
       {
@@ -468,9 +507,6 @@
               "lines": ["two"]
             }
           }
-        },
-        "when": {
-          "vim.targets.enable": true
         }
       },
       {
@@ -482,7 +518,7 @@
           "mode": "normal",
           "registers": {
             "\"": {
-              "mode": "character",
+              "mode": "line",
               "lines": [
                 "alpha beta gamma delta",
                 "  if (one, \"two\", [three]) { four(five) }",
@@ -491,7 +527,7 @@
               ]
             },
             "1": {
-              "mode": "character",
+              "mode": "line",
               "lines": [
                 "alpha beta gamma delta",
                 "  if (one, \"two\", [three]) { four(five) }",
@@ -499,7 +535,8 @@
                 "iota kappa lambda mu"
               ]
             }
-          }
+          },
+          "shiftNumbered": true
         }
       },
       {
@@ -536,18 +573,42 @@
         "key": "{",
         "label": "Delete inside braces",
         "expect": {
-          "text": "unchanged",
-          "cursor": [1, 13],
-          "mode": "normal"
+          "text": {
+            "1": "  if (one, \"two\", [three]) {}"
+          },
+          "cursor": [1, 28],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            }
+          }
         }
       },
       {
         "key": "}",
         "label": "Delete inside braces",
         "expect": {
-          "text": "unchanged",
-          "cursor": [1, 13],
-          "mode": "normal"
+          "text": {
+            "1": "  if (one, \"two\", [three]) {}"
+          },
+          "cursor": [1, 28],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" four(five) "]
+            }
+          }
         }
       },
       {
