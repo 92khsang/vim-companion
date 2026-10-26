@@ -172,8 +172,10 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   `modeHandlerMap` field, `vimState.modeData` and `recordedState`, the 8 `RecordedState` fields,
   the `Mode` enum, the `actionType`, `isCompleteAction` and `keysPressed` action fields, the
   `cmd_register` name and the webpack optimization lines) at each of the 72 release tags since
-  2020 and at the default branch; `changes.txt` lists the releases where a line changed. The last
-  change that alters what the adapter reads is v1.25.1 (2023-03-01, the register action name);
+  2020 and at the default branch; `changes.txt` lists the releases where a line changed. Changes
+  that alter what the adapter reads came in 7 releases: v1.14.0 (2020-05-02, the first webpack
+  bundle), v1.15.0, v1.17.0, v1.19.0, v1.22.0, v1.23.0 and v1.25.1 (2023-03-01, the register
+  action name); the others change a signature, a `public` keyword, a use count or source maps;
   v1.26.0 (2023-09-09) only drops one use of `ModeHandlerMap.` in `extensionBase.ts`; the 20
   releases from v1.26.0 to v1.32.4 and the default branch have identical fingerprints.
   `bundle-check.txt`: a static read of `extension/out/extension.js` in the published packages of
