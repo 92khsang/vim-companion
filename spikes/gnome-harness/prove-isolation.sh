@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Proves that the harness neither reads nor writes the user's dconf database, IBus or session bus.
-# Usage: prove-isolation.sh <out-dir>   (prints a report; exits non-zero on any leak)
+# Usage: [S3_CPUS=<cores>] prove-isolation.sh <out-dir>   (prints a report; exits non-zero on any leak)
+# S3_CPUS pins the harness session it starts to a core set (taskset), as the spike S3 scripts do, so that the proof
+# can run beside other harness sessions without taking their cores.
 set -uo pipefail
 out="$(mkdir -p "$1" && cd "$1" && pwd)"
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -16,7 +18,9 @@ check "user database has no probe key before" '[ -z "$(dconf read $probe_key)" ]
 
 root="$(mktemp -d)"
 cp "$here/settings.ini" "$root/settings.ini"
-"$h" start "$root" | tee "$out/start.txt"
+start=("$h" start "$root")
+if [ -n "${S3_CPUS:-}" ]; then start=(taskset -c "$S3_CPUS" "${start[@]}"); fi
+"${start[@]}" | tee "$out/start.txt"
 sleep 8
 
 cp "$root/dconf-after-load.dump" "$out/harness-dconf-after-load.dump"

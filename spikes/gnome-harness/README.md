@@ -16,7 +16,8 @@ Spikes S1 and S4 can reuse it by permalink.
   display and `ibus-x11`;
 - an unlocked keyring with an empty password, so that no Secret Service client makes the shell prompt for one.
 
-`prove-isolation.sh <out-dir>` checks this and fails on any leak: the harness database starts with exactly
+`[S3_CPUS=<cores>] prove-isolation.sh <out-dir>` (S3_CPUS pins the session it starts to a core set, as the spike S3
+scripts do) checks this and fails on any leak: the harness database starts with exactly
 `settings.ini`, a harness write lands in the harness database and not in the user's, GNOME Shell, Mutter RemoteDesktop
 and IBus are on the harness bus, no system service is reachable, the harness runs its own `ibus-daemon`, and after
 `stop` the user's IBus and input-source settings, the user's `ibus-daemon` and the mounts are unchanged and no harness
