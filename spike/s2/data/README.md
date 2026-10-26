@@ -70,10 +70,14 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   VimState records no macro (VSCodeVim 1.32.4 keeps `vimState.macro` per ModeHandler and
   `ModeHandlerMap` is a `Map<Uri, ModeHandler>`; `QuitRecordMacro.doesActionApply` needs
   `vimState.macro !== undefined`), so `q @` matches nothing (`<macro>` is `[0-9a-zA-Z]`), `a`
-  appends, and the `<Esc> <Esc>` after the script completes it; register `a` holds an empty
-  recording in every trace run, so `@a` can replay nothing in any outcome. The no-settle minority
-  is the run where `q`, typed 30 ms after `h`, still reached the closing quick pick; a one-run
-  control with the CDP port and no settle reproduced each outcome once (scratch only).
+  appends, and the `<Esc> <Esc>` after the script completes it. Inferred from the source, not
+  from the records: `q a` stored a fresh empty recording in register `a` and nothing stopped it in
+  b.txt, so `@a` replays nothing; the probe renders every macro register as `keys:`, so the trace
+  files cannot show the register's content. The minority's mechanism is not recorded either: the
+  `q` typed 30 ms after `h` was either swallowed by the closing quick pick, or delivered to b.txt
+  between the pick's hide (VS Code refocuses the editor that opened it) and the `focusLeftGroup`
+  command, where it stopped the recording; the records fit both. Two trace controls with the CDP
+  port and no settle reproduced one outcome each (scratch only, too few to say anything).
 - `vim-expect-pilot/`: `node spike/s2/vim-check/expect.mjs <short dir> <set> spike/s2/cards/pilot.json <out>`
   on 2026-10-26 for both settings sets (`expect-<set>.jsonl`; Vim 9.1 with patches 1-948 and
   950-2141, tmux 3.6, `taskset -c 28-31`, one fresh Vim per row): the Vim-generated expectations of
@@ -95,9 +99,11 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   compared (the probe of 2026-10-16 mis-read them); `compare-<set>-<version>-v2.txt` compares the
   records of 2026-10-26 as (mode, lines).
   `count-cards.txt`: `node spike/s2/vim-check/expect.mjs --count spike/s2/cards/cards.json`, the
-  class of every row of `cards.json` per settings set: defaults 3,455 rows = 3,051 Vim + 35 remap +
-  337 own + 32 plugin; extensions 3,649 = 3,013 Vim + 35 remap + 345 own + 256 plugin; 3,051
-  distinct Vim rows over both sets (3,013 in both).
+  class of every row of `cards.json` per settings set, regenerated on the rebuilt cards (the first
+  run, on the v1 cards, gave 3,051 and 3,013 Vim rows): defaults 3,442 rows = 3,038 Vim + 35 remap +
+  337 own + 32 plugin; extensions 3,633 = 3,013 Vim + 35 remap + 329 own + 256 plugin; 3,038
+  distinct Vim rows over both sets (3,013 in both). The 13 `z` rows after an operator that the
+  rebuild removed under the defaults counted as Vim rows; under the second set they are sneak rows.
 - `cards-registers/registers-1.141.0.json`: `S2_NAME_PREFIX=f1- node spike/s2/harness/cards-registers.mjs 1.141.0 :123 9523 <out>`
   on 2026-10-26, a direct check of the probe's register reader after it was changed to read a
   shifted numbered register, which VSCodeVim 1.32.4 stores as `{ ...previous }` (an object with

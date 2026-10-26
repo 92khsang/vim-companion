@@ -14,7 +14,8 @@ set backspace=indent,eol,start
 set expandtab shiftwidth=4 softtabstop=4 tabstop=4
 " vim.ignorecase, vim.smartcase, vim.textwidth defaults of VSCodeVim. CTRL-A and CTRL-X: VSCodeVim
 " 1.32.4 parses a leading-zero number as octal and has no binary numbers
-" (src/common/number/numericString.ts L14-34), so octal and hex, not Vim's default bin,hex.
+" (src/common/number/numericString.ts L14-34), so octal and hex, not the bin,hex of Vim's
+" defaults.vim (the option's own default is bin,octal,hex).
 set ignorecase smartcase textwidth=80 nrformats=octal,hex
 " As the grammar fixture (spec/fixtures/grammar) and vim-check/vimrc.
 set timeout timeoutlen=1000 ttimeout ttimeoutlen=10

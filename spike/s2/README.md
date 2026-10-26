@@ -42,7 +42,9 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   `.quick-input-widget` is hidden (`display: none`), capped at 1000 ms, and types the rest. Both
   workbench bundles carry the 150 ms closing animation (class `quick-input-widget-closing`); in the
   recorded runs 1.141.0 showed that class at the first poll in 20 of 20 waits, while 1.134.0 was
-  already hidden at the first poll in 20 of 20. Design note: VS Code's quick input `hide()`
+  already hidden at the first poll in 20 of 20. Read in the minified bundles, not verified at run
+  time: the animation is gated by `workbench.experimental.modernUI`, registered with the default
+  `false` in 1.134.0 and `true` in 1.141.0, which the sandbox does not pin. Design note: VS Code's quick input `hide()`
   refocuses the element that opened the pick before which-key runs the leaf command, so a wait that
   ends when the focus leaves the widget would reintroduce the race; the hidden-widget wait works on
   1.141.0 because the animation outlasts the command, and a rule that waits for the leaf command's
@@ -111,9 +113,11 @@ VSCodeVim implements differently (`gd`, `K`, `<C-]>`, undo, `%`, word motions ov
 gets Vim's answer, which the comparison then reports as a deviation to review by hand; a Visual-mode
 cursor is Vim's inclusive position, not VS Code's exclusive selection end; the sample key of a
 placeholder row is a hand choice. In numbers (a hand count over `cards.json`): about 197
-nothing-pending Vim rows per set (the `<C-w>` card's 29, the `z` card's 19, and
-`<C-o> <C-i> <C-g> <C-^> <C-]> <C-t> <C-b> <C-d> <C-e> <C-f> <C-u> <C-y>`) read `unchanged` or
-depend on the window geometry (tmux 100x12 against the editor height), the 82 command-line rows
+nothing-pending Vim rows per set (the `<C-w>` and `z` prefix rows, 15 and 17, and 165 rows of
+`<C-o> <C-i> <C-g> <C-^> <C-6> <C-]> <C-t> <C-b> <C-d> <C-e> <C-f> <C-u> <C-y>` over the 18
+nothing-pending cards), plus the `<C-w>` card's 29 and the `z` card's 19 waiting rows, read
+`unchanged` or depend on the window geometry (tmux 100x12 against the editor height), the 82
+command-line rows
 have no fixture mode name, and the `"+` card (142 rows) needs a Vim with clipboard support; these
 need hand-written expectations or a rule before the oracle's output is used. Unverified: VS Code's
 `editor.detectIndentation` is not pinned in the sandbox settings, and the fixture's second line is
