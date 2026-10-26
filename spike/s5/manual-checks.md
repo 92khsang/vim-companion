@@ -26,10 +26,13 @@ its expected result. `$MAC_HOST` is the Mac; `$MAC_SPIKE_DIR` is the spike's tem
 
 ### 5. Grant the permissions, once, at the Mac
 
-Measured on macOS 27.0.1: TCC attributes every program that runs over ssh to the responsible
-process `/usr/libexec/sshd-keygen-wrapper` (identifier `com.apple.sshd-keygen-wrapper`), so the
-permissions go to that program. This includes the sandbox IDEs that an agent starts over ssh: their
-TCC requests carry the same responsible process (`data/row23-post/tcc-rows23.txt`).
+Measured on macOS 27.0.1: TCC attributes every program that runs inside an ssh session, including
+`screencapture`, `s5win`, `s5keys` and the sandbox VS Code started from the session with `nohup`,
+to the responsible process `/usr/libexec/sshd-keygen-wrapper` (identifier
+`com.apple.sshd-keygen-wrapper`), so the permissions go to that program. The IntelliJ sandbox is
+started as a launchd job in `gui/<uid>`, because Java AWT cannot open a window from an ssh session,
+and TCC attributes it to its own JDK `java` binary instead; rows 2 and 3 do not depend on that,
+because the capturer and the key sender run in the ssh session (`data/row23-post/tcc-rows23.txt`).
 
 Measured on macOS 27.0.1: System Settings names the Accessibility pane `Device Control and Data
 Access` (Korean UI: `기기 제어 및 데이터 접근`) and the Screen Recording pane `Screen & System Audio
