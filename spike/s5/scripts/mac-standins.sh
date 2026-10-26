@@ -12,8 +12,8 @@
 #   MAC_HOST=<host> MAC_SPIKE_DIR=<dir> mac-standins.sh intellij <out dir> <commit> <gradle user home>
 #         install 0.0.1, upgrade to 0.0.2 and roll back to 0.0.1 in the IntelliJ sandbox of the run task
 #         runIde2026_2_3: each step extracts the copied plugin zip into the sandbox's plugins directory,
-#         as Install Plugin from Disk does, then starts the sandbox IDE, whose plugin manager reports
-#         the loaded version, and lets it exit.
+#         as Install Plugin from Disk does, then starts the sandbox IDE as a launchd job in the console
+#         user's GUI session, whose plugin manager reports the loaded version, and lets it exit.
 set -euo pipefail
 : "${MAC_HOST:?}" "${MAC_SPIKE_DIR:?}"
 what=$1 out=$2
@@ -49,8 +49,20 @@ case $what in
     for step in install:0.0.1 upgrade:0.0.2 rollback:0.0.1; do
       name=${step%%:*} v=${step#*:}
       r "/bin/rm -rf '$plugins/s5-target-b' && /usr/bin/unzip -q -o '$md/artifacts/s5-target-b-$v.zip' -d '$plugins' && /bin/ls '$plugins/s5-target-b/lib'" > "$out/$name-files.txt" 2>&1
-      r "'$md/scripts/intellij-sandbox.sh' task '$w' '$gh' runIde2026_2_3 -Ps5.keepSandboxPlugins=true -Ps5.report='$w/report-$name.log' -Ps5.exitAfterReport=true" > "$out/$name-gradle.log" 2>&1 || true
-      r "/bin/cat '$w/report-$name.log'" > "$out/$name-report.log" 2>&1 || true
+      # On macOS the run task must run in the console user's GUI session, so it starts as the
+      # launchd job of `intellij-sandbox.sh start`; the IDE exits after the probe's report.
+      gpid=$(r "'$md/scripts/intellij-sandbox.sh' start '$w' '$gh' '$w/gradle-$name.log' -Ps5.keepSandboxPlugins=true -Ps5.report='$w/report-$name.log' -Ps5.exitAfterReport=true")
+      for _ in $(seq 1 200); do
+        r "/bin/cat '$w/report-$name.log' 2>/dev/null" > "$out/$name-report.log" || true
+        grep -q pluginVersion "$out/$name-report.log" && break
+        sleep 3
+      done
+      for _ in $(seq 1 60); do
+        r "/bin/ps -p $gpid > /dev/null" || break
+        sleep 2
+      done
+      r "'$md/scripts/intellij-sandbox.sh' stop-job '$w'" || true
+      r "/bin/cat '$w/gradle-$name.log'" > "$out/$name-gradle.log" 2>&1 || true
       got=$(sed -n 's/.*pluginVersion=\([0-9.]*\).*/\1/p' "$out/$name-report.log" | head -1)
       result=fail
       [ "$got" = "$v" ] && result=pass
