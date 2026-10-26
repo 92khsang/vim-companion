@@ -7,8 +7,13 @@
 //   expect.mode:      fixture mode name
 //   expect.shiftNumbered: true when the key shifts the numbered registers 1-8 to 2-9
 //   setup:            optional keys typed after the reset and before the card's keys
-//   expect.registers: { "<name>": "<text>" } for the registers the key writes; every other
-//                     register must hold what it held before the key
+//   expect.registers: { "<name>": { "mode": "character" | "line" | "block", "lines": ["<line>", ...] } }
+//                     for the registers the key writes (a recorded macro: { "mode", "keys" });
+//                     every other register must hold what it held before the key
+// A register is compared as (mode, lines): VSCodeVim's RegisterMode and its text split at "\n",
+// which is what Vim's getregtype() and getreg(name, 1, 1) give. A linewise register holding `line`
+// ({ mode: "line", lines: ["line"] }) and a charwise one holding `line\n` ({ mode: "character",
+// lines: ["line", ""] }) are different values, and the record shows both.
 // Usage: node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <cards.json> <trials> <out.jsonl> [card ids, comma-separated]
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -50,12 +55,40 @@ function expectedText(expect) {
   for (const [i, line] of Object.entries(expect.text)) lines[Number(i)] = line;
   return lines.filter((l) => l !== null);
 }
-const regText = (r) =>
-  r
-    ? r
-        .map((c) => (Array.isArray(c.text) ? c.text.join("\n") : c.text))
-        .join("\n")
-    : undefined;
+const REGISTER_MODES = ["character", "line", "block"];
+/** A probe register (one entry per cursor) as (mode, lines), or { cursors } for several cursors. */
+const regValue = (r) => {
+  if (!r) return undefined;
+  const one = (c) =>
+    typeof c.text === "string"
+      ? { mode: c.mode, lines: c.text.split("\n") }
+      : { mode: c.mode, keys: c.text?.keys ?? String(c.text) };
+  return r.length === 1 ? one(r[0]) : { cursors: r.map(one) };
+};
+/** The same value with its keys in a fixed order, for comparison and the record. */
+const canon = (v) =>
+  v === undefined || v === null
+    ? v
+    : v.cursors
+      ? { cursors: v.cursors.map(canon) }
+      : { mode: v.mode, ...(v.lines ? { lines: v.lines } : { keys: v.keys }) };
+const sameReg = (a, b) => JSON.stringify(canon(a)) === JSON.stringify(canon(b));
+// Every register expectation must name a mode and lines (or a macro's keys) before VS Code starts.
+for (const card of cards)
+  for (const row of card.rows)
+    for (const [name, v] of Object.entries(row.expect?.registers ?? {})) {
+      const ok =
+        v &&
+        typeof v === "object" &&
+        REGISTER_MODES.includes(v.mode) &&
+        ((Array.isArray(v.lines) &&
+          v.lines.every((l) => typeof l === "string")) ||
+          typeof v.keys === "string");
+      if (!ok)
+        throw new Error(
+          `${card.id} ${row.key}: register ${name} must be { mode, lines } or { mode, keys }`,
+        );
+    }
 
 let xvfb, code;
 for (const sig of ["SIGTERM", "SIGINT"]) {
@@ -73,7 +106,7 @@ try {
   code = await openSession({
     version,
     display,
-    name: `correct-${set}-${version}-${display.slice(1)}`,
+    name: `${process.env.S2_NAME_PREFIX ?? ""}correct-${set}-${version}-${display.slice(1)}`,
     cdpPort: Number(cdpPort),
     settings,
   });
@@ -134,11 +167,17 @@ try {
         const after = await code.probe.call("registers");
         // expect.shiftNumbered: the key shifts the numbered registers (:help quote_number), so
         // register n+1 must hold what register n held before, for n = 1..8.
-        const expectedRegisters = { ...(row.expect.registers ?? {}) };
+        const expectedRegisters = Object.fromEntries(
+          Object.entries(row.expect.registers ?? {}).map(([k, v]) => [
+            k,
+            canon(v),
+          ]),
+        );
         if (row.expect.shiftNumbered) {
           for (let n = 8; n >= 1; n--) {
-            if (regText(before[String(n)]) !== undefined)
-              expectedRegisters[String(n + 1)] = regText(before[String(n)]);
+            const prev = regValue(before[String(n)]);
+            if (prev !== undefined)
+              expectedRegisters[String(n + 1)] = canon(prev);
           }
         }
         const got = {
@@ -150,12 +189,12 @@ try {
               .filter(
                 (k) =>
                   k in expectedRegisters ||
-                  regText(before[k]) !== regText(after[k]),
+                  !sameReg(regValue(before[k]), regValue(after[k])),
               )
-              .map((k) => [k, regText(after[k]) ?? null]),
+              .map((k) => [k, canon(regValue(after[k])) ?? null]),
           ),
         };
-        // Registers named in the expectation must hold the given text; every other register must
+        // Registers named in the expectation must hold the given value; every other register must
         // hold what it held before the key.
         const want = {
           text: expectedText(row.expect),
@@ -164,18 +203,28 @@ try {
           registers: expectedRegisters,
         };
         const sortEntries = (o) => JSON.stringify(Object.entries(o).sort());
-        const ok =
-          JSON.stringify(got.text) === JSON.stringify(want.text) &&
-          JSON.stringify(got.cursor) === JSON.stringify(want.cursor) &&
-          got.mode === want.mode &&
-          sortEntries(got.registers) === sortEntries(want.registers);
+        const diff = [
+          ["text", JSON.stringify(got.text) !== JSON.stringify(want.text)],
+          [
+            "cursor",
+            JSON.stringify(got.cursor) !== JSON.stringify(want.cursor),
+          ],
+          ["mode", got.mode !== want.mode],
+          [
+            "registers",
+            sortEntries(got.registers) !== sortEntries(want.registers),
+          ],
+        ]
+          .filter(([, d]) => d)
+          .map(([k]) => k);
         write({
           type: "trial",
           card: card.id,
           key: row.key,
           typed,
           trial,
-          ok,
+          ok: diff.length === 0,
+          diff,
           got,
           want,
           activeFile: snap.active?.replace(/^.*\//, ""),

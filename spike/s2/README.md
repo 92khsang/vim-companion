@@ -30,6 +30,8 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
 - `harness/prove.mjs`: harness proof. `harness/fixture-run.mjs` + `fixture-summary.mjs`: the
   grammar fixture against VSCodeVim (reader or adapter). `harness/cards-extract.mjs`,
   `cards-count.mjs`, `cards-build.mjs`: the completeness reference and the card rows.
+  `harness/cards-complete.mjs`: check (2) of candidate (b). `harness/cards-correctness.mjs`:
+  check (1). `harness/cards-registers.mjs`: a direct check of the probe's register reader.
   `harness/differential.mjs` + `differential-compare.mjs`: the differential test.
 - `harness/whichkey-settle.mjs`: the opt-in which-key settle rule of the differential test
   (`S2_WHICHKEY_SETTLE=1`, with a CDP port as the last argument; off by default and then without
@@ -42,6 +44,15 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   editor), capped at 1000 ms, and types the rest. Every other key keeps the 30 ms delay; xdotool
   sleeps the delay after the last key of a burst too. The run record carries `settle` with one entry
   per wait (item, key, path, wait, polls, what the first poll saw) and the counts.
+
+## Cards reference and register convention
+
+- Registers are compared and recorded as (mode, lines): VSCodeVim's `RegisterMode` (`character`,
+  `line`, `block`) and the register text split at `\n`, which is what Vim's `getregtype()` and
+  `getreg(name, 1, 1)` give. A linewise register holding `line` is `{ "mode": "line", "lines":
+["line"] }`; a charwise one holding `line\n` is `{ "mode": "character", "lines": ["line", ""] }`.
+  The two are different values, and a trial record shows both sides. `shiftNumbered` compares
+  registers 2-9 after the key with registers 1-8 before it, as (mode, lines).
 
 ## Vim oracle for the card expectations
 
