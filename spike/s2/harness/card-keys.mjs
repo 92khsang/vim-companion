@@ -7,7 +7,10 @@ import { keysym } from "./lib.mjs";
 /**
  * keys: physical keys typed instead of the token; exec: a VS Code command run instead of a key,
  * with a teardown command run after the trial's reads; unreachable: nothing produces the token on
- * Linux, so the row cannot be typed.
+ * Linux, so the row cannot be typed. An unreachable token also carries `tries`, the raw xdotool
+ * chords a Linux user would press for it, and `label`, the card's statement that it is not
+ * available on Linux (check1/unsupported.mjs). Its check (1) row is a negative one: a trial sends
+ * every chord and passes only when VSCodeVim never receives the token (cards-correctness.mjs).
  */
 export const TOKENS = {
   // Surround's default mappings in normal mode, active while vim.surround is true:
@@ -44,18 +47,30 @@ export const TOKENS = {
   // shift+alt+down/up (package.json L427, L434), so on Linux VSCodeVim receives
   // <S-alt+down>/<S-alt+up>, which no action takes.
   "<C-alt+down>": {
+    tries: [["ctrl+alt+Down"], ["shift+alt+Down"]],
+    label:
+      "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
     unreachable:
       "Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
   },
   "<C-alt+up>": {
+    tries: [["ctrl+alt+Up"], ["shift+alt+Up"]],
+    label:
+      "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
     unreachable:
       "Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
   },
   "<D-alt+down>": {
+    tries: [["super+alt+Down"]],
+    label:
+      "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
     unreachable:
       "cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
   },
   "<D-alt+up>": {
+    tries: [["super+alt+Up"]],
+    label:
+      "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
     unreachable:
       "cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
   },
@@ -64,6 +79,9 @@ export const TOKENS = {
   // us, check1/keys-proof.mjs): ctrl+6 reached the action; ctrl+asciicircum, ctrl+shift+6 and
   // ctrl+shift+asciicircum did not, so VS Code dispatches no key of the us layout to ctrl+^.
   "<C-^>": {
+    tries: [["ctrl+asciicircum"], ["ctrl+shift+6"], ["ctrl+shift+asciicircum"]],
+    label:
+      "Not available on a US layout on Linux; use <C-6> (edit the alternate file)",
     unreachable:
       "VS Code dispatches no key of the us layout to the binding ctrl+^ (package.json L326): ctrl+asciicircum, ctrl+shift+6 and ctrl+shift+asciicircum did not reach it (measured 2026-10-27 on VS Code 1.134.0 and 1.141.0, spike/s2/data/check1/keys-proof); <C-6> (ctrl+6) reaches the same action",
   },
@@ -71,6 +89,9 @@ export const TOKENS = {
   // (package.json L341; notation.ts L4 and L6: ctrl+ -> C-, then shift+ -> S-), so the action
   // never matches.
   "<C-shift+2>": {
+    tries: [["ctrl+shift+2"], ["ctrl+at"]],
+    label:
+      "Not available on Linux: VSCodeVim's binding for Ctrl+@ (insert the last inserted text and leave Insert mode) never reaches its action",
     unreachable:
       "the binding ctrl+shift+2 is normalized to <C-S-2> (package.json L341; notation.ts L4, L6), which no action takes; insert.ts L337 expects <C-shift+2>",
   },

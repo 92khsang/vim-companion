@@ -15,7 +15,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { REPO, START } from "../harness/lib.mjs";
-import { planKeys } from "../harness/card-keys.mjs";
+import { TOKENS, planKeys } from "../harness/card-keys.mjs";
 import { SETS, cardFile, harnessCursor, setsOf } from "./lib.mjs";
 
 const args = process.argv.slice(2);
@@ -106,6 +106,7 @@ const summary = Object.fromEntries(
       invalid: 0,
       untypeable: 0,
       unreachable: 0,
+      unsupported: 0,
     },
   ]),
 );
@@ -152,7 +153,16 @@ for (const card of cards) {
       const sum = summary[s];
       sum.inForce += 1;
       const why = [];
-      if (!["vim-oracle", "hand"].includes(x.source)) why.push("source");
+      if (!["vim-oracle", "hand", "unsupported-linux"].includes(x.source))
+        why.push("source");
+      // A row whose key nothing on Linux produces (check1/unsupported.mjs): no expectation; its
+      // check (1) verification is negative (the token's `tries` in harness/card-keys.mjs).
+      const unsupported = x.source === "unsupported-linux";
+      if (
+        unsupported &&
+        !(x.reason && TOKENS[x.unsupported?.token]?.tries?.length)
+      )
+        why.push("unsupported: token, tries or reason");
       if (x.source === "hand" && !x.reason) why.push("reason");
       if (typeof x.label !== "string" || !x.label.trim() || x.label === "TODO")
         why.push("label");
@@ -164,14 +174,14 @@ for (const card of cards) {
       if (x.pending) {
         sum.pending += 1;
         why.push(`pending: ${x.pending.split(":")[0]}`);
-      } else why.push(...expectProblems(x.expect));
+      } else if (!unsupported) why.push(...expectProblems(x.expect));
       if (hasTodo(x)) sum.todo += 1;
       // The keys the harness types for the row (a sample still to be chosen is not counted), as
       // harness/card-keys.mjs plans them: untypeable (no key known) or unreachable on Linux.
       const typed = [
         ...(x.setup ?? []),
         ...card.keys,
-        x.sample ?? row.key,
+        ...(unsupported ? [] : [x.sample ?? row.key]),
       ].filter((k) => k !== "TODO");
       const plan = planKeys(typed);
       if (plan.untypeable.length) {
@@ -186,6 +196,7 @@ for (const card of cards) {
       }
       if (x.source === "vim-oracle") sum.vimOracle += 1;
       if (x.source === "hand") sum.hand += 1;
+      if (unsupported) sum.unsupported += 1;
       const blocking = why.filter(
         (w) =>
           !w.startsWith("pending") &&
@@ -197,7 +208,20 @@ for (const card of cards) {
         sum.invalid += 1;
         problems.push(`${name} ${row.key} (${s}): ${blocking.join(", ")}`);
       }
-      if (why.length === 0) {
+      if (why.length === 0 && unsupported) {
+        sum.complete += 1;
+        perSet[s].push({
+          key: row.key,
+          ...(row.when ? { when: row.when } : {}),
+          label: x.label,
+          ...(x.setup ? { setup: x.setup } : {}),
+          negative: {
+            token: x.unsupported.token,
+            tries: TOKENS[x.unsupported.token].tries,
+            reason: x.reason,
+          },
+        });
+      } else if (why.length === 0) {
         sum.complete += 1;
         const e = x.expect;
         const expect = {

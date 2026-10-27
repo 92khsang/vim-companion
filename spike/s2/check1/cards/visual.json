@@ -482,30 +482,48 @@
     {
       "key": "<C-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the next line (VSCodeVim's <C-alt+down>)",
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 14],
-        "mode": "visual"
+      "unsupported": {
+        "token": "<C-alt+down>"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the next line (VSCodeVim's <C-alt+down>)",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual"
+        }
+      }
     },
     {
       "key": "<C-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above (VSCodeVim's <C-alt+up>)",
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 14],
-        "mode": "visual"
+      "unsupported": {
+        "token": "<C-alt+up>"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above (VSCodeVim's <C-alt+up>)",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual"
+        }
+      }
     },
     {
       "key": "<C-b>",
@@ -954,30 +972,48 @@
     {
       "key": "<D-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the next line (VSCodeVim's <D-alt+down>)",
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 14],
-        "mode": "visual"
+      "unsupported": {
+        "token": "<D-alt+down>"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the next line (VSCodeVim's <D-alt+down>)",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual"
+        }
+      }
     },
     {
       "key": "<D-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above (VSCodeVim's <D-alt+up>)",
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 14],
-        "mode": "visual"
+      "unsupported": {
+        "token": "<D-alt+up>"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1120-1152 (insertCursorBelow/Above); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.addCursorDown/Up keep the existing cursors first, so the primary selection stays); VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above (VSCodeVim's <D-alt+up>)",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual"
+        }
+      }
     },
     {
       "key": "<D-d>",

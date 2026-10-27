@@ -73,15 +73,12 @@ const TOKENS_TO_PROVE = [
   "<C-6>",
   "<C-^>",
 ];
-// The physical keys a user would try for a token that nothing on Linux produces.
-const TRY_UNREACHABLE = {
-  "<C-alt+down>": [["ctrl+alt+Down"], ["shift+alt+Down"]],
-  "<C-alt+up>": [["ctrl+alt+Up"], ["shift+alt+Up"]],
-  "<D-alt+down>": [["super+alt+Down"]],
-  "<D-alt+up>": [["super+alt+Up"]],
-  "<C-shift+2>": [["ctrl+shift+2"], ["ctrl+at"]],
-  "<C-^>": [["ctrl+asciicircum"], ["ctrl+shift+6"], ["ctrl+shift+asciicircum"]],
-};
+// The physical keys a user would try for a token that nothing on Linux produces (card-keys.mjs).
+const TRY_UNREACHABLE = Object.fromEntries(
+  Object.entries(TOKENS)
+    .filter(([, t]) => t.tries)
+    .map(([k, t]) => [k, t.tries]),
+);
 const CARDS_DIR = new URL("./cards/", import.meta.url).pathname;
 const cards = readdirSync(CARDS_DIR)
   .filter((f) => f.endsWith(".json"))

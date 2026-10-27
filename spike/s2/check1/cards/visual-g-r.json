@@ -707,29 +707,38 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Replace the selection with the register, then add a cursor on the line below",
-      "expect": {
-        "text": {
-          "1": "  if (one, \"tww\", [three]) { four(five) }"
-        },
-        "cursor": [1, 14],
-        "mode": "normal",
-        "registers": {
-          "0": {
-            "mode": "character",
-            "lines": ["w"]
-          },
-          "\"": {
-            "mode": "character",
-            "lines": ["w"]
-          }
-        }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap.",
       "setup": ["y", "l", "l"],
-      "labelFrom": "hand"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap."
+      }
     },
     {
       "key": "<C-alt+up>",
@@ -737,29 +746,38 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Replace the selection with the register, then add a cursor on the line above",
-      "expect": {
-        "text": {
-          "1": "  if (one, \"tww\", [three]) { four(five) }"
-        },
-        "cursor": [1, 14],
-        "mode": "normal",
-        "registers": {
-          "0": {
-            "mode": "character",
-            "lines": ["w"]
-          },
-          "\"": {
-            "mode": "character",
-            "lines": ["w"]
-          }
-        }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>).",
       "setup": ["y", "l", "l"],
-      "labelFrom": "hand"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>)."
+      }
     },
     {
       "key": "<C-b>",
@@ -1423,29 +1441,38 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Replace the selection with the register, then add a cursor on the line below",
-      "expect": {
-        "text": {
-          "1": "  if (one, \"tww\", [three]) { four(five) }"
-        },
-        "cursor": [1, 14],
-        "mode": "normal",
-        "registers": {
-          "0": {
-            "mode": "character",
-            "lines": ["w"]
-          },
-          "\"": {
-            "mode": "character",
-            "lines": ["w"]
-          }
-        }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap.",
       "setup": ["y", "l", "l"],
-      "labelFrom": "hand"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<D-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap."
+      }
     },
     {
       "key": "<D-alt+up>",
@@ -1453,29 +1480,38 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Replace the selection with the register, then add a cursor on the line above",
-      "expect": {
-        "text": {
-          "1": "  if (one, \"tww\", [three]) { four(five) }"
-        },
-        "cursor": [1, 14],
-        "mode": "normal",
-        "registers": {
-          "0": {
-            "mode": "character",
-            "lines": ["w"]
-          },
-          "\"": {
-            "mode": "character",
-            "lines": ["w"]
-          }
-        }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>).",
       "setup": ["y", "l", "l"],
-      "labelFrom": "hand"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<D-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>)."
+      }
     },
     {
       "key": "<D-d>",

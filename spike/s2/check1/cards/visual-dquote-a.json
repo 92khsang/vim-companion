@@ -460,36 +460,54 @@
     {
       "key": "<C-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line below",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": {
-          "vim": [1, 13],
-          "visualStart": [1, 13]
-        },
-        "mode": "visual"
+      "unsupported": {
+        "token": "<C-alt+down>"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 13],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<C-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": {
-          "vim": [1, 13],
-          "visualStart": [1, 13]
-        },
-        "mode": "visual"
+      "unsupported": {
+        "token": "<C-alt+up>"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 13],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<C-b>",
@@ -891,36 +909,54 @@
     {
       "key": "<D-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line below",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": {
-          "vim": [1, 13],
-          "visualStart": [1, 13]
-        },
-        "mode": "visual"
+      "unsupported": {
+        "token": "<D-alt+down>"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 13],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<D-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above",
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
       "labelFrom": "hand",
-      "expect": {
-        "text": "unchanged",
-        "cursor": {
-          "vim": [1, 13],
-          "visualStart": [1, 13]
-        },
-        "mode": "visual"
+      "unsupported": {
+        "token": "<D-alt+up>"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 13],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading the 1-character selection [1,13]-[1,14]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<D-d>",

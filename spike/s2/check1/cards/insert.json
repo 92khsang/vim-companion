@@ -289,25 +289,34 @@
     {
       "key": "<C-shift+2>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Insert the previously inserted text and leave Insert mode",
-      "expect": {
-        "text": {
-          "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
-        },
-        "cursor": [1, 14],
-        "mode": "normal",
-        "registers": {
-          ".": {
-            "mode": "character",
-            "keys": "iX<Esc>"
-          }
-        }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: InsertPreviousTextAndQuit src/actions/commands/insert.ts L334-343: as <C-a>, then Normal mode without moving the cursor left. Setup i X <Esc>.",
       "setup": ["i", "X", "<Esc>"],
-      "labelFrom": "hand"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: the binding ctrl+shift+2 is normalized to <C-S-2> (package.json L341; notation.ts L4, L6), which no action takes; insert.ts L337 expects <C-shift+2>",
+      "label": "Not available on Linux: VSCodeVim's binding for Ctrl+@ (insert the last inserted text and leave Insert mode) never reaches its action",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-shift+2>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Insert the previously inserted text and leave Insert mode",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "iX<Esc>"
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: InsertPreviousTextAndQuit src/actions/commands/insert.ts L334-343: as <C-a>, then Normal mode without moving the cursor left. Setup i X <Esc>."
+      }
     },
     {
       "key": "<C-t>",

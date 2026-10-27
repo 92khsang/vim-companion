@@ -457,16 +457,6 @@
     {
       "key": "<C-^>",
       "sets": ["defaults", "extensions"],
-      "source": "vim-oracle",
-      "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "Edit buffer 2",
-      "labelIndex": "index.txt L245 |CTRL-^|",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
-      },
-      "labelFrom": "hand",
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
         "layout": "harness"
@@ -474,10 +464,29 @@
       "handBasis": {
         "basis": "Vim editing.txt *CTRL-^*: with no alternate file E23 and nothing changes; with a count it edits buffer N, which does not exist (E86); VSCodeVim commands/file.ts L29-L57 reads register #, which VSCodeVim never writes, so E23"
       },
-      "knownDeviation": {
-        "description": "VSCodeVim opens the file of register # (b.txt, the previous active editor) in the active group, whatever the count and whether a.txt has unsaved changes; the cursor is where VS Code puts b.txt's editor",
-        "basis": "src/actions/commands/file.ts L30-58 (GoToAlternateFile: Register.get('#'), workspace.findFiles, window.showTextDocument; no count, no dirty check); extensionBase.ts L218-227 (sets # to the previous active editor's path)",
-        "status": "Inferred: read from the VSCodeVim 1.32.4 source for this re-derivation; not measured"
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: VS Code dispatches no key of the us layout to the binding ctrl+^ (package.json L326): ctrl+asciicircum, ctrl+shift+6 and ctrl+shift+asciicircum did not reach it (measured 2026-10-27 on VS Code 1.134.0 and 1.141.0, spike/s2/data/check1/keys-proof); <C-6> (ctrl+6) reaches the same action",
+      "label": "Not available on a US layout on Linux; use <C-6> (edit the alternate file)",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-^>"
+      },
+      "previous": {
+        "source": "vim-oracle",
+        "reason": "outside: file or tag; <c-^> (file or tag)",
+        "label": "Edit buffer 2",
+        "labelFrom": "hand",
+        "labelIndex": "index.txt L245 |CTRL-^|",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "knownDeviation": {
+          "description": "VSCodeVim opens the file of register # (b.txt, the previous active editor) in the active group, whatever the count and whether a.txt has unsaved changes; the cursor is where VS Code puts b.txt's editor",
+          "basis": "src/actions/commands/file.ts L30-58 (GoToAlternateFile: Register.get('#'), workspace.findFiles, window.showTextDocument; no count, no dirty check); extensionBase.ts L218-227 (sets # to the previous active editor's path)",
+          "status": "Inferred: read from the VSCodeVim 1.32.4 source for this re-derivation; not measured"
+        }
       }
     },
     {
@@ -496,30 +505,48 @@
     {
       "key": "<C-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add cursors on the 2 lines below",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
-      },
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
       "labelFrom": "hand",
-      "basis": "src/actions/commands/actions.ts L1121-L1136: InsertCursorBelow runs editor.action.insertCursorBelow (VS Code reference: \"Insert Cursor Below\") once per count; the new cursors are secondary, selections[0] stays the original cursor (VS Code API: the primary selection is always at index 0)"
+      "unsupported": {
+        "token": "<C-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add cursors on the 2 lines below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "src/actions/commands/actions.ts L1121-L1136: InsertCursorBelow runs editor.action.insertCursorBelow (VS Code reference: \"Insert Cursor Below\") once per count; the new cursors are secondary, selections[0] stays the original cursor (VS Code API: the primary selection is always at index 0)"
+      }
     },
     {
       "key": "<C-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above, 2 times",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
-      },
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
       "labelFrom": "hand",
-      "basis": "src/actions/commands/actions.ts L1138-L1153: InsertCursorAbove runs editor.action.insertCursorAbove (VS Code reference: \"Insert Cursor Above\") once per count; selections[0] stays the original cursor"
+      "unsupported": {
+        "token": "<C-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above, 2 times",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "src/actions/commands/actions.ts L1138-L1153: InsertCursorAbove runs editor.action.insertCursorAbove (VS Code reference: \"Insert Cursor Above\") once per count; selections[0] stays the original cursor"
+      }
     },
     {
       "key": "<C-b>",
@@ -971,30 +998,48 @@
     {
       "key": "<D-alt+down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add cursors on the 2 lines below",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
-      },
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
       "labelFrom": "hand",
-      "basis": "src/actions/commands/actions.ts L1121-L1136: InsertCursorBelow runs editor.action.insertCursorBelow (VS Code reference: \"Insert Cursor Below\") once per count; the new cursors are secondary, selections[0] stays the original cursor (VS Code API: the primary selection is always at index 0)"
+      "unsupported": {
+        "token": "<D-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add cursors on the 2 lines below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "src/actions/commands/actions.ts L1121-L1136: InsertCursorBelow runs editor.action.insertCursorBelow (VS Code reference: \"Insert Cursor Below\") once per count; the new cursors are secondary, selections[0] stays the original cursor (VS Code API: the primary selection is always at index 0)"
+      }
     },
     {
       "key": "<D-alt+up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "reason": "own: a key token of VSCodeVim's own",
-      "label": "Add a cursor on the line above, 2 times",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
-      },
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
       "labelFrom": "hand",
-      "basis": "src/actions/commands/actions.ts L1138-L1153: InsertCursorAbove runs editor.action.insertCursorAbove (VS Code reference: \"Insert Cursor Above\") once per count; selections[0] stays the original cursor"
+      "unsupported": {
+        "token": "<D-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Add a cursor on the line above, 2 times",
+        "labelFrom": "hand",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "src/actions/commands/actions.ts L1138-L1153: InsertCursorAbove runs editor.action.insertCursorAbove (VS Code reference: \"Insert Cursor Above\") once per count; selections[0] stays the original cursor"
+      }
     },
     {
       "key": "<D-d>",
