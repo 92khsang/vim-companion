@@ -9,8 +9,9 @@
 # and stops when the build changed since the batch started. Every run record carries the same
 # build, and the compare and the summaries refuse mixed builds.
 #
-# Every batch also holds a shared lock on the S2_CPUS cores; the CPU row (cpu.sh) takes it
-# exclusively, so no other batch can run on those cores during its windows.
+# Every batch also holds a shared lock on each core of S2_CPUS (one lock file per core, so that
+# overlapping but different core lists conflict too); the CPU row (cpu.sh) takes them exclusively,
+# so no other batch can run on those cores during its windows.
 # S2_BATCH_DATA (default spike/s2/data) is the data root, for smoke runs outside the repository.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/../../.."
@@ -23,8 +24,19 @@ DATA=${S2_BATCH_DATA:-spike/s2/data}
 export S2_NAME_PREFIX=${S2_NAME_PREFIX:-a-}
 exec 9>"$S2_RUN/batch-${BATCH_DISPLAY#:}.lock"
 flock -n 9 || { echo "another batch holds display $BATCH_DISPLAY"; exit 1; }
-exec 8>"$S2_RUN/cores-${S2_CPUS}.lock"
-flock -s -n 8 || { echo "the CPU row holds cores $S2_CPUS"; exit 1; }
+CORE_FDS=()
+for core in $(node -e 'import("./spike/s2/harness/lib.mjs").then((m) => console.log(m.cpuList(process.argv[1]).join(" ")))' "$S2_CPUS"); do
+  exec {fd}>"$S2_RUN/core-$core.lock"
+  flock -s -n "$fd" || { echo "the CPU row holds core $core"; exit 1; }
+  CORE_FDS+=("$fd")
+done
+# Takes the core locks exclusively (the CPU row).
+exclusive_cores() {
+  local fd
+  for fd in "${CORE_FDS[@]}"; do
+    flock -x -n "$fd" || { echo "another batch runs on cores $S2_CPUS"; exit 1; }
+  done
+}
 
 log() { echo "$(date -u +%FT%TZ) $*"; }
 build_json() {
@@ -56,8 +68,10 @@ harness() { # <data dir> <env assignments and command...>
   } | sed "s#$HOME#\$HOME#g" >> "$dir/command.txt"
   env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE -u S2_DIFF_TRACE -u S2_CASES -u S2_RESET_SETTLE "$@"
 }
-# "<attempts> <completed on> <completed off> <script or read errors>" of a differential output file
-# (0 0 0 0 if absent). Exits the batch when the file cannot be read, rather than restarting at 0.
+# "<attempts> <completed on> <completed off> <errors from the host's start on> <adapter checks
+# failed>" of a differential output file (0 0 0 0 0 if absent). Only an error of the phase `boot`
+# may be replaced by a further run (differential-compare.mjs). Exits the batch when the file cannot
+# be read, rather than restarting at run 0.
 count_runs() {
   local out
   out=$(node -e '
@@ -66,11 +80,13 @@ count_runs() {
     const rs = fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse) : [];
     const runs = rs.filter((r) => r.type === "run");
     const errs = rs.filter((r) => r.type === "run-error");
+    const badAdapter = runs.filter((r) => r.arm === "on" ? r.adapterCheck?.ok !== true
+      : (r.hello?.adapter ?? r.adapter) != null || r.adapterCheck?.present === true);
     console.log(runs.length + errs.length,
       runs.filter((r) => r.arm === "on").length, runs.filter((r) => r.arm === "off").length,
-      errs.filter((r) => r.phase !== "start").length);
+      errs.filter((r) => r.phase !== "boot").length, badAdapter.length);
   ' "$1" 2>/dev/null) || { log "cannot read $1 (a line is not JSON): stopping" >&2; exit 1; }
-  [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'" >&2; exit 1; }
+  [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'" >&2; exit 1; }
   echo "$out"
 }
 # Stops the batch when a data file it would continue holds records of another build: a resumed row
@@ -91,6 +107,17 @@ same_build_or_stop() { # <file>
     log "$1 holds records of the build(s) $ids, not $BUILD_ID: move it away to start over; stopping"
     exit 1
   fi
+}
+# Whether the precheck of a version passed with this batch's build: at least 100 completed
+# adapter-off runs that all agree, under the compare's rules (S2_DIFF_PRECHECK), and one clean build
+# that is BUILD_ID. Prints the compare's PRECHECK line.
+PRECHECK_RUNS=100
+precheck_ok() { # <version>
+  local f=$DATA/precheck/off-$1.jsonl out
+  [ -s "$f" ] || { echo "no precheck file $f"; return 1; }
+  out=$(S2_DIFF_PRECHECK=$PRECHECK_RUNS node spike/s2/harness/differential-compare.mjs "$f")
+  echo "$out" | grep "^PRECHECK $1:"
+  echo "$out" | grep -qx "builds: $BUILD_ID" && echo "$out" | grep -qE "^PRECHECK $1: .*: pass$"
 }
 # No sandbox process, mount or Xvfb of the batch may be left. The batch's instances are the ones of
 # its display (instance names end with the display number); another batch's are not counted.

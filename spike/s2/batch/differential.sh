@@ -4,25 +4,29 @@
 # effect rule, then differential-compare.mjs with S2_DIFF_EXPECT=1000, whose ROW line states the
 # pass condition. Runs go in chunks of 50 into one file per version; a rerun of the script
 # continues after the last complete run (S2_DIFF_START keeps the run numbers and the alternation).
-# A run-error of the phase `start` measured nothing (the session, the clipboard or the input check
-# failed): the batch runs further alternating runs until each arm has 1000 completed runs, and stops
-# after 2100 attempts per version. A run-error while the script was typed or read counts against
-# the row (differential-compare.mjs), so the batch stops that version at the first one.
+# The batch starts only when precheck.sh passed for every version with the same build (common.sh
+# precheck_ok). A run-error of the phase `boot` (before the extension host was up) measured
+# nothing: the batch runs further alternating runs until each arm has 1000 completed runs, and
+# stops after 2100 attempts per version. Any other run-error, and any failed adapter check, counts
+# against the row (differential-compare.mjs), so the batch stops that version at the first one.
 # Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/differential.sh
 source "$(dirname "$0")/common.sh"
 RUNS=1000
 MAX_ATTEMPTS=2100
 CHUNK=50
 dir=$DATA/differential-row
+for v in $VERSIONS; do
+  precheck_ok "$v" || { log "differential: no passing precheck of the build $BUILD_ID for $v; run precheck.sh first"; exit 1; }
+done
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/both-$v.jsonl
   same_build_or_stop "$out"
   while :; do
     counts=$(count_runs "$out")
-    read -r attempts nOn nOff fatal <<< "$counts"
-    if [ "$fatal" -gt 0 ]; then
-      log "differential $v: $fatal run errors in the script or read phase; the row cannot pass; stopping this version"
+    read -r attempts nOn nOff fatal bad <<< "$counts"
+    if [ "$fatal" -gt 0 ] || [ "$bad" -gt 0 ]; then
+      log "differential $v: $fatal run errors from the host's start on, $bad failed adapter checks; the row cannot pass; stopping this version"
       break
     fi
     if [ "$nOn" -ge "$RUNS" ] && [ "$nOff" -ge "$RUNS" ]; then break; fi
