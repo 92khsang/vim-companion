@@ -303,6 +303,37 @@ const KEYSYM = {
   "<CR>": "Return",
   "<Tab>": "Tab",
   "<BS>": "BackSpace",
+  // Keys of the card rows (check (1) of candidate (b)), as VSCodeVim 1.32.4 names them on Linux:
+  // a key bound in its package.json is normalized by Notation.NormalizeKey (notation.ts) from the
+  // binding's `linux` or `key` field (configuration.ts L163-L167); " " and "\n" come through VS
+  // Code's `type` command (extensionBase.ts L322-L333). VS Code reads `cmd+` as the meta key on
+  // every platform (the keybinding parser's _readModifiers), which is Super on Linux.
+  "<up>": "Up",
+  "<down>": "Down",
+  "<left>": "Left",
+  "<right>": "Right",
+  " ": "space",
+  "\n": "Return",
+  "<Home>": "Home",
+  "<End>": "End",
+  "<C-Home>": "ctrl+Home",
+  "<C-End>": "ctrl+End",
+  "<C-left>": "ctrl+Left",
+  "<C-right>": "ctrl+Right",
+  "<C-BS>": "ctrl+BackSpace",
+  "<S-BS>": "shift+BackSpace",
+  "<Del>": "Delete",
+  "<Insert>": "Insert",
+  "<C-pagedown>": "ctrl+Next",
+  "<C-pageup>": "ctrl+Prior",
+  "<C-[>": "ctrl+bracketleft",
+  "<C-]>": "ctrl+bracketright",
+  "<C-6>": "ctrl+6",
+  "<D-left>": "super+Left",
+  "<D-right>": "super+Right",
+  "<D-a>": "super+a",
+  "<D-c>": "super+c",
+  "<D-d>": "super+d",
 };
 export function keysym(key) {
   if (KEYSYM[key]) return KEYSYM[key];

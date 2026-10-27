@@ -5,6 +5,7 @@
 //                                 sample, setup and expect, with a Visual-mode cursor converted to
 //                                 what the harness reads (lib.mjs harnessCursor)
 //   <out>/cards-<set>.json        cards.json with each row's label under that set
+//   <out>/excluded-<set>.json     the in-force rows left out with --partial, and why
 // A row is complete under a set when it has a source (and a reason when `hand`), a label, a sample
 // for a placeholder key and a valid expectation, nothing pending and no "TODO" left from the
 // template. The builder writes only when every in-force row is complete, unless --partial is
@@ -13,7 +14,8 @@
 //        node spike/s2/check1/build.mjs <out dir> [--partial]
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { REPO, START, keysym } from "../harness/lib.mjs";
+import { REPO, START } from "../harness/lib.mjs";
+import { planKeys } from "../harness/card-keys.mjs";
 import { SETS, cardFile, harnessCursor, setsOf } from "./lib.mjs";
 
 const args = process.argv.slice(2);
@@ -103,10 +105,12 @@ const summary = Object.fromEntries(
       todo: 0,
       invalid: 0,
       untypeable: 0,
+      unreachable: 0,
     },
   ]),
 );
 const untypeable = new Map();
+const unreachable = new Map();
 const out = Object.fromEntries(
   SETS.map((s) => [s, { correctness: [], cards: [] }]),
 );
@@ -162,23 +166,23 @@ for (const card of cards) {
         why.push(`pending: ${x.pending.split(":")[0]}`);
       } else why.push(...expectProblems(x.expect));
       if (hasTodo(x)) sum.todo += 1;
-      // The keys the harness types for the row (a sample still to be chosen is not counted).
+      // The keys the harness types for the row (a sample still to be chosen is not counted), as
+      // harness/card-keys.mjs plans them: untypeable (no key known) or unreachable on Linux.
       const typed = [
         ...(x.setup ?? []),
         ...card.keys,
         x.sample ?? row.key,
       ].filter((k) => k !== "TODO");
-      const bad = typed.filter((k) => {
-        try {
-          keysym(k);
-          return false;
-        } catch {
-          return true;
-        }
-      });
-      if (bad.length) {
+      const plan = planKeys(typed);
+      if (plan.untypeable.length) {
         sum.untypeable += 1;
-        for (const k of bad) untypeable.set(k, (untypeable.get(k) ?? 0) + 1);
+        for (const k of plan.untypeable)
+          untypeable.set(k, (untypeable.get(k) ?? 0) + 1);
+      }
+      if (plan.unreachable.length) {
+        sum.unreachable += 1;
+        for (const { token } of plan.unreachable)
+          unreachable.set(token, (unreachable.get(token) ?? 0) + 1);
       }
       if (x.source === "vim-oracle") sum.vimOracle += 1;
       if (x.source === "hand") sum.hand += 1;
@@ -219,7 +223,10 @@ for (const card of cards) {
           expect,
           ...(x.knownDeviation ? { knownDeviation: x.knownDeviation } : {}),
         });
-      } else if (partial) out[s].incomplete = (out[s].incomplete ?? 0) + 1;
+      } else if (partial) {
+        out[s].incomplete = (out[s].incomplete ?? 0) + 1;
+        (out[s].excluded ??= []).push({ card: card.id, key: row.key, why });
+      }
     }
     for (const s of SETS) {
       const from = resolved[s] ?? resolved[sets[0]];
@@ -252,6 +259,9 @@ console.log(
       untypeableKeys: Object.fromEntries(
         [...untypeable].sort((a, b) => b[1] - a[1]),
       ),
+      unreachableKeys: Object.fromEntries(
+        [...unreachable].sort((a, b) => b[1] - a[1]),
+      ),
       problems: problems.length,
       firstProblems: problems.slice(0, 20),
     },
@@ -276,6 +286,12 @@ if (!checkOnly) {
     writeFileSync(
       join(outDir, `cards-${s}.json`),
       JSON.stringify(out[s].cards, null, 1) + "\n",
+    );
+    // The in-force rows that are not in the correctness input (--partial): check (1) counts them
+    // as rows that did not pass.
+    writeFileSync(
+      join(outDir, `excluded-${s}.json`),
+      JSON.stringify(out[s].excluded ?? [], null, 1) + "\n",
     );
   }
 }

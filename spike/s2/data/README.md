@@ -270,3 +270,13 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   commit records no build, run phase or adapter check, so these runs do not gate the differential row;
   they are the first evidence that the effect rule makes the adapter-off runs deterministic. The ROW
   line in `compare-*.txt` says "not pass" because a precheck file holds no adapter-on runs.
+- `check1/keys-proof/proof-<version>.jsonl`: `S2_CPUS=28-31 S2_NAME_PREFIX=k- node spike/s2/check1/keys-proof.mjs <version> :138 9548 <out>`
+  on 2026-10-27 02:39-02:46Z (one sandbox VS Code per version, VSCodeVim's defaults). For the 30
+  tokens that `harness/card-keys.mjs` types, in one card per mode in which each is a row key (103
+  scenarios per version), VSCodeVim received the token in 103 of 103: 100 as the keys of an action
+  (the probe's pending keys or the keys of the recorded macro's actions) and 3 as Visual `" "`,
+  the generated which-key leader, which opened which-key's quick input. For the 6 tokens marked
+  unreachable on Linux, 11 tries with the physical keys a user would try (`ctrl+alt+Down`,
+  `shift+alt+Down`, `super+alt+Down` and the same with `Up`; `ctrl+shift+2`, `ctrl+at`;
+  `ctrl+asciicircum`, `ctrl+shift+6`, `ctrl+shift+asciicircum`) delivered the token 0 times. Same
+  result on 1.134.0 and 1.141.0. This shows delivery only; no expectation comes from these runs.

@@ -210,6 +210,23 @@ const methods = {
       out[name] = registerContents(contents);
     return out;
   },
+  // Test-only: the actions of the macro recorded in a register, with the keys each action took
+  // (VSCodeVim pushes every action it runs while recording, modeHandler.ts L704-L711, and
+  // QuitRecordMacro stores the list, macro.ts L51-L65). spike/s2/check1/keys-proof.mjs reads it to
+  // show which key token VSCodeVim received for a key the harness sent.
+  macroActions: async ({ name }) => {
+    const Register = await reader.registerClass();
+    const contents = Register.registers.get(name);
+    const first = Array.isArray(contents)
+      ? contents[0]
+      : (contents?.[0] ?? contents);
+    const recorded = first?.text;
+    if (!recorded || !Array.isArray(recorded.actionsRun)) return null;
+    return recorded.actionsRun.map((a) => ({
+      name: a.name ?? a.constructor?.name ?? null,
+      keys: [...(a.keysPressed ?? [])],
+    }));
+  },
   // Test-only: how each register's content list is stored (an array, or the object that a shift
   // of the numbered registers leaves).
   registerShapes: async () => {
@@ -341,7 +358,14 @@ const methods = {
     const h = e && handlerFor(map, e.document.uri.toString());
     if (!h) return { handler: false, documents: map.modeHandlerMap.size };
     const fields = fieldsOf(h);
-    return { handler: true, fields, state: toState(fields) };
+    // `recording`: a macro is being recorded in this document (VSCodeVim keeps vimState.macro per
+    // ModeHandler, macro.ts L26); keys-proof.mjs checks it to stop a recording that a key left open.
+    return {
+      handler: true,
+      fields,
+      state: toState(fields),
+      recording: h.vimState.macro !== undefined,
+    };
   },
 };
 
