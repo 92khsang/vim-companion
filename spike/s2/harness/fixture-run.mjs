@@ -143,6 +143,11 @@ try {
     delays,
     steps: stepsArg,
     poll: POLL,
+    // The adapter's own poll interval, for the check that all (a) rows measure one poll interval.
+    adapterPollMs:
+      source === "adapter"
+        ? ((await code.probe.call("adapter")).pollMs ?? null)
+        : null,
     hello: code.hello,
     build: buildInfo(),
     cases: { all: cases.length, selected: selected.length },
