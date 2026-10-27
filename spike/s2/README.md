@@ -353,8 +353,52 @@ under both) the card's `R` row, the same command in Vim.
   (one sandbox VS Code: the buffer's indentation, then the keys of `check1/observe-sequences.json`)
   and `node spike/s2/check1/observe-compare.mjs cards|compare ...`.
 
-Open for check (1): `harness/lib.mjs` `keysym` cannot type 693 in-force rows under the defaults
-and 712 under the second set (`" "`, `"\n"`, the arrows, `<Home>`, `<End>`, `<Del>`, `<Insert>`,
-`<C-Home>`, `<C-End>`, `<C-left>`, `<C-right>`, `<C-[>`, `<C-]>`, `<C-^>`, `<C-6>` and VSCodeVim's
-own tokens such as `<D-...>`, `<C-alt+...>`, `<copy>`, `<plugds>`), and `typeKeys` throws on the
-first one, which ends a `cards-correctness.mjs` run (`build.mjs --check` lists them).
+How the harness types the card rows on Linux: `harness/lib.mjs` `keysym` names the plain keys
+(the arrows, `<Home>`, `<End>`, `<Del>`, `<Insert>`, Ctrl and Shift chords, `" "` and `"\n"`,
+and VSCodeVim's `<D-...>` keys as Super chords, because VS Code reads `cmd+` as the meta key on
+every platform). `harness/card-keys.mjs` handles the tokens no single key names: `<plugys>`,
+`<plugcs>` and `<plugds>` are typed as `y s`, `c s` and `d s` (surround's default mappings),
+`<copy>` as `<D-c>` (VSCodeVim turns `<D-c>` into `<copy>` while `vim.overrideCopy` is on), and
+`<ExtensionDisable>` runs the command `toggleVim`, which the trial runs again as its teardown. Six
+tokens are unreachable on Linux, with the source in `card-keys.mjs`: `<C-alt+down>`, `<C-alt+up>`,
+`<D-alt+down>`, `<D-alt+up>` (Linux binds `shift+alt+down/up`, which no action takes),
+`<C-shift+2>` (its binding is normalized to `<C-S-2>`) and `<C-^>` (no key of the `us` layout
+reaches the `ctrl+^` binding; `<C-6>` reaches the same action). `cards-correctness.mjs` records a
+row with such a token as `untyped` and types nothing for it; such a row never passes.
+`node spike/s2/check1/keys-proof.mjs <version> <display> <cdpPort> <out.jsonl>` shows in one
+sandbox VS Code which token VSCodeVim receives for each of these keys (pending keys and the keys of
+a recorded macro's actions, read by the probe's test-only `vimState` and `macroActions`); it proves
+delivery only and writes no expectation. `cards-correctness.mjs` reopens a.txt and b.txt without
+closing an editor when a row left another editor active (closing the modified a.txt would raise a
+save prompt, because the sandbox has `files.hotExit` and `files.autoSave` off).
+
+### Check (1) batch: two passes
+
+`spike/s2/batch/check1.sh` runs check (1) from a frozen checkout like the (a) batches (clean build,
+build recorded before every harness call, resumable, a shared lock on its cores, leftover check,
+`batch finished`), on its own display and port (default `:124` and 9524) and on cores that no other
+batch uses (`S2_CPUS`). It builds the correctness input with `check1/build.mjs --partial` into
+`spike/s2/data/check1-pass<n>/input/` (a rerun must find the same input), then runs
+`cards-correctness.mjs` for both settings sets on VS Code 1.141.0 and 1.134.0, 3 trials per row at
+30 ms, in chunks of 8 cards (`#<from>-<to>`), and writes `summary.txt` with
+`spike/s2/batch/check1-summary.mjs`. The summary prints per set and version the rows in force, the
+trials, the rows that pass every trial, each failing row with the fields that differ and whether it
+carries a `knownDeviation`, the untyped rows, the rows the builder left out and the errors, and a
+ROW line per set and version and one for the row as written: 100% of card rows in every trial,
+both sets, both versions.
+
+1. Pass 1 (`S2_CHECK1_PASS=1`) discovers. Every failing, untyped or left-out row is then judged by
+   hand: an authoring error is corrected in the check (1) files (from Vim 9.1 or Vim's help for a
+   Vim-command row, from VSCodeVim's source for its own keys); a harness bug is fixed in the
+   harness; a VSCodeVim deviation makes the card state VSCodeVim's behaviour, backed by the pass-1
+   trials as the `Measured:` finding and the VSCodeVim source location as `Documented:`; a token
+   that is unreachable on Linux is reported, not hidden, and its row states that. The corrections
+   are committed, and a new frozen checkout is made at that commit.
+2. Pass 2 (`S2_CHECK1_PASS=2`) must pass every row in every trial; its ROW line is the result of
+   check (1).
+
+Run time per pass, estimated from the pilot (99 trials in about 91 s, 0.92 s per trial): the rows
+that are typed under both sets (about 6,960 of the 7,075 in force) times 3 trials times 2 versions
+is about 41,750 trials, about 10.7 hours, plus about 32 VS Code starts of about 20 s each.
+`S2_CHECK1_TRIALS` and `S2_CHECK1_CARDS` (`#<from>-<to>`) exist for smoke runs; the summary marks a
+run with fewer than 3 trials or a card subset as not the row.
