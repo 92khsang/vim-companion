@@ -8,19 +8,24 @@
 // Before the window opens, the input check of every row: `l h` must reach a.txt (two selection
 // events), up to three attempts with a refocus between them. In the typing scenario each loop of the
 // script starts in the first editor group with a.txt reset to the start state, and the probe's
-// editor events are counted per loop; in the idle scenario they are counted over the window. At the
-// end of the window the adapter check (lib.mjs adapterCheck) reads whether the adapter was really
-// at work (on) or absent (off). The busy time of the S2_CPUS cores (/proc/stat) is read at the start
-// and end of the window together with the CPU time of this session's own processes (the VS Code
-// process group and the Xvfb server); the rest is load from elsewhere on those cores.
-// A window is valid when the input check passed, the adapter check passed, typing reached the
-// editor (typing: at least 10 editor events per loop; idle: none), no other sandbox of the harness
-// ran on cores that overlap S2_CPUS (sampled at the start, after every loop or every 30 s, and at
-// the end), and the load from elsewhere on the S2_CPUS cores stayed below 50% of one core (the
-// user's unpinned desktop programs put 5 to 15% of one core on a set of 4 cores; the per-process
-// CPU time this row compares does not include them); cpu-summary.mjs uses only valid windows and
-// spike/s2/batch/cpu.sh runs a window again until it has a valid one. The record carries the build
-// (lib.mjs buildInfo), the probe's hello and CLK_TCK as read at run time.
+// editor events are counted per loop; in the idle scenario they are counted over the window. The
+// probe reads the adapter at the start and the end of the window in both arms (the same probe work
+// in both); with the adapter on, its count of completed polls must grow by at least 90% of the
+// window over its poll interval (it polled through the window), and the check at the end
+// (lib.mjs adapterCheck) needs a fresh report for the active editor and a neutral Normal state.
+// The busy time of the S2_CPUS cores (/proc/stat) is read at the start and end of the window
+// together with the CPU time of this session's own processes that are pinned to those cores; the
+// rest is load from elsewhere on them. The record also holds the busy share of every core, of every
+// Hyper-Threading pair the cores belong to, and of the pairs' cores outside S2_CPUS.
+//
+// A window is `valid` when every check passes. An invalid window is `rerunnable` only when its
+// reasons are another sandbox of the harness on cores that overlap S2_CPUS (sampled at the start,
+// after every loop or every 30 s, and at the end) or load from elsewhere on the cores of at least
+// 50% of one core; an error record is rerunnable only in the phase `boot` (before the extension
+// host was up). Every other failure (the input check, an adapter check, the typing evidence, the
+// polling, an error from the host's start on) counts against the row in cpu-summary.mjs, and
+// spike/s2/batch/cpu.sh does not run such a window again. The record carries the build (lib.mjs
+// buildInfo), the probe's hello and CLK_TCK as read at run time.
 import { execFileSync } from "node:child_process";
 import { appendFileSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -49,7 +54,7 @@ const CLK_TCK = Number(
   execFileSync("getconf", ["CLK_TCK"], { encoding: "utf8" }),
 );
 const FOREIGN_LIMIT = 0.5; // of one core
-const MIN_EVENTS_PER_LOOP = 10;
+const POLL_SHARE = 0.9;
 const write = (rec) =>
   appendFileSync(outFile, portable(JSON.stringify(rec)) + "\n");
 // Fields after the command name: state is field 3, pgrp 5, utime 14, stime 15 (proc(5)).
@@ -61,31 +66,45 @@ const ticks = (pid) => {
   const f = statFields(pid);
   return Number(f[11]) + Number(f[12]);
 };
-/** CPU ticks per pid of the VS Code process group, the extension host and the Xvfb server. */
-const ownTicks = (pgid, extra) => {
+const allowedCores = (pid) =>
+  cpuList(
+    readFileSync(`/proc/${pid}/status`, "utf8")
+      .split("\n")
+      .find((l) => l.startsWith("Cpus_allowed_list:"))
+      .split(/\s+/)[1],
+  );
+/** CPU ticks per pid of the VS Code process group, for the processes pinned to the cores. */
+const ownTicks = (pgid, cores) => {
   const out = new Map();
   for (const d of readdirSync("/proc")) {
     if (!/^\d+$/.test(d)) continue;
     try {
       const f = statFields(d);
-      if (Number(f[2]) === pgid || extra.includes(Number(d)))
-        out.set(d, Number(f[11]) + Number(f[12]));
+      if (Number(f[2]) !== pgid) continue;
+      if (!allowedCores(d).every((c) => cores.includes(c))) continue;
+      out.set(d, Number(f[11]) + Number(f[12]));
     } catch {}
   }
   return out;
 };
-/** Busy ticks of each core of the S2_CPUS list (user nice system irq softirq steal). */
-const coreBusy = (cores) => {
-  const lines = readFileSync("/proc/stat", "utf8").split("\n");
-  return cores.map((c) => {
-    const f = lines
-      .find((l) => l.startsWith(`cpu${c} `))
-      .split(/\s+/)
-      .slice(1)
-      .map(Number);
-    return f[0] + f[1] + f[2] + f[5] + f[6] + f[7];
-  });
+/** Busy ticks per core (user nice system irq softirq steal). */
+const coreBusy = () => {
+  const out = new Map();
+  for (const l of readFileSync("/proc/stat", "utf8").split("\n")) {
+    const m = /^cpu(\d+) (.*)$/.exec(l);
+    if (!m) continue;
+    const f = m[2].trim().split(/\s+/).map(Number);
+    out.set(Number(m[1]), f[0] + f[1] + f[2] + f[5] + f[6] + f[7]);
+  }
+  return out;
 };
+const siblingsOf = (c) =>
+  cpuList(
+    readFileSync(
+      `/sys/devices/system/cpu/cpu${c}/topology/thread_siblings_list`,
+      "utf8",
+    ).trim(),
+  );
 /** Processes of another sandbox of the harness (another XDG_RUNTIME_DIR under S2_RUN) that may run on these cores. */
 const otherSandboxes = (cores, ownRt) => {
   const run = process.env.S2_RUN;
@@ -103,11 +122,7 @@ const otherSandboxes = (cores, ownRt) => {
     }
     if (!rt || !run || !rt.startsWith(run + "/") || rt === ownRt) continue;
     try {
-      const allowed = readFileSync(`/proc/${d}/status`, "utf8")
-        .split("\n")
-        .find((l) => l.startsWith("Cpus_allowed_list:"))
-        .split(/\s+/)[1];
-      if (cpuList(allowed).some((c) => cores.includes(c)))
+      if (allowedCores(d).some((c) => cores.includes(c)))
         seen.add(rt.slice(run.length + 1));
     } catch {}
   }
@@ -127,7 +142,7 @@ for (const sig of ["SIGTERM", "SIGINT"]) {
     process.exit(1);
   });
 }
-let phase = "start";
+let phase = "boot";
 let build;
 try {
   build = buildInfo();
@@ -138,6 +153,9 @@ try {
     name: `${process.env.S2_NAME_PREFIX ?? ""}cpu-${scenario}-${arm}-${version}-${display.slice(1)}`,
     spikeExtensions: ["s2-probe", "s2-adapter"],
     disable: arm === "off" ? ["vim-companion-spike.s2-adapter"] : [],
+    onHostUp: () => {
+      phase = "start";
+    },
   });
   await code.probe.call("reset", START);
   // The input check: l h must reach a.txt and leave the cursor where it was.
@@ -164,9 +182,14 @@ try {
   phase = "window";
   const pid = code.hello.pid;
   const cores = cpuList(CPUS());
+  const pairs = [...new Set(cores.map((c) => siblingsOf(c).join(",")))].map(
+    (p) => p.split(",").map(Number),
+  );
+  const outside = [...new Set(pairs.flat().filter((c) => !cores.includes(c)))];
   await code.probe.call("events", { clear: true });
-  const own0 = ownTicks(code.pid, [pid, xvfb]);
-  const busy0 = coreBusy(cores);
+  const a0 = await code.probe.call("adapter");
+  const own0 = ownTicks(code.pid, cores);
+  const busy0 = coreBusy();
   const t0 = Date.now();
   const c0 = ticks(pid);
   const end = t0 + Number(minutesArg) * 60000;
@@ -179,21 +202,25 @@ try {
   sample();
   let loops = 0;
   const eventsPerLoop = [];
+  const itemsPerLoop = [];
   if (scenario === "typing") {
     while (Date.now() < end) {
       await code.probe.call("exec", {
         command: "workbench.action.focusFirstEditorGroup",
       });
       await code.probe.call("reset", START);
+      let items = 0;
       for (const item of script.items) {
         if (Date.now() >= end) break;
         typeKeys(display, item.keys, 30);
+        items += 1;
         await sleep(200);
       }
       typeKeys(display, ["<Esc>", "<Esc>"], 30);
       eventsPerLoop.push(
         editorEvents(await code.probe.call("events", { clear: true })),
       );
+      itemsPerLoop.push(items);
       loops += 1;
       sample();
     }
@@ -205,42 +232,62 @@ try {
   }
   const c1 = ticks(pid);
   const t1 = Date.now();
-  const busy1 = coreBusy(cores);
-  const own1 = ownTicks(code.pid, [pid, xvfb]);
+  const busy1 = coreBusy();
+  const own1 = ownTicks(code.pid, cores);
+  const a1 = await code.probe.call("adapter");
   const idleEvents =
     scenario === "idle"
       ? editorEvents(await code.probe.call("events", { clear: true }))
       : null;
   phase = "read";
-  const adapter = await adapterCheck(code, arm);
-  const busyTicks = busy1.reduce((s, b, j) => s + b - busy0[j], 0);
+  await sleep(200); // the adapter polls after the last <Esc> <Esc> before the end check
+  const snap = await code.probe.call("snapshot");
+  const adapter = await adapterCheck(code, arm, {
+    activeUri: snap.active,
+    neutral: true,
+  });
+  const wallMs = t1 - t0;
+  const delta = (cs) =>
+    cs.reduce((s, c) => s + (busy1.get(c) - busy0.get(c)), 0);
+  const share = (t) => (t * 1000) / CLK_TCK / wallMs;
+  const busyTicks = delta(cores);
   let ownDelta = 0;
   for (const [p, t] of own1) ownDelta += t - (own0.get(p) ?? 0);
   const foreignMs = (Math.max(0, busyTicks - ownDelta) * 1000) / CLK_TCK;
-  const wallMs = t1 - t0;
-  const editorEventCount =
-    scenario === "typing"
-      ? eventsPerLoop.reduce((s, n) => s + n, 0)
-      : idleEvents;
+  const pollsInWindow =
+    a0.polls !== null && a1.polls !== null && a0.polls !== undefined
+      ? a1.polls - a0.polls
+      : null;
+  const pollsWanted = (POLL_SHARE * wallMs) / (a1.pollMs ?? 50);
   const invalid = [];
-  if (!adapter.ok) invalid.push(...adapter.reasons);
+  const fail = (kind, text) => invalid.push({ kind, text });
+  if (!adapter.ok) for (const r of adapter.reasons) fail("adapter-check", r);
+  if (arm === "on" && !(pollsInWindow >= pollsWanted))
+    fail(
+      "polling",
+      `the adapter completed ${pollsInWindow} polls in the window, fewer than ${Math.ceil(pollsWanted)}`,
+    );
   if (
     scenario === "typing" &&
-    !(loops > 0 && eventsPerLoop.every((n) => n >= MIN_EVENTS_PER_LOOP))
+    !(loops > 0 && eventsPerLoop.every((n, j) => n >= itemsPerLoop[j]))
   )
-    invalid.push(
-      `typing did not reach the editor in every loop (${eventsPerLoop.join(",")})`,
+    fail(
+      "typing-evidence",
+      `fewer editor events than items in a loop (events ${eventsPerLoop.join(",")}; items ${itemsPerLoop.join(",")})`,
     );
   if (scenario === "idle" && idleEvents !== 0)
-    invalid.push(`${idleEvents} editor events in the idle window`);
+    fail("idle-events", `${idleEvents} editor events in the idle window`);
   if (others.size)
-    invalid.push(
+    fail(
+      "other-sandbox",
       `another sandbox on cores ${CPUS()}: ${[...others].join(", ")}`,
     );
   if (foreignMs / wallMs >= FOREIGN_LIMIT)
-    invalid.push(
+    fail(
+      "outside-load",
       `load from elsewhere on cores ${CPUS()}: ${((foreignMs / wallMs) * 100).toFixed(1)}% of one core`,
     );
+  const RERUNNABLE = new Set(["other-sandbox", "outside-load"]);
   write({
     version,
     scenario,
@@ -256,19 +303,40 @@ try {
     cpuTicks: c1 - c0,
     cpuMs: ((c1 - c0) * 1000) / CLK_TCK,
     loops,
-    editorEvents: editorEventCount,
+    editorEvents:
+      scenario === "typing"
+        ? eventsPerLoop.reduce((s, n) => s + n, 0)
+        : idleEvents,
     eventsPerLoop: scenario === "typing" ? eventsPerLoop : undefined,
+    itemsPerLoop: scenario === "typing" ? itemsPerLoop : undefined,
+    polls: {
+      start: a0.polls ?? null,
+      end: a1.polls ?? null,
+      inWindow: pollsInWindow,
+      wanted: arm === "on" ? Math.ceil(pollsWanted) : null,
+    },
     cores: {
       list: CPUS(),
       busyMs: (busyTicks * 1000) / CLK_TCK,
       ownMs: (ownDelta * 1000) / CLK_TCK,
       foreignMs,
       foreignShare: foreignMs / wallMs,
+      perCore: Object.fromEntries(cores.map((c) => [c, share(delta([c]))])),
+      pairs: pairs.map((p) => ({
+        cores: p.join(","),
+        busyShare: share(delta(p)),
+      })),
+      siblingsOutside: {
+        list: outside.join(","),
+        busyShare: outside.length ? share(delta(outside)) : 0,
+      },
       otherSandboxes: [...others],
       samples,
     },
     valid: invalid.length === 0,
-    invalid,
+    rerunnable:
+      invalid.length > 0 && invalid.every((x) => RERUNNABLE.has(x.kind)),
+    invalid: invalid.map((x) => `${x.kind}: ${x.text}`),
     started: new Date(t0).toISOString(),
   });
 } catch (e) {
@@ -279,6 +347,7 @@ try {
     build,
     phase,
     valid: false,
+    rerunnable: phase === "boot",
     error: String(e.stack ?? e)
       .split("\n")
       .slice(0, 3)

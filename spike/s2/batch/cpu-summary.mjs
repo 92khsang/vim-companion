@@ -1,75 +1,108 @@
 // The (a) polling CPU row of issue #11 from cpu.mjs records: per version and scenario, each window
 // with the adapter on is compared with the mean of the 3 windows with it off: (CPU time on / wall
 // time on) minus the mean of (CPU time off / wall time off) must be below 1% of one core, for every
-// on window. Only valid windows count (cpu.mjs `valid`: the input check, the adapter check, the
-// typing evidence and the load from elsewhere on the S2_CPUS cores); a record with an error or an
-// invalid window is a window that did not run. The row needs exactly 3 valid windows per arm,
-// scenario and version, both versions of the issue (1.134.0 and 1.141.0, or S2_BATCH_VERSIONS),
-// one build over all records (records without a build count as the build "none"), and windows of
-// 10 minutes, as the row states.
+// on window. The row needs, per version (1.134.0 and 1.141.0, both, as the issue states them):
+// - exactly 3 valid 10-minute windows per arm and scenario (cpu.mjs `valid`);
+// - no window that failed for a reason other than a rerunnable one (cpu.mjs `rerunnable`: another
+//   sandbox on the cores, load from elsewhere on them, or an error before the extension host was
+//   up): an adapter check, the polling, the typing evidence, the input check or an error from the
+//   host's start on fails the row, on either arm;
+// - VS Code of the version label in every window (hello.vscode) and one VSCodeVim and one which-key
+//   version over the version's windows;
+// - one build without uncommitted changes over all records.
+// The ROW line lists every window that was not counted, per arm, with its reason, and the maximum
+// over the counted windows of each arm of the load from elsewhere on the cores, of the busy share
+// of a Hyper-Threading pair, and of the busy share of the pairs' cores outside S2_CPUS.
 // Usage: node spike/s2/batch/cpu-summary.mjs <cpu-<version>.jsonl>...
 import { readFileSync } from "node:fs";
 
+const VERSIONS = ["1.134.0", "1.141.0"];
 const recs = process.argv
   .slice(2)
   .flatMap((f) =>
     readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse),
   );
-const expected = (process.env.S2_BATCH_VERSIONS ?? "1.134.0 1.141.0")
-  .split(/\s+/)
-  .filter(Boolean)
-  .sort();
-const ok = recs.filter((r) => r.valid === true);
-const notRun = recs.filter((r) => r.valid !== true);
-const short = ok.filter((r) => r.minutes !== 10 || r.wallMs < 600000);
 const frac = (r) => r.cpuMs / r.wallMs;
 const pct = (x) => `${(x * 100).toFixed(3)}%`;
 const builds = [...new Set(recs.map((r) => r.build?.id ?? "none"))];
-const versions = [...new Set(recs.map((r) => r.version))].sort();
+const dirty = recs.filter((r) => !r.build || r.build.dirty?.length);
 console.log(
-  `builds: ${builds.join(", ")}${builds.length > 1 ? " (mixed: the row does not pass)" : ""}`,
+  `builds: ${builds.join(", ")}${builds.length > 1 ? " (mixed: the row does not pass)" : ""}` +
+    (dirty.length
+      ? `; ${dirty.length} records without a build or of a build with uncommitted changes`
+      : ""),
 );
-let allPass = builds.length === 1 && short.length === 0;
-if (short.length)
-  console.log(
-    `windows shorter than 10 minutes: ${short.length} (the row does not pass)`,
-  );
-for (const version of versions) {
-  let pass = builds.length === 1;
+const why = (r) =>
+  r.error
+    ? `error in the phase ${r.phase ?? "unknown"}: ${r.error}`
+    : (r.invalid ?? ["no validity record"]).join("; ");
+const max = (xs) => (xs.length ? Math.max(...xs) : NaN);
+let allPass = builds.length === 1 && dirty.length === 0;
+for (const version of VERSIONS) {
+  const vRecs = recs.filter((r) => r.version === version);
+  let pass = builds.length === 1 && dirty.length === 0 && vRecs.length > 0;
+  const withHello = vRecs.filter((r) => r.hello);
+  const wrongCode = withHello.filter((r) => r.hello.vscode !== version);
+  const vims = [
+    ...new Set(withHello.map((r) => r.hello.vim?.version ?? "none")),
+  ];
+  const wks = [
+    ...new Set(withHello.map((r) => r.hello.whichkey?.version ?? "none")),
+  ];
+  if (wrongCode.length || vims.length !== 1 || wks.length !== 1) pass = false;
+  const notes = [];
   for (const scenario of ["idle", "typing"]) {
-    const sel = (arm) =>
-      ok.filter(
-        (r) =>
-          r.version === version && r.scenario === scenario && r.arm === arm,
+    const sel = (arm, f) =>
+      vRecs.filter((r) => r.scenario === scenario && r.arm === arm && f(r));
+    const counted = (arm) =>
+      sel(
+        arm,
+        (r) => r.valid === true && r.minutes === 10 && r.wallMs >= 600000,
       );
-    const offW = sel("off");
-    const onW = sel("on");
-    const bad = notRun.filter(
-      (r) => r.version === version && r.scenario === scenario,
-    );
+    const offW = counted("off");
+    const onW = counted("on");
+    const dropped = (arm) =>
+      sel(arm, (r) => r.valid !== true && r.rerunnable === true);
+    const fatal = (arm) =>
+      sel(
+        arm,
+        (r) =>
+          (r.valid !== true && r.rerunnable !== true) ||
+          (r.valid === true && !(r.minutes === 10 && r.wallMs >= 600000)),
+      );
     if (offW.length !== 3 || onW.length !== 3) pass = false;
+    if (fatal("off").length || fatal("on").length) pass = false;
     const meanOff = offW.length
       ? offW.reduce((s, r) => s + frac(r), 0) / offW.length
       : NaN;
     const diffs = onW.map((r) => frac(r) - meanOff);
-    if (!diffs.every((d) => d < 0.01)) pass = false;
-    const foreign = [...offW, ...onW].map((r) => pct(r.cores.foreignShare));
+    if (!(diffs.length === 3 && diffs.every((d) => d < 0.01))) pass = false;
+    const loads = (ws) =>
+      `outside load max ${pct(max(ws.map((r) => r.cores.foreignShare)))}, ` +
+      `HT pair busy max ${pct(max(ws.flatMap((r) => r.cores.pairs.map((p) => p.busyShare))))}, ` +
+      `pair cores outside the set max ${pct(max(ws.map((r) => r.cores.siblingsOutside.busyShare)))}`;
     console.log(
       `${version} ${scenario}: off windows ${offW.length} (${offW.map((r) => pct(frac(r))).join(", ")}; mean ${pct(meanOff)}), ` +
-        `on windows ${onW.length} (${onW.map((r) => pct(frac(r))).join(", ")}), not run or invalid ${bad.length}; ` +
+        `on windows ${onW.length} (${onW.map((r) => pct(frac(r))).join(", ")}); ` +
         `on minus mean off: ${diffs.map(pct).join(", ")} (threshold 1.000% of one core); ` +
-        `load from elsewhere on the cores, per window: ${foreign.join(", ")}`,
+        `off: ${offW.length ? loads(offW) : "-"}; on: ${onW.length ? loads(onW) : "-"}`,
     );
-    for (const r of bad)
-      console.log(
-        `  not counted: ${r.arm} ${r.error ? `error (${r.phase ?? "no phase"}): ${r.error}` : (r.invalid ?? ["no validity record"]).join("; ")}`,
-      );
+    for (const arm of ["off", "on"]) {
+      for (const r of dropped(arm))
+        notes.push(`${scenario} ${arm} dropped (rerun): ${why(r)}`);
+      for (const r of fatal(arm))
+        notes.push(
+          `${scenario} ${arm} FAILED: ${r.valid === true ? `window of ${r.minutes} min (${r.wallMs} ms)` : why(r)}`,
+        );
+    }
   }
-  console.log(`ROW (a) polling CPU ${version}: ${pass ? "pass" : "not pass"}`);
+  console.log(
+    `ROW (a) polling CPU ${version}: VS Code ${[...new Set(withHello.map((r) => r.hello.vscode))].join("+") || "none"}${wrongCode.length ? ` (${wrongCode.length} windows not ${version})` : ""}, ` +
+      `VSCodeVim ${vims.join("+")}, which-key ${wks.join("+")}, build ${builds.join("+")}${dirty.length ? " (not clean)" : ""}; ` +
+      `windows not counted: ${notes.length ? notes.join(" | ") : "none"}: ${pass ? "pass" : "not pass"}`,
+  );
   allPass &&= pass;
 }
-const missing = expected.filter((v) => !versions.includes(v));
-if (missing.length) allPass = false;
 console.log(
-  `ROW (a) polling CPU, both versions (${expected.join(", ")}${missing.length ? `; missing ${missing.join(", ")}` : ""}), build ${builds.join("+")}: ${allPass ? "pass" : "not pass"}`,
+  `ROW (a) polling CPU, both versions (${VERSIONS.join(", ")}), build ${builds.join("+")}: ${allPass ? "pass" : "not pass"}`,
 );
