@@ -141,9 +141,22 @@ function adapterReport() {
       present: Boolean(ext),
       active: Boolean(ext?.isActive),
       report: null,
+      error: null,
+      pollMs: null,
+      now: Date.now(),
     };
   }
-  return { present: true, active: true, report: ext.exports.latest() };
+  // `now` is the time of this read in the extension host, so that the age of the report (now - t)
+  // shows whether the adapter is still polling; `error` is the adapter's last polling error.
+  return {
+    present: true,
+    active: true,
+    report: ext.exports.latest(),
+    error: typeof ext.exports.error === "function" ? ext.exports.error() : null,
+    polls: typeof ext.exports.polls === "function" ? ext.exports.polls() : null,
+    pollMs: ext.exports.pollMs ?? null,
+    now: Date.now(),
+  };
 }
 
 const methods = {

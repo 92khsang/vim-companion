@@ -10,6 +10,8 @@ const reader = require("./inspect-reader.js");
 const POLL_MS = 50;
 let latest = null;
 let error = null;
+// Completed polls since activation, so that a reader can show the adapter polled through a window.
+let polls = 0;
 
 function activate(context) {
   let map;
@@ -29,11 +31,17 @@ function activate(context) {
     } catch (err) {
       error = String(err);
     } finally {
+      polls += 1;
       busy = false;
     }
   }, POLL_MS);
   context.subscriptions.push({ dispose: () => clearInterval(timer) });
-  return { latest: () => latest, error: () => error, pollMs: POLL_MS };
+  return {
+    latest: () => latest,
+    error: () => error,
+    polls: () => polls,
+    pollMs: POLL_MS,
+  };
 }
 
 module.exports = { activate, deactivate() {} };

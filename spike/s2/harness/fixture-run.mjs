@@ -6,6 +6,15 @@
 //           "last" reads after the last key only, as the (a) grammar fixture row does
 // Before each trial: <Esc> <Esc>, the probe resets a.txt and the cursor, and the source must show
 // Normal mode with nothing pending; otherwise the trial is recorded as a reset failure.
+// The reads are timed from the last key: xdotool sleeps the delay after every key, the last one
+// too, so the last key is pressed no earlier than the spawn time plus (keys - 1) times the delay;
+// the read 100 ms plus one poll interval after the last key, and the one after vim.timeout, are
+// timed from that lower bound. The xdotool call returns only after its trailing delay, so a read
+// comes at the later of its time and that return: it is late when the delay plus xdotool's
+// overhead exceeds 100 ms plus the poll interval, and later than fixture-summary.mjs allows (50 ms)
+// only when the overhead exceeds about 140 ms at a 60 ms delay; readAfterMs records it.
+// The meta record carries the build (lib.mjs buildInfo), S2_CASES and S2_RESET_SETTLE, and the
+// number of fixture cases selected; fixture-summary.mjs needs every case and an end record.
 import {
   readdirSync,
   readFileSync,
@@ -18,6 +27,8 @@ const RESET_KEYS = ["<Esc>", "<Esc>", "v", "<Esc>"];
 import {
   REPO,
   START,
+  portable,
+  buildInfo,
   startXvfb,
   openSession,
   stopCode,
@@ -69,7 +80,9 @@ const NEUTRAL = JSON.stringify({
   register: null,
 });
 writeFileSync(outFile, "");
-const write = (rec) => appendFileSync(outFile, JSON.stringify(rec) + "\n");
+const write = (rec) =>
+  appendFileSync(outFile, portable(JSON.stringify(rec)) + "\n");
+const selected = cases.filter((x) => !ONLY || ONLY.has(`${x.file}/${x.id}`));
 
 let xvfb, code;
 async function read() {
@@ -115,7 +128,14 @@ for (const sig of ["SIGTERM", "SIGINT"]) {
     process.exit(1);
   });
 }
+// Every error record carries its phase (`boot` before the probe's first hello, `start` after it
+// until the meta, `trials` from then on), the version, the source and the build, so that a file of
+// a run that failed before its meta still names its build and version. The adapter is loaded in
+// every run of the adapter row, so fixture-summary.mjs fails the row on any error, `boot` included.
+let phase = "boot";
+let build;
 try {
+  build = buildInfo();
   xvfb = await startXvfb(display);
   code = await openSession({
     version,
@@ -124,6 +144,9 @@ try {
     cdpPort: Number(cdpPort),
     spikeExtensions:
       source === "adapter" ? ["s2-probe", "s2-adapter"] : ["s2-probe"],
+    onHostUp: () => {
+      phase = "start";
+    },
   });
   write({
     type: "meta",
@@ -133,10 +156,20 @@ try {
     delays,
     steps: stepsArg,
     poll: POLL,
+    // The adapter's own poll interval, for the check that all (a) rows measure one poll interval.
+    adapterPollMs:
+      source === "adapter"
+        ? ((await code.probe.call("adapter")).pollMs ?? null)
+        : null,
     hello: code.hello,
+    build,
+    cases: { all: cases.length, selected: selected.length },
+    only: process.env.S2_CASES ?? null,
+    resetSettle: RESET_SETTLE,
     started: new Date().toISOString(),
   });
-  for (const c of cases.filter((x) => !ONLY || ONLY.has(`${x.file}/${x.id}`))) {
+  phase = "trials";
+  for (const c of selected) {
     const prefixes =
       stepsArg === "all" ? c.steps.map((_, i) => i + 1) : [c.steps.length];
     for (const k of prefixes) {
@@ -156,9 +189,11 @@ try {
             });
             continue;
           }
+          const tSpawn = Date.now();
           typeKeys(display, keys, delay);
-          const tLast = Date.now();
-          await sleep(SETTLE);
+          const tLast = tSpawn + (keys.length - 1) * delay;
+          await sleep(Math.max(0, tLast + SETTLE - Date.now()));
+          const readAfterMs = Date.now() - tLast;
           const state = await read();
           write({
             type: "read",
@@ -168,6 +203,7 @@ try {
             delay,
             trial,
             keys,
+            readAfterMs,
             state,
             expect: step.expect,
             vscodevim: step.engines?.vscodevim?.expect ?? null,
@@ -176,6 +212,7 @@ try {
           });
           if (k === c.steps.length && c.afterTimeout) {
             await sleep(Math.max(0, tLast + TIMEOUT + SETTLE - Date.now()));
+            const laterAfterMs = Date.now() - tLast;
             const later = await read();
             write({
               type: "read",
@@ -185,6 +222,7 @@ try {
               delay,
               trial,
               keys,
+              readAfterMs: laterAfterMs,
               state: later,
               expect: c.afterTimeout.expect,
               vscodevim: c.afterTimeout.engines?.vscodevim?.expect ?? null,
@@ -198,7 +236,14 @@ try {
   }
   write({ type: "end", finished: new Date().toISOString() });
 } catch (e) {
-  write({ type: "error", error: String(e.stack ?? e) });
+  write({
+    type: "error",
+    phase,
+    version,
+    source,
+    build,
+    error: String(e.stack ?? e),
+  });
 } finally {
   if (code) await stopCode(code);
   if (xvfb)

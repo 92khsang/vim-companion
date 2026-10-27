@@ -4,19 +4,32 @@
 # effect rule, then differential-compare.mjs with S2_DIFF_EXPECT=1000, whose ROW line states the
 # pass condition. Runs go in chunks of 50 into one file per version; a rerun of the script
 # continues after the last complete run (S2_DIFF_START keeps the run numbers and the alternation).
-# A run-error record is a run that did not complete: the batch runs further alternating runs until
-# each arm has 1000 completed runs, and stops after 2100 attempts per version.
-# Usage (repository root, S2 environment exported): spike/s2/batch/differential.sh
+# The batch starts only when precheck.sh passed for every version with the same build (common.sh
+# precheck_ok). A run-error of the phase `boot` (before the probe's first hello) on the adapter-off
+# arm measured nothing: the batch runs further alternating runs until each arm has 1000 completed
+# runs, and stops after 2100 attempts per version. Any other run-error (an adapter-on `boot` error
+# included, since the adapter is loaded by then), and any failed adapter check, counts against the
+# row (differential-compare.mjs), so the batch stops that version at the first one.
+# Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/differential.sh
 source "$(dirname "$0")/common.sh"
 RUNS=1000
 MAX_ATTEMPTS=2100
 CHUNK=50
-dir=spike/s2/data/differential-row
+dir=$DATA/differential-row
+for v in $VERSIONS; do
+  precheck_ok "$v" || { log "differential: no passing precheck of the build $BUILD_ID for $v; run precheck.sh first"; exit 1; }
+done
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/both-$v.jsonl
+  same_build_or_stop "$out"
   while :; do
-    read -r attempts nOn nOff < <(count_runs "$out")
+    counts=$(count_runs "$out")
+    read -r attempts nOn nOff fatal bad <<< "$counts"
+    if [ "$fatal" -gt 0 ] || [ "$bad" -gt 0 ]; then
+      log "differential $v: $fatal run errors that count (all but adapter-off boot errors), $bad failed adapter checks; the row cannot pass; stopping this version"
+      break
+    fi
     if [ "$nOn" -ge "$RUNS" ] && [ "$nOff" -ge "$RUNS" ]; then break; fi
     if [ "$attempts" -ge "$MAX_ATTEMPTS" ]; then
       log "differential $v: stopping after $attempts attempts ($nOn on, $nOff off completed)"

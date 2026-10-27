@@ -17,8 +17,9 @@ import {
   writeFileSync,
   readdirSync,
 } from "node:fs";
+import { createHash } from "node:crypto";
 import net from "node:net";
-import { join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
 export const REPO = join(import.meta.dirname, "../../..");
@@ -37,6 +38,202 @@ export const SPIKE_EXTENSIONS = join(REPO, "spike/s2/extensions");
 export const START = JSON.parse(
   readFileSync(join(REPO, "spec/fixtures/grammar/counts.json"), "utf8"),
 ).start;
+
+// ---------- build and machine facts recorded with every run ----------
+
+// Records name the sandbox root as $S2_ROOT and the home directory as $HOME (editor URIs, error
+// stacks), so that the data files carry no machine-specific path.
+export const portable = (text) =>
+  [
+    [process.env.S2_ROOT, "$S2_ROOT"],
+    [process.env.HOME, "$HOME"],
+  ].reduce((t, [from, to]) => (from ? t.replaceAll(from, to) : t), text);
+
+// What a run measures besides VS Code and the sandbox base: the spike extensions copied into every
+// instance, the differential script, the harness code and the generated settings the sandbox reads.
+const BUILD_PATHS = {
+  adapter: "spike/s2/extensions/s2-adapter",
+  probe: "spike/s2/extensions/s2-probe",
+  script: "spike/s2/harness/differential-script.json",
+  harness: "spike/s2/harness",
+  remaps: "spec/generated/vscode/vim-remaps.json",
+  whichkey: "spec/generated/vscode/whichkey-bindings.json",
+};
+const filesUnder = (abs) =>
+  readdirSync(abs, { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory()
+      ? filesUnder(join(abs, d.name))
+      : d.isFile()
+        ? [join(abs, d.name)]
+        : [],
+  );
+const hashPath = (rel) => {
+  const abs = join(REPO, rel);
+  let files;
+  try {
+    files = filesUnder(abs);
+  } catch {
+    files = [abs];
+  }
+  const h = createHash("sha256");
+  for (const f of files.sort()) {
+    h.update(relative(REPO, f) + "\0");
+    h.update(readFileSync(f));
+    h.update("\0");
+  }
+  return h.digest("hex");
+};
+/** sha256 over the sorted relative paths and contents of every file under a directory. */
+const hashDir = (abs) => {
+  const h = createHash("sha256");
+  for (const f of filesUnder(abs).sort()) {
+    h.update(relative(abs, f) + "\0");
+    h.update(readFileSync(f));
+    h.update("\0");
+  }
+  return h.digest("hex");
+};
+/**
+ * The software outside the repository that a run measures: the version and product commit of each
+ * S2_CODE_* binary (its resources/app/product.json) and a hash of $S2_ROOT/ext/base, the VSCodeVim
+ * and which-key folders copied into every instance. No path is recorded.
+ */
+function externalInfo() {
+  const code = {};
+  for (const [name, bin] of Object.entries(process.env).sort())
+    if (/^S2_CODE_\d+_\d+_\d+$/.test(name)) {
+      const label = name.slice("S2_CODE_".length).replaceAll("_", ".");
+      const product = JSON.parse(
+        readFileSync(join(dirname(bin), "resources/app/product.json"), "utf8"),
+      );
+      code[label] = { version: product.version, commit: product.commit };
+    }
+  const base = process.env.S2_ROOT
+    ? join(process.env.S2_ROOT, "ext/base")
+    : null;
+  return {
+    code,
+    extBase: base && existsSync(base) ? hashDir(base) : null,
+    extBaseFolders: base && existsSync(base) ? readdirSync(base).sort() : [],
+  };
+}
+/**
+ * The build a run measures: the checkout's HEAD, the uncommitted changes under spike/s2 and spec
+ * (data directories excluded), sha256 hashes of BUILD_PATHS, and the software outside the
+ * repository (externalInfo). `id` is a short hash of all of it; the compare and the summaries
+ * refuse records of more than one id, and records of a build with uncommitted changes.
+ */
+export function buildInfo() {
+  const git = (args) =>
+    execFileSync("git", ["-C", REPO, ...args], { encoding: "utf8" }).trim();
+  const head = git(["rev-parse", "HEAD"]);
+  const dirty = git([
+    "status",
+    "--porcelain",
+    "--",
+    "spike/s2",
+    "spec",
+    ":!spike/s2/data",
+  ]);
+  const sha256 = Object.fromEntries(
+    Object.entries(BUILD_PATHS).map(([k, p]) => [k, hashPath(p)]),
+  );
+  const external = externalInfo();
+  const id = createHash("sha256")
+    .update(JSON.stringify({ head, dirty, sha256, external }))
+    .digest("hex")
+    .slice(0, 16);
+  return { id, head, dirty: dirty ? dirty.split("\n") : [], sha256, external };
+}
+
+/**
+ * Whether the adapter is really at work (arm on) or really absent (arm off), from the probe's
+ * `adapter` method: with the adapter on, it must be present and active, its latest report must
+ * hold a state, its last polling error must be null, and the report must be at most two poll
+ * intervals old; with the adapter off, the extension must be absent (disabled extensions are not
+ * listed). A failed inspector walk leaves the adapter active with no report, which this catches.
+ */
+export const NEUTRAL_STATE = {
+  mode: "normal",
+  pending: [],
+  operator: null,
+  count: null,
+  register: null,
+};
+/**
+ * The adapter's report, as adapterCheck reads it. With `activeUri`, the report must be for that
+ * document (the active editor at the read); with `neutral`, its state must be Normal mode with
+ * nothing pending, no operator, count or register (the state after <Esc> <Esc>). Right after the
+ * adapter, the probe's own test-only reader (the inspector reader of the fixture deviations) reads
+ * VSCodeVim's state in both arms; the check records it, whether it is neutral and, with the adapter
+ * on, whether it equals the adapter's report, so that a failure of the neutral check can be put on
+ * VSCodeVim's end state or on the adapter. The reader does not change the pass rule.
+ */
+export async function adapterCheck(code, arm, { activeUri, neutral } = {}) {
+  const a = await code.probe.call("adapter");
+  let reader;
+  try {
+    const r = await code.probe.call("vimState");
+    reader = { state: r.state ?? null, handler: r.handler };
+  } catch (e) {
+    reader = { state: null, error: String(e) };
+  }
+  const ageMs = a.report ? a.now - a.report.t : null;
+  const reasons = [];
+  if (arm === "on") {
+    if (!a.present) reasons.push("adapter not present");
+    if (!a.active) reasons.push("adapter not active");
+    if (!a.report) reasons.push("no adapter report");
+    else if (!a.report.state) reasons.push("adapter report without a state");
+    if (a.error) reasons.push(`adapter error: ${a.error}`);
+    if (a.report && !(ageMs >= 0 && ageMs <= 2 * (a.pollMs ?? 50)))
+      reasons.push(`adapter report ${ageMs} ms old`);
+    if (a.report && activeUri !== undefined && a.report.uri !== activeUri)
+      reasons.push(
+        "adapter report for another document than the active editor",
+      );
+    if (
+      a.report?.state &&
+      neutral &&
+      JSON.stringify(a.report.state) !== JSON.stringify(NEUTRAL_STATE)
+    )
+      reasons.push(
+        `adapter state after <Esc> <Esc> is not neutral: ${JSON.stringify(a.report.state)}`,
+      );
+  } else if (a.present) reasons.push("adapter present with the adapter off");
+  return {
+    arm,
+    present: a.present,
+    active: a.active,
+    ageMs,
+    pollMs: a.pollMs,
+    polls: a.polls ?? null,
+    error: a.error,
+    uri: a.report?.uri ?? null,
+    uriMatches:
+      activeUri === undefined || !a.report ? null : a.report.uri === activeUri,
+    state: a.report?.state ?? null,
+    reader: {
+      ...reader,
+      neutral: reader.state
+        ? JSON.stringify(reader.state) === JSON.stringify(NEUTRAL_STATE)
+        : null,
+      equalsAdapter:
+        arm === "on" && a.report?.state && reader.state
+          ? JSON.stringify(reader.state) === JSON.stringify(a.report.state)
+          : null,
+    },
+    ok: reasons.length === 0,
+    reasons,
+  };
+}
+
+/** The CPU numbers of a taskset list such as 8-15 or 8-11,14. */
+export const cpuList = (spec) =>
+  spec.split(",").flatMap((part) => {
+    const [a, b = a] = part.split("-").map(Number);
+    return Array.from({ length: b - a + 1 }, (_, i) => a + i);
+  });
 
 // ---------- X display ----------
 
@@ -508,6 +705,7 @@ export async function openSession({
   disable = [],
   spikeExtensions,
   settings,
+  onHostUp,
 }) {
   const inst = prepareInstance({ name, spikeExtensions, settings });
   const code = await startCode({
@@ -518,6 +716,10 @@ export async function openSession({
     cdpPort,
     disable,
   });
+  // The probe has answered its first hello (startCode); a harness that sorts its errors by phase
+  // moves from `boot` to `start` here. The adapter, which activates on the same event as the probe,
+  // is already loaded at this point.
+  onHostUp?.();
   for (let i = 0; i < 150; i++) {
     const h = await code.probe.call("hello");
     code.hello = h;
