@@ -6,7 +6,7 @@
     {
       "key": "'",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: mark or jump; ]' reads the mark or jump",
       "label": "Jump to the first non-blank of the next line with a lowercase mark",
       "labelIndex": "index.txt L684 |]'|",
@@ -17,7 +17,13 @@
       },
       "labelFrom": "hand",
       "setup": ["j", "m", "a", "k"],
-      "basis": "Vim motion.txt *]'*: the setup jmak puts mark a on line 2, the nearest possible line below, so marks from earlier rows cannot come between"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *]'*: the setup jmak puts mark a on line 2, the nearest possible line below, so marks from earlier rows cannot come between"
+      }
     },
     {
       "key": ")",
@@ -35,7 +41,7 @@
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; ]P reads the register",
       "label": "Put the lines above with the indent of the current line",
       "labelIndex": "index.txt L671 |[p|",
@@ -62,7 +68,13 @@
       },
       "labelFrom": "hand",
       "setup": ["y", "y"],
-      "basis": "Vim change.txt *]P* (same as [p): like P with the indent adjusted; cursor on the first non-blank of the new line"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *]P* (same as [p): like P with the indent adjusted; cursor on the first non-blank of the new line"
+      }
     },
     {
       "key": "[",
@@ -93,7 +105,7 @@
     {
       "key": "`",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: mark or jump; ]` reads the mark or jump",
       "label": "Jump to the next lowercase mark",
       "labelIndex": "index.txt L688 |]`|",
@@ -104,7 +116,13 @@
       },
       "labelFrom": "hand",
       "setup": ["l", "m", "a", "h"],
-      "basis": "Vim motion.txt *]`*: the setup lma puts mark a at (1,14), the nearest possible position after the cursor, so marks from earlier rows cannot come between"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *]`*: the setup lma puts mark a at (1,14), the nearest possible position after the cursor, so marks from earlier rows cannot come between"
+      }
     },
     {
       "key": "d",
@@ -137,7 +155,7 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; ]p reads the register",
       "label": "Put the lines below with the indent of the current line",
       "labelIndex": "index.txt L711 |]p|",
@@ -164,7 +182,13 @@
       },
       "labelFrom": "hand",
       "setup": ["y", "y"],
-      "basis": "Vim change.txt *]p*: like p with the indent adjusted to the current line (both have 2 spaces); the setup yy fills the unnamed register and 0 linewise; a linewise put leaves the cursor on the first non-blank of the new line"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *]p*: like p with the indent adjusted to the current line (both have 2 spaces); the setup yy fills the unnamed register and 0 linewise; a linewise put leaves the cursor on the first non-blank of the new line"
+      }
     },
     {
       "key": "}",

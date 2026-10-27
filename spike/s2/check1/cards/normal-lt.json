@@ -167,7 +167,7 @@
       "key": ",",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "e"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Shift left to the target of the last f, t, F or T in the opposite direction",
       "labelFrom": "hand",
@@ -179,7 +179,13 @@
         "cursor": [1, 0],
         "mode": "normal"
       },
-      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
     },
     {
       "key": "-",
@@ -199,7 +205,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Shift left to a search match: waits for the pattern",
       "labelFrom": "hand",
@@ -208,7 +214,13 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233 (the operator waits while searching)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233 (the operator waits while searching)"
+      }
     },
     {
       "key": "0",
@@ -229,7 +241,7 @@
       "key": ";",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "e"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Shift left to the target of the last f, t, F or T",
       "labelFrom": "hand",
@@ -241,7 +253,13 @@
         "cursor": [1, 0],
         "mode": "normal"
       },
-      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
     },
     {
       "key": "<",
@@ -550,7 +568,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Shift left to a backward search match: waits for the pattern",
       "labelFrom": "hand",
@@ -559,7 +577,13 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233"
+      }
     },
     {
       "key": "B",
@@ -668,7 +692,7 @@
       "key": "N",
       "sets": ["defaults", "extensions"],
       "setup": ["j", "g", "*"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Shift left to the previous match of the last search",
       "labelFrom": "hand",
@@ -684,7 +708,13 @@
           }
         }
       },
-      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); back from [2,19] to [2,13]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); back from [2,19] to [2,13]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
     },
     {
       "key": "T",
@@ -941,7 +971,7 @@
       "key": "n",
       "sets": ["defaults", "extensions"],
       "setup": ["j", "g", "*"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Shift left to the next match of the last search",
       "labelFrom": "hand",
@@ -959,7 +989,13 @@
           }
         }
       },
-      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); forward from [2,19] wraps to [0,7], so the range is [0,7]-[2,19); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); forward from [2,19] wraps to [0,7], so the range is [0,7]-[2,19); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
     },
     {
       "key": "t",

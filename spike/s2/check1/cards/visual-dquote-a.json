@@ -39,17 +39,37 @@
     {
       "key": "!",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Filter the highlighted lines through an external command: opens :'<,'>!",
       "labelFrom": "hand",
       "labelIndex": "index.txt L925 |v_!|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "other-6"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L261-293 (FilterOperator restores the cursors of the key's start and sets CommandlineInProgress with the previous mode), src/mode/modeHandler.ts L1294-1346 (drawn as the 1-character Visual selection)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L261-293 (FilterOperator restores the cursors of the key's start and sets CommandlineInProgress with the previous mode), src/mode/modeHandler.ts L1294-1346 (drawn as the 1-character Visual selection)"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L261-293 (FilterOperator restores the cursors of the key's start and sets CommandlineInProgress with the previous mode), src/mode/modeHandler.ts L1294-1346 (drawn as the 1-character Visual selection)",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "\"",
@@ -212,7 +232,7 @@
       "key": ",",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "e"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Repeat the last f, t, F or T in the opposite direction",
       "labelFrom": "hand",
@@ -225,7 +245,13 @@
         },
         "mode": "visual"
       },
-      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "-",
@@ -246,7 +272,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Start a forward search that extends the selection: waits for the pattern",
       "labelFrom": "hand",
@@ -255,7 +281,13 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
+      }
     },
     {
       "key": "0",
@@ -276,7 +308,7 @@
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Open the command line with the range :'<,'>",
       "labelFrom": "hand",
@@ -286,13 +318,19 @@
         "cursor": [1, 13],
         "mode": "other-6"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L277-302 (ShowCommandLine) sets CommandlineInProgress (Mode 6, probe other-6); src/mode/modeHandler.ts L1294-1301; spike/s2/data/check1/observe-1.141.0.json"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L277-302 (ShowCommandLine) sets CommandlineInProgress (Mode 6, probe other-6); src/mode/modeHandler.ts L1294-1301; spike/s2/data/check1/observe-1.141.0.json"
+      }
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "e"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Repeat the last f, t, F or T",
       "labelFrom": "hand",
@@ -305,7 +343,13 @@
         },
         "mode": "visual"
       },
-      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<",
@@ -451,17 +495,40 @@
       "key": "<C-b>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-b> (view)",
       "label": "Scroll a page up and move the cursor a page up",
       "labelFrom": "hand",
       "labelIndex": "index.txt L207 |CTRL-B|",
       "expect": {
         "text": "unchanged",
-        "cursor": [0, 0],
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "visual"
+        },
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "visual"
+        },
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-c>",
@@ -480,7 +547,7 @@
       "key": "<C-d>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b", "2", "<C-u>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-d> (view)",
       "label": "Scroll down 'scroll' lines (half a window) and move the cursor as far",
       "labelFrom": "hand",
@@ -493,13 +560,19 @@
         },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-u> sets vim.scroll to 2 and moves the cursor to [0,0], where v starts; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-u> sets vim.scroll to 2 and moves the cursor to [0,0], where v starts; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-e> (view)",
       "label": "Scroll the view a line down",
       "labelFrom": "hand",
@@ -512,23 +585,52 @@
         },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
+      }
     },
     {
       "key": "<C-f>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-f> (view)",
       "label": "Scroll a page down and move the cursor a page down",
       "labelFrom": "hand",
       "labelIndex": "index.txt L211 |CTRL-F|",
       "expect": {
         "text": "unchanged",
-        "cursor": [4, 0],
+        "cursor": {
+          "vim": [3, 0],
+          "visualStart": [1, 13]
+        },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); the cursor ends on the empty line 4 and the selection's active end is [4,0]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [4, 0],
+          "mode": "visual"
+        },
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); the cursor ends on the empty line 4 and the selection's active end is [4,0]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [4, 0],
+          "mode": "visual"
+        },
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); the cursor ends on the empty line 4 and the selection's active end is [4,0]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-j>",
@@ -681,7 +783,7 @@
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b", "2", "<C-d>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-u> (view)",
       "label": "Scroll up 'scroll' lines (half a window) and move the cursor as far",
       "labelFrom": "hand",
@@ -694,7 +796,13 @@
         },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-d> sets vim.scroll to 2 and moves the cursor to [3,0], where v starts; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-d> sets vim.scroll to 2 and moves the cursor to [3,0], where v starts; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "<C-v>",
@@ -745,7 +853,7 @@
       "key": "<C-y>",
       "sets": ["defaults", "extensions"],
       "setup": ["z", "b"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-y> (view)",
       "label": "Scroll the view a line up",
       "labelFrom": "hand",
@@ -758,7 +866,13 @@
         },
         "mode": "visual"
       },
-      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
+      }
     },
     {
       "key": "<D-a>",
@@ -1074,7 +1188,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Start a backward search that extends the selection: waits for the pattern",
       "labelFrom": "hand",
@@ -1083,7 +1197,13 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
+      }
     },
     {
       "key": "@",
@@ -1322,7 +1442,7 @@
       "key": "N",
       "sets": ["defaults", "extensions"],
       "setup": ["j", "g", "*"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Extend to the previous match of the last search",
       "labelFrom": "hand",
@@ -1341,7 +1461,13 @@
           }
         }
       },
-      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "O",
@@ -1363,7 +1489,7 @@
       "key": "P",
       "sets": ["defaults", "extensions"],
       "setup": ["\"", "a", "y", "i", "w"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; P reads the register",
       "label": "Put register a over the highlighted area (the unnamed register keeps its text)",
       "labelFrom": "hand",
@@ -1385,7 +1511,13 @@
           }
         }
       },
-      "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\", cursor on its last character; P does not overwrite \" (L421-428)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\", cursor on its last character; P does not overwrite \" (L421-428)"
+      }
     },
     {
       "key": "R",
@@ -1477,7 +1609,7 @@
     {
       "key": "U",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; U reads the undo history",
       "label": "Make the highlighted area uppercase",
       "labelFrom": "hand",
@@ -1489,7 +1621,13 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L353-408 (Visual U is UpperCaseOperator; it reads no undo history)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L353-408 (Visual U is UpperCaseOperator; it reads no undo history)"
+      }
     },
     {
       "key": "V",
@@ -1872,7 +2010,7 @@
       "key": "n",
       "sets": ["defaults", "extensions"],
       "setup": ["j", "g", "*"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Extend to the next match of the last search",
       "labelFrom": "hand",
@@ -1891,7 +2029,13 @@
           }
         }
       },
-      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
     },
     {
       "key": "o",
@@ -1913,7 +2057,7 @@
       "key": "p",
       "sets": ["defaults", "extensions"],
       "setup": ["\"", "a", "y", "i", "w"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; p reads the register",
       "label": "Put register a over the highlighted area",
       "labelFrom": "hand",
@@ -1932,10 +2076,58 @@
           "\"": {
             "mode": "character",
             "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
           }
         }
       },
-      "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twowo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "a": {
+              "mode": "character",
+              "lines": ["two"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["t"]
+            }
+          }
+        },
+        "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twowo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "a": {
+              "mode": "character",
+              "lines": ["two"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["t"]
+            }
+          }
+        },
+        "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "q",
@@ -2029,7 +2221,7 @@
     {
       "key": "u",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; u reads the undo history",
       "label": "Make the highlighted area lowercase",
       "labelFrom": "hand",
@@ -2039,7 +2231,13 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L353-423 (Visual u is LowerCaseOperator; \"w\" is already lowercase)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L353-423 (Visual u is LowerCaseOperator; \"w\" is already lowercase)"
+      }
     },
     {
       "key": "v",

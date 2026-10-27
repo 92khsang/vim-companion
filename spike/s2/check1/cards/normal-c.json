@@ -287,7 +287,7 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Change back to the previous f/t match",
       "labelIndex": "index.txt L295 |,|",
@@ -301,12 +301,52 @@
           "\"": {
             "mode": "character",
             "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space> to (1,10)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one,wo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 10],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" \"t"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space> to (1,10)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one,wo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 10],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" \"t"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space> to (1,10)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "-",
@@ -341,7 +381,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Change to a search match: starts the search",
       "expect": {
@@ -349,8 +389,14 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending (Mode 5).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending (Mode 5)."
+      }
     },
     {
       "key": "0",
@@ -380,7 +426,7 @@
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Change to the next f/t match",
       "labelIndex": "index.txt L317 |;|",
@@ -394,12 +440,52 @@
           "\"": {
             "mode": "character",
             "lines": ["wo\", "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", "]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space> to (1,17), one right with an operator, L857-860); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"t[three]) { four(five) }"
+          },
+          "cursor": [1, 13],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["wo\", "]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space> to (1,17), one right with an operator, L857-860); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"t[three]) { four(five) }"
+          },
+          "cursor": [1, 13],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["wo\", "]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space> to (1,17), one right with an operator, L857-860); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<BS>",
@@ -909,7 +995,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Change back to a search match: starts the search",
       "expect": {
@@ -917,8 +1003,14 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending."
+      }
     },
     {
       "key": "B",
@@ -1106,7 +1198,7 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Change back to the previous search match",
       "labelIndex": "index.txt L353 |N|",
@@ -1117,19 +1209,72 @@
         "cursor": [1, 8],
         "mode": "insert",
         "registers": {
-          "\"": {
+          "1": {
             "mode": "character",
             "lines": ["e, \"t"]
           },
           "/": {
             "mode": "character",
             "lines": ["e"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["e, \"t"]
           }
-        }
+        },
+        "shiftNumbered": true
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (onwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 8],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["e, \"t"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (onwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 8],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["e, \"t"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "T",
@@ -1512,7 +1657,7 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Change to the next search match",
       "labelIndex": "index.txt L413 |n|",
@@ -1523,19 +1668,72 @@
         "cursor": [1, 13],
         "mode": "insert",
         "registers": {
-          "\"": {
+          "1": {
             "mode": "character",
             "lines": ["wo\", [thr"]
           },
           "/": {
             "mode": "character",
             "lines": ["e"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [thr"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", [thr"]
           }
-        }
+        },
+        "shiftNumbered": true
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tee]) { four(five) }"
+          },
+          "cursor": [1, 13],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["wo\", [thr"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tee]) { four(five) }"
+          },
+          "cursor": [1, 13],
+          "mode": "insert",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": ["wo\", [thr"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "s",

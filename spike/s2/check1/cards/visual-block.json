@@ -39,7 +39,7 @@
     {
       "key": "!",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Filter the highlighted lines through an external command: opens :'<,'>!",
       "labelIndex": "index.txt L925 |v_!|",
@@ -49,7 +49,13 @@
         "mode": "other-6"
       },
       "labelFrom": "hand",
-      "basis": "Vim change.txt *v_!*: opens the command line with :'<,'>! (Visual mode ends, the cursor at the start of the area, (1,13)); rule (b): the probe reads other-6 (CommandlineInProgress)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_!*: opens the command line with :'<,'>! (Visual mode ends, the cursor at the start of the area, (1,13)); rule (b): the probe reads other-6 (CommandlineInProgress)"
+      }
     },
     {
       "key": "\"",
@@ -167,7 +173,7 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Repeat the last f, t, F or T in the opposite direction",
       "labelIndex": "index.txt L295 |,|",
@@ -181,7 +187,13 @@
       },
       "labelFrom": "hand",
       "setup": ["f", "e"],
-      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      }
     },
     {
       "key": "-",
@@ -202,7 +214,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Search forward to extend the selection: type the pattern",
       "expect": {
@@ -211,7 +223,13 @@
         "mode": "other-5"
       },
       "labelFrom": "hand",
-      "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      }
     },
     {
       "key": "0",
@@ -232,7 +250,7 @@
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Start an Ex command line for the highlighted lines (:'<,'>)",
       "labelIndex": "index.txt L927 |v_:|",
@@ -242,12 +260,18 @@
         "mode": "other-6"
       },
       "labelFrom": "hand",
-      "basis": "Vim cmdline.txt *:* (with a count, *N:* gives .,.+N-1); rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-6 (CommandlineInProgress), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim cmdline.txt *:* (with a count, *N:* gives .,.+N-1); rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-6 (CommandlineInProgress), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      }
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Repeat the last f, t, F or T",
       "labelIndex": "index.txt L317 |;|",
@@ -261,7 +285,13 @@
       },
       "labelFrom": "hand",
       "setup": ["f", "e"],
-      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      }
     },
     {
       "key": "<",
@@ -370,7 +400,7 @@
     {
       "key": "<C-b>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-b> (view)",
       "label": "Scroll the window one page up",
       "labelIndex": "index.txt L207 |CTRL-B|",
@@ -384,7 +414,13 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
     },
     {
       "key": "<C-c>",
@@ -402,7 +438,7 @@
     {
       "key": "<C-d>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-d> (view)",
       "label": "Scroll half a window down and move the cursor as many lines",
       "labelIndex": "index.txt L209 |CTRL-D|",
@@ -416,12 +452,18 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13); 'startofline' applies in Visual-block mode too (checked on another buffer)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13); 'startofline' applies in Visual-block mode too (checked on another buffer)"
+      }
     },
     {
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-e> (view)",
       "label": "Scroll the window one line down",
       "labelIndex": "index.txt L210 |CTRL-E|",
@@ -435,12 +477,18 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
     },
     {
       "key": "<C-f>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-f> (view)",
       "label": "Scroll the window one page down",
       "labelIndex": "index.txt L211 |CTRL-F|",
@@ -454,7 +502,13 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
     },
     {
       "key": "<C-j>",
@@ -569,7 +623,7 @@
     {
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-u> (view)",
       "label": "Scroll half a window up and move the cursor as many lines",
       "labelIndex": "index.txt L232 |CTRL-U|",
@@ -583,7 +637,13 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
     },
     {
       "key": "<C-v>",
@@ -614,7 +674,7 @@
     {
       "key": "<C-y>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-y> (view)",
       "label": "Scroll the window one line up",
       "labelIndex": "index.txt L237 |CTRL-Y|",
@@ -628,7 +688,13 @@
       },
       "labelFrom": "hand",
       "setup": ["z", "b"],
-      "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
     },
     {
       "key": "<D-a>",
@@ -869,7 +935,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Search backward to extend the selection: type the pattern",
       "expect": {
@@ -878,7 +944,13 @@
         "mode": "other-5"
       },
       "labelFrom": "hand",
-      "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      }
     },
     {
       "key": "A",
@@ -1088,7 +1160,7 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Repeat the last search in the opposite direction",
       "labelIndex": "index.txt L353 |N|",
@@ -1108,7 +1180,13 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>"],
-      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      }
     },
     {
       "key": "O",
@@ -1129,7 +1207,7 @@
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; P reads the register",
       "label": "Replace the block with the text (the unnamed register is kept)",
       "labelIndex": "index.txt L946 |v_P|",
@@ -1152,7 +1230,13 @@
       },
       "labelFrom": "hand",
       "setup": ["y", "i", "w"],
-      "basis": "Vim change.txt *v_P*: like v_p, but the unnamed register is not changed"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_P*: like v_p, but the unnamed register is not changed"
+      }
     },
     {
       "key": "R",
@@ -1254,7 +1338,7 @@
     {
       "key": "U",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; U reads the undo history",
       "label": "Make the block uppercase",
       "labelIndex": "index.txt L953 |v_U|",
@@ -1266,7 +1350,13 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "Vim change.txt *v_U*: uppercase the area (the w at (1,13)), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_U*: uppercase the area (the w at (1,13)), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      }
     },
     {
       "key": "V",
@@ -1641,7 +1731,7 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Repeat the last search",
       "labelIndex": "index.txt L413 |n|",
@@ -1661,7 +1751,13 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>"],
-      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      }
     },
     {
       "key": "o",
@@ -1682,7 +1778,7 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; p reads the register",
       "label": "Replace the block with the text",
       "labelIndex": "index.txt L1010 |v_p|",
@@ -1709,7 +1805,13 @@
       },
       "labelFrom": "hand",
       "setup": ["y", "i", "w"],
-      "basis": "Vim change.txt *v_p*: the one-character block (t after the setup yiw) is replaced by the charwise register; the replaced text goes to the unnamed and small delete registers as a block (checked on another buffer); cursor on the last put character"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_p*: the one-character block (t after the setup yiw) is replaced by the charwise register; the replaced text goes to the unnamed and small delete registers as a block (checked on another buffer); cursor on the last put character"
+      }
     },
     {
       "key": "q",
@@ -1813,7 +1915,7 @@
     {
       "key": "u",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; u reads the undo history",
       "label": "Make the block lowercase",
       "labelIndex": "index.txt L1014 |v_u|",
@@ -1823,7 +1925,13 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "Vim change.txt *v_u*: lowercase the area (already lowercase), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_u*: lowercase the area (already lowercase), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      }
     },
     {
       "key": "v",

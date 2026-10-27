@@ -6,7 +6,7 @@
     {
       "key": "+",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Increase the window height",
       "labelIndex": "index.txt L557 |CTRL-W_+|",
@@ -16,12 +16,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L261-L273 (IncreasePaneHeight) runs workbench.action.increaseViewHeight, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L261-L273 (IncreasePaneHeight) runs workbench.action.increaseViewHeight, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Decrease the window height",
       "labelIndex": "index.txt L558 |CTRL-W_-|",
@@ -31,12 +37,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L275-L287 (DecreasePaneHeight) runs workbench.action.decreaseViewHeight, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L275-L287 (DecreasePaneHeight) runs workbench.action.decreaseViewHeight, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Decrease the window width",
       "labelIndex": "index.txt L560 |CTRL-W_<|",
@@ -46,12 +58,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L247-L259 (DecreasePaneWidth) runs workbench.action.decreaseViewWidth, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L247-L259 (DecreasePaneWidth) runs workbench.action.decreaseViewWidth, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<C-c>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Nothing: CTRL-C cancels the window command",
       "labelIndex": "index.txt L534 |CTRL-W_CTRL-C|",
@@ -74,12 +92,18 @@
       },
       "labelFrom": "hand",
       "setup": ["x"],
-      "basis": "Vim windows.txt *CTRL-W_CTRL-C* (index.txt: no-op); VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41). Inferred: on an unchanged a.txt VSCodeVim would close the editor; the setup keeps the run deterministic and hides that difference"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_CTRL-C* (index.txt: no-op); VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41). Inferred: on an unchanged a.txt VSCodeVim would close the editor; the setup keeps the run deterministic and hides that difference"
+      }
     },
     {
       "key": "<C-h>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the left (none here)",
       "labelIndex": "index.txt L600 |CTRL-W_h|",
@@ -89,12 +113,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window below (none here)",
       "labelIndex": "index.txt L603 |CTRL-W_j|",
@@ -104,12 +134,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<C-k>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window above (none here)",
       "labelIndex": "index.txt L604 |CTRL-W_k|",
@@ -119,12 +155,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<C-l>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the right",
       "labelIndex": "index.txt L605 |CTRL-W_l|",
@@ -134,12 +176,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      }
     },
     {
       "key": "<C-o>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Close all other windows",
       "labelIndex": "index.txt L607 |CTRL-W_o|",
@@ -149,12 +197,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      }
     },
     {
       "key": "<C-q>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "oracle: Vim exits (the key closes its only window)",
       "label": "Quit the window (refused while the buffer has changes)",
       "labelIndex": "index.txt L609 |CTRL-W_q|",
@@ -177,12 +231,18 @@
       },
       "labelFrom": "hand",
       "setup": ["x"],
-      "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
     },
     {
       "key": "<C-s>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Split the window horizontally",
       "labelIndex": "index.txt L611 |CTRL-W_s|",
@@ -192,12 +252,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      }
     },
     {
       "key": "<C-v>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Split the window vertically",
       "labelIndex": "index.txt L614 |CTRL-W_v|",
@@ -207,12 +273,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      }
     },
     {
       "key": "<C-w>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the next window",
       "labelIndex": "index.txt L616 |CTRL-W_w|",
@@ -222,12 +294,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      }
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window below (none here)",
       "labelIndex": "index.txt L603 |CTRL-W_j|",
@@ -237,12 +315,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<left>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the left (none here)",
       "labelIndex": "index.txt L600 |CTRL-W_h|",
@@ -252,12 +336,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "<right>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the right",
       "labelIndex": "index.txt L605 |CTRL-W_l|",
@@ -267,12 +357,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      }
     },
     {
       "key": "<up>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window above (none here)",
       "labelIndex": "index.txt L604 |CTRL-W_k|",
@@ -282,12 +378,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "=",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Make all windows the same size",
       "labelIndex": "index.txt L561 |CTRL-W_=|",
@@ -297,12 +399,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L219-L231 (EvenPaneWidths) runs workbench.action.evenEditorWidths, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L219-L231 (EvenPaneWidths) runs workbench.action.evenEditorWidths, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": ">",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Increase the window width",
       "labelIndex": "index.txt L562 |CTRL-W_>|",
@@ -312,12 +420,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L233-L245 (IncreasePaneWidth) runs workbench.action.increaseViewWidth, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L233-L245 (IncreasePaneWidth) runs workbench.action.increaseViewWidth, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "c",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Close the window (refused while the buffer has changes)",
       "labelIndex": "index.txt L578 |CTRL-W_c|",
@@ -340,12 +454,18 @@
       },
       "labelFrom": "hand",
       "setup": ["x"],
-      "basis": "Vim windows.txt *CTRL-W_c* *E444*: fails with 'nohidden', changes and no other window on the buffer; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_c* *E444*: fails with 'nohidden', changes and no other window on the buffer; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
     },
     {
       "key": "h",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the left (none here)",
       "labelIndex": "index.txt L600 |CTRL-W_h|",
@@ -355,12 +475,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "j",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window below (none here)",
       "labelIndex": "index.txt L603 |CTRL-W_j|",
@@ -370,12 +496,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "k",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window above (none here)",
       "labelIndex": "index.txt L604 |CTRL-W_k|",
@@ -385,12 +517,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the window on the right",
       "labelIndex": "index.txt L605 |CTRL-W_l|",
@@ -400,12 +538,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      }
     },
     {
       "key": "o",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Close all other windows",
       "labelIndex": "index.txt L607 |CTRL-W_o|",
@@ -415,12 +559,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      }
     },
     {
       "key": "q",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "oracle: Vim exits (the key closes its only window)",
       "label": "Quit the window (refused while the buffer has changes)",
       "labelIndex": "index.txt L609 |CTRL-W_q|",
@@ -443,12 +593,18 @@
       },
       "labelFrom": "hand",
       "setup": ["x"],
-      "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
     },
     {
       "key": "s",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Split the window horizontally",
       "labelIndex": "index.txt L611 |CTRL-W_s|",
@@ -458,12 +614,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      }
     },
     {
       "key": "v",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Split the window vertically",
       "labelIndex": "index.txt L614 |CTRL-W_v|",
@@ -473,12 +635,18 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      }
     },
     {
       "key": "w",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; a CTRL-W window command",
       "label": "Move to the next window",
       "labelIndex": "index.txt L616 |CTRL-W_w|",
@@ -488,7 +656,13 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      }
     }
   ]
 }

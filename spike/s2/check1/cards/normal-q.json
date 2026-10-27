@@ -6,23 +6,49 @@
     {
       "key": "\"",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: macro recording; starts recording a macro",
       "label": "Start recording a macro into register \"",
       "labelIndex": "index.txt L418 |q|",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
-        "mode": "normal",
-        "registers": {
-          "\"": {
-            "mode": "character",
-            "keys": ""
-          }
-        }
+        "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "/",
@@ -31,13 +57,20 @@
       "reason": "outside: window; q/ (window)",
       "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L422 |q/|",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
+      "labelFrom": "hand",
+      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
       },
-      "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378, src/cmd_line/commandLine.ts L335-352 await a quick pick.",
-      "labelFrom": "hand"
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378, src/cmd_line/commandLine.ts L335-352 await a quick pick."
+      }
     },
     {
       "key": ":",
@@ -46,13 +79,20 @@
       "reason": "outside: window; q: (window)",
       "label": "Show the : command history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L421 |q:|",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
+      "labelFrom": "hand",
+      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
       },
-      "expectBasis": "VSCodeVim 1.32.4: ShowCommandHistory src/actions/commands/actions.ts L305-322 awaits vscode.window.showQuickPick; until it closes nothing else changes.",
-      "labelFrom": "hand"
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: ShowCommandHistory src/actions/commands/actions.ts L305-322 awaits vscode.window.showQuickPick; until it closes nothing else changes."
+      }
     },
     {
       "key": "?",
@@ -61,56 +101,115 @@
       "reason": "outside: window; q? (window)",
       "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L423 |q?|",
-      "expect": {
-        "text": "unchanged",
-        "cursor": [1, 13],
-        "mode": "normal"
+      "labelFrom": "hand",
+      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
       },
-      "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378 (backward when the pick is accepted).",
-      "labelFrom": "hand"
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378 (backward when the pick is accepted)."
+      }
     },
     {
       "key": "q",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: macro recording; starts recording a macro",
       "label": "Start recording a macro into register q",
       "labelIndex": "index.txt L418 |q|",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
-        "mode": "normal",
-        "registers": {
-          "q": {
-            "mode": "character",
-            "keys": ""
-          }
-        }
+        "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "q": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "q": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "{<macro>}",
       "sets": ["defaults", "extensions"],
       "sample": "a",
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: macro recording; starts recording a macro",
       "label": "Start recording a macro into register {0-9 a-z A-Z}",
       "labelIndex": "index.txt L418 |q|",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
-        "mode": "normal",
-        "registers": {
-          "a": {
-            "mode": "character",
-            "keys": ""
-          }
-        }
+        "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300). Sample a.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "a": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300). Sample a."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal",
+          "registers": {
+            "a": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300). Sample a.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     }
   ]
 }

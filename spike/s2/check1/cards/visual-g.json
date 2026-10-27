@@ -202,7 +202,7 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; gN reads the last search",
       "label": "Extend the selection to the start of the previous match of the last search",
       "labelIndex": "index.txt L758 |gN|",
@@ -222,12 +222,18 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>", "0"],
-      "basis": "Vim visual.txt *gN*: like gn backward; from (2,0) the previous match starts at (0,7) (checked on another buffer)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim visual.txt *gN*: like gn backward; from (2,0) the previous match starts at (0,7) (checked on another buffer)"
+      }
     },
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; gP reads the register",
       "label": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
       "labelIndex": "index.txt L760 |gP|",
@@ -244,18 +250,45 @@
           },
           "\"": {
             "mode": "character",
-            "lines": ["two"]
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
           }
         }
       },
       "labelFrom": "hand",
       "setup": ["y", "i", "w"],
-      "basis": "Vim change.txt *gP* with *v_P*: like v_p but the unnamed register is not changed; cursor just after the new text"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twowo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["two"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["two"]
+            }
+          }
+        },
+        "basis": "Vim change.txt *gP* with *v_P*: like v_p but the unnamed register is not changed; cursor just after the new text"
+      }
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; gT (window)",
       "label": "Go to the previous tab page (only one here)",
       "labelIndex": "index.txt L764 |gT|",
@@ -268,7 +301,13 @@
         "mode": "visual"
       },
       "labelFrom": "hand",
-      "basis": "Vim tabpage.txt *gT*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L317-L333 (workbench.action.previousEditorInGroup)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim tabpage.txt *gT*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L317-L333 (workbench.action.previousEditorInGroup)"
+      }
     },
     {
       "key": "U",
@@ -367,7 +406,7 @@
     {
       "key": "f",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: file or tag; gf (file or tag)",
       "label": "Edit the file named by the selection (no file w: E447)",
       "labelIndex": "index.txt L782 |gf|",
@@ -377,7 +416,13 @@
         "mode": "normal"
       },
       "labelFrom": "hand",
-      "basis": "Vim editing.txt *v_gf*: the selected text w names no file, E447, and Visual mode ends with the cursor at the start of the area (checked on another buffer)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim editing.txt *v_gf*: the selected text w names no file, E447, and Visual mode ends with the cursor at the start of the area (checked on another buffer)"
+      }
     },
     {
       "key": "g",
@@ -446,7 +491,7 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; gn reads the last search",
       "label": "Extend the selection to the end of the next match of the last search",
       "labelIndex": "index.txt L796 |gn|",
@@ -466,7 +511,13 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>", "0"],
-      "basis": "Vim visual.txt *gn*: in Visual mode the selection extends to the end of the next match; the setup /eta<CR>0 leaves the cursor at (2,0), off a match, the next match is (2,9)-(2,11) (checked on another buffer)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim visual.txt *gn*: in Visual mode the selection extends to the end of the next match; the setup /eta<CR>0 leaves the cursor at (2,0), off a match, the next match is (2,9)-(2,11) (checked on another buffer)"
+      }
     },
     {
       "key": "o",
@@ -487,7 +538,7 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; gp reads the register",
       "label": "Replace the selection with the text and put the cursor after it",
       "labelIndex": "index.txt L799 |gp|",
@@ -514,7 +565,13 @@
       },
       "labelFrom": "hand",
       "setup": ["y", "i", "w"],
-      "basis": "Vim change.txt *gp* with *v_p*: the selection (t after the setup yiw) is replaced, the replaced text goes to the unnamed and small delete registers, the cursor goes just after the new text (checked on another buffer)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *gp* with *v_p*: the selection (t after the setup yiw) is replaced, the replaced text goes to the unnamed and small delete registers, the cursor goes just after the new text (checked on another buffer)"
+      }
     },
     {
       "key": "q",
@@ -545,7 +602,7 @@
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: window; gt (window)",
       "label": "Go to the next tab page (only one here)",
       "labelIndex": "index.txt L804 |gt|",
@@ -558,7 +615,13 @@
         "mode": "visual"
       },
       "labelFrom": "hand",
-      "basis": "Vim tabpage.txt *gt*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L291-L315 (workbench.action.nextEditorInGroup; group 1 holds only a.txt)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness"
+      },
+      "handBasis": {
+        "basis": "Vim tabpage.txt *gt*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L291-L315 (workbench.action.nextEditorInGroup; group 1 holds only a.txt)"
+      }
     },
     {
       "key": "u",

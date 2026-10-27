@@ -6,7 +6,7 @@
     {
       "key": "`",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: mark or jump; `` reads the mark or jump",
       "label": "Jump back to the position before the latest jump",
       "labelIndex": "index.txt L390 |``|",
@@ -17,7 +17,13 @@
       },
       "labelFrom": "hand",
       "setup": ["g", "g"],
-      "basis": "Vim motion.txt *``*: the setup gg is a jump from (1,13), so `` returns there"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *``*: the setup gg is a jump from (1,13), so `` returns there"
+      }
     },
     {
       "key": "{<register>}",

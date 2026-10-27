@@ -36,17 +36,37 @@
     {
       "key": "!",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Filter the block's lines through a shell command: opens the command line with '<,'>!",
       "labelIndex": "index.txt L925 |v_!|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "other-6"
       },
-      "expectBasis": "VSCodeVim 1.32.4: FilterOperator src/actions/operator.ts L262-291; drawn as the previous Visual Block selection (src/mode/modeHandler.ts L1294-1300).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: FilterOperator src/actions/operator.ts L262-291; drawn as the previous Visual Block selection (src/mode/modeHandler.ts L1294-1300)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: FilterOperator src/actions/operator.ts L262-291; drawn as the previous Visual Block selection (src/mode/modeHandler.ts L1294-1300).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "\"",
@@ -164,18 +184,41 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Extend the block to the 3rd previous f/t match",
       "labelIndex": "index.txt L295 |,|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": {
+          "vim": [1, 1],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveRepeatReversed src/actions/motion.ts L989-1012, count 3: F<Space> to (1,1); the block spans columns 1-13. Setup f<Space> 1 4 |.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveRepeatReversed src/actions/motion.ts L989-1012, count 3: F<Space> to (1,1); the block spans columns 1-13. Setup f<Space> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveRepeatReversed src/actions/motion.ts L989-1012, count 3: F<Space> to (1,1); the block spans columns 1-13. Setup f<Space> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "-",
@@ -196,47 +239,110 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Start a forward search to extend the block",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-5"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-5"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Open the command line for the block's lines ('<,'>)",
       "labelIndex": "index.txt L927 |v_:|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "other-6"
       },
-      "expectBasis": "VSCodeVim 1.32.4: ShowCommandLine src/actions/commands/actions.ts L276-303.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: ShowCommandLine src/actions/commands/actions.ts L276-303."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-6"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: ShowCommandLine src/actions/commands/actions.ts L276-303.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Extend the block to the 3rd next f/t match",
       "labelIndex": "index.txt L317 |;|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 29],
+        "cursor": {
+          "vim": [1, 28],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveRepeat src/actions/motion.ts L972-987, count 3: f<Space> to (1,28). Setup f<Space> 1 4 |.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 29],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveRepeat src/actions/motion.ts L972-987, count 3: f<Space> to (1,28). Setup f<Space> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 29],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveRepeat src/actions/motion.ts L972-987, count 3: f<Space> to (1,28). Setup f<Space> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<",
@@ -342,18 +448,41 @@
     {
       "key": "<C-b>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-b> (view)",
       "label": "Scroll 3 pages up and move the cursor up",
       "labelIndex": "index.txt L207 |CTRL-B|",
       "expect": {
         "text": "unchanged",
-        "cursor": [0, 14],
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: line 0, startofline (0,0); the block's top line is 0. Setup gg j 1 3 l.",
       "setup": ["g", "g", "j", "1", "3", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: line 0, startofline (0,0); the block's top line is 0. Setup gg j 1 3 l."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: line 0, startofline (0,0); the block's top line is 0. Setup gg j 1 3 l.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-c>",
@@ -371,49 +500,118 @@
     {
       "key": "<C-d>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-d> (view)",
       "label": "Set the scroll amount to 3, then scroll down and move the cursor 3 lines down",
       "labelIndex": "index.txt L209 |CTRL-D|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": {
+          "vim": [3, 0],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172: stop (4,0) (the empty last line); configuration.scroll stays 3.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172: stop (4,0) (the empty last line); configuration.scroll stays 3."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172: stop (4,0) (the empty last line); configuration.scroll stays 3.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-e> (view)",
       "label": "Scroll the view 3 lines down",
       "labelIndex": "index.txt L210 |CTRL-E|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": {
+          "vim": [3, 13],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlE src/actions/commands/scroll.ts L10-62: stop moves to (3,13). Setup gg j 1 3 l.",
       "setup": ["g", "g", "j", "1", "3", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlE src/actions/commands/scroll.ts L10-62: stop moves to (3,13). Setup gg j 1 3 l."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlE src/actions/commands/scroll.ts L10-62: stop moves to (3,13). Setup gg j 1 3 l.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-f>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-f> (view)",
       "label": "Scroll 3 pages down and move the cursor down",
       "labelIndex": "index.txt L211 |CTRL-F|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": {
+          "vim": [3, 0],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageDown src/actions/commands/scroll.ts L76-160: stop (4,0).",
       "setup": ["g", "g", "j", "1", "3", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageDown src/actions/commands/scroll.ts L76-160: stop (4,0)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageDown src/actions/commands/scroll.ts L76-160: stop (4,0).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-j>",
@@ -528,17 +726,40 @@
     {
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-u> (view)",
       "label": "Set the scroll amount to 3, then scroll up and move the cursor 3 lines up",
       "labelIndex": "index.txt L232 |CTRL-U|",
       "expect": {
         "text": "unchanged",
-        "cursor": [0, 14],
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: stop (0,0).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: stop (0,0)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: stop (0,0).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-v>",
@@ -569,18 +790,41 @@
     {
       "key": "<C-y>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view; <c-y> (view)",
       "label": "Scroll the view 3 lines up",
       "labelIndex": "index.txt L237 |CTRL-Y|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlY src/actions/commands/scroll.ts L10-70: the view is at the top, the cursor stays. Setup gg j 1 3 l.",
       "setup": ["g", "g", "j", "1", "3", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlY src/actions/commands/scroll.ts L10-70: the view is at the top, the cursor stays. Setup gg j 1 3 l."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "visual-block"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandCtrlY src/actions/commands/scroll.ts L10-70: the view is at the top, the cursor stays. Setup gg j 1 3 l.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<D-a>",
@@ -781,16 +1025,36 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Start a backward search to extend the block",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-5"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "other-5"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "A",
@@ -1000,13 +1264,16 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Extend the block to the 3rd previous search match",
       "labelIndex": "index.txt L353 |N|",
       "expect": {
         "text": "unchanged",
-        "cursor": [0, 14],
+        "cursor": {
+          "vim": [0, 7],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block",
         "registers": {
           "/": {
@@ -1015,9 +1282,41 @@
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandPreviousSearchMatch src/actions/motion.ts L474-522, count 3: (1,8), (0,18), (0,7). Setup /e<CR> 1 4 |.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandPreviousSearchMatch src/actions/motion.ts L474-522, count 3: (1,8), (0,18), (0,7). Setup /e<CR> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 14],
+          "mode": "visual-block",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandPreviousSearchMatch src/actions/motion.ts L474-522, count 3: (1,8), (0,18), (0,7). Setup /e<CR> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "O",
@@ -1038,7 +1337,7 @@
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; P reads the register",
       "label": "Replace the block with the register 3 times (the unnamed register keeps its text)",
       "labelIndex": "index.txt L946 |v_P|",
@@ -1059,9 +1358,15 @@
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: PutBeforeCommand src/actions/commands/put.ts L421-472 (overwritesRegisterWithSelection false), BasePutCommand L37-139, L277-291 (charwise text www over the block), cursor L405-412. Setup y l.",
       "setup": ["y", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: PutBeforeCommand src/actions/commands/put.ts L421-472 (overwritesRegisterWithSelection false), BasePutCommand L37-139, L277-291 (charwise text www over the block), cursor L405-412. Setup y l."
+      }
     },
     {
       "key": "R",
@@ -1137,7 +1442,7 @@
     {
       "key": "U",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; U reads the undo history",
       "label": "Make the block uppercase",
       "labelIndex": "index.txt L953 |v_U|",
@@ -1148,8 +1453,14 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: UpperCaseOperator src/actions/operator.ts L396-402, ChangeCaseOperator L353-375 (cursor to the block start). In Visual modes u and U change case; the reason state: undo history does not apply.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: UpperCaseOperator src/actions/operator.ts L396-402, ChangeCaseOperator L353-375 (cursor to the block start). In Visual modes u and U change case; the reason state: undo history does not apply."
+      }
     },
     {
       "key": "V",
@@ -1524,13 +1835,16 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Extend the block to the 3rd next search match",
       "labelIndex": "index.txt L413 |n|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 38],
+        "cursor": {
+          "vim": [1, 37],
+          "visualStart": [1, 13]
+        },
         "mode": "visual-block",
         "registers": {
           "/": {
@@ -1539,9 +1853,41 @@
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandNextSearchMatch src/actions/motion.ts L425-472, count 3: (1,22), (1,23), (1,37). Setup /e<CR> 1 4 |.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 38],
+          "mode": "visual-block",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandNextSearchMatch src/actions/motion.ts L425-472, count 3: (1,22), (1,23), (1,37). Setup /e<CR> 1 4 |."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 38],
+          "mode": "visual-block",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["e"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: CommandNextSearchMatch src/actions/motion.ts L425-472, count 3: (1,22), (1,23), (1,37). Setup /e<CR> 1 4 |.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "o",
@@ -1562,7 +1908,7 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: register; p reads the register",
       "label": "Replace the block with the register 3 times; the unnamed register gets the old block",
       "labelIndex": "index.txt L1010 |v_p|",
@@ -1580,12 +1926,60 @@
           "\"": {
             "mode": "block",
             "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, BasePutCommand L101-120 (the replaced text, blockwise in Visual Block mode). Setup y l.",
       "setup": ["y", "l"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "block",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, BasePutCommand L101-120 (the replaced text, blockwise in Visual Block mode). Setup y l."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "block",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, BasePutCommand L101-120 (the replaced text, blockwise in Visual Block mode). Setup y l.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "q",
@@ -1684,7 +2078,7 @@
     {
       "key": "u",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: undo history; u reads the undo history",
       "label": "Make the block lowercase",
       "labelIndex": "index.txt L1014 |v_u|",
@@ -1693,8 +2087,14 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: LowerCaseOperator src/actions/operator.ts L411-417, ChangeCaseOperator L353-375. In Visual modes u and U change case; the reason state: undo history does not apply.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: LowerCaseOperator src/actions/operator.ts L411-417, ChangeCaseOperator L353-375. In Visual modes u and U change case; the reason state: undo history does not apply."
+      }
     },
     {
       "key": "v",

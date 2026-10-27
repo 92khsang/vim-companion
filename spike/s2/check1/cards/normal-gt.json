@@ -189,7 +189,7 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L295 |,|",
@@ -200,9 +200,15 @@
         "cursor": [1, 4],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4."
+      }
     },
     {
       "key": "-",
@@ -225,7 +231,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Shift right to a search match: starts the search",
       "expect": {
@@ -233,8 +239,14 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending."
+      }
     },
     {
       "key": "0",
@@ -256,7 +268,7 @@
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L317 |;|",
@@ -267,9 +279,15 @@
         "cursor": [1, 4],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
       "setup": ["f", "<Space>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4."
+      }
     },
     {
       "key": "<BS>",
@@ -619,7 +637,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Shift right back to a search match: starts the search",
       "expect": {
@@ -627,8 +645,14 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending."
+      }
     },
     {
       "key": "B",
@@ -753,7 +777,7 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L353 |N|",
@@ -770,9 +794,15 @@
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4."
+      }
     },
     {
       "key": "T",
@@ -1048,7 +1078,7 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L413 |n|",
@@ -1065,9 +1095,15 @@
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
       "setup": ["/", "e", "<CR>", "1", "4", "|"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4."
+      }
     },
     {
       "key": "t",

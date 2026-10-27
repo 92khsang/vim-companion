@@ -261,7 +261,7 @@
       "key": ",",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "<Space>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Delete back to the 2nd match of the last f, t, F or T in the opposite direction",
       "labelFrom": "hand",
@@ -283,7 +283,13 @@
           }
         }
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      }
     },
     {
       "key": "-",
@@ -318,7 +324,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Delete to a search match: opens the search input",
       "labelFrom": "hand",
@@ -327,13 +333,19 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      }
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
       "setup": ["f", "<Space>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Delete to the 2nd next match of the last f, t, F or T",
       "labelFrom": "hand",
@@ -355,7 +367,13 @@
           }
         }
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      }
     },
     {
       "key": "<BS>",
@@ -653,11 +671,11 @@
         "cursor": [1, 12],
         "mode": "normal",
         "registers": {
-          "\"": {
+          "1": {
             "mode": "character",
             "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
           },
-          "1": {
+          "\"": {
             "mode": "character",
             "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
           }
@@ -835,7 +853,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Delete back to a search match: opens the backward search input",
       "labelFrom": "hand",
@@ -844,7 +862,13 @@
         "cursor": [1, 13],
         "mode": "other-5"
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      }
     },
     {
       "key": "B",
@@ -1027,7 +1051,7 @@
       "key": "N",
       "sets": ["defaults", "extensions"],
       "setup": ["/", "<Space>", "<CR>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Delete back to the 2nd previous match of the last search",
       "labelFrom": "hand",
@@ -1039,6 +1063,14 @@
         "cursor": [1, 4],
         "mode": "normal",
         "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [" (one, \"two\","]
+          },
+          "/": {
+            "mode": "character",
+            "lines": [" "]
+          },
           "\"": {
             "mode": "character",
             "lines": [" (one, \"two\","]
@@ -1046,14 +1078,63 @@
           "-": {
             "mode": "character",
             "lines": [" (one, \"two\","]
-          },
-          "/": {
-            "mode": "character",
-            "lines": [" "]
           }
-        }
+        },
+        "shiftNumbered": true
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" (one, \"two\","]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" (one, \"two\","]
+            },
+            "/": {
+              "mode": "character",
+              "lines": [" "]
+            }
+          }
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if [three]) { four(five) }"
+          },
+          "cursor": [1, 4],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" (one, \"two\","]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" (one, \"two\","]
+            },
+            "/": {
+              "mode": "character",
+              "lines": [" "]
+            }
+          }
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "T",
@@ -1447,7 +1528,7 @@
       "key": "n",
       "sets": ["defaults", "extensions"],
       "setup": ["/", "<Space>", "<CR>"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Delete to the 2nd next match of the last search",
       "labelFrom": "hand",
@@ -1459,6 +1540,14 @@
         "cursor": [1, 17],
         "mode": "normal",
         "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [" [three]) {"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": [" "]
+          },
           "\"": {
             "mode": "character",
             "lines": [" [three]) {"]
@@ -1466,14 +1555,63 @@
           "-": {
             "mode": "character",
             "lines": [" [three]) {"]
-          },
-          "/": {
-            "mode": "character",
-            "lines": [" "]
           }
-        }
+        },
+        "shiftNumbered": true
       },
-      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"two\", four(five) }"
+          },
+          "cursor": [1, 17],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" [three]) {"]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" [three]) {"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": [" "]
+            }
+          }
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"two\", four(five) }"
+          },
+          "cursor": [1, 17],
+          "mode": "normal",
+          "registers": {
+            "\"": {
+              "mode": "character",
+              "lines": [" [three]) {"]
+            },
+            "-": {
+              "mode": "character",
+              "lines": [" [three]) {"]
+            },
+            "/": {
+              "mode": "character",
+              "lines": [" "]
+            }
+          }
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "s",

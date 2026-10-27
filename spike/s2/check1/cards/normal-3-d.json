@@ -264,7 +264,7 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; , reads the last f/t",
       "label": "Delete back to the 3rd repeat of the last f, t, F or T in the opposite direction",
       "labelIndex": "index.txt L295 |,|",
@@ -287,7 +287,13 @@
       },
       "labelFrom": "hand",
       "setup": ["0", "f", "e", ";", ";", ";"],
-      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,37); 3, (F e, exclusive) reaches (1,8): columns 8-36"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,37); 3, (F e, exclusive) reaches (1,8): columns 8-36"
+      }
     },
     {
       "key": "-",
@@ -322,7 +328,7 @@
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Delete to a search match forward: type the pattern",
       "expect": {
@@ -331,12 +337,18 @@
         "mode": "other-5"
       },
       "labelFrom": "hand",
-      "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
+      }
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last f/t; ; reads the last f/t",
       "label": "Delete to the 3rd repeat of the last f, t, F or T",
       "labelIndex": "index.txt L317 |;|",
@@ -359,7 +371,13 @@
       },
       "labelFrom": "hand",
       "setup": ["0", "f", "e"],
-      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup 0fe leaves the cursor at (1,8); 3; reaches (1,37), inclusive"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup 0fe leaves the cursor at (1,8); 3; reaches (1,37), inclusive"
+      }
     },
     {
       "key": "<BS>",
@@ -852,7 +870,7 @@
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
       "label": "Delete to a search match backward: type the pattern",
       "expect": {
@@ -861,7 +879,13 @@
         "mode": "other-5"
       },
       "labelFrom": "hand",
-      "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
+      }
     },
     {
       "key": "B",
@@ -1045,7 +1069,7 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; N reads the last search",
       "label": "Delete to the 3rd previous match of the last search",
       "labelIndex": "index.txt L353 |N|",
@@ -1077,7 +1101,13 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>"],
-      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3N goes (0,7), (2,19), (2,13): dN deletes columns 9-12 of line 2; with N register 1 is always used and - too within a line (change.txt *quote_number*)"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3N goes (0,7), (2,19), (2,13): dN deletes columns 9-12 of line 2; with N register 1 is always used and - too within a line (change.txt *quote_number*)"
+      }
     },
     {
       "key": "T",
@@ -1479,7 +1509,7 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last search; n reads the last search",
       "label": "Delete to the 3rd next match of the last search",
       "labelIndex": "index.txt L413 |n|",
@@ -1513,7 +1543,13 @@
       },
       "labelFrom": "hand",
       "setup": ["/", "e", "t", "a", "<CR>"],
-      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3n wraps to (0,7), so dn deletes (0,7) to (2,8) (exclusive); with n register 1 is always used (change.txt *quote_number*), - only within a line"
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3n wraps to (0,7), so dn deletes (0,7) to (2,8) (exclusive); with n register 1 is always used (change.txt *quote_number*), - only within a line"
+      }
     },
     {
       "key": "s",

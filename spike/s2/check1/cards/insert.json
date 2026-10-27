@@ -40,7 +40,7 @@
     {
       "key": "<C-a>",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "state: last insert; inserts the previously inserted text",
       "label": "Insert the previously inserted text",
       "labelIndex": "index.txt L39 |i_CTRL-A|",
@@ -53,13 +53,49 @@
         "registers": {
           ".": {
             "mode": "character",
-            "keys": "iX<Esc>"
+            "lines": ["X"]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: InsertPreviousText src/actions/commands/insert.ts L295-332 replays register . (set when an insertion ends, src/mode/modeHandler.ts L830-842) without its first and last actions (src/mode/modeHandler.ts L1142-1203, src/actions/commands/documentChange.ts L45-110). Setup i X <Esc> inserts X at (1,13); the probe reads register . as its keys.",
       "setup": ["i", "X", "<Esc>"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "insert",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "iX<Esc>"
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: InsertPreviousText src/actions/commands/insert.ts L295-332 replays register . (set when an insertion ends, src/mode/modeHandler.ts L830-842) without its first and last actions (src/mode/modeHandler.ts L1142-1203, src/actions/commands/documentChange.ts L45-110). Setup i X <Esc> inserts X at (1,13); the probe reads register . as its keys."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "insert",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "iX<Esc>"
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: InsertPreviousText src/actions/commands/insert.ts L295-332 replays register . (set when an insertion ends, src/mode/modeHandler.ts L830-842) without its first and last actions (src/mode/modeHandler.ts L1142-1203, src/actions/commands/documentChange.ts L45-110). Setup i X <Esc> inserts X at (1,13); the probe reads register . as its keys.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "<C-c>",

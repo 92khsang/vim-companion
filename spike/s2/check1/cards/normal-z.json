@@ -6,7 +6,7 @@
     {
       "key": "\n",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the top of the window and move to its first non-blank",
       "labelIndex": "index.txt L825 |z<CR>|",
@@ -15,13 +15,19 @@
         "cursor": [1, 2],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandTopScrollFirstChar src/actions/commands/scroll.ts L260-290.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandTopScrollFirstChar src/actions/commands/scroll.ts L260-290."
+      }
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the bottom of the window and move to its first non-blank",
       "labelIndex": "index.txt L830 |z-|",
@@ -30,13 +36,19 @@
         "cursor": [1, 2],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandBottomScrollFirstChar src/actions/commands/scroll.ts L316-345.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandBottomScrollFirstChar src/actions/commands/scroll.ts L316-345."
+      }
     },
     {
       "key": ".",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the center of the window and move to its first non-blank",
       "labelIndex": "index.txt L832 |z.|",
@@ -45,13 +57,19 @@
         "cursor": [1, 2],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCenterScrollFirstChar src/actions/commands/scroll.ts L207-233.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandCenterScrollFirstChar src/actions/commands/scroll.ts L207-233."
+      }
     },
     {
       "key": "C",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Close the folds at the cursor recursively",
       "labelIndex": "index.txt L837 |zC|",
@@ -60,44 +78,90 @@
         "cursor": [0, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CloseAllFoldsRecursively src/actions/commands/fold.ts L66-71 (editor.foldRecursively); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k.",
       "setup": ["k"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CloseAllFoldsRecursively src/actions/commands/fold.ts L66-71 (editor.foldRecursively); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k."
+      }
     },
     {
       "key": "H",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Move the cursor right by half the line length (VSCodeVim moves the cursor; Vim scrolls the view)",
       "labelIndex": "index.txt L842 |zH|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 34],
+        "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRightHalf src/actions/motion.ts L1239-1253 runs cursorMove right by halfLine (src/actions/motion.ts L64-110); VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts _moveHalfLineRight: round(41/2) = 21 columns, VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveRight.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 34],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRightHalf src/actions/motion.ts L1239-1253 runs cursorMove right by halfLine (src/actions/motion.ts L64-110); VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts _moveHalfLineRight: round(41/2) = 21 columns, VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveRight."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 34],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRightHalf src/actions/motion.ts L1239-1253 runs cursorMove right by halfLine (src/actions/motion.ts L64-110); VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts _moveHalfLineRight: round(41/2) = 21 columns, VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveRight.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "L",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Move the cursor left by half the line length (VSCodeVim moves the cursor; Vim scrolls the view)",
       "labelIndex": "index.txt L844 |zL|",
       "expect": {
         "text": "unchanged",
-        "cursor": [0, 21],
+        "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeftHalf src/actions/motion.ts L1255-1270, cursorMove left by halfLine: 21 columns left of column 13 clips to the line start and wraps to the end of line 0 (VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveLeft, leftPosition); the Normal-mode clamp gives (0,21) (src/mode/modeHandler.ts L932-966).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 21],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeftHalf src/actions/motion.ts L1255-1270, cursorMove left by halfLine: 21 columns left of column 13 clips to the line start and wraps to the end of line 0 (VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveLeft, leftPosition); the Normal-mode clamp gives (0,21) (src/mode/modeHandler.ts L932-966)."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 21],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeftHalf src/actions/motion.ts L1255-1270, cursorMove left by halfLine: 21 columns left of column 13 clips to the line start and wraps to the end of line 0 (VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveLeft, leftPosition); the Normal-mode clamp gives (0,21) (src/mode/modeHandler.ts L932-966).",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "M",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Close all folds",
       "labelIndex": "index.txt L846 |zM|",
@@ -106,14 +170,20 @@
         "cursor": [0, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CloseAllFolds src/actions/commands/fold.ts L47-51 (editor.foldAll); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k.",
       "setup": ["k"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CloseAllFolds src/actions/commands/fold.ts L47-51 (editor.foldAll); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k."
+      }
     },
     {
       "key": "O",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Open the folds at the cursor recursively",
       "labelIndex": "index.txt L848 |zO|",
@@ -122,13 +192,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: OpenAllFoldsRecursively src/actions/commands/fold.ts L73-78 (editor.unfoldRecursively): nothing is folded.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: OpenAllFoldsRecursively src/actions/commands/fold.ts L73-78 (editor.unfoldRecursively): nothing is folded."
+      }
     },
     {
       "key": "R",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Open all folds",
       "labelIndex": "index.txt L849 |zR|",
@@ -137,13 +213,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: OpenAllFolds src/actions/commands/fold.ts L60-64 (editor.unfoldAll): nothing is folded.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: OpenAllFolds src/actions/commands/fold.ts L60-64 (editor.unfoldAll): nothing is folded."
+      }
     },
     {
       "key": "a",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Toggle the fold at the cursor",
       "labelIndex": "index.txt L854 |za|",
@@ -152,14 +234,20 @@
         "cursor": [0, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: ToggleFold src/actions/commands/fold.ts L34-38 (editor.toggleFold); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k.",
       "setup": ["k"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: ToggleFold src/actions/commands/fold.ts L34-38 (editor.toggleFold); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k."
+      }
     },
     {
       "key": "b",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the bottom of the window",
       "labelIndex": "index.txt L855 |zb|",
@@ -168,13 +256,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandBottomScroll src/actions/commands/scroll.ts L291-314 (revealLine bottom, the cursor stays).",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandBottomScroll src/actions/commands/scroll.ts L291-314 (revealLine bottom, the cursor stays)."
+      }
     },
     {
       "key": "c",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Close the fold at the cursor",
       "labelIndex": "index.txt L856 |zc|",
@@ -183,14 +277,20 @@
         "cursor": [0, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CloseFold src/actions/commands/fold.ts L40-45 (editor.fold); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k.",
       "setup": ["k"],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CloseFold src/actions/commands/fold.ts L40-45 (editor.fold); src/actions/commands/fold.ts L10-30 (vscodeCommand, then Normal mode); VS Code 1.141.0 src/vs/editor/contrib/folding/browser/indentRangeProvider.ts computeRanges gives one fold, lines 0-1. Setup k."
+      }
     },
     {
       "key": "d",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Delete the manual folds at the cursor (there are none)",
       "labelIndex": "index.txt L857 |zd|",
@@ -199,13 +299,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: RemoveFold src/actions/commands/fold.ts L97-112 (editor.removeManualFoldingRanges), cursor kept at the position in Normal mode.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: RemoveFold src/actions/commands/fold.ts L97-112 (editor.removeManualFoldingRanges), cursor kept at the position in Normal mode."
+      }
     },
     {
       "key": "f",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Create a fold over a motion: waits for the motion",
       "labelIndex": "index.txt L861 |zf|",
@@ -214,43 +320,89 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: AddFold src/actions/commands/fold.ts L80-95 is an operator: it waits for a motion.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: AddFold src/actions/commands/fold.ts L80-95 is an operator: it waits for a motion."
+      }
     },
     {
       "key": "h",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Move the cursor one character right (VSCodeVim moves the cursor; Vim scrolls the view)",
       "labelIndex": "index.txt L863 |zh|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 14],
+        "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRight src/actions/motion.ts L1207-1221 runs cursorMove right by one character.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRight src/actions/motion.ts L1207-1221 runs cursorMove right by one character."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 14],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRight src/actions/motion.ts L1207-1221 runs cursorMove right by one character.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Move the cursor one character left (VSCodeVim moves the cursor; Vim scrolls the view)",
       "labelIndex": "index.txt L868 |zl|",
       "expect": {
         "text": "unchanged",
-        "cursor": [1, 12],
+        "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeft src/actions/motion.ts L1223-1237 runs cursorMove left by one character.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 12],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeft src/actions/motion.ts L1223-1237 runs cursorMove left by one character."
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 12],
+          "mode": "normal"
+        },
+        "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeft src/actions/motion.ts L1223-1237 runs cursorMove left by one character.",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      }
     },
     {
       "key": "o",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Open the fold at the cursor",
       "labelIndex": "index.txt L872 |zo|",
@@ -259,13 +411,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: OpenFold src/actions/commands/fold.ts L53-58 (editor.unfold): nothing is folded.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: OpenFold src/actions/commands/fold.ts L53-58 (editor.unfold): nothing is folded."
+      }
     },
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the top of the window",
       "labelIndex": "index.txt L879 |zt|",
@@ -274,13 +432,19 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandTopScroll src/actions/commands/scroll.ts L235-258.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandTopScroll src/actions/commands/scroll.ts L235-258."
+      }
     },
     {
       "key": "z",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
+      "source": "vim-oracle",
       "reason": "outside: view or fold; a z command (scroll, fold, redraw)",
       "label": "Scroll the cursor line to the center of the window",
       "labelIndex": "index.txt L888 |zz|",
@@ -289,8 +453,14 @@
         "cursor": [1, 13],
         "mode": "normal"
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandCenterScroll src/actions/commands/scroll.ts L184-205.",
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single"
+      },
+      "handBasis": {
+        "expectBasis": "VSCodeVim 1.32.4: CommandCenterScroll src/actions/commands/scroll.ts L184-205."
+      }
     }
   ]
 }

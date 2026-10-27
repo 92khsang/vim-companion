@@ -217,6 +217,7 @@ for (const card of cards) {
           ...(x.sample ? { sample: x.sample } : {}),
           ...(x.setup ? { setup: x.setup } : {}),
           expect,
+          ...(x.knownDeviation ? { knownDeviation: x.knownDeviation } : {}),
         });
       } else if (partial) out[s].incomplete = (out[s].incomplete ?? 0) + 1;
     }
