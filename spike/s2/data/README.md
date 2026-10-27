@@ -263,3 +263,10 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
     `knownDeviation`. After both: `node spike/s2/check1/build.mjs --check` gives 3,439 of 3,442
     rows complete under the defaults and 3,630 of 3,633 under the second set, 3 undetermined each,
     0 TODO and 0 invalid.
+- `precheck-4e44e19/`: `spike/s2/batch/precheck.sh` at 4e44e19 on 2026-10-26 23:53Z to 2026-10-27 01:52Z
+  (cores 8-15, display :121, port 9521; the exact commands in `command.txt`; the output directory was
+  `spike/s2/data/precheck/` and was renamed afterwards). 100 runs with the adapter off per version
+  with the effect rule: 100 of 100 agree on 1.141.0 and on 1.134.0, 0 run errors. The harness of that
+  commit records no build, run phase or adapter check, so these runs do not gate the differential row;
+  they are the first evidence that the effect rule makes the adapter-off runs deterministic. The ROW
+  line in `compare-*.txt` says "not pass" because a precheck file holds no adapter-on runs.
