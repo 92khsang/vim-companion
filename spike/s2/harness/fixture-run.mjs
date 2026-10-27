@@ -9,7 +9,10 @@
 // The reads are timed from the last key: xdotool sleeps the delay after every key, the last one
 // too, so the last key is pressed no earlier than the spawn time plus (keys - 1) times the delay;
 // the read 100 ms plus one poll interval after the last key, and the one after vim.timeout, are
-// timed from that lower bound (they can come at most the spawn latency early, never late).
+// timed from that lower bound. The xdotool call returns only after its trailing delay, so a read
+// comes at the later of its time and that return: it is late when the delay plus xdotool's
+// overhead exceeds 100 ms plus the poll interval, and later than fixture-summary.mjs allows (50 ms)
+// only when the overhead exceeds about 140 ms at a 60 ms delay; readAfterMs records it.
 // The meta record carries the build (lib.mjs buildInfo), S2_CASES and S2_RESET_SETTLE, and the
 // number of fixture cases selected; fixture-summary.mjs needs every case and an end record.
 import {
@@ -125,7 +128,14 @@ for (const sig of ["SIGTERM", "SIGINT"]) {
     process.exit(1);
   });
 }
+// Every error record carries its phase (`boot` before the probe's first hello, `start` after it
+// until the meta, `trials` from then on), the version, the source and the build, so that a file of
+// a run that failed before its meta still names its build and version. The adapter is loaded in
+// every run of the adapter row, so fixture-summary.mjs fails the row on any error, `boot` included.
+let phase = "boot";
+let build;
 try {
+  build = buildInfo();
   xvfb = await startXvfb(display);
   code = await openSession({
     version,
@@ -134,6 +144,9 @@ try {
     cdpPort: Number(cdpPort),
     spikeExtensions:
       source === "adapter" ? ["s2-probe", "s2-adapter"] : ["s2-probe"],
+    onHostUp: () => {
+      phase = "start";
+    },
   });
   write({
     type: "meta",
@@ -149,12 +162,13 @@ try {
         ? ((await code.probe.call("adapter")).pollMs ?? null)
         : null,
     hello: code.hello,
-    build: buildInfo(),
+    build,
     cases: { all: cases.length, selected: selected.length },
     only: process.env.S2_CASES ?? null,
     resetSettle: RESET_SETTLE,
     started: new Date().toISOString(),
   });
+  phase = "trials";
   for (const c of selected) {
     const prefixes =
       stepsArg === "all" ? c.steps.map((_, i) => i + 1) : [c.steps.length];
@@ -222,7 +236,14 @@ try {
   }
   write({ type: "end", finished: new Date().toISOString() });
 } catch (e) {
-  write({ type: "error", error: String(e.stack ?? e) });
+  write({
+    type: "error",
+    phase,
+    version,
+    source,
+    build,
+    error: String(e.stack ?? e),
+  });
 } finally {
   if (code) await stopCode(code);
   if (xvfb)

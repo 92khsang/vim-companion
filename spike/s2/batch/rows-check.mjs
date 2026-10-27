@@ -1,7 +1,8 @@
 // The cross-row check of candidate (a): issue #11 says "Candidate (a) passes when all three of its
 // rows pass, measured with one adapter build and one poll interval", and every row runs on VS Code
-// 1.134.0 and 1.141.0. This reads the precheck, the grammar fixture (complete and kept incomplete
-// runs), the differential row and the CPU row under a data directory and needs:
+// 1.134.0 and 1.141.0. This reads the precheck, the grammar fixture (the metas and error records of
+// complete and kept incomplete runs), the differential row and the CPU row under a data directory
+// and needs:
 // - each of the four for both versions;
 // - one build over all of their records (one build id; the frozen checkout gets no commit until
 //   every row is done), hence one sha256 of the adapter, the probe and the harness, and one set of
@@ -32,7 +33,7 @@ const rows = {
     (r) => r.type === "run" || r.type === "run-error",
   ),
   fixture: read("fixture-adapter", /^adapter-.*\.jsonl$/).filter(
-    (r) => r.type === "meta",
+    (r) => r.type === "meta" || r.type === "error",
   ),
   differential: read("differential-row", /^both-.*\.jsonl$/).filter(
     (r) => r.type === "run" || r.type === "run-error",
@@ -63,7 +64,7 @@ for (const [name, recs] of Object.entries(rows)) {
     }
   }
   if (name === "fixture")
-    for (const m of recs) {
+    for (const m of recs.filter((r) => r.type === "meta")) {
       polls.add(m.poll);
       polls.add(m.adapterPollMs ?? "none");
     }

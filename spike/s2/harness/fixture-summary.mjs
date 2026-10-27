@@ -7,14 +7,16 @@
 // - per version, one complete run (one meta and one end record) of the adapter with 10 trials at
 //   10, 30 and 60 ms, reads after the last key (`last`), no S2_CASES selection, every case of
 //   spec/fixtures/grammar, and every read point read trials x delays times;
-// - every read of every file to match, including the files of runs that stopped early: such an
-//   incomplete file (no end record) counts only when it holds no mismatched read, no reset failure
-//   and no error; a reset failure or an error anywhere fails the row;
+// - every read of every file to match, including the files of runs that stopped early (no end
+//   record, or no meta when the run failed before it); a reset failure or an error anywhere fails
+//   the row, `boot` included, because the adapter is loaded in every run of this row; the per-file
+//   lines and the ROW line list every error with its phase;
 // - every read at most 50 ms later than the row states (100 ms plus one poll interval after the
 //   last key, and that plus vim.timeout for the read after the timeout; readAfterMs);
 // - one poll interval: the meta's poll equals the adapter's own (adapterPollMs);
 // - VS Code of the version label (hello.vscode) and one VSCodeVim and one which-key version per
-//   version, and one build without uncommitted changes over all files.
+//   version, none of them missing, and one build without uncommitted changes over all files (the
+//   metas' and the error records' builds).
 // Usage: node spike/s2/harness/fixture-summary.mjs <run.jsonl>...
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -45,13 +47,14 @@ for (const file of process.argv.slice(2)) {
     ends: recs.filter((r) => r.type === "end").length,
     reads: recs.filter((r) => r.type === "read"),
     resets: recs.filter((r) => r.type === "reset-failed").length,
+    errorRecs: recs.filter((r) => r.type === "error"),
     errors: recs
       .filter((r) => r.type === "error")
-      .map((r) => r.error.split("\n")[0]),
+      .map((r) => `${r.phase ?? "no phase"}: ${r.error.split("\n")[0]}`),
   });
 }
 for (const f of files) {
-  f.version = f.meta?.version ?? null;
+  f.version = f.meta?.version ?? f.errorRecs[0]?.version ?? null;
   f.complete = f.metaCount === 1 && f.ends === 1;
   const settle = 100 + (f.meta?.poll ?? 0);
   f.mismatches = f.reads.filter(
@@ -126,8 +129,9 @@ console.log(`${pass}/${total} reads matched the expected value`);
 // The row.
 const versions = [...new Set(files.map((f) => f.version))].sort();
 const metas = files.map((f) => f.meta).filter(Boolean);
-const builds = [...new Set(metas.map((m) => m.build?.id ?? "none"))];
-const dirty = metas.filter((m) => !m.build || m.build.dirty?.length);
+const withBuild = [...metas, ...files.flatMap((f) => f.errorRecs)];
+const builds = [...new Set(withBuild.map((m) => m.build?.id ?? "none"))];
+const dirty = withBuild.filter((m) => !m.build || m.build.dirty?.length);
 const problems = [];
 if (builds.length !== 1) problems.push(`builds ${builds.join("+")}`);
 if (dirty.length) problems.push("a build that is not clean");
@@ -135,7 +139,7 @@ for (const f of files) {
   if (f.metaCount !== 1)
     problems.push(`${f.file}: ${f.metaCount} meta records`);
   if (f.resets) problems.push(`${f.file}: reset failures ${f.resets}`);
-  if (f.errors.length) problems.push(`${f.file}: errors ${f.errors.length}`);
+  for (const e of f.errors) problems.push(`${f.file}: error (${e})`);
   if (f.mismatches)
     problems.push(`${f.file}: ${f.mismatches} mismatched reads`);
   if (f.late) problems.push(`${f.file}: ${f.late} late reads`);
@@ -181,7 +185,7 @@ for (const v of versions) {
     );
   const vims = new Set(hellos.map((h) => h.vim?.version ?? "none"));
   const wks = new Set(hellos.map((h) => h.whichkey?.version ?? "none"));
-  if (vims.size !== 1 || wks.size !== 1)
+  if (vims.size !== 1 || wks.size !== 1 || vims.has("none") || wks.has("none"))
     problems.push(
       `${v}: VSCodeVim ${[...vims].join("+")}, which-key ${[...wks].join("+")}`,
     );
