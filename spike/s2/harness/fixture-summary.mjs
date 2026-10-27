@@ -137,12 +137,19 @@ if (builds.length !== 1) problems.push(`builds ${builds.join("+")}`);
 if (dirty.length) problems.push("a build that is not clean");
 for (const f of files) {
   if (f.metaCount !== 1)
-    problems.push(`${f.file}: ${f.metaCount} meta records`);
-  if (f.resets) problems.push(`${f.file}: reset failures ${f.resets}`);
-  for (const e of f.errors) problems.push(`${f.file}: error (${e})`);
+    problems.push(
+      `${f.file.replace(/^.*\//, "")}: ${f.metaCount} meta records`,
+    );
+  if (f.resets)
+    problems.push(`${f.file.replace(/^.*\//, "")}: reset failures ${f.resets}`);
+  for (const e of f.errors)
+    problems.push(`${f.file.replace(/^.*\//, "")}: error (${e})`);
   if (f.mismatches)
-    problems.push(`${f.file}: ${f.mismatches} mismatched reads`);
-  if (f.late) problems.push(`${f.file}: ${f.late} late reads`);
+    problems.push(
+      `${f.file.replace(/^.*\//, "")}: ${f.mismatches} mismatched reads`,
+    );
+  if (f.late)
+    problems.push(`${f.file.replace(/^.*\//, "")}: ${f.late} late reads`);
 }
 for (const v of versions) {
   const vFiles = files.filter((f) => f.version === v);
