@@ -7,10 +7,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"#\", but without using \"\\<\" and \"\\>\"",
-      "labelFrom": "index",
+      "label": "Search backward for the Nth occurrence of the word under the cursor, also inside words",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L728 |g#|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 12],
@@ -27,10 +26,9 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to rightmost character of the current line that is on the screen; when 'wrap' on go to the rightmost character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the last character of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L729 |g$|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 40],
@@ -41,10 +39,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"*\", but without using \"\\<\" and \"\\>\"",
-      "labelFrom": "index",
+      "label": "Search forward for the Nth occurrence of the word under the cursor, also inside words",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L736 |gstar|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 12],
@@ -60,20 +57,38 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
+      "setup": ["x", "0"],
       "source": "hand",
       "reason": "outside: jump list; g, (jump list)",
-      "label": "TODO",
+      "label": "Go to the newer position in the change list",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L738 |g,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup x 0 deletes \"w\" at [1,13] (a step whose change position is [1,13], VSCodeVim 1.32.4 src/history/historyTracker.ts L770-786) and moves to [1,0]; src/actions/commands/navigate.ts L74-89 and src/history/historyTracker.ts L357-369 (without a current index g, returns the newest change)"
     },
     {
       "key": "0",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to leftmost character of the current line that is on the screen; when 'wrap' on go to the leftmost character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the first character of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L740 |g0|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 0],
@@ -83,20 +98,38 @@
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
+      "setup": ["x", "0"],
       "source": "hand",
       "reason": "outside: jump list; g; (jump list)",
-      "label": "TODO",
+      "label": "Go to the older position in the change list",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L746 |g;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup x 0 deletes \"w\" at [1,13] (a step whose change position is [1,13], VSCodeVim 1.32.4 src/history/historyTracker.ts L770-786) and moves to [1,0]; src/actions/commands/navigate.ts L57-72 and src/history/historyTracker.ts L371-383 (without a current index g; returns the newest change)"
     },
     {
       "key": "<C-a>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Only when compiled with MEM_PROFILE defined: dump a memory profile",
-      "labelFrom": "index",
+      "label": "Dump a memory profile (only in a MEM_PROFILE build; nothing here)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L722 |g_CTRL-A|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -108,17 +141,22 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Subtract from the numbers after the cursor in steps (none on this line)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/incrementDecrement.ts L15-108 and L130-135 (Normal mode searches the rest of the cursor line; line 1 has no digit)"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
-      "labelFrom": "index",
+      "label": "Move N screen lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L790 |gj|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [2, 13],
@@ -129,10 +167,9 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
-      "labelFrom": "index",
+      "label": "Move N screen lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L792 |gk|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [0, 13],
@@ -157,17 +194,29 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Toggle a block comment over a motion: waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L806-822 (gC is an operator); src/state/recordedState.ts L221-246 (pending until a motion)"
     },
     {
       "key": "D",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; gD (file or tag)",
-      "label": "TODO",
+      "label": "Go to the declaration of the word under the cursor (VS Code Go to Declaration; none here)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L751 |gD|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
     },
     {
       "key": "E",
@@ -186,10 +235,9 @@
       "key": "I",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"I\", but always start in column 1",
-      "labelFrom": "index",
+      "label": "Insert text in column 1 of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L756 |gI|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 0],
@@ -216,37 +264,84 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; gN reads the last search",
-      "label": "TODO",
+      "label": "Select the match of the last search at or before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L758 |gN|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 21],
+          "visualStart": [2, 19]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
     },
     {
       "key": "O",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to a symbol in the file (remap: workbench.action.gotoSymbol)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "spec/generated/vscode/vim-remaps.json maps the key to workbench.action.gotoSymbol; VSCodeVim 1.32.4 src/configuration/remapper.ts L494-528 runs a remap's commands (count times) without a mode or cursor change; the command opens the quick open with the @ prefix (VS Code Go to Symbol in Editor) and changes no text or selection"
     },
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
       "source": "hand",
       "reason": "state: register; gP reads the register",
-      "label": "TODO",
+      "label": "Put the unnamed register before the cursor and leave the cursor after it",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L760 |gP|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twotwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L474-545 (PlaceCursorAfterText for gp gP)"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; gT (window)",
-      "label": "TODO",
+      "label": "Go to the previous editor of the group",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L764 |gT|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
     },
     {
       "key": "U",
@@ -265,10 +360,9 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to leftmost non-white character of the current line that is on the screen; when 'wrap' on go to the leftmost non-white character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank character of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L770 |g^|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 2],
@@ -293,33 +387,60 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: message; ga (message)",
-      "label": "TODO",
+      "label": "Show the character code of the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L776 |ga|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1022-1039 (CommandUnicodeName writes the status bar only)"
     },
     {
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the word under the cursor (VSCodeVim gb: VS Code Add Selection to Next Find Match)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 12]
+        },
+        "mode": "visual"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1065-1082 (editor.action.addSelectionToNextFindMatch, stop moved one left, Visual mode); VS Code docs (Multiple selections): Ctrl+D selects the word at the cursor, or the next occurrence of the current selection; the word \"two\" [1,12]-[1,15]"
     },
     {
       "key": "c",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Toggle line comments over a motion: waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L746-757 (gc is an operator); src/state/recordedState.ts L221-246"
     },
     {
       "key": "d",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: VSCodeVim redefines gd (hover / go to definition)",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the declaration of the word under the cursor (VSCodeVim gd: VS Code Go to Declaration; none here)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
     },
     {
       "key": "e",
@@ -339,9 +460,15 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; gf (file or tag)",
-      "label": "TODO",
+      "label": "Edit the file whose name is under the cursor (no such file)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L782 |gf|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/file.ts L60-118 (gf throws E447 when neither the path next to a.txt nor in the workspace exists; the workspace holds only a.txt and b.txt)"
     },
     {
       "key": "g",
@@ -361,26 +488,46 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: VSCodeVim redefines gh (hover / go to definition)",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Show the hover at the cursor (VSCodeVim gh)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1041-1052 (editor.action.showHover); editor.action.showHover finds no hover provider for a plaintext file in the sandbox (Inferred: no language extension handles plaintext), so nothing changes"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
+      "setup": ["a", "X", "<Esc>", "0"],
       "source": "hand",
       "reason": "state: last insert; gi reads the last insert",
-      "label": "TODO",
+      "label": "Insert at the end of the last change",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L789 |gi|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twXo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "keys": "aX<Esc>"
+          }
+        }
+      },
+      "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)"
     },
     {
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
-      "labelFrom": "index",
+      "label": "Move N screen lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L790 |gj|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [2, 13],
@@ -391,10 +538,9 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
-      "labelFrom": "index",
+      "label": "Move N screen lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L792 |gk|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [0, 13],
@@ -417,11 +563,27 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; gn reads the last search",
-      "label": "TODO",
+      "label": "Select the match of the last search at or after the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L796 |gn|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 21],
+          "visualStart": [2, 19]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
     },
     {
       "key": "o",
@@ -439,11 +601,30 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
       "source": "hand",
       "reason": "state: register; gp reads the register",
-      "label": "TODO",
+      "label": "Put the unnamed register after the cursor and leave the cursor after it",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L799 |gp|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"ttwowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L474-545 (PlaceCursorAfterText for gp gP)"
     },
     {
       "key": "q",
@@ -476,9 +657,15 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; gt (window)",
-      "label": "TODO",
+      "label": "Go to the next editor of the group",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L804 |gt|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
     },
     {
       "key": "u",
@@ -496,19 +683,35 @@
     {
       "key": "v",
       "sets": ["defaults", "extensions"],
+      "setup": ["v", "l", "l", "<Esc>"],
       "source": "hand",
       "reason": "state: last Visual area; gv reads the last Visual area",
-      "label": "TODO",
+      "label": "Reselect the last Visual area",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L806 |gv|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "basis": "setup v l l <Esc> stores the Visual area [1,13]-[1,16) (VSCodeVim 1.32.4 src/mode/modeHandler.ts L976-985); src/actions/commands/visual.ts L76-96 (gv restores it with the stop moved back to [1,15]); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
     },
     {
       "key": "x",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Open the link under the cursor (no link)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L47-55 (editor.action.openLink; the word under the cursor is no link)"
     },
     {
       "key": "~",

@@ -6,21 +6,55 @@
     {
       "key": "@",
       "sets": ["defaults", "extensions"],
+      "setup": ["\"", "a", "y", "l", "@", "a"],
       "source": "hand",
       "reason": "state: register; @@ executes a register",
-      "label": "TODO",
+      "label": "Execute the last executed register again",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L332 |@@|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 18],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup \" a y l puts \"w\" into a and \", and @a runs it as keys (w to [1,15]) and makes a the last executed register (VSCodeVim 1.32.4 src/actions/commands/macro.ts L104-129, src/transformations/execute.ts L163-183); src/actions/commands/macro.ts L77-102 (@@ runs a again: w from [1,15] to [1,18])"
     },
     {
       "key": "{<register>}",
       "sets": ["defaults", "extensions"],
       "sample": "a",
+      "setup": ["\"", "a", "y", "l"],
       "source": "hand",
       "reason": "state: register; @{<register>} executes a register",
-      "label": "TODO",
+      "label": "Execute the contents of register {char} as typed keys",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L329 |@|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup \" a y l puts \"w\" into a and \"; VSCodeVim 1.32.4 src/actions/commands/macro.ts L104-129 and src/transformations/execute.ts L163-183 (a string register runs as typed keys: w from [1,13] to [1,15])"
     }
   ]
 }

@@ -37,10 +37,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift left search backward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Shift left the lines to the previous occurrence of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "if (one, \"two\", [three]) { four(five) }"
@@ -74,10 +73,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift left find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
-      "labelFrom": "index",
+      "label": "Shift left the lines to the matching bracket",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L259 |%|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "if (one, \"two\", [three]) { four(five) }"
@@ -133,10 +131,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift left search forward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Shift left the lines to the next occurrence of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "if (one, \"two\", [three]) { four(five) }"
@@ -169,11 +166,20 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Shift left to the target of the last f, t, F or T in the opposite direction",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "-",
@@ -195,8 +201,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to a search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233 (the operator waits while searching)"
     },
     {
       "key": "0",
@@ -216,11 +228,20 @@
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Shift left to the target of the last f, t, F or T",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "<",
@@ -257,8 +278,16 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left a char to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "<C-End>",
@@ -385,16 +414,32 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to the first char of the line (like 0)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1026-1041 (MoveLineBegin keys 0 <Home> <D-left>, only without a count); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to the end of the line (like $)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1013-1024 (MoveLineEnd keys $ <End> <D-right>: getDown(count-1).getLineEnd()); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "<End>",
@@ -431,8 +476,16 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left a char to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "<down>",
@@ -499,8 +552,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to a backward search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233"
     },
     {
       "key": "B",
@@ -608,11 +667,24 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Shift left to the previous match of the last search",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); back from [2,19] to [2,13]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "T",
@@ -650,8 +722,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to a backward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
     },
     {
       "key": "[",
@@ -862,11 +940,26 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Shift left to the next match of the last search",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); forward from [2,19] wraps to [0,7], so the range is [0,7]-[2,19); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
     },
     {
       "key": "t",
@@ -904,8 +997,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left to a forward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
     },
     {
       "key": "{",
@@ -928,11 +1027,17 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift left over a camelCase motion: waits for the motion key",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "the sample is VSCodeVim's default leader \\ (the sandbox sets no vim.leader); VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-29 and src/actions/plugins/easymotion/easymotion.cmd.ts L31-95 (easymotion actions check vim.easymotion only when run), so the key is a prefix and VSCodeVim waits"
     },
     {
       "key": "{<number>}",

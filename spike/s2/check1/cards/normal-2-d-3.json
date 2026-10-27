@@ -64,10 +64,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete search backward for the 6th occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Delete to the 6th previous occurrence of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -131,10 +130,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete go to 6 percentage in the file",
-      "labelFrom": "index",
+      "label": "Delete the lines to the line 6% down the file",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L263 |N%|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
         "cursor": [0, 0],
@@ -201,10 +199,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete search forward for the 6th occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Delete to the 6th next occurrence of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -267,11 +264,18 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Delete to the target of the last f, t, F or T in the opposite direction (6 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 22],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); with the count 6 no 6th e exists before [1,22], the motion fails and the operator is dropped (src/mode/modeHandler.ts L1036-1041); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "-",
@@ -308,17 +312,30 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233 (the operator waits while searching)"
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Delete to the target of the last f, t, F or T (6 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 22],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); with the count 6 no 6th e exists after [1,22], the motion fails and the operator is dropped (src/mode/modeHandler.ts L1036-1041); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "<BS>",
@@ -350,15 +367,33 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete 6 chars to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (owo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 7],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["ne, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["ne, \"t"]
+          }
+        }
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 6, default last line",
-      "labelFrom": "index",
+      "label": "Delete to line 6 (the last line, as the buffer is shorter)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
@@ -389,8 +424,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 6, default first line",
-      "labelFrom": "index",
+      "label": "Delete to line 6 (the last line, as the buffer is shorter)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -604,8 +639,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to the end of the line 5 lines lower (like 6$; the buffer end here)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1013-1024 (MoveLineEnd keys $ <End> <D-right>: getDown(count-1).getLineEnd()); getDown(5) clamps to the empty line 4, so the range [1,13]-[4,0) takes the rest of the buffer with the final line break (src/actions/operator.ts L113-129); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262); the cursor [1,13] is past the new line end and moves to [1,12] (src/mode/modeHandler.ts L927-967)"
     },
     {
       "key": "<End>",
@@ -644,8 +706,26 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete 6 chars to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (owo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 7],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["ne, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["ne, \"t"]
+          }
+        }
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "<down>",
@@ -764,8 +844,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a backward search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233"
     },
     {
       "key": "B",
@@ -840,8 +926,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 6, default last line",
-      "labelFrom": "index",
+      "label": "Delete to line 6 (the last line, as the buffer is shorter)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -961,11 +1047,34 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Delete to the 6th previous match of the last search",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "2": "epsilon zeta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["eta eta th"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["eta eta th"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); 6 steps back from [2,19] end on [2,9]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "T",
@@ -1016,8 +1125,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a backward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
     },
     {
       "key": "[",
@@ -1072,8 +1187,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 6 - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Delete to the first CHAR 5 lines lower",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -1359,11 +1474,34 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Delete to the 6th next match of the last search",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "2": "epsilon zeta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["eta eta th"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["eta eta th"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); 6 steps forward from [2,19] end on [2,9]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/commands/actions.ts L71-98 (2d3 gives the count 6), src/actions/operator.ts L97-184 (DeleteOperator: \" and - for a text without a line break, \" and 1 with the shift otherwise, src/register/register.ts L210-262)"
     },
     {
       "key": "t",
@@ -1411,8 +1549,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a forward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
     },
     {
       "key": "{",
@@ -1433,11 +1577,17 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete over a camelCase motion: waits for the motion key",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "the sample is VSCodeVim's default leader \\ (the sandbox sets no vim.leader); VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-29 and src/actions/plugins/easymotion/easymotion.cmd.ts L31-95 (easymotion actions check vim.easymotion only when run), so the key is a prefix and VSCodeVim waits"
     },
     {
       "key": "{<number>}",

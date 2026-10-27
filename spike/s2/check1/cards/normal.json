@@ -21,15 +21,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Open the which-key leader menu (remap: whichkey.show)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "spec/generated/vscode/vim-remaps.json maps the key to whichkey.show; VSCodeVim 1.32.4 src/configuration/remapper.ts L494-528 runs a remap's commands (count times) without a mode or cursor change; whichkey.show opens the which-key quick pick (VSpaceCode.whichkey); the editor keeps its text and selection"
     },
     {
       "key": "!",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "2 filter the text of a motion through the {filter} command: waits for a motion",
-      "labelFrom": "index",
+      "label": "Filter the lines of a motion through an external command: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L250 |!|",
       "expect": {
         "text": "unchanged",
@@ -41,8 +47,8 @@
       "key": "\"",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Use {register} for next delete, yank or put ({.%#:} only work with put)",
-      "labelFrom": "index",
+      "label": "Use register {char} for the next delete, yank or put: waits for the name",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L254 |quote|",
       "expect": {
         "text": "unchanged",
@@ -86,10 +92,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
-      "labelFrom": "index",
+      "label": "Jump to the matching bracket",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L259 |%|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 24],
@@ -101,9 +106,15 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "TODO",
+      "label": "Repeat the last :s on the current line (none in this run: E35)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L264 |&|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-417 (& runs :s), src/cmd_line/commands/substitute.ts L509-543 (resolvePatterns throws E35 at L524 without a previous substitute, nothing changes); no card of cards.json types <CR> after :, so no earlier row of the run sets a substitute (Inferred from cards.json); a setup that sets one needs <CR>, which harness/lib.mjs keysym cannot type"
     },
     {
       "key": "'",
@@ -179,11 +190,18 @@
     {
       "key": ",",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Repeat the last f, t, F or T in the opposite direction",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 8],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); F e from [1,22] finds the e of one at [1,8]"
     },
     {
       "key": "-",
@@ -201,19 +219,44 @@
     {
       "key": ".",
       "sets": ["defaults", "extensions"],
+      "setup": ["x"],
       "source": "hand",
       "reason": "state: dot repeat; . reads the dot repeat",
-      "label": "TODO",
+      "label": "Repeat the last change",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L299 |.|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["o"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["o"]
+          }
+        }
+      },
+      "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); the replayed x deletes \"o\""
     },
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a forward search: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
     },
     {
       "key": "0",
@@ -233,25 +276,38 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
+      "label": "Open the command line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L314 |:|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-6"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L277-302 (ShowCommandLine) sets CommandlineInProgress (Mode 6, probe other-6); src/mode/modeHandler.ts L1294-1301; spike/s2/data/check1/observe-1.141.0.json"
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Repeat the last f, t, F or T",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 23],
+        "mode": "normal"
+      },
+      "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); f e from [1,22] finds [1,23]"
     },
     {
       "key": "<",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift Nmove lines one 'shiftwidth' leftwards: waits for a motion",
-      "labelFrom": "index",
+      "label": "Shift the lines of a motion one 'shiftwidth' left: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L318 |<|",
       "expect": {
         "text": "unchanged",
@@ -277,17 +333,25 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "TODO",
+      "label": "Edit the alternate file (b.txt)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L245 |CTRL-^|",
-      "expect": "TODO"
+      "pending": "undetermined: VSCodeVim 1.32.4 src/actions/commands/file.ts L29-58 opens the # register's file with window.showTextDocument in the active group; # is \"b.txt\" because the harness opens b.txt and then a.txt (extensionBase.ts L218-227); the new b.txt editor's cursor comes from VS Code's view state of b.txt in that group, which earlier rows can leave anywhere, and its text is b.txt's, which the reset does not restore, so the four fields cannot be fixed by hand (the % and # registers swap too)",
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/file.ts L29-58 opens the # register's file with window.showTextDocument in the active group; # is \"b.txt\" because the harness opens b.txt and then a.txt (extensionBase.ts L218-227)"
     },
     {
       "key": "<C-BS>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move a char to the left, across line breaks (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s)"
     },
     {
       "key": "<C-End>",
@@ -332,18 +396,26 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"r\" (the hit-enter prompt), which the fixture has no mode name for",
-      "label": "TODO",
+      "label": "Jump to the definition of the word under the cursor (VS Code Go to Definition; none here)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L244 |CTRL-]|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.revealDefinition and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
     },
     {
       "key": "<C-^>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "TODO",
+      "label": "Edit the alternate file (b.txt)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L245 |CTRL-^|",
-      "expect": "TODO"
+      "pending": "undetermined: VSCodeVim 1.32.4 src/actions/commands/file.ts L29-58 opens the # register's file with window.showTextDocument in the active group; # is \"b.txt\" because the harness opens b.txt and then a.txt (extensionBase.ts L218-227); the new b.txt editor's cursor comes from VS Code's view state of b.txt in that group, which earlier rows can leave anywhere, and its text is b.txt's, which the reset does not restore, so the four fields cannot be fixed by hand (the % and # registers swap too)",
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/file.ts L29-58 opens the # register's file with window.showTextDocument in the active group; # is \"b.txt\" because the harness opens b.txt and then a.txt (extensionBase.ts L218-227)"
     },
     {
       "key": "<C-a>",
@@ -363,32 +435,51 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor on the line below",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading [1,13]"
     },
     {
       "key": "<C-alt+up>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor on the line above",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading [1,13]"
     },
     {
       "key": "<C-b>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b"],
       "source": "hand",
       "reason": "outside: view; <c-b> (view)",
-      "label": "TODO",
+      "label": "Scroll a page up and move the cursor a page up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L207 |CTRL-B|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines up from line 1 clamps to line 0"
     },
     {
       "key": "<C-c>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Interrupt current (search) command",
-      "labelFrom": "index",
+      "label": "Stay in Normal mode (nothing is pending)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L208 |CTRL-C|",
       "expect": {
         "text": "unchanged",
@@ -399,47 +490,81 @@
     {
       "key": "<C-d>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b", "2", "<C-u>"],
       "source": "hand",
       "reason": "outside: view; <c-d> (view)",
-      "label": "TODO",
+      "label": "Scroll down 'scroll' lines (half a window) and move the cursor as far",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L209 |CTRL-D|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 0],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-u> sets vim.scroll to 2 (a count persists for later rows) and moves the cursor to [0,0]; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); 2 lines down to [2,0]"
     },
     {
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b"],
       "source": "hand",
       "reason": "outside: view; <c-e> (view)",
-      "label": "TODO",
+      "label": "Scroll the view a line down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L210 |CTRL-E|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
     },
     {
       "key": "<C-f>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b"],
       "source": "hand",
       "reason": "outside: view; <c-f> (view)",
-      "label": "TODO",
+      "label": "Scroll a page down and move the cursor a page down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L211 |CTRL-F|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines down from line 1 clamps to the empty line 4"
     },
     {
       "key": "<C-g>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: message; <c-g> (message)",
-      "label": "TODO",
+      "label": "Show the file name and the cursor position",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L212 |CTRL-G|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/file.ts L15-27 (ShowFileInfo writes the status bar only)"
     },
     {
       "key": "<C-i>",
       "sets": ["defaults", "extensions"],
+      "setup": ["g", "g", "<C-o>"],
       "source": "hand",
       "reason": "outside: jump list; <c-i> (jump list)",
-      "label": "TODO",
+      "label": "Go to the newer position in the jump list",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L215 |<Tab>|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "basis": "setup g g <C-o> leaves the jump list one step back; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L105-117, src/jumps/jumpTracker.ts L216-232 (jumpForward clamps at the newest jump, [0,0], also with a count)"
     },
     {
       "key": "<C-j>",
@@ -496,11 +621,18 @@
     {
       "key": "<C-o>",
       "sets": ["defaults", "extensions"],
+      "setup": ["g", "g"],
       "source": "hand",
       "reason": "outside: jump list; <c-o> (jump list)",
-      "label": "TODO",
+      "label": "Go to the older position in the jump list",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L226 |CTRL-O|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
     },
     {
       "key": "<C-p>",
@@ -520,33 +652,73 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the next editor of the group (like gt)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
     },
     {
       "key": "<C-pageup>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the previous editor of the group (like gT)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
     },
     {
       "key": "<C-q>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start blockwise Visual mode (like <C-v>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/visual.ts L53-64; VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
     },
     {
       "key": "<C-r>",
       "sets": ["defaults", "extensions"],
+      "setup": ["x", "u"],
       "source": "hand",
       "reason": "state: undo history; <c-r> reads the undo history",
-      "label": "TODO",
+      "label": "Redo the last undone change",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L229 |CTRL-R|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup x u leaves one step to redo; VSCodeVim 1.32.4 src/actions/commands/undo.ts L34-46 (<C-r>, once even with a count), src/history/historyTracker.ts L832-860"
     },
     {
       "key": "<C-right>",
@@ -564,20 +736,34 @@
     {
       "key": "<C-t>",
       "sets": ["defaults", "extensions"],
+      "setup": ["g", "g"],
       "source": "hand",
       "reason": "outside: file or tag; <c-t> (file or tag)",
-      "label": "TODO",
+      "label": "Go to the older position in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L231 |CTRL-T|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
     },
     {
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b", "2", "<C-d>"],
       "source": "hand",
       "reason": "outside: view; <c-u> (view)",
-      "label": "TODO",
+      "label": "Scroll up 'scroll' lines (half a window) and move the cursor as far",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L232 |CTRL-U|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); 2<C-d> sets vim.scroll to 2 (a count persists for later rows) and moves the cursor to [3,0]; VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-180 and src/configuration/configuration.ts L449-453 (a count sets vim.scroll, which then gives the lines; else half the visible lines); 2 lines up to line 1, first non-blank [1,2]"
     },
     {
       "key": "<C-v>",
@@ -624,59 +810,105 @@
     {
       "key": "<C-y>",
       "sets": ["defaults", "extensions"],
+      "setup": ["z", "b"],
       "source": "hand",
       "reason": "outside: view; <c-y> (view)",
-      "label": "TODO",
+      "label": "Scroll the view a line up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L237 |CTRL-Y|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll)"
     },
     {
       "key": "<D-a>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select all lines (linewise Visual mode)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "visual-line"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L249-261 (<D-a>: Visual Line from line 0 to the last of the 5 document lines); src/mode/modeHandler.ts L1328-1334 draws (line 0 begin, line 4 end)"
     },
     {
       "key": "<D-alt+down>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor on the line below",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading [1,13]"
     },
     {
       "key": "<D-alt+up>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor on the line above",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1121-1153 (editor.action.insertCursorBelow/Above); VS Code addCursorDown/Up keep the original cursor first (src/vs/editor/common/cursor/cursorMoveCommands.ts), and the primary selection is editor.selections[0] (VS Code API TextEditor.selections), so the harness keeps reading [1,13]"
     },
     {
       "key": "<D-d>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the word under the cursor (VS Code Add Selection to Next Find Match)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 12]
+        },
+        "mode": "visual"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1065-1082 (editor.action.addSelectionToNextFindMatch, stop moved one left, Visual mode); VS Code docs (Multiple selections): Ctrl+D selects the word at the cursor, or the next occurrence of the current selection; the word \"two\" [1,12]-[1,15]"
     },
     {
       "key": "<D-left>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move to the first char of the line (like 0)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1026-1041 (MoveLineBegin keys 0 <Home> <D-left>, only without a count)"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move to the end of the line (like $)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 40],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1013-1024 (MoveLineEnd keys $ <End> <D-right>: getDown(count-1).getLineEnd()); src/mode/modeHandler.ts L927-967 keeps a Normal-mode cursor on the last character"
     },
     {
       "key": "<Del>",
@@ -733,8 +965,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Disable VSCodeVim (Disabled mode)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-12"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L28-47 (DisableExtension sets Mode.Disabled, probe other-12); src/mode/modeHandler.ts L1352-1355 draws Selection(stop, stop)"
     },
     {
       "key": "<Home>",
@@ -767,16 +1005,28 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move a char to the left, across line breaks (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s)"
     },
     {
       "key": "<copy>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Copy the selection to the clipboard (nothing is selected)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L196-248 (CommandOverrideCopy copies the selection to the clipboard, writes no VSCodeVim register, returns to Normal mode)"
     },
     {
       "key": "<down>",
@@ -812,8 +1062,14 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a surround change (cs): waits for the surrounding to change",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/surround.ts L71-80 and L192-300 (<plugys> is an operator, <plugds> and <plugcs> wait for the target)"
     },
     {
       "key": "<plugds>",
@@ -823,8 +1079,14 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a surround delete (ds): waits for the surrounding to delete",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/surround.ts L71-80 and L192-300 (<plugys> is an operator, <plugds> and <plugcs> wait for the target)"
     },
     {
       "key": "<plugys>",
@@ -834,8 +1096,14 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a surround add (ys): waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/surround.ts L71-80 and L192-300 (<plugys> is an operator, <plugds> and <plugcs> wait for the target)"
     },
     {
       "key": "<right>",
@@ -867,8 +1135,8 @@
       "key": "=",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Filter Nmove lines through \"indent\": waits for a motion",
-      "labelFrom": "index",
+      "label": "Re-indent the lines of a motion: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L321 |=|",
       "expect": {
         "text": "unchanged",
@@ -880,8 +1148,8 @@
       "key": ">",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift Nmove lines one 'shiftwidth' rightwards: waits for a motion",
-      "labelFrom": "index",
+      "label": "Shift the lines of a motion one 'shiftwidth' right: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L323 |>|",
       "expect": {
         "text": "unchanged",
@@ -894,15 +1162,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a backward search: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json"
     },
     {
       "key": "@",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Execute the contents of register {a-z} N times",
-      "labelFrom": "index",
+      "label": "Execute the contents of a register: waits for the register name",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L329 |@|",
       "expect": {
         "text": "unchanged",
@@ -940,10 +1214,9 @@
       "key": "C",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change from the cursor position to the end of the line, and N-1 more lines; synonym for \"c$\"",
-      "labelFrom": "index",
+      "label": "Change from the cursor to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L335 |C|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"t"
@@ -966,10 +1239,9 @@
       "key": "D",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the characters under the cursor until the end of the line and N-1 more lines; synonym for \"d$\"",
-      "labelFrom": "index",
+      "label": "Delete from the cursor to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L338 |D|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"t"
@@ -1075,8 +1347,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Show the hover at the cursor (remap: editor.action.showHover)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "spec/generated/vscode/vim-remaps.json maps the key to editor.action.showHover; VSCodeVim 1.32.4 src/configuration/remapper.ts L494-528 runs a remap's commands (count times) without a mode or cursor change; editor.action.showHover finds no hover provider for a plaintext file in the sandbox (Inferred: no language extension handles plaintext), so nothing changes"
     },
     {
       "key": "L",
@@ -1107,11 +1385,24 @@
     {
       "key": "N",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Repeat the last search in the opposite direction",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 13],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); back from [2,19] to [2,13]"
     },
     {
       "key": "O",
@@ -1135,18 +1426,37 @@
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
       "source": "hand",
       "reason": "state: register; P reads the register",
-      "label": "TODO",
+      "label": "Put the unnamed register before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L357 |P|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twotwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): P inserts the text 1 time(s) at [1,12], cursor on its last character"
     },
     {
       "key": "R",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Enter replace mode: overtype existing characters, repeat the entered text N-1 times",
-      "labelFrom": "index",
+      "label": "Enter Replace mode: overtype existing characters",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L360 |R|",
       "expect": {
         "text": "unchanged",
@@ -1184,9 +1494,15 @@
         },
         "extensions": {
           "source": "hand",
-          "label": "TODO",
-          "expect": "TODO",
-          "reason": "plugin:sneak: sneak redefines s and S"
+          "reason": "plugin:sneak: sneak redefines s and S",
+          "label": "Sneak backward to a two-character match: waits for the characters",
+          "labelFrom": "hand",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
         }
       }
     },
@@ -1206,11 +1522,30 @@
     {
       "key": "U",
       "sets": ["defaults", "extensions"],
+      "setup": ["k", "x", "j", "x"],
       "source": "hand",
       "reason": "state: undo history; U reads the undo history",
-      "label": "TODO",
+      "label": "Undo all latest changes on the last changed line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L367 |U|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "0": "alpha beta gama delta"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup k x j x deletes \"m\" on line 0 and then \"w\" on line 1 as two steps; VSCodeVim 1.32.4 src/actions/commands/undo.ts L21-32 (U, once), src/history/historyTracker.ts L877-958 (undo the consecutive changes on the last changed line, stop at a change on another line, cursor to the last undone change)"
     },
     {
       "key": "V",
@@ -1538,11 +1873,24 @@
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Repeat the last search",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); forward from [2,19] wraps to [0,7]"
     },
     {
       "key": "o",
@@ -1566,11 +1914,30 @@
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
       "source": "hand",
       "reason": "state: register; p reads the register",
-      "label": "TODO",
+      "label": "Put the unnamed register after the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L416 |p|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"ttwowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): p inserts the text 1 time(s) at [1,13], cursor on its last character"
     },
     {
       "key": "q",
@@ -1627,9 +1994,15 @@
         },
         "extensions": {
           "source": "hand",
-          "label": "TODO",
-          "expect": "TODO",
-          "reason": "plugin:sneak: sneak redefines s and S"
+          "reason": "plugin:sneak: sneak redefines s and S",
+          "label": "Sneak forward to a two-character match: waits for the characters",
+          "labelFrom": "hand",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
         }
       }
     },
@@ -1649,11 +2022,28 @@
     {
       "key": "u",
       "sets": ["defaults", "extensions"],
+      "setup": ["x"],
       "source": "hand",
       "reason": "state: undo history; u reads the undo history",
-      "label": "TODO",
+      "label": "Undo the last change",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L429 |u|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "basis": "setup x deletes \"w\" as its own undo step; VSCodeVim 1.32.4 src/actions/commands/undo.ts L6-19 (u), src/history/historyTracker.ts L797-826 (undo the last step, cursor to the step's start)"
     },
     {
       "key": "v",
@@ -1751,11 +2141,17 @@
     {
       "key": "{<leader>}",
       "sets": ["defaults", "extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a leader command (camelCaseMotion or EasyMotion): waits for the next key",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "the sample is VSCodeVim's default leader \\ (the sandbox sets no vim.leader); VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-29 and src/actions/plugins/easymotion/easymotion.cmd.ts L31-95 (easymotion actions check vim.easymotion only when run), so the key is a prefix and VSCodeVim waits"
     },
     {
       "key": "{<number>}",
@@ -1800,10 +2196,9 @@
       "key": "~",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Switch case of N characters under cursor and move the cursor N characters to the right",
-      "labelFrom": "index",
+      "label": "Switch the case of the character under the cursor and move right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L440 |~|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"tWo\", [three]) { four(five) }"
