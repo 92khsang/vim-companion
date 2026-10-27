@@ -386,6 +386,17 @@ Every trial also starts with no macro being recorded: a row such as `q a` leaves
 which would record the next rows and make a later `q` stop it, so the reset types `<Esc> <Esc> q`
 until the reader shows no recording.
 
+Pass 1 showed state that leaked from one trial into the next, so the reset (2026-10-28) also:
+selects the line with VS Code's `expandLineSelection` before the last `<Esc>` (after a Visual Line
+or Visual Block trial VS Code otherwise handed about every second typed key to VSCodeVim as
+`replacePreviousChar`, which VSCodeVim drops: 19 of 48 keys lost on each version, 0 of 48 with this
+step); unfolds and scrolls the first line to the top (rows such as `zc`, `CTRL-E` and `zt` changed
+what `H`, `M`, `L` and `CTRL-B` see); puts b.txt at the start state when the files are reopened
+(`resetB`; the oracle's harness layout does the same); and types `v <Esc>` after the cursor reset,
+so the last Visual area is at the start position. The clipboard registers `*` and `+`, which
+VSCodeVim creates empty when it first reads the clipboard, count as unchanged when absent before
+and empty after.
+
 `node spike/s2/check1/keys-proof.mjs <version> <display> <cdpPort> <out.jsonl>` shows in one
 sandbox VS Code which token VSCodeVim receives for each of these keys (pending keys and the keys of
 a recorded macro's actions, read by the probe's test-only `vimState` and `macroActions`); it proves

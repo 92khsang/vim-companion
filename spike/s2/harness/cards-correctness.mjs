@@ -39,7 +39,17 @@ import { execFileSync } from "node:child_process";
 import { SETTINGS_SETS } from "./cards-extract.mjs";
 import { planKeys } from "./card-keys.mjs";
 
-const RESET_KEYS = ["<Esc>", "<Esc>", "v", "<Esc>"];
+// The trial reset (resetTrial): <Esc> <Esc>, VS Code's expandLineSelection and <Esc>, the probe's
+// reset of the text and cursor, then `v <Esc>`. Measured (check1 triage, 2026-10-28, 1.134.0 and
+// 1.141.0): after a Visual Line trial whose stop moved (`V w`, `V j w`) or a Visual Block one,
+// leaving the mode with <Esc> and resetting made VS Code hand about every second typed key to
+// VSCodeVim as `replacePreviousChar` instead of `type`, which VSCodeVim 1.32.4 drops outside an IME
+// composition (extensionBase.ts L339-367): 19 of 48 keys lost on each version with the old reset
+// (<Esc> <Esc> v <Esc>, then the probe's reset), 0 of 48 after selecting the line with VS Code's
+// own command first. `v <Esc>` runs after the cursor reset so that the last Visual area and the
+// '< '> marks are at the start position in every trial.
+const RESET_KEYS = ["<Esc>", "<Esc>"];
+const RESET_TAIL = ["v", "<Esc>"];
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -106,6 +116,17 @@ const canon = (v) =>
       ? { cursors: v.cursors.map(canon) }
       : { mode: v.mode, ...(v.lines ? { lines: v.lines } : { keys: v.keys }) };
 const sameReg = (a, b) => JSON.stringify(canon(a)) === JSON.stringify(canon(b));
+// VSCodeVim creates the clipboard registers * and + when it first reads the clipboard; an empty
+// one that did not exist before holds what the absent one meant (an empty clipboard), so the key
+// did not write it.
+const CLIPBOARD = new Set(["*", "+"]);
+const isEmptyText = (v) =>
+  v && !v.cursors && v.lines?.length === 1 && v.lines[0] === "";
+const sameRegNamed = (name, a, b) =>
+  sameReg(a, b) ||
+  (CLIPBOARD.has(name) &&
+    ((a === undefined && isEmptyText(canon(b))) ||
+      (b === undefined && isEmptyText(canon(a)))));
 // Every register expectation must name a mode and lines (or a macro's keys) before VS Code starts.
 for (const card of cards)
   for (const row of card.rows)
@@ -162,6 +183,22 @@ try {
     { path: join(code.inst, "ws/a.txt"), viewColumn: 1 },
     { path: join(code.inst, "ws/b.txt"), viewColumn: 2 },
   ];
+  // b.txt (group 2) is the window and alternate file of the window and file rows (<C-w> l, <C-6>,
+  // ...); a row that shows it can move its cursor, which later rows would read. It starts, and is
+  // put back whenever the files are reopened, at the fixture's start state, as in the oracle's
+  // harness layout (vim-check/expect.mjs S2_VIM_LAYOUT=harness).
+  async function resetB() {
+    await code.probe.call("exec", {
+      command: "workbench.action.focusSecondEditorGroup",
+    });
+    await sleep(150);
+    await code.probe.call("reset", START);
+    await code.probe.call("exec", {
+      command: "workbench.action.focusFirstEditorGroup",
+    });
+    await sleep(150);
+  }
+  await resetB();
   // A row such as `q a` leaves a macro recording on, which would record the next rows and make a
   // later `q` stop it instead of starting one: every trial starts with no recording (up to 3 tries).
   async function stopRecording() {
@@ -177,6 +214,10 @@ try {
   // being recorded, and the fixture text and cursor.
   async function resetTrial() {
     typeKeys(display, RESET_KEYS, 30);
+    await sleep(80);
+    await code.probe.call("exec", { command: "expandLineSelection" });
+    await sleep(150);
+    typeKeys(display, ["<Esc>"], 30);
     await sleep(80);
     const snap = await code.probe.call("snapshot");
     if (
@@ -197,9 +238,20 @@ try {
       await code.probe.call("exec", {
         command: "workbench.action.focusFirstEditorGroup",
       });
+      await resetB();
     }
     await stopRecording();
     await code.probe.call("reset", START);
+    // The view (top line) and folds carry over from earlier rows (CTRL-E, CTRL-F, zt, zf, ...) and
+    // decide keys such as H, M, L, CTRL-B and CTRL-U: every trial starts with the document's first
+    // line at the top and no fold.
+    await code.probe.call("exec", { command: "editor.unfoldAll" });
+    await code.probe.call("exec", {
+      command: "revealLine",
+      args: [{ lineNumber: 0, at: "top" }],
+    });
+    await sleep(150);
+    typeKeys(display, RESET_TAIL, 30);
     await sleep(200);
   }
   // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
@@ -349,7 +401,7 @@ try {
               .filter(
                 (k) =>
                   k in expectedRegisters ||
-                  !sameReg(regValue(before[k]), regValue(after[k])),
+                  !sameRegNamed(k, regValue(before[k]), regValue(after[k])),
               )
               .map((k) => [k, canon(regValue(after[k])) ?? null]),
           ),
