@@ -62,13 +62,21 @@ const isBefore = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]);
  *   the right column + 1, or to the line end after `$` (L1336-1346, src/textEditor.ts
  *   L209-241): the top line at min(line length, right column + 1).
  * Every other mode: the cursor.
+ * `docLineCount` is the number of lines of the VS Code document. The harness writes the fixture
+ * with a final line break (harness/lib.mjs), so the document has one more, empty, line than Vim's
+ * buffer, and a forward stop at the end of Vim's last line moves to that line's column 0
+ * (src/common/motion/position.ts L364-381, getRightThroughLineBreaks).
  */
-export function harnessCursor({ mode, cursor, visualStart, toLineEnd }, lines) {
+export function harnessCursor(
+  { mode, cursor, visualStart, toLineEnd },
+  lines,
+  docLineCount = lines.length + 1,
+) {
   const len = (l) => lines[l].length;
   if (mode === "visual") {
     if (isBefore(cursor, visualStart)) return cursor;
     const [l, c] = cursor;
-    if (c >= len(l)) return l < lines.length - 1 ? [l + 1, 0] : [l, len(l)];
+    if (c >= len(l)) return l < docLineCount - 1 ? [l + 1, 0] : [l, len(l)];
     return [l, Math.min(c + 1, len(l))];
   }
   if (mode === "visual-line")
