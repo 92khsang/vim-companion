@@ -1397,31 +1397,130 @@
     {
       "key": "S",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "label": "Change the whole lines of the block",
-      "expect": {
-        "text": {
-          "1": ""
-        },
-        "cursor": [1, 0],
-        "mode": "insert",
-        "registers": {
-          "\"": {
-            "mode": "block",
-            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
-          }
-        }
-      },
       "bySet": {
         "defaults": {
-          "reason": "plugin:surround: surround redefines S in Visual mode"
+          "source": "vim-oracle",
+          "label": "Change the whole lines of the block",
+          "expect": {
+            "text": {
+              "1": "  "
+            },
+            "cursor": [1, 2],
+            "mode": "insert",
+            "registers": {
+              "1": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              },
+              "\"": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              }
+            },
+            "shiftNumbered": true
+          },
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectBasis": "VSCodeVim 1.32.4: VisualBlockChangeLine src/actions/commands/actions.ts L946-954 (no setting check; surround's Visual S is Visual and Visual Line only, src/actions/plugins/surround.ts L140-186, and sneak's S prefix loses to a full match, src/actions/base.ts L260-279) runs ChangeOperator src/actions/operator.ts L661-705 from the line start to the line end: blockwise register, Insert mode."
+          },
+          "knownDeviation": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectBasis": "VSCodeVim 1.32.4: VisualBlockChangeLine src/actions/commands/actions.ts L946-954 (no setting check; surround's Visual S is Visual and Visual Line only, src/actions/plugins/surround.ts L140-186, and sneak's S prefix loses to a full match, src/actions/base.ts L260-279) runs ChangeOperator src/actions/operator.ts L661-705 from the line start to the line end: blockwise register, Insert mode.",
+            "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured; the card's C and R rows run the same VSCodeVim code"
+          }
         },
         "extensions": {
-          "reason": "plugin:sneak: sneak redefines s and S"
+          "source": "vim-oracle",
+          "label": "Change the whole lines of the block",
+          "expect": {
+            "text": {
+              "1": "  "
+            },
+            "cursor": [1, 2],
+            "mode": "insert",
+            "registers": {
+              "1": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              },
+              "\"": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              }
+            },
+            "shiftNumbered": true
+          },
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectBasis": "VSCodeVim 1.32.4: VisualBlockChangeLine src/actions/commands/actions.ts L946-954 (no setting check; surround's Visual S is Visual and Visual Line only, src/actions/plugins/surround.ts L140-186, and sneak's S prefix loses to a full match, src/actions/base.ts L260-279) runs ChangeOperator src/actions/operator.ts L661-705 from the line start to the line end: blockwise register, Insert mode."
+          },
+          "knownDeviation": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectBasis": "VSCodeVim 1.32.4: VisualBlockChangeLine src/actions/commands/actions.ts L946-954 (no setting check; surround's Visual S is Visual and Visual Line only, src/actions/plugins/surround.ts L140-186, and sneak's S prefix loses to a full match, src/actions/base.ts L260-279) runs ChangeOperator src/actions/operator.ts L661-705 from the line start to the line end: blockwise register, Insert mode.",
+            "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured; the card's C and R rows run the same VSCodeVim code"
+          }
         }
-      },
-      "expectBasis": "VSCodeVim 1.32.4: VisualBlockChangeLine src/actions/commands/actions.ts L946-954 (no setting check; surround's Visual S is Visual and Visual Line only, src/actions/plugins/surround.ts L140-186, and sneak's S prefix loses to a full match, src/actions/base.ts L260-279) runs ChangeOperator src/actions/operator.ts L661-705 from the line start to the line end: blockwise register, Insert mode.",
-      "labelFrom": "hand"
+      }
     },
     {
       "key": "T",

@@ -1600,8 +1600,8 @@
           "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/surround.ts L71-170 (S in Visual and Visual Line mode starts surround input: SurroundInputMode = probe other-10; the previous mode's selection stays drawn, src/mode/modeHandler.ts L1295-1302)"
         },
         "extensions": {
-          "source": "hand",
-          "reason": "plugin:sneak: sneak redefines s and S",
+          "source": "vim-oracle",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround is off and sneak does not take S in Visual mode, so VSCodeVim runs VisualChangeLine_2 (src/actions/commands/actions.ts L917-953)",
           "label": "Delete the highlighted lines and start insert",
           "labelFrom": "hand",
           "expect": {
@@ -1611,13 +1611,54 @@
             "cursor": [1, 2],
             "mode": "insert",
             "registers": {
+              "1": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              },
               "\"": {
                 "mode": "line",
                 "lines": ["  if (one, \"two\", [three]) { four(five) }"]
               }
-            }
+            },
+            "shiftNumbered": true
           },
-          "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (linewise in Visual Line mode: vim.autoindent keeps the indent)"
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (linewise in Visual Line mode: vim.autoindent keeps the indent)"
+          },
+          "knownDeviation": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (linewise in Visual Line mode: vim.autoindent keeps the indent)",
+            "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured; the card's C and R rows run the same VSCodeVim code"
+          }
         }
       }
     },

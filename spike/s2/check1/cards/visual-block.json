@@ -1267,11 +1267,12 @@
     {
       "key": "S",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
-      "label": "Delete the highlighted lines and start insert",
       "bySet": {
         "defaults": {
-          "reason": "plugin:surround: surround redefines S in Visual mode",
+          "source": "vim-oracle",
+          "label": "Delete the highlighted lines and start insert",
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
           "expect": {
             "text": {
               "1": "  "
@@ -1290,11 +1291,37 @@
             },
             "shiftNumbered": true
           },
-          "basis": "src/actions/commands/actions.ts L945-L953: in Visual-block mode S is VisualBlockChangeLine; surround has no Visual-block S (plugins/surround.ts L142-L176 cover Visual and Visual Line only); expectation from Vim index.txt *v_S* with 'autoindent'",
-          "labelFrom": "hand"
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "basis": "src/actions/commands/actions.ts L945-L953: in Visual-block mode S is VisualBlockChangeLine; surround has no Visual-block S (plugins/surround.ts L142-L176 cover Visual and Visual Line only); expectation from Vim index.txt *v_S* with 'autoindent'"
+          }
         },
         "extensions": {
-          "reason": "plugin:sneak: sneak redefines s and S",
+          "source": "vim-oracle",
+          "label": "Delete the highlighted lines and start insert",
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
           "expect": {
             "text": {
               "1": "  "
@@ -1313,11 +1340,33 @@
             },
             "shiftNumbered": true
           },
-          "basis": "src/actions/commands/actions.ts L945-L953: VisualBlockChangeLine does not check vim.sneak and base.ts L257-L279 returns the first complete action, so sneak's S never starts; expectation from Vim index.txt *v_S* with 'autoindent'",
-          "labelFrom": "hand"
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "basis": "src/actions/commands/actions.ts L945-L953: VisualBlockChangeLine does not check vim.sneak and base.ts L257-L279 returns the first complete action, so sneak's S never starts; expectation from Vim index.txt *v_S* with 'autoindent'"
+          }
         }
-      },
-      "labelFrom": "hand"
+      }
     },
     {
       "key": "T",

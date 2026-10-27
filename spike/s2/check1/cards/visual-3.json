@@ -1441,9 +1441,10 @@
     {
       "key": "S",
       "sets": ["defaults", "extensions"],
-      "source": "hand",
       "bySet": {
         "defaults": {
+          "source": "hand",
+          "labelFrom": "hand",
           "reason": "plugin:surround: surround redefines S in Visual mode",
           "label": "Surround the selection: waits for the surrounding character (surround)",
           "expect": {
@@ -1451,11 +1452,12 @@
             "cursor": [1, 13],
             "mode": "other-10"
           },
-          "basis": "src/actions/plugins/surround.ts L142-L152 and L116-L121: S runs the surround operator on the selection and sets SurroundInputMode (mode.ts value 10, probe other-10); modeHandler.ts L1296-L1326 draws the previous mode's selection with the unshifted stop, so the active end is (1,13)",
-          "labelFrom": "hand"
+          "basis": "src/actions/plugins/surround.ts L142-L152 and L116-L121: S runs the surround operator on the selection and sets SurroundInputMode (mode.ts value 10, probe other-10); modeHandler.ts L1296-L1326 draws the previous mode's selection with the unshifted stop, so the active end is (1,13)"
         },
         "extensions": {
-          "reason": "plugin:sneak: sneak redefines s and S",
+          "source": "vim-oracle",
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround is off and sneak does not take S in Visual mode, so VSCodeVim runs VisualChangeLine_2 (src/actions/commands/actions.ts L917-953)",
           "label": "Delete the highlighted lines and start insert (sneak does not take S in Visual mode)",
           "expect": {
             "text": {
@@ -1475,11 +1477,33 @@
             },
             "shiftNumbered": true
           },
-          "basis": "src/actions/commands/actions.ts L931-L943: VisualChangeLine_2 applies when vim.surround is off and does not check vim.sneak; base.ts L257-L279 returns the first complete action, so sneak's S never starts; expectation from Vim change.txt *v_S* with 'autoindent' (the card's C and R rows are the same command)",
-          "labelFrom": "hand"
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "basis": "src/actions/commands/actions.ts L931-L943: VisualChangeLine_2 applies when vim.surround is off and does not check vim.sneak; base.ts L257-L279 returns the first complete action, so sneak's S never starts; expectation from Vim change.txt *v_S* with 'autoindent' (the card's C and R rows are the same command)"
+          }
         }
-      },
-      "labelFrom": "hand"
+      }
     },
     {
       "key": "T",
