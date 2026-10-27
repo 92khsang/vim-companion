@@ -14,7 +14,11 @@
 // which is what Vim's getregtype() and getreg(name, 1, 1) give. A linewise register holding `line`
 // ({ mode: "line", lines: ["line"] }) and a charwise one holding `line\n` ({ mode: "character",
 // lines: ["line", ""] }) are different values, and the record shows both.
-// Usage: node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <cards.json> <trials> <out.jsonl> [card ids, comma-separated]
+// Usage: node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <cards.json> <trials> <out.jsonl> [card ids, comma-separated | #<from>-<to>]
+// `#<from>-<to>` selects the cards with index from <= i < to in <cards.json> (batch/check1.sh runs
+// the cards in chunks this way, because card ids hold commas). The meta record carries the build
+// (lib.mjs buildInfo) and the probe's hello; an error record carries its phase (`boot` before the
+// probe's first hello, `trials` after it) and the build.
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -25,8 +29,12 @@ import {
   stopCode,
   typeKeys,
   focusWindow,
+  keysym,
+  buildInfo,
+  portable,
 } from "./lib.mjs";
 import { SETTINGS_SETS } from "./cards-extract.mjs";
+import { planKeys } from "./card-keys.mjs";
 
 const RESET_KEYS = ["<Esc>", "<Esc>", "v", "<Esc>"];
 const DEFAULTS = {
@@ -42,11 +50,26 @@ const settings = SETTINGS_SETS[set];
 const inForce = { ...DEFAULTS, ...settings };
 const holds = (when) =>
   !when || Object.entries(when).every(([k, v]) => inForce[k] === v);
-const cards = JSON.parse(readFileSync(cardsFile, "utf8")).filter(
-  (c) => !only || only.split(",").includes(c.id),
+const range = /^#(\d+)-(\d+)$/.exec(only ?? "");
+const cards = JSON.parse(readFileSync(cardsFile, "utf8")).filter((c, i) =>
+  !only
+    ? true
+    : range
+      ? i >= Number(range[1]) && i < Number(range[2])
+      : only.split(",").includes(c.id),
 );
+const build = buildInfo();
+let phase = "boot";
 writeFileSync(outFile, "");
 const write = (r) => appendFileSync(outFile, JSON.stringify(r) + "\n");
+let code;
+/** Types the key steps of a plan (card-keys.mjs) at 30 ms and runs its command steps in order. */
+async function send(plan) {
+  for (const step of plan.steps) {
+    if (step.keys) typeKeys(display, step.keys, 30);
+    if (step.exec) await code.probe.call("exec", { command: step.exec });
+  }
+}
 
 function expectedText(expect) {
   if (expect.text === "unchanged") return START.lines;
@@ -90,7 +113,7 @@ for (const card of cards)
         );
     }
 
-let xvfb, code;
+let xvfb;
 for (const sig of ["SIGTERM", "SIGINT"]) {
   process.on(sig, async () => {
     if (code) await stopCode(code);
@@ -109,6 +132,9 @@ try {
     name: `${process.env.S2_NAME_PREFIX ?? ""}correct-${set}-${version}-${display.slice(1)}`,
     cdpPort: Number(cdpPort),
     settings,
+    onHostUp: () => {
+      phase = "trials";
+    },
   });
   write({
     type: "meta",
@@ -116,6 +142,10 @@ try {
     set,
     settings,
     trials: Number(trialsArg),
+    cards: cards.map((c) => c.id),
+    only: only ?? null,
+    build,
+    hello: code.hello,
     started: new Date().toISOString(),
   });
   const files = [
@@ -128,6 +158,21 @@ try {
         write({ type: "no-expectation", card: card.id, key: row.key });
         continue;
       }
+      // How the row's tokens are produced on Linux (card-keys.mjs). A row with a token that no key
+      // or command produces on Linux is recorded once and not typed, so that it can never pass.
+      const setupPlan = row.setup ? planKeys(row.setup) : null;
+      const plan = planKeys([...card.keys, row.sample ?? row.key]);
+      const blocked = [plan, setupPlan].filter(Boolean);
+      if (blocked.some((p) => p.unreachable.length || p.untypeable.length)) {
+        write({
+          type: "untyped",
+          card: card.id,
+          key: row.key,
+          unreachable: blocked.flatMap((p) => p.unreachable),
+          untypeable: blocked.flatMap((p) => p.untypeable),
+        });
+        continue;
+      }
       for (let trial = 0; trial < Number(trialsArg); trial++) {
         typeKeys(display, RESET_KEYS, 30);
         await sleep(80);
@@ -137,9 +182,14 @@ try {
           !snap.active?.endsWith("/a.txt") ||
           snap.activeViewColumn !== 1
         ) {
-          await code.probe.call("exec", {
-            command: "workbench.action.closeAllEditors",
-          });
+          // Reopen the two files without closing anything: the sandbox has files.hotExit and
+          // files.autoSave off, so closing the modified a.txt would raise a save prompt that blocks
+          // the harness. A row that split a window leaves a third group: join the groups first,
+          // which closes no editor.
+          if (snap.editors.length !== 2)
+            await code.probe.call("exec", {
+              command: "workbench.action.joinAllGroups",
+            });
           await code.probe.call("open", { files });
           focusWindow(code);
           await code.probe.call("exec", {
@@ -150,12 +200,12 @@ try {
         await sleep(200);
         const before = await code.probe.call("registers");
         // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
-        if (row.setup) {
-          typeKeys(display, row.setup, 30);
+        if (setupPlan) {
+          await send(setupPlan);
           await sleep(200);
         }
         const typed = [...card.keys, row.sample ?? row.key];
-        typeKeys(display, typed, 30);
+        await send(plan);
         await sleep(400);
         snap = await code.probe.call("snapshot");
         const active =
@@ -222,19 +272,35 @@ try {
           card: card.id,
           key: row.key,
           typed,
+          sent: plan.steps.map((st) =>
+            st.keys ? { keys: st.keys.map(keysym) } : { exec: st.exec },
+          ),
           trial,
           ok: diff.length === 0,
           diff,
           got,
           want,
           activeFile: snap.active?.replace(/^.*\//, ""),
+          knownDeviation: row.knownDeviation ?? null,
         });
+        // A row whose token ran a command (such as toggleVim) undoes it before the next trial.
+        for (const command of plan.teardown) {
+          await code.probe.call("exec", { command });
+          await sleep(600);
+        }
       }
     }
   }
   write({ type: "end", finished: new Date().toISOString() });
 } catch (e) {
-  write({ type: "error", error: String(e.stack ?? e) });
+  write({
+    type: "error",
+    phase,
+    version,
+    set,
+    build,
+    error: portable(e.stack ?? e),
+  });
 } finally {
   if (code) await stopCode(code);
   if (xvfb)
