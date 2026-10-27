@@ -6,11 +6,18 @@
     {
       "key": "'",
       "sets": ["defaults", "extensions"],
+      "setup": ["G"],
       "source": "hand",
       "reason": "state: mark or jump; '' reads the mark or jump",
-      "label": "TODO",
+      "label": "Jump to the first non-blank of the line before the latest jump",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L267 |''|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/history/historyTracker.ts L602-630 (the ' mark is the last entry of the jump list), src/actions/motion.ts L571-579 (MarkMovementBOL: first non-blank); setup G records the jump from (1,13) (src/jumps/jumpTracker.ts L66-80, L320-331)"
     },
     {
       "key": "{<register>}",

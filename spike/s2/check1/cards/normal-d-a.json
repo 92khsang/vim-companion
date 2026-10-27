@@ -147,8 +147,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the indentation block with the lines above and below",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              ""
+            ]
+          },
+          "1": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L600-675 and L723-728 (InsideIndentObjectBoth: lines 0-2, stop (3,0) -> (2,22), charwise); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
     },
     {
       "key": "W",
@@ -243,8 +270,26 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the argument and its separator",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, [three]) { four(five) }"
+        },
+        "cursor": [1, 9],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [", \"two\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [", \"two\""]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L733-996 (SelectAroundArgument: from the left separator (1,9) to before the right one (1,15)); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
     },
     {
       "key": "b",
@@ -276,41 +321,106 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the entire buffer",
+      "labelFrom": "hand",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "1": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L562-570 (SelectEntire: (0,0) to the end (4,0), which executeOperator moves to (3,20); DeleteOperator then takes the line break of line 3); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the indentation block with the line above",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              ""
+            ]
+          },
+          "1": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L600-675 and L716-721 (InsideIndentObjectAbove: lines 0-1, stop (2,0) -> (1,41), charwise); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the last-object prefix (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/targets/smartQuotes.ts L1-155 (al\" al' al` alq); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the next-object prefix (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/targets/smartQuotes.ts L1-155 (an\" an' an` anq); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Same as \":diffput\"",
-      "labelFrom": "index",
+      "label": "Delete a paragraph and the blank lines after it",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L402 |dp|",
-      "labelReview": "unresolved \"same as :diffput\"",
       "expect": {
         "text": [""],
         "cursor": [0, 0],
@@ -343,8 +453,26 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the nearest quoted string with its quotes and the space before it (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one,, [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"two\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"two\""]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L2090-2223 (MoveAroundQuote: no trailing white space, so the leading space is included: (1,10)-(1,15); package.json vim.targets.smartQuotes.aIncludesSurroundingSpaces true); VSCodeVim 1.32.4 src/actions/operator.ts L100-178 (DeleteOperator), src/register/register.ts L54-81 and L208-257 (registers)"
     },
     {
       "key": "s",

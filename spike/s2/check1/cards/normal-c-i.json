@@ -235,8 +235,22 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the argument under the cursor",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, , [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\"two\""]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L733-996 (SelectInnerArgument: (1,11)-(1,15)); VSCodeVim 1.32.4 src/actions/operator.ts L661-708 (ChangeOperator; it has no name, so processNumberedRegisters in src/register/register.ts L208-257 writes neither - nor 1)"
     },
     {
       "key": "b",
@@ -268,32 +282,75 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the entire buffer except leading and trailing blank lines",
+      "labelFrom": "hand",
+      "expect": {
+        "text": [""],
+        "cursor": [0, 0],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L573-594 (SelectEntireIgnoringLeadingTrailing skips the empty line 4: (0,0)-(3,20)); VSCodeVim 1.32.4 src/actions/operator.ts L661-708 (ChangeOperator; it has no name, so processNumberedRegisters in src/register/register.ts L208-257 writes neither - nor 1); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the lines of the cursor's indentation level, keeping the indent",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  "
+        },
+        "cursor": [1, 2],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"two\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/textobject/textobject.ts L600-675 (IndentObjectMatch: with c the start is the first non-blank, stop (2,0) -> (1,41) in executeOperator; the register mode stays charwise); VSCodeVim 1.32.4 src/actions/operator.ts L661-708 (ChangeOperator; it has no name, so processNumberedRegisters in src/register/register.ts L208-257 writes neither - nor 1)"
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the last-object prefix (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/targets/smartQuotes.ts L1-155 (il\" il' il` ilq need a third key and apply in both sets); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the next-object prefix (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/targets/smartQuotes.ts L1-155 (in\" in' in` inq need a third key and apply in both sets); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "p",
@@ -334,8 +391,22 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change inside the nearest quotes (targets)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/targets/smartQuotes.ts L113-119 and src/actions/motion.ts L2090-2223 (MoveInsideQuote: (1,12)-(1,14) in both sets); VSCodeVim 1.32.4 src/actions/operator.ts L661-708 (ChangeOperator; it has no name, so processNumberedRegisters in src/register/register.ts L208-257 writes neither - nor 1)"
     },
     {
       "key": "s",
@@ -440,11 +511,17 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for w: change the camelCase part of a word (camelCaseMotion, i<leader>w)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-100 (<leader>w/e/b, i<leader>w; leader \\ by default, package.json vim.leader); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "}",

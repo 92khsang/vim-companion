@@ -9,10 +9,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L730-744 (MoveDownNonBlank, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": " ",
@@ -20,10 +37,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character under the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talphao\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L702-727 (MoveRight; <Space> wraps with whichwrap s, src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "#",
@@ -31,10 +67,33 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the previous match of the word under the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/commands/search.ts L23-56 and L169-184 (the match is (1,12)); the read-only / register becomes \\<two\\>; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "$",
@@ -42,10 +101,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1013-1023 (MoveLineEnd keys $ <End> <D-right>: count-1 lines down, line end); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "%",
@@ -53,10 +131,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the matching bracket with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1763-1840 (from the cursor to the first bracket on the line, [ at 18, and its match at 24); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "'",
@@ -66,8 +163,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a mark: replace whole lines to its line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "(",
@@ -75,10 +178,31 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the sentence with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": [
+          "alphawo\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1586-1594 and L1671-1678, src/textobject/sentence.ts L30-52 and src/textobject/paragraph.ts L28-42 (no sentence end and no blank line above: the start of the buffer); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": ")",
@@ -86,10 +210,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the start of the next sentence with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"talpha"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1607-1669, src/textobject/sentence.ts L54-100 and src/textobject/paragraph.ts L7-23 (both reach the empty line 4, (4,0), which executeOperator moves to (3,20)); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "*",
@@ -97,10 +238,33 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the next match of the word under the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/commands/search.ts L23-56 and L139-154 (two is the only match: the search wraps to (1,12)); the read-only / register becomes \\<two\\>; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "+",
@@ -108,10 +272,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L730-744 (MoveDownNonBlank, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": ",",
@@ -119,10 +300,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l", "f", "<Space>"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the match of the last f, t, F or T in the opposite direction with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one,alpha [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13), then f<Space>"
     },
     {
       "key": "-",
@@ -130,10 +330,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the one above with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L747-761 (MoveUpNonBlank, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "/",
@@ -143,8 +360,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to a search match with the register: opens the search input",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18)"
     },
     {
       "key": "0",
@@ -152,10 +375,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1026-1039 (MoveLineBegin keys 0 <Home> <D-left>); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": ";",
@@ -163,10 +405,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l", "f", "<Space>"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the next match of the last f, t, F or T with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\",alpha{ four(five) }"
+        },
+        "cursor": [1, 21],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13), then f<Space>"
     },
     {
       "key": "<BS>",
@@ -174,10 +435,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character before the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-BS>",
@@ -185,10 +465,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character before the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-End>",
@@ -196,10 +495,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the last line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"talpha"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1406-1420 (EndOfSpecificLine: (4,0), not linewise); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-Home>",
@@ -207,10 +523,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the lines up to the first line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1354-1373 (MoveNonBlankFirst, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-j>",
@@ -218,10 +551,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L306-345 (MoveDown with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-left>",
@@ -229,10 +579,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the word with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1568-1575 (MoveBeginningWord); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-m>",
@@ -240,10 +609,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L730-744 (MoveDownNonBlank, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-n>",
@@ -251,10 +637,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L306-345 (MoveDown with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-p>",
@@ -262,10 +665,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the one above with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L349-387 (MoveUp with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<C-right>",
@@ -273,10 +693,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the start of the next WORD with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha[three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1495-1514 (MoveFullWordBegin: next WORD at (1,18)); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<D-left>",
@@ -284,10 +723,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1026-1039 (MoveLineBegin keys 0 <Home> <D-left>); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<D-right>",
@@ -295,10 +753,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1013-1023 (MoveLineEnd keys $ <End> <D-right>: count-1 lines down, line end); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<End>",
@@ -306,10 +783,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1013-1023 (MoveLineEnd keys $ <End> <D-right>: count-1 lines down, line end); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<Home>",
@@ -317,10 +813,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1026-1039 (MoveLineBegin keys 0 <Home> <D-left>); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<S-BS>",
@@ -328,10 +843,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character before the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<down>",
@@ -339,10 +873,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L306-345 (MoveDown with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<left>",
@@ -350,10 +901,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character before the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<right>",
@@ -361,10 +931,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character under the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talphao\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L702-727 (MoveRight; <Space> wraps with whichwrap s, src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "<up>",
@@ -372,10 +961,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the one above with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L349-387 (MoveUp with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "?",
@@ -385,8 +991,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to a search match with the register: opens the search input",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18)"
     },
     {
       "key": "B",
@@ -394,10 +1006,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the WORD with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1577-1584 (MoveBeginningFullWord); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "E",
@@ -405,10 +1036,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the WORD with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1534-1547 (MoveFullWordEnd with an operator: inclusive); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "F",
@@ -418,8 +1068,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a character: replace back to it with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "G",
@@ -427,10 +1083,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the lines to the last line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1375-1404 (MoveNonBlankLast, linewise to line 4); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "H",
@@ -438,10 +1111,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the lines up to the top of the window with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1271-1301 (MoveToLineFromViewPortTop, linewise, top line 0); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "L",
@@ -449,10 +1139,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the lines down to the bottom of the window with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1303-1336 (MoveToLineFromViewPortBottom, linewise; the last visible line is the last line 4); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "M",
@@ -460,10 +1167,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the middle line of the window with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L59-140 and L1337-1343 (cursorMove viewPortCenter, not linewise); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (CursorMoveCommands.viewportMove: line round((1+5)/2) = 3, its first non-blank: (2,0), which executeOperator moves to (1,41)); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "N",
@@ -471,10 +1197,33 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l", "/", "<Space>", "<CR>"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the previous match of the last search with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one,alpha [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": [" "]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13), then /<Space><CR>"
     },
     {
       "key": "T",
@@ -484,8 +1233,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a character: replace back to just after it with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "W",
@@ -493,10 +1248,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the start of the next WORD with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha[three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1495-1514 (MoveFullWordBegin: next WORD at (1,18)); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "Z",
@@ -507,8 +1281,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for two characters: replace back to the previous match with the register (sneak)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-23 and L74-90 (z/Z after an operator wait for two characters); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "[",
@@ -518,8 +1298,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the next key of a [ motion: replace with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "]",
@@ -529,8 +1315,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the next key of a ] motion: replace with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "^",
@@ -538,10 +1330,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the first non-blank of the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 6],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1345-1352 (MoveNonBlank); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "_",
@@ -549,10 +1360,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "alpha"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L764-778 (MoveDownUnderscore with an operator: the cursor line, linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "`",
@@ -562,16 +1392,28 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a mark: replace to its position with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "a",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Show code actions (generated remap)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json (gra -> editor.action.quickFix) (gr is a prefix of the generated remaps, so the remapper buffers it, src/configuration/remapper.ts L130-300); VSCodeVim 1.32.4 src/configuration/remapper.ts L533-569 and L487-529 (a remap's commands run count times; the mode does not change); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (the command is an EditorAction2/EditorAction whose precondition needs a provider; it does not run without one); Inferred: no extension of the sandbox provides one for plaintext, and even with one the command changes no text"
     },
     {
       "key": "b",
@@ -579,10 +1421,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the word with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1568-1575 (MoveBeginningWord); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "e",
@@ -590,10 +1451,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the word with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1516-1531 (MoveWordEnd with an operator: inclusive); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "f",
@@ -603,8 +1483,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a character: replace up to it with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "g",
@@ -614,8 +1500,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the next key of a g motion: replace with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "h",
@@ -623,18 +1515,43 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character before the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to implementation (generated remap)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json (gri -> editor.action.goToImplementation) (gr is a prefix of the generated remaps, so the remapper buffers it, src/configuration/remapper.ts L130-300); VSCodeVim 1.32.4 src/configuration/remapper.ts L533-569 and L487-529 (a remap's commands run count times; the mode does not change); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (the command is an EditorAction2/EditorAction whose precondition needs a provider; it does not run without one); Inferred: no extension of the sandbox provides one for plaintext, and even with one the command changes no text"
     },
     {
       "key": "j",
@@ -642,10 +1559,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the next one with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "alpha", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L306-345 (MoveDown with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "k",
@@ -653,10 +1587,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the line and the one above with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha", "epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L349-387 (MoveUp with an operator: linewise); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "l",
@@ -664,26 +1615,57 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace the character under the cursor with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talphao\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L702-727 (MoveRight; <Space> wraps with whichwrap s, src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Rename symbol (generated remap)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json (grn -> editor.action.rename) (gr is a prefix of the generated remaps, so the remapper buffers it, src/configuration/remapper.ts L130-300); VSCodeVim 1.32.4 src/configuration/remapper.ts L533-569 and L487-529 (a remap's commands run count times; the mode does not change); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (the command is an EditorAction2/EditorAction whose precondition needs a provider; it does not run without one); Inferred: no extension of the sandbox provides one for plaintext, and even with one the command changes no text"
     },
     {
       "key": "r",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Find references (generated remap)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json (grr -> editor.action.goToReferences) (gr is a prefix of the generated remaps, so the remapper buffers it, src/configuration/remapper.ts L130-300); VSCodeVim 1.32.4 src/configuration/remapper.ts L533-569 and L487-529 (a remap's commands run count times; the mode does not change); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (the command is an EditorAction2/EditorAction whose precondition needs a provider; it does not run without one); Inferred: no extension of the sandbox provides one for plaintext, and even with one the command changes no text"
     },
     {
       "key": "t",
@@ -693,8 +1675,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for a character: replace up to just before it with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply) (the motion needs one more key)"
     },
     {
       "key": "w",
@@ -702,10 +1690,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the start of the next word with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"talpha\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1423-1488 (MoveWordBegin: next word \", at (1,15)); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "z",
@@ -716,8 +1723,14 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for two characters: replace to the next match with the register (sneak)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-23 and L74-90 (z/Z after an operator wait for two characters); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "{",
@@ -725,10 +1738,31 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the start of the paragraph with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": [
+          "alphawo\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1586-1594 and L1671-1678, src/textobject/sentence.ts L30-52 and src/textobject/paragraph.ts L28-42 (no sentence end and no blank line above: the start of the buffer); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "{<leader>}",
@@ -737,11 +1771,17 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for w, b or e: replace a camelCase word with the register (camelCaseMotion)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-100 (<leader>w/e/b, i<leader>w; leader \\ by default, package.json vim.leader); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "{<number>}",
@@ -749,11 +1789,17 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "3",
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a digit to the count: waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L60-90 (CommandNumber) and VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
     },
     {
       "key": "|",
@@ -761,10 +1807,29 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace back to the first column with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "alphawo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L781-791 (MoveToColumn without a count: column 0); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     },
     {
       "key": "}",
@@ -772,10 +1837,27 @@
         "vim.replaceWithRegister": true
       },
       "sets": ["extensions"],
+      "setup": ["g", "g", "y", "e", "j", "1", "3", "l"],
       "source": "hand",
       "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Replace to the end of the paragraph with the register",
+      "labelFrom": "hand",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"talpha"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["alpha"]
+          },
+          "0": {
+            "mode": "character",
+            "lines": ["alpha"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/replaceWithRegister.ts L13-71 (ReplaceOperator writes no register); VSCodeVim 1.32.4 src/actions/motion.ts L1607-1669, src/textobject/sentence.ts L54-100 and src/textobject/paragraph.ts L7-23 (both reach the empty line 4, (4,0), which executeOperator moves to (3,20)); Inferred: the probe reset writes the fixture lines with a trailing newline (spike/s2/extensions/s2-probe/extension.js reset), so the VS Code document has a fifth, empty line 4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); setup gg ye j 13l yanks 'alpha' into \" and 0 (src/actions/operator.ts L203-260), scrolls the view to line 0 and returns to (1,13)"
     }
   ]
 }

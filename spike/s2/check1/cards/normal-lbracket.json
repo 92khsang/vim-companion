@@ -6,11 +6,18 @@
     {
       "key": "'",
       "sets": ["defaults", "extensions"],
+      "setup": ["k", "m", "b", "j"],
       "source": "hand",
       "reason": "state: mark or jump; [' reads the mark or jump",
-      "label": "TODO",
+      "label": "Move to the first non-blank of the previous line with a lowercase mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L642 |['|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L649-662 (PrevMarkLinewise); setup k mb j puts mark b on line 0, the only line above the cursor, so earlier marks cannot change the answer"
     },
     {
       "key": "(",
@@ -28,11 +35,34 @@
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
+      "setup": ["k", "y", "y", "j"],
       "source": "hand",
       "reason": "state: register; [P reads the register",
-      "label": "TODO",
+      "label": "Put the text before the cursor line, with the indent of the current line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L671 |[p|",
-      "expect": "TODO"
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "line",
+            "lines": ["alpha beta gamma delta"]
+          },
+          "0": {
+            "mode": "line",
+            "lines": ["alpha beta gamma delta"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/put.ts L566-583 ([p [P ]P are PutBeforeWithIndentCommand: put before, a linewise text gets the indent of the cursor line) and L421-470; setup k yy j yanks line 0 linewise"
     },
     {
       "key": "[",
@@ -63,36 +93,78 @@
     {
       "key": "`",
       "sets": ["defaults", "extensions"],
+      "setup": ["h", "m", "b", "l"],
       "source": "hand",
       "reason": "state: mark or jump; [` reads the mark or jump",
-      "label": "TODO",
+      "label": "Move to the previous lowercase mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L646 |[`|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L618-631 (PrevMark: the closest mark before the cursor); setup h mb l puts mark b on (1,12), right before the cursor"
     },
     {
       "key": "d",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the previous problem (generated remap)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json ([d -> editor.action.marker.prev); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (markerController.navigate moves only to a selected marker); Inferred: a.txt (plaintext) has no diagnostics"
     },
     {
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the previous problem (generated remap, alias of [d)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "spec/generated/vscode/vim-remaps.json ([e -> editor.action.marker.prev); VS Code 1.134.0 resources/app/out/vs/workbench/workbench.desktop.main.js (markerController.navigate moves only to a selected marker); Inferred: a.txt (plaintext) has no diagnostics"
     },
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
+      "setup": ["k", "y", "y", "j"],
       "source": "hand",
       "reason": "state: register; [p reads the register",
-      "label": "TODO",
+      "label": "Put the text before the cursor line, with the indent of the current line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L671 |[p|",
-      "expect": "TODO"
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "line",
+            "lines": ["alpha beta gamma delta"]
+          },
+          "0": {
+            "mode": "line",
+            "lines": ["alpha beta gamma delta"]
+          }
+        }
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/put.ts L566-583 ([p [P ]P are PutBeforeWithIndentCommand: put before, a linewise text gets the indent of the cursor line) and L421-470; setup k yy j yanks line 0 linewise"
     },
     {
       "key": "{",
