@@ -288,3 +288,19 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   `toggleVim` the handler is back in Normal mode and the item reads `-- NORMAL --` again. Same on
   1.134.0 and 1.141.0. This is the read that cards-correctness.mjs uses for the mode when VSCodeVim
   is off (`other-12`, Mode.Disabled).
+- `diag-which-key/`: diagnosis of the two 1.141.0 failures of the differential row at cbf136f
+  (`differential-row/both-1.141.0.jsonl`: adapter-off run 292 ended with a.txt's cursor at
+  [0,17] instead of [1,1]; adapter-on run 633 stopped with the which-key menu still open after
+  `3 SPC b n`). Tools in `spike/s2/diag/`, commands in `command.txt`, all on VS Code 1.141.0,
+  one sandbox per tool on cores 28-31. `qi-*.jsonl`: a renderer log over CDP of every keydown
+  (dispatched into the quick input `Q` or the editor `E`) and every change of the quick input
+  (visible, input value, rows, first row) while the keys are typed at 30 ms. With the count, the
+  root menu of which-key is drawn again after `b` was accepted in 18 of 18, 52 of 52 and 86 of 86
+  fresh sessions (first use); without the count (`qi-spc-off.jsonl`) it is drawn once.
+  `qi-first*`: the first `3 SPC b n` of a fresh sandbox; the menu was still open 600 ms later in
+  4 of 86 sessions with the adapter on and 0 of 86 with it off (one-sided Fisher p = 0.06,
+  `qi-sum.py`); no key reached the editor in either arm. `wk-*.jsonl`: the same burst repeated
+  in one session: 1 menu left open in 500 attempts with the adapter on (attempt 2), 0 in 700 with
+  it off and 0 in 700 with it on. `lat-cold-off-1.141.0.jsonl`: from `<Space>` (no count) to the
+  quick input visible with the focus in it, 38-55 ms at the first use of 25 sessions, 11-31 ms at
+  the second.

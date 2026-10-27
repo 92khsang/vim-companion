@@ -27,6 +27,8 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   candidate (a).
 - `extensions/s2-adapter`: candidate (a), inspector build (option 2 of the note on #11).
 - `extensions/s2-cards`: candidate (b), static cards in a webview view.
+- `diag/`: diagnostic tools for the which-key race of `3 SPC b n` (`wk-loop.mjs`, `lat-loop.mjs`,
+  `qi-observe.mjs`, `qi-sum.py`); data in `data/diag-which-key/`. Not part of any row.
 - `engine-history/`: `run.sh` fingerprints, at every VSCodeVim release since 2020, the internals
   that the inspector adapter reads (`fingerprint.sh`), and checks the published packages for their
   names (`bundle_check.py`); it clones VSCodeVim and downloads packages, and executes neither.
