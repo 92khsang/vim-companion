@@ -1,0 +1,416 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :compileKotlin UP-TO-DATE
+> Task :compileJava NO-SOURCE
+> Task :initializeIntellijPlatformPlugin
+> Task :patchPluginXml UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :generateManifest UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :composedJar UP-TO-DATE
+> Task :prepareSandbox UP-TO-DATE
+> Task :buildSearchableOptions SKIPPED
+> Task :prepareJarSearchableOptions SKIPPED
+> Task :jarSearchableOptions SKIPPED
+> Task :buildPlugin UP-TO-DATE
+> Task :compileUiTestKotlin UP-TO-DATE
+> Task :compileUiTestJava NO-SOURCE
+> Task :prepareSandbox_runIde262 UP-TO-DATE
+> Task :prepareSandbox_uiTest UP-TO-DATE
+> Task :processUiTestResources UP-TO-DATE
+> Task :uiTestClasses UP-TO-DATE
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (file:$HOME/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/33d12735bef894440780fce64f9758d420c7bae2/jna-5.17.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+> Task :uiTest
+
+Gradle Test Executor 1 STANDARD_OUT
+    [01:18:41]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Port 45654 is busy. Trying use another
+    [01:18:41]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+    [01:18:41]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server started on port 45664
+
+S3UiTest STANDARD_OUT
+    [01:18:41]: Starter DI was initialized
+
+S3UiTest > run() STANDARD_OUT
+    [01:18:41]: Starter DI was updated by:
+    - spike.s3.ui.S3Ide.<clinit>(S3Ide.kt:139)
+    - spike.s3.ui.S3UiTest.run(S3UiTest.kt:15)
+    - java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=class com.intellij.ide.starter.runner.TestContainer$Companion$1, timeout=2m, executeOnce=false, sequential=false, callback=(com.intellij.ide.starter.runner.TestContextInitializedEvent) -> kotlin.Unit) for TestContextInitializedEvent
+    [01:18:42]: Resolving IDE build for s3-hangul-ibus-2.47.3-WLToolkit...
+    [01:18:42]: Using IDE paths for 's3-hangul-ibus-2.47.3-WLToolkit': IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit
+    [01:18:42]: IDE to run for 's3-hangul-ibus-2.47.3-WLToolkit': IDE{IU, 262.10968.63, Linux, home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide}
+    [01:18:42]: Cleaning system dir for com.intellij.ide.starter.ide.IDETestContext@48a0c8aa at IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit
+    [01:18:42]: Setting IDE system property: [ij.load.shell.env=false]
+    [01:18:42]: Setting IDE system property: [ide.instant.shutdown=false]
+    [01:18:42]: Setting IDE system property: [feature.usage.event.log.send.on.ide.close=false]
+    [01:18:42]: Setting IDE system property: [linux.native.menu.force.disable=true]
+    [01:18:42]: Setting IDE system property: [jdk.gtk.verbose=true]
+    [01:18:42]: Setting IDE system property: [jdk.gtk.version=2]
+    [01:18:42]: Setting IDE system property: [vcs.log.index.enable=false]
+    [01:18:42]: Setting IDE system property: [ide.slow.operations.assertion=false]
+    [01:18:42]: Setting IDE system property: [integrationTests.profiler=async]
+    [01:18:42]: Setting IDE system property: [idea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/config]
+    [01:18:42]: Setting IDE system property: [idea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/system]
+    [01:18:42]: Setting IDE system property: [idea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/plugins]
+    [01:18:42]: Trusted xml file content: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <application>
+    
+      <component name="Trusted.Paths">
+        
+        <option name="TRUSTED_PROJECT_PATHS">
+            
+          <map>
+            <entry key="$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/project" value="true"/>
+          </map>
+          
+        </option>
+      
+      </component>
+    
+      <component name="Trusted.Paths.Settings">
+        
+        <option name="TRUSTED_PATHS">
+            
+          <list/>
+          
+        </option>
+      
+      </component>
+  
+    </application>
+
+    [01:18:42]: Setting IDE system property: [idea.local.statistics.without.report=true]
+    [01:18:42]: Setting IDE system property: [idea.updates.url=http://127.0.0.1]
+    [01:18:42]: Setting IDE system property: [kotest.assertions.collection.enumerate.size=2147483647]
+    [01:18:42]: Setting IDE system property: [ide.enable.notification.trace.data.sharing=false]
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait start for TestContextInitializedEvent: total=1, sequential=0, parallel=1
+    [01:18:42]: Starter configuration storage: {MONITORING_DUMPS_INTERVAL_SECONDS=60, ENABLE_SCRAMBLING_FOR_DEVSERVER=false, INSTALLER_INCLUDE_RUNTIME_MODULE_REPOSITORY=false, AFTER_EACH_MESSAGE_BUS_CLEANUP=false, LOG_ENVIRONMENT_VARIABLES=false, SPLIT_MODE_ENABLED=false, DEBUG_LOGGING_ENABLED=false}
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait finished for TestContextInitializedEvent. Exceptions: []
+    [01:18:42]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/IdeaVIM to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/plugins/IdeaVIM
+    [01:18:42]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/s3-spike to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/plugins/s3-spike
+    [01:18:42]: Setting IDE system property: [user.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/home]
+    [01:18:42]: Setting IDE system property: [awt.toolkit.name=WLToolkit]
+    [01:18:42]: Setting IDE system property: [idea.trust.all.projects=true]
+    [01:18:42]: Setting IDE system property: [ide.browser.jcef.enabled=false]
+    [01:18:42]: Setting IDE system property: [ide.show.tips.on.startup.default.value=false]
+    [01:18:42]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [01:18:42]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [01:18:42]: Setting IDE system property: [idea.initially.ask.config=never]
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=CompletableDeferredImpl{Active}@3178219a, timeout=2m, executeOnce=true, sequential=false, callback=(com.intellij.ide.starter.runner.events.IdeLaunchEvent) -> kotlin.Unit) for IdeLaunchEvent
+    [01:18:42]: Creating reports dir 'reports'
+    [01:18:42]: Creating reports dir 'snapshots'
+    [01:18:42]: Reports dir 's3-hangul-ibus-2.47.3-WLToolkit' is already created
+    [01:18:42]: Creating reports dir 'log'
+    [01:18:42]: Starting external process for `exec-java-cmd`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3/jbr
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3/jbr/bin/java -version]
+      STDOUT will be redirected to: string. STDERR will be redirected to: string. STDIN is empty: true
+
+    [01:18:42]:   ... started external process `exec-java-cmd` with process ID = 3094077
+    [01:18:42]:    ... process `exec-java-cmd` (pid=3094077) exited on its own with code 0 before the 60s timeout. 
+    [01:18:42]:   ... successfully finished external process for `exec-java-cmd` with exit code 0
+    [01:18:42]: 
+        Result of calling [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3/jbr/bin/java, -version]:
+        openjdk version "25.0.4" 2026-07-21
+    OpenJDK Runtime Environment JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27)
+    OpenJDK 64-Bit Server VM JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27, mixed mode, sharing)
+    
+    [01:18:42]: Found following 25.0.4+1-b508.27 in the product: IU 262.10968.63
+    [01:18:42]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [01:18:42]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [01:18:42]: Setting IDE system property: [jb.privacy.policy.ai.assistant.text=<!--999.999-->]
+    [01:18:42]: Setting IDE system property: [marketplace.eula.reviewed.and.accepted=true]
+    [01:18:42]: Setting IDE system property: [writerside.eula.reviewed.and.accepted=true]
+    [01:18:42]: Setting IDE system property: [ide.newUsersOnboarding=false]
+    [01:18:42]: Setting IDE system property: [freeze.reporter.profiling=false]
+    [01:18:42]: Setting IDE system property: [idea.fatal.error.notification=true]
+    [01:18:42]: Setting IDE system property: [idea.is.integration.test=true]
+    [01:18:42]: Setting IDE system property: [ide.browser.jcef.jsQueryPoolSize=10000]
+    [01:18:42]: Setting IDE system property: [ide.performance.screenshot=heartbeat]
+    [01:18:42]: Setting IDE system property: [idea.diagnostic.opentelemetry.metrics.max-files-to-keep=120]
+    [01:18:42]: No profiler is specified.
+    [01:18:42]: Setting IDE system property: [snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/snapshots]
+    [01:18:42]: Setting IDE system property: [java.rmi.server.hostname=127.0.0.1]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.host=127.0.0.1]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote=true]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.port=9531]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.rmi.port=9531]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.authenticate=false]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.ssl=false]
+    [01:18:42]: Setting IDE system property: [com.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**']
+    [01:18:42]: Setting IDE system property: [expose.ui.hierarchy.url=true]
+    [01:18:42]: Setting IDE system property: [platform.experiment.ab.manual.option=control.option]
+    [01:18:42]: Setting IDE system property: [rpc.port=9532]
+    [01:18:42]: Setting IDE system property: [memory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log]
+    [01:18:42]: Setting IDE system property: [idea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/opentelemetry.json]
+    [01:18:42]: Setting IDE system property: [idea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log]
+    [01:18:42]: Test commands to be executed: 
+
+    [01:18:42]: Setting IDE system property: [testscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/system/s3-hangul-ibus-2.47.3-WLToolkit.text]
+    [01:18:42]: Setting IDE system property: [testscript.must.exist.process.with.non.success.code.on.ide.error=true]
+    [01:18:42]: Write vmoptions patch to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3.vmoptions
+    [01:18:42]: Starting IDE for s3-hangul-ibus-2.47.3-WLToolkit with timeout 12h
+      VM Options: [VMOptions{ env={IDEA_VIM_CUSTOM_VIMRC=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/rc/ideavimrc} -Dij.load.shell.env=false -Dide.instant.shutdown=false -Dfeature.usage.event.log.send.on.ide.close=false -Dlinux.native.menu.force.disable=true -Djdk.gtk.verbose=true -Djdk.gtk.version=2 -Dvcs.log.index.enable=false -Dide.slow.operations.assertion=false -DintegrationTests.profiler=async -Didea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/config -Didea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/system -Didea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/plugins -Didea.local.statistics.without.report=true -Didea.updates.url=http://127.0.0.1 -Dkotest.assertions.collection.enumerate.size=2147483647 -Dide.enable.notification.trace.data.sharing=false -Duser.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/home -Dawt.toolkit.name=WLToolkit -Didea.trust.all.projects=true -Dide.browser.jcef.enabled=false -Dide.show.tips.on.startup.default.value=false -Djb.consents.confirmation.enabled=false -Djb.privacy.policy.text=<!--999.999--> -Didea.initially.ask.config=never -Xmx2g -Djb.privacy.policy.ai.assistant.text=<!--999.999--> -Dmarketplace.eula.reviewed.and.accepted=true -Dwriterside.eula.reviewed.and.accepted=true -Dide.newUsersOnboarding=false -Dfreeze.reporter.profiling=false -Didea.fatal.error.notification=true -Didea.is.integration.test=true -Dide.browser.jcef.jsQueryPoolSize=10000 -Dide.performance.screenshot=heartbeat -XX:ErrorFile=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/jvm-crash/java_error_in_idea_%p.log -XX:HeapDumpPath=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/heap-dump/heap-dump.hprof -Xlog:gc*:file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/reports/gcLog.log -Didea.diagnostic.opentelemetry.metrics.max-files-to-keep=120 -Dsnapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/snapshots -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9531 -Dcom.sun.management.jmxremote.rmi.port=9531 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**' -Dexpose.ui.hierarchy.url=true -Dplatform.experiment.ab.manual.option=control.option -Drpc.port=9532 -Dmemory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log -Didea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/opentelemetry.json -Didea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log -Dtestscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/system/s3-hangul-ibus-2.47.3-WLToolkit.text -Dtestscript.must.exist.process.with.non.success.code.on.ide.error=true } // VMOptions ]
+      On Java : [$HOME/.local/share/mise/installs/java/temurin-25.0.4+7.0.LTS]
+
+    [01:18:42]: Starting external process for `run-ide-s3-hangul-ibus-2.47.3-WLToolkit`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/ide/idea-2026.2.3/bin/idea $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/project]
+      STDOUT will be redirected to: string. STDERR will be redirected to: stdout. STDIN is empty: true
+
+    [01:18:42]:   ... started external process `run-ide-s3-hangul-ibus-2.47.3-WLToolkit` with process ID = 3094101
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - Unsubscribing CompletableDeferredImpl{Active}@3178219a for IdeLaunchEvent
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait start for IdeLaunchEvent: total=1, sequential=0, parallel=1
+    [01:18:42]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait finished for IdeLaunchEvent. Exceptions: []
+    [01:18:42]: Parent process is an IDE process itself (was launched without wrapper)
+    [01:18:42]: Creating reports dir 'monitoring-thread-dumps-ide'
+    [01:18:43]:   [ide-s3-hangul-ibus-2.47.3-WLToolkit-err] Looking for GTK3 library...
+    [01:18:43]:   [ide-s3-hangul-ibus-2.47.3-WLToolkit-err] GTK3 library loaded.
+    [01:19:42]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-1-2026-10-27-01-19-42.txt
+    [01:20:43]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-2-2026-10-27-01-20-43.txt
+    [01:21:43]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-3-2026-10-27-01-21-43.txt
+    [01:22:43]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-4-2026-10-27-01-22-43.txt
+    [01:23:44]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-5-2026-10-27-01-23-44.txt
+    [01:24:44]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-6-2026-10-27-01-24-44.txt
+    [01:25:44]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-7-2026-10-27-01-25-44.txt
+    [01:26:45]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-8-2026-10-27-01-26-45.txt
+    [01:27:45]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-9-2026-10-27-01-27-45.txt
+    [01:28:45]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-10-2026-10-27-01-28-45.txt
+    [01:29:45]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-11-2026-10-27-01-29-45.txt
+    [01:30:46]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-12-2026-10-27-01-30-46.txt
+    [01:31:46]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-13-2026-10-27-01-31-46.txt
+    [01:32:46]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-14-2026-10-27-01-32-46.txt
+    [01:33:47]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-15-2026-10-27-01-33-47.txt
+    [01:34:47]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-16-2026-10-27-01-34-47.txt
+    [01:35:47]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-17-2026-10-27-01-35-47.txt
+    [01:36:48]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-18-2026-10-27-01-36-48.txt
+    [01:37:48]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-19-2026-10-27-01-37-48.txt
+    [01:38:48]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-20-2026-10-27-01-38-48.txt
+    [01:39:48]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-21-2026-10-27-01-39-48.txt
+    [01:40:49]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-22-2026-10-27-01-40-49.txt
+    [01:41:49]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-23-2026-10-27-01-41-49.txt
+    [01:42:50]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-24-2026-10-27-01-42-50.txt
+    [01:43:50]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-25-2026-10-27-01-43-50.txt
+    [01:44:50]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-26-2026-10-27-01-44-50.txt
+    [01:45:51]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-27-2026-10-27-01-45-51.txt
+    [01:46:51]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-28-2026-10-27-01-46-51.txt
+    [01:47:51]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-29-2026-10-27-01-47-51.txt
+    [01:48:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-30-2026-10-27-01-48-52.txt
+    [01:49:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-31-2026-10-27-01-49-52.txt
+    [01:50:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-32-2026-10-27-01-50-52.txt
+    [01:51:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-33-2026-10-27-01-51-52.txt
+    [01:52:53]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-34-2026-10-27-01-52-53.txt
+    [01:53:53]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-35-2026-10-27-01-53-53.txt
+    [01:54:53]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-36-2026-10-27-01-54-53.txt
+    [01:55:54]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-37-2026-10-27-01-55-54.txt
+    [01:56:54]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-38-2026-10-27-01-56-54.txt
+    [01:57:54]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-39-2026-10-27-01-57-54.txt
+    [01:58:55]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-40-2026-10-27-01-58-55.txt
+    [01:59:55]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-41-2026-10-27-01-59-55.txt
+    [02:00:55]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-42-2026-10-27-02-00-55.txt
+    [02:01:56]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-43-2026-10-27-02-01-56.txt
+    [02:02:56]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-44-2026-10-27-02-02-56.txt
+    [02:03:56]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-45-2026-10-27-02-03-56.txt
+    [02:04:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-46-2026-10-27-02-04-57.txt
+    [02:05:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-47-2026-10-27-02-05-57.txt
+    [02:06:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-48-2026-10-27-02-06-57.txt
+    [02:07:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-49-2026-10-27-02-07-58.txt
+    [02:08:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-50-2026-10-27-02-08-58.txt
+    [02:09:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-51-2026-10-27-02-09-58.txt
+    [02:10:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-52-2026-10-27-02-10-59.txt
+    [02:11:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-53-2026-10-27-02-11-59.txt
+    [02:12:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-54-2026-10-27-02-12-59.txt
+    [02:14:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-55-2026-10-27-02-14-00.txt
+    [02:15:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-56-2026-10-27-02-15-00.txt
+    [02:16:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-57-2026-10-27-02-16-00.txt
+    [02:17:01]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-58-2026-10-27-02-17-01.txt
+    [02:18:01]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-59-2026-10-27-02-18-01.txt
+    [02:19:01]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-60-2026-10-27-02-19-01.txt
+    [02:20:02]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-61-2026-10-27-02-20-02.txt
+    [02:21:02]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-62-2026-10-27-02-21-02.txt
+    [02:22:02]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-63-2026-10-27-02-22-02.txt
+    [02:23:03]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-64-2026-10-27-02-23-03.txt
+    [02:24:03]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-65-2026-10-27-02-24-03.txt
+    [02:25:03]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-66-2026-10-27-02-25-03.txt
+    [02:26:04]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-67-2026-10-27-02-26-04.txt
+    [02:27:04]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-68-2026-10-27-02-27-04.txt
+    [02:28:04]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-69-2026-10-27-02-28-04.txt
+    [02:29:05]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-70-2026-10-27-02-29-05.txt
+    [02:30:05]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-71-2026-10-27-02-30-05.txt
+    [02:31:05]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-72-2026-10-27-02-31-05.txt
+    [02:32:06]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-73-2026-10-27-02-32-06.txt
+    [02:33:06]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-74-2026-10-27-02-33-06.txt
+    [02:34:06]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-75-2026-10-27-02-34-06.txt
+    [02:35:07]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-76-2026-10-27-02-35-07.txt
+    [02:36:07]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-77-2026-10-27-02-36-07.txt
+    [02:37:07]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-78-2026-10-27-02-37-07.txt
+    [02:38:08]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-79-2026-10-27-02-38-08.txt
+    [02:39:08]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-80-2026-10-27-02-39-08.txt
+    [02:40:08]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-81-2026-10-27-02-40-08.txt
+    [02:41:09]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-82-2026-10-27-02-41-09.txt
+    [02:42:09]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-83-2026-10-27-02-42-09.txt
+    [02:43:09]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-84-2026-10-27-02-43-09.txt
+    [02:44:10]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-85-2026-10-27-02-44-10.txt
+    [02:45:10]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-86-2026-10-27-02-45-10.txt
+    [02:46:10]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-87-2026-10-27-02-46-10.txt
+    [02:47:11]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-88-2026-10-27-02-47-11.txt
+    [02:48:11]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-89-2026-10-27-02-48-11.txt
+    [02:49:11]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-90-2026-10-27-02-49-11.txt
+    [02:50:12]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-91-2026-10-27-02-50-12.txt
+    [02:51:12]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-92-2026-10-27-02-51-12.txt
+    [02:52:12]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-93-2026-10-27-02-52-12.txt
+    [02:53:13]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-94-2026-10-27-02-53-13.txt
+    [02:54:13]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-95-2026-10-27-02-54-13.txt
+    [02:55:13]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-96-2026-10-27-02-55-13.txt
+    [02:56:14]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-97-2026-10-27-02-56-14.txt
+    [02:57:14]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-98-2026-10-27-02-57-14.txt
+    [02:58:14]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-99-2026-10-27-02-58-14.txt
+    [02:59:15]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-100-2026-10-27-02-59-15.txt
+    [03:00:15]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-101-2026-10-27-03-00-15.txt
+    [03:01:15]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-102-2026-10-27-03-01-15.txt
+    [03:02:16]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-103-2026-10-27-03-02-16.txt
+    [03:03:16]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-104-2026-10-27-03-03-16.txt
+    [03:04:16]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-105-2026-10-27-03-04-16.txt
+    [03:05:17]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-106-2026-10-27-03-05-17.txt
+    [03:06:17]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-107-2026-10-27-03-06-17.txt
+    [03:07:17]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-108-2026-10-27-03-07-17.txt
+    [03:08:18]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-109-2026-10-27-03-08-18.txt
+    [03:09:18]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-110-2026-10-27-03-09-18.txt
+    [03:10:18]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-111-2026-10-27-03-10-18.txt
+    [03:11:19]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-112-2026-10-27-03-11-19.txt
+    [03:12:19]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-113-2026-10-27-03-12-19.txt
+    [03:13:19]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-114-2026-10-27-03-13-19.txt
+    [03:14:20]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-115-2026-10-27-03-14-20.txt
+    [03:15:20]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-116-2026-10-27-03-15-20.txt
+    [03:16:20]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-117-2026-10-27-03-16-20.txt
+    [03:17:21]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-118-2026-10-27-03-17-21.txt
+    [03:18:21]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-119-2026-10-27-03-18-21.txt
+    [03:19:21]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-120-2026-10-27-03-19-21.txt
+    [03:20:22]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-121-2026-10-27-03-20-22.txt
+    [03:21:22]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-122-2026-10-27-03-21-22.txt
+    [03:22:22]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-123-2026-10-27-03-22-22.txt
+    [03:23:23]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-124-2026-10-27-03-23-23.txt
+    [03:24:23]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-125-2026-10-27-03-24-23.txt
+    [03:25:23]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-126-2026-10-27-03-25-23.txt
+    [03:26:24]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-127-2026-10-27-03-26-24.txt
+    [03:27:24]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-128-2026-10-27-03-27-24.txt
+    [03:28:24]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-129-2026-10-27-03-28-24.txt
+    [03:29:25]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-130-2026-10-27-03-29-25.txt
+    [03:30:25]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-131-2026-10-27-03-30-25.txt
+    [03:31:26]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-132-2026-10-27-03-31-26.txt
+    [03:32:26]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-133-2026-10-27-03-32-26.txt
+    [03:33:26]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-134-2026-10-27-03-33-26.txt
+    [03:34:27]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-135-2026-10-27-03-34-27.txt
+    [03:35:27]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-136-2026-10-27-03-35-27.txt
+    [03:36:27]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-137-2026-10-27-03-36-27.txt
+    [03:37:28]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-138-2026-10-27-03-37-28.txt
+    [03:38:28]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-139-2026-10-27-03-38-28.txt
+    [03:39:28]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-140-2026-10-27-03-39-28.txt
+    [03:40:29]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-141-2026-10-27-03-40-29.txt
+    [03:41:29]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-142-2026-10-27-03-41-29.txt
+    [03:42:30]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-143-2026-10-27-03-42-30.txt
+    [03:43:30]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-144-2026-10-27-03-43-30.txt
+    [03:44:30]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-145-2026-10-27-03-44-30.txt
+    [03:45:30]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-146-2026-10-27-03-45-30.txt
+    [03:46:31]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-147-2026-10-27-03-46-31.txt
+    [03:47:31]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-148-2026-10-27-03-47-31.txt
+    [03:48:31]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-149-2026-10-27-03-48-31.txt
+    [03:49:32]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-150-2026-10-27-03-49-32.txt
+    [03:50:32]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-151-2026-10-27-03-50-32.txt
+    [03:51:32]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-152-2026-10-27-03-51-32.txt
+    [03:52:33]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-153-2026-10-27-03-52-33.txt
+    [03:53:33]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-154-2026-10-27-03-53-33.txt
+    [03:54:34]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-155-2026-10-27-03-54-34.txt
+    [03:55:34]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-156-2026-10-27-03-55-34.txt
+    [03:56:34]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-157-2026-10-27-03-56-34.txt
+    [03:57:35]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-158-2026-10-27-03-57-35.txt
+    [03:58:35]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-159-2026-10-27-03-58-35.txt
+    [03:59:35]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-160-2026-10-27-03-59-35.txt
+    [04:00:36]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-161-2026-10-27-04-00-36.txt
+    [04:01:36]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-162-2026-10-27-04-01-36.txt
+    [04:02:37]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-163-2026-10-27-04-02-37.txt
+    [04:03:37]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-164-2026-10-27-04-03-37.txt
+    [04:04:37]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-165-2026-10-27-04-04-37.txt
+    [04:05:38]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-166-2026-10-27-04-05-38.txt
+    [04:06:38]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-167-2026-10-27-04-06-38.txt
+    [04:07:38]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-168-2026-10-27-04-07-38.txt
+    [04:08:39]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-169-2026-10-27-04-08-39.txt
+    [04:09:39]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-170-2026-10-27-04-09-39.txt
+    [04:10:39]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-171-2026-10-27-04-10-39.txt
+    [04:11:40]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-172-2026-10-27-04-11-40.txt
+    [04:12:40]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-173-2026-10-27-04-12-40.txt
+    [04:13:40]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-174-2026-10-27-04-13-40.txt
+    [04:14:41]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-175-2026-10-27-04-14-41.txt
+    [04:15:41]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-176-2026-10-27-04-15-41.txt
+    [04:16:42]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-hangul-ibus-2.47.3-WLToolkit/log/monitoring-thread-dumps-ide/threadDump-177-2026-10-27-04-16-42.txt
+    [04:16:51]:    ... process `run-ide-s3-hangul-ibus-2.47.3-WLToolkit` (pid=3094101) exited on its own with code 0 before the 43200s timeout. 
+    [04:16:51]:  ... cancelling and waiting for process `"On process run-ide-s3-hangul-ibus-2.47.3-WLToolkit created job#11":StandaloneCoroutine{Active}@50810be0` job ... 
+    [04:16:51]:   ... successfully finished external process for `run-ide-s3-hangul-ibus-2.47.3-WLToolkit` with exit code 0
+    [04:16:51]: IDE run s3-hangul-ibus-2.47.3-WLToolkit completed in 2h 58m 8.257906242s
+    [04:16:51]: Run VM options validation
+    [04:16:51]: Finished VM options validation
+    ##teamcity[testMetadata type='link' name='Link to Logs and artifacts' value='null']
+
+S3UiTest > run() STANDARD_ERROR
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 4:16:51 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [04:16:51]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [04:16:51]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [04:16:51]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [04:16:51]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+
+S3UiTest > run() STANDARD_OUT
+    [04:16:51]: Successfully finished publishArtifacts run for s3-hangul-ibus-2.47.3-WLToolkit
+    [04:16:51]: IDEStartResult(runContext=IDERunContext(testContext=com.intellij.ide.starter.ide.IDETestContext@48a0c8aa, commandLine=fun openTestCaseProject(com.intellij.ide.starter.runner.IDERunContext): com.intellij.ide.starter.runner.IDECommandLine, commands=com.intellij.tools.ide.performanceTesting.commands.CommandChain@2cb3a9be, runTimeout=12h, useStartupScript=true, verboseOutput=false, launchName=, expectedKill=false, expectedExitCode=0, analyzeProcessExit=true, collectNativeThreads=false, stdOut=null), executionTime=2h 58m 8.257906242s, exitCode=0, vmOptionsDiff=VMOptionsDiff(newLines=[], missingLines=[]), failureError=null, frontendStartResult=null)
+    [04:16:51]: IDERunContext(testContext=com.intellij.ide.starter.ide.IDETestContext@48a0c8aa, commandLine=fun openTestCaseProject(com.intellij.ide.starter.runner.IDERunContext): com.intellij.ide.starter.runner.IDECommandLine, commands=com.intellij.tools.ide.performanceTesting.commands.CommandChain@2cb3a9be, runTimeout=12h, useStartupScript=true, verboseOutput=false, launchName=, expectedKill=false, expectedExitCode=0, analyzeProcessExit=true, collectNativeThreads=false, stdOut=null)
+
+S3UiTest > run() PASSED
+
+Gradle Test Executor 1 STANDARD_OUT
+    [04:16:51]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+
+[04:16:51]: Canceling suite supervisor scopes: Shutdown is in progress: either SIGTERM or SIGKILL is caught
+
+[Incubating] Problems report is available at: file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.47.3-g9531/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2h 58m 16s
+14 actionable tasks: 2 executed, 12 up-to-date
