@@ -21,9 +21,11 @@
 // A window is `valid` when every check passes. An invalid window is `rerunnable` only when its
 // reasons are another sandbox of the harness on cores that overlap S2_CPUS (sampled at the start,
 // after every loop or every 30 s, and at the end) or load from elsewhere on the cores of at least
-// 50% of one core; an error record is rerunnable only in the phase `boot` (before the extension
-// host was up). Every other failure (the input check, an adapter check, the typing evidence, the
-// polling, an error from the host's start on) counts against the row in cpu-summary.mjs, and
+// 50% of one core; an error record is rerunnable only in the phase `boot` (before the probe's first
+// hello) and only with the adapter off: with the adapter on, the adapter is loaded before that hello
+// (both activate on onStartupFinished), so an on-arm boot error counts against the row. Every other
+// failure (the input check, an adapter check, the typing evidence, the polling, an error after the
+// probe's hello) counts against the row in cpu-summary.mjs, and
 // spike/s2/batch/cpu.sh does not run such a window again. The record carries the build (lib.mjs
 // buildInfo), the probe's hello and CLK_TCK as read at run time.
 import { execFileSync } from "node:child_process";
@@ -347,7 +349,7 @@ try {
     build,
     phase,
     valid: false,
-    rerunnable: phase === "boot",
+    rerunnable: phase === "boot" && arm === "off",
     error: String(e.stack ?? e)
       .split("\n")
       .slice(0, 3)

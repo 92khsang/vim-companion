@@ -2,11 +2,11 @@
 # The (a) polling CPU row of issue #11: per version, the idle and the typing scenario, 3 valid
 # windows of 10 minutes with the adapter on and 3 with it off (in the order off, on, off, on, off,
 # on), each in its own sandbox session (cpu.mjs), then cpu-summary.mjs. A window that failed only
-# for a rerunnable reason (cpu.mjs `rerunnable`: another sandbox on the cores, load from elsewhere
-# on them, or an error before the extension host was up) is run again, at most 6 extra times per
+# for a rerunnable reason (another sandbox on the cores, load from elsewhere on them, or an error
+# before the probe's first hello with the adapter off) is run again, at most 6 extra times per
 # scenario and arm. Any other failure (an adapter check, the polling, the typing evidence, the
-# input check, an error from the host's start on) fails the row: the batch stops that version and
-# the summary lists it. Resumable: a window that already has a valid record is not run again.
+# input check, an error after the probe's hello, any error with the adapter on) fails the row: the
+# batch stops that version and the summary lists it. Resumable: a window that already has a valid record is not run again.
 # The batch takes the core locks of S2_CPUS exclusively: no other batch can start on those cores
 # while it runs, and it does not start while another batch holds one of them.
 # Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/cpu.sh
@@ -22,7 +22,9 @@ windows() { # <file> <scenario|any> <arm|any> <valid|all|fatal>
     const [f, s, a, which] = process.argv.slice(1);
     const rs = fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse) : [];
     const pick = { valid: (r) => r.valid === true, all: () => true,
-      fatal: (r) => r.valid !== true && r.rerunnable !== true }[which];
+      // The summary's rule: an error may be rerun only before the probe's hello with the adapter
+      // off; an invalid window only when cpu.mjs marked it rerunnable.
+      fatal: (r) => r.error ? !(r.phase === "boot" && r.arm === "off") : r.valid !== true && r.rerunnable !== true }[which];
     console.log(rs.filter((r) => (s === "any" || r.scenario === s) && (a === "any" || r.arm === a) && pick(r)).length);
   ' "$@"
 }

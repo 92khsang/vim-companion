@@ -3,16 +3,19 @@
 // time on) minus the mean of (CPU time off / wall time off) must be below 1% of one core, for every
 // on window. The row needs, per version (1.134.0 and 1.141.0, both, as the issue states them):
 // - exactly 3 valid 10-minute windows per arm and scenario (cpu.mjs `valid`);
-// - no window that failed for a reason other than a rerunnable one (cpu.mjs `rerunnable`: another
-//   sandbox on the cores, load from elsewhere on them, or an error before the extension host was
-//   up): an adapter check, the polling, the typing evidence, the input check or an error from the
-//   host's start on fails the row, on either arm;
+// - no window that failed for a reason other than a rerunnable one: another sandbox on the cores or
+//   load from elsewhere on them (cpu.mjs `rerunnable`), or an error before the probe's first hello
+//   with the adapter off (the summary decides this from the record's phase and arm, not from the
+//   record's flag); an adapter check, the polling, the typing evidence, the input check, an error
+//   after the probe's hello, or any error with the adapter on (the adapter is loaded before that
+//   hello) fails the row;
 // - VS Code of the version label in every window (hello.vscode) and one VSCodeVim and one which-key
-//   version over the version's windows;
+//   version over the version's windows, none of them missing;
 // - one build without uncommitted changes over all records.
-// The ROW line lists every window that was not counted, per arm, with its reason, and the maximum
-// over the counted windows of each arm of the load from elsewhere on the cores, of the busy share
-// of a Hyper-Threading pair, and of the busy share of the pairs' cores outside S2_CPUS.
+// The ROW line lists every window that was not counted, per arm, with its reason, and, per arm over
+// the counted windows of both scenarios, the maximum of the load from elsewhere on the cores, of
+// the busy share of a Hyper-Threading pair, and of the busy share of the pairs' cores outside
+// S2_CPUS.
 // Usage: node spike/s2/batch/cpu-summary.mjs <cpu-<version>.jsonl>...
 import { readFileSync } from "node:fs";
 
@@ -23,7 +26,8 @@ const recs = process.argv
     readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse),
   );
 const frac = (r) => r.cpuMs / r.wallMs;
-const pct = (x) => `${(x * 100).toFixed(3)}%`;
+const pct = (x) => (Number.isFinite(x) ? `${(x * 100).toFixed(3)}%` : "-");
+const max = (xs) => (xs.length ? Math.max(...xs) : NaN);
 const builds = [...new Set(recs.map((r) => r.build?.id ?? "none"))];
 const dirty = recs.filter((r) => !r.build || r.build.dirty?.length);
 console.log(
@@ -35,8 +39,20 @@ console.log(
 const why = (r) =>
   r.error
     ? `error in the phase ${r.phase ?? "unknown"}: ${r.error}`
-    : (r.invalid ?? ["no validity record"]).join("; ");
-const max = (xs) => (xs.length ? Math.max(...xs) : NaN);
+    : r.valid === true
+      ? `window of ${r.minutes} min (${r.wallMs} ms)`
+      : (r.invalid ?? ["no validity record"]).join("; ");
+// Whether a record that was not counted may be run again; anything else fails the row.
+const rerunnable = (r) =>
+  r.error
+    ? r.phase === "boot" && r.arm === "off"
+    : r.valid !== true && r.rerunnable === true;
+const isCounted = (r) =>
+  r.valid === true && r.minutes === 10 && r.wallMs >= 600000;
+const loads = (ws) =>
+  `outside load max ${pct(max(ws.map((r) => r.cores.foreignShare)))}, ` +
+  `HT pair busy max ${pct(max(ws.flatMap((r) => r.cores.pairs.map((p) => p.busyShare))))}, ` +
+  `pair cores outside the set max ${pct(max(ws.map((r) => r.cores.siblingsOutside.busyShare)))}`;
 let allPass = builds.length === 1 && dirty.length === 0;
 for (const version of VERSIONS) {
   const vRecs = recs.filter((r) => r.version === version);
@@ -49,56 +65,48 @@ for (const version of VERSIONS) {
   const wks = [
     ...new Set(withHello.map((r) => r.hello.whichkey?.version ?? "none")),
   ];
-  if (wrongCode.length || vims.length !== 1 || wks.length !== 1) pass = false;
+  if (
+    wrongCode.length ||
+    vims.length !== 1 ||
+    wks.length !== 1 ||
+    vims[0] === "none" ||
+    wks[0] === "none"
+  )
+    pass = false;
   const notes = [];
   for (const scenario of ["idle", "typing"]) {
     const sel = (arm, f) =>
       vRecs.filter((r) => r.scenario === scenario && r.arm === arm && f(r));
-    const counted = (arm) =>
-      sel(
-        arm,
-        (r) => r.valid === true && r.minutes === 10 && r.wallMs >= 600000,
-      );
-    const offW = counted("off");
-    const onW = counted("on");
-    const dropped = (arm) =>
-      sel(arm, (r) => r.valid !== true && r.rerunnable === true);
-    const fatal = (arm) =>
-      sel(
-        arm,
-        (r) =>
-          (r.valid !== true && r.rerunnable !== true) ||
-          (r.valid === true && !(r.minutes === 10 && r.wallMs >= 600000)),
-      );
+    const offW = sel("off", isCounted);
+    const onW = sel("on", isCounted);
     if (offW.length !== 3 || onW.length !== 3) pass = false;
-    if (fatal("off").length || fatal("on").length) pass = false;
+    for (const arm of ["off", "on"]) {
+      for (const r of sel(arm, (x) => !isCounted(x) && rerunnable(x)))
+        notes.push(`${scenario} ${arm} dropped (rerun): ${why(r)}`);
+      for (const r of sel(arm, (x) => !isCounted(x) && !rerunnable(x))) {
+        notes.push(`${scenario} ${arm} FAILED: ${why(r)}`);
+        pass = false;
+      }
+    }
     const meanOff = offW.length
       ? offW.reduce((s, r) => s + frac(r), 0) / offW.length
       : NaN;
     const diffs = onW.map((r) => frac(r) - meanOff);
     if (!(diffs.length === 3 && diffs.every((d) => d < 0.01))) pass = false;
-    const loads = (ws) =>
-      `outside load max ${pct(max(ws.map((r) => r.cores.foreignShare)))}, ` +
-      `HT pair busy max ${pct(max(ws.flatMap((r) => r.cores.pairs.map((p) => p.busyShare))))}, ` +
-      `pair cores outside the set max ${pct(max(ws.map((r) => r.cores.siblingsOutside.busyShare)))}`;
     console.log(
       `${version} ${scenario}: off windows ${offW.length} (${offW.map((r) => pct(frac(r))).join(", ")}; mean ${pct(meanOff)}), ` +
         `on windows ${onW.length} (${onW.map((r) => pct(frac(r))).join(", ")}); ` +
-        `on minus mean off: ${diffs.map(pct).join(", ")} (threshold 1.000% of one core); ` +
-        `off: ${offW.length ? loads(offW) : "-"}; on: ${onW.length ? loads(onW) : "-"}`,
+        `on minus mean off: ${diffs.map(pct).join(", ")} (threshold 1.000% of one core)`,
     );
-    for (const arm of ["off", "on"]) {
-      for (const r of dropped(arm))
-        notes.push(`${scenario} ${arm} dropped (rerun): ${why(r)}`);
-      for (const r of fatal(arm))
-        notes.push(
-          `${scenario} ${arm} FAILED: ${r.valid === true ? `window of ${r.minutes} min (${r.wallMs} ms)` : why(r)}`,
-        );
-    }
   }
+  const perArm = (arm) => {
+    const ws = vRecs.filter((r) => r.arm === arm && isCounted(r));
+    return ws.length ? loads(ws) : "no counted windows";
+  };
   console.log(
     `ROW (a) polling CPU ${version}: VS Code ${[...new Set(withHello.map((r) => r.hello.vscode))].join("+") || "none"}${wrongCode.length ? ` (${wrongCode.length} windows not ${version})` : ""}, ` +
-      `VSCodeVim ${vims.join("+")}, which-key ${wks.join("+")}, build ${builds.join("+")}${dirty.length ? " (not clean)" : ""}; ` +
+      `VSCodeVim ${vims.join("+") || "none"}, which-key ${wks.join("+") || "none"}, build ${builds.join("+")}${dirty.length ? " (not clean)" : ""}; ` +
+      `off: ${perArm("off")}; on: ${perArm("on")}; ` +
       `windows not counted: ${notes.length ? notes.join(" | ") : "none"}: ${pass ? "pass" : "not pass"}`,
   );
   allPass &&= pass;
