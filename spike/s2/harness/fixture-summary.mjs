@@ -4,9 +4,25 @@
 // trial the reported mode, pending keys, operator, count and register equal the case's expected
 // state (the VSCodeVim value where the case records a documented deviation), at every delay and
 // after vim.timeout for the cases that wait for it; a reset failure or an error is a trial that
-// did not run, so the row then does not pass.
+// did not run, so the row then does not pass. The row also needs every case of spec/fixtures/grammar
+// in the reads of every version, an end record in every file (a run that stopped early is not a
+// row run), no S2_CASES selection, and one build over all files (lib.mjs buildInfo; files without
+// a build count as the build "none").
 // Usage: node spike/s2/harness/fixture-summary.mjs <run.jsonl>...
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { REPO } from "./lib.mjs";
+
+const fixtureDir = join(REPO, "spec/fixtures/grammar");
+const fixtureCases = readdirSync(fixtureDir)
+  .filter((n) => n.endsWith(".json"))
+  .flatMap((n) =>
+    JSON.parse(readFileSync(join(fixtureDir, n), "utf8")).cases.map(
+      (c) => `${n.replace(".json", "")}/${c.id}`,
+    ),
+  );
+const casesByVersion = new Map();
+const files = [];
 
 const groups = new Map();
 const metas = [];
@@ -14,8 +30,20 @@ let resets = 0;
 let errors = [];
 let meta = [];
 for (const file of process.argv.slice(2)) {
+  const f = { file, meta: 0, end: 0, version: null };
+  files.push(f);
   for (const line of readFileSync(file, "utf8").split("\n").filter(Boolean)) {
     const r = JSON.parse(line);
+    if (r.type === "meta") {
+      f.meta += 1;
+      f.version = r.version;
+    }
+    if (r.type === "end") f.end += 1;
+    if (r.type === "read") {
+      const set = casesByVersion.get(f.version) ?? new Set();
+      set.add(r.case);
+      casesByVersion.set(f.version, set);
+    }
     if (r.type === "meta") metas.push(r);
     if (r.type === "meta")
       meta.push(
@@ -72,16 +100,33 @@ const mismatched = [...groups.values()].filter(
 const label = [
   ...new Set(metas.map((m) => `${m.version} ${m.source} ${m.steps}`)),
 ].join(", ");
+const missing = [...casesByVersion.entries()].flatMap(([v, set]) =>
+  fixtureCases.filter((c) => !set.has(c)).map((c) => `${v} ${c}`),
+);
+const unfinished = files.filter((f) => f.meta !== 1 || f.end !== 1);
+const selectedRuns = metas.filter((m) => m.only);
+const builds = [...new Set(metas.map((m) => m.build?.id ?? "none"))];
 const rowPass =
   metas.length > 0 &&
   groups.size > 0 &&
   short === 0 &&
   mismatched === 0 &&
   resets === 0 &&
-  errors.length === 0;
+  errors.length === 0 &&
+  missing.length === 0 &&
+  unfinished.length === 0 &&
+  selectedRuns.length === 0 &&
+  builds.length === 1;
+if (missing.length)
+  console.log(`cases missing (version case): ${missing.join(", ")}`);
+for (const f of unfinished)
+  console.log(
+    `file without exactly one meta and one end record: ${f.file} (meta ${f.meta}, end ${f.end})`,
+  );
 console.log(
-  `ROW (a) grammar fixture (${label}): ${cases.size} cases, ${groups.size} read points, ` +
+  `ROW (a) grammar fixture (${label}): ${cases.size} of ${fixtureCases.length} cases, ${groups.size} read points, ` +
     `${total} reads (want ${want} per read point; ${short} read points short), ` +
-    `${mismatched} read points with a mismatch, reset failures ${resets}, errors ${errors.length}: ` +
+    `${mismatched} read points with a mismatch, reset failures ${resets}, errors ${errors.length}, ` +
+    `missing cases ${missing.length}, unfinished files ${unfinished.length}, S2_CASES runs ${selectedRuns.length}, build ${builds.join("+")}: ` +
     `${rowPass ? "pass" : "not pass"}`,
 );
