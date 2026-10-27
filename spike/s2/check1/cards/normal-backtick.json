@@ -8,9 +8,16 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: mark or jump; `` reads the mark or jump",
-      "label": "TODO",
+      "label": "Jump back to the position before the latest jump",
       "labelIndex": "index.txt L390 |``|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["g", "g"],
+      "basis": "Vim motion.txt *``*: the setup gg is a jump from (1,13), so `` returns there"
     },
     {
       "key": "{<register>}",

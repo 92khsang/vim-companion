@@ -7,8 +7,8 @@
       "key": "\n",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": {
@@ -23,8 +23,8 @@
       "key": " ",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the right",
-      "labelFrom": "index",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -38,10 +38,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase search backward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Uppercase back to the previous match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"Two\", [three]) { four(five) }"
@@ -60,8 +59,8 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Uppercase to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": {
@@ -75,10 +74,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
-      "labelFrom": "index",
+      "label": "Uppercase to the match of the next bracket on the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L259 |%|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"tWO\", [THREE]) { four(five) }"
@@ -91,8 +89,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR on the line with mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Uppercase to the line of a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L265 |'|",
       "expect": {
         "text": "unchanged",
@@ -104,8 +102,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N sentences backward",
-      "labelFrom": "index",
+      "label": "Uppercase one sentence backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L289 |(|",
       "expect": {
         "text": {
@@ -120,8 +118,8 @@
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N sentences forward",
-      "labelFrom": "index",
+      "label": "Uppercase one sentence forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L290 |)|",
       "expect": {
         "text": {
@@ -137,10 +135,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase search forward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Uppercase to the next match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"Two\", [three]) { four(five) }"
@@ -159,8 +156,8 @@
       "key": "+",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": {
@@ -176,16 +173,25 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Uppercase back to the last f, t, F or T in the opposite direction",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (onE, \"TWO\", [THRee]) { four(five) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); from (1,22) , is F e (exclusive): columns 8-21"
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR N lines higher",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L297 |-|",
       "expect": {
         "text": {
@@ -201,15 +207,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase to a search match forward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
     },
     {
       "key": "0",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first char of the line",
-      "labelFrom": "index",
+      "label": "Uppercase to the first character of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "expect": {
         "text": {
@@ -224,16 +236,25 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Uppercase to the next repeat of the last f, t, F or T",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [thrEE]) { four(five) }"
+        },
+        "cursor": [1, 22],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,22); ; is f e, inclusive"
     },
     {
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the left",
-      "labelFrom": "index",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -248,15 +269,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase the character to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); gU{motion} change.txt *gU*"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to line N, default last line",
-      "labelFrom": "index",
+      "label": "Uppercase to the end of the buffer",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": {
@@ -272,8 +301,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to line N, default first line",
-      "labelFrom": "index",
+      "label": "Uppercase the lines to the first line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": {
@@ -288,8 +317,8 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines downward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": {
@@ -304,8 +333,8 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N words backward",
-      "labelFrom": "index",
+      "label": "Uppercase one word backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": {
@@ -319,8 +348,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": {
@@ -335,8 +364,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines downward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": {
@@ -351,8 +380,8 @@
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines upward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": {
@@ -367,8 +396,8 @@
       "key": "<C-right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N words forward",
-      "labelFrom": "index",
+      "label": "Uppercase one word forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": {
@@ -383,23 +412,39 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase to the first character of the line",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1026-L1040: <D-left> is MoveLineBegin with 0 and <Home> (only without a count); the motion is Vim's 0 (motion.txt *0*); change.txt *gU*"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1013-L1024: <D-right> is MoveLineEnd with $ and <End>; the motion is Vim's $ (motion.txt *$*); change.txt *gU*"
     },
     {
       "key": "<End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Uppercase to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": {
@@ -413,8 +458,8 @@
       "key": "<Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first char of the line",
-      "labelFrom": "index",
+      "label": "Uppercase to the first character of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "expect": {
         "text": {
@@ -429,15 +474,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase the character to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); gU{motion} change.txt *gU*"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines downward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": {
@@ -452,8 +505,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the left",
-      "labelFrom": "index",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -467,8 +520,8 @@
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the right",
-      "labelFrom": "index",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -482,8 +535,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines upward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": {
@@ -499,15 +552,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase to a search match backward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
     },
     {
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N WORDS backward",
-      "labelFrom": "index",
+      "label": "Uppercase one WORD backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L334 |B|",
       "expect": {
         "text": {
@@ -521,8 +580,8 @@
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase forward to the end of WORD N",
-      "labelFrom": "index",
+      "label": "Uppercase to the end of the WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L341 |E|",
       "expect": {
         "text": {
@@ -536,8 +595,8 @@
       "key": "F",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Uppercase to the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L342 |F|",
       "expect": {
         "text": "unchanged",
@@ -549,8 +608,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to line N, default last line",
-      "labelFrom": "index",
+      "label": "Uppercase the lines to the last line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": {
@@ -566,8 +625,8 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to line N from top of screen",
-      "labelFrom": "index",
+      "label": "Uppercase the lines to the first line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "expect": {
         "text": {
@@ -582,8 +641,8 @@
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to line N from bottom of screen",
-      "labelFrom": "index",
+      "label": "Uppercase the lines to the last line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "expect": {
         "text": {
@@ -599,8 +658,8 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to middle line of screen",
-      "labelFrom": "index",
+      "label": "Uppercase the lines to the middle line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
         "text": {
@@ -615,16 +674,33 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Uppercase back to the previous match of the last search",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "0": "alpha bETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON Zeta eta theta"
+        },
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; N goes back to (0,7), exclusive of (2,9): charwise from (0,7) to (2,8)"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase till after Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Uppercase to just after the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L365 |T|",
       "expect": {
         "text": "unchanged",
@@ -637,15 +713,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: undo history; U reads the undo history",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Uppercase the line",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim change.txt *gUU* (gUgU): the line is uppercased and the cursor goes to the first non-blank, as the g~ card's ~ row (Vim 9.1) shows for g~~; the work list's state reason (undo) does not apply after gU"
     },
     {
       "key": "W",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N WORDS forward",
-      "labelFrom": "index",
+      "label": "Uppercase one WORD forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L369 |W|",
       "expect": {
         "text": {
@@ -663,8 +747,19 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak backward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L74-L90: after an operator, Z starts SneakBackward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "[",
@@ -694,8 +789,8 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR of the line",
-      "labelFrom": "index",
+      "label": "Uppercase to the first non-blank of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L379 |^|",
       "expect": {
         "text": {
@@ -709,8 +804,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the first CHAR N - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Uppercase the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "expect": {
         "text": {
@@ -724,8 +819,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to the mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Uppercase to a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L381 |`|",
       "expect": {
         "text": "unchanged",
@@ -749,8 +844,8 @@
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N words backward",
-      "labelFrom": "index",
+      "label": "Uppercase one word backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": {
@@ -764,8 +859,8 @@
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase forward to the end of word N",
-      "labelFrom": "index",
+      "label": "Uppercase to the end of the word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L403 |e|",
       "expect": {
         "text": {
@@ -779,8 +874,8 @@
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Uppercase to the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L404 |f|",
       "expect": {
         "text": "unchanged",
@@ -804,8 +899,8 @@
       "key": "h",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the left",
-      "labelFrom": "index",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -819,8 +914,8 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Uppercase an inner text object: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -831,8 +926,8 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines downward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": {
@@ -847,8 +942,8 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N lines upward",
-      "labelFrom": "index",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": {
@@ -863,8 +958,8 @@
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N chars to the right",
-      "labelFrom": "index",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -879,16 +974,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Uppercase to the next match of the last search",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "2": "epsilon zETA eta theta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; n is exclusive: columns 9-12 of line 2"
     },
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase till before Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Uppercase to just before the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L427 |t|",
       "expect": {
         "text": "unchanged",
@@ -900,8 +1010,8 @@
       "key": "w",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N words forward",
-      "labelFrom": "index",
+      "label": "Uppercase one word forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": {
@@ -919,15 +1029,26 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak forward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L7-L23: after an operator, z starts SneakForward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N paragraphs backward",
-      "labelFrom": "index",
+      "label": "Uppercase one paragraph backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L437 |{|",
       "expect": {
         "text": {
@@ -944,19 +1065,30 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Wait after the leader for a camelCaseMotion motion",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim's leader is \\ (package.json vim.leader default); camelCaseMotion's <leader>w/b/e need vim.camelCaseMotion.enable (src/actions/plugins/camelCaseMotion.ts L11-L18), easymotion's <leader><leader> actions do not check vim.easymotion in couldActionApply (src/actions/plugins/easymotion/easymotion.cmd.ts L74-L77 checks it only in exec), so the leader waits in both sets",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "{<number>}",
       "sets": ["defaults", "extensions"],
       "sample": "3",
       "source": "vim-oracle",
-      "label": "Start a count",
-      "labelFrom": "index",
+      "label": "Start a count for the motion",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -967,8 +1099,8 @@
       "key": "|",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase to column N",
-      "labelFrom": "index",
+      "label": "Uppercase to column 1",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L438 |bar|",
       "expect": {
         "text": {
@@ -982,8 +1114,8 @@
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Uppercase N paragraphs forward",
-      "labelFrom": "index",
+      "label": "Uppercase one paragraph forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L439 |}|",
       "expect": {
         "text": {

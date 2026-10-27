@@ -7,8 +7,8 @@
       "key": "\"",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a double quoted string",
-      "labelFrom": "index",
+      "label": "Select the double-quoted string and its trailing or leading white space",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L958 |v_aquote|",
       "expect": {
         "text": "unchanged",
@@ -23,8 +23,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a single quoted string",
-      "labelFrom": "index",
+      "label": "Select the single-quoted string and its trailing or leading white space",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L960 |v_a'|",
       "expect": {
         "text": "unchanged",
@@ -39,8 +39,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a () block",
-      "labelFrom": "index",
+      "label": "Select the () block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L972 |v_ab|",
       "expect": {
         "text": "unchanged",
@@ -55,8 +55,8 @@
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a () block",
-      "labelFrom": "index",
+      "label": "Select the () block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L972 |v_ab|",
       "expect": {
         "text": "unchanged",
@@ -71,8 +71,8 @@
       "key": "<",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a <> block",
-      "labelFrom": "index",
+      "label": "Select the <> block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L964 |v_a<|",
       "expect": {
         "text": "unchanged",
@@ -87,8 +87,8 @@
       "key": ">",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a <> block",
-      "labelFrom": "index",
+      "label": "Select the <> block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L964 |v_a<|",
       "expect": {
         "text": "unchanged",
@@ -103,8 +103,8 @@
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a {} block",
-      "labelFrom": "index",
+      "label": "Select the {} block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L966 |v_aB|",
       "expect": {
         "text": "unchanged",
@@ -120,15 +120,24 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the lines of the cursor's indentation level and the lines above and below",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 22],
+          "visualStart": [0, 0]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L596-L662 and L722-L728 (aI): lines 0-2; in Visual mode the stop is the end of line 2"
     },
     {
       "key": "W",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with \"a WORD\"",
-      "labelFrom": "index",
+      "label": "Select a WORD and its white space",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L967 |v_aW|",
       "expect": {
         "text": "unchanged",
@@ -143,8 +152,8 @@
       "key": "[",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a [] block",
-      "labelFrom": "index",
+      "label": "Select the [] block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L968 |v_a[|",
       "expect": {
         "text": "unchanged",
@@ -159,8 +168,8 @@
       "key": "]",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a [] block",
-      "labelFrom": "index",
+      "label": "Select the [] block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L968 |v_a[|",
       "expect": {
         "text": "unchanged",
@@ -175,8 +184,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a backtick quoted string",
-      "labelFrom": "index",
+      "label": "Select the backtick string and its trailing or leading white space",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L970 |v_a`|",
       "expect": {
         "text": "unchanged",
@@ -192,15 +201,24 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the argument and its leading separator",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 9]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L745-L860 (SelectArgument, around): boundaries , at (1,9) and , at (1,16); not the first argument, so (1,9)-(1,15)"
     },
     {
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a () block",
-      "labelFrom": "index",
+      "label": "Select the () block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L972 |v_ab|",
       "expect": {
         "text": "unchanged",
@@ -216,47 +234,89 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the entire buffer",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L563-L570 (SelectEntire): (0,0) to the document end; VS Code's buffer ends with an empty fifth line, so the active end is (4,0)"
     },
     {
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the smallest block around the cursor (expanding)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 10]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L177-L260 (SelectAnExpandingBlock): the smallest of the around-quote and bracket objects that contains the cursor is a\" (1,10)-(1,15); ( ) is larger"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the lines of the cursor's indentation level and the line above",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [0, 0]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L596-L662 and L716-L720 (ai): line 1 is the indent block, plus line 0; in Visual mode the stop is the end of line 1"
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the last-object prefix (targets)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/plugins/targets/smartQuotes.ts L25-L152 (al' al\" al` alq) and lastNextObjects.ts: couldActionApply does not check vim.targets.enable, so al waits in both sets (as the pilot's dil row)"
     },
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the next-object prefix (targets)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/plugins/targets/smartQuotes.ts L9-L136 (an' an\" an` anq) and lastNextObjects.ts: an waits in both sets (as the pilot's din row)"
     },
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a paragraph",
-      "labelFrom": "index",
+      "label": "Select a paragraph",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L973 |v_ap|",
       "expect": {
         "text": "unchanged",
@@ -272,15 +332,24 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the nearest quotes and their trailing or leading white space",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 10]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L2090-L2153 (MoveQuoteMatch, aq: any quote with targets, \" without): \"two\" at columns 11-15, no white space after it, so the white space before it (column 10) is included; the selection (1,10)-(1,15)"
     },
     {
       "key": "s",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a sentence",
-      "labelFrom": "index",
+      "label": "Select a sentence",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L974 |v_as|",
       "expect": {
         "text": "unchanged",
@@ -295,8 +364,8 @@
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a tag block",
-      "labelFrom": "index",
+      "label": "Select a tag block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L975 |v_at|",
       "expect": {
         "text": "unchanged",
@@ -311,8 +380,8 @@
       "key": "w",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with \"a word\"",
-      "labelFrom": "index",
+      "label": "Select a word and its white space",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L976 |v_aw|",
       "expect": {
         "text": "unchanged",
@@ -327,8 +396,8 @@
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a {} block",
-      "labelFrom": "index",
+      "label": "Select the {} block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L966 |v_aB|",
       "expect": {
         "text": "unchanged",
@@ -343,8 +412,8 @@
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Extend highlighted area with a {} block",
-      "labelFrom": "index",
+      "label": "Select the {} block",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L966 |v_aB|",
       "expect": {
         "text": "unchanged",

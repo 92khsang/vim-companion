@@ -7,8 +7,8 @@
       "key": "\n",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -39,8 +39,8 @@
       "key": " ",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the right",
-      "labelFrom": "index",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -64,10 +64,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete search backward for the 3rd occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Delete back to the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -99,8 +98,8 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the end of 3rd next line",
-      "labelFrom": "index",
+      "label": "Delete to the end of the line 2 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
@@ -131,10 +130,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete go to 3 percentage in the file",
-      "labelFrom": "index",
+      "label": "Delete the lines to 3% of the file",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L263 |N%|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
         "cursor": [0, 0],
@@ -162,8 +160,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR on the line with mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Delete to the line of a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L265 |'|",
       "expect": {
         "text": "unchanged",
@@ -201,10 +199,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete search forward for the 3rd occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Delete to the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -236,8 +233,8 @@
       "key": "+",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -269,16 +266,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Delete back to the 3rd repeat of the last f, t, F or T in the opposite direction",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(fiv"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(fiv"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["0", "f", "e", ";", ";", ";"],
+      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,37); 3, (F e, exclusive) reaches (1,8): columns 8-36"
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 3 lines higher",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L297 |-|",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -308,24 +324,49 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a search match forward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Delete to the 3rd repeat of the last f, t, F or T",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (on) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(five"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(five"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["0", "f", "e"],
+      "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup 0fe leaves the cursor at (1,8); 3; reaches (1,37), inclusive"
     },
     {
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -350,15 +391,33 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete 3 characters to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); change.txt *d*, *quote_-*"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 3, default last line",
-      "labelFrom": "index",
+      "label": "Delete to the end of line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": [
@@ -385,8 +444,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 3, default first line",
-      "labelFrom": "index",
+      "label": "Delete the lines to line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
@@ -415,8 +474,8 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines downward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -472,8 +531,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -504,8 +563,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines downward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -536,8 +595,8 @@
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines upward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -592,15 +651,40 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to the end of the line 2 lines down",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1013-L1024: <D-right> is MoveLineEnd with $ and <End>; the motion is Vim's $ (motion.txt *$*); d3$ deletes to the end of line 3, a multi-line delete goes to register 1 (change.txt *quote_number*)"
     },
     {
       "key": "<End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the end of 3rd next line",
-      "labelFrom": "index",
+      "label": "Delete to the end of the line 2 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
@@ -632,15 +716,33 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete 3 characters to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); change.txt *d*, *quote_-*"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines downward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -671,8 +773,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -696,8 +798,8 @@
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the right",
-      "labelFrom": "index",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -721,8 +823,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines upward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -752,8 +854,14 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete to a search match backward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
     },
     {
       "key": "B",
@@ -784,8 +892,8 @@
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete forward to the end of WORD 3",
-      "labelFrom": "index",
+      "label": "Delete to the end of the 3rd WORD forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L341 |E|",
       "expect": {
         "text": {
@@ -809,8 +917,8 @@
       "key": "F",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the 3rd occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Delete to the 3rd previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L342 |F|",
       "expect": {
         "text": "unchanged",
@@ -822,8 +930,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 3, default last line",
-      "labelFrom": "index",
+      "label": "Delete the lines to line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
@@ -852,8 +960,8 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 3 from top of screen",
-      "labelFrom": "index",
+      "label": "Delete the lines to the 3rd line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "expect": {
         "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
@@ -882,8 +990,8 @@
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to line 3 from bottom of screen",
-      "labelFrom": "index",
+      "label": "Delete the lines to the 3rd line from the bottom of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "expect": {
         "text": [
@@ -910,8 +1018,8 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to middle line of screen",
-      "labelFrom": "index",
+      "label": "Delete the lines to the middle line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
         "text": [
@@ -939,16 +1047,44 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Delete to the 3rd previous match of the last search",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "2": "epsilon zeta theta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["eta "]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["eta "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["eta "]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3N goes (0,7), (2,19), (2,13): dN deletes columns 9-12 of line 2; with N register 1 is always used and - too within a line (change.txt *quote_number*)"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete till after 3rd occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Delete to just after the 3rd previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L365 |T|",
       "expect": {
         "text": "unchanged",
@@ -989,8 +1125,19 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak backward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L74-L90: after an operator, Z starts SneakBackward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "[",
@@ -1020,8 +1167,8 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR of the line",
-      "labelFrom": "index",
+      "label": "Delete to the first non-blank of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L379 |^|",
       "expect": {
         "text": {
@@ -1045,8 +1192,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the first CHAR 3 - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Delete 3 lines",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -1077,8 +1224,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to the mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Delete to a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L381 |`|",
       "expect": {
         "text": "unchanged",
@@ -1159,8 +1306,8 @@
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete forward to the end of word 3",
-      "labelFrom": "index",
+      "label": "Delete to the end of the 3rd word forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L403 |e|",
       "expect": {
         "text": {
@@ -1184,8 +1331,8 @@
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to 3rd occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Delete to the 3rd next {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L404 |f|",
       "expect": {
         "text": "unchanged",
@@ -1209,8 +1356,8 @@
       "key": "h",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -1234,8 +1381,8 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Delete an inner text object: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1246,8 +1393,8 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines downward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta"],
@@ -1278,8 +1425,8 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 lines upward",
-      "labelFrom": "index",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -1308,8 +1455,8 @@
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 chars to the right",
-      "labelFrom": "index",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -1334,9 +1481,39 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Delete to the 3rd next match of the last search",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": ["alpha beta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "eta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon z"
+            ]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "eta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon z"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3n wraps to (0,7), so dn deletes (0,7) to (2,8) (exclusive); with n register 1 is always used (change.txt *quote_number*), - only within a line"
     },
     {
       "key": "s",
@@ -1346,15 +1523,26 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "plugin:surround: row exists only with vim.surround",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "defaults": {
+          "label": "Delete a surrounding: waits for the surrounding character (surround, ds)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/pluginDefaultMappings.ts (surround maps ds to <plugds>) and plugins/surround.ts L205-L247: waits for <any>",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete till before 3rd occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Delete to just before the 3rd next {char} on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L427 |t|",
       "expect": {
         "text": "unchanged",
@@ -1395,8 +1583,19 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak forward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L7-L23: after an operator, z starts SneakForward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "{",
@@ -1417,11 +1616,22 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Wait after the leader for a camelCaseMotion motion",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim's leader is \\ (package.json vim.leader default); camelCaseMotion's <leader>w/b/e need vim.camelCaseMotion.enable (src/actions/plugins/camelCaseMotion.ts L11-L18), easymotion's <leader><leader> actions do not check vim.easymotion in couldActionApply (src/actions/plugins/easymotion/easymotion.cmd.ts L74-L77 checks it only in exec), so the leader waits in both sets",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "{<number>}",

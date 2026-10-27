@@ -7,10 +7,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"#\", but without using \"\\<\" and \"\\>\"",
-      "labelFrom": "index",
+      "label": "Search backward for the word under the cursor, also inside other words",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L728 |g#|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -30,10 +29,9 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to rightmost character of the current line that is on the screen; when 'wrap' on go to the rightmost character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the last character of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L729 |g$|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -47,10 +45,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"*\", but without using \"\\<\" and \"\\>\"",
-      "labelFrom": "index",
+      "label": "Search forward for the word under the cursor, also inside other words",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L736 |gstar|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -70,10 +67,9 @@
       "key": "0",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to leftmost character of the current line that is on the screen; when 'wrap' on go to the leftmost character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the first character of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L740 |g0|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -87,8 +83,8 @@
       "key": "<C-a>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Add N to number in highlighted text",
-      "labelFrom": "index",
+      "label": "Add 1 to the numbers in the selection",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L981 |v_g_CTRL-A|",
       "expect": {
         "text": "unchanged",
@@ -100,8 +96,8 @@
       "key": "<C-x>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Subtract N from number in highlighted text",
-      "labelFrom": "index",
+      "label": "Subtract 1 from the numbers in the selection",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L982 |v_g_CTRL-X|",
       "expect": {
         "text": "unchanged",
@@ -113,10 +109,9 @@
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
-      "labelFrom": "index",
+      "label": "Move one screen line down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L790 |gj|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -130,10 +125,9 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
-      "labelFrom": "index",
+      "label": "Move one screen line up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L792 |gk|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -147,8 +141,8 @@
       "key": "?",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Rot13 encoding operator",
-      "labelFrom": "index",
+      "label": "Encode the highlighted text with rot13",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L748 |g?|",
       "expect": {
         "text": {
@@ -163,15 +157,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Toggle a block comment around the selection (plain text has none)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/operator.ts L804-L821: CommentBlockOperator runs editor.action.blockComment (VS Code reference: \"Toggle Block Comment\"), which does nothing in plain text, then puts the cursor at the start of the selection in Normal mode"
     },
     {
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Go backwards to the end of the previous WORD",
-      "labelFrom": "index",
+      "label": "Move back to the end of the previous WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L753 |gE|",
       "expect": {
         "text": "unchanged",
@@ -204,27 +204,71 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; gN reads the last search",
-      "label": "TODO",
+      "label": "Extend the selection to the start of the previous match of the last search",
       "labelIndex": "index.txt L758 |gN|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 7],
+          "visualStart": [2, 0]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>", "0"],
+      "basis": "Vim visual.txt *gN*: like gn backward; from (2,0) the previous match starts at (0,7) (checked on another buffer)"
     },
     {
       "key": "P",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; gP reads the register",
-      "label": "TODO",
+      "label": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
       "labelIndex": "index.txt L760 |gP|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "basis": "Vim change.txt *gP* with *v_P*: like v_p but the unnamed register is not changed; cursor just after the new text"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; gT (window)",
-      "label": "TODO",
+      "label": "Go to the previous tab page (only one here)",
       "labelIndex": "index.txt L764 |gT|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim tabpage.txt *gT*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L317-L333 (workbench.action.previousEditorInGroup)"
     },
     {
       "key": "U",
@@ -245,10 +289,9 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move when 'wrap' off go to leftmost non-white character of the current line that is on the screen; when 'wrap' on go to the leftmost non-white character of the current screen line",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L770 |g^|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -262,8 +305,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the last CHAR N - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Move to the last non-blank of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L775 |g_|",
       "expect": {
         "text": "unchanged",
@@ -279,23 +322,38 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a selection at the next match of the selected text (none here)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/actions.ts L1065-L1084: gb is ActionOverrideCmdD; src/actions/commands/actions.ts L1065-L1084: with the selection \"w\" selected, editor.action.addSelectionToNextFindMatch finds no other \"w\" (VS Code reference: \"Add Selection To Next Find Match\"), so the selection stays (1,13)-(1,14) in Visual mode"
     },
     {
       "key": "c",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Toggle line comments on the highlighted lines (plain text has none)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/operator.ts L744-L756: CommentOperator runs editor.action.commentLine (VS Code reference: \"Toggle Line Comment\"), which does nothing in plain text, then puts the cursor at column 0 of the first line in Normal mode"
     },
     {
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Go backwards to the end of the previous word",
-      "labelFrom": "index",
+      "label": "Move back to the end of the previous word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L780 |ge|",
       "expect": {
         "text": "unchanged",
@@ -311,16 +369,22 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; gf (file or tag)",
-      "label": "TODO",
+      "label": "Edit the file named by the selection (no file w: E447)",
       "labelIndex": "index.txt L782 |gf|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim editing.txt *v_gf*: the selected text w names no file, E447, and Visual mode ends with the cursor at the start of the area (checked on another buffer)"
     },
     {
       "key": "g",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line N, default first line",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank of the first line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": "unchanged",
@@ -335,10 +399,9 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"j\", but when 'wrap' on go N screen lines down",
-      "labelFrom": "index",
+      "label": "Move one screen line down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L790 |gj|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -352,10 +415,9 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Like \"k\", but when 'wrap' on go N screen lines up",
-      "labelFrom": "index",
+      "label": "Move one screen line up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L792 |gk|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": {
@@ -369,8 +431,8 @@
       "key": "m",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Go to character at middle of the screenline",
-      "labelFrom": "index",
+      "label": "Move to the middle of the screen line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L794 |gm|",
       "expect": {
         "text": "unchanged",
@@ -386,16 +448,32 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; gn reads the last search",
-      "label": "TODO",
+      "label": "Extend the selection to the end of the next match of the last search",
       "labelIndex": "index.txt L796 |gn|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 11],
+          "visualStart": [2, 0]
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>", "0"],
+      "basis": "Vim visual.txt *gn*: in Visual mode the selection extends to the end of the next match; the setup /eta<CR>0 leaves the cursor at (2,0), off a match, the next match is (2,9)-(2,11) (checked on another buffer)"
     },
     {
       "key": "o",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to byte N in the buffer",
-      "labelFrom": "index",
+      "label": "Move to byte 1 of the buffer",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L798 |go|",
       "expect": {
         "text": "unchanged",
@@ -411,9 +489,32 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; gp reads the register",
-      "label": "TODO",
+      "label": "Replace the selection with the text and put the cursor after it",
       "labelIndex": "index.txt L799 |gp|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "basis": "Vim change.txt *gp* with *v_p*: the selection (t after the setup yiw) is replaced, the replaced text goes to the unnamed and small delete registers, the cursor goes just after the new text (checked on another buffer)"
     },
     {
       "key": "q",
@@ -432,8 +533,8 @@
       "key": "r",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Virtual replace N chars with {char}",
-      "labelFrom": "index",
+      "label": "Virtually replace every highlighted character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L802 |gr|",
       "expect": {
         "text": "unchanged",
@@ -446,9 +547,18 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; gt (window)",
-      "label": "TODO",
+      "label": "Go to the next tab page (only one here)",
       "labelIndex": "index.txt L804 |gt|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "Vim tabpage.txt *gt*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L291-L315 (workbench.action.nextEditorInGroup; group 1 holds only a.txt)"
     },
     {
       "key": "u",
@@ -468,15 +578,24 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Open the link under the cursor (none here)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/navigate.ts L47-L55: OpenLink runs editor.action.openLink without waiting; w is no link, and the mode stays Visual"
     },
     {
       "key": "~",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Swap case for the highlighted text",
-      "labelFrom": "index",
+      "label": "Switch the case of the highlighted text",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L809 |g~|",
       "expect": {
         "text": {

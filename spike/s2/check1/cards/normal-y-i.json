@@ -7,8 +7,8 @@
       "key": "\"",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank double quoted string without the quotes",
-      "labelFrom": "index",
+      "label": "Yank inside double quotes",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L509 |v_iquote|",
       "expect": {
         "text": "unchanged",
@@ -30,8 +30,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank single quoted string without the quotes",
-      "labelFrom": "index",
+      "label": "Yank inside single quotes",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L510 |v_i'|",
       "expect": {
         "text": "unchanged",
@@ -43,8 +43,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner block from [( to ])",
-      "labelFrom": "index",
+      "label": "Yank inside parentheses",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L520 |v_ib|",
       "expect": {
         "text": "unchanged",
@@ -66,8 +66,8 @@
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner block from [( to ])",
-      "labelFrom": "index",
+      "label": "Yank inside parentheses",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L520 |v_ib|",
       "expect": {
         "text": "unchanged",
@@ -89,8 +89,8 @@
       "key": "<",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner <> from '<' to the matching '>'",
-      "labelFrom": "index",
+      "label": "Yank inside angle brackets",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L513 |v_i<|",
       "expect": {
         "text": "unchanged",
@@ -102,8 +102,8 @@
       "key": ">",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner <> from '<' to the matching '>'",
-      "labelFrom": "index",
+      "label": "Yank inside angle brackets",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L513 |v_i<|",
       "expect": {
         "text": "unchanged",
@@ -115,8 +115,8 @@
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner Block from [{ and ]}",
-      "labelFrom": "index",
+      "label": "Yank inside braces",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L515 |v_iB|",
       "expect": {
         "text": "unchanged",
@@ -138,8 +138,8 @@
       "key": "W",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner WORD",
-      "labelFrom": "index",
+      "label": "Yank the WORD under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L516 |v_iW|",
       "expect": {
         "text": "unchanged",
@@ -161,8 +161,8 @@
       "key": "[",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner [] from '[' to the matching ']'",
-      "labelFrom": "index",
+      "label": "Yank inside square brackets",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L517 |v_i[|",
       "expect": {
         "text": "unchanged",
@@ -184,8 +184,8 @@
       "key": "]",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner [] from '[' to the matching ']'",
-      "labelFrom": "index",
+      "label": "Yank inside square brackets",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L517 |v_i[|",
       "expect": {
         "text": "unchanged",
@@ -207,8 +207,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank string in backticks without the backticks",
-      "labelFrom": "index",
+      "label": "Yank inside backticks",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L519 |v_i`|",
       "expect": {
         "text": "unchanged",
@@ -221,15 +221,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Yank the argument under the cursor",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 11],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["\"two\""]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["\"two\""]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L745-L860 and L985-L989 (ia): \"two\" at (1,11)-(1,15), as the pilot's dia row; yank leaves the cursor at the start (change.txt *y*), registers \" and 0"
     },
     {
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner block from [( to ])",
-      "labelFrom": "index",
+      "label": "Yank inside parentheses",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L520 |v_ib|",
       "expect": {
         "text": "unchanged",
@@ -252,39 +268,93 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Yank the entire buffer except leading and trailing blank lines",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L573-L594 (ie): (0,0) to the end of line 3, charwise, as the pilot's die row; cursor at the start"
     },
     {
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Yank the lines of the cursor's indentation level",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/textobject/textobject.ts L596-L662 and L710-L714 (ii): (1,0) to (2,0), charwise, as the pilot's dii row; cursor at the start"
     },
     {
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the last-object prefix (targets)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/plugins/targets/smartQuotes.ts and lastNextObjects.ts: il waits in both sets (as the pilot's dil row)"
     },
     {
       "key": "n",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Wait for the object of the next-object prefix (targets)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/plugins/targets/smartQuotes.ts and lastNextObjects.ts: in waits in both sets (as the pilot's din row)"
     },
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner paragraph",
-      "labelFrom": "index",
+      "label": "Yank the paragraph",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L521 |v_ip|",
       "expect": {
         "text": "unchanged",
@@ -317,15 +387,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Yank inside the nearest quotes",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L2090-L2200 and plugins/targets/smartQuotes.ts L113-L119 (iq): \"two\" between the quotes, as the pilot's diq row; cursor at the start"
     },
     {
       "key": "s",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner sentence",
-      "labelFrom": "index",
+      "label": "Yank the sentence",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L522 |v_is|",
       "expect": {
         "text": "unchanged",
@@ -357,8 +443,8 @@
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner tag block",
-      "labelFrom": "index",
+      "label": "Yank inside the tag",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L523 |v_it|",
       "expect": {
         "text": "unchanged",
@@ -370,8 +456,8 @@
       "key": "w",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner word",
-      "labelFrom": "index",
+      "label": "Yank the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L524 |v_iw|",
       "expect": {
         "text": "unchanged",
@@ -393,8 +479,8 @@
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner Block from [{ and ]}",
-      "labelFrom": "index",
+      "label": "Yank inside braces",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L515 |v_iB|",
       "expect": {
         "text": "unchanged",
@@ -418,18 +504,29 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Wait after the leader for w: yank the camelCase part of a word (camelCaseMotion, i<leader>w)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/camelCaseMotion.ts L81-L85 (i<leader>w); as the pilot's di{<leader>} row",
+          "labelFrom": "hand"
+        }
+      }
     },
     {
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank inner Block from [{ and ]}",
-      "labelFrom": "index",
+      "label": "Yank inside braces",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L515 |v_iB|",
       "expect": {
         "text": "unchanged",

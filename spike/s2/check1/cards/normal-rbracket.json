@@ -8,16 +8,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: mark or jump; ]' reads the mark or jump",
-      "label": "TODO",
+      "label": "Jump to the first non-blank of the next line with a lowercase mark",
       "labelIndex": "index.txt L684 |]'|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["j", "m", "a", "k"],
+      "basis": "Vim motion.txt *]'*: the setup jmak puts mark a on line 2, the nearest possible line below, so marks from earlier rows cannot come between"
     },
     {
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move N times forward to unmatched ')'",
-      "labelFrom": "index",
+      "label": "Move to the next unmatched )",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L686 |])|",
       "expect": {
         "text": "unchanged",
@@ -30,16 +37,39 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; ]P reads the register",
-      "label": "TODO",
+      "label": "Put the lines above with the indent of the current line",
       "labelIndex": "index.txt L671 |[p|",
-      "expect": "TODO"
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "y"],
+      "basis": "Vim change.txt *]P* (same as [p): like P with the indent adjusted; cursor on the first non-blank of the new line"
     },
     {
       "key": "[",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move N SECTIONS forward",
-      "labelFrom": "index",
+      "label": "Move to the next section end",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L698 |][|",
       "expect": {
         "text": "unchanged",
@@ -51,8 +81,8 @@
       "key": "]",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move N sections forward",
-      "labelFrom": "index",
+      "label": "Move to the next section start",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L699 |]]|",
       "expect": {
         "text": "unchanged",
@@ -65,41 +95,83 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: mark or jump; ]` reads the mark or jump",
-      "label": "TODO",
+      "label": "Jump to the next lowercase mark",
       "labelIndex": "index.txt L688 |]`|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 14],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["l", "m", "a", "h"],
+      "basis": "Vim motion.txt *]`*: the setup lma puts mark a at (1,14), the nearest possible position after the cursor, so marks from earlier rows cannot come between"
     },
     {
       "key": "d",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the next problem (VS Code remap)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "spec/generated/vscode/vim-remaps.json: ]d runs editor.action.marker.next (VS Code: Go to Next Problem (Error, Warning, Info)). Inferred: a.txt (plain text) has no problems, so nothing moves"
     },
     {
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the next problem (VS Code remap)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "spec/generated/vscode/vim-remaps.json: ]e runs editor.action.marker.next (VS Code: Go to Next Problem (Error, Warning, Info)). Inferred: a.txt (plain text) has no problems, so nothing moves"
     },
     {
       "key": "p",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; ]p reads the register",
-      "label": "TODO",
+      "label": "Put the lines below with the indent of the current line",
       "labelIndex": "index.txt L711 |]p|",
-      "expect": "TODO"
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [2, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "y"],
+      "basis": "Vim change.txt *]p*: like p with the indent adjusted to the current line (both have 2 spaces); the setup yy fills the unnamed register and 0 linewise; a linewise put leaves the cursor on the first non-blank of the new line"
     },
     {
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move N times forward to unmatched '}'",
-      "labelFrom": "index",
+      "label": "Move to the next unmatched }",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L714 |]}|",
       "expect": {
         "text": "unchanged",
