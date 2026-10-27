@@ -102,7 +102,8 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
   `spike/s2/batch/<script>.sh`; afterwards the data directories are committed from that checkout
   onto the spike branch. A batch refuses to start when `spike/s2` or `spec` has uncommitted
   changes (data directories excepted), records before every harness call the build and every `S2_`
-  variable that is not a path in `command.txt`, stops when the build changed since it started, and
+  variable that is not a path in `command.txt`, stops when the build changed since it started or
+  when a data file it would continue holds records of another build, and
   unsets `S2_DIFF_TRACE`, `S2_CASES` and `S2_RESET_SETTLE` unless it sets them itself. Every batch
   holds a shared lock on the `S2_CPUS` cores, which `cpu.sh` takes exclusively; agents' direct
   harness runs do not take it, and `cpu.mjs` detects them instead. `S2_BATCH_DATA` (default
