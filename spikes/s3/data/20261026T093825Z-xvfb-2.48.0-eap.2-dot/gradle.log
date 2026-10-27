@@ -1,0 +1,221 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :compileKotlin UP-TO-DATE
+> Task :compileJava NO-SOURCE
+> Task :initializeIntellijPlatformPlugin
+> Task :patchPluginXml UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :generateManifest UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :composedJar UP-TO-DATE
+> Task :prepareSandbox UP-TO-DATE
+> Task :buildSearchableOptions SKIPPED
+> Task :prepareJarSearchableOptions SKIPPED
+> Task :jarSearchableOptions SKIPPED
+> Task :buildPlugin UP-TO-DATE
+> Task :compileUiTestKotlin UP-TO-DATE
+> Task :compileUiTestJava NO-SOURCE
+> Task :prepareSandbox_runIde262 UP-TO-DATE
+> Task :prepareSandbox_uiTest UP-TO-DATE
+> Task :processUiTestResources UP-TO-DATE
+> Task :uiTestClasses UP-TO-DATE
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (file:$HOME/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/33d12735bef894440780fce64f9758d420c7bae2/jna-5.17.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+> Task :uiTest
+
+Gradle Test Executor 1 STANDARD_OUT
+    [19:29:51]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Port 45654 is busy. Trying use another
+    [19:29:51]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+    [19:29:51]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server started on port 45664
+
+S3UiTest STANDARD_OUT
+    [07:29:51]: Starter DI was initialized
+
+S3UiTest > run() STANDARD_OUT
+    [07:29:51]: Starter DI was updated by:
+    - spike.s3.ui.S3Ide.<clinit>(S3Ide.kt:139)
+    - spike.s3.ui.S3UiTest.run(S3UiTest.kt:15)
+    - java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+    [19:29:51]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=class com.intellij.ide.starter.runner.TestContainer$Companion$1, timeout=2m, executeOnce=false, sequential=false, callback=(com.intellij.ide.starter.runner.TestContextInitializedEvent) -> kotlin.Unit) for TestContextInitializedEvent
+    [07:29:51]: Resolving IDE build for s3-dot-2.48.0-eap.2-XToolkit...
+    [07:29:51]: Using IDE paths for 's3-dot-2.48.0-eap.2-XToolkit': IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit
+    [07:29:51]: IDE to run for 's3-dot-2.48.0-eap.2-XToolkit': IDE{IU, 262.10968.63, Linux, home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide}
+    [07:29:51]: Cleaning system dir for com.intellij.ide.starter.ide.IDETestContext@33634f04 at IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit
+    [07:29:51]: Setting IDE system property: [ij.load.shell.env=false]
+    [07:29:51]: Setting IDE system property: [ide.instant.shutdown=false]
+    [07:29:51]: Setting IDE system property: [feature.usage.event.log.send.on.ide.close=false]
+    [07:29:51]: Setting IDE system property: [linux.native.menu.force.disable=true]
+    [07:29:51]: Setting IDE system property: [jdk.gtk.verbose=true]
+    [07:29:51]: Setting IDE system property: [jdk.gtk.version=2]
+    [07:29:51]: Setting IDE system property: [vcs.log.index.enable=false]
+    [07:29:51]: Setting IDE system property: [ide.slow.operations.assertion=false]
+    [07:29:51]: Setting IDE system property: [integrationTests.profiler=async]
+    [07:29:51]: Setting IDE system property: [idea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/config]
+    [07:29:51]: Setting IDE system property: [idea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/system]
+    [07:29:51]: Setting IDE system property: [idea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/plugins]
+    [07:29:51]: Trusted xml file content: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <application>
+    
+      <component name="Trusted.Paths">
+        
+        <option name="TRUSTED_PROJECT_PATHS">
+            
+          <map>
+            <entry key="$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/project" value="true"/>
+          </map>
+          
+        </option>
+      
+      </component>
+    
+      <component name="Trusted.Paths.Settings">
+        
+        <option name="TRUSTED_PATHS">
+            
+          <list/>
+          
+        </option>
+      
+      </component>
+  
+    </application>
+
+    [07:29:51]: Setting IDE system property: [idea.local.statistics.without.report=true]
+    [07:29:51]: Setting IDE system property: [idea.updates.url=http://127.0.0.1]
+    [07:29:51]: Setting IDE system property: [kotest.assertions.collection.enumerate.size=2147483647]
+    [07:29:51]: Setting IDE system property: [ide.enable.notification.trace.data.sharing=false]
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait start for TestContextInitializedEvent: total=1, sequential=0, parallel=1
+    [07:29:52]: Starter configuration storage: {MONITORING_DUMPS_INTERVAL_SECONDS=60, ENABLE_SCRAMBLING_FOR_DEVSERVER=false, INSTALLER_INCLUDE_RUNTIME_MODULE_REPOSITORY=false, AFTER_EACH_MESSAGE_BUS_CLEANUP=false, LOG_ENVIRONMENT_VARIABLES=false, SPLIT_MODE_ENABLED=false, DEBUG_LOGGING_ENABLED=false}
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait finished for TestContextInitializedEvent. Exceptions: []
+    [07:29:52]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/IdeaVIM to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/plugins/IdeaVIM
+    [07:29:52]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/s3-spike to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/plugins/s3-spike
+    [07:29:52]: Setting IDE system property: [user.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home]
+    [07:29:52]: Setting IDE system property: [awt.toolkit.name=XToolkit]
+    [07:29:52]: Setting IDE system property: [idea.trust.all.projects=true]
+    [07:29:52]: Setting IDE system property: [ide.browser.jcef.enabled=false]
+    [07:29:52]: Setting IDE system property: [ide.show.tips.on.startup.default.value=false]
+    [07:29:52]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [07:29:52]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [07:29:52]: Setting IDE system property: [idea.initially.ask.config=never]
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=CompletableDeferredImpl{Active}@2d85fb64, timeout=2m, executeOnce=true, sequential=false, callback=(com.intellij.ide.starter.runner.events.IdeLaunchEvent) -> kotlin.Unit) for IdeLaunchEvent
+    [07:29:52]: Creating reports dir 'reports'
+    [07:29:52]: Creating reports dir 'snapshots'
+    [07:29:52]: Reports dir 's3-dot-2.48.0-eap.2-XToolkit' is already created
+    [07:29:52]: Creating reports dir 'log'
+    [07:29:52]: Starting external process for `exec-java-cmd`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3/jbr
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3/jbr/bin/java -version]
+      STDOUT will be redirected to: string. STDERR will be redirected to: string. STDIN is empty: true
+
+    [07:29:52]:   ... started external process `exec-java-cmd` with process ID = 203800
+    [07:29:52]:    ... process `exec-java-cmd` (pid=203800) exited on its own with code 0 before the 60s timeout. 
+    [07:29:52]:   ... successfully finished external process for `exec-java-cmd` with exit code 0
+    [07:29:52]: 
+        Result of calling [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3/jbr/bin/java, -version]:
+        openjdk version "25.0.4" 2026-07-21
+    OpenJDK Runtime Environment JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27)
+    OpenJDK 64-Bit Server VM JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27, mixed mode, sharing)
+    
+    [07:29:52]: Found following 25.0.4+1-b508.27 in the product: IU 262.10968.63
+    [07:29:52]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [07:29:52]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [07:29:52]: Setting IDE system property: [jb.privacy.policy.ai.assistant.text=<!--999.999-->]
+    [07:29:52]: Setting IDE system property: [marketplace.eula.reviewed.and.accepted=true]
+    [07:29:52]: Setting IDE system property: [writerside.eula.reviewed.and.accepted=true]
+    [07:29:52]: Setting IDE system property: [ide.newUsersOnboarding=false]
+    [07:29:52]: Setting IDE system property: [freeze.reporter.profiling=false]
+    [07:29:52]: Setting IDE system property: [idea.fatal.error.notification=true]
+    [07:29:52]: Setting IDE system property: [idea.is.integration.test=true]
+    [07:29:52]: Setting IDE system property: [ide.browser.jcef.jsQueryPoolSize=10000]
+    [07:29:52]: Setting IDE system property: [ide.performance.screenshot=heartbeat]
+    [07:29:52]: Setting IDE system property: [idea.diagnostic.opentelemetry.metrics.max-files-to-keep=120]
+    [07:29:52]: No profiler is specified.
+    [07:29:52]: Setting IDE system property: [snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/snapshots]
+    [07:29:52]: Setting IDE system property: [java.rmi.server.hostname=127.0.0.1]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.host=127.0.0.1]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote=true]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.port=9531]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.rmi.port=9531]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.authenticate=false]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.ssl=false]
+    [07:29:52]: Setting IDE system property: [com.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**']
+    [07:29:52]: Setting IDE system property: [expose.ui.hierarchy.url=true]
+    [07:29:52]: Setting IDE system property: [platform.experiment.ab.manual.option=control.option]
+    [07:29:52]: Setting IDE system property: [rpc.port=9532]
+    [07:29:52]: Setting IDE system property: [memory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log]
+    [07:29:52]: Setting IDE system property: [idea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/opentelemetry.json]
+    [07:29:52]: Setting IDE system property: [idea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log]
+    [07:29:52]: Test commands to be executed: 
+
+    [07:29:52]: Setting IDE system property: [testscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/system/s3-dot-2.48.0-eap.2-XToolkit.text]
+    [07:29:52]: Setting IDE system property: [testscript.must.exist.process.with.non.success.code.on.ide.error=true]
+    [07:29:52]: Write vmoptions patch to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3.vmoptions
+    [07:29:52]: Starting IDE for s3-dot-2.48.0-eap.2-XToolkit with timeout 12h
+      VM Options: [VMOptions{ env={HOME=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home, XDG_CONFIG_HOME=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home/.config, XDG_DATA_HOME=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home/.local/share, XDG_CACHE_HOME=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home/.cache, DISPLAY=:131, IDEA_VIM_CUSTOM_VIMRC=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/rc/ideavimrc} -Dij.load.shell.env=false -Dide.instant.shutdown=false -Dfeature.usage.event.log.send.on.ide.close=false -Dlinux.native.menu.force.disable=true -Djdk.gtk.verbose=true -Djdk.gtk.version=2 -Dvcs.log.index.enable=false -Dide.slow.operations.assertion=false -DintegrationTests.profiler=async -Didea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/config -Didea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/system -Didea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/plugins -Didea.local.statistics.without.report=true -Didea.updates.url=http://127.0.0.1 -Dkotest.assertions.collection.enumerate.size=2147483647 -Dide.enable.notification.trace.data.sharing=false -Duser.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/home -Dawt.toolkit.name=XToolkit -Didea.trust.all.projects=true -Dide.browser.jcef.enabled=false -Dide.show.tips.on.startup.default.value=false -Djb.consents.confirmation.enabled=false -Djb.privacy.policy.text=<!--999.999--> -Didea.initially.ask.config=never -Xmx2g -Djb.privacy.policy.ai.assistant.text=<!--999.999--> -Dmarketplace.eula.reviewed.and.accepted=true -Dwriterside.eula.reviewed.and.accepted=true -Dide.newUsersOnboarding=false -Dfreeze.reporter.profiling=false -Didea.fatal.error.notification=true -Didea.is.integration.test=true -Dide.browser.jcef.jsQueryPoolSize=10000 -Dide.performance.screenshot=heartbeat -XX:ErrorFile=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/jvm-crash/java_error_in_idea_%p.log -XX:HeapDumpPath=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/heap-dump/heap-dump.hprof -Xlog:gc*:file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/reports/gcLog.log -Didea.diagnostic.opentelemetry.metrics.max-files-to-keep=120 -Dsnapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/snapshots -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9531 -Dcom.sun.management.jmxremote.rmi.port=9531 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**' -Dexpose.ui.hierarchy.url=true -Dplatform.experiment.ab.manual.option=control.option -Drpc.port=9532 -Dmemory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log -Didea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/opentelemetry.json -Didea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log -Dtestscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/system/s3-dot-2.48.0-eap.2-XToolkit.text -Dtestscript.must.exist.process.with.non.success.code.on.ide.error=true } // VMOptions ]
+      On Java : [$HOME/.local/share/mise/installs/java/temurin-25.0.4+7.0.LTS]
+
+    [07:29:52]: Starting external process for `run-ide-s3-dot-2.48.0-eap.2-XToolkit`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/ide/idea-2026.2.3/bin/idea $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/project]
+      STDOUT will be redirected to: string. STDERR will be redirected to: stdout. STDIN is empty: true
+
+    [07:29:52]:   ... started external process `run-ide-s3-dot-2.48.0-eap.2-XToolkit` with process ID = 203824
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - Unsubscribing CompletableDeferredImpl{Active}@2d85fb64 for IdeLaunchEvent
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait start for IdeLaunchEvent: total=1, sequential=0, parallel=1
+    [19:29:52]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait finished for IdeLaunchEvent. Exceptions: []
+    [07:29:52]: Parent process is an IDE process itself (was launched without wrapper)
+    [07:29:52]: Creating reports dir 'monitoring-thread-dumps-ide'
+    [07:29:53]:   [ide-s3-dot-2.48.0-eap.2-XToolkit-err] Looking for GTK3 library...
+    [07:29:53]:   [ide-s3-dot-2.48.0-eap.2-XToolkit-err] 
+    [07:29:53]:   [ide-s3-dot-2.48.0-eap.2-XToolkit-err] (idea:203824): dbind-WARNING **: 19:29:53.049: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files
+    [07:29:53]:   [ide-s3-dot-2.48.0-eap.2-XToolkit-err] GTK3 library loaded.
+    [07:30:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-1-2026-10-26-19-30-52.txt
+    [07:31:52]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-2-2026-10-26-19-31-52.txt
+    [07:32:53]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-3-2026-10-26-19-32-53.txt
+    [07:33:53]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/s3-work-131/out/ide-tests/tests/IU-262.10968.63/s3-dot-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-4-2026-10-26-19-33-53.txt
+    [07:34:27]:    ... process `run-ide-s3-dot-2.48.0-eap.2-XToolkit` (pid=203824) exited on its own with code 0 before the 43200s timeout. 
+    [07:34:27]:  ... cancelling and waiting for process `"On process run-ide-s3-dot-2.48.0-eap.2-XToolkit created job#11":StandaloneCoroutine{Active}@50810be0` job ... 
+    [07:34:27]:   ... successfully finished external process for `run-ide-s3-dot-2.48.0-eap.2-XToolkit` with exit code 0
+    [07:34:27]: IDE run s3-dot-2.48.0-eap.2-XToolkit completed in 4m 35.484882368s
+    [07:34:27]: Run VM options validation
+    [07:34:27]: Finished VM options validation
+    ##teamcity[testMetadata type='link' name='Link to Logs and artifacts' value='null']
+
+S3UiTest > run() STANDARD_ERROR
+    [07:34:27]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [07:34:27]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [07:34:27]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [07:34:27]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+
+S3UiTest > run() STANDARD_OUT
+    [07:34:27]: Successfully finished publishArtifacts run for s3-dot-2.48.0-eap.2-XToolkit
+    [07:34:27]: IDEStartResult(runContext=IDERunContext(testContext=com.intellij.ide.starter.ide.IDETestContext@33634f04, commandLine=fun openTestCaseProject(com.intellij.ide.starter.runner.IDERunContext): com.intellij.ide.starter.runner.IDECommandLine, commands=com.intellij.tools.ide.performanceTesting.commands.CommandChain@6d072133, runTimeout=12h, useStartupScript=true, verboseOutput=false, launchName=, expectedKill=false, expectedExitCode=0, analyzeProcessExit=true, collectNativeThreads=false, stdOut=null), executionTime=4m 35.484882368s, exitCode=0, vmOptionsDiff=VMOptionsDiff(newLines=[], missingLines=[]), failureError=null, frontendStartResult=null)
+    [07:34:27]: IDERunContext(testContext=com.intellij.ide.starter.ide.IDETestContext@33634f04, commandLine=fun openTestCaseProject(com.intellij.ide.starter.runner.IDERunContext): com.intellij.ide.starter.runner.IDECommandLine, commands=com.intellij.tools.ide.performanceTesting.commands.CommandChain@6d072133, runTimeout=12h, useStartupScript=true, verboseOutput=false, launchName=, expectedKill=false, expectedExitCode=0, analyzeProcessExit=true, collectNativeThreads=false, stdOut=null)
+
+S3UiTest > run() PASSED
+
+Gradle Test Executor 1 STANDARD_OUT
+    [19:34:27]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+
+[07:34:27]: Canceling suite supervisor scopes: Shutdown is in progress: either SIGTERM or SIGKILL is caught
+
+[Incubating] Problems report is available at: file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-x131/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 4m 43s
+14 actionable tasks: 2 executed, 12 up-to-date
