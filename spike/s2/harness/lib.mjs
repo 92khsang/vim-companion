@@ -17,8 +17,9 @@ import {
   writeFileSync,
   readdirSync,
 } from "node:fs";
+import { createHash } from "node:crypto";
 import net from "node:net";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
 export const REPO = join(import.meta.dirname, "../../..");
@@ -37,6 +38,117 @@ export const SPIKE_EXTENSIONS = join(REPO, "spike/s2/extensions");
 export const START = JSON.parse(
   readFileSync(join(REPO, "spec/fixtures/grammar/counts.json"), "utf8"),
 ).start;
+
+// ---------- build and machine facts recorded with every run ----------
+
+// Records name the sandbox root as $S2_ROOT and the home directory as $HOME (editor URIs, error
+// stacks), so that the data files carry no machine-specific path.
+export const portable = (text) =>
+  [
+    [process.env.S2_ROOT, "$S2_ROOT"],
+    [process.env.HOME, "$HOME"],
+  ].reduce((t, [from, to]) => (from ? t.replaceAll(from, to) : t), text);
+
+// What a run measures besides VS Code and the sandbox base: the spike extensions copied into every
+// instance, the differential script, the harness code and the generated settings the sandbox reads.
+const BUILD_PATHS = {
+  adapter: "spike/s2/extensions/s2-adapter",
+  probe: "spike/s2/extensions/s2-probe",
+  script: "spike/s2/harness/differential-script.json",
+  harness: "spike/s2/harness",
+  remaps: "spec/generated/vscode/vim-remaps.json",
+  whichkey: "spec/generated/vscode/whichkey-bindings.json",
+};
+const filesUnder = (abs) =>
+  readdirSync(abs, { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory()
+      ? filesUnder(join(abs, d.name))
+      : d.isFile()
+        ? [join(abs, d.name)]
+        : [],
+  );
+const hashPath = (rel) => {
+  const abs = join(REPO, rel);
+  let files;
+  try {
+    files = filesUnder(abs);
+  } catch {
+    files = [abs];
+  }
+  const h = createHash("sha256");
+  for (const f of files.sort()) {
+    h.update(relative(REPO, f) + "\0");
+    h.update(readFileSync(f));
+    h.update("\0");
+  }
+  return h.digest("hex");
+};
+/**
+ * The build a run measures: the checkout's HEAD, the uncommitted changes under spike/s2 and spec
+ * (data directories excluded), and sha256 hashes of BUILD_PATHS. `id` is a short hash of all of it;
+ * the compare and the summaries refuse records of more than one id.
+ */
+export function buildInfo() {
+  const git = (args) =>
+    execFileSync("git", ["-C", REPO, ...args], { encoding: "utf8" }).trim();
+  const head = git(["rev-parse", "HEAD"]);
+  const dirty = git([
+    "status",
+    "--porcelain",
+    "--",
+    "spike/s2",
+    "spec",
+    ":!spike/s2/data",
+  ]);
+  const sha256 = Object.fromEntries(
+    Object.entries(BUILD_PATHS).map(([k, p]) => [k, hashPath(p)]),
+  );
+  const id = createHash("sha256")
+    .update(JSON.stringify({ head, dirty, sha256 }))
+    .digest("hex")
+    .slice(0, 16);
+  return { id, head, dirty: dirty ? dirty.split("\n") : [], sha256 };
+}
+
+/**
+ * Whether the adapter is really at work (arm on) or really absent (arm off), from the probe's
+ * `adapter` method: with the adapter on, it must be present and active, its latest report must
+ * hold a state, its last polling error must be null, and the report must be at most two poll
+ * intervals old; with the adapter off, the extension must be absent (disabled extensions are not
+ * listed). A failed inspector walk leaves the adapter active with no report, which this catches.
+ */
+export async function adapterCheck(code, arm) {
+  const a = await code.probe.call("adapter");
+  const ageMs = a.report ? a.now - a.report.t : null;
+  const reasons = [];
+  if (arm === "on") {
+    if (!a.present) reasons.push("adapter not present");
+    if (!a.active) reasons.push("adapter not active");
+    if (!a.report) reasons.push("no adapter report");
+    else if (!a.report.state) reasons.push("adapter report without a state");
+    if (a.error) reasons.push(`adapter error: ${a.error}`);
+    if (a.report && !(ageMs <= 2 * (a.pollMs ?? 50)))
+      reasons.push(`adapter report ${ageMs} ms old`);
+  } else if (a.present) reasons.push("adapter present with the adapter off");
+  return {
+    arm,
+    present: a.present,
+    active: a.active,
+    ageMs,
+    pollMs: a.pollMs,
+    error: a.error,
+    state: a.report?.state ?? null,
+    ok: reasons.length === 0,
+    reasons,
+  };
+}
+
+/** The CPU numbers of a taskset list such as 8-15 or 8-11,14. */
+export const cpuList = (spec) =>
+  spec.split(",").flatMap((part) => {
+    const [a, b = a] = part.split("-").map(Number);
+    return Array.from({ length: b - a + 1 }, (_, i) => a + i);
+  });
 
 // ---------- X display ----------
 

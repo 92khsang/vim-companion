@@ -9,12 +9,20 @@
 // carries `settle`); S2_NAME_PREFIX names the instances (default `diff`); S2_DIFF_START=<n> numbers
 // the first run n, so that a resumed batch keeps the run numbers and the alternation of the arms;
 // S2_DIFF_TRACE=1 is the diagnostic trace described below.
+// Every run record carries the build it measured (lib.mjs buildInfo), the probe's hello (VS Code,
+// VSCodeVim, which-key and extension versions) and `adapterCheck`, read after the script: with the
+// adapter on, a fresh report with a state and no error; with it off, no adapter. A run that does not
+// complete is a run-error record with its phase: `start` (session start, clipboard, input check;
+// such a run measured nothing and a batch may replace it), `script` (while the script items are
+// typed) or `read` (the reads and pastes after the script); see differential-compare.mjs.
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import {
   REPO,
-  ROOT,
+  portable,
+  buildInfo,
+  adapterCheck,
   startXvfb,
   openSession,
   stopCode,
@@ -57,13 +65,7 @@ const TRACE = Boolean(process.env.S2_DIFF_TRACE);
 const START = Number(process.env.S2_DIFF_START ?? 0);
 const whichKey = SETTLE ? loadWhichKey() : undefined;
 const NAME_PREFIX = process.env.S2_NAME_PREFIX ?? "diff";
-// Records name the sandbox root as $S2_ROOT and the home directory as $HOME (editor URIs, error
-// stacks), so that the data files carry no machine-specific path.
-const portable = (text) =>
-  [
-    [ROOT(), "$S2_ROOT"],
-    [process.env.HOME, "$HOME"],
-  ].reduce((t, [from, to]) => (from ? t.replaceAll(from, to) : t), text);
+// Records name the sandbox root as $S2_ROOT and the home directory as $HOME (lib.mjs portable).
 const write = (rec) =>
   appendFileSync(outFile, portable(JSON.stringify(rec)) + "\n");
 
@@ -91,7 +93,10 @@ try {
           ? "on"
           : "off";
     const t0 = Date.now();
+    let phase = "start";
+    let build;
     try {
+      build = buildInfo();
       code = await openSession({
         version,
         display,
@@ -123,6 +128,7 @@ try {
       }
       if (!inputOk)
         throw new Error("input check failed: l h did not reach the editor");
+      phase = "script";
       // S2_DIFF_TRACE=1 records, after each item's pause, a digest of the active editor, the
       // contents of VSCodeVim's registers (recorded keys for a recorded state) and the editor
       // events of the item with their delay after its first key, to find the item where two runs
@@ -155,7 +161,8 @@ try {
             matcher,
             { watcher, tracker, rule: RULE },
           ))
-            waits.push({ item: item.case, ...w });
+            // The record itself, not a copy: a no-change check fills it in after the script.
+            waits.push(Object.assign(w, { item: item.case }));
         } else typeKeys(display, item.keys, DELAY);
         await sleep(PAUSE);
         if (TRACE) {
@@ -186,9 +193,16 @@ try {
           });
         }
       }
+      // The no-change leaves are checked up to the next key now that all their events are in.
+      if (tracker) {
+        tracker.closePending(Date.now());
+        await tracker.checkPending();
+      }
+      phase = "read";
       typeKeys(display, ["<Esc>", "<Esc>"], DELAY);
       await sleep(500);
       const end = await code.probe.call("snapshot");
+      const adapter = await adapterCheck(code, arm);
       for (const r of script.registers) {
         typeKeys(display, ['"', r, "p"], DELAY);
         await sleep(100);
@@ -201,7 +215,10 @@ try {
         i,
         arm,
         version,
+        build,
+        hello: code.hello,
         adapter: code.hello.adapter,
+        adapterCheck: adapter,
         end,
         pasted,
         clipboard,
@@ -226,6 +243,8 @@ try {
         i,
         arm,
         version,
+        phase,
+        build,
         error: String(e.stack ?? e)
           .split("\n")
           .slice(0, 3)

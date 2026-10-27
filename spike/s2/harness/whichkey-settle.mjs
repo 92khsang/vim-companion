@@ -217,13 +217,42 @@ const GROUPS_JS = `(() => {
  * changes. A file shown in two groups at once would make the group of an event ambiguous, so
  * sync() refuses it. With keepEvents (the trace mode, which clears the probe's events itself) the
  * events are read without clearing them.
+ *
+ * A leaf that must change nothing (a no-change leaf) is checked twice: by waitEffect up to the end
+ * of its wait, and again over the whole interval from the leaf to the next key the harness types
+ * (closePending marks that moment, checkPending reads the events later). The second check adds no
+ * delay to any key: it only reads timestamps of events that the probe already recorded. The trace
+ * mode clears the probe's events at every item, so it cannot hold a pending check across items:
+ * sync() drops them, and a trace run is a diagnostic, not a row run.
  */
 export class EditorTracker {
   constructor(probe, { keepEvents = false } = {}) {
     this.probe = probe;
     this.keepEvents = keepEvents;
+    this.pending = [];
+  }
+  /** The harness is about to type the next key: close the interval of every open no-change check. */
+  closePending(t) {
+    for (const p of this.pending) p.tEnd ??= t;
+  }
+  /** Reads the events so far and throws when a no-change leaf saw a change before the next key. */
+  async checkPending() {
+    await this.poll();
+    for (const p of this.pending.filter((x) => x.tEnd !== undefined)) {
+      const changes = this.timeline.filter(
+        (x) => x.t >= p.tLeaf && x.t < p.tEnd,
+      );
+      p.rec.untilNextKeyMs = p.tEnd - p.tLeaf;
+      p.rec.changesUntilNextKey = changes.length;
+      if (changes.length)
+        throw new Error(
+          `which-key leaf ${p.path}: expected ${p.expected} from ${p.from}, saw ${changes.map(at).join(", ")} before the next key`,
+        );
+    }
+    this.pending = this.pending.filter((x) => x.tEnd === undefined);
   }
   async sync() {
+    if (this.keepEvents) this.pending = [];
     const s = await this.probe.call("snapshot");
     this.columns = new Map();
     for (const e of s.editors) {
@@ -315,8 +344,8 @@ async function waitEffect({ watcher, tracker, binding, path, tLeaf }) {
     const done = none
       ? (q.hidden || q.closing) && !q.inQuick
       : Boolean(observed);
-    if (done)
-      return {
+    if (done) {
+      const rec = {
         rule: "effect",
         command,
         from: at(from),
@@ -331,6 +360,10 @@ async function waitEffect({ watcher, tracker, binding, path, tLeaf }) {
         focusInQuick: q.inQuick,
         active: q.active,
       };
+      if (none)
+        tracker.pending.push({ tLeaf, path, expected, from: at(from), rec });
+      return rec;
+    }
     if (Date.now() - t0 >= EFFECT_CAP_MS)
       throw new Error(
         `which-key leaf ${path}: ${command} expected ${expected} from ${at(from)}; not observed within ${EFFECT_CAP_MS} ms (changes: ${changes.map(at).join(", ") || "none"}; quick input hidden ${q.hidden}, closing ${q.closing}, focus in it ${q.inQuick})`,
@@ -367,14 +400,12 @@ export async function typeKeysSettling(
     if (matcher.feed(key) !== "leaf") continue;
     resume();
     const path = matcher.path.join(" ");
+    tracker?.closePending(Date.now());
     const tLeaf = Date.now() + (burst.length - 1) * delayMs;
     typeKeys(display, burst, delayMs);
     const t = Date.now();
-    const rec = {
-      index,
-      key,
-      path,
-      ...(rule === "hidden"
+    const inner =
+      rule === "hidden"
         ? await watcher.waitHidden()
         : await waitEffect({
             watcher,
@@ -382,13 +413,18 @@ export async function typeKeysSettling(
             binding: matcher.leaf,
             path,
             tLeaf,
-          })),
-    };
+          });
+    const rec = { index, key, path, ...inner };
+    // A pending no-change check fills in its result on the record that is kept.
+    for (const p of tracker?.pending ?? []) if (p.rec === inner) p.rec = rec;
     waits.push(rec);
     last = { rec, t };
     burst = [];
   }
   resume();
-  if (burst.length) typeKeys(display, burst, delayMs);
+  if (burst.length) {
+    tracker?.closePending(Date.now());
+    typeKeys(display, burst, delayMs);
+  }
   return waits;
 }
