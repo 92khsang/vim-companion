@@ -214,8 +214,8 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   - `observe-oracle-defaults.jsonl.gz`: the same sequences through the oracle (as cards from
     `observe-compare.mjs cards`), and `observe-compare-1.141.0.txt`:
     `node spike/s2/check1/observe-compare.mjs compare <oracle> observe-1.141.0.json`. With the
-    cursor rule of `check1/lib.mjs`, 31 of 34 Visual-mode trials agree with VS Code in mode and
-    cursor (`v`, `v e`, `v b`, `v $`, `v j`, `v k`, `v h`, `V`, `V j`, `V k`, `<C-v>`, `<C-v> j l`,
+    cursor rule of `check1/lib.mjs`, 31 of 34 Visual-mode trials (17 sequences, 2 trials each)
+    agree with VS Code in mode and cursor (`v`, `v e`, `v b`, `v $`, `v j`, `v k`, `v h`, `V`, `V j`, `V k`, `<C-v>`, `<C-v> j l`,
     `<C-v> k h`, `<C-v> j $`, `<C-v> h` in 2 of 2, `V h` in 1 of 2); in the other 3 (`V h` trial 1,
     `V l` trials 0 and 1) VSCodeVim ended in Normal mode at the cursor that `h` or `l` gives in
     Normal mode. Inferred, not verified: each of the 3 followed a trial that left the cursor on
@@ -225,7 +225,8 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
     for parts 1 and 2 one after the other, then `oracle-merge.mjs` (`run-*.json`: the runner's
     summary per part). `expect` for both sets, `expect-sw2` and `expect-prestate` for the defaults
     (whose Vim rows include every Vim row of the second set). Each pass took 491-503 s on 4 tmux
-    servers (sum of the row times 1,859-1,890 s, median 611-613 ms, max 1,611 ms). Rows per class
+    servers (sum of the row times 1,859-1,890 s, median 611-613 ms, max 1,611 ms in the defaults pass and 1,613 ms
+    over the four passes). Rows per class
     (expect.mjs): defaults 3,038 Vim + 35 remap + 337 own + 17 leader + 15 surround; extensions
     3,013 Vim + 35 remap + 329 own + 63 sneak + 36 leader + 157 replaceWithRegister. Of the Vim
     rows 3,036 settled and 2 exited Vim (`<C-w> q`, `<C-w> <C-q>`); 94 ended with no fixture mode
@@ -244,3 +245,21 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
     its reason after `fill.mjs` (defaults 2,429 `vim-oracle`, 55 pending, 958 `hand`: 404 not Vim,
     94 null-mode, 221 outside, 237 state, 2 oracle; extensions 2,406, 55, 1,172: 620, 94, 219,
     237, 2).
+  - `rederive/`: the re-derivation of 2026-10-27 (`check1/rederive.mjs`; commands in the spike
+    README, section Check (1) input). `<set>-<layout>-<plain|prefixed>.json` are the oracle inputs
+    that `rederive.mjs prepare` wrote (482 single-window and 63 harness-layout rows per set,
+    `prefixed` with the history prefix before each setup), `<same>.jsonl.gz` the outputs of
+    `S2_VIM_LAYOUT=<layout> S2_VIMRC=expect-sw2.vimrc node spike/s2/vim-check/expect.mjs` on cores
+    28-31 (work and run directories replaced by `<work>` and `<run dir>`). The single-window
+    outputs are those of 01:18-01:45Z, with the `30u` row (whose setup changed afterwards) from a
+    rerun at 01:48-01:51Z; the harness-layout outputs are from 01:52-01:58Z. Every row settled and
+    none exited. `apply-report.json`: what `rederive.mjs apply` did to the 1,090 row-sets of both
+    sets: 772 kept the same expectation, 286 changed and kept the hand author's VSCodeVim reading
+    as `knownDeviation`, 18 that were pending got one, 6 changed with an added setup (`&`), 2
+    changed from a Vim-help answer (Visual `g P`: Vim 9.1 also yanks the replaced text), and 6 are
+    undetermined (`q:`, `q/`, `q?`: Vim's command-line window lists the session's history); 32
+    alternate-file row-sets (`<C-^>`, `<C-6>`) got a `knownDeviation` read from the source.
+    `visual-s.txt`: `node spike/s2/check1/visual-s.mjs`, 12 `S` row-sets, 9 with a
+    `knownDeviation`. After both: `node spike/s2/check1/build.mjs --check` gives 3,439 of 3,442
+    rows complete under the defaults and 3,630 of 3,633 under the second set, 3 undetermined each,
+    0 TODO and 0 invalid.

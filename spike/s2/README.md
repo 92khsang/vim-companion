@@ -181,19 +181,28 @@ what check (1) needs; one file per card so that hand authors can own disjoint ca
   `index.txt` line `labelIndex`; `pilot`; else hand) and `labelReview` when the index line was not
   plain and a hand review is due.
 - `source`: `vim-oracle` (the expectation is Vim 9.1's answer from `vim-check/expect.mjs`) or
-  `hand`, with `reason`.
+  `hand`, with `reason`. A `vim-oracle` row that `rederive.mjs` re-derived keeps the hand
+  `reason` (what check (1) does not compare, or which session state its setup fixes) and has
+  `oracle` (`vimrc`, `layout`, `setupAdded`); `previousHand` holds the hand expectation it
+  replaced, `handBasis` the hand author's sources when the expectation did not change.
+- `knownDeviation`: where VSCodeVim 1.32.4 is expected to differ from Vim's answer: the expected
+  VSCodeVim outcome (`expect` or `description`), its source (file and lines) and `status`
+  (`Inferred`: read from the source, not measured). The expectation stays Vim's answer, so the
+  trial shows the difference and it is judged by hand.
 - `expect`: the expectation in the format of `cards-correctness.mjs`, except that in a Visual mode
   `cursor` may be `{ "vim": [line, column], "visualStart": [line, column], "toLineEnd": true }`,
   Vim's own cursor and Visual start (`getpos('.')`, `getpos('v')`, 0-based; `toLineEnd` after `$`),
   which the builder converts to what the harness reads: the active end of VS Code's primary
   selection, which VSCodeVim 1.32.4 draws as the cursor plus one character for a forward
-  selection (through the line break at the line end), the cursor itself for a backward one, the
+  selection (through the line break at the line end, also at the end of Vim's last line, because
+  the harness writes the fixture with a final line break and the VS Code document has one more,
+  empty, line than Vim's buffer), the cursor itself for a backward one, the
   line end or column 0 of the cursor line in Visual Line mode, and in Visual Block mode the top
   line at the right column plus one (the line end after `$`); see `harnessCursor` in
   `check1/lib.mjs`. A mode is a fixture name or the probe's `other-<n>` for VSCodeVim's `Mode`
   value n: after `:` the probe reads `other-6` (CommandlineInProgress), after `/` and `?`
   `other-5` (SearchInProgressMode), with text and cursor unchanged.
-- `pending`: the row waits for a decision, with `variants` holding the candidate expectations.
+- `pending`: the row cannot be checked yet; since 2026-10-27 only `undetermined: <reason>`.
 - `bySet`: the fields that differ between the sets (for example `s`, Vim's substitute under the
   defaults and sneak under the second set); the other fields apply to every set in `sets`.
 
@@ -209,14 +218,35 @@ a register); or when its answer reads session state that a fresh Vim lacks and V
 from earlier rows of a run (`state`: puts, `n N ; ,`, `.`, undo, `&`, `gv`, `gi`, marks, `@`). The
 `state` list covers every row whose answer changed under `expect-prestate.vimrc` (0 rows outside
 it). A row whose answer differs between `expect.vimrc` and `expect-sw2.vimrc` (55 per set: the `>`
-operator and Visual `>`) is `vim-oracle` with `pending: "indentation"` until the coordinator
-chooses; `fill.mjs --indent <vimrc>` then writes that answer.
+operator and Visual `>`) was `vim-oracle` with `pending: "indentation"`; the coordinator kept the
+sandbox's detected indentation, and `check1/resolve-indent.mjs` wrote the `expect-sw2.vimrc` answer
+(`indentation` says why).
+
+Re-derivation of 2026-10-27 (`check1/rederive.mjs`, decision 3 of the note on #11 of that day: a
+Vim-command row takes Vim's answer, never one read from VSCodeVim's source). Every `hand` row whose
+reason is `state`, `null-mode`, `outside` or `oracle` ran through the oracle with its setup and
+`expect-sw2.vimrc`, except the `"+` card's clipboard rows (the installed Vim has no clipboard),
+which stay `hand` from Vim's help. Window, file and tag rows, and the rows that close a window, run
+in the oracle's harness layout (`S2_VIM_LAYOUT=harness`: the fixture in the left window, marked
+modified as a.txt is in the harness; b.txt with the same text in a right window and the
+alternate file; 'hidden' off, Vim's default). Each row ran a second time after a history prefix
+(jumps, a search, an f/t, a substitute, changes, an insert, a Visual area, a mark and a macro,
+then back to the start state); a row whose text, cursor or mode changes with it reads history
+that its setup does not fix and is `undetermined`. A row ending in the command line maps Vim's
+mode `c` to the probe's `other-6` (after `:` or `!`) or `other-5` (after `/` or `?`); one ending
+at the hit-enter prompt after an error maps to `normal`. Setups the rows lacked: `:s/e/X/<CR>`
+before `&`, and 30 changes (`x` 30 times) before `30u`. `check1/visual-s.mjs` gives the Visual
+cards' `S` rows where S is Vim's v_S (Visual and Visual Line under the second set, Visual Block
+under both) the card's `R` row, the same command in Vim.
 
 - Run the oracle over a set on several tmux servers:
   `[S2_VIMRC=<vimrc>] node spike/s2/check1/oracle-run.mjs <set> <workers> <run dir> [<part>/<parts>] [cards.json]`,
   then `node spike/s2/check1/oracle-merge.mjs <run dir> <vimrc base> <set> <out.jsonl.gz> [cards.json]`.
 - Write the input files: `node spike/s2/check1/fill.mjs [--force] [--indent <vimrc>]` (it keeps
-  existing files without `--force`).
+  existing files without `--force`); then `node spike/s2/check1/resolve-indent.mjs`,
+  `node spike/s2/check1/rederive.mjs prepare <dir>`, for each `<set>-<layout>-<variant>.json` in
+  `<dir>`: `S2_VIM_LAYOUT=<layout> S2_VIMRC=expect-sw2.vimrc node spike/s2/vim-check/expect.mjs <short work dir> <set> <dir>/<name>.json <dir>/<name>.jsonl`,
+  then `node spike/s2/check1/rederive.mjs apply <dir>` and `node spike/s2/check1/visual-s.mjs`.
 - Validate: `node spike/s2/check1/build.mjs --check`; build the correctness input and the labeled
   cards per set: `node spike/s2/check1/build.mjs <out dir> [--partial]`, then
   `node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <out dir>/correctness-<set>.json 3 <out.jsonl>`.
