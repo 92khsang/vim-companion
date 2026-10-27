@@ -4,8 +4,10 @@
 // nothing on Linux produces), the rows the builder left out, the errors, and a ROW line with the
 // criterion as written: 100% of card rows, in every trial, give the effect that the row states
 // (3 trials per row at 30 ms, both settings sets, both versions).
-// A row passes only when it has at least 3 trials, every one ok. Untyped, left-out and unmeasured
-// rows do not pass. Every record of the directory counts, kept incomplete runs included. The runs
+// A row passes only when it has at least 3 trials, every one ok. A negative row (a key marked
+// unsupported on Linux, check1/unsupported.mjs) is ok in a trial when no chord a Linux user would
+// press delivered its token; such rows are counted apart and stay inside the 100% rule. Untyped,
+// left-out and unmeasured rows do not pass. Every record of the directory counts, kept incomplete runs included. The runs
 // must share one clean build, hello.vscode must equal the version, and each version must have one
 // VSCodeVim and one which-key version.
 // Usage: node spike/s2/batch/check1-summary.mjs <check1 data dir>
@@ -105,6 +107,9 @@ for (const v of VERSIONS)
     );
     let inForce = 0;
     let pass = 0;
+    // Negative rows (a token nothing on Linux produces, marked unsupported): counted apart, and
+    // inside the 100% rule like every other row.
+    const neg = { rows: 0, trials: 0, pass: 0 };
     const failing = [];
     const unmeasured = [];
     for (const c of input[s].cards)
@@ -112,13 +117,19 @@ for (const v of VERSIONS)
         inForce += 1;
         const k = `${c.id}\u0000${row.key}`;
         const ts = trialsOf.get(k) ?? [];
+        if (row.negative) {
+          neg.rows += 1;
+          neg.trials += ts.length;
+        }
         if (untyped.has(k)) continue;
         if (ts.length < TRIALS) {
           unmeasured.push({ card: c.id, key: row.key, trials: ts.length });
           continue;
         }
-        if (ts.every((t) => t.ok)) pass += 1;
-        else
+        if (ts.every((t) => t.ok)) {
+          pass += 1;
+          if (row.negative) neg.pass += 1;
+        } else
           failing.push({
             card: c.id,
             key: row.key,
@@ -126,6 +137,13 @@ for (const v of VERSIONS)
             failed: ts.filter((t) => !t.ok).length,
             diff: [...new Set(ts.flatMap((t) => t.diff))],
             knownDeviation: Boolean(row.knownDeviation),
+            negative: row.negative
+              ? ts.flatMap((t) =>
+                  (t.tries ?? [])
+                    .filter((x) => x.delivered)
+                    .map((x) => x.chord.join(" ")),
+                )
+              : null,
           });
       }
     const excluded = input[s].excluded;
@@ -134,11 +152,11 @@ for (const v of VERSIONS)
     const ok = metas.length > 0 && pass === inForce && problems.length === 0;
     rows.push({ v, s, ok });
     lines.push(
-      `${s} ${v}: ${inForce} rows in force, ${trials} trials, ${pass} rows pass every trial; failing ${failing.length} (knownDeviation ${failing.filter((f) => f.knownDeviation).length}), untyped ${untyped.size}, left out ${excluded.length}, unmeasured ${unmeasured.length}, errors ${errors.length}`,
+      `${s} ${v}: ${inForce} rows in force, ${trials} trials, ${pass} rows pass every trial (negative rows ${neg.rows}: ${neg.trials} trials, ${neg.pass} pass); failing ${failing.length} (knownDeviation ${failing.filter((f) => f.knownDeviation).length}), untyped ${untyped.size}, left out ${excluded.length}, unmeasured ${unmeasured.length}, errors ${errors.length}`,
     );
     for (const f of failing)
       lines.push(
-        `  FAIL ${f.card} ${JSON.stringify(f.key)}: ${f.failed} of ${f.trials} trials, differ in ${f.diff.join(",")}${f.knownDeviation ? ", knownDeviation" : ""}`,
+        `  FAIL ${f.card} ${JSON.stringify(f.key)}: ${f.failed} of ${f.trials} trials, differ in ${f.diff.join(",")}${f.knownDeviation ? ", knownDeviation" : ""}${f.negative ? `, negative row: the token arrived by ${f.negative.join("; ")}` : ""}`,
       );
     for (const u of untyped.values())
       lines.push(

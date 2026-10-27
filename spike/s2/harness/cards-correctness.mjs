@@ -32,11 +32,21 @@ import {
   keysym,
   buildInfo,
   portable,
+  cdpEvaluate,
+  STATUS_BAR_JS,
 } from "./lib.mjs";
+import { execFileSync } from "node:child_process";
 import { SETTINGS_SETS } from "./cards-extract.mjs";
 import { planKeys } from "./card-keys.mjs";
 
 const RESET_KEYS = ["<Esc>", "<Esc>", "v", "<Esc>"];
+// VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
+// status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
+// "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
+// (extensionBase.ts L519-L526), so the reader finds none. The mode is then read from VSCodeVim's
+// status bar item over CDP. Mode.Disabled is 12 (mode.ts L4-L18), "other-12" in the fixture's names.
+const DISABLED_TEXT = "-- VIM: DISABLED --";
+const DISABLED_MODE = "other-12";
 const DEFAULTS = {
   "vim.surround": true,
   "vim.targets.enable": false,
@@ -152,8 +162,120 @@ try {
     { path: join(code.inst, "ws/a.txt"), viewColumn: 1 },
     { path: join(code.inst, "ws/b.txt"), viewColumn: 2 },
   ];
+  // A row such as `q a` leaves a macro recording on, which would record the next rows and make a
+  // later `q` stop it instead of starting one: every trial starts with no recording (up to 3 tries).
+  async function stopRecording() {
+    for (let i = 0; i < 3; i++) {
+      const st = await code.probe.call("vimState");
+      if (!st.recording) return i;
+      typeKeys(display, ["<Esc>", "<Esc>", "q"], 30);
+      await sleep(400);
+    }
+    throw new Error("a macro recording did not stop");
+  }
+  // Every trial starts from Normal mode, the two files in their groups with a.txt active, no macro
+  // being recorded, and the fixture text and cursor.
+  async function resetTrial() {
+    typeKeys(display, RESET_KEYS, 30);
+    await sleep(80);
+    const snap = await code.probe.call("snapshot");
+    if (
+      snap.editors.length !== 2 ||
+      !snap.active?.endsWith("/a.txt") ||
+      snap.activeViewColumn !== 1
+    ) {
+      // Reopen the two files without closing anything: the sandbox has files.hotExit and
+      // files.autoSave off, so closing the modified a.txt would raise a save prompt that blocks
+      // the harness. A row that split a window leaves a third group: join the groups first,
+      // which closes no editor.
+      if (snap.editors.length !== 2)
+        await code.probe.call("exec", {
+          command: "workbench.action.joinAllGroups",
+        });
+      await code.probe.call("open", { files });
+      focusWindow(code);
+      await code.probe.call("exec", {
+        command: "workbench.action.focusFirstEditorGroup",
+      });
+    }
+    await stopRecording();
+    await code.probe.call("reset", START);
+    await sleep(200);
+  }
+  // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
+  // A trial sends, in the row's state, each chord a Linux user would press for it (card-keys.mjs
+  // `tries`) while a macro is recorded, and reads which tokens VSCodeVim took: its pending keys (the
+  // probe's test-only reader) and the keys of the recorded actions (probe macroActions). The trial
+  // passes only when no chord delivered the token.
+  async function negativeTrial(card, row, setupPlan) {
+    const cardPlan = planKeys(card.keys);
+    const tries = [];
+    for (const chord of row.negative.tries) {
+      await resetTrial();
+      if (setupPlan) {
+        await send(setupPlan);
+        await sleep(200);
+      }
+      typeKeys(display, ["q", "z"], 30);
+      await sleep(200);
+      await send(cardPlan);
+      execFileSync(
+        "xdotool",
+        ["key", "--clearmodifiers", "--delay", "30", ...chord],
+        {
+          env: { PATH: process.env.PATH, DISPLAY: display },
+        },
+      );
+      await sleep(400);
+      const st = await code.probe.call("vimState");
+      const snap = await code.probe.call("snapshot");
+      const pending = st.handler
+        ? [
+            ...st.fields.actionsRun.flatMap((a) => a.keysPressed),
+            ...st.fields.actionKeys,
+            ...st.fields.bufferedKeys,
+          ]
+        : [];
+      if (!snap.active?.endsWith("/a.txt") || snap.activeViewColumn !== 1) {
+        await code.probe.call("open", { files });
+        focusWindow(code);
+      }
+      typeKeys(display, ["<Esc>", "<Esc>", "q"], 30);
+      await sleep(400);
+      await stopRecording();
+      const macro = await code.probe.call("macroActions", { name: "z" });
+      const received = [...pending, ...(macro ?? []).flatMap((a) => a.keys)];
+      tries.push({
+        chord,
+        received,
+        delivered: received.includes(row.negative.token),
+        actions: macro ?? null,
+        activeFile: snap.active?.replace(/^.*\//, ""),
+      });
+    }
+    return tries;
+  }
   for (const card of cards) {
     for (const row of card.rows.filter((r) => holds(r.when))) {
+      if (row.negative) {
+        const setupPlan = row.setup ? planKeys(row.setup) : null;
+        for (let trial = 0; trial < Number(trialsArg); trial++) {
+          const tries = await negativeTrial(card, row, setupPlan);
+          const ok = tries.every((t) => !t.delivered);
+          write({
+            type: "trial",
+            kind: "negative",
+            card: card.id,
+            key: row.key,
+            token: row.negative.token,
+            trial,
+            ok,
+            diff: ok ? [] : ["delivered"],
+            tries,
+          });
+        }
+        continue;
+      }
       if (!row.expect) {
         write({ type: "no-expectation", card: card.id, key: row.key });
         continue;
@@ -174,30 +296,7 @@ try {
         continue;
       }
       for (let trial = 0; trial < Number(trialsArg); trial++) {
-        typeKeys(display, RESET_KEYS, 30);
-        await sleep(80);
-        let snap = await code.probe.call("snapshot");
-        if (
-          snap.editors.length !== 2 ||
-          !snap.active?.endsWith("/a.txt") ||
-          snap.activeViewColumn !== 1
-        ) {
-          // Reopen the two files without closing anything: the sandbox has files.hotExit and
-          // files.autoSave off, so closing the modified a.txt would raise a save prompt that blocks
-          // the harness. A row that split a window leaves a third group: join the groups first,
-          // which closes no editor.
-          if (snap.editors.length !== 2)
-            await code.probe.call("exec", {
-              command: "workbench.action.joinAllGroups",
-            });
-          await code.probe.call("open", { files });
-          focusWindow(code);
-          await code.probe.call("exec", {
-            command: "workbench.action.focusFirstEditorGroup",
-          });
-        }
-        await code.probe.call("reset", START);
-        await sleep(200);
+        await resetTrial();
         const before = await code.probe.call("registers");
         // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
         if (setupPlan) {
@@ -207,13 +306,24 @@ try {
         const typed = [...card.keys, row.sample ?? row.key];
         await send(plan);
         await sleep(400);
-        snap = await code.probe.call("snapshot");
+        const snap = await code.probe.call("snapshot");
         const active =
           snap.editors.find(
             (e) =>
               e.uri === snap.active && e.viewColumn === snap.activeViewColumn,
           ) ?? snap.editors.find((e) => e.uri === snap.active);
         const state = (await code.probe.call("vimState")).state;
+        let mode = state?.mode ?? null;
+        let modeFrom = "reader";
+        if (!state) {
+          const status = (
+            await cdpEvaluate(Number(cdpPort), STATUS_BAR_JS)
+          ).map((x) => x[1]);
+          if (status.includes(DISABLED_TEXT)) {
+            mode = DISABLED_MODE;
+            modeFrom = "status bar";
+          } else modeFrom = "none";
+        }
         const after = await code.probe.call("registers");
         // expect.shiftNumbered: the key shifts the numbered registers (:help quote_number), so
         // register n+1 must hold what register n held before, for n = 1..8.
@@ -233,7 +343,7 @@ try {
         const got = {
           text: active ? active.text.replace(/\n$/, "").split("\n") : null,
           cursor: active ? active.selections[0].slice(2) : null,
-          mode: state?.mode ?? null,
+          mode,
           registers: Object.fromEntries(
             [...new Set([...Object.keys(before), ...Object.keys(after)])]
               .filter(
@@ -282,6 +392,7 @@ try {
           want,
           activeFile: snap.active?.replace(/^.*\//, ""),
           knownDeviation: row.knownDeviation ?? null,
+          modeFrom,
         });
         // A row whose token ran a command (such as toggleVim) undoes it before the next trial.
         for (const command of plan.teardown) {
