@@ -292,7 +292,9 @@ what check (1) needs; one file per card so that hand authors can own disjoint ca
   trials per set and version, verdict). The builder makes this value the expectation the harness
   checks and keeps Vim's answer under `vim`, with `knownDeviation` holding the rule, `documented`
   and `measured`. A rule holds for a row only when its value matches every trial of the latest run
-  and every trial of pass 1 whose trials agree; a value is never copied from a measurement.
+  and every trial of pass 1 whose trials agree; a value is never copied from a measurement. Rules apply to
+  rows whose expectation is Vim's answer: `vim-oracle` rows and the `"+` card's clipboard rows (hand
+  rows from Vim's help only because the installed Vim has no clipboard).
 - `expect`: the expectation in the format of `cards-correctness.mjs`, except that in a Visual mode
   `cursor` may be `{ "vim": [line, column], "visualStart": [line, column], "toLineEnd": true }`,
   Vim's own cursor and Visual start (`getpos('.')`, `getpos('v')`, 0-based; `toLineEnd` after `$`),

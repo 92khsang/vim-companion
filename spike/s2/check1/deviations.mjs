@@ -17,6 +17,10 @@ import { cardFile, harnessCursor } from "./lib.mjs";
 
 const IN = join(REPO, "spike/s2/check1/cards");
 const sameJson = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const vimAnswer = (x) =>
+  x.source === "vim-oracle" ||
+  (x.source === "hand" &&
+    (x.reason ?? "").startsWith("outside: clipboard register"));
 const canon = (v) =>
   v == null
     ? null
@@ -339,16 +343,17 @@ if (cmd === "classify") {
   const [passDirs, buildDir, outFile] = args;
   const dirs = passDirs.split(",");
   // A rule turns Vim's answer into VSCodeVim's: it is tried only on rows whose expectation is
-  // Vim's answer (source vim-oracle) under the set.
+  // Vim's answer under the set: source vim-oracle, or the `"+` card's clipboard rows, which are
+  // hand rows only because the installed Vim has no clipboard (their expectation is Vim's help).
   const source = {};
   for (const f of readdirSync(IN).filter((f) => f.endsWith(".json"))) {
     const c = JSON.parse(readFileSync(join(IN, f), "utf8"));
     for (const r of c.rows)
       for (const set of r.sets)
-        source[`${set}\0${c.card}\0${r.key}`] = {
+        source[`${set}\0${c.card}\0${r.key}`] = vimAnswer({
           ...r,
           ...(r.bySet?.[set] ?? {}),
-        }.source;
+        });
   }
   const want = {};
   for (const set of ["defaults", "extensions"])
@@ -416,9 +421,7 @@ if (cmd === "classify") {
         ]),
       ),
     };
-    const allOracle = ts.every(
-      ({ set }) => source[`${set}\0${card}\0${key}`] === "vim-oracle",
-    );
+    const allOracle = ts.every(({ set }) => source[`${set}\0${card}\0${key}`]);
     for (const rule of allOracle ? RULES : []) {
       if (!rule.applies(ctx)) continue;
       const engine = {};
