@@ -17,6 +17,7 @@ dir=$DATA/differential-row
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/both-$v.jsonl
+  same_build_or_stop "$out"
   while :; do
     counts=$(count_runs "$out")
     read -r attempts nOn nOff fatal <<< "$counts"

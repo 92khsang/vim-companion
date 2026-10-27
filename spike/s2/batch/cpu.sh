@@ -24,6 +24,7 @@ windows() { # <file> <scenario> <arm> <valid|all>
 }
 for v in $VERSIONS; do
   out=$dir/cpu-$v.jsonl
+  same_build_or_stop "$out"
   for scenario in idle typing; do
     for k in 1 2 3; do
       for arm in off on; do

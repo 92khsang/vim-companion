@@ -73,6 +73,25 @@ count_runs() {
   [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'" >&2; exit 1; }
   echo "$out"
 }
+# Stops the batch when a data file it would continue holds records of another build: a resumed row
+# must measure one build, and the compare would refuse the mixed file only at the end. The records
+# that carry a build: differential runs and run-errors, CPU windows (no type) and fixture metas.
+same_build_or_stop() { # <file>
+  [ -s "$1" ] || return 0
+  local ids
+  ids=$(node -e '
+    const fs = require("fs");
+    const ids = new Set(fs.readFileSync(process.argv[1], "utf8").split("\n").filter(Boolean)
+      .map((l) => JSON.parse(l))
+      .filter((r) => [undefined, "run", "run-error", "meta"].includes(r.type))
+      .map((r) => r.build?.id ?? "none"));
+    console.log([...ids].join(" "));
+  ' "$1" 2>/dev/null) || { log "cannot read $1 (a line is not JSON): stopping" >&2; exit 1; }
+  if [ "$ids" != "$BUILD_ID" ]; then
+    log "$1 holds records of the build(s) $ids, not $BUILD_ID: move it away to start over; stopping"
+    exit 1
+  fi
+}
 # No sandbox process, mount or Xvfb of the batch may be left. The batch's instances are the ones of
 # its display (instance names end with the display number); another batch's are not counted.
 leftover_check() {

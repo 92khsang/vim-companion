@@ -14,6 +14,7 @@ mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/adapter-$v.jsonl
   if [ -s "$out" ] && grep -q '"type":"end"' "$out"; then
+    same_build_or_stop "$out"
     log "fixture $v: complete, not run again"
   else
     [ -e "$out" ] && mv "$out" "$out.incomplete-$(date -u +%Y%m%dT%H%M%SZ)"

@@ -12,6 +12,7 @@ dir=$DATA/precheck
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/off-$v.jsonl
+  same_build_or_stop "$out"
   while :; do
     counts=$(count_runs "$out")
     read -r attempts _ nOff fatal <<< "$counts"
