@@ -422,7 +422,13 @@ or Visual Block trial VS Code otherwise handed about every second typed key to V
 step); unfolds and scrolls the first line to the top (rows such as `zc`, `CTRL-E` and `zt` changed
 what `H`, `M`, `L` and `CTRL-B` see); puts b.txt at the start state when the files are reopened
 (`resetB`; the oracle's harness layout does the same); and types `v <Esc>` after the cursor reset,
-so the last Visual area is at the start position. The clipboard registers `*` and `+`, which
+so the last Visual area is at the start position. The rechecks after it showed four more leaks, so every trial also
+starts with keyboard focus in group 1 and a.txt as group 1's only editor (`<C-w> h` runs
+`navigateLeft`, which left focus in the Explorer while a.txt stayed active, and `<C-6>` left a
+hidden b.txt in group 1 that `<C-pagedown>` then showed), checks that the reset ended in Normal
+mode (the first trial of a session often kept the Visual mode of `v` because its `<Esc>` was lost)
+and, for a row that reads the jump list (`<C-o>`, `<C-i>`, `<Tab>`), clears VSCodeVim's
+session-wide jump list with `:clearjumps`. The clipboard registers `*` and `+`, which
 VSCodeVim creates empty when it first reads the clipboard, count as unchanged when absent before
 and empty after.
 

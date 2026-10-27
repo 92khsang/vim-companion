@@ -50,6 +50,7 @@ import { planKeys } from "./card-keys.mjs";
 // '< '> marks are at the start position in every trial.
 const RESET_KEYS = ["<Esc>", "<Esc>"];
 const RESET_TAIL = ["v", "<Esc>"];
+const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>"]);
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -212,7 +213,7 @@ try {
   }
   // Every trial starts from Normal mode, the two files in their groups with a.txt active, no macro
   // being recorded, and the fixture text and cursor.
-  async function resetTrial() {
+  async function resetTrial({ clearJumps = false } = {}) {
     typeKeys(display, RESET_KEYS, 30);
     await sleep(80);
     await code.probe.call("exec", { command: "expandLineSelection" });
@@ -220,8 +221,14 @@ try {
     typeKeys(display, ["<Esc>"], 30);
     await sleep(80);
     const snap = await code.probe.call("snapshot");
+    const shows = (file, column) =>
+      snap.editors.some(
+        (e) => e.uri.endsWith(`/${file}`) && e.viewColumn === column,
+      );
     if (
       snap.editors.length !== 2 ||
+      !shows("a.txt", 1) ||
+      !shows("b.txt", 2) ||
       !snap.active?.endsWith("/a.txt") ||
       snap.activeViewColumn !== 1
     ) {
@@ -240,7 +247,30 @@ try {
       });
       await resetB();
     }
+    // Keyboard focus and group 1's editors. <C-w> h runs navigateLeft (VSCodeVim 1.32.4
+    // src/actions/commands/window.ts L71-L90), which from group 1 moves keyboard focus to the
+    // Explorer while a.txt stays the active editor, so later keys went to the Explorer (pass 1:
+    // the first 18 rows of the "a card after the <C-w> card). <C-6> opens b.txt in group 1 and the
+    // reopen above only puts a.txt in front of it, so <C-pagedown> and <C-pageup>
+    // (nextEditorInGroup, cmd_line/commands/tab.ts L182-L210) then switched to that hidden b.txt.
+    // Every trial starts with keyboard focus in group 1 and a.txt as its only editor; b.txt is
+    // open in group 2, so closing its other editor raises no save prompt.
+    await code.probe.call("exec", {
+      command: "workbench.action.focusFirstEditorGroup",
+    });
+    await code.probe.call("exec", {
+      command: "workbench.action.closeOtherEditors",
+    });
+    await sleep(100);
     await stopRecording();
+    // VSCodeVim keeps one jump list for the session (jumps/jumpTracker.ts), which the oracle's
+    // fresh Vim does not have: a row that reads it (<C-o>, <C-i>, <Tab>) starts with it cleared
+    // (:clearjumps, cmd_line/commands/jumps.ts L51). Only those rows: the command line it runs
+    // becomes the : register, which other rows may read.
+    if (clearJumps) {
+      typeKeys(display, [":", ..."clearjumps", "\n"], 30);
+      await sleep(300);
+    }
     await code.probe.call("reset", START);
     // The view (top line) and folds carry over from earlier rows (CTRL-E, CTRL-F, zt, zf, ...) and
     // decide keys such as H, M, L, CTRL-B and CTRL-U: every trial starts with the document's first
@@ -253,6 +283,17 @@ try {
     await sleep(150);
     typeKeys(display, RESET_TAIL, 30);
     await sleep(200);
+    // The reset ends in Normal mode. Measured (check1 triage, 2026-10-28): the first trial of a
+    // session often stayed in Visual mode (the tail's <Esc> was lost), so the row's keys acted on a
+    // one-character selection (`d 3 <CR>` deleted "w"); <Esc> again until the reader shows Normal
+    // mode (3 tries). With VSCodeVim off the reader has no state and there is nothing to check.
+    for (let i = 0; ; i++) {
+      const st = (await code.probe.call("vimState")).state;
+      if (!st || st.mode === "normal") break;
+      if (i === 3) throw new Error(`the trial reset left mode ${st.mode}`);
+      typeKeys(display, ["<Esc>"], 30);
+      await sleep(200);
+    }
   }
   // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
   // A trial sends, in the row's state, each chord a Linux user would press for it (card-keys.mjs
@@ -347,8 +388,13 @@ try {
         });
         continue;
       }
+      const clearJumps = [
+        ...(row.setup ?? []),
+        ...card.keys,
+        row.sample ?? row.key,
+      ].some((k) => JUMP_KEYS.has(k));
       for (let trial = 0; trial < Number(trialsArg); trial++) {
-        await resetTrial();
+        await resetTrial({ clearJumps });
         const before = await code.probe.call("registers");
         // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
         if (setupPlan) {
