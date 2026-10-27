@@ -75,59 +75,89 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
 - `harness/differential.mjs`, `cpu.mjs`, `fixture-run.mjs`: every record carries `build`
   (`lib.mjs` `buildInfo`: the checkout's HEAD, the uncommitted changes under `spike/s2` and `spec`
   without the data directories, sha256 hashes of `extensions/s2-adapter`, `extensions/s2-probe`,
-  `harness/differential-script.json`, `harness/` and the two generated settings files, and a short
-  `id` of all of it) and the probe's `hello` (VS Code, VSCodeVim, which-key, the extensions). A
-  differential run and a CPU window also carry `adapterCheck` (`lib.mjs`): with the adapter on, the
-  adapter is present and active, its latest report holds a state, its last polling error is null
-  and the report is at most two poll intervals old; with it off, the adapter is absent. A failed
-  inspector walk leaves the adapter active without a report, and this check catches it. A
-  differential `run-error` carries its phase: `start` (session, clipboard, input check), `script`
-  or `read`. `differential-compare.mjs`'s `ROW` line needs, besides the outcomes: only `start`
-  errors, unique and contiguous run numbers from 0 with strict alternation of the arms, a passing
-  adapter check in every run, no trace run and one build over all records. `cpu.mjs` runs the
-  input check of every row before the window, resets a.txt in the first group before each loop of
-  the typing scenario and counts the probe's editor events per loop, reads CLK_TCK with `getconf`,
-  records the busy time of the `S2_CPUS` cores and the CPU time of the session's own processes,
-  and marks a window `valid` only when the input check, the adapter check and the typing evidence
-  hold, no other sandbox of the harness ran on overlapping cores, and the load from elsewhere on
-  those cores stayed below 50% of one core. `fixture-run.mjs` times the reads from the last key
-  (the spawn time plus the keys before it times the delay, a lower bound, so a read is never late)
-  and records `readAfterMs`; `fixture-summary.mjs`'s `ROW` line needs every case of
-  `spec/fixtures/grammar`, one meta and one end record per file, no `S2_CASES` selection and one
-  build.
+  `harness/differential-script.json`, `harness/` and the two generated settings files, the version
+  and product commit of each `S2_CODE_*` binary from its `resources/app/product.json`, a sha256 of
+  `$S2_ROOT/ext/base` (the VSCodeVim and which-key folders copied into every instance), and a short
+  `id` of all of it) and the probe's `hello` (VS Code, VSCodeVim, which-key, the extensions).
+  Every compare and summary refuses mixed builds and builds with uncommitted changes, and needs
+  `hello.vscode` to be the version label and one VSCodeVim and one which-key version per version.
+- The adapter check (`lib.mjs` `adapterCheck`), at the end of a differential run and of a CPU
+  window: with the adapter on, the adapter is present and active, its latest report holds a state,
+  is for the active editor at the read (`uri`), is at most two poll intervals old, its last polling
+  error is null, and after `<Esc> <Esc>` its state is neutral Normal mode (nothing pending, no
+  operator, count or register); with the adapter off, the adapter is absent. The adapter counts its
+  completed polls (`polls`), and a CPU window with the adapter on needs at least 90% of the window
+  over the poll interval.
+- Phases of an error: `boot` (before the extension host is up: the instance, the process spawn, the
+  probe's socket and hello), `start` (from the host's start: VSCodeVim's activation, the files, the
+  clipboard, the input check), `script`, `read` (differential) or `window`, `read` (CPU). Only a
+  `boot` error measured nothing; every other error counts against its row, on either arm.
+- `differential-compare.mjs`: its `ROW` line needs, besides the outcomes, only `boot` errors,
+  unique and contiguous run numbers from 0 with strict alternation of the arms, a passing adapter
+  check in every run, the effect rule in every run, no trace run, the versions above and one clean
+  build. With `S2_DIFF_PRECHECK=<n>` it prints a `PRECHECK` line per version instead: at least n
+  adapter-off runs and no adapter-on run under the same rules.
+- `cpu.mjs` runs the input check of every row before the window, resets a.txt in the first group
+  before each loop of the typing scenario and counts the probe's editor events per loop (at least
+  one per item typed), reads CLK_TCK with `getconf`, records the busy time of the `S2_CPUS` cores,
+  of each core, of each Hyper-Threading pair they belong to and of the pairs' cores outside the
+  set, and the CPU time of the session's own processes pinned to the cores. A window is `valid`
+  when every check holds; an invalid window is `rerunnable` only for another sandbox of the
+  harness on overlapping cores or load from elsewhere on the cores of at least 50% of one core
+  (the user's unpinned desktop programs put 5 to 15% of one core on a set of 4 cores; the
+  per-process CPU time the row compares does not include them), and an error only in the phase
+  `boot`. `batch/cpu-summary.mjs` counts valid 10-minute windows, fails the row on any other
+  failure of either arm, needs 1.134.0 and 1.141.0, and lists every window it did not count with
+  its reason and, per arm, the maximum load from elsewhere, HT pair busy share and busy share of
+  the pairs' cores outside the set.
+- `fixture-run.mjs` times the reads from the last key (the spawn time plus the keys before it
+  times the delay, a lower bound, so a read is never late), records `readAfterMs` and the adapter's
+  own poll interval (`adapterPollMs`). `fixture-summary.mjs`'s `ROW` line needs per version one
+  complete run of the adapter with 10 trials at 10, 30 and 60 ms, `last`, no `S2_CASES`, every case
+  of `spec/fixtures/grammar` read trials x delays times, every read of every file matching
+  (including kept incomplete runs), no reset failure, error or read more than 50 ms later than the
+  row states, the meta's poll equal to the adapter's, the versions above and one clean build.
 - `batch/`: the batch scripts of the (a) rows. They run from a dedicated frozen checkout, not from
   a working tree that other work commits to, because every run copies the spike extensions and
   reads the generated settings from the checkout:
   `git worktree add --detach <dir> <commit>`, then from `<dir>`, with the S2 environment exported,
-  `spike/s2/batch/<script>.sh`; afterwards the data directories are committed from that checkout
-  onto the spike branch. A batch refuses to start when `spike/s2` or `spec` has uncommitted
-  changes (data directories excepted), records before every harness call the build and every `S2_`
-  variable that is not a path in `command.txt`, stops when the build changed since it started or
-  when a data file it would continue holds records of another build, and
-  unsets `S2_DIFF_TRACE`, `S2_CASES` and `S2_RESET_SETTLE` unless it sets them itself. Every batch
-  holds a shared lock on the `S2_CPUS` cores, which `cpu.sh` takes exclusively; agents' direct
-  harness runs do not take it, and `cpu.mjs` detects them instead. `S2_BATCH_DATA` (default
-  `spike/s2/data`) moves the data root for smoke runs. Each batch runs one sandbox VS Code at a
-  time on `S2_BATCH_DISPLAY` (default
-  `:121`) and `S2_BATCH_PORT` (default 9521) with `S2_NAME_PREFIX` (default `a-`), holds a lock on
-  that display, appends every harness command to its data directory's `command.txt`, ends with a
-  leftover check and the line `batch finished`, and continues where it stopped when it is run
-  again (`fixture-adapter.sh` reruns an incomplete version from the start). `precheck.sh`: 100
-  completed adapter-off runs per version with the effect rule must all agree, with no adapter in
-  any of them and one build; a `start` error is replaced by a further run (at most 110 attempts),
-  a `script` or `read` error fails it (`spike/s2/data/precheck/`).
-  `fixture-adapter.sh`: the grammar fixture row, `fixture-run.mjs <version> :121 9521 adapter 10
-10,30,60 last <out> 50`, and `fixture-summary.mjs`, whose `ROW` line states the row's pass
-  condition (`spike/s2/data/fixture-adapter/`). `cpu.sh`: the polling CPU row, per version the idle
-  and the typing scenario, 3 valid windows of 10 minutes on and 3 off in the order off, on, off,
-  on, off, on (an invalid window is run again, at most 6 extra times per scenario and arm), then
-  `batch/cpu-summary.mjs`, which counts only valid 10-minute windows, needs both versions and one
-  build (`spike/s2/data/cpu/`). `differential.sh`: the differential row, 1000 runs on and 1000 off
-  per version, alternating, in chunks of 50 with `S2_DIFF_START`, until each arm has 1000 completed
-  runs (a `start` error is replaced; at most 2100 attempts; the first `script` or `read` error
-  stops the version, because the row can then not pass), then `differential-compare.mjs` with
-  `S2_DIFF_EXPECT=1000`, whose `ROW` line states the pass condition per version
-  (`spike/s2/data/differential-row/`).
+  `spike/s2/batch/<script>.sh`. The frozen checkout gets no commit until every row is done, so that
+  every row carries the same build; then the data directories are committed from it onto the spike
+  branch. A batch refuses to start when `spike/s2` or `spec` has uncommitted changes (data
+  directories excepted), records before every harness call the build and every `S2_` variable that
+  is not a path in `command.txt`, stops when the build changed since it started (the binaries and
+  the sandbox extensions included) or when a data file it would continue holds records of another
+  build, and unsets `S2_DIFF_TRACE`, `S2_CASES` and `S2_RESET_SETTLE` unless it sets them itself.
+  Every batch holds a shared lock on each core of `S2_CPUS` (one lock file per core), which `cpu.sh`
+  takes exclusively; agents' direct harness runs do not take them, and `cpu.mjs` detects them
+  instead. `S2_BATCH_DATA` (default `spike/s2/data`) moves the data root for smoke runs. Each batch
+  runs one sandbox VS Code at a time on `S2_BATCH_DISPLAY` (default `:121`) and `S2_BATCH_PORT`
+  (default 9521) with `S2_NAME_PREFIX` (default `a-`), holds a lock on that display, appends every
+  harness command to its data directory's `command.txt`, ends with a leftover check of its display
+  and the line `batch finished`, and continues where it stopped when it is run again.
+  - `precheck.sh`: 100 completed adapter-off runs per version with the effect rule must all agree
+    under the compare's `PRECHECK` rules; a `boot` error is replaced by a further run (at most 110
+    attempts), any other error or an adapter in an adapter-off run fails it
+    (`spike/s2/data/precheck/`).
+  - `fixture-adapter.sh`: the grammar fixture row, `fixture-run.mjs <version> :121 9521 adapter 10
+10,30,60 last <out> 50`, and `fixture-summary.mjs` (`spike/s2/data/fixture-adapter/`). A version
+    whose file has no end record is run again from the start; the incomplete file is summarized
+    first, the batch stops when it holds a mismatched read, a reset failure, an error or a late
+    read, and otherwise it is kept as `adapter-<version>.incomplete-<time>.jsonl` and counted.
+  - `cpu.sh`: the polling CPU row, per version the idle and the typing scenario, 3 valid windows of
+    10 minutes on and 3 off in the order off, on, off, on, off, on; a rerunnable window is run
+    again (at most 6 extra times per scenario and arm), any other failure stops the version; then
+    `batch/cpu-summary.mjs` (`spike/s2/data/cpu/`).
+  - `differential.sh`: starts only when `precheck.sh` passed for every version with the same build.
+    1000 runs on and 1000 off per version, alternating, in chunks of 50 with `S2_DIFF_START`, until
+    each arm has 1000 completed runs (a `boot` error is replaced; at most 2100 attempts; the first
+    other error or failed adapter check stops the version, because the row can then not pass), then
+    `differential-compare.mjs` with `S2_DIFF_EXPECT=1000`, whose `ROW` line states the pass
+    condition per version (`spike/s2/data/differential-row/`).
+  - `rows-check.mjs [data dir]`: after the three rows, the cross-row condition of the issue: the
+    precheck, fixture, differential and CPU records of both versions carry one build, hence one
+    adapter, probe and harness, and one poll interval (the fixture's poll and adapterPollMs and the
+    differential and CPU adapter checks' pollMs), with one VSCodeVim and one which-key version.
 
 ## Cards reference and register convention
 
