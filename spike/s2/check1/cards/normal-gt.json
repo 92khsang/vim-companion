@@ -7,8 +7,8 @@
       "key": "\n",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -34,8 +34,8 @@
       "key": " ",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the right",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -59,10 +59,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right search backward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Shift the lines back to the previous match of the word under the cursor right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
         "expect.vimrc": {
@@ -97,8 +96,8 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -122,10 +121,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L259 |%|",
-      "labelReview": "the index description is long",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
         "expect.vimrc": {
@@ -148,8 +146,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR on the line with mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Shift the lines up to a mark right: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L265 |'|",
       "expect": {
         "text": "unchanged",
@@ -161,8 +159,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N sentences backward",
-      "labelFrom": "index",
+      "label": "Shift the lines back to the start of the sentence right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L289 |(|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -188,8 +186,8 @@
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N sentences forward",
-      "labelFrom": "index",
+      "label": "Shift the lines to the start of the next sentence right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L290 |)|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -217,10 +215,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right search forward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Shift the lines to the next match of the word under the cursor right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
         "expect.vimrc": {
@@ -255,8 +252,8 @@
       "key": "+",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -283,16 +280,25 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR N lines higher",
-      "labelFrom": "index",
+      "label": "Shift this line and the one above right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L297 |-|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -319,15 +325,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift right to a search match: starts the search",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending.",
+      "labelFrom": "hand"
     },
     {
       "key": "0",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first char of the line",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -352,16 +364,25 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space>). Setup f<Space> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the left",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -386,15 +407,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift the line right (the motion stays on the line)",
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLeft src/actions/motion.ts L666-701; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to line N, default last line",
-      "labelFrom": "index",
+      "label": "Shift the lines down to the last line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -422,8 +451,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to line N, default first line",
-      "labelFrom": "index",
+      "label": "Shift the lines up to the first line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -449,8 +478,8 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines downward",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -476,8 +505,8 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N words backward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -501,8 +530,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -528,8 +557,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines downward",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -555,8 +584,8 @@
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines upward",
-      "labelFrom": "index",
+      "label": "Shift this line and the one above right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -582,8 +611,8 @@
       "key": "<C-right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N words forward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -608,23 +637,39 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift the line right (the motion stays on the line)",
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLineBegin src/actions/motion.ts L1027-1042; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift the line right (the motion stays on the line)",
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLineEnd src/actions/motion.ts L1014-1025; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "labelFrom": "hand"
     },
     {
       "key": "<End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -648,8 +693,8 @@
       "key": "<Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first char of the line",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -674,15 +719,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift the line right (the motion stays on the line)",
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLeft src/actions/motion.ts L666-701; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "labelFrom": "hand"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines downward",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -708,8 +761,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the left",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -733,8 +786,8 @@
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the right",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -758,8 +811,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines upward",
-      "labelFrom": "index",
+      "label": "Shift this line and the one above right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -785,8 +838,8 @@
       "key": ">",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift N lines one 'shiftwidth' rightwards",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L325 |>>|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -811,15 +864,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift right back to a search match: starts the search",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending.",
+      "labelFrom": "hand"
     },
     {
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N WORDS backward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L334 |B|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -843,8 +902,8 @@
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right forward to the end of WORD N",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L341 |E|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -868,8 +927,8 @@
       "key": "F",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Shift this line right: waits for the character to find backward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L342 |F|",
       "expect": {
         "text": "unchanged",
@@ -881,8 +940,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to line N, default last line",
-      "labelFrom": "index",
+      "label": "Shift the lines down to the last line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -910,8 +969,8 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to line N from top of screen",
-      "labelFrom": "index",
+      "label": "Shift the lines up to the top line of the window right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -937,8 +996,8 @@
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to line N from bottom of screen",
-      "labelFrom": "index",
+      "label": "Shift the lines down to the bottom line of the window right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -966,8 +1025,8 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to middle line of screen",
-      "labelFrom": "index",
+      "label": "Shift the lines to the middle line of the window right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L352 |M|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -992,16 +1051,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right till after Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Shift this line right: waits for the character (till backward)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L365 |T|",
       "expect": {
         "text": "unchanged",
@@ -1013,8 +1087,8 @@
       "key": "W",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N WORDS forward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L369 |W|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1042,15 +1116,21 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift right back to a two-character match (sneak): waits for two characters",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SneakBackward src/actions/plugins/sneak.ts L75-140 with an operator.",
+      "labelFrom": "hand"
     },
     {
       "key": "[",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a [ command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a [ motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1061,8 +1141,8 @@
       "key": "]",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a ] command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a ] motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1073,8 +1153,8 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR of the line",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L379 |^|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1098,8 +1178,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the first CHAR N - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1123,8 +1203,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to the mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Shift the lines up to a mark right: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L381 |`|",
       "expect": {
         "text": "unchanged",
@@ -1136,8 +1216,8 @@
       "key": "a",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Shift the lines around a text object right: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1148,8 +1228,8 @@
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N words backward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1173,8 +1253,8 @@
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right forward to the end of word N",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L403 |e|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1198,8 +1278,8 @@
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Shift this line right: waits for the character to find",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L404 |f|",
       "expect": {
         "text": "unchanged",
@@ -1211,8 +1291,8 @@
       "key": "g",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a g command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a g motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1223,8 +1303,8 @@
       "key": "h",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the left",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1248,8 +1328,8 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Shift the lines inside a text object right: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1260,8 +1340,8 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines downward",
-      "labelFrom": "index",
+      "label": "Shift this line and the next right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1287,8 +1367,8 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N lines upward",
-      "labelFrom": "index",
+      "label": "Shift this line and the one above right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1314,8 +1394,8 @@
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N chars to the right",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1340,16 +1420,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Shift the line right (the motion stays on the line)",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 4],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)). Setup /e<CR> 1 4 |; IndentOperator src/actions/operator.ts L449-461 runs editor.action.indentLines on line 1 and puts the cursor on its first non-blank. VS Code 1.141.0 src/vs/editor/common/commands/shiftCommand.ts L60-71, L111-191: with insertSpaces the indent of 2 goes to the next indent stop, 4, both for the detected indent size 2 and for tab size 4.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right till before Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Shift this line right: waits for the character (till)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L427 |t|",
       "expect": {
         "text": "unchanged",
@@ -1361,8 +1456,8 @@
       "key": "w",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N words forward",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1390,15 +1485,21 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift right to a two-character match (sneak): waits for two characters",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SneakForward src/actions/plugins/sneak.ts L7-73 with an operator.",
+      "labelFrom": "hand"
     },
     {
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N paragraphs backward",
-      "labelFrom": "index",
+      "label": "Shift the lines back to the start of the paragraph right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L437 |{|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1426,19 +1527,25 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Shift right by a camelCase word (camelCaseMotion): waits for w, b or e",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/actions/plugins/camelCaseMotion.ts L11-60.",
+      "labelFrom": "hand"
     },
     {
       "key": "{<number>}",
       "sets": ["defaults", "extensions"],
       "sample": "3",
       "source": "vim-oracle",
-      "label": "Start a count",
-      "labelFrom": "index",
+      "label": "Start a count for the motion",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1449,8 +1556,8 @@
       "key": "|",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right to column N",
-      "labelFrom": "index",
+      "label": "Shift this line right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L438 |bar|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {
@@ -1474,8 +1581,8 @@
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift right N paragraphs forward",
-      "labelFrom": "index",
+      "label": "Shift the lines to the end of the paragraph right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L439 |}|",
       "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
       "variants": {

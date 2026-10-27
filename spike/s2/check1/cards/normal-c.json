@@ -7,8 +7,8 @@
       "key": "\n",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -37,8 +37,8 @@
       "key": " ",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the right",
-      "labelFrom": "index",
+      "label": "Change the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -62,10 +62,9 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change search backward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Change back to the previous match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -97,8 +96,8 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Change to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": {
@@ -122,10 +121,9 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change find the next (curly/square) bracket on this line and go to its match, or go to matching comment bracket, or go to matching preprocessor directive",
-      "labelFrom": "index",
+      "label": "Change to the matching bracket",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L259 |%|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"t) { four(five) }"
@@ -153,8 +151,8 @@
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR on the line with mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Change the lines up to a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L265 |'|",
       "expect": {
         "text": "unchanged",
@@ -166,8 +164,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N sentences backward",
-      "labelFrom": "index",
+      "label": "Change back to the start of the sentence",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L289 |(|",
       "expect": {
         "text": [
@@ -194,8 +192,8 @@
       "key": ")",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N sentences forward",
-      "labelFrom": "index",
+      "label": "Change to the start of the next sentence",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L290 |)|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
@@ -226,10 +224,9 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change search forward for the Nth occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Change to the next match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
-      "labelReview": "the motion's description starts with a verb",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -261,8 +258,8 @@
       "key": "+",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -292,16 +289,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Change back to the previous f/t match",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeatReversed src/actions/motion.ts L989-1012 (F<Space> to (1,10)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR N lines higher",
-      "labelFrom": "index",
+      "label": "Change this line and the one above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L297 |-|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -331,15 +343,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change to a search match: starts the search",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 with the operator pending (Mode 5).",
+      "labelFrom": "hand"
     },
     {
       "key": "0",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first char of the line",
-      "labelFrom": "index",
+      "label": "Change back to the start of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "expect": {
         "text": {
@@ -364,16 +382,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Change to the next f/t match",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t[three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", "]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveRepeat src/actions/motion.ts L972-987 (f<Space> to (1,17), one right with an operator, L857-860); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup f<Space> 1 4 |.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the left",
-      "labelFrom": "index",
+      "label": "Change the character before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -398,15 +431,29 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the character before the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLeft src/actions/motion.ts L666-701; ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249).",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to line N, default last line",
-      "labelFrom": "index",
+      "label": "Change to the end of the file",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
@@ -437,8 +484,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to line N, default first line",
-      "labelFrom": "index",
+      "label": "Change the lines up to the first line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -467,8 +514,8 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines downward",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -497,8 +544,8 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N words backward",
-      "labelFrom": "index",
+      "label": "Change back to the start of the word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": {
@@ -522,8 +569,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR N lines lower",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -552,8 +599,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines downward",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -582,8 +629,8 @@
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines upward",
-      "labelFrom": "index",
+      "label": "Change this line and the one above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -612,8 +659,8 @@
       "key": "<C-right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N words forward",
-      "labelFrom": "index",
+      "label": "Change to the end of the WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": {
@@ -638,23 +685,51 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change to the start of the line",
+      "expect": {
+        "text": {
+          "1": "wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["  if (one, \"t"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLineBegin src/actions/motion.ts L1027-1042; ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249).",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLineEnd src/actions/motion.ts L1014-1025 returns the line end; ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249).",
+      "labelFrom": "hand"
     },
     {
       "key": "<End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the end of Nth next line",
-      "labelFrom": "index",
+      "label": "Change to the end of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": {
@@ -678,8 +753,8 @@
       "key": "<Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first char of the line",
-      "labelFrom": "index",
+      "label": "Change back to the start of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L304 |0|",
       "expect": {
         "text": {
@@ -704,15 +779,29 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the character before the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); MoveLeft src/actions/motion.ts L666-701; ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249).",
+      "labelFrom": "hand"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines downward",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -741,8 +830,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the left",
-      "labelFrom": "index",
+      "label": "Change the character before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -766,8 +855,8 @@
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the right",
-      "labelFrom": "index",
+      "label": "Change the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -791,8 +880,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines upward",
-      "labelFrom": "index",
+      "label": "Change this line and the one above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -822,15 +911,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change back to a search match: starts the search",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 with the operator pending.",
+      "labelFrom": "hand"
     },
     {
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N WORDS backward",
-      "labelFrom": "index",
+      "label": "Change back to the start of the WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L334 |B|",
       "expect": {
         "text": {
@@ -854,8 +949,8 @@
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change forward to the end of WORD N",
-      "labelFrom": "index",
+      "label": "Change to the end of the WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L341 |E|",
       "expect": {
         "text": {
@@ -879,8 +974,8 @@
       "key": "F",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Change back to a character on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L342 |F|",
       "expect": {
         "text": "unchanged",
@@ -892,8 +987,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to line N, default last line",
-      "labelFrom": "index",
+      "label": "Change the lines down to the last line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": ["alpha beta gamma delta", "  "],
@@ -924,8 +1019,8 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to line N from top of screen",
-      "labelFrom": "index",
+      "label": "Change the lines up to the top line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -954,8 +1049,8 @@
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to line N from bottom of screen",
-      "labelFrom": "index",
+      "label": "Change the lines down to the bottom line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "expect": {
         "text": ["alpha beta gamma delta", "  "],
@@ -986,8 +1081,8 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to middle line of screen",
-      "labelFrom": "index",
+      "label": "Change the lines to the middle line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
         "text": {
@@ -1013,16 +1108,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Change back to the previous search match",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (onwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 8],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"t"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandPreviousSearchMatch src/actions/motion.ts L474-522 (e at (1,8)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change till after Nth occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Change back to just after a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L365 |T|",
       "expect": {
         "text": "unchanged",
@@ -1034,8 +1148,8 @@
       "key": "W",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N WORDS forward",
-      "labelFrom": "index",
+      "label": "Change to the end of the WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L369 |W|",
       "expect": {
         "text": {
@@ -1063,15 +1177,21 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change back to a two-character match (sneak): waits for two characters",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SneakBackward src/actions/plugins/sneak.ts L75-140: Z with an operator (L82-90).",
+      "labelFrom": "hand"
     },
     {
       "key": "[",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a [ command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a [ motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1082,8 +1202,8 @@
       "key": "]",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a ] command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a ] motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1094,8 +1214,8 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR of the line",
-      "labelFrom": "index",
+      "label": "Change back to the first non-blank of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L379 |^|",
       "expect": {
         "text": {
@@ -1119,8 +1239,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the first CHAR N - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Change this line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "expect": {
         "text": {
@@ -1145,8 +1265,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to the mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Change to a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L381 |`|",
       "expect": {
         "text": "unchanged",
@@ -1158,8 +1278,8 @@
       "key": "a",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Change around a text object: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1170,8 +1290,8 @@
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N words backward",
-      "labelFrom": "index",
+      "label": "Change back to the start of the word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": {
@@ -1195,8 +1315,8 @@
       "key": "c",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete N lines and start insert",
-      "labelFrom": "index",
+      "label": "Change this line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L397 |cc|",
       "expect": {
         "text": {
@@ -1221,8 +1341,8 @@
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change forward to the end of word N",
-      "labelFrom": "index",
+      "label": "Change to the end of the word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L403 |e|",
       "expect": {
         "text": {
@@ -1246,8 +1366,8 @@
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Change to a character on the line: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L404 |f|",
       "expect": {
         "text": "unchanged",
@@ -1259,8 +1379,8 @@
       "key": "g",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a g command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a g motion: waits for the next key",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1271,8 +1391,8 @@
       "key": "h",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the left",
-      "labelFrom": "index",
+      "label": "Change the character before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": {
@@ -1296,8 +1416,8 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change a text object: waits for the object",
-      "labelFrom": "index",
+      "label": "Change inside a text object: waits for the object",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1308,8 +1428,8 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines downward",
-      "labelFrom": "index",
+      "label": "Change this line and the next",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": ["alpha beta gamma delta", "  ", "iota kappa lambda mu"],
@@ -1338,8 +1458,8 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N lines upward",
-      "labelFrom": "index",
+      "label": "Change this line and the one above",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": ["", "epsilon zeta eta theta", "iota kappa lambda mu"],
@@ -1368,8 +1488,8 @@
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N chars to the right",
-      "labelFrom": "index",
+      "label": "Change the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": {
@@ -1394,9 +1514,28 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Change to the next search match",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tee]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [thr"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/mode/modeHandler.ts L1082-1140 (exclusive charwise range); CommandNextSearchMatch src/actions/motion.ts L425-472 (e at (1,22)); ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: the operator has no name, src/register/register.ts L205-249). Setup /e<CR> 1 4 |.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "s",
@@ -1406,15 +1545,21 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "plugin:surround: row exists only with vim.surround",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the surrounding pair: waits for the pair (surround's cs)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/actions/plugins/pluginDefaultMappings.ts L22-26 maps c s to <plugcs>; CommandSurroundChangeSurround src/actions/plugins/surround.ts L248-288 waits for <any>.",
+      "labelFrom": "hand"
     },
     {
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change till before Nth occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Change to just before a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L427 |t|",
       "expect": {
         "text": "unchanged",
@@ -1426,8 +1571,8 @@
       "key": "w",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N words forward",
-      "labelFrom": "index",
+      "label": "Change to the end of the word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": {
@@ -1455,15 +1600,21 @@
       "sets": ["extensions"],
       "source": "hand",
       "reason": "plugin:sneak: row exists only with vim.sneak",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change to a two-character match (sneak): waits for two characters",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SneakForward src/actions/plugins/sneak.ts L7-73: z with an operator (L15-23).",
+      "labelFrom": "hand"
     },
     {
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N paragraphs backward",
-      "labelFrom": "index",
+      "label": "Change back to the start of the paragraph",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L437 |{|",
       "expect": {
         "text": [
@@ -1492,19 +1643,25 @@
         "vim.camelCaseMotion.enable": true
       },
       "sets": ["extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change by a camelCase word (camelCaseMotion): waits for w, b or e",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/actions/plugins/camelCaseMotion.ts L11-60: <leader>w, <leader>e and <leader>b with vim.camelCaseMotion.enable.",
+      "labelFrom": "hand"
     },
     {
       "key": "{<number>}",
       "sets": ["defaults", "extensions"],
       "sample": "3",
       "source": "vim-oracle",
-      "label": "Start a count",
-      "labelFrom": "index",
+      "label": "Start a count for the motion",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1515,8 +1672,8 @@
       "key": "|",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change to column N",
-      "labelFrom": "index",
+      "label": "Change back to column 1",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L438 |bar|",
       "expect": {
         "text": {
@@ -1540,8 +1697,8 @@
       "key": "}",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change N paragraphs forward",
-      "labelFrom": "index",
+      "label": "Change to the end of the paragraph",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L439 |}|",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],

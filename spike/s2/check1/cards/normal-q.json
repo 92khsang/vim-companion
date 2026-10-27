@@ -8,45 +8,87 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: macro recording; starts recording a macro",
-      "label": "TODO",
+      "label": "Start recording a macro into register \"",
       "labelIndex": "index.txt L418 |q|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "keys": ""
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
+      "labelFrom": "hand"
     },
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; q/ (window)",
-      "label": "TODO",
+      "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L422 |q/|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378, src/cmd_line/commandLine.ts L335-352 await a quick pick.",
+      "labelFrom": "hand"
     },
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; q: (window)",
-      "label": "TODO",
+      "label": "Show the : command history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L421 |q:|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ShowCommandHistory src/actions/commands/actions.ts L305-322 awaits vscode.window.showQuickPick; until it closes nothing else changes.",
+      "labelFrom": "hand"
     },
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: window; q? (window)",
-      "label": "TODO",
+      "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L423 |q?|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378 (backward when the pick is accepted).",
+      "labelFrom": "hand"
     },
     {
       "key": "q",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: macro recording; starts recording a macro",
-      "label": "TODO",
+      "label": "Start recording a macro into register q",
       "labelIndex": "index.txt L418 |q|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "q": {
+            "mode": "character",
+            "keys": ""
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300).",
+      "labelFrom": "hand"
     },
     {
       "key": "{<macro>}",
@@ -54,9 +96,21 @@
       "sample": "a",
       "source": "hand",
       "reason": "outside: macro recording; starts recording a macro",
-      "label": "TODO",
+      "label": "Start recording a macro into register {0-9 a-z A-Z}",
       "labelIndex": "index.txt L418 |q|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "keys": ""
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: RecordMacro src/actions/commands/macro.ts L11-37: starts recording (vimState.macro) and puts an empty RecordedState into the register (src/register/register.ts L52-78); the probe reads it as { keys: \"\" } (actionsRunPressedKeys, spike/s2/extensions/s2-probe/extension.js L87-106), CharacterWise in Normal mode (src/state/vimState.ts L288-300). Sample a.",
+      "labelFrom": "hand"
     }
   ]
 }

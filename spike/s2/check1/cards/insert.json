@@ -7,10 +7,9 @@
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete character before the cursor",
-      "labelFrom": "index",
+      "label": "Delete the character before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L56 |i_<BS>|",
-      "labelReview": "several index lines",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -23,10 +22,9 @@
       "key": "<C-[>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "End insert mode (unless 'insertmode' set)",
-      "labelFrom": "index",
+      "label": "Leave Insert mode",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L103 |i_<Esc>|",
-      "labelReview": "several index lines",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 12],
@@ -44,18 +42,32 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last insert; inserts the previously inserted text",
-      "label": "TODO",
+      "label": "Insert the previously inserted text",
       "labelIndex": "index.txt L39 |i_CTRL-A|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "keys": "iX<Esc>"
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertPreviousText src/actions/commands/insert.ts L295-332 replays register . (set when an insertion ends, src/mode/modeHandler.ts L830-842) without its first and last actions (src/mode/modeHandler.ts L1142-1203, src/actions/commands/documentChange.ts L45-110). Setup i X <Esc> inserts X at (1,13); the probe reads register . as its keys.",
+      "setup": ["i", "X", "<Esc>"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-c>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Quit insert mode, without checking for abbreviation, unless 'insertmode' set",
-      "labelFrom": "index",
+      "label": "Leave Insert mode",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L41 |i_CTRL-C|",
-      "labelReview": "the index description has a condition or a reference",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 12],
@@ -72,8 +84,8 @@
       "key": "<C-d>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete one shiftwidth of indent in the current line",
-      "labelFrom": "index",
+      "label": "Remove one shiftwidth of indent from the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L43 |i_CTRL-D|",
       "expect": {
         "text": {
@@ -87,8 +99,8 @@
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert the character which is below the cursor",
-      "labelFrom": "index",
+      "label": "Insert the character below the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L45 |i_CTRL-E|",
       "expect": {
         "text": {
@@ -103,7 +115,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a <C-g> command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -114,10 +126,9 @@
       "key": "<C-h>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Same as <BS>",
-      "labelFrom": "index",
+      "label": "Delete the character before the cursor (same as <BS>)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L59 |i_CTRL-H|",
-      "labelReview": "unresolved \"same as <BS>\"",
       "expect": {
         "text": {
           "1": "  if (one, \"wo\", [three]) { four(five) }"
@@ -130,8 +141,8 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin new line",
-      "labelFrom": "index",
+      "label": "Start a new line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L67 |i_<CR>|",
       "expect": {
         "text": [
@@ -149,8 +160,8 @@
       "key": "<C-k>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Enter digraph",
-      "labelFrom": "index",
+      "label": "Insert a digraph: waits for two characters",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L64 |i_CTRL-K|",
       "expect": {
         "text": "unchanged",
@@ -162,8 +173,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin new line",
-      "labelFrom": "index",
+      "label": "Start a new line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L67 |i_<CR>|",
       "expect": {
         "text": [
@@ -181,8 +192,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Find next match for keyword in front of the cursor",
-      "labelFrom": "index",
+      "label": "Complete the word before the cursor (next match)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L69 |i_CTRL-N|",
       "expect": {
         "text": {
@@ -196,8 +207,8 @@
       "key": "<C-o>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Execute a single command and return to insert mode",
-      "labelFrom": "index",
+      "label": "Run one Normal-mode command, then return to Insert mode",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L71 |i_CTRL-O|",
       "expect": {
         "text": "unchanged",
@@ -215,8 +226,8 @@
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Find previous match for keyword in front of the cursor",
-      "labelFrom": "index",
+      "label": "Complete the word before the cursor (previous match)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L73 |i_CTRL-P|",
       "expect": {
         "text": {
@@ -230,8 +241,8 @@
       "key": "<C-r>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert the contents of a register",
-      "labelFrom": "index",
+      "label": "Insert the contents of a register: waits for the register",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L79 |i_CTRL-R|",
       "expect": {
         "text": "unchanged",
@@ -244,15 +255,30 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Insert the previously inserted text and leave Insert mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "keys": "iX<Esc>"
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertPreviousTextAndQuit src/actions/commands/insert.ts L334-343: as <C-a>, then Normal mode without moving the cursor left. Setup i X <Esc>.",
+      "setup": ["i", "X", "<Esc>"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-t>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert one shiftwidth of indent in current line",
-      "labelFrom": "index",
+      "label": "Add one shiftwidth of indent to the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L90 |i_CTRL-T|",
       "expect": {
         "text": {
@@ -266,8 +292,8 @@
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete all entered characters in the current line",
-      "labelFrom": "index",
+      "label": "Delete the text entered before the cursor on the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L92 |i_CTRL-U|",
       "expect": {
         "text": {
@@ -281,8 +307,8 @@
       "key": "<C-v>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert next non-digit literally",
-      "labelFrom": "index",
+      "label": "Insert the next character literally: waits for it",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L94 |i_CTRL-V|",
       "expect": {
         "text": "unchanged",
@@ -294,8 +320,8 @@
       "key": "<C-w>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete word before the cursor",
-      "labelFrom": "index",
+      "label": "Delete the word before the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L99 |i_CTRL-W|",
       "expect": {
         "text": {
@@ -310,7 +336,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a <C-x> command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L100 |i_CTRL-X|",
       "expect": {
         "text": "unchanged",
@@ -322,8 +348,8 @@
       "key": "<C-y>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert the character which is above the cursor",
-      "labelFrom": "index",
+      "label": "Insert the character above the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L101 |i_CTRL-Y|",
       "expect": {
         "text": {
@@ -338,15 +364,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the word before the cursor (Cmd+D in Insert mode)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 15],
+        "mode": "insert"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ActionOverrideCmdDInsert src/actions/commands/actions.ts L1086-1119 selects two (1,12)-(1,15) and runs editor.action.addSelectionToNextFindMatch (no other match); Insert mode keeps the selection (src/transformations/execute.ts L257-260), and the selection events arrive while the action runs and are ignored (src/mode/internalSelectionsTracker.ts L60-71, L119-139).",
+      "labelFrom": "hand"
     },
     {
       "key": "<Del>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete character under the cursor",
-      "labelFrom": "index",
+      "label": "Delete the character under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L122 |i_<Del>|",
       "expect": {
         "text": {
@@ -360,10 +392,9 @@
       "key": "<Esc>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "End insert mode (unless 'insertmode' set)",
-      "labelFrom": "index",
+      "label": "Leave Insert mode",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L103 |i_<Esc>|",
-      "labelReview": "several index lines",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 12],
@@ -381,15 +412,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Disable VSCodeVim",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-12"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: DisableExtension src/actions/commands/actions.ts L28-48 (Mode 12); the toggleVim command sends it (extensionBase.ts L455-458).",
+      "labelFrom": "hand"
     },
     {
       "key": "<Insert>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Toggle Insert/Replace mode",
-      "labelFrom": "index",
+      "label": "Switch to Replace mode",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L145 |i_<Insert>|",
       "expect": {
         "text": "unchanged",
@@ -402,15 +439,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Copy the selection (there is none) and return to Normal mode",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandOverrideCopy src/actions/commands/actions.ts L196-247: an empty selection copies nothing, Normal mode without moving the cursor left.",
+      "labelFrom": "hand"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cursor one line down",
-      "labelFrom": "index",
+      "label": "Move the cursor one line down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L135 |i_<Down>|",
       "expect": {
         "text": "unchanged",
@@ -428,8 +471,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cursor one character left",
-      "labelFrom": "index",
+      "label": "Move the cursor one character left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L127 |i_<Left>|",
       "expect": {
         "text": "unchanged",
@@ -447,8 +490,8 @@
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cursor one character right",
-      "labelFrom": "index",
+      "label": "Move the cursor one character right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L130 |i_<Right>|",
       "expect": {
         "text": "unchanged",
@@ -466,8 +509,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cursor one line up",
-      "labelFrom": "index",
+      "label": "Move the cursor one line up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L133 |i_<Up>|",
       "expect": {
         "text": "unchanged",

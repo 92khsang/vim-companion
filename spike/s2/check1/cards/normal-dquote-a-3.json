@@ -7,8 +7,8 @@
       "key": "\n",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": "unchanged",
@@ -21,15 +21,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Open the leader menu (which-key, <Space> remap; the count runs it 3 times)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: spec/generated/vscode/vim-remaps.json <space> -> whichkey.show; src/configuration/remapper.ts L470-520 runs the commands count times and leaves register a pending.",
+      "labelFrom": "hand"
     },
     {
       "key": "!",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "2 filter the text of a motion through the {filter} command: waits for a motion",
-      "labelFrom": "index",
+      "label": "Filter through a shell command: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L250 |!|",
       "expect": {
         "text": "unchanged",
@@ -41,8 +47,8 @@
       "key": "\"",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Use {register} for next delete, yank or put ({.%#:} only work with put)",
-      "labelFrom": "index",
+      "label": "Select another register: waits for the register name",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L254 |quote|",
       "expect": {
         "text": "unchanged",
@@ -54,8 +60,8 @@
       "key": "#",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Search backward for the 3rd occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Search backward for the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L256 |#|",
       "expect": {
         "text": "unchanged",
@@ -73,8 +79,8 @@
       "key": "$",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the end of 3rd next line",
-      "labelFrom": "index",
+      "label": "Move to the end of the line 2 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": "unchanged",
@@ -86,8 +92,8 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Go to 3 percentage in the file",
-      "labelFrom": "index",
+      "label": "Go to the line 3% into the file",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L263 |N%|",
       "expect": {
         "text": "unchanged",
@@ -100,16 +106,31 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "TODO",
+      "label": "Repeat the last :s on the line (VSCodeVim ignores the count)",
       "labelIndex": "index.txt L264 |&|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          ":": {
+            "mode": "character",
+            "keys": ""
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: RepeatSubstitution src/actions/commands/actions.ts L407-418 runs :s with the previous pattern (src/cmd_line/commands/substitute.ts L510-545), first match per line, cursor to column 0 of the line (L626-640). Setup :s/e/X/<CR> (register : holds a RecordedState with no keys, src/cmd_line/commandLine.ts L262-272) then 1 4 |.",
+      "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "'",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR on the line with mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Jump to the line of a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L265 |'|",
       "expect": {
         "text": "unchanged",
@@ -121,8 +142,8 @@
       "key": "(",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 sentences backward",
-      "labelFrom": "index",
+      "label": "Move 3 sentences back",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L289 |(|",
       "expect": {
         "text": "unchanged",
@@ -135,7 +156,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Move 3 sentences forward",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L290 |)|",
       "expect": {
         "text": "unchanged",
@@ -147,8 +168,8 @@
       "key": "*",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Search forward for the 3rd occurrence of the ident under the cursor",
-      "labelFrom": "index",
+      "label": "Search forward for the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L291 |star|",
       "expect": {
         "text": "unchanged",
@@ -166,8 +187,8 @@
       "key": "+",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": "unchanged",
@@ -180,16 +201,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; , reads the last f/t",
-      "label": "TODO",
+      "label": "Repeat the last f/t search backward 3 times",
       "labelIndex": "index.txt L295 |,|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 1],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: MoveRepeatReversed src/actions/motion.ts L989-1012 with count 3: F<Space> from 13 finds 10, 4, 1 (findHelper L800-825). Setup f<Space> 1 4 |.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "-",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR 3 lines higher",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank 3 lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L297 |-|",
       "expect": {
         "text": "unchanged",
@@ -202,42 +230,80 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: dot repeat; . reads the dot repeat",
-      "label": "TODO",
+      "label": "Repeat the last change 3 times (VSCodeVim does not use register a)",
       "labelIndex": "index.txt L299 |.|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [","]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [","]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: DotRepeat src/actions/commands/actions.ts L386-405: replays the previous x 3 times (src/mode/modeHandler.ts L1142-1203 starts each with a new RecordedState, so the register is the unnamed one). Setup x deletes w; the replays delete o, \" and , (src/register/register.ts L224-235).",
+      "setup": ["x"],
+      "labelFrom": "hand"
     },
     {
       "key": "/",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a forward search (the count applies to it)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchForwards src/actions/commands/search.ts L201-213 (Mode 5).",
+      "labelFrom": "hand"
     },
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
+      "label": "Open the command line with the range .,.+2",
       "labelIndex": "index.txt L315 |N:|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-6"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ShowCommandLine src/actions/commands/actions.ts L276-303 (Mode 6).",
+      "labelFrom": "hand"
     },
     {
       "key": ";",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last f/t; ; reads the last f/t",
-      "label": "TODO",
+      "label": "Repeat the last f/t search 3 times",
       "labelIndex": "index.txt L317 |;|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 28],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: MoveRepeat src/actions/motion.ts L972-987 with count 3: f<Space> finds 17, 26, 28. Setup f<Space> 1 4 |.",
+      "setup": ["f", "<Space>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "<",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift Nmove lines one 'shiftwidth' leftwards: waits for a motion",
-      "labelFrom": "index",
+      "label": "Shift lines left: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L318 |<|",
       "expect": {
         "text": "unchanged",
@@ -249,8 +315,8 @@
       "key": "<BS>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Move 3 characters left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": "unchanged",
@@ -263,24 +329,36 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "TODO",
+      "label": "Edit the alternate file (there is none: an error)",
       "labelIndex": "index.txt L245 |CTRL-^|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: GoToAlternateFile src/actions/commands/file.ts L29-58: register # is never written in VSCodeVim 1.32.4, so E23.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-BS>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move 3 characters left",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 10],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: MoveLeft src/actions/motion.ts L666-701 with count 3.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line 3, default last line",
-      "labelFrom": "index",
+      "label": "Move to the end of line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": "unchanged",
@@ -292,8 +370,8 @@
       "key": "<C-Home>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line 3, default first line",
-      "labelFrom": "index",
+      "label": "Move to line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L787 |gg|",
       "expect": {
         "text": "unchanged",
@@ -305,8 +383,8 @@
       "key": "<C-[>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cancel the pending command",
-      "labelFrom": "index",
+      "label": "Cancel the pending register and count",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -318,25 +396,37 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"r\" (the hit-enter prompt), which the fixture has no mode name for",
-      "label": "TODO",
+      "label": "Jump to the definition (there is none in plain text)",
       "labelIndex": "index.txt L244 |CTRL-]|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: GoToDefinition src/actions/commands/navigate.ts L31-46 runs editor.action.revealDefinition; no definition provider for plain text, the cursor stays.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-^>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "TODO",
+      "label": "Edit the alternate file (there is none: an error)",
       "labelIndex": "index.txt L245 |CTRL-^|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: GoToAlternateFile src/actions/commands/file.ts L29-58: register # is never written in VSCodeVim 1.32.4, so E23.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-a>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Add 3 to number at/after cursor",
-      "labelFrom": "index",
+      "label": "Add 3 to the number at or after the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L206 |CTRL-A|",
       "expect": {
         "text": "unchanged",
@@ -349,32 +439,51 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor below, 3 times",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 (runsOnceForEachCountPrefix); VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor primary. Linux sends <S-alt+down> instead (src/configuration/configuration.ts L154-173).",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-alt+up>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor above, 3 times",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertCursorAbove src/actions/commands/actions.ts L1138-1154; addCursorUp keeps the original cursor primary.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-b>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-b> (view)",
-      "label": "TODO",
+      "label": "Scroll 3 pages up and move the cursor up",
       "labelIndex": "index.txt L207 |CTRL-B|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: 3 x 4 lines up from line 1, clamped to 0, startofline. Setup gg j 1 3 l (line 0 at the top).",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-c>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Interrupt current (search) command",
-      "labelFrom": "index",
+      "label": "Cancel the pending register and count",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L208 |CTRL-C|",
       "expect": {
         "text": "unchanged",
@@ -387,52 +496,100 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-d> (view)",
-      "label": "TODO",
+      "label": "Set the scroll amount to 3, then scroll down and move the cursor 3 lines down",
       "labelIndex": "index.txt L209 |CTRL-D|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172: the count sets configuration.scroll = 3 (it stays set for later rows); line 1+3 = 4 (the empty last line), startofline.",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-e>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-e> (view)",
-      "label": "TODO",
+      "label": "Scroll the view 3 lines down",
       "labelIndex": "index.txt L210 |CTRL-E|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [3, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlE src/actions/commands/scroll.ts L10-62: line 1 would leave the top of the view, so the cursor moves to line 3 at desiredColumn 13. Setup gg j 1 3 l.",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-f>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-f> (view)",
-      "label": "TODO",
+      "label": "Scroll 3 pages down and move the cursor down",
       "labelIndex": "index.txt L211 |CTRL-F|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageDown src/actions/commands/scroll.ts L76-160: clamped to the last line 4.",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-g>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: message; <c-g> (message)",
-      "label": "TODO",
+      "label": "Show the file name and the cursor position",
       "labelIndex": "index.txt L212 |CTRL-G|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ShowFileInfo src/actions/commands/file.ts L15-27 only sets the status bar.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-i>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: jump list; <c-i> (jump list)",
-      "label": "TODO",
+      "label": "Jump forward 3 times in the jump list",
       "labelIndex": "index.txt L215 |<Tab>|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: NavigateForward src/actions/commands/navigate.ts L105-118, src/jumps/jumpTracker.ts L223-235: from (0,0) forward to (4,0), (2,0), (1,13). Setup as for <C-o>, then <C-o> 3 times.",
+      "setup": [
+        "g",
+        "g",
+        "G",
+        "3",
+        "G",
+        "2",
+        "G",
+        "1",
+        "4",
+        "|",
+        "<C-o>",
+        "<C-o>",
+        "<C-o>"
+      ],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines downward",
-      "labelFrom": "index",
+      "label": "Move 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": "unchanged",
@@ -444,8 +601,8 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 words backward",
-      "labelFrom": "index",
+      "label": "Move 3 words back",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": "unchanged",
@@ -457,8 +614,8 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR 3 lines lower",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L222 |<CR>|",
       "expect": {
         "text": "unchanged",
@@ -470,8 +627,8 @@
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines downward",
-      "labelFrom": "index",
+      "label": "Move 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": "unchanged",
@@ -484,16 +641,23 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: jump list; <c-o> (jump list)",
-      "label": "TODO",
+      "label": "Jump back 3 times in the jump list (VSCodeVim maps CTRL-T to CTRL-O)",
       "labelIndex": "index.txt L226 |CTRL-O|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: NavigateBack src/actions/commands/navigate.ts L91-103, src/jumps/jumpTracker.ts L158-221, L317-332: from (1,13) back to (2,0), (4,0), (0,0). Setup gg G 3G 2G 1 4 | records jumps from (1,13), (0,0), (4,0), (2,0).",
+      "setup": ["g", "g", "G", "3", "G", "2", "G", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines upward",
-      "labelFrom": "index",
+      "label": "Move 3 lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": "unchanged",
@@ -506,40 +670,77 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to editor 3 of the group (there is none: no change)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: NextTab src/actions/commands/window.ts L292-316 with a count runs workbench.action.openEditorAtIndex 2 (src/cmd_line/commands/tab.ts L163-173); group 1 holds one editor.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-pageup>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Go to the previous editor of the group 3 times (one editor: no change)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: PreviousTab src/actions/commands/window.ts L318-336, src/cmd_line/commands/tab.ts L201-210.",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-q>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start Visual Block mode over 3 characters",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 16],
+        "mode": "visual-block"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: EnterVisualBlockMode src/actions/commands/visual.ts L53-64: stop 2 columns right; the block of line 1 ends at column 16 (src/mode/modeHandler.ts L1336-1346).",
+      "labelFrom": "hand"
     },
     {
       "key": "<C-r>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: undo history; <c-r> reads the undo history",
-      "label": "TODO",
+      "label": "Redo the last undone change (VSCodeVim ignores the count)",
       "labelIndex": "index.txt L229 |CTRL-R|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["\""]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Redo src/actions/commands/undo.ts L34-45 runs once; src/history/historyTracker.ts L832-865 redoes the first x and puts the cursor at the start of that step. Setup x x x u u u.",
+      "setup": ["x", "x", "x", "u", "u", "u"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 words forward",
-      "labelFrom": "index",
+      "label": "Move 3 WORDS forward",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": "unchanged",
@@ -552,25 +753,39 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: file or tag; <c-t> (file or tag)",
-      "label": "TODO",
+      "label": "Jump back 3 times in the jump list (VSCodeVim maps CTRL-T to CTRL-O)",
       "labelIndex": "index.txt L231 |CTRL-T|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: NavigateBack src/actions/commands/navigate.ts L91-103, src/jumps/jumpTracker.ts L158-221, L317-332: from (1,13) back to (2,0), (4,0), (0,0). Setup gg G 3G 2G 1 4 | records jumps from (1,13), (0,0), (4,0), (2,0).",
+      "setup": ["g", "g", "G", "3", "G", "2", "G", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-u>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-u> (view)",
-      "label": "TODO",
+      "label": "Set the scroll amount to 3, then scroll up and move the cursor 3 lines up",
       "labelIndex": "index.txt L232 |CTRL-U|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: line 1-3 clamped to 0.",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<C-v>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start blockwise Visual mode",
-      "labelFrom": "index",
+      "label": "Start Visual Block mode over 3 characters",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L234 |CTRL-V|",
       "expect": {
         "text": "unchanged",
@@ -585,8 +800,8 @@
       "key": "<C-w>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a <C-w> command: waits for the next key",
-      "labelFrom": "index",
+      "label": "Start a window command: waits for the next key",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L235 |CTRL-W|",
       "expect": {
         "text": "unchanged",
@@ -598,8 +813,8 @@
       "key": "<C-x>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Subtract 3 from number at/after cursor",
-      "labelFrom": "index",
+      "label": "Subtract 3 from the number at or after the cursor",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L236 |CTRL-X|",
       "expect": {
         "text": "unchanged",
@@ -612,56 +827,93 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "outside: view; <c-y> (view)",
-      "label": "TODO",
+      "label": "Scroll the view 3 lines up",
       "labelIndex": "index.txt L237 |CTRL-Y|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandCtrlY src/actions/commands/scroll.ts L10-70: the view is at the top, the cursor stays.",
+      "setup": ["g", "g", "j", "1", "3", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "<D-a>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select every line (Visual Line mode)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "visual-line"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandCmdA src/actions/commands/actions.ts L249-262: Visual Line from line 0 to the last line 4, whose end is (4,0).",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-alt+down>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor below, 3 times",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 (runsOnceForEachCountPrefix); VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor primary. Linux sends <S-alt+down> instead (src/configuration/configuration.ts L154-173).",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-alt+up>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a cursor above, 3 times",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: InsertCursorAbove src/actions/commands/actions.ts L1138-1154; addCursorUp keeps the original cursor primary.",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-d>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Select the word under the cursor (Cmd+D)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 15],
+        "mode": "visual"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: ActionOverrideCmdD src/actions/commands/actions.ts L1065-1084, run 3 times: the first selects two (1,12)-(1,15), the others find no other match; Visual mode drawn to (1,15).",
+      "labelFrom": "hand"
     },
     {
       "key": "<D-right>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move to the end of the line 2 lines down",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [3, 19],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: MoveLineEnd src/actions/motion.ts L1014-1025 with count 3; Normal-mode clamp src/mode/modeHandler.ts L932-966.",
+      "labelFrom": "hand"
     },
     {
       "key": "<Del>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Remove the last digit from {count}",
-      "labelFrom": "index",
+      "label": "Remove the last digit of the count",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L452 |N<Del>|",
       "expect": {
         "text": "unchanged",
@@ -673,8 +925,8 @@
       "key": "<End>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the end of 3rd next line",
-      "labelFrom": "index",
+      "label": "Move to the end of the line 2 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L258 |$|",
       "expect": {
         "text": "unchanged",
@@ -686,8 +938,8 @@
       "key": "<Esc>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Cancel the pending command",
-      "labelFrom": "index",
+      "label": "Cancel the pending register and count",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -699,31 +951,49 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Disable VSCodeVim",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-12"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: DisableExtension src/actions/commands/actions.ts L28-48 (Mode 12).",
+      "labelFrom": "hand"
     },
     {
       "key": "<S-BS>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Move 3 characters left",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 10],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: MoveLeft src/actions/motion.ts L666-701 with count 3.",
+      "labelFrom": "hand"
     },
     {
       "key": "<copy>",
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Copy the selection (there is none) and stay in Normal mode",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandOverrideCopy src/actions/commands/actions.ts L196-247.",
+      "labelFrom": "hand"
     },
     {
       "key": "<down>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines downward",
-      "labelFrom": "index",
+      "label": "Move 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": "unchanged",
@@ -735,8 +1005,8 @@
       "key": "<left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Move 3 characters left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": "unchanged",
@@ -752,8 +1022,14 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Change the surrounding pair: waits for the pair (surround's cs)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandSurroundChangeSurround src/actions/plugins/surround.ts L248-288 waits for <any>; the token comes from the default mapping c s (src/actions/plugins/pluginDefaultMappings.ts L22-26).",
+      "labelFrom": "hand"
     },
     {
       "key": "<plugds>",
@@ -763,8 +1039,14 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Delete the surrounding pair: waits for the pair (surround's ds)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandSurroundDeleteSurround src/actions/plugins/surround.ts L204-240 waits for <any>; mapping d s (src/actions/plugins/pluginDefaultMappings.ts L27-31).",
+      "labelFrom": "hand"
     },
     {
       "key": "<plugys>",
@@ -774,15 +1056,21 @@
       "sets": ["defaults"],
       "source": "hand",
       "reason": "own: a key token of VSCodeVim's own",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Add a surrounding pair around a motion: waits for the motion (surround's ys)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: YankSurroundOperator src/actions/plugins/surround.ts L78-121 is an operator; mapping y s (src/actions/plugins/pluginDefaultMappings.ts L12-16).",
+      "labelFrom": "hand"
     },
     {
       "key": "<right>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 chars to the right",
-      "labelFrom": "index",
+      "label": "Move 3 characters right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": "unchanged",
@@ -794,8 +1082,8 @@
       "key": "<up>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines upward",
-      "labelFrom": "index",
+      "label": "Move 3 lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": "unchanged",
@@ -807,8 +1095,8 @@
       "key": "=",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Filter Nmove lines through \"indent\": waits for a motion",
-      "labelFrom": "index",
+      "label": "Re-indent lines: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L321 |=|",
       "expect": {
         "text": "unchanged",
@@ -820,8 +1108,8 @@
       "key": ">",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Shift Nmove lines one 'shiftwidth' rightwards: waits for a motion",
-      "labelFrom": "index",
+      "label": "Shift lines right: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L323 |>|",
       "expect": {
         "text": "unchanged",
@@ -834,15 +1122,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Start a backward search (the count applies to it)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: SearchBackwards src/actions/commands/search.ts L215-231 (Mode 5).",
+      "labelFrom": "hand"
     },
     {
       "key": "@",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Execute the contents of register {a-z} 3 times",
-      "labelFrom": "index",
+      "label": "Run a register as a macro 3 times: waits for the register",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L329 |@|",
       "expect": {
         "text": "unchanged",
@@ -854,8 +1148,8 @@
       "key": "A",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Append text after the end of the line 3 times",
-      "labelFrom": "index",
+      "label": "Append at the end of the line (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L333 |A|",
       "expect": {
         "text": "unchanged",
@@ -867,8 +1161,8 @@
       "key": "B",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 WORDS backward",
-      "labelFrom": "index",
+      "label": "Move 3 WORDS back",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L334 |B|",
       "expect": {
         "text": "unchanged",
@@ -880,10 +1174,9 @@
       "key": "C",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change from the cursor position to the end of the line, and 3-1 more lines into register a; synonym for \"c$\"",
-      "labelFrom": "index",
+      "label": "Change to the end of the line and 2 more lines into register a",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L335 |C|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
         "cursor": [1, 13],
@@ -921,10 +1214,9 @@
       "key": "D",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the characters under the cursor until the end of the line and 3-1 more lines into register a; synonym for \"d$\"",
-      "labelFrom": "index",
+      "label": "Delete to the end of the line and 2 more lines into register a",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L338 |D|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": ["alpha beta gamma delta", "  if (one, \"t"],
         "cursor": [1, 12],
@@ -962,8 +1254,8 @@
       "key": "E",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move forward to the end of WORD 3",
-      "labelFrom": "index",
+      "label": "Move to the end of the 3rd WORD",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L341 |E|",
       "expect": {
         "text": "unchanged",
@@ -975,8 +1267,8 @@
       "key": "F",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the 3rd occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Move back to the 3rd match of a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L342 |F|",
       "expect": {
         "text": "unchanged",
@@ -988,8 +1280,8 @@
       "key": "G",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line 3, default last line",
-      "labelFrom": "index",
+      "label": "Move to line 3",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L344 |G|",
       "expect": {
         "text": "unchanged",
@@ -1001,8 +1293,8 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line 3 from top of screen",
-      "labelFrom": "index",
+      "label": "Move to the 3rd line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "expect": {
         "text": "unchanged",
@@ -1014,8 +1306,8 @@
       "key": "I",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert text before the first CHAR on the line 3 times",
-      "labelFrom": "index",
+      "label": "Insert before the first non-blank (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L346 |I|",
       "expect": {
         "text": "unchanged",
@@ -1027,8 +1319,8 @@
       "key": "J",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Join 3 lines; default is 2",
-      "labelFrom": "index",
+      "label": "Join 3 lines",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L348 |J|",
       "expect": {
         "text": [
@@ -1044,15 +1336,21 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
-      "label": "TODO",
-      "expect": "TODO"
+      "label": "Show the hover at the cursor (K remap: editor.action.showHover)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: spec/generated/vscode/vim-remaps.json K -> editor.action.showHover; src/configuration/remapper.ts L470-520 (a hover changes no text, cursor or mode).",
+      "labelFrom": "hand"
     },
     {
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to line 3 from bottom of screen",
-      "labelFrom": "index",
+      "label": "Move to the 3rd line from the bottom of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "expect": {
         "text": "unchanged",
@@ -1064,8 +1362,8 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to middle line of screen",
-      "labelFrom": "index",
+      "label": "Move to the middle line of the window",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
         "text": "unchanged",
@@ -1078,16 +1376,29 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; N reads the last search",
-      "label": "TODO",
+      "label": "Repeat the last search backward 3 times",
       "labelIndex": "index.txt L353 |N|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandPreviousSearchMatch src/actions/motion.ts L474-522, 3 times: e at (1,8), (0,18), (0,7). Setup /e<CR> 1 4 |.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "O",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin a new line above the cursor and insert text, repeat 3 times",
-      "labelFrom": "index",
+      "label": "Open a line above (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L355 |O|",
       "expect": {
         "text": [
@@ -1106,16 +1417,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; P reads the register",
-      "label": "TODO",
+      "label": "Put register a 3 times before the cursor",
       "labelIndex": "index.txt L357 |P|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twwwwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: PutBeforeCommand src/actions/commands/put.ts L421-472, BasePutCommand L37-139 (text repeated count times, cursor on its last character). Setup \"ayl.",
+      "setup": ["\"", "a", "y", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "R",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Enter replace mode: overtype existing characters, repeat the entered text 3-1 times",
-      "labelFrom": "index",
+      "label": "Start Replace mode (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L360 |R|",
       "expect": {
         "text": "unchanged",
@@ -1129,8 +1459,8 @@
       "bySet": {
         "defaults": {
           "source": "vim-oracle",
-          "label": "Delete 3 lines into register a and start insert; synonym for \"cc\"",
-          "labelFrom": "index",
+          "label": "Change 3 lines into register a",
+          "labelFrom": "hand",
           "labelIndex": "index.txt L363 |S|",
           "expect": {
             "text": ["alpha beta gamma delta", "  "],
@@ -1167,9 +1497,15 @@
         },
         "extensions": {
           "source": "hand",
-          "label": "TODO",
-          "expect": "TODO",
-          "reason": "plugin:sneak: sneak redefines s and S"
+          "label": "Sneak backward: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "reason": "plugin:sneak: sneak redefines s and S",
+          "expectBasis": "VSCodeVim 1.32.4: SneakBackward src/actions/plugins/sneak.ts L75-140; ChangeLine S does not apply with vim.sneak (src/actions/commands/actions.ts L509-531).",
+          "labelFrom": "hand"
         }
       }
     },
@@ -1177,8 +1513,8 @@
       "key": "T",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move till after 3rd occurrence of {char} to the left",
-      "labelFrom": "index",
+      "label": "Move back to just after the 3rd match of a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L365 |T|",
       "expect": {
         "text": "unchanged",
@@ -1191,16 +1527,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: undo history; U reads the undo history",
-      "label": "TODO",
+      "label": "Undo the latest changes on the last changed line",
       "labelIndex": "index.txt L367 |U|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "0": "alpha beta gama delta"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["\""]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: UndoOnLine src/actions/commands/undo.ts L21-32, src/history/historyTracker.ts L877-948: undoes the three x on line 1 and stops at the change on line 0; cursor at the start of the last undone change. Setup k x j x x x.",
+      "setup": ["k", "x", "j", "x", "x", "x"],
+      "labelFrom": "hand"
     },
     {
       "key": "V",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start linewise Visual mode",
-      "labelFrom": "index",
+      "label": "Start Visual Line mode over 3 lines",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L368 |V|",
       "expect": {
         "text": "unchanged",
@@ -1216,7 +1571,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Move 3 WORDS forward",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L369 |W|",
       "expect": {
         "text": "unchanged",
@@ -1228,8 +1583,8 @@
       "key": "X",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 characters before the cursor into register a",
-      "labelFrom": "index",
+      "label": "Delete the 3 characters before the cursor into register a",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L370 |X|",
       "expect": {
         "text": {
@@ -1253,8 +1608,8 @@
       "key": "Y",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank 3 lines into register a; synonym for \"yy\"",
-      "labelFrom": "index",
+      "label": "Yank 3 lines into register a",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L372 |Y|",
       "expect": {
         "text": "unchanged",
@@ -1285,7 +1640,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a Z command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1297,7 +1652,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a [ command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L376 |[|",
       "expect": {
         "text": "unchanged",
@@ -1310,7 +1665,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a ] command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L378 |]|",
       "expect": {
         "text": "unchanged",
@@ -1322,8 +1677,8 @@
       "key": "^",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR of the line",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank of the line",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L379 |^|",
       "expect": {
         "text": "unchanged",
@@ -1335,8 +1690,8 @@
       "key": "_",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the first CHAR 3 - 1 lines lower",
-      "labelFrom": "index",
+      "label": "Move to the first non-blank 2 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L380 |_|",
       "expect": {
         "text": "unchanged",
@@ -1348,8 +1703,8 @@
       "key": "`",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to the mark {a-zA-Z0-9}",
-      "labelFrom": "index",
+      "label": "Jump to a mark: waits for the mark",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L381 |`|",
       "expect": {
         "text": "unchanged",
@@ -1361,8 +1716,8 @@
       "key": "a",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Append text after the cursor 3 times",
-      "labelFrom": "index",
+      "label": "Append after the cursor (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L393 |a|",
       "expect": {
         "text": "unchanged",
@@ -1374,8 +1729,8 @@
       "key": "b",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 words backward",
-      "labelFrom": "index",
+      "label": "Move 3 words back",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
         "text": "unchanged",
@@ -1387,8 +1742,8 @@
       "key": "c",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the text of a motion into register a and start insert: waits for a motion",
-      "labelFrom": "index",
+      "label": "Change into register a: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L395 |c|",
       "expect": {
         "text": "unchanged",
@@ -1400,8 +1755,8 @@
       "key": "d",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the text of a motion into register a: waits for a motion",
-      "labelFrom": "index",
+      "label": "Delete into register a: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L399 |d|",
       "expect": {
         "text": "unchanged",
@@ -1413,8 +1768,8 @@
       "key": "e",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move forward to the end of word 3",
-      "labelFrom": "index",
+      "label": "Move to the end of the 3rd word",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L403 |e|",
       "expect": {
         "text": "unchanged",
@@ -1426,8 +1781,8 @@
       "key": "f",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move to 3rd occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Move to the 3rd match of a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L404 |f|",
       "expect": {
         "text": "unchanged",
@@ -1440,7 +1795,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a g command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L406 |g|",
       "expect": {
         "text": "unchanged",
@@ -1452,8 +1807,8 @@
       "key": "h",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 chars to the left",
-      "labelFrom": "index",
+      "label": "Move 3 characters left",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L407 |h|",
       "expect": {
         "text": "unchanged",
@@ -1465,8 +1820,8 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert text before the cursor 3 times",
-      "labelFrom": "index",
+      "label": "Insert before the cursor (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L408 |i|",
       "expect": {
         "text": "unchanged",
@@ -1478,8 +1833,8 @@
       "key": "j",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines downward",
-      "labelFrom": "index",
+      "label": "Move 3 lines down",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L409 |j|",
       "expect": {
         "text": "unchanged",
@@ -1491,8 +1846,8 @@
       "key": "k",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 lines upward",
-      "labelFrom": "index",
+      "label": "Move 3 lines up",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L410 |k|",
       "expect": {
         "text": "unchanged",
@@ -1504,8 +1859,8 @@
       "key": "l",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 chars to the right",
-      "labelFrom": "index",
+      "label": "Move 3 characters right",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L411 |l|",
       "expect": {
         "text": "unchanged",
@@ -1517,8 +1872,8 @@
       "key": "m",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Set mark {A-Za-z} at cursor position",
-      "labelFrom": "index",
+      "label": "Set a mark at the cursor: waits for the mark name",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L412 |m|",
       "expect": {
         "text": "unchanged",
@@ -1531,16 +1886,29 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: last search; n reads the last search",
-      "label": "TODO",
+      "label": "Repeat the last search 3 times",
       "labelIndex": "index.txt L413 |n|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 37],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: CommandNextSearchMatch src/actions/motion.ts L425-472, 3 times: e at (1,22), (1,23), (1,37). Setup /e<CR> 1 4 |.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|"],
+      "labelFrom": "hand"
     },
     {
       "key": "o",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin a new line below the cursor and insert text, repeat 3 times",
-      "labelFrom": "index",
+      "label": "Open a line below (the text is repeated 3 times)",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L414 |o|",
       "expect": {
         "text": [
@@ -1559,16 +1927,35 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: register; p reads the register",
-      "label": "TODO",
+      "label": "Put register a 3 times after the cursor",
       "labelIndex": "index.txt L416 |p|",
-      "expect": "TODO"
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twwwwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "a": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, L380-418. Setup \"ayl.",
+      "setup": ["\"", "a", "y", "l"],
+      "labelFrom": "hand"
     },
     {
       "key": "q",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Record typed characters into named register {0-9a-zA-Z\"} (uppercase to append)",
-      "labelFrom": "index",
+      "label": "Record a macro: waits for the register name",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L418 |q|",
       "expect": {
         "text": "unchanged",
@@ -1580,8 +1967,8 @@
       "key": "r",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Replace 3 chars with {char}",
-      "labelFrom": "index",
+      "label": "Replace 3 characters with a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L424 |r|",
       "expect": {
         "text": "unchanged",
@@ -1595,8 +1982,8 @@
       "bySet": {
         "defaults": {
           "source": "vim-oracle",
-          "label": "Delete 3 characters into register a and start insert",
-          "labelFrom": "index",
+          "label": "Change 3 characters into register a",
+          "labelFrom": "hand",
           "labelIndex": "index.txt L425 |s|",
           "expect": {
             "text": {
@@ -1618,9 +2005,15 @@
         },
         "extensions": {
           "source": "hand",
-          "label": "TODO",
-          "expect": "TODO",
-          "reason": "plugin:sneak: sneak redefines s and S"
+          "label": "Sneak forward: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "reason": "plugin:sneak: sneak redefines s and S",
+          "expectBasis": "VSCodeVim 1.32.4: SneakForward src/actions/plugins/sneak.ts L7-73; ChangeChar s defers to sneak (src/actions/commands/actions.ts L956-985).",
+          "labelFrom": "hand"
         }
       }
     },
@@ -1628,8 +2021,8 @@
       "key": "t",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move till before 3rd occurrence of {char} to the right",
-      "labelFrom": "index",
+      "label": "Move to just before the 3rd match of a character: waits for the character",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L427 |t|",
       "expect": {
         "text": "unchanged",
@@ -1642,16 +2035,33 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "state: undo history; u reads the undo history",
-      "label": "TODO",
+      "label": "Undo the last 3 changes",
       "labelIndex": "index.txt L429 |u|",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["\""]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Undo src/actions/commands/undo.ts L6-19 (once per count), src/history/historyTracker.ts L797-830: the three x steps, cursor at the start of the first. Setup x x x.",
+      "setup": ["x", "x", "x"],
+      "labelFrom": "hand"
     },
     {
       "key": "v",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start characterwise Visual mode",
-      "labelFrom": "index",
+      "label": "Start Visual mode over 3 characters",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L430 |v|",
       "expect": {
         "text": "unchanged",
@@ -1667,7 +2077,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Move 3 words forward",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L431 |w|",
       "expect": {
         "text": "unchanged",
@@ -1679,8 +2089,8 @@
       "key": "x",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete 3 characters under and after the cursor into register a",
-      "labelFrom": "index",
+      "label": "Delete 3 characters into register a",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L432 |x|",
       "expect": {
         "text": {
@@ -1704,8 +2114,8 @@
       "key": "y",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank the text of a motion into register a: waits for a motion",
-      "labelFrom": "index",
+      "label": "Yank into register a: waits for a motion",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L434 |y|",
       "expect": {
         "text": "unchanged",
@@ -1718,7 +2128,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Start a z command: waits for the next key",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L436 |z|",
       "expect": {
         "text": "unchanged",
@@ -1730,8 +2140,8 @@
       "key": "{",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move 3 paragraphs backward",
-      "labelFrom": "index",
+      "label": "Move 3 paragraphs back",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L437 |{|",
       "expect": {
         "text": "unchanged",
@@ -1742,11 +2152,25 @@
     {
       "key": "{<leader>}",
       "sets": ["defaults", "extensions"],
-      "sample": "TODO",
+      "sample": "\\",
       "source": "hand",
       "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
-      "label": "TODO",
-      "expect": "TODO"
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "bySet": {
+        "defaults": {
+          "label": "Start a leader command: waits for the next key (easymotion's \\\\ keys, inactive while vim.easymotion is off)",
+          "labelFrom": "hand"
+        },
+        "extensions": {
+          "label": "Start a leader command: waits for w, b or e (camelCaseMotion) or \\ (easymotion, inactive)",
+          "labelFrom": "hand"
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: src/actions/plugins/easymotion/easymotion.cmd.ts: the <leader><leader> commands match their keys whatever vim.easymotion is (their exec checks it, L76, L231); src/actions/plugins/camelCaseMotion.ts L11-60 with vim.camelCaseMotion.enable."
     },
     {
       "key": "{<number>}",
@@ -1754,7 +2178,7 @@
       "sample": "3",
       "source": "vim-oracle",
       "label": "Add a digit to the count",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
@@ -1766,7 +2190,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Move to column 3",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L438 |bar|",
       "expect": {
         "text": "unchanged",
@@ -1779,7 +2203,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "label": "Move 3 paragraphs forward",
-      "labelFrom": "index",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L439 |}|",
       "expect": {
         "text": "unchanged",
@@ -1791,10 +2215,9 @@
       "key": "~",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Switch case of 3 characters under cursor and move the cursor 3 characters to the right",
-      "labelFrom": "index",
+      "label": "Switch the case of 3 characters and move past them",
+      "labelFrom": "hand",
       "labelIndex": "index.txt L440 |~|",
-      "labelReview": "the index description is long",
       "expect": {
         "text": {
           "1": "  if (one, \"tWO\", [three]) { four(five) }"
