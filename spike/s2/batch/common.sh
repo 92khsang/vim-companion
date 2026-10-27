@@ -51,9 +51,9 @@ harness() { # <data dir> <env assignments and command...>
   fi
   {
     echo "$(date -u +%FT%TZ) build $b"
-    echo "$(date -u +%FT%TZ) env $(env | grep '^S2_' | grep -vE '^S2_(ROOT|RUN|CODE_[0-9_]+)=' | sort | tr '\n' ' ')"
+    echo "$(date -u +%FT%TZ) env $(env | grep '^S2_' | grep -vE '^S2_(ROOT|RUN|CODE_[0-9_]+|BATCH_DATA|DIFF_TRACE|CASES|RESET_SETTLE)=' | sort | tr '\n' ' ')(unset for the harness: S2_DIFF_TRACE S2_CASES S2_RESET_SETTLE)"
     echo "$(date -u +%FT%TZ) S2_CPUS=$S2_CPUS S2_NAME_PREFIX=$S2_NAME_PREFIX $*"
-  } >> "$dir/command.txt"
+  } | sed "s#$HOME#\$HOME#g" >> "$dir/command.txt"
   env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE -u S2_DIFF_TRACE -u S2_CASES -u S2_RESET_SETTLE "$@"
 }
 # "<attempts> <completed on> <completed off> <script or read errors>" of a differential output file
@@ -69,8 +69,8 @@ count_runs() {
     console.log(runs.length + errs.length,
       runs.filter((r) => r.arm === "on").length, runs.filter((r) => r.arm === "off").length,
       errs.filter((r) => r.phase !== "start").length);
-  ' "$1") || { log "cannot read $1"; exit 1; }
-  [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'"; exit 1; }
+  ' "$1" 2>/dev/null) || { log "cannot read $1 (a line is not JSON): stopping" >&2; exit 1; }
+  [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'" >&2; exit 1; }
   echo "$out"
 }
 # No sandbox process, mount or Xvfb of the batch may be left. The batch's instances are the ones of
