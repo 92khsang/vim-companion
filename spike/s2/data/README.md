@@ -280,3 +280,11 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
   `shift+alt+Down`, `super+alt+Down` and the same with `Up`; `ctrl+shift+2`, `ctrl+at`;
   `ctrl+asciicircum`, `ctrl+shift+6`, `ctrl+shift+asciicircum`) delivered the token 0 times. Same
   result on 1.134.0 and 1.141.0. This shows delivery only; no expectation comes from these runs.
+- `check1/keys-proof/disabled-<version>.json`: `S2_CPUS=28-31 S2_NAME_PREFIX=k- node spike/s2/check1/disabled-proof.mjs <version> :138 9548 <out>`
+  on 2026-10-27 (one sandbox VS Code per version, VSCodeVim's defaults): before `toggleVim` the
+  probe's reader finds a mode handler in Normal mode and VSCodeVim's status bar item
+  `vscodevim.vim.primary` reads `-- NORMAL --`; after `toggleVim` the reader finds no handler and
+  the item reads `-- VIM: DISABLED --` (the `showcmd` item `<ExtensionDisable>`); after a second
+  `toggleVim` the handler is back in Normal mode and the item reads `-- NORMAL --` again. Same on
+  1.134.0 and 1.141.0. This is the read that cards-correctness.mjs uses for the mode when VSCodeVim
+  is off (`other-12`, Mode.Disabled).
