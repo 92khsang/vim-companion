@@ -1,0 +1,17 @@
+# Hangul `SPC g` with the jamo committed while SPC is pending (fast timing); plugin-off references first.
+# Run after queue-resume.txt: bash queue.sh queue-fast.txt 9531:131 9533:132 9535:133 (Temurin 25.0.4 on PATH).
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 200 off {port} plugin-off,fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 200 off {port} plugin-off,fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 200 off {port} plugin-off,fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 200 off {port} plugin-off,fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 balloon {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 WLToolkit 1000 layer {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 balloon {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.47.3 XToolkit 1000 layer {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 balloon {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap WLToolkit 1000 layer {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 balloon {port} fast
+./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port} fast
+# Reruns of queue-resume.txt lines 40 and 58, whose harness GNOME Shell crashed mid-run (2026-10-27).
+./gnome-case.sh commit-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 layer {port} word-commit
+S3_IDEAVIM_EXTENSION=../plugin/build-ext/IdeaVimExtension-1.7.4.zip ./gnome-case.sh hangul-ibus IdeaVIM:2.48.0-eap.2@eap XToolkit 1000 balloon {port} keep-english
