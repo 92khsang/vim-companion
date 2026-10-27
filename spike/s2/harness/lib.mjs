@@ -163,10 +163,21 @@ export const NEUTRAL_STATE = {
 /**
  * The adapter's report, as adapterCheck reads it. With `activeUri`, the report must be for that
  * document (the active editor at the read); with `neutral`, its state must be Normal mode with
- * nothing pending, no operator, count or register (the state after <Esc> <Esc>).
+ * nothing pending, no operator, count or register (the state after <Esc> <Esc>). Right after the
+ * adapter, the probe's own test-only reader (the inspector reader of the fixture deviations) reads
+ * VSCodeVim's state in both arms; the check records it, whether it is neutral and, with the adapter
+ * on, whether it equals the adapter's report, so that a failure of the neutral check can be put on
+ * VSCodeVim's end state or on the adapter. The reader does not change the pass rule.
  */
 export async function adapterCheck(code, arm, { activeUri, neutral } = {}) {
   const a = await code.probe.call("adapter");
+  let reader;
+  try {
+    const r = await code.probe.call("vimState");
+    reader = { state: r.state ?? null, handler: r.handler };
+  } catch (e) {
+    reader = { state: null, error: String(e) };
+  }
   const ageMs = a.report ? a.now - a.report.t : null;
   const reasons = [];
   if (arm === "on") {
@@ -202,6 +213,16 @@ export async function adapterCheck(code, arm, { activeUri, neutral } = {}) {
     uriMatches:
       activeUri === undefined || !a.report ? null : a.report.uri === activeUri,
     state: a.report?.state ?? null,
+    reader: {
+      ...reader,
+      neutral: reader.state
+        ? JSON.stringify(reader.state) === JSON.stringify(NEUTRAL_STATE)
+        : null,
+      equalsAdapter:
+        arm === "on" && a.report?.state && reader.state
+          ? JSON.stringify(reader.state) === JSON.stringify(a.report.state)
+          : null,
+    },
     ok: reasons.length === 0,
     reasons,
   };
@@ -695,8 +716,9 @@ export async function openSession({
     cdpPort,
     disable,
   });
-  // The extension host is up once the probe has answered hello (startCode); a harness that sorts
-  // its errors by phase moves from `boot` to `start` here.
+  // The probe has answered its first hello (startCode); a harness that sorts its errors by phase
+  // moves from `boot` to `start` here. The adapter, which activates on the same event as the probe,
+  // is already loaded at this point.
   onHostUp?.();
   for (let i = 0; i < 150; i++) {
     const h = await code.probe.call("hello");
