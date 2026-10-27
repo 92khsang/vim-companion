@@ -19,7 +19,7 @@ import {
 } from "node:fs";
 import { createHash } from "node:crypto";
 import net from "node:net";
-import { join, relative } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
 export const REPO = join(import.meta.dirname, "../../..");
@@ -83,10 +83,45 @@ const hashPath = (rel) => {
   }
   return h.digest("hex");
 };
+/** sha256 over the sorted relative paths and contents of every file under a directory. */
+const hashDir = (abs) => {
+  const h = createHash("sha256");
+  for (const f of filesUnder(abs).sort()) {
+    h.update(relative(abs, f) + "\0");
+    h.update(readFileSync(f));
+    h.update("\0");
+  }
+  return h.digest("hex");
+};
+/**
+ * The software outside the repository that a run measures: the version and product commit of each
+ * S2_CODE_* binary (its resources/app/product.json) and a hash of $S2_ROOT/ext/base, the VSCodeVim
+ * and which-key folders copied into every instance. No path is recorded.
+ */
+function externalInfo() {
+  const code = {};
+  for (const [name, bin] of Object.entries(process.env).sort())
+    if (/^S2_CODE_\d+_\d+_\d+$/.test(name)) {
+      const label = name.slice("S2_CODE_".length).replaceAll("_", ".");
+      const product = JSON.parse(
+        readFileSync(join(dirname(bin), "resources/app/product.json"), "utf8"),
+      );
+      code[label] = { version: product.version, commit: product.commit };
+    }
+  const base = process.env.S2_ROOT
+    ? join(process.env.S2_ROOT, "ext/base")
+    : null;
+  return {
+    code,
+    extBase: base && existsSync(base) ? hashDir(base) : null,
+    extBaseFolders: base && existsSync(base) ? readdirSync(base).sort() : [],
+  };
+}
 /**
  * The build a run measures: the checkout's HEAD, the uncommitted changes under spike/s2 and spec
- * (data directories excluded), and sha256 hashes of BUILD_PATHS. `id` is a short hash of all of it;
- * the compare and the summaries refuse records of more than one id.
+ * (data directories excluded), sha256 hashes of BUILD_PATHS, and the software outside the
+ * repository (externalInfo). `id` is a short hash of all of it; the compare and the summaries
+ * refuse records of more than one id, and records of a build with uncommitted changes.
  */
 export function buildInfo() {
   const git = (args) =>
@@ -103,11 +138,12 @@ export function buildInfo() {
   const sha256 = Object.fromEntries(
     Object.entries(BUILD_PATHS).map(([k, p]) => [k, hashPath(p)]),
   );
+  const external = externalInfo();
   const id = createHash("sha256")
-    .update(JSON.stringify({ head, dirty, sha256 }))
+    .update(JSON.stringify({ head, dirty, sha256, external }))
     .digest("hex")
     .slice(0, 16);
-  return { id, head, dirty: dirty ? dirty.split("\n") : [], sha256 };
+  return { id, head, dirty: dirty ? dirty.split("\n") : [], sha256, external };
 }
 
 /**
@@ -117,7 +153,19 @@ export function buildInfo() {
  * intervals old; with the adapter off, the extension must be absent (disabled extensions are not
  * listed). A failed inspector walk leaves the adapter active with no report, which this catches.
  */
-export async function adapterCheck(code, arm) {
+export const NEUTRAL_STATE = {
+  mode: "normal",
+  pending: [],
+  operator: null,
+  count: null,
+  register: null,
+};
+/**
+ * The adapter's report, as adapterCheck reads it. With `activeUri`, the report must be for that
+ * document (the active editor at the read); with `neutral`, its state must be Normal mode with
+ * nothing pending, no operator, count or register (the state after <Esc> <Esc>).
+ */
+export async function adapterCheck(code, arm, { activeUri, neutral } = {}) {
   const a = await code.probe.call("adapter");
   const ageMs = a.report ? a.now - a.report.t : null;
   const reasons = [];
@@ -127,8 +175,20 @@ export async function adapterCheck(code, arm) {
     if (!a.report) reasons.push("no adapter report");
     else if (!a.report.state) reasons.push("adapter report without a state");
     if (a.error) reasons.push(`adapter error: ${a.error}`);
-    if (a.report && !(ageMs <= 2 * (a.pollMs ?? 50)))
+    if (a.report && !(ageMs >= 0 && ageMs <= 2 * (a.pollMs ?? 50)))
       reasons.push(`adapter report ${ageMs} ms old`);
+    if (a.report && activeUri !== undefined && a.report.uri !== activeUri)
+      reasons.push(
+        "adapter report for another document than the active editor",
+      );
+    if (
+      a.report?.state &&
+      neutral &&
+      JSON.stringify(a.report.state) !== JSON.stringify(NEUTRAL_STATE)
+    )
+      reasons.push(
+        `adapter state after <Esc> <Esc> is not neutral: ${JSON.stringify(a.report.state)}`,
+      );
   } else if (a.present) reasons.push("adapter present with the adapter off");
   return {
     arm,
@@ -136,7 +196,11 @@ export async function adapterCheck(code, arm) {
     active: a.active,
     ageMs,
     pollMs: a.pollMs,
+    polls: a.polls ?? null,
     error: a.error,
+    uri: a.report?.uri ?? null,
+    uriMatches:
+      activeUri === undefined || !a.report ? null : a.report.uri === activeUri,
     state: a.report?.state ?? null,
     ok: reasons.length === 0,
     reasons,
@@ -620,6 +684,7 @@ export async function openSession({
   disable = [],
   spikeExtensions,
   settings,
+  onHostUp,
 }) {
   const inst = prepareInstance({ name, spikeExtensions, settings });
   const code = await startCode({
@@ -630,6 +695,9 @@ export async function openSession({
     cdpPort,
     disable,
   });
+  // The extension host is up once the probe has answered hello (startCode); a harness that sorts
+  // its errors by phase moves from `boot` to `start` here.
+  onHostUp?.();
   for (let i = 0; i < 150; i++) {
     const h = await code.probe.call("hello");
     code.hello = h;

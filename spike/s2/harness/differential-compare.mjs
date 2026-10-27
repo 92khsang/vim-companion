@@ -8,17 +8,23 @@
 // as issue #11 writes it: the adapter-off runs all agree, and 0 adapter-on runs differ from them;
 // comparisons stay within one version. With S2_DIFF_EXPECT=<n>, the row also needs n completed runs
 // per arm and version. The row also needs, per version:
-// - run-errors only of the phase `start` (a run that measured nothing, which a batch replaces with
-//   a further run); an error while the script was typed or read counts against the row (on the
-//   adapter-on arm it is a run that did not behave as with the adapter off; on the adapter-off arm
-//   it is non-determinism), and so does an error without a phase;
+// - run-errors only of the phase `boot` (before the extension host was up: the run measured
+//   nothing, and a batch replaces it with a further run); any error from the host's start on
+//   counts against the row: on the adapter-on arm it is a run that did not behave as with the
+//   adapter off, on the adapter-off arm it is non-determinism; an error without a phase counts too;
 // - run numbers that are unique and contiguous from 0 over runs and run-errors, and, when both arms
 //   are present, strict alternation: every even run on one arm, every odd run on the other;
-// - an adapter check in every adapter-on run that shows a working adapter (adapterCheck.ok), and no
+// - an adapter check in every adapter-on run that shows a working adapter (adapterCheck.ok: a
+//   fresh report for the active editor, a neutral state after <Esc> <Esc>, no error), and no
 //   adapter in every adapter-off run;
-// - no trace run (S2_DIFF_TRACE: a diagnostic, its reads lengthen the gaps between items);
-// - one build: every record of all the files read carries the same build id (records without a
-//   build count as the build "none").
+// - the which-key effect rule in every run (settle.rule "effect"), and no trace run (S2_DIFF_TRACE:
+//   a diagnostic, its reads lengthen the gaps between items);
+// - VS Code of the version label in every run (hello.vscode) and one VSCodeVim and one which-key
+//   version over the version's runs;
+// - one build without uncommitted changes: every record of all the files read carries the same
+//   build id, and that build's `dirty` list is empty (records without a build count as "none").
+// With S2_DIFF_PRECHECK=<n>, a PRECHECK line per version states the precheck of the differential
+// row instead: at least n completed adapter-off runs and no adapter-on run, under the same rules.
 // Usage: node spike/s2/harness/differential-compare.mjs <runs.jsonl>...
 import { readFileSync } from "node:fs";
 
@@ -221,24 +227,28 @@ function effectSummary(settled, arm) {
 const expectRuns = process.env.S2_DIFF_EXPECT
   ? Number(process.env.S2_DIFF_EXPECT)
   : undefined;
+const precheckRuns = process.env.S2_DIFF_PRECHECK
+  ? Number(process.env.S2_DIFF_PRECHECK)
+  : undefined;
 const allVersions = [
   ...new Set([...ok, ...errors].map((r) => r.version)),
 ].sort();
 const builds = [...new Set(runs.map((r) => r.build?.id ?? "none"))];
+const dirtyBuilds = runs.filter((r) => !r.build || r.build.dirty?.length);
 console.log(
-  `builds: ${builds.join(", ")}${builds.length > 1 ? " (mixed: the row does not pass)" : ""}`,
+  `builds: ${builds.join(", ")}${builds.length > 1 ? " (mixed: the row does not pass)" : ""}` +
+    (dirtyBuilds.length
+      ? `; ${dirtyBuilds.length} records without a build or of a build with uncommitted changes`
+      : ""),
 );
 for (const version of allVersions) {
   const vOff = off.filter((r) => r.version === version);
   const vOn = on.filter((r) => r.version === version);
   const vErr = errors.filter((r) => r.version === version);
-  const fatal = vErr.filter((r) => r.phase !== "start");
+  const fatal = vErr.filter((r) => r.phase !== "boot");
   const outcomes = new Set(vOff.map(key));
   const vKey = mostCommon(vOff.map(key));
   const differ = vOn.filter((r) => key(r) !== vKey);
-  const complete =
-    expectRuns === undefined ||
-    (vOn.length >= expectRuns && vOff.length >= expectRuns);
   // Run numbers over runs and run-errors: unique, contiguous from 0, and alternating arms.
   const all = [...vOn, ...vOff, ...vErr];
   const nums = all.map((r) => r.i).sort((a, b) => a - b);
@@ -258,37 +268,72 @@ for (const version of allVersions) {
       (r.hello?.adapter ?? r.adapter) != null ||
       r.adapterCheck?.present === true,
   );
-  const traced = [...vOn, ...vOff].filter((r) => r.trace);
-  const pass =
-    vOff.length > 0 &&
-    vOn.length > 0 &&
-    outcomes.size === 1 &&
-    differ.length === 0 &&
+  const vRuns = [...vOn, ...vOff];
+  const traced = vRuns.filter((r) => r.trace);
+  const noEffect = vRuns.filter((r) => r.settle?.rule !== "effect");
+  const wrongCode = vRuns.filter((r) => r.hello?.vscode !== version);
+  const vims = [...new Set(vRuns.map((r) => r.hello?.vim?.version ?? "none"))];
+  const whichkeys = [
+    ...new Set(vRuns.map((r) => r.hello?.whichkey?.version ?? "none")),
+  ];
+  const common =
     fatal.length === 0 &&
-    complete &&
     unique &&
     contiguous &&
     alternating &&
-    onBad.length === 0 &&
     offBad.length === 0 &&
     traced.length === 0 &&
-    builds.length === 1;
+    noEffect.length === 0 &&
+    wrongCode.length === 0 &&
+    vims.length === 1 &&
+    vims[0] !== "none" &&
+    whichkeys.length === 1 &&
+    whichkeys[0] !== "none" &&
+    builds.length === 1 &&
+    dirtyBuilds.length === 0 &&
+    outcomes.size === 1;
+  const facts =
+    `run errors ${vErr.length} (boot ${vErr.length - fatal.length}, from the host's start on ${fatal.length}; on ${vErr.filter((r) => r.arm === "on").length}, off ${vErr.filter((r) => r.arm === "off").length})` +
+    `, adapter-off outcomes ${outcomes.size}` +
+    `, run numbers ${unique && contiguous ? `0-${nums.length - 1}` : "not unique and contiguous"}${both ? (alternating ? ", alternating" : ", NOT alternating") : ""}` +
+    `, adapter checks failed ${onBad.length} on, ${offBad.length} off` +
+    (traced.length ? `, trace runs ${traced.length}` : "") +
+    (noEffect.length
+      ? `, runs without the effect rule ${noEffect.length}`
+      : "") +
+    `, VS Code ${[...new Set(vRuns.map((r) => r.hello?.vscode ?? "none"))].join("+")}${wrongCode.length ? ` (${wrongCode.length} runs not ${version})` : ""}` +
+    `, VSCodeVim ${vims.join("+")}, which-key ${whichkeys.join("+")}` +
+    `, build ${builds.join("+")}${dirtyBuilds.length ? " (not clean)" : ""}`;
+  const reasons =
+    (differ.length
+      ? ` (runs that differ: ${differ.map((r) => r.i).join(", ")})`
+      : "") +
+    (fatal.length
+      ? ` (errors in runs ${fatal.map((r) => `${r.i} ${r.arm} ${r.phase ?? "no phase"}`).join(", ")})`
+      : "") +
+    (onBad.length
+      ? ` (adapter: ${[...new Set(onBad.map((r) => (r.adapterCheck?.reasons ?? ["no adapter check"]).join("; ")))].join(" | ")})`
+      : "");
+  if (precheckRuns !== undefined) {
+    const pass = vOn.length === 0 && vOff.length >= precheckRuns && common;
+    console.log(
+      `PRECHECK ${version}: ${vOff.length} off (need ${precheckRuns}), ${vOn.length} on, ${facts}: ${pass ? "pass" : "not pass"}${reasons}`,
+    );
+    continue;
+  }
+  const complete =
+    expectRuns === undefined ||
+    (vOn.length >= expectRuns && vOff.length >= expectRuns);
+  const pass =
+    vOff.length > 0 &&
+    vOn.length > 0 &&
+    differ.length === 0 &&
+    complete &&
+    onBad.length === 0 &&
+    common;
   console.log(
     `ROW differential ${version}: ${vOn.length} on, ${vOff.length} off` +
       (expectRuns === undefined ? "" : ` (need ${expectRuns} each)`) +
-      `, run errors ${vErr.length} (start ${vErr.length - fatal.length}, script or read ${fatal.length}; on ${vErr.filter((r) => r.arm === "on").length}, off ${vErr.filter((r) => r.arm === "off").length})` +
-      `, adapter-off outcomes ${outcomes.size}, adapter-on runs that differ ${differ.length}` +
-      `, run numbers ${unique && contiguous ? `0-${nums.length - 1}` : "not unique and contiguous"}${both ? (alternating ? ", alternating" : ", NOT alternating") : ""}` +
-      `, adapter checks failed ${onBad.length} on, ${offBad.length} off` +
-      (traced.length ? `, trace runs ${traced.length}` : "") +
-      `, build ${builds.join("+")}` +
-      `: ${pass ? "pass" : "not pass"}` +
-      (differ.length ? ` (runs ${differ.map((r) => r.i).join(", ")})` : "") +
-      (fatal.length
-        ? ` (errors in runs ${fatal.map((r) => `${r.i} ${r.phase ?? "no phase"}`).join(", ")})`
-        : "") +
-      (onBad.length
-        ? ` (adapter: ${[...new Set(onBad.map((r) => (r.adapterCheck?.reasons ?? ["no adapter check"]).join("; ")))].join(" | ")})`
-        : ""),
+      `, adapter-on runs that differ ${differ.length}, ${facts}: ${pass ? "pass" : "not pass"}${reasons}`,
   );
 }

@@ -12,9 +12,12 @@
 // Every run record carries the build it measured (lib.mjs buildInfo), the probe's hello (VS Code,
 // VSCodeVim, which-key and extension versions) and `adapterCheck`, read after the script: with the
 // adapter on, a fresh report with a state and no error; with it off, no adapter. A run that does not
-// complete is a run-error record with its phase: `start` (session start, clipboard, input check;
-// such a run measured nothing and a batch may replace it), `script` (while the script items are
-// typed) or `read` (the reads and pastes after the script); see differential-compare.mjs.
+// complete is a run-error record with its phase: `boot` (before the extension host is up: the
+// instance, the process spawn, the probe's socket and hello; such a run measured nothing and a batch
+// may replace it), `start` (from the host's start: VSCodeVim's activation, the files, the clipboard,
+// the input check), `script` (while the script items are typed) or `read` (the reads and pastes
+// after the script); see differential-compare.mjs. The adapter check after <Esc> <Esc> also needs
+// the adapter's report to be for the active editor and its state to be neutral Normal mode.
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -93,11 +96,14 @@ try {
           ? "on"
           : "off";
     const t0 = Date.now();
-    let phase = "start";
+    let phase = "boot";
     let build;
     try {
       build = buildInfo();
       code = await openSession({
+        onHostUp: () => {
+          phase = "start";
+        },
         version,
         display,
         name: `${NAME_PREFIX}-${version}-${display.slice(1)}`,
@@ -202,7 +208,10 @@ try {
       typeKeys(display, ["<Esc>", "<Esc>"], DELAY);
       await sleep(500);
       const end = await code.probe.call("snapshot");
-      const adapter = await adapterCheck(code, arm);
+      const adapter = await adapterCheck(code, arm, {
+        activeUri: end.active,
+        neutral: true,
+      });
       for (const r of script.registers) {
         typeKeys(display, ['"', r, "p"], DELAY);
         await sleep(100);

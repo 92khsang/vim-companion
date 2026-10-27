@@ -153,6 +153,7 @@ function adapterReport() {
     active: true,
     report: ext.exports.latest(),
     error: typeof ext.exports.error === "function" ? ext.exports.error() : null,
+    polls: typeof ext.exports.polls === "function" ? ext.exports.polls() : null,
     pollMs: ext.exports.pollMs ?? null,
     now: Date.now(),
   };
