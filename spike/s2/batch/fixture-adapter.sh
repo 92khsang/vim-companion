@@ -5,9 +5,11 @@
 # wait for it (`last`: the row reads after the last key; `all` would also read every prefix).
 # fixture-run.mjs is not resumable: a version whose file has no end record is run again from the
 # start, after the incomplete file is kept as <file>.incomplete-<time>.
-# Usage (repository root, S2 environment exported): spike/s2/batch/fixture-adapter.sh
+# The run reads from the last key (fixture-run.mjs), and the summary needs every fixture case, an
+# end record and one build; S2_CASES and S2_RESET_SETTLE are never inherited (common.sh).
+# Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/fixture-adapter.sh
 source "$(dirname "$0")/common.sh"
-dir=spike/s2/data/fixture-adapter
+dir=$DATA/fixture-adapter
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/adapter-$v.jsonl

@@ -4,19 +4,26 @@
 # effect rule, then differential-compare.mjs with S2_DIFF_EXPECT=1000, whose ROW line states the
 # pass condition. Runs go in chunks of 50 into one file per version; a rerun of the script
 # continues after the last complete run (S2_DIFF_START keeps the run numbers and the alternation).
-# A run-error record is a run that did not complete: the batch runs further alternating runs until
-# each arm has 1000 completed runs, and stops after 2100 attempts per version.
-# Usage (repository root, S2 environment exported): spike/s2/batch/differential.sh
+# A run-error of the phase `start` measured nothing (the session, the clipboard or the input check
+# failed): the batch runs further alternating runs until each arm has 1000 completed runs, and stops
+# after 2100 attempts per version. A run-error while the script was typed or read counts against
+# the row (differential-compare.mjs), so the batch stops that version at the first one.
+# Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/differential.sh
 source "$(dirname "$0")/common.sh"
 RUNS=1000
 MAX_ATTEMPTS=2100
 CHUNK=50
-dir=spike/s2/data/differential-row
+dir=$DATA/differential-row
 mkdir -p "$dir"
 for v in $VERSIONS; do
   out=$dir/both-$v.jsonl
   while :; do
-    read -r attempts nOn nOff < <(count_runs "$out")
+    counts=$(count_runs "$out")
+    read -r attempts nOn nOff fatal <<< "$counts"
+    if [ "$fatal" -gt 0 ]; then
+      log "differential $v: $fatal run errors in the script or read phase; the row cannot pass; stopping this version"
+      break
+    fi
     if [ "$nOn" -ge "$RUNS" ] && [ "$nOff" -ge "$RUNS" ]; then break; fi
     if [ "$attempts" -ge "$MAX_ATTEMPTS" ]; then
       log "differential $v: stopping after $attempts attempts ($nOn on, $nOff off completed)"

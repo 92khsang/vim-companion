@@ -1,6 +1,17 @@
 # Shared by the S2 batch scripts; sourced, not run. Each batch runs one sandbox VS Code at a time
 # through the harness, on one display and CDP port, and holds a lock so that two batches cannot
 # share them.
+#
+# The measured build is frozen: a batch runs from a dedicated checkout at one commit (see
+# spike/s2/README.md), refuses to start when spike/s2 or spec has uncommitted changes (data
+# directories excepted), records before every harness call the build (HEAD, the uncommitted
+# changes and the sha256 hashes of lib.mjs buildInfo) and every S2_ variable that is not a path,
+# and stops when the build changed since the batch started. Every run record carries the same
+# build, and the compare and the summaries refuse mixed builds.
+#
+# Every batch also holds a shared lock on the S2_CPUS cores; the CPU row (cpu.sh) takes it
+# exclusively, so no other batch can run on those cores during its windows.
+# S2_BATCH_DATA (default spike/s2/data) is the data root, for smoke runs outside the repository.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/../../.."
 : "${S2_ROOT:?source the S2 environment first}" "${S2_RUN:?}" "${S2_CPUS:?}"
@@ -8,36 +19,69 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../../.."
 BATCH_DISPLAY=${S2_BATCH_DISPLAY:-:121}
 BATCH_PORT=${S2_BATCH_PORT:-9521}
 VERSIONS=${S2_BATCH_VERSIONS:-"1.141.0 1.134.0"}
+DATA=${S2_BATCH_DATA:-spike/s2/data}
 export S2_NAME_PREFIX=${S2_NAME_PREFIX:-a-}
 exec 9>"$S2_RUN/batch-${BATCH_DISPLAY#:}.lock"
 flock -n 9 || { echo "another batch holds display $BATCH_DISPLAY"; exit 1; }
+exec 8>"$S2_RUN/cores-${S2_CPUS}.lock"
+flock -s -n 8 || { echo "the CPU row holds cores $S2_CPUS"; exit 1; }
 
 log() { echo "$(date -u +%FT%TZ) $*"; }
+build_json() {
+  node -e 'import("./spike/s2/harness/lib.mjs").then((m) => console.log(JSON.stringify(m.buildInfo())))'
+}
+build_id() { build_json | node -e 'let s="";process.stdin.on("data",(d)=>s+=d).on("end",()=>console.log(JSON.parse(s).id))'; }
+dirty=$(git status --porcelain -- spike/s2 spec ':!spike/s2/data')
+if [ -n "$dirty" ]; then
+  echo "the checkout has uncommitted changes under spike/s2 or spec; a batch measures one committed build:"
+  echo "$dirty"
+  exit 1
+fi
+BUILD_ID=$(build_id)
 # Runs a harness command as an X11 client of its own Xvfb display and records it in command.txt.
+# Inherited variables that change what a harness measures are unset; a batch that needs one sets it
+# among the assignments, which are recorded.
 harness() { # <data dir> <env assignments and command...>
   local dir=$1; shift
-  echo "$(date -u +%FT%TZ) S2_CPUS=$S2_CPUS S2_NAME_PREFIX=$S2_NAME_PREFIX $*" >> "$dir/command.txt"
-  env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE "$@"
+  local b
+  b=$(build_json)
+  if [ "$(echo "$b" | node -e 'let s="";process.stdin.on("data",(d)=>s+=d).on("end",()=>console.log(JSON.parse(s).id))')" != "$BUILD_ID" ]; then
+    log "the build changed since the batch started ($BUILD_ID): stopping"
+    exit 1
+  fi
+  {
+    echo "$(date -u +%FT%TZ) build $b"
+    echo "$(date -u +%FT%TZ) env $(env | grep '^S2_' | grep -vE '^S2_(ROOT|RUN|CODE_[0-9_]+)=' | sort | tr '\n' ' ')"
+    echo "$(date -u +%FT%TZ) S2_CPUS=$S2_CPUS S2_NAME_PREFIX=$S2_NAME_PREFIX $*"
+  } >> "$dir/command.txt"
+  env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE -u S2_DIFF_TRACE -u S2_CASES -u S2_RESET_SETTLE "$@"
 }
-# "<attempts> <completed on> <completed off>" of a differential output file (0 0 0 if absent).
+# "<attempts> <completed on> <completed off> <script or read errors>" of a differential output file
+# (0 0 0 0 if absent). Exits the batch when the file cannot be read, rather than restarting at 0.
 count_runs() {
-  node -e '
+  local out
+  out=$(node -e '
     const fs = require("fs");
     const f = process.argv[1];
     const rs = fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse) : [];
     const runs = rs.filter((r) => r.type === "run");
-    console.log(rs.filter((r) => r.type === "run" || r.type === "run-error").length,
-      runs.filter((r) => r.arm === "on").length, runs.filter((r) => r.arm === "off").length);
-  ' "$1"
+    const errs = rs.filter((r) => r.type === "run-error");
+    console.log(runs.length + errs.length,
+      runs.filter((r) => r.arm === "on").length, runs.filter((r) => r.arm === "off").length,
+      errs.filter((r) => r.phase !== "start").length);
+  ' "$1") || { log "cannot read $1"; exit 1; }
+  [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'"; exit 1; }
+  echo "$out"
 }
-# No sandbox process, mount or Xvfb of the batch may be left.
+# No sandbox process, mount or Xvfb of the batch may be left. The batch's instances are the ones of
+# its display (instance names end with the display number); another batch's are not counted.
 leftover_check() {
-  local procs=0 p
+  local procs=0 p d=${BATCH_DISPLAY#:}
   for p in /proc/[0-9]*; do
-    cat "$p/environ" 2>/dev/null | tr '\0' '\n' | grep -q "^XDG_RUNTIME_DIR=$S2_RUN/" && procs=$((procs + 1))
+    cat "$p/environ" 2>/dev/null | tr '\0' '\n' | grep -qE "^XDG_RUNTIME_DIR=$S2_RUN/[^/]*-$d\.[^/]*\.rt$" && procs=$((procs + 1))
   done
   local mounts xvfb
-  mounts=$(mount | grep -c 's2r\.' || true)
+  mounts=$(mount | grep -cE "$S2_RUN/[^/ ]*-$d\.[^/ ]*\.rt" || true)
   xvfb=$(pgrep -a Xvfb | grep -cE " ${BATCH_DISPLAY}( |$)" || true)
   log "leftover check: $procs sandbox processes, $mounts s2r mounts, $xvfb Xvfb on $BATCH_DISPLAY"
 }
