@@ -19,7 +19,9 @@
       "setup": ["j", "m", "a", "k"],
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
-        "layout": "single"
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       },
       "handBasis": {
         "basis": "Vim motion.txt *]'*: the setup jmak puts mark a on line 2, the nearest possible line below, so marks from earlier rows cannot come between"
@@ -36,6 +38,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -70,7 +78,9 @@
       "setup": ["y", "y"],
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
-        "layout": "single"
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       },
       "handBasis": {
         "basis": "Vim change.txt *]P* (same as [p): like P with the indent adjusted; cursor on the first non-blank of the new line"
@@ -85,8 +95,26 @@
       "labelIndex": "index.txt L698 |][|",
       "expect": {
         "text": "unchanged",
-        "cursor": [3, 0],
+        "cursor": [4, 0],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [3, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
       }
     },
     {
@@ -98,8 +126,26 @@
       "labelIndex": "index.txt L699 |]]|",
       "expect": {
         "text": "unchanged",
-        "cursor": [3, 0],
+        "cursor": [4, 0],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [3, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
       }
     },
     {
@@ -118,7 +164,9 @@
       "setup": ["l", "m", "a", "h"],
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
-        "layout": "single"
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       },
       "handBasis": {
         "basis": "Vim motion.txt *]`*: the setup lma puts mark a at (1,14), the nearest possible position after the cursor, so marks from earlier rows cannot come between"
@@ -184,7 +232,9 @@
       "setup": ["y", "y"],
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
-        "layout": "single"
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       },
       "handBasis": {
         "basis": "Vim change.txt *]p*: like p with the indent adjusted to the current line (both have 2 spaces); the setup yy fills the unnamed register and 0 linewise; a linewise put leaves the cursor on the first non-blank of the new line"
@@ -201,6 +251,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     }
   ]

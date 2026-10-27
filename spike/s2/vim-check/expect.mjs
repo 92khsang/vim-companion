@@ -27,6 +27,17 @@
 // focuses group 1 after group 2), and the fixture buffer marked modified, as a.txt is in the
 // harness (the probe's reset is an edit and nothing saves it; 'hidden' stays off, Vim's default,
 // since VSCodeVim has no such setting); the default is one window.
+// S2_VIM_DOC=document gives Vim the buffer that the harness's VS Code document holds: the probe
+// writes the fixture lines with a final line break (s2-probe reset), and VS Code shows that
+// break as a fifth, empty line that VSCodeVim's motions reach, while Vim reading the same file
+// has four lines; with `document` Vim's buffer is the four lines plus that empty line, and the
+// expectation's text is read the way the harness reads VS Code's text (one final empty line
+// dropped). The default, `buffer`, is the four-line buffer of the first runs. S2_VIM_SIZE=<cols>x<rows>
+// sets the tmux window (default 100x12); check1/geometry.mjs measures the harness editor groups
+// (43 columns and 40 or 41 lines each), so `document` runs use 43x42 for one window and 87x42
+// for the harness layout's two (Vim's window is the terminal minus a two-line command line). In
+// the harness layout of a `document` run b.txt's cursor is at the start position too, as the
+// harness puts it (cards-correctness.mjs resetB).
 import { execFileSync, spawnSync } from "node:child_process";
 import {
   appendFileSync,
@@ -512,16 +523,22 @@ const regValue = ([type, lines]) =>
     : null;
 const sameJson = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+// The start buffer of the run: START.lines, plus the empty fifth line with S2_VIM_DOC=document.
+let START_DOC = START.lines;
+/** Vim's buffer as the harness reads VS Code's text: the text with one final line break dropped. */
+const viewOf = (lines) =>
+  START_DOC.length > START.lines.length && lines.length && lines.at(-1) === ""
+    ? lines.slice(0, -1)
+    : lines;
 function expectation(dump, baseline) {
-  const text = sameJson(dump.lines, START.lines)
+  const lines = viewOf(dump.lines);
+  const text = sameJson(lines, START.lines)
     ? "unchanged"
-    : dump.lines.length === START.lines.length
+    : lines.length === START.lines.length
       ? Object.fromEntries(
-          dump.lines
-            .map((l, i) => [i, l])
-            .filter(([i, l]) => l !== START.lines[i]),
+          lines.map((l, i) => [i, l]).filter(([i, l]) => l !== START.lines[i]),
         )
-      : dump.lines;
+      : lines;
   const registers = {};
   let shiftNumbered = false;
   for (const name of Object.keys(dump.regs)) {
@@ -578,6 +595,13 @@ async function main() {
   const bufferFile = join(work, "buffer.txt");
   const altFile = join(work, "b.txt");
   const layout = process.env.S2_VIM_LAYOUT ?? "single";
+  const docMode = process.env.S2_VIM_DOC ?? "buffer";
+  if (!["buffer", "document"].includes(docMode))
+    throw new Error("S2_VIM_DOC must be buffer or document");
+  const size = /^(\d+)x(\d+)$/.exec(process.env.S2_VIM_SIZE ?? "100x12");
+  if (!size) throw new Error("S2_VIM_SIZE must be <cols>x<rows>");
+  const [cols, rowsN] = [size[1], size[2]];
+  START_DOC = docMode === "document" ? [...START.lines, ""] : START.lines;
   if (!["single", "harness"].includes(layout))
     throw new Error(`S2_VIM_LAYOUT must be single or harness`);
   const vimrcName = process.env.S2_VIMRC ?? "expect.vimrc";
@@ -598,10 +622,16 @@ async function main() {
     .join(" / ");
   writeFileSync(outFile, "");
   const write = (r) => appendFileSync(outFile, JSON.stringify(r) + "\n");
+  // In a 43-column window an error message longer than the command line minus the showcmd area
+  // (about 32 characters) makes Vim wait at its hit-enter prompt, which VS Code has no counterpart
+  // for: `document` runs turn showcmd off and use a two-line command line (the window keeps the
+  // measured 40 lines with S2_VIM_SIZE 43x42 or 87x42; showcmd is then not recorded).
+  const docClear =
+    docMode === "document" ? ` -c "set noshowcmd cmdheight=2"` : "";
   const vimCommand = (cursor) =>
     layout === "harness"
-      ? `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -O -c "2wincmd w" -c "1wincmd w" -c "edit ${altFile}" -c "edit ${bufferFile}" -c "set modified" -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})" ${bufferFile} ${altFile}`
-      : `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})" ${bufferFile}`;
+      ? `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -O -c "2wincmd w"${docMode === "document" ? ` -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})"` : ""} -c "1wincmd w" -c "edit ${altFile}" -c "edit ${bufferFile}" -c "set modified" -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})"${docClear} ${bufferFile} ${altFile}`
+      : `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})"${docClear} ${bufferFile}`;
   write({
     type: "meta",
     set,
@@ -610,6 +640,8 @@ async function main() {
     vim: version,
     vimrc: `spike/s2/vim-check/${vimrcName}`,
     layout,
+    doc: docMode,
+    size: `${cols}x${rowsN}`,
     command: vimCommand(START.cursor)
       .replaceAll(work, "<work>")
       .replace(vimrc, `spike/s2/vim-check/${vimrcName}`),
@@ -643,18 +675,18 @@ async function main() {
         const typed = [...(row.setup ?? []), ...card.keys, sample ?? row.key];
         const t0 = Date.now();
         rmSync(dumpFile, { force: true });
-        writeFileSync(bufferFile, START.lines.join("\n") + "\n");
+        writeFileSync(bufferFile, START_DOC.join("\n") + "\n");
         if (layout === "harness")
-          writeFileSync(altFile, START.lines.join("\n") + "\n");
+          writeFileSync(altFile, START_DOC.join("\n") + "\n");
         tmux(
           "new-session",
           "-d",
           "-s",
           "s2",
           "-x",
-          "100",
+          cols,
           "-y",
-          "12",
+          rowsN,
           "-e",
           `S2_DUMP=${dumpFile}`,
           vimCommand(START.cursor),
@@ -665,7 +697,7 @@ async function main() {
           if (
             d &&
             d.mode === "n" &&
-            sameJson(d.lines, START.lines) &&
+            sameJson(d.lines, START_DOC) &&
             d.pos[1] === START.cursor.line + 1 &&
             d.pos[2] === START.cursor.column + 1
           )
@@ -762,7 +794,13 @@ async function main() {
                 ),
                 settled,
                 exited,
-                showcmd: screen ? (screen[11] ?? "").slice(89).trim() : null,
+                showcmd:
+                  screen && docMode === "buffer"
+                    ? (screen[Number(rowsN) - 1] ?? "")
+                        .slice(Number(cols) - 11)
+                        .trim()
+                    : null,
+                docLines: dump.lines.length,
               }
             : null,
           ms,

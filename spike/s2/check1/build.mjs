@@ -234,6 +234,7 @@ for (const card of cards) {
                   cursor: e.cursor.vim,
                   visualStart: e.cursor.visualStart,
                   toLineEnd: e.cursor.toLineEnd,
+                  docLines: e.cursor.docLines,
                 },
                 textOf(e),
               ),

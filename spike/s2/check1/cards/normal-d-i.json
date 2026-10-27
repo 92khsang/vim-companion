@@ -25,6 +25,12 @@
             "lines": ["two"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -37,6 +43,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -61,6 +73,12 @@
             "lines": ["one, \"two\", [three]"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -85,6 +103,12 @@
             "lines": ["one, \"two\", [three]"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -97,6 +121,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -109,6 +139,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -133,6 +169,12 @@
             "lines": [" four(five) "]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -157,6 +199,12 @@
             "lines": ["\"two\","]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -181,6 +229,12 @@
             "lines": ["three"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -205,6 +259,12 @@
             "lines": ["three"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -217,6 +277,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -267,6 +333,12 @@
             "lines": ["one, \"two\", [three]"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -368,7 +440,7 @@
       "label": "Delete the paragraph",
       "labelFrom": "pilot",
       "expect": {
-        "text": [""],
+        "text": [],
         "cursor": [0, 0],
         "mode": "normal",
         "registers": {
@@ -392,6 +464,45 @@
           }
         },
         "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": [""],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
       }
     },
     {
@@ -427,7 +538,7 @@
       "label": "Delete the sentence",
       "labelFrom": "pilot",
       "expect": {
-        "text": [""],
+        "text": [],
         "cursor": [0, 0],
         "mode": "normal",
         "registers": {
@@ -451,6 +562,45 @@
           }
         },
         "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": [""],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
       }
     },
     {
@@ -463,6 +613,12 @@
         "text": "unchanged",
         "cursor": [1, 13],
         "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -487,6 +643,12 @@
             "lines": ["two"]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -511,6 +673,12 @@
             "lines": [" four(five) "]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     },
     {
@@ -553,6 +721,12 @@
             "lines": [" four(five) "]
           }
         }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
       }
     }
   ]

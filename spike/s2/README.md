@@ -344,6 +344,17 @@ under both) the card's `R` row, the same command in Vim.
   `node spike/s2/check1/rederive.mjs prepare <dir>`, for each `<set>-<layout>-<variant>.json` in
   `<dir>`: `S2_VIM_LAYOUT=<layout> S2_VIMRC=expect-sw2.vimrc node spike/s2/vim-check/expect.mjs <short work dir> <set> <dir>/<name>.json <dir>/<name>.jsonl`,
   then `node spike/s2/check1/rederive.mjs apply <dir>` and `node spike/s2/check1/visual-s.mjs`.
+- Realign after pass 1 (2026-10-28): the oracle's first runs used Vim's four-line buffer in a
+  100x12 terminal, while VSCodeVim moves through VS Code's document, which shows the fixture's
+  final line break as a fifth, empty line, in editor groups of 43 columns and 40 or 41 lines
+  (`check1/geometry.mjs`). `node spike/s2/check1/realign.mjs prepare <dir>`, then for each
+  `<set>-<layout>.json`, with `S2_VIM_SIZE` 43x42 for one window and 87x42 for the harness layout:
+  `S2_VIM_DOC=document S2_VIM_SIZE=<size> S2_VIM_LAYOUT=<layout> S2_VIMRC=expect-sw2.vimrc node spike/s2/check1/oracle-run.mjs ...`
+  and `oracle-merge.mjs` into `<dir>/<set>-<layout>.jsonl.gz`, then
+  `node spike/s2/check1/realign.mjs apply <dir>`. A changed row keeps the replaced value in
+  `previousOracle` (expectation, oracle settings, reason); a `knownDeviation` equal to Vim's new
+  answer is dropped. While `r` waits for its character Vim shows Replace mode, so a row ending in
+  `r` expects the card's mode, as the grammar fixture states it.
 - Validate: `node spike/s2/check1/build.mjs --check`; build the correctness input and the labeled
   cards per set: `node spike/s2/check1/build.mjs <out dir> [--partial]`, then
   `node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <out dir>/correctness-<set>.json 3 <out.jsonl>`.

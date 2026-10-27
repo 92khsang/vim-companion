@@ -62,17 +62,22 @@ const isBefore = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]);
  *   the right column + 1, or to the line end after `$` (L1336-1346, src/textEditor.ts
  *   L209-241): the top line at min(line length, right column + 1).
  * Every other mode: the cursor.
- * `docLineCount` is the number of lines of the VS Code document. The harness writes the fixture
- * with a final line break (harness/lib.mjs), so the document has one more, empty, line than Vim's
- * buffer, and a forward stop at the end of Vim's last line moves to that line's column 0
+ * `docLineCount` is the number of lines of the VS Code document: `docLines` from an oracle run in
+ * document mode (Vim's buffer is the document), otherwise one more than `lines`, since the harness
+ * writes the fixture with a final line break and VS Code shows it as an empty last line. A forward
+ * stop at the end of a line before the document's last moves to the next line's column 0
  * (src/common/motion/position.ts L364-381, getRightThroughLineBreaks).
  */
 export function harnessCursor(
-  { mode, cursor, visualStart, toLineEnd },
+  { mode, cursor, visualStart, toLineEnd, docLines },
   lines,
-  docLineCount = lines.length + 1,
+  docLineCount = docLines ?? lines.length + 1,
 ) {
-  const len = (l) => lines[l].length;
+  // The document's lines: the text the harness reads plus the empty last line after the final
+  // line break, when the document has one (an oracle run with S2_VIM_DOC=document records the
+  // buffer's line count as `docLines`).
+  const doc = docLineCount === lines.length + 1 ? [...lines, ""] : lines;
+  const len = (l) => doc[l].length;
   if (mode === "visual") {
     if (isBefore(cursor, visualStart)) return cursor;
     const [l, c] = cursor;

@@ -263,6 +263,20 @@ Commands assume `S2_ROOT`, `S2_RUN`, `S2_CODE_1_134_0` and `S2_CODE_1_141_0` as 
     `knownDeviation`. After both: `node spike/s2/check1/build.mjs --check` gives 3,439 of 3,442
     rows complete under the defaults and 3,630 of 3,633 under the second set, 3 undetermined each,
     0 TODO and 0 invalid.
+  - `realign/`: the oracle rerun of 2026-10-28 after pass 1 (`check1/realign.mjs`; spike README,
+    section Check (1) input). `<set>-<single|harness>.json` are the inputs that `realign.mjs
+    prepare` wrote (every `vim-oracle` row of the set, by layout), `<same>.jsonl.gz` the merged
+    outputs of `S2_VIM_DOC=document S2_VIM_SIZE=<43x42|87x42> S2_VIMRC=expect-sw2.vimrc
+    node spike/s2/check1/oracle-run.mjs` on 4 tmux servers, cores 28-31 (single window
+    2026-10-27 23:59-00:33Z; the harness layout rerun at 01:19Z after `resetB`; the run directory
+    replaced by `<run dir>`). `apply-report.json`: of the 6,023 `vim-oracle` row-sets, 553 changed
+    expectation (515 from the document's fifth line and the 43x40 editor groups, 38 pending `r`
+    rows from Vim's Replace-mode display to the card's mode), 20 `knownDeviation`s equal to Vim's
+    new answer were dropped, and 12 Visual `S` row-sets have no answer (vim-surround's `S`, not a
+    Vim command; they keep the first run's expectation). Each changed row keeps the old value in
+    `previousOracle`. Geometry: `geometry-<version>.json`,
+    `S2_CPUS=28-31 node spike/s2/check1/geometry.mjs <version> :124 9524 <out>` (sandbox VS Code):
+    43 columns and 40 (1.141.0) or 41 (1.134.0) lines per editor group, read over CDP.
 - `precheck-4e44e19/`: `spike/s2/batch/precheck.sh` at 4e44e19 on 2026-10-26 23:53Z to 2026-10-27 01:52Z
   (cores 8-15, display :121, port 9521; the exact commands in `command.txt`; the output directory was
   `spike/s2/data/precheck/` and was renamed afterwards). 100 runs with the adapter off per version
