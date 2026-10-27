@@ -1004,23 +1004,15 @@
       "label": "Shift the highlighted lines one 'shiftwidth' right",
       "labelFrom": "index",
       "labelIndex": "index.txt L934 |v_>|",
-      "pending": "indentation: VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation), expect.vimrc has shiftwidth=4",
-      "variants": {
-        "expect.vimrc": {
-          "text": {
-            "1": "      if (one, \"two\", [three]) { four(five) }"
-          },
-          "cursor": [1, 6],
-          "mode": "normal"
+      "expect": {
+        "text": {
+          "1": "    if (one, \"two\", [three]) { four(five) }"
         },
-        "expect-sw2.vimrc": {
-          "text": {
-            "1": "    if (one, \"two\", [three]) { four(five) }"
-          },
-          "cursor": [1, 4],
-          "mode": "normal"
-        }
-      }
+        "cursor": [1, 4],
+        "mode": "normal"
+      },
+      "oracle": "expect-sw2.vimrc",
+      "indentation": "VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation, not pinned in the sandbox), so the answer of expect-sw2.vimrc"
     },
     {
       "key": "?",
@@ -1315,11 +1307,11 @@
         "cursor": [1, 15],
         "mode": "normal",
         "registers": {
-          "\"": {
+          "0": {
             "mode": "character",
             "lines": ["mma"]
           },
-          "0": {
+          "\"": {
             "mode": "character",
             "lines": ["mma"]
           }
@@ -1851,13 +1843,13 @@
         "cursor": [1, 15],
         "mode": "normal",
         "registers": {
-          "\"": {
-            "mode": "character",
-            "lines": ["w"]
-          },
           "0": {
             "mode": "character",
             "lines": ["mma"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
           }
         }
       },
