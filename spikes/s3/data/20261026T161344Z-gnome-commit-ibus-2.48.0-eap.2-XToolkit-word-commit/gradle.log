@@ -1,0 +1,395 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :compileKotlin UP-TO-DATE
+> Task :compileJava NO-SOURCE
+> Task :initializeIntellijPlatformPlugin
+> Task :patchPluginXml UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :generateManifest UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :composedJar UP-TO-DATE
+> Task :prepareSandbox UP-TO-DATE
+> Task :buildSearchableOptions SKIPPED
+> Task :prepareJarSearchableOptions SKIPPED
+> Task :jarSearchableOptions SKIPPED
+> Task :buildPlugin UP-TO-DATE
+> Task :compileUiTestKotlin UP-TO-DATE
+> Task :compileUiTestJava NO-SOURCE
+> Task :prepareSandbox_runIde262 UP-TO-DATE
+> Task :prepareSandbox_uiTest UP-TO-DATE
+> Task :processUiTestResources UP-TO-DATE
+> Task :uiTestClasses UP-TO-DATE
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (file:$HOME/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/33d12735bef894440780fce64f9758d420c7bae2/jna-5.17.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+> Task :uiTest
+
+Gradle Test Executor 1 STANDARD_OUT
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Port 45654 is busy. Trying use another
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Port 45664 is busy. Trying use another
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server started on port 45674
+
+S3UiTest STANDARD_OUT
+    [01:13:56]: Starter DI was initialized
+
+S3UiTest > run() STANDARD_OUT
+    [01:13:56]: Starter DI was updated by:
+    - spike.s3.ui.S3Ide.<clinit>(S3Ide.kt:139)
+    - spike.s3.ui.S3UiTest.run(S3UiTest.kt:15)
+    - java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+    [01:13:56]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=class com.intellij.ide.starter.runner.TestContainer$Companion$1, timeout=2m, executeOnce=false, sequential=false, callback=(com.intellij.ide.starter.runner.TestContextInitializedEvent) -> kotlin.Unit) for TestContextInitializedEvent
+    [01:13:56]: Resolving IDE build for s3-commit-ibus-2.48.0-eap.2-XToolkit...
+    [01:13:56]: Using IDE paths for 's3-commit-ibus-2.48.0-eap.2-XToolkit': IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit
+    [01:13:56]: IDE to run for 's3-commit-ibus-2.48.0-eap.2-XToolkit': IDE{IU, 262.10968.63, Linux, home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide}
+    [01:13:56]: Cleaning system dir for com.intellij.ide.starter.ide.IDETestContext@2dd0f797 at IDE Test Paths at $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit
+    [01:13:56]: Setting IDE system property: [ij.load.shell.env=false]
+    [01:13:56]: Setting IDE system property: [ide.instant.shutdown=false]
+    [01:13:56]: Setting IDE system property: [feature.usage.event.log.send.on.ide.close=false]
+    [01:13:56]: Setting IDE system property: [linux.native.menu.force.disable=true]
+    [01:13:56]: Setting IDE system property: [jdk.gtk.verbose=true]
+    [01:13:56]: Setting IDE system property: [jdk.gtk.version=2]
+    [01:13:56]: Setting IDE system property: [vcs.log.index.enable=false]
+    [01:13:56]: Setting IDE system property: [ide.slow.operations.assertion=false]
+    [01:13:56]: Setting IDE system property: [integrationTests.profiler=async]
+    [01:13:56]: Setting IDE system property: [idea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/config]
+    [01:13:56]: Setting IDE system property: [idea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/system]
+    [01:13:56]: Setting IDE system property: [idea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/plugins]
+    [01:13:56]: Trusted xml file content: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <application>
+    
+      <component name="Trusted.Paths">
+        
+        <option name="TRUSTED_PROJECT_PATHS">
+            
+          <map>
+            <entry key="$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/project" value="true"/>
+          </map>
+          
+        </option>
+      
+      </component>
+    
+      <component name="Trusted.Paths.Settings">
+        
+        <option name="TRUSTED_PATHS">
+            
+          <list/>
+          
+        </option>
+      
+      </component>
+  
+    </application>
+
+    [01:13:56]: Setting IDE system property: [idea.local.statistics.without.report=true]
+    [01:13:56]: Setting IDE system property: [idea.updates.url=http://127.0.0.1]
+    [01:13:56]: Setting IDE system property: [kotest.assertions.collection.enumerate.size=2147483647]
+    [01:13:56]: Setting IDE system property: [ide.enable.notification.trace.data.sharing=false]
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait start for TestContextInitializedEvent: total=1, sequential=0, parallel=1
+    [01:13:57]: Starter configuration storage: {MONITORING_DUMPS_INTERVAL_SECONDS=60, ENABLE_SCRAMBLING_FOR_DEVSERVER=false, INSTALLER_INCLUDE_RUNTIME_MODULE_REPOSITORY=false, AFTER_EACH_MESSAGE_BUS_CLEANUP=false, LOG_ENVIRONMENT_VARIABLES=false, SPLIT_MODE_ENABLED=false, DEBUG_LOGGING_ENABLED=false}
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [2] PostAndWait finished for TestContextInitializedEvent. Exceptions: []
+    [01:13:57]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/IdeaVIM to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/plugins/IdeaVIM
+    [01:13:57]: Copy plugins from $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/sandbox/s3-spike/IU-2026.1.5/plugins_runIde262/s3-spike to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/plugins/s3-spike
+    [01:13:57]: Setting IDE system property: [user.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/home]
+    [01:13:57]: Setting IDE system property: [awt.toolkit.name=XToolkit]
+    [01:13:57]: Setting IDE system property: [idea.trust.all.projects=true]
+    [01:13:57]: Setting IDE system property: [ide.browser.jcef.enabled=false]
+    [01:13:57]: Setting IDE system property: [ide.show.tips.on.startup.default.value=false]
+    [01:13:57]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [01:13:57]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [01:13:57]: Setting IDE system property: [idea.initially.ask.config=never]
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=CompletableDeferredImpl{Active}@3f598450, timeout=2m, executeOnce=true, sequential=false, callback=(com.intellij.ide.starter.runner.events.IdeLaunchEvent) -> kotlin.Unit) for IdeLaunchEvent
+    [01:13:57]: Creating reports dir 'reports'
+    [01:13:57]: Creating reports dir 'snapshots'
+    [01:13:57]: Reports dir 's3-commit-ibus-2.48.0-eap.2-XToolkit' is already created
+    [01:13:57]: Creating reports dir 'log'
+    [01:13:57]: Starting external process for `exec-java-cmd`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3/jbr
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3/jbr/bin/java -version]
+      STDOUT will be redirected to: string. STDERR will be redirected to: string. STDIN is empty: true
+
+    [01:13:57]:   ... started external process `exec-java-cmd` with process ID = 3063103
+    [01:13:57]:    ... process `exec-java-cmd` (pid=3063103) exited on its own with code 0 before the 60s timeout. 
+    [01:13:57]:   ... successfully finished external process for `exec-java-cmd` with exit code 0
+    [01:13:57]: 
+        Result of calling [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3/jbr/bin/java, -version]:
+        openjdk version "25.0.4" 2026-07-21
+    OpenJDK Runtime Environment JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27)
+    OpenJDK 64-Bit Server VM JBR-25.0.4+1-508.27-nomod (build 25.0.4+1-b508.27, mixed mode, sharing)
+    
+    [01:13:57]: Found following 25.0.4+1-b508.27 in the product: IU 262.10968.63
+    [01:13:57]: Setting IDE system property: [jb.consents.confirmation.enabled=false]
+    [01:13:57]: Setting IDE system property: [jb.privacy.policy.text=<!--999.999-->]
+    [01:13:57]: Setting IDE system property: [jb.privacy.policy.ai.assistant.text=<!--999.999-->]
+    [01:13:57]: Setting IDE system property: [marketplace.eula.reviewed.and.accepted=true]
+    [01:13:57]: Setting IDE system property: [writerside.eula.reviewed.and.accepted=true]
+    [01:13:57]: Setting IDE system property: [ide.newUsersOnboarding=false]
+    [01:13:57]: Setting IDE system property: [freeze.reporter.profiling=false]
+    [01:13:57]: Setting IDE system property: [idea.fatal.error.notification=true]
+    [01:13:57]: Setting IDE system property: [idea.is.integration.test=true]
+    [01:13:57]: Setting IDE system property: [ide.browser.jcef.jsQueryPoolSize=10000]
+    [01:13:57]: Setting IDE system property: [ide.performance.screenshot=heartbeat]
+    [01:13:57]: Setting IDE system property: [idea.diagnostic.opentelemetry.metrics.max-files-to-keep=120]
+    [01:13:57]: No profiler is specified.
+    [01:13:57]: Setting IDE system property: [snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/snapshots]
+    [01:13:57]: Setting IDE system property: [java.rmi.server.hostname=127.0.0.1]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.host=127.0.0.1]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote=true]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.port=9533]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.rmi.port=9533]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.authenticate=false]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.ssl=false]
+    [01:13:57]: Setting IDE system property: [com.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**']
+    [01:13:57]: Setting IDE system property: [expose.ui.hierarchy.url=true]
+    [01:13:57]: Setting IDE system property: [platform.experiment.ab.manual.option=control.option]
+    [01:13:57]: Setting IDE system property: [rpc.port=9534]
+    [01:13:57]: Setting IDE system property: [memory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log]
+    [01:13:57]: Setting IDE system property: [idea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/opentelemetry.json]
+    [01:13:57]: Setting IDE system property: [idea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log]
+    [01:13:57]: Test commands to be executed: 
+
+    [01:13:57]: Setting IDE system property: [testscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/system/s3-commit-ibus-2.48.0-eap.2-XToolkit.text]
+    [01:13:57]: Setting IDE system property: [testscript.must.exist.process.with.non.success.code.on.ide.error=true]
+    [01:13:57]: Write vmoptions patch to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3.vmoptions
+    [01:13:57]: Starting IDE for s3-commit-ibus-2.48.0-eap.2-XToolkit with timeout 12h
+      VM Options: [VMOptions{ env={IDEA_VIM_CUSTOM_VIMRC=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/rc/ideavimrc} -Dij.load.shell.env=false -Dide.instant.shutdown=false -Dfeature.usage.event.log.send.on.ide.close=false -Dlinux.native.menu.force.disable=true -Djdk.gtk.verbose=true -Djdk.gtk.version=2 -Dvcs.log.index.enable=false -Dide.slow.operations.assertion=false -DintegrationTests.profiler=async -Didea.config.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/config -Didea.system.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/system -Didea.plugins.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/plugins -Didea.local.statistics.without.report=true -Didea.updates.url=http://127.0.0.1 -Dkotest.assertions.collection.enumerate.size=2147483647 -Dide.enable.notification.trace.data.sharing=false -Duser.home=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/home -Dawt.toolkit.name=XToolkit -Didea.trust.all.projects=true -Dide.browser.jcef.enabled=false -Dide.show.tips.on.startup.default.value=false -Djb.consents.confirmation.enabled=false -Djb.privacy.policy.text=<!--999.999--> -Didea.initially.ask.config=never -Xmx2g -Djb.privacy.policy.ai.assistant.text=<!--999.999--> -Dmarketplace.eula.reviewed.and.accepted=true -Dwriterside.eula.reviewed.and.accepted=true -Dide.newUsersOnboarding=false -Dfreeze.reporter.profiling=false -Didea.fatal.error.notification=true -Didea.is.integration.test=true -Dide.browser.jcef.jsQueryPoolSize=10000 -Dide.performance.screenshot=heartbeat -XX:ErrorFile=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/jvm-crash/java_error_in_idea_%p.log -XX:HeapDumpPath=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/heap-dump/heap-dump.hprof -Xlog:gc*:file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/reports/gcLog.log -Didea.diagnostic.opentelemetry.metrics.max-files-to-keep=120 -Dsnapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/snapshots -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9533 -Dcom.sun.management.jmxremote.rmi.port=9533 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.serial.filter.pattern='java.**;javax.**;com.intellij.driver.model.**' -Dexpose.ui.hierarchy.url=true -Dplatform.experiment.ab.manual.option=control.option -Drpc.port=9534 -Dmemory.snapshots.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log -Didea.diagnostic.opentelemetry.file=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/opentelemetry.json -Didea.log.path=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log -Dtestscript.filename=$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/system/s3-commit-ibus-2.48.0-eap.2-XToolkit.text -Dtestscript.must.exist.process.with.non.success.code.on.ide.error=true } // VMOptions ]
+      On Java : [$HOME/.local/share/mise/installs/java/temurin-25.0.4+7.0.LTS]
+
+    [01:13:57]: Starting external process for `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit`
+      Working directory: $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3
+      Arguments: [$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/ide/idea-2026.2.3/bin/idea $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/project]
+      STDOUT will be redirected to: string. STDERR will be redirected to: stdout. STDIN is empty: true
+
+    [01:13:57]:   ... started external process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` with process ID = 3063153
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - Unsubscribing CompletableDeferredImpl{Active}@3f598450 for IdeLaunchEvent
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait start for IdeLaunchEvent: total=1, sequential=0, parallel=1
+    [01:13:57]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - [5] PostAndWait finished for IdeLaunchEvent. Exceptions: []
+    [01:13:57]: Parent process is an IDE process itself (was launched without wrapper)
+    [01:13:57]: Creating reports dir 'monitoring-thread-dumps-ide'
+    [01:13:57]:   [ide-s3-commit-ibus-2.48.0-eap.2-XToolkit-err] Looking for GTK3 library...
+    [01:13:57]:   [ide-s3-commit-ibus-2.48.0-eap.2-XToolkit-err] GTK3 library loaded.
+    [01:14:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-1-2026-10-27-01-14-57.txt
+    [01:15:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-2-2026-10-27-01-15-57.txt
+    [01:16:57]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-3-2026-10-27-01-16-57.txt
+    [01:17:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-4-2026-10-27-01-17-58.txt
+    [01:18:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-5-2026-10-27-01-18-58.txt
+    [01:19:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-6-2026-10-27-01-19-58.txt
+    [01:20:58]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-7-2026-10-27-01-20-58.txt
+    [01:21:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-8-2026-10-27-01-21-59.txt
+    [01:22:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-9-2026-10-27-01-22-59.txt
+    [01:23:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-10-2026-10-27-01-23-59.txt
+    [01:24:59]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-11-2026-10-27-01-24-59.txt
+    [01:26:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-12-2026-10-27-01-26-00.txt
+    [01:27:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-13-2026-10-27-01-27-00.txt
+    [01:28:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-14-2026-10-27-01-28-00.txt
+    [01:29:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-15-2026-10-27-01-29-00.txt
+    [01:30:00]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-16-2026-10-27-01-30-00.txt
+    [01:31:01]: Dumping threads to $HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/s3-work/out/ide-tests/tests/IU-262.10968.63/s3-commit-ibus-2.48.0-eap.2-XToolkit/log/monitoring-thread-dumps-ide/threadDump-17-2026-10-27-01-31-01.txt
+    [01:31:05]:    ... process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` (pid=3063153) exited on its own with code 1 before the 43200s timeout. 
+    [01:31:05]:  ... cancelling and waiting for process `"On process run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit created job#11":StandaloneCoroutine{Active}@429b5b7b` job ... 
+    [01:31:05]:   ... failed external process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` with exit code 1
+    ##teamcity[testMetadata type='link' name='Link to Logs and artifacts' value='null']
+
+S3UiTest > run() STANDARD_ERROR
+    [01:31:05]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 1:31:05 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [01:31:05]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 1:31:05 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [01:31:05]: No logic for reporting test failure has been implemented.
+    If you want to report tests failures (e.g. on CI) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    Oct 27, 2026 1:31:05 AM io.qameta.allure.AllureLifecycle updateTestCase
+    SEVERE: Could not update test case: no test case running
+    [01:31:05]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [01:31:05]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [01:31:05]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+    [01:31:05]: No logic for publishing artifacts has been implemented.
+    If you want to publish artifacts somewhere (e.g. in CI build) - implement [CIServer] interface and register it via KodeinDI as specified in Readme.
+
+S3UiTest > run() STANDARD_OUT
+    [01:31:05]: Successfully finished publishArtifacts run for s3-commit-ibus-2.48.0-eap.2-XToolkit
+    [01:31:05]: IDERunContext(testContext=com.intellij.ide.starter.ide.IDETestContext@2dd0f797, commandLine=fun openTestCaseProject(com.intellij.ide.starter.runner.IDERunContext): com.intellij.ide.starter.runner.IDECommandLine, commands=com.intellij.tools.ide.performanceTesting.commands.CommandChain@226ee153, runTimeout=12h, useStartupScript=true, verboseOutput=false, launchName=, expectedKill=false, expectedExitCode=0, analyzeProcessExit=true, collectNativeThreads=false, stdOut=null)
+
+S3UiTest > run() STANDARD_ERROR
+    Unable to cleanup remote Driver session
+    [01:31:05]: [Closing 3063153] Error on exit application via Driver
+    java.lang.IllegalStateException: [Closing 3063153] Driver is not connected, so it can't exit IDE
+    	at com.intellij.ide.starter.driver.engine.BackgroundRun.closeIdeAndWait-8Mi8wO0(BackgroundRun.kt:103)
+    	at com.intellij.ide.starter.driver.engine.BackgroundRun.useDriverAndCloseIde-rnQQ1Ag(BackgroundRun.kt:53)
+    	at com.intellij.ide.starter.driver.engine.BackgroundRun.useDriverAndCloseIde-rnQQ1Ag$default(BackgroundRun.kt:46)
+    	at spike.s3.ui.S3UiTest.run(S3UiTest.kt:16)
+    	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+    	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:786)
+    	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:514)
+    	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91)
+    	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+    	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+    	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+    	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+    	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestDefinitionProcessor$CollectThenExecuteTestDefinitionConsumer.processAllTestDefinitions(JUnitPlatformTestDefinitionProcessor.java:206)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestDefinitionProcessor$CollectThenExecuteTestDefinitionConsumer.access$000(JUnitPlatformTestDefinitionProcessor.java:123)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestDefinitionProcessor.stop(JUnitPlatformTestDefinitionProcessor.java:117)
+    	at org.gradle.api.internal.tasks.testing.SuiteTestDefinitionProcessor.stop(SuiteTestDefinitionProcessor.java:63)
+    	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+    	at org.gradle.internal.dispatch.MethodInvocation.invokeOn(MethodInvocation.java:77)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:28)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:19)
+    	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+    	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:88)
+    	at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:195)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:126)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+    	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:122)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:72)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+
+
+S3UiTest > run() STANDARD_OUT
+    [01:31:05]: [Closing 3063153] Performing force kill
+    [01:31:05]: [ProcessKiller] Process[3063153] 'unknown command': Stopping gracefully by `destroy` [SIGTERM]
+    [01:31:05]: Performing 'Process[3063153] 'unknown command': Waiting for graceful exit with 20s timeout' with catching all exceptions
+
+[01:31:05]: Canceling suite supervisor scopes: Shutdown is in progress: either SIGTERM or SIGKILL is caught
+
+> Task :uiTest FAILED
+
+S3UiTest > run() FAILED
+    java.lang.Exception: External process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` failed with code 1
+      LAST 100 lines of the standard output stream
+        [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=ProfileStopSubscriber, timeout=2m, executeOnce=false, sequential=false, callback=(com.jetbrains.performancePlugin.events.StopProfilerEvent) -> kotlin.Unit) for StopProfilerEvent
+        [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.shared.client.LocalEventBusServerClient - New subscriber StopProfilerEvent
+    
+        at com.intellij.ide.starter.runner.LocalIDEProcess.run(LocalIDEProcess.kt:150)
+        at com.intellij.ide.starter.runner.LocalIDEProcess$run$1.invokeSuspend(LocalIDEProcess.kt)
+        at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:42)
+        at com.intellij.ide.starter.driver.engine.BackgroundRun$closeIdeAndWait$3.invokeSuspend(BackgroundRun.kt:124)
+
+        Caused by:
+        java.lang.Exception: External process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` failed with code 1
+          LAST 100 lines of the standard output stream
+            [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=ProfileStopSubscriber, timeout=2m, executeOnce=false, sequential=false, callback=(com.jetbrains.performancePlugin.events.StopProfilerEvent) -> kotlin.Unit) for StopProfilerEvent
+            [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.shared.client.LocalEventBusServerClient - New subscriber StopProfilerEvent
+    
+            at com.intellij.ide.starter.runner.LocalIDEProcess.run(LocalIDEProcess.kt:150)
+            at com.intellij.ide.starter.runner.LocalIDEProcess$run$1.invokeSuspend(LocalIDEProcess.kt)
+            at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+            at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+            at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+            at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+            at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+            at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+            at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+            at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+            Caused by:
+            java.lang.IllegalStateException: External process `run-ide-s3-commit-ibus-2.48.0-eap.2-XToolkit` failed with code 1
+              LAST 100 lines of the standard output stream
+                [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.local.LocalEventsFlow - New subscriber Subscriber(subscriberName=ProfileStopSubscriber, timeout=2m, executeOnce=false, sequential=false, callback=(com.jetbrains.performancePlugin.events.StopProfilerEvent) -> kotlin.Unit) for StopProfilerEvent
+                [01:13:59]: INFO - com.intellij.tools.ide.starter.bus.shared.client.LocalEventBusServerClient - New subscriber StopProfilerEvent
+    
+                at com.intellij.ide.starter.process.exec.ProcessExecutor.analyzeProcessExit(ProcessExecutor.kt:148)
+                at com.intellij.ide.starter.process.exec.ProcessExecutor.startCancellable(ProcessExecutor.kt:286)
+                at com.intellij.ide.starter.process.exec.ProcessExecutor$startCancellable$1.invokeSuspend(ProcessExecutor.kt)
+                ... 8 more
+
+Gradle Test Executor 1 STANDARD_OUT
+    [01:31:05]: INFO - com.intellij.tools.ide.starter.bus.shared.server.LocalEventBusServer - Server stopped
+
+1 test completed, 1 failed
+
+[Incubating] Problems report is available at: file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':uiTest'.
+> There were failing tests. See the report at: file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s3/spikes/s3/plugin/build-2.48.0-eap.2-g9533/reports/tests/uiTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 17m 16s
+14 actionable tasks: 2 executed, 12 up-to-date
