@@ -5,10 +5,11 @@
 # pass condition. Runs go in chunks of 50 into one file per version; a rerun of the script
 # continues after the last complete run (S2_DIFF_START keeps the run numbers and the alternation).
 # The batch starts only when precheck.sh passed for every version with the same build (common.sh
-# precheck_ok). A run-error of the phase `boot` (before the extension host was up) measured
-# nothing: the batch runs further alternating runs until each arm has 1000 completed runs, and
-# stops after 2100 attempts per version. Any other run-error, and any failed adapter check, counts
-# against the row (differential-compare.mjs), so the batch stops that version at the first one.
+# precheck_ok). A run-error of the phase `boot` (before the probe's first hello) on the adapter-off
+# arm measured nothing: the batch runs further alternating runs until each arm has 1000 completed
+# runs, and stops after 2100 attempts per version. Any other run-error (an adapter-on `boot` error
+# included, since the adapter is loaded by then), and any failed adapter check, counts against the
+# row (differential-compare.mjs), so the batch stops that version at the first one.
 # Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/differential.sh
 source "$(dirname "$0")/common.sh"
 RUNS=1000
@@ -26,7 +27,7 @@ for v in $VERSIONS; do
     counts=$(count_runs "$out")
     read -r attempts nOn nOff fatal bad <<< "$counts"
     if [ "$fatal" -gt 0 ] || [ "$bad" -gt 0 ]; then
-      log "differential $v: $fatal run errors from the host's start on, $bad failed adapter checks; the row cannot pass; stopping this version"
+      log "differential $v: $fatal run errors that count (all but adapter-off boot errors), $bad failed adapter checks; the row cannot pass; stopping this version"
       break
     fi
     if [ "$nOn" -ge "$RUNS" ] && [ "$nOff" -ge "$RUNS" ]; then break; fi

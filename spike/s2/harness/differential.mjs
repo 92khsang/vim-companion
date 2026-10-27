@@ -12,11 +12,12 @@
 // Every run record carries the build it measured (lib.mjs buildInfo), the probe's hello (VS Code,
 // VSCodeVim, which-key and extension versions) and `adapterCheck`, read after the script: with the
 // adapter on, a fresh report with a state and no error; with it off, no adapter. A run that does not
-// complete is a run-error record with its phase: `boot` (before the extension host is up: the
-// instance, the process spawn, the probe's socket and hello; such a run measured nothing and a batch
-// may replace it), `start` (from the host's start: VSCodeVim's activation, the files, the clipboard,
-// the input check), `script` (while the script items are typed) or `read` (the reads and pastes
-// after the script); see differential-compare.mjs. The adapter check after <Esc> <Esc> also needs
+// complete is a run-error record with its phase: `boot` (before the probe's first hello: the
+// instance, the process spawn, the probe's socket and hello; with the adapter off such a run
+// measured nothing and a batch may replace it, with the adapter on it counts against the row,
+// because the adapter is loaded by then), `start` (after the hello: VSCodeVim's activation, the
+// files, the clipboard, the input check), `script` (while the script items are typed) or `read`
+// (the reads and pastes after the script); see differential-compare.mjs. The adapter check after <Esc> <Esc> also needs
 // the adapter's report to be for the active editor and its state to be neutral Normal mode.
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";

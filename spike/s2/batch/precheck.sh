@@ -1,8 +1,9 @@
 #!/bin/bash
 # Before the differential row: 100 completed runs with the adapter off per version, with the
 # which-key effect rule, must all agree; otherwise the harness is not deterministic and the row
-# would not count. A run-error of the phase `boot` (before the extension host was up) measured
-# nothing and is replaced by a further run (at most 110 attempts); any other run-error, or an
+# would not count. A run-error of the phase `boot` (before the probe's first hello; the adapter is
+# disabled in every precheck run) measured nothing and is replaced by a further run (at most 110
+# attempts); any other run-error, or an
 # adapter in an adapter-off run, fails the precheck. The verdict is the compare's PRECHECK line
 # (common.sh precheck_ok), which differential.sh requires for the same build before it starts.
 # Resumable: a rerun continues after the last complete run of each file.

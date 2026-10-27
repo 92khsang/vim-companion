@@ -68,10 +68,11 @@ harness() { # <data dir> <env assignments and command...>
   } | sed "s#$HOME#\$HOME#g" >> "$dir/command.txt"
   env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE -u S2_DIFF_TRACE -u S2_CASES -u S2_RESET_SETTLE "$@"
 }
-# "<attempts> <completed on> <completed off> <errors from the host's start on> <adapter checks
+# "<attempts> <completed on> <completed off> <run errors that count> <adapter checks
 # failed>" of a differential output file (0 0 0 0 0 if absent). Only an error of the phase `boot`
-# may be replaced by a further run (differential-compare.mjs). Exits the batch when the file cannot
-# be read, rather than restarting at run 0.
+# (before the probe's first hello) on the adapter-off arm may be replaced by a further run; every
+# other error counts (differential-compare.mjs). Exits the batch when the file cannot be read,
+# rather than restarting at run 0.
 count_runs() {
   local out
   out=$(node -e '
@@ -84,14 +85,15 @@ count_runs() {
       : (r.hello?.adapter ?? r.adapter) != null || r.adapterCheck?.present === true);
     console.log(runs.length + errs.length,
       runs.filter((r) => r.arm === "on").length, runs.filter((r) => r.arm === "off").length,
-      errs.filter((r) => r.phase !== "boot").length, badAdapter.length);
+      errs.filter((r) => !(r.phase === "boot" && r.arm === "off")).length, badAdapter.length);
   ' "$1" 2>/dev/null) || { log "cannot read $1 (a line is not JSON): stopping" >&2; exit 1; }
   [[ "$out" =~ ^[0-9]+\ [0-9]+\ [0-9]+\ [0-9]+\ [0-9]+$ ]] || { log "cannot count the runs of $1: '$out'" >&2; exit 1; }
   echo "$out"
 }
 # Stops the batch when a data file it would continue holds records of another build: a resumed row
 # must measure one build, and the compare would refuse the mixed file only at the end. The records
-# that carry a build: differential runs and run-errors, CPU windows (no type) and fixture metas.
+# that carry a build: differential runs and run-errors, CPU windows (no type), fixture metas and
+# fixture error records. The file stays where it is: it belongs to another build's data.
 same_build_or_stop() { # <file>
   [ -s "$1" ] || return 0
   local ids
@@ -99,12 +101,12 @@ same_build_or_stop() { # <file>
     const fs = require("fs");
     const ids = new Set(fs.readFileSync(process.argv[1], "utf8").split("\n").filter(Boolean)
       .map((l) => JSON.parse(l))
-      .filter((r) => [undefined, "run", "run-error", "meta"].includes(r.type))
+      .filter((r) => [undefined, "run", "run-error", "meta", "error"].includes(r.type))
       .map((r) => r.build?.id ?? "none"));
     console.log([...ids].join(" "));
   ' "$1" 2>/dev/null) || { log "cannot read $1 (a line is not JSON): stopping" >&2; exit 1; }
   if [ "$ids" != "$BUILD_ID" ]; then
-    log "$1 holds records of the build(s) $ids, not $BUILD_ID: move it away to start over; stopping"
+    log "$1 holds records of the build(s) $ids, not $BUILD_ID: this data directory belongs to another build; stopping"
     exit 1
   fi
 }

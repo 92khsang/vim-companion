@@ -8,10 +8,13 @@
 // as issue #11 writes it: the adapter-off runs all agree, and 0 adapter-on runs differ from them;
 // comparisons stay within one version. With S2_DIFF_EXPECT=<n>, the row also needs n completed runs
 // per arm and version. The row also needs, per version:
-// - run-errors only of the phase `boot` (before the extension host was up: the run measured
-//   nothing, and a batch replaces it with a further run); any error from the host's start on
-//   counts against the row: on the adapter-on arm it is a run that did not behave as with the
-//   adapter off, on the adapter-off arm it is non-determinism; an error without a phase counts too;
+// - run-errors only of the phase `boot` (before the probe's first hello) on the adapter-off arm:
+//   with the adapter disabled such an error cannot be caused by the adapter, the run measured
+//   nothing, and a batch replaces it with a further run. On the adapter-on arm the adapter is
+//   loaded before the probe's hello (both activate on onStartupFinished), so any error there,
+//   `boot` included, counts against the row as a run that did not behave as with the adapter off;
+//   any error after `boot` on the adapter-off arm counts as non-determinism; an error without a
+//   phase counts too;
 // - run numbers that are unique and contiguous from 0 over runs and run-errors, and, when both arms
 //   are present, strict alternation: every even run on one arm, every odd run on the other;
 // - an adapter check in every adapter-on run that shows a working adapter (adapterCheck.ok: a
@@ -245,7 +248,7 @@ for (const version of allVersions) {
   const vOff = off.filter((r) => r.version === version);
   const vOn = on.filter((r) => r.version === version);
   const vErr = errors.filter((r) => r.version === version);
-  const fatal = vErr.filter((r) => r.phase !== "boot");
+  const fatal = vErr.filter((r) => !(r.phase === "boot" && r.arm === "off"));
   const outcomes = new Set(vOff.map(key));
   const vKey = mostCommon(vOff.map(key));
   const differ = vOn.filter((r) => key(r) !== vKey);
@@ -293,7 +296,7 @@ for (const version of allVersions) {
     dirtyBuilds.length === 0 &&
     outcomes.size === 1;
   const facts =
-    `run errors ${vErr.length} (boot ${vErr.length - fatal.length}, from the host's start on ${fatal.length}; on ${vErr.filter((r) => r.arm === "on").length}, off ${vErr.filter((r) => r.arm === "off").length})` +
+    `run errors ${vErr.length} (replaceable off-arm boot ${vErr.length - fatal.length}, counted ${fatal.length}; on ${vErr.filter((r) => r.arm === "on").length}, off ${vErr.filter((r) => r.arm === "off").length})` +
     `, adapter-off outcomes ${outcomes.size}` +
     `, run numbers ${unique && contiguous ? `0-${nums.length - 1}` : "not unique and contiguous"}${both ? (alternating ? ", alternating" : ", NOT alternating") : ""}` +
     `, adapter checks failed ${onBad.length} on, ${offBad.length} off` +
