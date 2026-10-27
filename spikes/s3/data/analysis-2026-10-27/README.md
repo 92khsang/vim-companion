@@ -13,16 +13,22 @@ data; none of the scripts starts an IDE.
 | `analyze-rows.jsonl`                              | Focus, `Esc`, control, commit and dot rows per case, host, version and toolkit                             |
 | `via-ide-keys.jsonl`                              | Every key of the VIA_IDE runs and the IdeaVim entry point it took                                          |
 | `fixture-check.jsonl`                             | The Driver run of the observer fixture per version                                                         |
-| `hangul-check.jsonl`, `hangul-check-warnings.txt` | The Hangul rows' conditions (1) to (3) against the plugin-off references                                   |
+| `hangul-check.jsonl`, `hangul-check-warnings.txt` | The Hangul row's conditions (1) to (3), real IBus, against the plugin-off references                       |
 | `keep-english.jsonl`                              | The keep-english checks under a strict and a lenient reading                                               |
 | `spc-spc-modes.txt`                               | ibus-hangul's mode after `SPC SPC` in each real-IBus run                                                   |
+| `validity.jsonl`, `validity.txt`                  | Per run file: steps without a focus owner or a delivered key, trials without the host, error records       |
+| `invalid-runs.json`                               | The runs that measure nothing and are excluded, with the measurement and the inferred cause                |
 
 Findings that the numbers alone do not show:
 
-- The Xvfb plugin-off references of the Hangul row (`20261026T112639Z-*`, `20261026T131133Z-*`) recorded `SPC g`
-  once: from trial 2 on, every `SPC g` trial stopped with "no focus owner" (199 of 200 per version), while the five
-  other sequences ran 200 of 200. So `SPC g` on XToolkit with input-method events has one reference trial, and
-  `hangul_check.py` reports its 1999 later plugin-on trials per version as "no reference run".
+- The four Xvfb input-method runs of the Hangul row are invalid and excluded from every row (`invalid-runs.json`,
+  `validity.txt`). In the two plugin-on runs (`20261026T161459Z-*`, `20261027T021949Z-*`), 23,994 of 24,000 steps
+  delivered nothing and the host never showed in 11,997 of 12,000 trials: only the first three sequences of trial
+  1 reached IdeaVim, the last of them `SPC /`. The harness did not stop on its input-method poster's "no focus
+  owner" answer, so those trials looked like passes in `hangul_check.py`. In the two plugin-off references
+  (`20261026T112639Z-*`, `20261026T131133Z-*`), `SPC g` trials 2 to 200 stopped with "no focus owner". Inferred:
+  under Xvfb, with no window manager, the IDE frame loses the X input focus when the Find in Path dialog of `SPC /`
+  closes. They are rerun on a fixed harness; `hangul-check.jsonl` covers the real-IBus runs only.
 - The headless GNOME Shell of the harness crashed twice (system journal: a general protection fault in
   `libgobject-2.0.so.0.8800.0` on 2026-10-26 16:30:59Z and a segfault in the same library on 2026-10-27 14:26:34Z).
   The key injector then lost its D-Bus peer, and the runs stopped: `20261026T161344Z-*` (committed Hangul, EAP,

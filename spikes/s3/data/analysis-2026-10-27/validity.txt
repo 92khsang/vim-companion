@@ -1,0 +1,17 @@
+Validity scan of every run file the S3 verdict cites (scripts/validity_scan.py; command in commands.sh).
+Totals: 67 run files, 192872 trials, 393567 steps; null-focus steps 0, undelivered steps 48790, trials with the host never shown 23994, error records 1879, failed delivery checks 0.
+
+Run files with a non-zero count:
+- 20261026T091810Z-xvfb-2.47.3-control/control-2.47.3-XToolkit.jsonl: 100 trials, 400 steps, undeliveredSteps 200. expected: the control popup takes Esc, so Esc (and the j counted after it) is not delivered by design
+- 20261026T093825Z-xvfb-2.48.0-eap.2-control/control-2.48.0-eap.2-XToolkit.jsonl: 100 trials, 400 steps, undeliveredSteps 200. expected: the control popup takes Esc, so Esc (and the j counted after it) is not delivered by design
+- 20261026T100906Z-gnome-control-2.47.3-WLToolkit-base/control-2.47.3-WLToolkit.jsonl: 100 trials, 400 steps, undeliveredSteps 200. expected: the control popup takes Esc, so Esc (and the j counted after it) is not delivered by design
+- 20261026T102652Z-gnome-control-2.48.0-eap.2-WLToolkit-base/control-2.48.0-eap.2-WLToolkit.jsonl: 100 trials, 400 steps, undeliveredSteps 200. expected: the control popup takes Esc, so Esc (and the j counted after it) is not delivered by design
+- 20261026T112639Z-xvfb-hangul-ime-2.47.3/hangul-ime-2.47.3-XToolkit.jsonl: 1200 trials, 2002 steps, errorRecords 199. INVALID: plugin-off reference, SPC g trials 2-200 stopped with 'no focus owner'
+- 20261026T131133Z-xvfb-hangul-ime-2.48.0-eap.2/hangul-ime-2.48.0-eap.2-XToolkit.jsonl: 1200 trials, 2002 steps, errorRecords 199. INVALID: plugin-off reference, SPC g trials 2-200 stopped with 'no focus owner'
+- 20261026T161344Z-gnome-commit-ibus-2.48.0-eap.2-XToolkit-word-commit/commit-ibus-2.48.0-eap.2-XToolkit.jsonl.gz: 3000 trials, 0 steps, errorRecords 1480. the harness GNOME Shell crashed at trial 507; the trials before it are complete
+- 20261026T161459Z-xvfb-hangul-ime-2.47.3/hangul-ime-2.47.3-XToolkit.jsonl.gz: 12000 trials, 24000 steps, undeliveredSteps 23994, hostNeverShown 11997. INVALID: keys reached nothing after the first SPC / of the run; the trials only looked like passes
+- 20261027T021949Z-xvfb-hangul-ime-2.48.0-eap.2/hangul-ime-2.48.0-eap.2-XToolkit.jsonl.gz: 12000 trials, 24000 steps, undeliveredSteps 23994, hostNeverShown 11997. INVALID: keys reached nothing after the first SPC / of the run; the trials only looked like passes
+- 20261027T122530Z-gnome-hangul-ibus-2.48.0-eap.2-XToolkit-keep-english/hangul-ibus-2.48.0-eap.2-XToolkit.jsonl.gz: 4022 trials, 8713 steps, errorRecords 1. the harness GNOME Shell crashed at trial 671; the trials before it are complete
+- 20261026T223620Z-mac-esc-2.47.3-LWCToolkit/esc-2.47.3-LWCToolkit.jsonl.gz: 2000 trials, 8000 steps, undeliveredSteps 2. the trial that received a <Left> nobody sent (Esc and j counted out of order)
+
+GNOME Hangul runs with the plugin: 16 run files, 94022 trials, 203713 steps; null-focus 0, undelivered 0, host never shown 0.

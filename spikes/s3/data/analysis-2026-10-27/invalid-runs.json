@@ -1,0 +1,29 @@
+{
+  "description": "Runs of the S3 rerun that measure nothing and are excluded from every row; rerun on a fixed harness (queue-resume.txt lines 26, 31, 42 and 51). Measured by validity.txt; the cause is an inference from it and from the harness code.",
+  "runs": [
+    {
+      "dir": "20261026T161459Z-xvfb-hangul-ime-2.47.3",
+      "row": "Hangul input, XToolkit with input-method events, plugin on",
+      "measured": "23994 of 24000 steps delivered nothing and the host never showed in 11997 of 12000 trials; the 6 delivered steps are the first three sequences of trial 1, the last of them SPC /",
+      "inferred": "under Xvfb, with no window manager, the IDE frame loses the X input focus when the Find in Path dialog of SPC / closes; the harness ignored the 'no focus owner' answer of its input-method poster, so the trials looked like passes"
+    },
+    {
+      "dir": "20261027T021949Z-xvfb-hangul-ime-2.48.0-eap.2",
+      "row": "Hangul input, XToolkit with input-method events, plugin on",
+      "measured": "23994 of 24000 steps delivered nothing and the host never showed in 11997 of 12000 trials; the 6 delivered steps are the first three sequences of trial 1, the last of them SPC /",
+      "inferred": "as above"
+    },
+    {
+      "dir": "20261026T112639Z-xvfb-hangul-ime-2.47.3",
+      "row": "Hangul input, XToolkit with input-method events, plugin-off reference",
+      "measured": "SPC g trials 2 to 200 stopped with 'no focus owner'; the plugin-off harness records no delivery for the other sequences, so they cannot show whether keys arrived",
+      "inferred": "the same lost X input focus after SPC /"
+    },
+    {
+      "dir": "20261026T131133Z-xvfb-hangul-ime-2.48.0-eap.2",
+      "row": "Hangul input, XToolkit with input-method events, plugin-off reference",
+      "measured": "SPC g trials 2 to 200 stopped with 'no focus owner'; the plugin-off harness records no delivery for the other sequences",
+      "inferred": "the same lost X input focus after SPC /"
+    }
+  ]
+}
