@@ -20,7 +20,13 @@
 //   node spike/s2/vim-check/expect.mjs --count <cards.json>      (classify every row, no Vim)
 // The work directory holds the tmux socket, so keep its path short (mktemp -d /tmp/s2v.XXXXXX).
 // Vim runs under taskset on S2_VIM_CPUS (default 28-31). S2_VIMRC names another vimrc in
-// vim-check/ (default expect.vimrc), such as expect-sw2.vimrc.
+// vim-check/ (default expect.vimrc), such as expect-sw2.vimrc. S2_VIM_LAYOUT=harness mirrors the
+// harness's two editor groups: the fixture buffer in the left window and b.txt (the same text) in
+// a right window, focus left after the right one (so `<C-w>p` goes right), with b.txt as the left
+// window's alternate file (VSCodeVim sets `#` to the previous active editor, and the harness
+// focuses group 1 after group 2), and the fixture buffer marked modified, as a.txt is in the
+// harness (the probe's reset is an edit and nothing saves it; 'hidden' stays off, Vim's default,
+// since VSCodeVim has no such setting); the default is one window.
 import { execFileSync, spawnSync } from "node:child_process";
 import {
   appendFileSync,
@@ -570,6 +576,10 @@ async function main() {
   };
   const dumpFile = join(work, "dump.json");
   const bufferFile = join(work, "buffer.txt");
+  const altFile = join(work, "b.txt");
+  const layout = process.env.S2_VIM_LAYOUT ?? "single";
+  if (!["single", "harness"].includes(layout))
+    throw new Error(`S2_VIM_LAYOUT must be single or harness`);
   const vimrcName = process.env.S2_VIMRC ?? "expect.vimrc";
   if (!/^[\w.-]+\.vimrc$/.test(vimrcName))
     throw new Error(`S2_VIMRC must name a .vimrc file in vim-check/`);
@@ -589,7 +599,9 @@ async function main() {
   writeFileSync(outFile, "");
   const write = (r) => appendFileSync(outFile, JSON.stringify(r) + "\n");
   const vimCommand = (cursor) =>
-    `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})" ${bufferFile}`;
+    layout === "harness"
+      ? `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -O -c "2wincmd w" -c "1wincmd w" -c "edit ${altFile}" -c "edit ${bufferFile}" -c "set modified" -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})" ${bufferFile} ${altFile}`
+      : `taskset -c ${cpus} vim --noplugin -u ${vimrc} -i NONE -N -n -c "call cursor(${cursor.line + 1}, ${cursor.column + 1})" ${bufferFile}`;
   write({
     type: "meta",
     set,
@@ -597,8 +609,9 @@ async function main() {
     cards: cardsFile,
     vim: version,
     vimrc: `spike/s2/vim-check/${vimrcName}`,
+    layout,
     command: vimCommand(START.cursor)
-      .replace(work, "<work>")
+      .replaceAll(work, "<work>")
       .replace(vimrc, `spike/s2/vim-check/${vimrcName}`),
     tmux: execFileSync("tmux", ["-V"], { encoding: "utf8" }).trim(),
     cpus,
@@ -631,6 +644,8 @@ async function main() {
         const t0 = Date.now();
         rmSync(dumpFile, { force: true });
         writeFileSync(bufferFile, START.lines.join("\n") + "\n");
+        if (layout === "harness")
+          writeFileSync(altFile, START.lines.join("\n") + "\n");
         tmux(
           "new-session",
           "-d",
