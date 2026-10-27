@@ -174,7 +174,13 @@ for (const card of cards) {
       if (x.pending) {
         sum.pending += 1;
         why.push(`pending: ${x.pending.split(":")[0]}`);
-      } else if (!unsupported) why.push(...expectProblems(x.expect));
+      } else if (!unsupported) {
+        why.push(...expectProblems(x.expect));
+        if (x.vscodevim)
+          why.push(
+            ...expectProblems(x.vscodevim.expect).map((p) => `vscodevim.${p}`),
+          );
+      }
       if (hasTodo(x)) sum.todo += 1;
       // The keys the harness types for the row (a sample still to be chosen is not counted), as
       // harness/card-keys.mjs plans them: untypeable (no key known) or unreachable on Linux.
@@ -223,8 +229,7 @@ for (const card of cards) {
         });
       } else if (why.length === 0) {
         sum.complete += 1;
-        const e = x.expect;
-        const expect = {
+        const convert = (e) => ({
           ...e,
           cursor: isPos(e.cursor)
             ? e.cursor
@@ -238,7 +243,11 @@ for (const card of cards) {
                 },
                 textOf(e),
               ),
-        };
+        });
+        // A row with `vscodevim` (check1/deviations.mjs): a documented VSCodeVim 1.32.4 rule gives
+        // its value and a pass measured it; the harness checks that value and the record keeps
+        // Vim's answer under `vim`.
+        const expect = convert(x.vscodevim?.expect ?? x.expect);
         perSet[s].push({
           key: row.key,
           ...(row.when ? { when: row.when } : {}),
@@ -246,7 +255,18 @@ for (const card of cards) {
           ...(x.sample ? { sample: x.sample } : {}),
           ...(x.setup ? { setup: x.setup } : {}),
           expect,
-          ...(x.knownDeviation ? { knownDeviation: x.knownDeviation } : {}),
+          ...(x.vscodevim
+            ? {
+                vim: convert(x.expect),
+                knownDeviation: {
+                  rule: x.vscodevim.rule,
+                  documented: x.vscodevim.documented,
+                  measured: x.vscodevim.measured,
+                },
+              }
+            : x.knownDeviation
+              ? { knownDeviation: x.knownDeviation }
+              : {}),
         });
       } else if (partial) {
         out[s].incomplete = (out[s].incomplete ?? 0) + 1;

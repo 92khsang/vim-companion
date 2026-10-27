@@ -286,6 +286,13 @@ what check (1) needs; one file per card so that hand authors can own disjoint ca
   VSCodeVim outcome (`expect` or `description`), its source (file and lines) and `status`
   (`Inferred`: read from the source, not measured). The expectation stays Vim's answer, so the
   trial shows the difference and it is judged by hand.
+- `vscodevim` (after pass 1): VSCodeVim 1.32.4's value where it differs from Vim's answer and a
+  rule read in its source explains the difference (`check1/deviations.mjs`): `expect` (Vim's
+  `expect` turned by the rule), `rule`, `documented` (the source lines) and `measured` (the pass,
+  trials per set and version, verdict). The builder makes this value the expectation the harness
+  checks and keeps Vim's answer under `vim`, with `knownDeviation` holding the rule, `documented`
+  and `measured`. A rule holds for a row only when its value matches every trial of the latest run
+  and every trial of pass 1 whose trials agree; a value is never copied from a measurement.
 - `expect`: the expectation in the format of `cards-correctness.mjs`, except that in a Visual mode
   `cursor` may be `{ "vim": [line, column], "visualStart": [line, column], "toLineEnd": true }`,
   Vim's own cursor and Visual start (`getpos('.')`, `getpos('v')`, 0-based; `toLineEnd` after `$`),
@@ -355,6 +362,15 @@ under both) the card's `R` row, the same command in Vim.
   `previousOracle` (expectation, oracle settings, reason); a `knownDeviation` equal to Vim's new
   answer is dropped. While `r` waits for its character Vim shows Replace mode, so a row ending in
   `r` expects the card's mode, as the grammar fixture states it.
+- Deviations after pass 1: `node spike/s2/check1/deviations.mjs classify <run dirs, latest first, comma-separated> <build.mjs output dir> <out.json>`,
+  then `node spike/s2/check1/deviations.mjs apply <out.json> <pass label>` (it replaces the
+  `vscodevim` values of an earlier apply). The rules: `registers` (VSCodeVim's register
+  bookkeeping: only the five delete action names write `"-` or shift `"1`, whatever register the
+  command names; `D`, `C`, `s`, `S` and `c` write neither; a yank writes `"0` only without a named
+  register; a linewise delete through the document's last line stores its text without the final
+  line break), `macro-start` (`q{reg}` writes an empty recording), `yank-linewise-cursor`,
+  `case-linewise-cursor`, `command-line-keeps-visual-selection` and `open-line-no-indent`; each
+  cites its VSCodeVim 1.32.4 source lines in `documented`.
 - Validate: `node spike/s2/check1/build.mjs --check`; build the correctness input and the labeled
   cards per set: `node spike/s2/check1/build.mjs <out dir> [--partial]`, then
   `node spike/s2/harness/cards-correctness.mjs <version> <display> <cdpPort> <set> <out dir>/correctness-<set>.json 3 <out.jsonl>`.

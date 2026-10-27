@@ -2673,6 +2673,68 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "open-line-no-indent",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L173-L190 (o: editor.action.insertLineAfter) and the O command next to it (editor.action.insertLineBefore); harness/lib.mjs sandboxSettings sets editor.autoIndent to none (the criterion's harness)",
+            "measured": {
+              "pass": "check1 triage confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "open-line-no-indent",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L173-L190 (o: editor.action.insertLineAfter) and the O command next to it (editor.action.insertLineBefore); harness/lib.mjs sandboxSettings sets editor.autoIndent to none (the criterion's harness)",
+            "measured": {
+              "pass": "check1 triage confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
