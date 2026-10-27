@@ -287,12 +287,15 @@ object HangulIbus {
   private fun one(s: Session, row: String, host: String, n: Int, seq: Seq) {
     s.reset(Rows.TEXT, 9)
     val before = if (Env.mode == "gnome") s.ensureHangulMode() else ""
+    // A trial that starts without the editor's focus measures nothing: its keys reach no component.
+    if (!s.editorFocused()) error("the editor has no focus at the start of the trial")
     val ibusFrom = s.ibusEvents.size
     if (!Env.pluginOff) s.h.beginTrial()
     val steps = ArrayList<String>()
     for ((step, wait) in seq.steps) {
       when (step) {
-        is Step.Ime -> if (Env.pluginOff) RemoteState.postIme(s.driver, step.steps) else s.h.postIme(step.steps)
+        is Step.Ime -> if (Env.pluginOff) RemoteState.postIme(s.driver, step.steps) else
+          s.h.postIme(step.steps).let { if (!it.startsWith("posted")) error("input-method events not posted: $it") }
         else -> s.keys.press(step)
       }
       Thread.sleep(wait)

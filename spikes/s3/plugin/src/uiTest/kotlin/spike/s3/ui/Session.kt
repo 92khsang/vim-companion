@@ -320,7 +320,12 @@ class Session(val driver: Driver, val name: String) {
     harness.resetEditor(text, caret)
   }
 
-  /** Closes a dialog or popup that an action opened, with `Esc`, until the editor owns focus again. */
+  /**
+   * Closes a dialog or popup that an action opened, with `Esc`, until the editor owns focus again. Under Xvfb there is
+   * no window manager to give the IDE frame the X input focus back when such a window closes (`SPC /` opens Find in
+   * Path): Java's focus owner then stays null and later keys reach nothing. The harness then does what a window
+   * manager does and focuses the frame again ([focusWindow]), and logs a `refocus` event before the `focus` event.
+   */
   fun closePopups() {
     var tries = 0
     val focused = { harness?.editorHasFocus() ?: runCatching { editor.shouldHaveFocus(timeout = 300.milliseconds); true }.getOrDefault(false) }
@@ -328,7 +333,15 @@ class Session(val driver: Driver, val name: String) {
       keys.press(Step.ESC)
       Thread.sleep(200)
     }
+    if (Env.mode == "xvfb" && !focused()) {
+      log(J.obj("event" to "refocus", "reason" to "the editor has no focus after closing popups"))
+      focusWindow()
+    }
   }
+
+  /** Whether the editor owns the keyboard focus: the probe's answer, or the Driver's check without the spike plugin. */
+  fun editorFocused(): Boolean =
+    harness?.editorHasFocus() ?: runCatching { editor.shouldHaveFocus(timeout = 2.seconds); true }.getOrDefault(false)
 
   fun log(line: String) {
     outFile.appendText(line + "\n")
