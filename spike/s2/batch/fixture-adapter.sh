@@ -46,8 +46,15 @@ for v in $VERSIONS; do
   else
     log "fixture $v: no new run, because a kept run holds a failure"
   fi
-  node spike/s2/harness/fixture-summary.mjs "$dir"/adapter-"$v".jsonl "$dir"/adapter-"$v".incomplete-*.jsonl > "$dir/summary-$v.txt"
-  log "$(tail -1 "$dir/summary-$v.txt")"
+  files=()
+  [ -e "$out" ] && files+=("$out")
+  files+=("$dir"/adapter-"$v".incomplete-*.jsonl)
+  if [ "${#files[@]}" -gt 0 ]; then
+    node spike/s2/harness/fixture-summary.mjs "${files[@]}" > "$dir/summary-$v.txt"
+    log "$(tail -1 "$dir/summary-$v.txt")"
+  else
+    log "fixture $v: no file to summarize"
+  fi
 done
 leftover_check
 log "batch finished"
