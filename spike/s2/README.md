@@ -197,6 +197,16 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
     adapter, probe and harness, and one poll interval (the fixture's poll and adapterPollMs and the
     differential and CPU adapter checks' pollMs), with one VSCodeVim and one which-key version.
 
+The frozen 300 ms run at `f6ba9a2`, build `dfd686159cc2459f`, has passing prechecks, grammar
+fixtures and polling CPU rows on both versions. Completed evidence is under
+[`data/stabilized-300ms-original-affinity/`](data/stabilized-300ms-original-affinity/): 100 off
+precheck runs and 1,800 matched fixture reads per version, plus 24 valid ten-minute CPU windows
+with no exclusions or retries. The maximum added CPU share is 0.268% of one core, below the 1%
+limit. The [CPU orchestration repair](data/stabilized-300ms/cpu-orchestration-restart/README.md)
+preserves the original invocation and frozen measured code; its excluded diagnostic contributes
+no formal sample. Differential validation (1,000 on and 1,000 off per version) and the cross-row
+check are still pending, so candidate (a) is not yet qualified.
+
 ## Cards reference and register convention
 
 - A key is in the reference of a state when VSCodeVim's own `doesActionApply` accepts the keys so
