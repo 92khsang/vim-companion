@@ -51,6 +51,7 @@ import { planKeys } from "./card-keys.mjs";
 const RESET_KEYS = ["<Esc>", "<Esc>"];
 const RESET_TAIL = ["v", "<Esc>"];
 const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>", "<C-t>"]);
+const WINDOW_TARGET_KEYS = new Set(["l", "w", "<right>", "<C-l>", "<C-w>"]);
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -209,50 +210,56 @@ try {
     });
     await sleep(150);
   }
-  // Ctrl-6 opens b.txt in group 1. Its view state is independent of group 2's
-  // visible editor, so seed the target group before capturing the trial baseline.
-  async function prepareAlternateFile() {
+  // A target file can retain a prior row's edits, mode, or per-group view state
+  // even when a.txt is active. Prepare the exact group the tested key will use.
+  async function prepareTargetFile(viewColumn) {
+    async function readTargetState() {
+      const snap = await code.probe.call("snapshot");
+      const editor = snap.editors.find(
+        (e) => e.uri === snap.active && e.viewColumn === viewColumn,
+      );
+      return {
+        file: snap.active?.replace(/^.*\//, "") ?? null,
+        viewColumn: snap.activeViewColumn,
+        text: editor?.text.replace(/\n$/, "").split("\n") ?? null,
+        selections: editor?.selections ?? null,
+        mode: (await code.probe.call("vimState")).state?.mode ?? null,
+      };
+    }
     await code.probe.call("open", {
-      files: [{ path: files[1].path, viewColumn: 1 }],
+      files: [{ path: files[1].path, viewColumn }],
     });
     focusWindow(code);
     await code.probe.call("exec", {
-      command: "workbench.action.focusFirstEditorGroup",
+      command:
+        viewColumn === 1
+          ? "workbench.action.focusFirstEditorGroup"
+          : "workbench.action.focusSecondEditorGroup",
     });
+    const previous = await readTargetState();
     typeKeys(display, RESET_KEYS, 30);
     await sleep(150);
     await code.probe.call("reset", START);
     await sleep(150);
-    const snap = await code.probe.call("snapshot");
-    const editor = snap.editors.find(
-      (e) => e.uri === snap.active && e.viewColumn === 1,
-    );
-    const mode = (await code.probe.call("vimState")).state?.mode ?? null;
-    const prepared = {
-      file: snap.active?.replace(/^.*\//, "") ?? null,
-      viewColumn: snap.activeViewColumn,
-      text: editor?.text.replace(/\n$/, "").split("\n") ?? null,
-      selections: editor?.selections ?? null,
-      mode,
-    };
+    const prepared = await readTargetState();
     const { line, column } = START.cursor;
     if (
       prepared.file !== "b.txt" ||
-      prepared.viewColumn !== 1 ||
+      prepared.viewColumn !== viewColumn ||
       JSON.stringify(prepared.text) !== JSON.stringify(START.lines) ||
       JSON.stringify(prepared.selections) !==
         JSON.stringify([[line, column, line, column]]) ||
       prepared.mode !== "normal"
     )
       throw new Error(
-        "alternate-file preparation did not reach the fixture state",
+        `target-file preparation in group ${viewColumn} did not reach the fixture state`,
       );
     await code.probe.call("open", { files: [files[0]] });
     await code.probe.call("exec", {
       command: "workbench.action.closeOtherEditors",
     });
     await sleep(150);
-    return prepared;
+    return { ...prepared, previous };
   }
   await resetB();
   // A row such as `q a` leaves a macro recording on, which would record the next rows and make a
@@ -271,6 +278,7 @@ try {
   async function resetTrial({
     clearJumps = false,
     alternateFile = false,
+    windowTarget = false,
   } = {}) {
     typeKeys(display, RESET_KEYS, 30);
     await sleep(80);
@@ -321,9 +329,11 @@ try {
     });
     await sleep(100);
     await stopRecording();
+    // Ctrl-6 uses group 1's independent view state; window navigation uses group 2.
     const alternatePreparation = alternateFile
-      ? await prepareAlternateFile()
+      ? await prepareTargetFile(1)
       : null;
+    const windowPreparation = windowTarget ? await prepareTargetFile(2) : null;
     // VSCodeVim keeps one jump list for the session (jumps/jumpTracker.ts), which the oracle's
     // fresh Vim does not have: a row that reads it starts with it cleared
     // (:clearjumps, cmd_line/commands/jumps.ts L51). Only those rows: the command line it runs
@@ -355,7 +365,7 @@ try {
       typeKeys(display, ["<Esc>"], 30);
       await sleep(200);
     }
-    return alternatePreparation;
+    return { alternatePreparation, windowPreparation };
   }
   // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
   // A trial sends, in the row's state, each chord a Linux user would press for it (card-keys.mjs
@@ -461,13 +471,17 @@ try {
           (k !== "<C-t>" || card.id.startsWith("normal ")),
       );
       for (let trial = 0; trial < Number(trialsArg); trial++) {
-        const alternatePreparation = await resetTrial({
+        const { alternatePreparation, windowPreparation } = await resetTrial({
           clearJumps,
           alternateFile: row.key === "<C-6>",
+          windowTarget:
+            card.id === 'normal ["<C-w>"]' &&
+            !row.setup?.length &&
+            WINDOW_TARGET_KEYS.has(row.key),
         });
         const before = await code.probe.call("registers");
         if (
-          alternatePreparation &&
+          (alternatePreparation || windowPreparation) &&
           (!sameReg(regValue(before["%"]), {
             mode: "character",
             lines: ["a.txt"],
@@ -477,7 +491,7 @@ try {
               lines: ["b.txt"],
             }))
         )
-          throw new Error("alternate-file register baseline was not restored");
+          throw new Error("target-file register baseline was not restored");
         // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
         if (setupPlan) {
           await send(setupPlan);
@@ -578,6 +592,7 @@ try {
           ),
           trial,
           ...(alternatePreparation ? { alternatePreparation } : {}),
+          ...(windowPreparation ? { windowPreparation } : {}),
           ok: diff.length === 0,
           diff,
           got,
@@ -591,6 +606,7 @@ try {
             Object.entries(after).map(([k, v]) => [k, canon(regValue(v))]),
           ),
           activeFile: snap.active?.replace(/^.*\//, ""),
+          activeViewColumn: snap.activeViewColumn,
           knownDeviation: row.knownDeviation ?? null,
           modeFrom,
         });
