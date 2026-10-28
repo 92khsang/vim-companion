@@ -82,6 +82,18 @@ Marketplace, plugin 9615, SHA-256 `bdc647dbbb7bdb5e6dcd4121002278beab8aa39993ee1
 `S3_CPUS` (default `16-27`) is the core set that `xvfb-case.sh`, `gnome-case.sh` and `via-ide.sh` pin Gradle, the test JVM
 and the IDE to, so that a smoke run can use other cores: `S3_CPUS=28-31 ./xvfb-case.sh 135 focus IdeaVIM:2.47.3 2 layer 9541`.
 
+## Completed measurement analysis
+
+Measured: `data/analysis-2026-10-28/` records the 16 completed Xvfb and Keep-English fast-timing reruns.
+Its `commands.sh` reproduces the analysis from preserved records without starting an IDE, verifies input
+checksums and accepts an optional absolute output directory for a separate reproduction. The existing
+`data/analysis-2026-10-27/` retains the main and first fast-timing runs and their invalid-run findings.
+
+Use the `JLayeredPane.POPUP_LAYER` host: its required Hangul, Linux focus/Esc and macOS focus/Esc measurements
+are complete. Keep the S3 verdict `fail`: the EAP dot result is inconsistent in 1 of 20 `]d` trials. The balloon's
+Hangul failure and incomplete EAP/XToolkit/Keep-English default run remain documented. The new fast run measures
+`SPC g` only and cannot replace the other five sequences of that incomplete run.
+
 ## macOS mode
 
 The `mac` mode of the uiTest harness (`-Ps3.mode=mac`) runs the focus and `d Esc j` rows on the user's Mac over ssh,
