@@ -9,6 +9,8 @@
 //   VS Code builds and sandbox extensions;
 // - one poll interval: the fixture metas' poll and adapterPollMs, and the pollMs of the adapter
 //   checks of the differential runs and CPU windows with the adapter on;
+// - one counted-leader interval over the precheck and differential (the CPU row keeps its own
+//   input timing);
 // - one VSCodeVim and one which-key version over all records, and VS Code of the version label.
 // It does not repeat the rows' own pass conditions; their ROW lines state them.
 // Usage: node spike/s2/batch/rows-check.mjs [data dir, default spike/s2/data]
@@ -44,6 +46,7 @@ const problems = [];
 const ids = new Set();
 const parts = { adapter: new Set(), probe: new Set(), harness: new Set() };
 const polls = new Set();
+const countDelays = new Set();
 const vims = new Set();
 const wks = new Set();
 for (const [name, recs] of Object.entries(rows)) {
@@ -51,6 +54,8 @@ for (const [name, recs] of Object.entries(rows)) {
   for (const v of VERSIONS)
     if (!versions.includes(v)) problems.push(`${name}: no records of ${v}`);
   for (const r of recs) {
+    if (name === "precheck" || name === "differential")
+      countDelays.add(r.countLeaderDelayMs ?? 0);
     ids.add(r.build?.id ?? "none");
     for (const k of Object.keys(parts))
       parts[k].add(r.build?.sha256?.[k] ?? "none");
@@ -81,9 +86,13 @@ for (const [k, s] of Object.entries(parts))
   if (s.size !== 1)
     problems.push(`sha256.${k} ${[...s].map((x) => x.slice(0, 12)).join("+")}`);
 if (polls.size !== 1) problems.push(`poll intervals ${[...polls].join("+")}`);
+if (countDelays.size !== 1 || ![0, 300].includes([...countDelays][0]))
+  problems.push(
+    `precheck/differential counted-leader intervals ${[...countDelays].join("+")}`,
+  );
 if (vims.size !== 1) problems.push(`VSCodeVim ${[...vims].join("+")}`);
 if (wks.size !== 1) problems.push(`which-key ${[...wks].join("+")}`);
 console.log(
   `ROWS (a) one adapter build and one poll interval: build ${[...ids].join("+")}, poll ${[...polls].join("+")} ms, ` +
-    `VSCodeVim ${[...vims].join("+")}, which-key ${[...wks].join("+")}: ${problems.length ? "not pass" : "pass"}${problems.length ? ` (${problems.join("; ")})` : ""}`,
+    `VSCodeVim ${[...vims].join("+")}, which-key ${[...wks].join("+")}, precheck/differential counted-leader interval ${[...countDelays].join("+")} ms: ${problems.length ? "not pass" : "pass"}${problems.length ? ` (${problems.join("; ")})` : ""}`,
 );

@@ -30,6 +30,7 @@
 // row instead: at least n completed adapter-off runs and no adapter-on run, under the same rules.
 // Usage: node spike/s2/harness/differential-compare.mjs <runs.jsonl>...
 import { readFileSync } from "node:fs";
+import { countLeaderProblems } from "./count-leader.mjs";
 
 const file = (uri) => uri?.replace(/^.*\//, "") ?? null;
 const norm = (snap) =>
@@ -238,6 +239,18 @@ const allVersions = [
 ].sort();
 const builds = [...new Set(runs.map((r) => r.build?.id ?? "none"))];
 const dirtyBuilds = runs.filter((r) => !r.build || r.build.dirty?.length);
+const countDelays = [...new Set(runs.map((r) => r.countLeaderDelayMs ?? 0))];
+const wantedDelay =
+  process.env.S2_COUNT_LEADER_STABILIZE === undefined
+    ? undefined
+    : Number(process.env.S2_COUNT_LEADER_STABILIZE);
+const sameCountCondition =
+  countDelays.length === 1 &&
+  [0, 300].includes(countDelays[0]) &&
+  (wantedDelay === undefined || wantedDelay === countDelays[0]);
+console.log(
+  `counted-leader stabilization: ${countDelays.join("+")} ms${sameCountCondition ? "" : " (mixed, unsupported or not the requested condition)"}`,
+);
 console.log(
   `builds: ${builds.join(", ")}${builds.length > 1 ? " (mixed: the row does not pass)" : ""}` +
     (dirtyBuilds.length
@@ -274,6 +287,32 @@ for (const version of allVersions) {
   const vRuns = [...vOn, ...vOff];
   const traced = vRuns.filter((r) => r.trace);
   const noEffect = vRuns.filter((r) => r.settle?.rule !== "effect");
+  const badCountLeader = vRuns.filter((r) => {
+    const records = (r.settle?.waits ?? []).filter((w) => w.countLeader);
+    if ((r.countLeaderDelayMs ?? 0) === 0) return records.length !== 0;
+    return (
+      records.length !== 1 ||
+      records[0].item !== "extra/count-leader" ||
+      countLeaderProblems(records[0].countLeader).length !== 0
+    );
+  });
+  for (const arm of ["off", "on"]) {
+    const observations = vRuns
+      .filter((r) => r.arm === arm)
+      .flatMap((r) => r.settle?.waits ?? [])
+      .filter((w) => w.countLeader)
+      .map((w) => w.countLeader);
+    if (!observations.length) continue;
+    const range = (values) => {
+      const finite = values.filter(Number.isFinite);
+      return finite.length
+        ? `min ${Math.min(...finite).toFixed(1)}, mean ${(finite.reduce((s, v) => s + v, 0) / finite.length).toFixed(1)}, max ${Math.max(...finite).toFixed(1)}`
+        : "none";
+    };
+    console.log(
+      `  counted-leader ${version} ${arm}: ${observations.length} observations; timer callback after Space ms ${range(observations.map((r) => r.ready?.afterSpaceMs))}; Space to b ms ${range(observations.map((r) => r.spaceToBMs))}; b to n ms ${range(observations.map((r) => r.bToNMs))}`,
+    );
+  }
   const wrongCode = vRuns.filter((r) => r.hello?.vscode !== version);
   const vims = [...new Set(vRuns.map((r) => r.hello?.vim?.version ?? "none"))];
   const whichkeys = [
@@ -287,6 +326,8 @@ for (const version of allVersions) {
     offBad.length === 0 &&
     traced.length === 0 &&
     noEffect.length === 0 &&
+    sameCountCondition &&
+    badCountLeader.length === 0 &&
     wrongCode.length === 0 &&
     vims.length === 1 &&
     vims[0] !== "none" &&
@@ -300,6 +341,7 @@ for (const version of allVersions) {
     `, adapter-off outcomes ${outcomes.size}` +
     `, run numbers ${unique && contiguous ? `0-${nums.length - 1}` : "not unique and contiguous"}${both ? (alternating ? ", alternating" : ", NOT alternating") : ""}` +
     `, adapter checks failed ${onBad.length} on, ${offBad.length} off` +
+    `, counted-leader stabilization ${countDelays.join("+")} ms, invalid observations ${badCountLeader.length}` +
     (traced.length ? `, trace runs ${traced.length}` : "") +
     (noEffect.length
       ? `, runs without the effect rule ${noEffect.length}`

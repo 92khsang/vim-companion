@@ -74,6 +74,20 @@ its own user data, extensions, `HOME`, XDG directories and D-Bus session, under 
     the minified bundles, not verified at run time: the animation is gated by
     `workbench.experimental.modernUI`, registered with the default `false` in 1.134.0 and `true` in
     1.141.0, which the sandbox does not pin.
+- `S2_COUNT_LEADER_STABILIZE=300` selects a separate condition for the precheck and differential:
+  only `extra/count-leader` (`3 SPC b n`) pauses after Space. A renderer timer scheduled for 300 ms
+  checks the generated root rows, empty input and quick-input focus once; a failed check ends the
+  run without waiting again. Renderer scheduling can delay this callback, so the record includes
+  the actual callback time after Space and the actual Space-to-`b` and `b`-to-`n` intervals. This is
+  a stabilization interval, not an exact completion signal. A passive renderer observer fails a
+  later root redraw after `b`, or a menu key dispatched outside quick input. Other keys retain the
+  30 ms injected delay and the leaf effect rule still applies. A failure retains its observation
+  and stops that version's batch; there is no retry of a failed observation. `0` (the default)
+  retains the original condition. The comparator and batch resume guard refuse mixed conditions.
+  Original results remain under `data/original-30ms-cbf136f/`; the new condition uses a separate
+  data root. The CPU typing row retains its original 30 ms script without either wait rule, and
+  the grammar fixture retains its own timing. All rows still require one frozen build and one
+  adapter poll interval, and a failed CPU row fails candidate (a).
 - `harness/differential.mjs`, `cpu.mjs`, `fixture-run.mjs`: every record carries `build`
   (`lib.mjs` `buildInfo`: the checkout's HEAD, the uncommitted changes under `spike/s2` and `spec`
   without the data directories, sha256 hashes of `extensions/s2-adapter`, `extensions/s2-probe`,

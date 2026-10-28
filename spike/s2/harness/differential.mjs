@@ -42,6 +42,7 @@ import {
   EditorTracker,
   typeKeysSettling,
 } from "./whichkey-settle.mjs";
+import { typeCountedLeader } from "./count-leader.mjs";
 
 const [
   version,
@@ -61,6 +62,14 @@ const PAUSE = 200;
 const ADAPTER = "vim-companion-spike.s2-adapter";
 const SETTLE_ENV = process.env.S2_WHICHKEY_SETTLE ?? "";
 const RULE = { 1: "effect", effect: "effect", hidden: "hidden" }[SETTLE_ENV];
+const COUNT_LEADER_DELAY = Number(process.env.S2_COUNT_LEADER_STABILIZE ?? 0);
+if (
+  ![0, 300].includes(COUNT_LEADER_DELAY) ||
+  (COUNT_LEADER_DELAY && RULE !== "effect")
+)
+  throw new Error(
+    "S2_COUNT_LEADER_STABILIZE must be 0 or 300; 300 requires the effect rule",
+  );
 if (SETTLE_ENV && !RULE)
   throw new Error(`S2_WHICHKEY_SETTLE=${SETTLE_ENV}: use 1, effect or hidden`);
 const SETTLE = Boolean(RULE);
@@ -161,13 +170,15 @@ try {
           if (tracker) await tracker.sync();
         }
         if (SETTLE) {
-          for (const w of await typeKeysSettling(
-            display,
-            item.keys,
-            DELAY,
-            matcher,
-            { watcher, tracker, rule: RULE },
-          ))
+          for (const w of await (
+            COUNT_LEADER_DELAY && item.case === "extra/count-leader"
+              ? typeCountedLeader
+              : typeKeysSettling
+          )(display, item.keys, DELAY, matcher, {
+            watcher,
+            tracker,
+            rule: RULE,
+          }))
             // The record itself, not a copy: a no-change check fills it in after the script.
             waits.push(Object.assign(w, { item: item.case }));
         } else typeKeys(display, item.keys, DELAY);
@@ -225,6 +236,7 @@ try {
         i,
         arm,
         version,
+        countLeaderDelayMs: COUNT_LEADER_DELAY,
         build,
         hello: code.hello,
         adapter: code.hello.adapter,
@@ -253,13 +265,16 @@ try {
         i,
         arm,
         version,
+        countLeaderDelayMs: COUNT_LEADER_DELAY,
         phase,
         build,
+        ...(e.countLeader ? { countLeader: e.countLeader } : {}),
         error: String(e.stack ?? e)
           .split("\n")
           .slice(0, 3)
           .join(" | "),
       });
+      if (e.countLeader) break;
     } finally {
       watcher?.close();
       watcher = undefined;

@@ -132,11 +132,18 @@ export class QuickInputWatcher {
       w.pending.delete(msg.id);
       msg.error
         ? p.reject(new Error(msg.error.message))
-        : p.resolve(msg.result.result.value);
+        : msg.result.exceptionDetails
+          ? p.reject(
+              new Error(
+                msg.result.exceptionDetails.exception?.description ??
+                  msg.result.exceptionDetails.text,
+              ),
+            )
+          : p.resolve(msg.result.result.value);
     };
     return w;
   }
-  evaluate(expression) {
+  evaluate(expression, awaitPromise = false) {
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
@@ -144,7 +151,7 @@ export class QuickInputWatcher {
         JSON.stringify({
           id,
           method: "Runtime.evaluate",
-          params: { expression, returnByValue: true },
+          params: { expression, returnByValue: true, awaitPromise },
         }),
       );
     });

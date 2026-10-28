@@ -110,6 +110,16 @@ same_build_or_stop() { # <file>
     exit 1
   fi
 }
+# The same build can run either timing condition; never append one to the other's data.
+same_differential_condition_or_stop() { # <file>
+  [ -s "$1" ] || return 0
+  node -e '
+    const fs = require("fs");
+    const want = Number(process.env.S2_COUNT_LEADER_STABILIZE ?? 0);
+    const rs = fs.readFileSync(process.argv[1], "utf8").split("\n").filter(Boolean).map(JSON.parse);
+    if (![0, 300].includes(want) || rs.some(r => (r.countLeaderDelayMs ?? 0) !== want)) process.exit(1);
+  ' "$1" || { log "$1 belongs to another counted-leader timing condition; stopping"; exit 1; }
+}
 # Whether the precheck of a version passed with this batch's build: at least 100 completed
 # adapter-off runs that all agree, under the compare's rules (S2_DIFF_PRECHECK), and one clean build
 # that is BUILD_ID. Prints the compare's PRECHECK line.
