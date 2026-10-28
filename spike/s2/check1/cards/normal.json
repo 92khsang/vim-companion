@@ -1397,7 +1397,7 @@
       "setup": ["g", "g"],
       "source": "vim-oracle",
       "reason": "outside: file or tag; <c-t> (file or tag)",
-      "label": "Go to the older position in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+      "label": "Go 1 entry back in the jump list (VSCodeVim Ctrl-T)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L231 |CTRL-T|",
       "expect": {
@@ -1427,6 +1427,57 @@
         },
         "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "vimLabel": "Go to the older position in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -2577,6 +2628,36 @@
             "layout": "single",
             "doc": "document",
             "size": "43x42"
+          },
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
           }
         },
         "extensions": {

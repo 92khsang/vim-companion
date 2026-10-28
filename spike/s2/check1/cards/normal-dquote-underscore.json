@@ -807,6 +807,56 @@
       },
       "handBasis": {
         "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1236,7 +1286,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "outside: file or tag; <c-t> (file or tag)",
-      "label": "Jump to the older entry of the tag stack",
+      "label": "Go 1 entry back in the jump list (VSCodeVim Ctrl-T)",
       "labelIndex": "index.txt L231 |CTRL-T|",
       "expect": {
         "text": "unchanged",
@@ -1253,6 +1303,57 @@
       },
       "handBasis": {
         "basis": "Vim tagsrch.txt *CTRL-T*: the tag stack is empty (E73), so the cursor stays where the setup's gg left it; VSCodeVim navigate.ts L91-L102 binds <C-t> to NavigateBack (the jump list)"
+      },
+      "vimLabel": "Jump to the older entry of the tag stack",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

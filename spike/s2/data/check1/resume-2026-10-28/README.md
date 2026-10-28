@@ -302,3 +302,32 @@ its eight rows / 16 row-setting expectations, with `%` and `#` swaps and count-a
 Ctrl-^ negative-delivery rows remain unchanged. Viewport-center source links now use the
 actual installed 1.134.0 product commit `110a328ea54b42367b803ec53ee0bf52ef26b419`; the compared
 1.134.0/1.141.0 source files are byte-identical, and the raw-source viewport range is L357-L392.
+
+## Source followup confirmed, second wave pending
+
+`source-followup/` preserves all 642 direct trials at frozen `a0ef365`; every trial passes.
+The 59 rows cover 107 row-setting expectations, with three trials on each version for every
+eligible settings set. Eleven rows are defaults-only because the extension setting replaces
+those keys. `selected-source-followup-rules.json` promotes only this measured coverage.
+Normal Ctrl-T remains in a.txt in every trial with the corrected clearJumps precondition.
+The labels describe its jump-list behavior, dM's ignored count, and dot's ignored register
+prefix. Old residual-only rescoring now gives 234 pass / 334 fail, but its 16 Ctrl-6 and two
+Ctrl-T failures predate the separately verified harness preparation fixes and must not be
+counted as current failures when newer cohorts are available.
+
+`source-wave2-input/` freezes 72 further source predictions per settings set for 864 trials:
+14 counted selection-boundary rows, 20 counted-delete boundary rows, ten Insert rows, five
+other M operators, twelve single-cell VisualBlock J/Y/R/S rows, nine Visual-format rows and
+two parenthesis-pair-search rows. These are not yet promoted. Source descriptions and exact
+guards are carried by each prediction. Arrow dot registers must equal arbitrary baselines;
+literal values left by an earlier trial are never used as expectations. The copy row is an
+engine-specific hand expectation and will retain that provenance if confirmed.
+
+The Visual-format predictions rely on static inspection of the pinned extension selectors
+showing no plaintext range formatter; they do not claim the runtime registry/context was
+observed. `formatOnType=false` is not the justification.
+`bracket-oracle/` preserves the independent four-row Vim recheck of [( and ]): both settings
+still yield unchanged text/cursor/mode/registers at [1,13]. The VSCodeVim predictions follow
+its relative PairMatcher scan; no unverified causal explanation of Vim's quote handling is
+asserted. The installed-product viewport links and descriptions distinguish 1.134.0 product
+110a328ea54b42367b803ec53ee0bf52ef26b419 from 1.141.0 product2a59476c9bfcb90b3ddc372c36762471b7dfad1c.

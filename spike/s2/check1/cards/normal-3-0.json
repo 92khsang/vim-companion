@@ -597,6 +597,80 @@
         },
         "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); 30 replays of x, each one character at the cursor, which moves left at the line end (src/mode/modeHandler.ts L927-967)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one,"
+              },
+              "cursor": [1, 9],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": [" "]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": [" "]
+                }
+              }
+            },
+            "rule": "dot-replays-recorded-delete",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one,"
+              },
+              "cursor": [1, 9],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": [" "]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": [" "]
+                }
+              }
+            },
+            "rule": "dot-replays-recorded-delete",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1340,6 +1414,56 @@
         },
         "basis": "setup g g <C-o> leaves the jump list one step back; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L105-117, src/jumps/jumpTracker.ts L216-232 (jumpForward clamps at the newest jump, [0,0], also with a count)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "counted-jump-list-boundary",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "counted-jump-list-boundary",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1477,6 +1601,56 @@
       "previousHand": {
         "pending": "undetermined: VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L163-214 steps back 30 jumps, past the setup's jump into the jumps that earlier rows of the run left (at most one per file line, L344-349), so the target depends on the run",
         "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "counted-jump-list-boundary",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "counted-jump-list-boundary",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1613,7 +1787,7 @@
       "setup": ["g", "g"],
       "source": "vim-oracle",
       "reason": "outside: file or tag; <c-t> (file or tag)",
-      "label": "Go 30 positions back in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+      "label": "Go 30 entries back in the jump list (VSCodeVim Ctrl-T)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L231 |CTRL-T|",
       "expect": {
@@ -1630,6 +1804,57 @@
       "previousHand": {
         "pending": "undetermined: VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L163-214 steps back 30 jumps, past the setup's jump into the jumps that earlier rows of the run left (at most one per file line, L344-349), so the target depends on the run",
         "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+      },
+      "vimLabel": "Go 30 positions back in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-control-t-cleared-jumps",
+            "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

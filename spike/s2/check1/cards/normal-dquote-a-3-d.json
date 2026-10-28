@@ -3303,7 +3303,7 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to middle line of screen",
+      "label": "Delete to the start of the middle visible line (characterwise in VSCodeVim; count ignored)",
       "labelFrom": "index",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
@@ -3371,6 +3371,95 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Delete to middle line of screen",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "a": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 product commit 110a328ea54b42367b803ec53ee0bf52ef26b419 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "a": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 product commit 110a328ea54b42367b803ec53ee0bf52ef26b419 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

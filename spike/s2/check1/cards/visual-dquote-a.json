@@ -764,6 +764,56 @@
         },
         "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "visual"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "visual"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3171,6 +3221,80 @@
         },
         "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-put-keeps-delete-history",
+            "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-put-keeps-delete-history",
+            "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

@@ -438,7 +438,7 @@ export const RULES = [
     title:
       "dM uses a characterwise range through the newline before the viewport center",
     documented:
-      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 product commit 110a328ea54b42367b803ec53ee0bf52ef26b419 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
     applies: ({ mode, ops, key }) =>
       mode === "normal" && sameJson(ops, ["d"]) && key === "M",
     transform(w, { pending, setup }) {
@@ -677,6 +677,362 @@ export const RULES = [
     },
   },
   {
+    id: "counted-selection-boundaries",
+    title:
+      "counted boundary motions saturate at document edges with register and Visual prefixes",
+    documented:
+      "VSCodeVim 1.32.4 actions/baseMotion.ts L100-L148 feeds repeated positions back into motion.ts L1587-L1678; textobject/sentence.ts L32-L100 and paragraph.ts L7-L41 return the same edge at the boundary, independently of registerName. With four nonempty lines, no sentence terminator and the trailing document newline, backward stop is [0,0], forward stop [4,0]. modeHandler.ts L1309-L1346 and textEditor.ts L209-L241 draw the corresponding Visual selection; backward block active is [0,14] from anchor [1,13]. Scoped to named-a count3 Normal, count3 Visual/VisualLine, and backward count3 VisualBlock, without operators/setup.",
+    applies: ({ card, key }) =>
+      ([
+        'normal ["\\\"","a","3"]',
+        'visual ["3"]',
+        'visual-line ["3"]',
+      ].includes(card) &&
+        ["(", ")", "{", "}"].includes(key)) ||
+      (card === 'visual-block ["3"]' && ["(", "{"].includes(key)),
+    transform(w, { mode, key, setup }) {
+      if (
+        setup?.length ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4 ||
+        !START.lines.every((line) => line.trim() && !/[.!?]/.test(line))
+      )
+        return null;
+      const stop = ["(", "{"].includes(key) ? [0, 0] : [4, 0];
+      return {
+        text: "unchanged",
+        cursor: harnessCursor(
+          { mode, cursor: stop, visualStart: START_POS },
+          START.lines,
+        ),
+        mode,
+      };
+    },
+  },
+  {
+    id: "counted-delete-boundaries",
+    title:
+      "counted d sentence/paragraph motions delete characterwise to the document edge",
+    documented:
+      "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+    applies: ({ card, key }) =>
+      [
+        'normal ["3","d"]',
+        'normal ["2","d"]',
+        'normal ["d","3"]',
+        'normal ["2","d","3"]',
+        'normal ["\\\"","a","3","d"]',
+      ].includes(card) && ["(", ")", "{", "}"].includes(key),
+    transform(w, { key, pending, setup }) {
+      if (
+        setup?.length ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4 ||
+        !START.lines.every((line) => line.trim() && !/[.!?]/.test(line))
+      )
+        return null;
+      const back = ["(", "{"].includes(key),
+        [line, col] = START_POS;
+      const content = {
+        mode: "character",
+        lines: back
+          ? [START.lines[0], START.lines[line].slice(0, col)]
+          : [START.lines[line].slice(col), ...START.lines.slice(line + 1), ""],
+      };
+      const { registers, shift } = vscodevimRegisters(
+        "delete",
+        registerOf(pending),
+        content,
+      );
+      return {
+        text: back
+          ? [START.lines[line].slice(col), ...START.lines.slice(line + 1)]
+          : [START.lines[0], START.lines[line].slice(0, col)],
+        cursor: back ? [0, 0] : [line, col - 1],
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "insert-suggestion-and-newline",
+    title:
+      "Insert Ctrl-J/N/P select suggestions while Ctrl-M inserts a literal newline",
+    documented:
+      "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+    applies: ({ card, key }) =>
+      card === "insert []" &&
+      ["<C-j>", "<C-m>", "<C-n>", "<C-p>"].includes(key),
+    transform(w, { key, setup, sample }) {
+      if (setup?.length || sample !== undefined) return null;
+      const [line, col] = START_POS;
+      return key === "<C-m>"
+        ? {
+            text: [
+              ...START.lines.slice(0, line),
+              START.lines[line].slice(0, col),
+              START.lines[line].slice(col),
+              ...START.lines.slice(line + 1),
+            ],
+            cursor: [line + 1, 0],
+            mode: "insert",
+          }
+        : { text: "unchanged", cursor: START_POS, mode: "insert" };
+    },
+  },
+  {
+    id: "insert-mode-register-recording",
+    title:
+      "Insert arrows preserve dot while Ctrl-O and empty-selection copy record their original exit key",
+    documented:
+      "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+    applies: ({ card, key }) =>
+      card === "insert []" &&
+      ["<C-o>", "<copy>", "<down>", "<left>", "<right>", "<up>"].includes(key),
+    transform(w, { key, setup, sample }) {
+      if (setup?.length || sample !== undefined) return null;
+      if (["<C-o>", "<copy>"].includes(key))
+        return {
+          ...w,
+          registers: { ".": { mode: "character", keys: `i${key}` } },
+        };
+      return { ...w, registers: {} };
+    },
+  },
+  {
+    id: "other-viewport-center-operators",
+    title:
+      "c/y/indent/case M use the characterwise suffix before the viewport center",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 returns viewport-center [2,0] without LineWise; modeHandler.ts L1093-L1100 decreases stop to [1,EOL]. yM (operator.ts L203-L259) reads the suffix without newline because VS Code clamps EOL+1 (extHostDocumentData.ts raw L117-L140/L181-L245, identical in products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c). cM (operator.ts L660-L707, position.ts L313-L318) deletes only that suffix and retains editor selection [2,0] in Insert (transformations/execute.ts L257-L293). >M affects line1 only, adding two detected-indent spaces (operator.ts L449-L463). gU/g~ change only suffix case (operator.ts L353-L443). Scoped to five exact Normal cards, no setup and the fixed fixture.",
+    applies: ({ card, key }) =>
+      key === "M" &&
+      [
+        'normal ["c"]',
+        'normal ["y"]',
+        'normal [">"]',
+        'normal ["g","U"]',
+        'normal ["g","~"]',
+      ].includes(card),
+    transform(w, { card, setup }) {
+      if (
+        setup?.length ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const [line, col] = START_POS,
+        prefix = START.lines[line].slice(0, col),
+        suffix = START.lines[line].slice(col);
+      const content = { mode: "character", lines: [suffix] };
+      if (card === 'normal ["y"]')
+        return {
+          text: "unchanged",
+          cursor: START_POS,
+          mode: "normal",
+          registers: { '"': content, 0: content },
+        };
+      if (card === 'normal ["c"]')
+        return {
+          text: { [line]: prefix },
+          cursor: [2, 0],
+          mode: "insert",
+          registers: { '"': content },
+        };
+      if (card === 'normal [">"]')
+        return {
+          text: { [line]: "  " + START.lines[line] },
+          cursor: [line, 4],
+          mode: "normal",
+        };
+      const changed =
+        card === 'normal ["g","U"]'
+          ? suffix.toUpperCase()
+          : [...suffix]
+              .map((c) =>
+                c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase(),
+              )
+              .join("");
+      return {
+        text: { [line]: prefix + changed },
+        cursor: START_POS,
+        mode: "normal",
+      };
+    },
+  },
+  {
+    id: "single-block-join-retains-visual-mode",
+    title:
+      "single-cell VisualBlock J joins the next line and retains the block selection",
+    documented:
+      "VSCodeVim 1.32.4 visual.ts L54-L63 enters the single-cell block before the following count/register prefix. commands/join.ts L161-L170 passes count=1; execJoinLines L87-L96 keeps VisualBlock when start equals stop and applies column diff41-13. transformations/execute.ts L297-L300 moves both block endpoints to [1,41]; textEditor.ts L232-L240 and modeHandler.ts L1336-L1346 render primary active [1,42]. Text is line1 + space + trimmed line2; all registers stay unchanged. Scoped to exact plain/count3/named-a VisualBlock contexts, C-v before the prefix, no setup/sample, fixed single-cell fixture.",
+    applies: ({ card, key }) =>
+      key === "J" &&
+      [
+        "visual-block []",
+        'visual-block ["3"]',
+        'visual-block ["\\\"","a"]',
+      ].includes(card),
+    transform(w, { pending, cardKeys, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, ["<C-v>", ...pending]) ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const line = START_POS[0],
+        joinColumn = START.lines[line].length;
+      return {
+        text: [
+          ...START.lines.slice(0, line),
+          START.lines[line] + " " + START.lines[line + 1].trimStart(),
+          ...START.lines.slice(line + 2),
+        ],
+        cursor: [line, joinColumn + 1],
+        mode: "visual-block",
+      };
+    },
+  },
+  {
+    id: "single-block-yank-linewise",
+    title:
+      "VisualBlock Y yanks the current line without writing the numbered yank register",
+    documented:
+      "VSCodeVim 1.32.4 operator.ts L294-L303 forces LineWise for ShiftYankOperatorVisual; YankOperator L213-L215 reads the entire selected line and L249-L254 returns Normal at [1,0] from VisualBlock. Count after C-v does not extend the selection. The outer command has no yank_op/yank_full_line name, so register/register.ts L208-L228 does not write 0. Only named-a plus unnamed, or unnamed alone, receive the line; all other baseline registers remain. Scoped to the exact plain/count3/named-a single-cell VisualBlock contexts, no setup/sample.",
+    applies: ({ card, key }) =>
+      key === "Y" &&
+      [
+        "visual-block []",
+        'visual-block ["3"]',
+        'visual-block ["\\\"","a"]',
+      ].includes(card),
+    transform(w, { pending, cardKeys, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, ["<C-v>", ...pending]) ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const content = { mode: "line", lines: [START.lines[1]] };
+      return {
+        text: "unchanged",
+        cursor: [1, 0],
+        mode: "normal",
+        registers: vscodevimRegisters("plain", registerOf(pending), content)
+          .registers,
+      };
+    },
+  },
+  {
+    id: "single-block-change-line-content",
+    title:
+      "VisualBlock R/S replace the line content with an empty Insert line and use block registers",
+    documented:
+      "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+    applies: ({ card, key }) =>
+      ["R", "S"].includes(key) &&
+      [
+        "visual-block []",
+        'visual-block ["3"]',
+        'visual-block ["\\\"","a"]',
+      ].includes(card),
+    transform(w, { pending, cardKeys, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, ["<C-v>", ...pending]) ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const content = { mode: "block", lines: [START.lines[1]] };
+      return {
+        text: { 1: "" },
+        cursor: [1, 0],
+        mode: "insert",
+        registers: vscodevimRegisters("change", registerOf(pending), content)
+          .registers,
+      };
+    },
+  },
+  {
+    id: "visual-format-without-plaintext-provider",
+    title:
+      "Visual equals leaves plaintext unchanged when the pinned extension set has no range formatter",
+    documented:
+      "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+    applies: ({ mode, pending, key }) =>
+      key === "=" &&
+      ["visual", "visual-line", "visual-block"].includes(mode) &&
+      [[], ["3"], ['"', "a"]].some((p) => sameJson(p, pending)),
+    transform(w, { setup, sample, hasRangeFormattingProvider = false }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        hasRangeFormattingProvider ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      return {
+        text: "unchanged",
+        cursor: [1, START.lines[1].search(/\S/)],
+        mode: "normal",
+      };
+    },
+  },
+  {
+    id: "relative-parenthesis-pair-search",
+    title:
+      "bracket-parenthesis motions scan paired characters relative to the cursor without quote handling",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L2271-L2312 calls PairMatcher for exact [( and ]) without an operator. common/matching/matcher.ts L19-L24/L58-L101 excludes the current character and scans with a zero stack; reverse first-negative opening parenthesis is [1,5], forward first-negative closing parenthesis is [1,25]. Other character kinds and quote delimiters do not affect this scanner. This is relative unmatched-pair search, not a global malformed-parenthesis check. Original Vim oracle was independently rerun on both settings and still returns [1,13]; no causal claim about Vim quote behavior is inferred. Scoped to those two Normal cards, no count/register/operator/setup/sample, the fixed cursor inside two and one cursor.",
+    applies: ({ card, key }) =>
+      (card === 'normal ["["]' && key === "(") ||
+      (card === 'normal ["]"]' && key === ")"),
+    transform(w, { card, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines[1].slice(11, 16) !== '"two"'
+      )
+        return null;
+      const reverse = card === 'normal ["["]',
+        step = reverse ? -1 : 1;
+      let depth = 0;
+      for (
+        let line = START_POS[0];
+        line >= 0 && line < START.lines.length;
+        line += step
+      ) {
+        const first =
+          line === START_POS[0]
+            ? START_POS[1] + step
+            : reverse
+              ? START.lines[line].length - 1
+              : 0;
+        for (
+          let col = first;
+          col >= 0 && col < START.lines[line].length;
+          col += step
+        ) {
+          const char = START.lines[line][col];
+          if (char === (reverse ? ")" : "(")) depth++;
+          if (char === (reverse ? "(" : ")")) depth--;
+          if (depth < 0)
+            return { text: "unchanged", cursor: [line, col], mode: "normal" };
+        }
+      }
+      return null;
+    },
+  },
+  {
     id: "insert-dot-recorded-keys",
     title:
       "the last insertion register stores recorded keys instead of inserted text",
@@ -836,11 +1192,14 @@ if (cmd === "classify") {
         });
   }
   const want = {};
+  const cardKeys = {};
   for (const set of ["defaults", "extensions"])
     for (const c of JSON.parse(
       readFileSync(join(buildDir, `correctness-${set}.json`), "utf8"),
-    ))
+    )) {
+      cardKeys[`${set}\0${c.id}`] = c.keys;
       for (const r of c.rows) want[`${set}\0${c.id}\0${r.key}`] = r;
+    }
   const trials = new Map();
   dirs.forEach((passDir, d) => {
     for (const f of readdirSync(passDir).filter((f) => f.endsWith(".jsonl"))) {
@@ -928,6 +1287,7 @@ if (cmd === "classify") {
           ...ctx,
           sample: w.sample,
           setup: w.setup,
+          cardKeys: cardKeys[`${set}\0${card}`],
           engineOf: (c, k) => want[`${set}\0${c}\0${k}`]?.expect ?? null,
           vimOf: (c, k) => {
             const x = want[`${set}\0${c}\0${k}`];
@@ -1020,6 +1380,7 @@ if (cmd === "classify") {
           ops: opsOf(pending),
           sample: row.sample,
           setup: row.setup,
+          cardKeys: card.keys,
           engineOf: (c, k) => byKey.get(`${c}\0${k}`)?.expect ?? null,
           vimOf: (c, k) => {
             const r = byKey.get(`${c}\0${k}`);
@@ -1149,7 +1510,10 @@ if (cmd === "classify") {
       if (r.rule === "delete-viewport-center-characterwise") {
         row.vimLabel ??= row.label;
         row.label =
-          "Delete to the start of the middle visible line (characterwise in VSCodeVim)";
+          "Delete to the start of the middle visible line (characterwise in VSCodeVim" +
+          (pendingOf(r.card).some((key) => /^[0-9]$/.test(key))
+            ? "; count ignored)"
+            : ")");
       }
       if (r.rule === "delete-sentence-object-at-eof") {
         row.vimLabel ??= row.label;
@@ -1165,6 +1529,23 @@ if (cmd === "classify") {
           (pendingOf(r.card).some((key) => /^[0-9]$/.test(key))
             ? " (VSCodeVim ignores the count)"
             : "");
+      }
+      if (r.rule === "normal-control-t-cleared-jumps") {
+        row.vimLabel ??= row.label;
+        const count =
+          Number(
+            pendingOf(r.card)
+              .filter((key) => /^[0-9]$/.test(key))
+              .join(""),
+          ) || 1;
+        row.label = `Go ${count} ${count === 1 ? "entry" : "entries"} back in the jump list (VSCodeVim Ctrl-T)`;
+      }
+      if (
+        r.rule === "dot-replays-recorded-delete" &&
+        pendingOf(r.card).includes('"')
+      ) {
+        row.vimLabel ??= row.label;
+        row.label = `${row.vimLabel} (VSCodeVim ignores the register prefix)`;
       }
       for (const set of row.sets) {
         if (!r.engine[set]) continue;
