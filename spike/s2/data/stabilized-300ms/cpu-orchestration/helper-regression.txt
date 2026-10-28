@@ -1,0 +1,13 @@
+Original frozen cpu.sh: bash -n exits 0; the executable helper regression exits 1 with SyntaxError: Unexpected end of input.
+Corrected cpu.sh: bash -n exits 0; node --test spike/s2/batch/cpu-windows.test.mjs exits 0.
+The test executes 14 real Node helper calls across empty, valid and fatal/rerunnable fixtures, including scenario and arm filtering.
+
+✔ CPU window counts execute the embedded Node argument intact (283.78956ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 321.999182

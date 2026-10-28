@@ -22,7 +22,7 @@ windows() { # <file> <scenario|any> <arm|any> <valid|all|fatal>
     const [f, s, a, which] = process.argv.slice(1);
     const rs = fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse) : [];
     const pick = { valid: (r) => r.valid === true, all: () => true,
-      // The summary's rule: an error may be rerun only before the probe's hello with the adapter
+      // The summary rule: an error may be rerun only before the probe hello with the adapter
       // off; an invalid window only when cpu.mjs marked it rerunnable.
       fatal: (r) => r.error ? !(r.phase === "boot" && r.arm === "off") : r.valid !== true && r.rerunnable !== true }[which];
     console.log(rs.filter((r) => (s === "any" || r.scenario === s) && (a === "any" || r.arm === a) && pick(r)).length);
