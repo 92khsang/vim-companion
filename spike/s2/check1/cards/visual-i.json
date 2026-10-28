@@ -382,6 +382,29 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [4, 0],
+              "mode": "visual"
+            },
+            "rule": "visual-text-object-keeps-visual-mode",
+            "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 1
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -422,6 +445,29 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [4, 0],
+              "mode": "visual"
+            },
+            "rule": "visual-text-object-keeps-visual-mode",
+            "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 1
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

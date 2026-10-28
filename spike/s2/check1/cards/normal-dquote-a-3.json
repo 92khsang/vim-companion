@@ -1055,7 +1055,7 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move back by a word (VSCodeVim uses b; Vim uses B)",
+      "label": "Move 3 words back (VSCodeVim uses b; Vim uses B)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
@@ -2920,7 +2920,7 @@
       "key": "a",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Append after the cursor (the text is repeated 3 times)",
+      "label": "Ignore a after this register prefix (VSCodeVim)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L393 |a|",
       "expect": {
@@ -2933,6 +2933,30 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Append after the cursor (the text is repeated 3 times)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "register-prefix-rejects-insert",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 2
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3072,7 +3096,7 @@
       "key": "i",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert before the cursor (the text is repeated 3 times)",
+      "label": "Ignore i after this register prefix (VSCodeVim)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L408 |i|",
       "expect": {
@@ -3085,6 +3109,30 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Insert before the cursor (the text is repeated 3 times)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "register-prefix-rejects-insert",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 2
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

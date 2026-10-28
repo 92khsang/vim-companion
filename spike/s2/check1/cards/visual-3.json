@@ -890,7 +890,7 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Move back by a word (VSCodeVim uses b; Vim uses B)",
+      "label": "Move 3 words backward (VSCodeVim uses b; Vim uses B)",
       "labelFrom": "index",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
@@ -1932,7 +1932,7 @@
       "key": "I",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Insert at the start of the highlighted lines",
+      "label": "Insert at the selection start (VSCodeVim)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L941 |v_b_I|",
       "expect": {
@@ -1945,6 +1945,30 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Insert at the start of the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "visual-insert-selection-boundary",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 1
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

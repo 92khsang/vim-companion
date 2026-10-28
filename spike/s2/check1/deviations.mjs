@@ -11,7 +11,7 @@
 //   apply <classification.json> <pass label> [--merge]
 //       writes `vscodevim` into spike/s2/check1/cards/*.json; --merge preserves other rows
 // Usage: node spike/s2/check1/deviations.mjs classify|apply ...
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { REPO, START } from "../harness/lib.mjs";
 import { cardFile, harnessCursor } from "./lib.mjs";
@@ -336,6 +336,58 @@ export const RULES = [
       };
     },
   },
+  {
+    id: "register-prefix-rejects-insert",
+    title: "i and a do nothing after a pending register prefix",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+    applies: ({ mode, pending, ops, key }) =>
+      mode === "normal" &&
+      ops.length === 0 &&
+      pending.includes('"') &&
+      ["a", "+", "_"].includes(pending[pending.indexOf('"') + 1]) &&
+      ["i", "a"].includes(key),
+    transform() {
+      return { text: "unchanged", cursor: START_POS, mode: "normal" };
+    },
+  },
+  {
+    id: "visual-insert-selection-boundary",
+    title:
+      "I/A use the Visual selection boundary or the selected line boundary",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+    applies: ({ mode, ops, key }) =>
+      ["visual", "visual-line"].includes(mode) &&
+      ops.length === 0 &&
+      ["I", "A"].includes(key),
+    transform(w, { mode, key }) {
+      const column =
+        mode === "visual"
+          ? START_POS[1] + (key === "A" ? 1 : 0)
+          : key === "A"
+            ? START.lines[START_POS[0]].length
+            : START.lines[START_POS[0]].search(/\S/);
+      return { ...w, cursor: [START_POS[0], column], mode: "insert" };
+    },
+  },
+  {
+    id: "visual-text-object-keeps-visual-mode",
+    title:
+      "paragraph and sentence objects keep Visual mode and include the fixture's trailing empty line",
+    documented:
+      "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+    applies: ({ card, key }) =>
+      ['visual ["i"]', 'visual ["a"]'].includes(card) &&
+      ["p", "s"].includes(key),
+    transform() {
+      return {
+        text: "unchanged",
+        cursor: [START.lines.length, 0],
+        mode: "visual",
+      };
+    },
+  },
 ];
 
 // ---------- comparison of an expectation with a measured trial ----------
@@ -523,6 +575,62 @@ if (cmd === "classify") {
     tally[k] = (tally[k] ?? 0) + 1;
   }
   console.log(JSON.stringify({ failing: rows.length, tally }));
+} else if (cmd === "predict") {
+  // Derive expectations from source rules before measuring them. This writes a focused input,
+  // never the authored cards, and marks each result as a prediction rather than measured evidence.
+  const [buildDir, outDir, names] = args;
+  const selected = names.split(",");
+  if (selected.some((id) => !RULES.some((rule) => rule.id === id)))
+    throw new Error("unknown source rule");
+  mkdirSync(outDir, { recursive: true });
+  for (const set of ["defaults", "extensions"]) {
+    const cards = JSON.parse(
+      readFileSync(join(buildDir, `correctness-${set}.json`), "utf8"),
+    );
+    const byKey = new Map(
+      cards.flatMap((c) => c.rows.map((r) => [`${c.id}\0${r.key}`, r])),
+    );
+    const output = [];
+    for (const card of cards) {
+      const rows = [];
+      for (const row of card.rows) {
+        if (!row.expect) continue;
+        const pending = pendingOf(card.id);
+        const ctx = {
+          card: card.id,
+          key: row.key,
+          mode: modeOf(card.id),
+          pending,
+          ops: opsOf(pending),
+          sample: row.sample,
+          engineOf: (c, k) => byKey.get(`${c}\0${k}`)?.expect ?? null,
+          vimOf: (c, k) => {
+            const r = byKey.get(`${c}\0${k}`);
+            return r ? (r.vim ?? r.expect) : null;
+          },
+        };
+        for (const rule of RULES.filter((r) => selected.includes(r.id))) {
+          if (!rule.applies(ctx)) continue;
+          const expect = rule.transform(row.vim ?? row.expect, ctx);
+          if (!expect) continue;
+          rows.push({
+            ...row,
+            expect,
+            prediction: { rule: rule.id, documented: rule.documented },
+          });
+          break;
+        }
+      }
+      if (rows.length) output.push({ ...card, rows });
+    }
+    writeFileSync(
+      join(outDir, `correctness-${set}.json`),
+      JSON.stringify(output, null, 1) + "\n",
+    );
+    console.log(
+      `${set}: ${output.reduce((n, c) => n + c.rows.length, 0)} predicted rows`,
+    );
+  }
 } else if (cmd === "apply") {
   const [classFile, passLabel] = args;
   const rows = JSON.parse(readFileSync(classFile, "utf8")).filter(
@@ -578,8 +686,30 @@ if (cmd === "classify") {
         row.vimLabel ??= row.label;
         row.label =
           r.rule === "ctrl-left-is-small-word"
-            ? "Move back by a word (VSCodeVim uses b; Vim uses B)"
+            ? `${card.rows.find((x) => x.key === "b").label} (VSCodeVim uses b; Vim uses B)`
             : `Move to the ${r.key === "H" ? "first" : "last"} visible line (VSCodeVim ignores the count)`;
+        for (const value of Object.values(row.bySet ?? {})) {
+          if (value.label) {
+            value.vimLabel ??= value.label;
+            value.label = row.label;
+          }
+        }
+      }
+      if (
+        r.rule === "register-prefix-rejects-insert" ||
+        r.rule === "visual-insert-selection-boundary"
+      ) {
+        row.vimLabel ??= row.label;
+        row.label =
+          r.rule === "register-prefix-rejects-insert"
+            ? `Ignore ${r.key} after this register prefix (VSCodeVim)`
+            : r.card.startsWith("visual-line")
+              ? r.key === "I"
+                ? "Insert before the first nonblank of the selected line"
+                : "Append at the end of the selected line"
+              : r.key === "I"
+                ? "Insert at the selection start (VSCodeVim)"
+                : "Append after the selection end (VSCodeVim)";
         for (const value of Object.values(row.bySet ?? {})) {
           if (value.label) {
             value.vimLabel ??= value.label;
