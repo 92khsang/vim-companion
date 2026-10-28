@@ -10,7 +10,7 @@ Documented: [UndoOnLine](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384
 
 Measured: the four-row functional smoke in `functional-smoke.jsonl` passed on 1.141.0 defaults. It recorded scroll 7 changing to 0, visible model lines 0 through 4, and a history with two steps/six changes becoming empty while registers stayed unchanged. That run used a dirty development tree and is only an instrumentation check, not formal card evidence.
 
-The ordered regression input first leaves uppercase changes in history, then sets scroll to 7 through Ex, exercises the named `Ctrl-D` preparation, and checks standalone black-hole-register `U`. Formal four-condition verification has not yet run. From a clean frozen checkout with standard sandbox paths exported:
+The ordered regression input first leaves uppercase changes in history, then sets scroll to 7 through Ex, exercises the named `Ctrl-D` preparation, and checks standalone black-hole-register `U`. Measured: all 16 formal trials passed on VS Code 1.134.0 and 1.141.0, defaults and extensions, at clean commit `a0abfc39ed099069e334e0260f350281fa170943` (build `6a33c65ff679fc7e`). The exact ordered coverage and every preparation assertion listed below passed. Raw records are in `raw/`, with checks and hashes in `verification.json`. The Ex-register and U acceptance matrices remain separate. From a clean frozen checkout with standard sandbox paths exported:
 
 ```bash
 export S2_CPUS=8-15 S2_NAME_PREFIX=state-prep-
