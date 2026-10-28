@@ -85,11 +85,10 @@
       "key": "/",
       "sets": ["defaults", "extensions"],
       "source": "hand",
-      "reason": "outside: window; q/ (window)",
+      "reason": "outside: history UI; VSCodeVim opens a QuickPick without changing the buffer, cursor or registers until an item is selected",
       "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L422 |q/|",
       "labelFrom": "hand",
-      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
         "layout": "harness"
@@ -101,17 +100,26 @@
           "mode": "normal"
         },
         "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378, src/cmd_line/commandLine.ts L335-352 await a quick pick."
-      }
+      },
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "quickPick": {
+          "placeholder": "Vim search history",
+          "focused": true
+        }
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L306-370 (ShowCommandHistory and ShowSearchHistory await the history QuickPick before running its selection); src/cmd_line/commandLine.ts L335-352 (search-history QuickPick placeholder). The row checks the visible, focused history picker; its items depend on the session history."
     },
     {
       "key": ":",
       "sets": ["defaults", "extensions"],
       "source": "hand",
-      "reason": "outside: window; q: (window)",
+      "reason": "outside: history UI; VSCodeVim opens a QuickPick without changing the buffer, cursor or registers until an item is selected",
       "label": "Show the : command history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L421 |q:|",
       "labelFrom": "hand",
-      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
         "layout": "harness"
@@ -123,17 +131,26 @@
           "mode": "normal"
         },
         "expectBasis": "VSCodeVim 1.32.4: ShowCommandHistory src/actions/commands/actions.ts L305-322 awaits vscode.window.showQuickPick; until it closes nothing else changes."
-      }
+      },
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "quickPick": {
+          "placeholder": "Vim command history",
+          "focused": true
+        }
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L306-370 (ShowCommandHistory and ShowSearchHistory await the history QuickPick before running its selection); src/cmd_line/commandLine.ts L335-352 (search-history QuickPick placeholder). The row checks the visible, focused history picker; its items depend on the session history."
     },
     {
       "key": "?",
       "sets": ["defaults", "extensions"],
       "source": "hand",
-      "reason": "outside: window; q? (window)",
+      "reason": "outside: history UI; VSCodeVim opens a QuickPick without changing the buffer, cursor or registers until an item is selected",
       "label": "Show the search history in a quick pick (VSCodeVim; Vim opens the command-line window)",
       "labelIndex": "index.txt L423 |q?|",
       "labelFrom": "hand",
-      "pending": "undetermined: Vim opens the command-line window, a buffer that lists the session's command or search history, and earlier rows of a VSCodeVim session fill that history",
       "oracle": {
         "vimrc": "expect-sw2.vimrc",
         "layout": "harness"
@@ -145,7 +162,17 @@
           "mode": "normal"
         },
         "expectBasis": "VSCodeVim 1.32.4: ShowSearchHistory src/actions/commands/actions.ts L331-378 (backward when the pick is accepted)."
-      }
+      },
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "quickPick": {
+          "placeholder": "Vim search history",
+          "focused": true
+        }
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L306-370 (ShowCommandHistory and ShowSearchHistory await the history QuickPick before running its selection); src/cmd_line/commandLine.ts L335-352 (search-history QuickPick placeholder). The row checks the visible, focused history picker; its items depend on the session history."
     },
     {
       "key": "q",

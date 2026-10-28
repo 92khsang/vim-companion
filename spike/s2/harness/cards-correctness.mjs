@@ -58,6 +58,16 @@ const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>"]);
 // status bar item over CDP. Mode.Disabled is 12 (mode.ts L4-L18), "other-12" in the fixture's names.
 const DISABLED_TEXT = "-- VIM: DISABLED --";
 const DISABLED_MODE = "other-12";
+// History commands await a QuickPick selection. Inspect the rendered picker before cancelling
+// it in the next trial's reset, so an unchanged editor alone cannot pass a history-UI row.
+const HISTORY_PICKER_JS = `(() => {
+  const widget = document.querySelector('.quick-input-widget');
+  const input = widget?.querySelector('input');
+  const visible = !!widget && getComputedStyle(widget).display !== 'none' &&
+    getComputedStyle(widget).visibility !== 'hidden' && widget.getBoundingClientRect().height > 0;
+  return { visible, placeholder: input?.getAttribute('placeholder') ?? null,
+    focused: visible && document.activeElement === input };
+})()`;
 const DEFAULTS = {
   "vim.surround": true,
   "vim.targets.enable": false,
@@ -438,7 +448,11 @@ try {
               expectedRegisters[String(n + 1)] = canon(prev);
           }
         }
+        const historyPicker = row.expect.quickPick
+          ? await cdpEvaluate(Number(cdpPort), HISTORY_PICKER_JS)
+          : null;
         const got = {
+          ...(historyPicker ? { quickPick: historyPicker } : {}),
           text: active ? active.text.replace(/\n$/, "").split("\n") : null,
           cursor: active ? active.selections[0].slice(2) : null,
           mode,
@@ -455,6 +469,9 @@ try {
         // Registers named in the expectation must hold the given value; every other register must
         // hold what it held before the key.
         const want = {
+          ...(row.expect.quickPick
+            ? { quickPick: { visible: true, ...row.expect.quickPick } }
+            : {}),
           text: expectedText(row.expect),
           cursor: row.expect.cursor,
           mode: row.expect.mode,
@@ -462,6 +479,10 @@ try {
         };
         const sortEntries = (o) => JSON.stringify(Object.entries(o).sort());
         const diff = [
+          [
+            "quickPick",
+            JSON.stringify(got.quickPick) !== JSON.stringify(want.quickPick),
+          ],
           ["text", JSON.stringify(got.text) !== JSON.stringify(want.text)],
           [
             "cursor",
@@ -488,6 +509,14 @@ try {
           diff,
           got,
           want,
+          // Full register snapshots let a later, independently authored expectation be checked
+          // without guessing whether an omitted register changed or stayed unchanged.
+          beforeRegisters: Object.fromEntries(
+            Object.entries(before).map(([k, v]) => [k, canon(regValue(v))]),
+          ),
+          afterRegisters: Object.fromEntries(
+            Object.entries(after).map(([k, v]) => [k, canon(regValue(v))]),
+          ),
           activeFile: snap.active?.replace(/^.*\//, ""),
           knownDeviation: row.knownDeviation ?? null,
           modeFrom,

@@ -85,6 +85,16 @@ function expectProblems(e) {
       p.push(`expect.registers.${name}`);
   if ("shiftNumbered" in e && typeof e.shiftNumbered !== "boolean")
     p.push("expect.shiftNumbered");
+  if (
+    "quickPick" in e &&
+    !(
+      e.quickPick &&
+      typeof e.quickPick.placeholder === "string" &&
+      e.quickPick.placeholder.length > 0 &&
+      e.quickPick.focused === true
+    )
+  )
+    p.push("expect.quickPick");
   return p;
 }
 const hasTodo = (v) =>
