@@ -1,0 +1,4076 @@
+{
+  "card": "visual-block []",
+  "title": "visual-block after <C-v>",
+  "keys": ["<C-v>"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the next line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
+      "label": "Open the which-key leader menu (VS Code remap)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "spec/generated/vscode/vim-remaps.json visualModeKeyBindingsNonRecursive: <space> runs whichkey.show (which-key 0.11.4 \"Show Menu\", a quick pick); remapper.ts L486-L527; the selection stays"
+    },
+    {
+      "key": "!",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Filter the highlighted lines through an external command: opens :'<,'>!",
+      "labelIndex": "index.txt L925 |v_!|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-6"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_!*: opens the command line with :'<,'>! (Visual mode ends, the cursor at the start of the area, (1,13)); rule (b): the probe reads other-6 (CommandlineInProgress)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-6"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-6"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Use a register for the next command: waits for the register name",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Extend the block to the end of every line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13],
+          "toLineEnd": true,
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Jump to the match of the next bracket on the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L259 |%|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 24],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Jump to the first non-blank of the line of a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one sentence backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one sentence forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 20],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the next line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "Repeat the last f, t, F or T in the opposite direction",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 8],
+          "visualStart": [1, 22],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the previous line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Search forward to extend the selection: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-5"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-5"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first character of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ":",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Start an Ex command line for the highlighted lines (:'<,'>)",
+      "labelIndex": "index.txt L927 |v_:|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-6"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim cmdline.txt *:* (with a count, *N:* gives .,.+N-1); rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-6 (CommandlineInProgress), text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-6"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-6"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "Repeat the last f, t, F or T",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 23],
+          "visualStart": [1, 22],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); Visual-block mode starts at (1,22)"
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift the text from the block's left edge left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L929 |v_<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one character left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L916 |v_<BS>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Move one character left",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*)"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the end of the last line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 20],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the first line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-[>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Stop Visual mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L923 |v_<Esc>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Add 1 to the numbers in the selection",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L913 |v_CTRL-A|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-b>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-b> (view)",
+      "label": "Scroll the window one page up",
+      "labelIndex": "index.txt L207 |CTRL-B|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 14],
+              "mode": "visual-block"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 14],
+              "mode": "visual-block"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-c>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Stop Visual mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L914 |v_CTRL-C|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-d>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-d> (view)",
+      "label": "Scroll half a window down and move the cursor as many lines",
+      "labelIndex": "index.txt L209 |CTRL-D|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13); 'startofline' applies in Visual-block mode too (checked on another buffer)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 0],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "<C-e>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-e> (view)",
+      "label": "Scroll the window one line down",
+      "labelIndex": "index.txt L210 |CTRL-E|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
+    },
+    {
+      "key": "<C-f>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-f> (view)",
+      "label": "Scroll the window one page down",
+      "labelIndex": "index.txt L211 |CTRL-F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 0],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one word backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 11],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the next line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-q>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Stop blockwise Visual mode (like <C-v>)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/visual.ts L66-L74: in Visual-block mode <C-q> is ExitVisualBlockMode with <C-v>"
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one word forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 18],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-u>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-u> (view)",
+      "label": "Scroll half a window up and move the cursor as many lines",
+      "labelIndex": "index.txt L232 |CTRL-U|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
+    },
+    {
+      "key": "<C-v>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Stop Visual mode",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L920 |v_CTRL-V|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-x>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Subtract 1 from the numbers in the selection",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L922 |v_CTRL-X|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-y>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: view; <c-y> (view)",
+      "label": "Scroll the window one line up",
+      "labelIndex": "index.txt L237 |CTRL-Y|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "setup": ["z", "b"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim scroll.txt *CTRL-E* *CTRL-Y* *CTRL-D* *CTRL-U* *CTRL-F* *CTRL-B* and options.txt 'startofline' (default on: CTRL-D/U/F/B move to the first non-blank); setup zb puts the window at the top of the 4-line buffer in both engines; the VS Code editor shows the whole buffer, so CTRL-D, CTRL-F and CTRL-U stop at the last or first line and CTRL-B and CTRL-Y cannot scroll; CTRL-E and CTRL-Y keep the column (curswant); Vim's behaviour on a buffer shorter than the window checked on another buffer (cores 28-31); in Visual mode the moved cursor extends the selection from (1,13)"
+      }
+    },
+    {
+      "key": "<D-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Select all lines in Visual Line mode",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "visual-line"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/actions.ts L249-L261: CommandCmdA selects from line 0 to line lineCount-1 in Visual Line mode; VS Code's buffer has a fifth, empty line after the final newline, so the active end is (4,0) (src/mode/modeHandler.ts L1328-L1334)"
+    },
+    {
+      "key": "<D-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Move to the first character of the line",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1026-L1040: <D-left> is MoveLineBegin with 0 and <Home> (only without a count); the motion is Vim's 0 (motion.txt *0*)"
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Move to the end of the line",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13],
+          "toLineEnd": true
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1013-L1024: <D-right> is MoveLineEnd with $ and <End>; the motion is Vim's $ (motion.txt *$*)"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Extend the block to the end of every line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13],
+          "toLineEnd": true,
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<Esc>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Stop Visual mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L923 |v_<Esc>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<ExtensionDisable>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Turn VSCodeVim off",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-12"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/actions.ts L28-L48: DisableExtension sets Mode.Disabled (src/mode/mode.ts L4-L18: value 12, probe other-12) and moves nothing; modeHandler.ts L1349-L1352 draws a collapsed selection at the stop"
+    },
+    {
+      "key": "<Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first character of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Move one character left",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*)"
+    },
+    {
+      "key": "<copy>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Copy the block to the system clipboard and stop Visual mode",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/actions.ts L190-L245: CommandOverrideCopy copies the selection to the system clipboard (Clipboard.Copy, not a VSCodeVim register) only when text is selected, then sets Normal mode (Visual block: the block lines; the stop stays at (1,13))"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one character left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one character right",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "=",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Format the selected lines and return to Normal mode (no plaintext formatter is installed)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L931 |v_=|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Re-indent the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift the text from the block's left edge right",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L934 |v_>|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "indentation": "VS Code gives the fixture buffer Spaces: 2 (editor.detectIndentation, not pinned in the sandbox), so the answer of expect-sw2.vimrc"
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Search backward to extend the selection: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged; rule (b) of spike/s2/README.md \"Check (1) input\" (measured after v :): the probe reads the mode, text and cursor unchanged at (1,13); Vim's cursor stays at (1,13)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-5"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "other-5"
+            },
+            "rule": "command-line-keeps-visual-selection",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L1294-L1302 (updateView: in SearchInProgressMode and CommandlineInProgress the selection is drawn in commandLine.previousMode)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "A",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Append after the block on every line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L936 |v_b_A|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 14],
+        "mode": "insert"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one WORD backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 11],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "C",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change from the block to the line ends without writing a register (VSCodeVim)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L938 |v_C|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["wo\", [three]) { four(five) }"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["wo\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Change to the end of the line on every line of the block",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "D",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of the line on every line of the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L940 |v_D|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["wo\", [three]) { four(five) }"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["wo\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["wo\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["wo\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the end of the WORD",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 16],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the last line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 0],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first line of the window",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "I",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert before the block on every line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L941 |v_b_I|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "insert"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "J",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Join the next line and retain Visual Block mode",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L943 |v_J|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 41],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Join the highlighted lines (at least two)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 42],
+              "mode": "visual-block"
+            },
+            "rule": "single-block-join-retains-visual-mode",
+            "documented": "VSCodeVim 1.32.4 visual.ts L54-L63 enters the single-cell block before the following count/register prefix. commands/join.ts L161-L170 passes count=1; execJoinLines L87-L96 keeps VisualBlock when start equals stop and applies column diff41-13. transformations/execute.ts L297-L300 moves both block endpoints to [1,41]; textEditor.ts L232-L240 and modeHandler.ts L1336-L1346 render primary active [1,42]. Text is line1 + space + trimmed line2; all registers stay unchanged. Scoped to exact plain/count3/named-a VisualBlock contexts, C-v before the prefix, no setup/sample, fixed single-cell fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 42],
+              "mode": "visual-block"
+            },
+            "rule": "single-block-join-retains-visual-mode",
+            "documented": "VSCodeVim 1.32.4 visual.ts L54-L63 enters the single-cell block before the following count/register prefix. commands/join.ts L161-L170 passes count=1; execJoinLines L87-L96 keeps VisualBlock when start equals stop and applies column diff41-13. transformations/execute.ts L297-L300 moves both block endpoints to [1,41]; textEditor.ts L232-L240 and modeHandler.ts L1336-L1346 render primary active [1,42]. Text is line1 + space + trimmed line2; all registers stay unchanged. Scoped to exact plain/count3/named-a VisualBlock contexts, C-v before the prefix, no setup/sample, fixed single-cell fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last line of the window",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 0],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the middle line of the window",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 2],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; N reads the last search",
+      "label": "Repeat the last search in the opposite direction",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 7],
+          "visualStart": [2, 9],
+          "docLines": 5
+        },
+        "mode": "visual-block",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      }
+    },
+    {
+      "key": "O",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the other corner of the block on the same line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L945 |v_O|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "P",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; P reads the register",
+      "label": "Replace the block with the text (the unnamed register is kept)",
+      "labelIndex": "index.txt L946 |v_P|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_P*: like v_p, but the unnamed register is not changed"
+      }
+    },
+    {
+      "key": "R",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Change the current line content (blockwise)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L949 |v_R|",
+      "expect": {
+        "text": {
+          "1": "  "
+        },
+        "cursor": [1, 2],
+        "mode": "insert",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines and start insert",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "S",
+      "sets": ["defaults", "extensions"],
+      "bySet": {
+        "defaults": {
+          "source": "vim-oracle",
+          "label": "Change the current line content (blockwise)",
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
+          "expect": {
+            "text": {
+              "1": "  "
+            },
+            "cursor": [1, 2],
+            "mode": "insert",
+            "registers": {
+              "1": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              },
+              "\"": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              }
+            },
+            "shiftNumbered": true
+          },
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "basis": "src/actions/commands/actions.ts L945-L953: in Visual-block mode S is VisualBlockChangeLine; surround has no Visual-block S (plugins/surround.ts L142-L176 cover Visual and Visual Line only); expectation from Vim index.txt *v_S* with 'autoindent'"
+          },
+          "vimLabel": "Delete the highlighted lines and start insert",
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "source": "vim-oracle",
+          "label": "Change the current line content (blockwise)",
+          "labelFrom": "hand",
+          "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
+          "expect": {
+            "text": {
+              "1": "  "
+            },
+            "cursor": [1, 2],
+            "mode": "insert",
+            "registers": {
+              "1": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              },
+              "\"": {
+                "mode": "line",
+                "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+              }
+            },
+            "shiftNumbered": true
+          },
+          "oracle": {
+            "from": "R",
+            "note": "the card's R row under the same set"
+          },
+          "previousHand": {
+            "expect": {
+              "text": {
+                "1": "  "
+              },
+              "cursor": [1, 2],
+              "mode": "insert",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "basis": "src/actions/commands/actions.ts L945-L953: VisualBlockChangeLine does not check vim.sneak and base.ts L257-L279 returns the first complete action, so sneak's S never starts; expectation from Vim index.txt *v_S* with 'autoindent'"
+          },
+          "vimLabel": "Delete the highlighted lines and start insert",
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      },
+      "label": "Change the current line content (blockwise)"
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to just after the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "U",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: undo history; U reads the undo history",
+      "label": "Make the block uppercase",
+      "labelIndex": "index.txt L953 |v_U|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_U*: uppercase the area (the w at (1,13)), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      }
+    },
+    {
+      "key": "V",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Switch to linewise Visual mode",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L954 |v_V|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-line"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one WORD forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 18],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "X",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the highlighted lines",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L956 |v_X|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "Y",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank the current line linewise and return to Normal mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L957 |v_Y|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Yank the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-yank-linewise",
+            "documented": "VSCodeVim 1.32.4 operator.ts L294-L303 forces LineWise for ShiftYankOperatorVisual; YankOperator L213-L215 reads the entire selected line and L249-L254 returns Normal at [1,0] from VisualBlock. Count after C-v does not extend the selection. The outer command has no yank_op/yank_full_line name, so register/register.ts L208-L228 does not write 0. Only named-a plus unnamed, or unnamed alone, receive the line; all other baseline registers remain. Scoped to the exact plain/count3/named-a single-cell VisualBlock contexts, no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-yank-linewise",
+            "documented": "VSCodeVim 1.32.4 operator.ts L294-L303 forces LineWise for ShiftYankOperatorVisual; YankOperator L213-L215 reads the entire selected line and L249-L254 returns Normal at [1,0] from VisualBlock. Count after C-v does not extend the selection. The outer command has no yank_op/yank_full_line name, so register/register.ts L208-L228 does not write 0. Only named-a plus unnamed, or unnamed alone, receive the line; all other baseline registers remain. Scoped to the exact plain/count3/named-a single-cell VisualBlock contexts, no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L376 |[|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L378 |]|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 2],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 2],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Jump to a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Select a text object: waits for the object",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L393 |a|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one word backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "c",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the block and start insert",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L979 |v_c|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "d",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L980 |v_d|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the end of the word",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L406 |g|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one character left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Select an inner text object: waits for the object",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L408 |i|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one line up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one character right",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; n reads the last search",
+      "label": "Repeat the last search",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [2, 9],
+          "docLines": 5
+        },
+        "mode": "visual-block",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; Visual-block mode starts at (2,9)"
+      }
+    },
+    {
+      "key": "o",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the other corner of the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1009 |v_o|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; p reads the register",
+      "label": "Replace the block with the text",
+      "labelIndex": "index.txt L1010 |v_p|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "block",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_p*: the one-character block (t after the setup yiw) is replaced by the charwise register; the replaced text goes to the unnamed and small delete registers as a block (checked on another buffer); cursor on the last put character"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "single-cell-put-and-change",
+            "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "single-cell-put-and-change",
+            "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Record a macro: waits for the register",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L418 |q|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Replace every character of the block: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1012 |v_r|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "replace"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "while `r` waits for its character Vim shows Replace mode (mode(1) R), but the state is the card's mode with `r` pending, as the grammar fixture states it (spec/fixtures/grammar/character-arguments.json replace-character, from Vim's help)"
+      }
+    },
+    {
+      "key": "s",
+      "sets": ["defaults", "extensions"],
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "insert",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "bySet": {
+        "defaults": {
+          "labelFrom": "index",
+          "source": "vim-oracle",
+          "label": "Delete highlighted area and start insert",
+          "labelIndex": "index.txt L1013 |v_s|",
+          "oracle": {
+            "vimrc": "expect-sw2.vimrc",
+            "layout": "single",
+            "doc": "document",
+            "size": "43x42"
+          },
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "labelFrom": "hand",
+          "source": "hand",
+          "label": "Delete the block and start insert (sneak does not take s in Visual-block mode)",
+          "reason": "plugin:sneak: sneak redefines s and S",
+          "basis": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+          "previousHand": {
+            "label": "Delete the block and start insert (sneak does not take s in Visual-block mode)",
+            "reason": "plugin:sneak: sneak redefines s and S",
+            "basis": "src/actions/commands/actions.ts L691-L727: VisualBlockChange (c, s) does not check vim.sneak; base.ts L257-L279 returns the first complete action, so sneak's s never starts; expectation from Vim visual.txt *v_b_c* (v_s): the block goes to the unnamed and small delete registers as a block (checked on another buffer for v_p)",
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                },
+                "-": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            }
+          },
+          "expect": {
+            "text": {
+              "1": "  if (one, \"to\", [three]) { four(five) }"
+            },
+            "cursor": [1, 13],
+            "mode": "insert",
+            "registers": {
+              "\"": {
+                "mode": "block",
+                "lines": ["w"]
+              }
+            }
+          },
+          "measured": {
+            "pass": "source-wave4 (2231a60; actual Ex contents)",
+            "trials": {
+              "extensions 1.134.0": {
+                "trials": 3
+              },
+              "extensions 1.141.0": {
+                "trials": 3
+              }
+            },
+            "verdict": "match",
+            "note": "Every trial matched the independently authored source prediction, including full register baselines."
+          }
+        }
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to just before the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "u",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: undo history; u reads the undo history",
+      "label": "Make the block lowercase",
+      "labelIndex": "index.txt L1014 |v_u|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *v_u*: lowercase the area (already lowercase), Normal mode, cursor at the start of the area; the work list's state reason (undo) does not apply in Visual mode"
+      }
+    },
+    {
+      "key": "v",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Switch to characterwise Visual mode",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1015 |v_v|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one word forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "x",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1017 |v_x|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "y",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Yank the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1018 |v_y|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "block",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "block",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 5
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "block",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "z",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a z command: waits for the next key",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L436 |z|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one paragraph backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual-block"
+      },
+      "labelFrom": "hand",
+      "basis": "VSCodeVim's leader is \\ (package.json vim.leader default); camelCaseMotion's <leader>w/b/e need vim.camelCaseMotion.enable (src/actions/plugins/camelCaseMotion.ts L11-L18), easymotion's <leader><leader> actions do not check vim.easymotion in couldActionApply (src/actions/plugins/easymotion/easymotion.cmd.ts L74-L77 checks it only in exec), so the leader waits in both sets",
+      "bySet": {
+        "defaults": {
+          "label": "Wait after the leader for an easymotion key (easymotion is off)",
+          "labelFrom": "hand"
+        },
+        "extensions": {
+          "label": "Wait after the leader for a camelCaseMotion or easymotion key",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Start a count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to column 1",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one paragraph forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [4, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual-block"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [3, 19],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual-block"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "~",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Switch the case of the block",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L1019 |v_~|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

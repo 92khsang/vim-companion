@@ -1,0 +1,51 @@
+{
+  "card": "normal [\"`\"]",
+  "title": "normal after `",
+  "keys": ["`"],
+  "rows": [
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: mark or jump; `` reads the mark or jump",
+      "label": "Jump back to the position before the latest jump",
+      "labelIndex": "index.txt L390 |``|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["g", "g"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *``*: the setup gg is a jump from (1,13), so `` returns there"
+      }
+    },
+    {
+      "key": "{<register>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "a",
+      "setup": ["m", "a", "0"],
+      "source": "vim-oracle",
+      "label": "Jump to mark {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

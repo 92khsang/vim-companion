@@ -1,0 +1,68 @@
+{
+ "version": "1.141.0",
+ "hello": {
+  "vscode": "1.141.0",
+  "pid": 3639702,
+  "vim": {
+   "version": "1.32.4",
+   "active": true
+  },
+  "whichkey": {
+   "version": "0.11.4",
+   "active": false
+  },
+  "adapter": null,
+  "extensions": [
+   "vim-companion-spike.s2-probe",
+   "vscodevim.vim",
+   "VSpaceCode.whichkey"
+  ]
+ },
+ "steps": [
+  {
+   "step": "before",
+   "handler": true,
+   "readerMode": "normal",
+   "status": [
+    [
+     "vscodevim.vim.primary",
+     "-- NORMAL --"
+    ],
+    [
+     "vscodevim.vim.showcmd",
+     ""
+    ]
+   ]
+  },
+  {
+   "step": "after toggleVim",
+   "handler": false,
+   "readerMode": null,
+   "status": [
+    [
+     "vscodevim.vim.primary",
+     "-- VIM: DISABLED --"
+    ],
+    [
+     "vscodevim.vim.showcmd",
+     "<ExtensionDisable>"
+    ]
+   ]
+  },
+  {
+   "step": "after the second toggleVim",
+   "handler": true,
+   "readerMode": "normal",
+   "status": [
+    [
+     "vscodevim.vim.primary",
+     "-- NORMAL --"
+    ],
+    [
+     "vscodevim.vim.showcmd",
+     ""
+    ]
+   ]
+  }
+ ]
+}

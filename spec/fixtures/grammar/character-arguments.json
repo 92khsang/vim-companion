@@ -1,0 +1,202 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Keys that wait for one character: a target character, a mark or a register name.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": { "line": 1, "column": 13 }
+  },
+  "cases": [
+    {
+      "id": "find-forward",
+      "description": "f waits for the character to find.",
+      "help": ["f"],
+      "steps": [
+        {
+          "key": "f",
+          "expect": {
+            "mode": "normal",
+            "pending": ["f"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "find-backward",
+      "description": "F waits for the character to find.",
+      "help": ["F"],
+      "steps": [
+        {
+          "key": "F",
+          "expect": {
+            "mode": "normal",
+            "pending": ["F"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "till-forward",
+      "description": "t waits for the character to stop before.",
+      "help": ["t"],
+      "steps": [
+        {
+          "key": "t",
+          "expect": {
+            "mode": "normal",
+            "pending": ["t"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "till-backward",
+      "description": "T waits for the character to stop after.",
+      "help": ["T"],
+      "steps": [
+        {
+          "key": "T",
+          "expect": {
+            "mode": "normal",
+            "pending": ["T"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "replace-character",
+      "description": "r waits for the replacement character.",
+      "help": ["r"],
+      "steps": [
+        {
+          "key": "r",
+          "expect": {
+            "mode": "normal",
+            "pending": ["r"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "set-mark",
+      "description": "m waits for the mark name.",
+      "help": ["m"],
+      "steps": [
+        {
+          "key": "m",
+          "expect": {
+            "mode": "normal",
+            "pending": ["m"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "jump-mark-line",
+      "description": "' waits for the mark name.",
+      "help": ["'"],
+      "steps": [
+        {
+          "key": "'",
+          "expect": {
+            "mode": "normal",
+            "pending": ["'"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "jump-mark-exact",
+      "description": "` waits for the mark name.",
+      "help": ["`"],
+      "steps": [
+        {
+          "key": "`",
+          "expect": {
+            "mode": "normal",
+            "pending": ["`"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "record-macro",
+      "description": "q waits for the register to record into.",
+      "help": ["q"],
+      "steps": [
+        {
+          "key": "q",
+          "expect": {
+            "mode": "normal",
+            "pending": ["q"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "execute-register",
+      "description": "@ waits for the register to execute.",
+      "help": ["@"],
+      "steps": [
+        {
+          "key": "@",
+          "expect": {
+            "mode": "normal",
+            "pending": ["@"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-name",
+      "description": "\" waits for the register name.",
+      "help": ["quote"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}

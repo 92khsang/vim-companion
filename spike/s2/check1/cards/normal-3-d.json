@@ -1,0 +1,4304 @@
+{
+  "card": "normal [\"3\",\"d\"]",
+  "title": "normal after 3d",
+  "keys": ["3", "d"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete back to the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L256 |#|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"wo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["\\<two\\>"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"wo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["\\<two\\>"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of the line 2 lines down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete characterwise to the start of the line at 3% of the file (VSCodeVim)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L263 |N%|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Delete the lines to 3% of the file",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-percent-delete",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-percent-delete",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the line of a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 sentences backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 sentences forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the 3rd match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L291 |star|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"wo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["\\<two\\>"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"wo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["\\<two\\>"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "Delete back to the 3rd repeat of the last f, t, F or T in the opposite direction",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": {
+        "text": {
+          "1": "  if (one) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(fiv"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(fiv"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["0", "f", "e", ";", ";", ";"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,37); 3, (F e, exclusive) reaches (1,8): columns 8-36"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Delete to a search match forward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "Delete to the 3rd repeat of the last f, t, F or T",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": {
+        "text": {
+          "1": "  if (on) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(five"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["e, \"two\", [three]) { four(five"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["0", "f", "e"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup 0fe leaves the cursor at (1,8); 3; reaches (1,37), inclusive"
+      }
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Delete 3 characters to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); change.txt *d*, *quote_-*"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of line 3",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"t",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { four(five) }", "epsilon zeta eta theta"]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"t",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"t",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the lines to line 3",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words backward (VSCodeVim uses b; Vim uses B)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Delete 3 words backward",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onewo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 9],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                }
+              }
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onewo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 9],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                }
+              }
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tfour(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Delete to the end of the line 2 lines down",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1013-L1024: <D-right> is MoveLineEnd with $ and <End>; the motion is Vim's $ (motion.txt *$*); d3$ deletes to the end of line 3, a multi-line delete goes to register 1 (change.txt *quote_number*)"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of the line 2 lines down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "  if (one, \"t"],
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "wo\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Delete 3 characters to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); change.txt *d*, *quote_-*"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Delete to a search match backward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 WORDS backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of the 3rd WORD forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) {"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", [three]) {"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the 3rd previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the lines to line 3",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete linewise through the first visible line (VSCodeVim ignores the count)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Delete the lines to the 3rd line of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete linewise through the last visible line (VSCodeVim ignores the count)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": [
+            "alpha beta gamma delta",
+            "epsilon zeta eta theta",
+            "iota kappa lambda mu"
+          ],
+          "cursor": [1, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Delete the lines to the 3rd line from the bottom of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the start of the middle visible line (characterwise in VSCodeVim; count ignored)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": ["alpha beta gamma delta", "iota kappa lambda mu"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": [
+            "alpha beta gamma delta",
+            "epsilon zeta eta theta",
+            "iota kappa lambda mu"
+          ],
+          "cursor": [1, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Delete the lines to the middle line of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 product commit 110a328ea54b42367b803ec53ee0bf52ef26b419 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 product commit 110a328ea54b42367b803ec53ee0bf52ef26b419 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; N reads the last search",
+      "label": "Delete to the 3rd previous match of the last search",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": {
+        "text": {
+          "2": "epsilon zeta theta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": ["eta "]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["eta "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["eta "]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3N goes (0,7), (2,19), (2,13): dN deletes columns 9-12 of line 2; with N register 1 is always used and - too within a line (change.txt *quote_number*)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "2": "epsilon zeta theta"
+              },
+              "cursor": [2, 9],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["eta "]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["eta "]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "2": "epsilon zeta theta"
+              },
+              "cursor": [2, 9],
+              "mode": "normal",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["eta "]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["eta "]
+                }
+              }
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "unknown",
+              "note": "every value the pass shows matches; some registers were not listed in some trials, because the key wrote the value they already held"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to just after the 3rd previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 WORDS forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tfour(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", [three]) { "]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak backward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L74-L90: after an operator, Z starts SneakBackward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the first non-blank of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  if (onewo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 9],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [", \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [", \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "d",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 lines",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L400 |dd|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the end of the 3rd word forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tthree]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to the 3rd next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one,wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": [" \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": [" \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete an inner text object: waits for the object",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": ["alpha beta gamma delta"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon zeta eta theta",
+              "iota kappa lambda mu",
+              ""
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": ["alpha beta gamma delta"],
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "1": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            },
+            "\"": {
+              "mode": "line",
+              "lines": [
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ]
+            }
+          },
+          "shiftNumbered": true
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "registers",
+            "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete the line and 3 lines above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": [
+              "alpha beta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 characters from the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"t, [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\""]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\""]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; n reads the last search",
+      "label": "Delete to the 3rd next match of the last search",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": {
+        "text": ["alpha beta eta theta", "iota kappa lambda mu"],
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "1": {
+            "mode": "character",
+            "lines": [
+              "eta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon z"
+            ]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": [
+              "eta gamma delta",
+              "  if (one, \"two\", [three]) { four(five) }",
+              "epsilon z"
+            ]
+          }
+        },
+        "shiftNumbered": true
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; from (2,9) 3n wraps to (0,7), so dn deletes (0,7) to (2,8) (exclusive); with n register 1 is always used (change.txt *quote_number*), - only within a line"
+      }
+    },
+    {
+      "key": "s",
+      "when": {
+        "vim.surround": true
+      },
+      "sets": ["defaults"],
+      "source": "hand",
+      "reason": "plugin:surround: row exists only with vim.surround",
+      "labelFrom": "hand",
+      "bySet": {
+        "defaults": {
+          "label": "Delete a surrounding: waits for the surrounding character (surround, ds)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/pluginDefaultMappings.ts (surround maps ds to <plugds>) and plugins/surround.ts L205-L247: waits for <any>",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to just before the 3rd next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tthree]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["wo\", ["]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak forward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L7-L23: after an operator, z starts SneakForward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 paragraphs backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Wait after the leader for a camelCaseMotion motion",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim's leader is \\ (package.json vim.leader default); camelCaseMotion's <leader>w/b/e need vim.camelCaseMotion.enable (src/actions/plugins/camelCaseMotion.ts L11-L18), easymotion's <leader><leader> actions do not check vim.easymotion in couldActionApply (src/actions/plugins/easymotion/easymotion.cmd.ts L74-L77 checks it only in exec), so the leader waits in both sets",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Add a digit to the count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete to column 3",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": {
+          "1": "  wo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["if (one, \"t"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Delete 3 paragraphs forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

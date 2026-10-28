@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Prefix keys that wait for a second key: g, z and <C-w>. g also starts generated remaps (gO, gra and others), so the engine first waits for the mapping timeout; after it the built-in g still waits for its second key. The prefixes [ and ] are in remap-prefixes.json, because they start the generated remaps [d, [e, ]d and ]e.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "g",
+      "description": "g waits for the second key of a g command.",
+      "help": ["g", "map-typing"],
+      "steps": [
+        {
+          "key": "g",
+          "expect": {
+            "mode": "normal",
+            "pending": ["g"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["g"],
+          "operator": null,
+          "count": null,
+          "register": null
+        }
+      }
+    },
+    {
+      "id": "z",
+      "description": "z waits for the second key of a z command.",
+      "help": ["z"],
+      "steps": [
+        {
+          "key": "z",
+          "expect": {
+            "mode": "normal",
+            "pending": ["z"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "window",
+      "description": "<C-w> waits for the window command.",
+      "help": ["CTRL-W"],
+      "steps": [
+        {
+          "key": "<C-w>",
+          "expect": {
+            "mode": "normal",
+            "pending": ["<C-w>"],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        }
+      ]
+    }
+  ]
+}

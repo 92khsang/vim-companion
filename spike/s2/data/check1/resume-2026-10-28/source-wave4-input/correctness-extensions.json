@@ -1,0 +1,1916 @@
+[
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-r>",
+    "label": "Redo the last undone change",
+    "setup": [
+     "x",
+     "x",
+     "x",
+     "u",
+     "u",
+     "u"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"to\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"to\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         "\""
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         "\""
+        ]
+       }
+      }
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/undo.ts L34-45 (Redo has no runsOnceForEachCountPrefix, so it redoes one step) and src/history/historyTracker.ts L832-860 (the cursor returns to the step's start); setup xxx uuu",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-redo-and-g",
+     "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": "<C-y>",
+    "label": "Scroll the view 30 lines up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       13
+      ],
+      "mode": "normal"
+     },
+     "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll); 30 exceeds the 2 lines below the cursor, so the cursor moves 27 lines up, clamped to line 0 at the desired column 13",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "fixed-scroll-positions",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups."
+    }
+   },
+   {
+    "key": "J",
+    "label": "Join 30 lines (all lines here)",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      64
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "join-count-overrun",
+     "documented": "VSCodeVim 1.32.4 join.ts L24-L96 turns count30 into29, getDown (position.ts L323-L329) clamps at final line4, and the join loop adds nonempty lines2/3 separated by one space. Empty line4 does not replace columnDeltaOffset, so the primary column is joined.length minus the final added segment length, namely64. Scoped to Normal30J with no setup/sample and this fixed four-line ASCII fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"d\"]",
+  "title": "normal after 3d",
+  "keys": [
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "%",
+    "label": "Delete the lines to 3% of the file",
+    "expect": {
+     "text": [
+      "wo\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-percent-delete",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"d\",\"3\"]",
+  "title": "normal after d3",
+  "keys": [
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "%",
+    "label": "Delete the lines up to the line 3% into the file",
+    "expect": {
+     "text": [
+      "wo\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-percent-delete",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\"]",
+  "title": "normal after 2d",
+  "keys": [
+   "2",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "%",
+    "label": "Delete to the line at 2% of the file",
+    "expect": {
+     "text": [
+      "wo\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-percent-delete",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\",\"3\"]",
+  "title": "normal after 2d3",
+  "keys": [
+   "2",
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "%",
+    "label": "Delete the lines to the line 6% down the file",
+    "expect": {
+     "text": [
+      "wo\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-percent-delete",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"c\"]",
+  "title": "normal after c",
+  "keys": [
+   "c"
+  ],
+  "rows": [
+   {
+    "key": "<C-End>",
+    "label": "Change to the end of the file",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"t"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   },
+   {
+    "key": "G",
+    "label": "Change the lines down to the last line",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  "
+     ],
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu",
+        ""
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"y\"]",
+  "title": "normal after y",
+  "keys": [
+   "y"
+  ],
+  "rows": [
+   {
+    "key": "<C-End>",
+    "label": "Yank to line N, default last line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\"]",
+  "title": "normal after g",
+  "keys": [
+   "g"
+  ],
+  "rows": [
+   {
+    "key": "D",
+    "label": "Go to the declaration of the word under the cursor (VS Code Go to Declaration; none here)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal"
+     },
+     "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-redo-and-g",
+     "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used."
+    }
+   },
+   {
+    "key": "N",
+    "label": "Select the match of the last search at or before the cursor",
+    "setup": [
+     "j",
+     "g",
+     "*"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      22
+     ],
+     "mode": "visual",
+     "registers": {
+      "/": {
+       "mode": "character",
+       "lines": [
+        "eta"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": {
+       "vim": [
+        2,
+        21
+       ],
+       "visualStart": [
+        2,
+        19
+       ]
+      },
+      "mode": "visual",
+      "registers": {
+       "/": {
+        "mode": "character",
+        "lines": [
+         "eta"
+        ]
+       }
+      }
+     },
+     "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-redo-and-g",
+     "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used."
+    }
+   },
+   {
+    "key": "i",
+    "label": "Insert at the end of the last change",
+    "setup": [
+     "a",
+     "X",
+     "<Esc>",
+     "0"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twXo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      15
+     ],
+     "mode": "insert",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "keys": "aX<Esc>"
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"twXo\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       15
+      ],
+      "mode": "insert",
+      "registers": {
+       ".": {
+        "mode": "character",
+        "keys": "aX<Esc>"
+       }
+      }
+     },
+     "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-redo-and-g",
+     "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"~\"]",
+  "title": "normal after g~",
+  "keys": [
+   "g",
+   "~"
+  ],
+  "rows": [
+   {
+    "key": "~",
+    "label": "Switch the case of N lines",
+    "expect": {
+     "text": {
+      "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "repeated-line-case",
+     "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"u\"]",
+  "title": "normal after gu",
+  "keys": [
+   "g",
+   "u"
+  ],
+  "rows": [
+   {
+    "key": "u",
+    "label": "Lowercase the line",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       0
+      ],
+      "mode": "normal"
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/operator.ts L57-90 (gu then u is the repeated operator: runRepeat on the line) and L353-392 (cursor at the line start); it reads no undo state",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "repeated-line-case",
+     "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"U\"]",
+  "title": "normal after gU",
+  "keys": [
+   "g",
+   "U"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Uppercase the line",
+    "expect": {
+     "text": {
+      "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "repeated-line-case",
+     "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"z\"]",
+  "title": "normal after z",
+  "keys": [
+   "z"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Move the cursor right by half the line length (VSCodeVim moves the cursor; Vim scrolls the view)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      34
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       34
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRightHalf src/actions/motion.ts L1239-1253 runs cursorMove right by halfLine (src/actions/motion.ts L64-110); VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts _moveHalfLineRight: round(41/2) = 21 columns, VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveRight.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "fixed-scroll-positions",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move the cursor left by half the line length (VSCodeVim moves the cursor; Vim scrolls the view)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      21
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       21
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeftHalf src/actions/motion.ts L1255-1270, cursorMove left by halfLine: 21 columns left of column 13 clips to the line start and wraps to the end of line 0 (VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveLeft, leftPosition); the Normal-mode clamp gives (0,21) (src/mode/modeHandler.ts L932-966).",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "fixed-scroll-positions",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups."
+    }
+   },
+   {
+    "key": "h",
+    "label": "Move the cursor one character right (VSCodeVim moves the cursor; Vim scrolls the view)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       14
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRight src/actions/motion.ts L1207-1221 runs cursorMove right by one character.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "fixed-scroll-positions",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups."
+    }
+   },
+   {
+    "key": "l",
+    "label": "Move the cursor one character left (VSCodeVim moves the cursor; Vim scrolls the view)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       12
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeft src/actions/motion.ts L1223-1237 runs cursorMove left by one character.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "fixed-scroll-positions",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"<C-w>\"]",
+  "title": "normal after <C-w>",
+  "keys": [
+   "<C-w>"
+  ],
+  "rows": [
+   {
+    "key": "<C-l>",
+    "label": "Move to the window on the right",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial."
+    }
+   },
+   {
+    "key": "<C-w>",
+    "label": "Move to the next window",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial."
+    }
+   },
+   {
+    "key": "<right>",
+    "label": "Move to the window on the right",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial."
+    }
+   },
+   {
+    "key": "l",
+    "label": "Move to the window on the right",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial."
+    }
+   },
+   {
+    "key": "w",
+    "label": "Move to the next window",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-r>",
+    "label": "Redo the last undone change (VSCodeVim ignores the count)",
+    "setup": [
+     "x",
+     "x",
+     "x",
+     "u",
+     "u",
+     "u"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"to\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"to\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         "\""
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         "\""
+        ]
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: Redo src/actions/commands/undo.ts L34-45 runs once; src/history/historyTracker.ts L832-865 redoes the first x and puts the cursor at the start of that step. Setup x x x u u u.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-redo-and-g",
+     "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\",\"d\"]",
+  "title": "normal after \"a3d",
+  "keys": [
+   "\"",
+   "a",
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "%",
+    "label": "Delete to the line at 3% of the file",
+    "expect": {
+     "text": [
+      "wo\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "a": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"t"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-percent-delete",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual []",
+  "title": "visual after v",
+  "keys": [
+   "v"
+  ],
+  "rows": [
+   {
+    "key": "X",
+    "label": "Delete the highlighted lines",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"g\"]",
+  "title": "visual after vg",
+  "keys": [
+   "v",
+   "g"
+  ],
+  "rows": [
+   {
+    "key": "?",
+    "label": "Encode the highlighted text with rot13",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tjo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual"
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   },
+   {
+    "key": "N",
+    "label": "Extend the selection to the start of the previous match of the last search",
+    "setup": [
+     "/",
+     "e",
+     "t",
+     "a",
+     "<CR>",
+     "0"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      9
+     ],
+     "mode": "visual",
+     "registers": {
+      "/": {
+       "mode": "character",
+       "lines": [
+        "eta"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   },
+   {
+    "key": "P",
+    "label": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
+    "setup": [
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twowo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      15
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   },
+   {
+    "key": "f",
+    "label": "Edit the file named by the selection (no file w: E447)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual"
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the selection with the text and put the cursor after it",
+    "setup": [
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twowo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      15
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   },
+   {
+    "key": "q",
+    "label": "Format the highlighted lines",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "visual-g-command-effects",
+     "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"c\",\"i\"]",
+  "title": "normal after ci",
+  "keys": [
+   "c",
+   "i"
+  ],
+  "rows": [
+   {
+    "key": "s",
+    "label": "Change inner sentence",
+    "expect": {
+     "text": [
+      ""
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"y\",\"i\"]",
+  "title": "normal after yi",
+  "keys": [
+   "y",
+   "i"
+  ],
+  "rows": [
+   {
+    "key": "i",
+    "label": "Yank the lines of the cursor's indentation level",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Yank the paragraph",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      20
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   },
+   {
+    "key": "s",
+    "label": "Yank the sentence",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "eof-change-yank-ranges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"3\"]",
+  "title": "visual after v3",
+  "keys": [
+   "v",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<Del>",
+    "label": "Remove the last digit of the count",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"to\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "visual-count-delete",
+     "documented": "VSCodeVim 1.32.4 operator.ts L307-L313 routes Visual/VisualLine Delete to DeleteOperator. modeHandler.ts L1111-L1118 calls run without count because it is not a repeated operator. Visual deletes the one selected w; VisualLine deletes line1, and the outer wrapper has no numbered/small-delete name (register.ts L208-L260). The count-digit editing branch in actions.ts L560-L581 is Normal-only. Scoped to the exact v3Del and V3Del cards, no setup/sample, one-cell/line selection entered before count."
+    }
+   },
+   {
+    "key": "X",
+    "label": "Delete the highlighted lines",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the selection with the text, 3 times",
+    "setup": [
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twotwotwowo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      20
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-cell-put-and-change",
+     "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"\\\"\",\"a\"]",
+  "title": "visual after v\"a",
+  "keys": [
+   "v",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "X",
+    "label": "Delete the highlighted lines into register a",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line []",
+  "title": "visual-line after V",
+  "keys": [
+   "V"
+  ],
+  "rows": [
+   {
+    "key": "x",
+    "label": "Delete the highlighted area",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"3\"]",
+  "title": "visual-line after V3",
+  "keys": [
+   "V",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<Del>",
+    "label": "Remove the last digit from {count}",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "visual-count-delete",
+     "documented": "VSCodeVim 1.32.4 operator.ts L307-L313 routes Visual/VisualLine Delete to DeleteOperator. modeHandler.ts L1111-L1118 calls run without count because it is not a repeated operator. Visual deletes the one selected w; VisualLine deletes line1, and the outer wrapper has no numbered/small-delete name (register.ts L208-L260). The count-digit editing branch in actions.ts L560-L581 is Normal-only. Scoped to the exact v3Del and V3Del cards, no setup/sample, one-cell/line selection entered before count."
+    }
+   },
+   {
+    "key": "x",
+    "label": "Delete the highlighted area",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"\\\"\",\"a\"]",
+  "title": "visual-line after V\"a",
+  "keys": [
+   "V",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "x",
+    "label": "Delete the selected lines into register a",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block []",
+  "title": "visual-block after <C-v>",
+  "keys": [
+   "<C-v>"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Change to the end of the line on every line of the block",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert",
+     "registers": {},
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the block with the text",
+    "setup": [
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twowo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "block",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-cell-put-and-change",
+     "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded."
+    }
+   },
+   {
+    "key": "s",
+    "label": "Delete the block and start insert (sneak does not take s in Visual-block mode)",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"to\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "block",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-cell-put-and-change",
+     "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"3\"]",
+  "title": "visual-block after <C-v>3",
+  "keys": [
+   "<C-v>",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Change from the block to the line ends",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert",
+     "registers": {},
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"\\\"\",\"a\"]",
+  "title": "visual-block after <C-v>\"a",
+  "keys": [
+   "<C-v>",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Change from the block to the end of each line, into register a",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert",
+     "registers": {},
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "prediction": {
+     "rule": "visual-wrapper-registers",
+     "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer."
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,1249 @@
+{
+  "card": "visual [\"g\"]",
+  "title": "visual after vg",
+  "keys": ["v", "g"],
+  "rows": [
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Search backward for the word under the cursor, also inside other words",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L728 |g#|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last character of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L729 |g$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 41],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Search forward for the word under the cursor, also inside other words",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L736 |gstar|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 12],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first character of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L740 |g0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Add 1 to the numbers in the selection",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L981 |v_g_CTRL-A|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-x>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Subtract 1 from the numbers in the selection",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L982 |v_g_CTRL-X|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one screen line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L790 |gj|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one screen line up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L792 |gk|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Apply ROT13 to the selected text and retain Visual mode",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L748 |g?|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tjo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Encode the highlighted text with rot13",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tjo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tjo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "C",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Toggle a block comment around the selection (plain text has none)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/operator.ts L804-L821: CommentBlockOperator runs editor.action.blockComment (VS Code reference: \"Toggle Block Comment\"), which does nothing in plain text, then puts the cursor at the start of the selection in Normal mode"
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move back to the end of the previous WORD",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L753 |gE|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 9],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "J",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Join the highlighted lines without inserting spaces",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L983 |v_gJ|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 41],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; gN reads the last search",
+      "label": "Extend the selection through the previous search match",
+      "labelIndex": "index.txt L758 |gN|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 7],
+          "visualStart": [2, 0],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>", "0"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim visual.txt *gN*: like gn backward; from (2,0) the previous match starts at (0,7) (checked on another buffer)"
+      },
+      "vimLabel": "Extend the selection to the start of the previous match of the last search",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 9],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 9],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "P",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; gP reads the register",
+      "label": "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
+      "labelIndex": "index.txt L760 |gP|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twowo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["two"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["two"]
+            }
+          }
+        },
+        "basis": "Vim change.txt *gP* with *v_P*: like v_p but the unnamed register is not changed; cursor just after the new text"
+      },
+      "vimLabel": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; gT (window)",
+      "label": "Go to the previous tab page (only one here)",
+      "labelIndex": "index.txt L764 |gT|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim tabpage.txt *gT*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L317-L333 (workbench.action.previousEditorInGroup)"
+      }
+    },
+    {
+      "key": "U",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the highlighted text uppercase",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L765 |gU|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L770 |g^|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 2],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last non-blank of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L775 |g_|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 40],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Add a selection at the next match of the selected text (none here)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/actions.ts L1065-L1084: gb is ActionOverrideCmdD; src/actions/commands/actions.ts L1065-L1084: with the selection \"w\" selected, editor.action.addSelectionToNextFindMatch finds no other \"w\" (VS Code reference: \"Add Selection To Next Find Match\"), so the selection stays (1,13)-(1,14) in Visual mode"
+    },
+    {
+      "key": "c",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Toggle line comments on the highlighted lines (plain text has none)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/operator.ts L744-L756: CommentOperator runs editor.action.commentLine (VS Code reference: \"Toggle Line Comment\"), which does nothing in plain text, then puts the cursor at column 0 of the first line in Normal mode"
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move back to the end of the previous word",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L780 |ge|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 11],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: file or tag; gf (file or tag)",
+      "label": "Edit the file named by the selection (no file w: E447)",
+      "labelIndex": "index.txt L782 |gf|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim editing.txt *v_gf*: the selected text w names no file, E447, and Visual mode ends with the cursor at the start of the area (checked on another buffer)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank of the first line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one screen line down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L790 |gj|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move one screen line up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L792 |gk|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "m",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the middle of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L794 |gm|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 21],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [1, 41],
+            "visualStart": [1, 13]
+          },
+          "mode": "visual"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; gn reads the last search",
+      "label": "Extend the selection to the end of the next match of the last search",
+      "labelIndex": "index.txt L796 |gn|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 11],
+          "visualStart": [2, 0],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>", "0"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim visual.txt *gn*: in Visual mode the selection extends to the end of the next match; the setup /eta<CR>0 leaves the cursor at (2,0), off a match, the next match is (2,9)-(2,11) (checked on another buffer)"
+      }
+    },
+    {
+      "key": "o",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to byte 1 of the buffer",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L798 |go|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [0, 0],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; gp reads the register",
+      "label": "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
+      "labelIndex": "index.txt L799 |gp|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["t"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["t"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "i", "w"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *gp* with *v_p*: the selection (t after the setup yiw) is replaced, the replaced text goes to the unnamed and small delete registers, the cursor goes just after the new text (checked on another buffer)"
+      },
+      "vimLabel": "Replace the selection with the text and put the cursor after it",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Reflow the highlighted lines and return to Normal mode",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L985 |v_gq|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Format the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Virtually replace every highlighted character: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L802 |gr|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "replace"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "while `r` waits for its character Vim shows Replace mode (mode(1) R), but the state is the card's mode with `r` pending, as the grammar fixture states it (spec/fixtures/grammar/character-arguments.json replace-character, from Vim's help)"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; gt (window)",
+      "label": "Go to the next tab page (only one here)",
+      "labelIndex": "index.txt L804 |gt|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim tabpage.txt *gt*: with one tab page nothing happens and Visual mode stays; VSCodeVim window.ts L291-L315 (workbench.action.nextEditorInGroup; group 1 holds only a.txt)"
+      }
+    },
+    {
+      "key": "u",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the highlighted text lowercase",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L805 |gu|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "x",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Open the link under the cursor (none here)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13]
+        },
+        "mode": "visual"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/commands/navigate.ts L47-L55: OpenLink runs editor.action.openLink without waiting; w is no link, and the mode stays Visual"
+    },
+    {
+      "key": "~",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Switch the case of the highlighted text",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L809 |g~|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

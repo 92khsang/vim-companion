@@ -1,0 +1,2160 @@
+{
+  "card": "normal [\"g\",\"u\"]",
+  "title": "normal after gu",
+  "keys": ["g", "u"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase back to the previous match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L256 |#|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the end of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the matching bracket",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L259 |%|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR on the line with mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N sentences backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N sentences forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the next match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L291 |star|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "setup": ["f", "<Space>"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "Lowercase back to the match of the last f, t, F or T in the opposite direction",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 10],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR N lines higher",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Lowercase to a search match: opens the search input",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "setup": ["f", "<Space>"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "Lowercase to the next match of the last f, t, F or T",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 17],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L825-905 and L970-1004 (MoveRepeat/MoveRepeatReversed replay the last f/F; f is inclusive with an operator, F exclusive); setup f<Space> leaves the cursor on (1,17); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+      }
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Lowercase 1 character to the left (VSCodeVim's <C-BS>, same as h)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the end of the last line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N words backward (VSCodeVim uses b; Vim uses B)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 11],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Lowercase N words backward",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<D-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Lowercase to the first character of the line (VSCodeVim's <D-left>, same as 0)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L1026-1039 (MoveLineBegin keys 0 <Home> <D-left>); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Lowercase to the end of the line (VSCodeVim's <D-right>, same as $)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L1013-1023 (MoveLineEnd keys $ <End> <D-right>: count-1 lines down, line end); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the end of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Lowercase 1 character to the left (VSCodeVim's <S-BS>, same as h)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L666-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>; src/actions/wrapping.ts L9-25); VSCodeVim 1.32.4 src/mode/modeHandler.ts L989-1131 (the motion result is clamped to the line end, then executeOperator moves an exclusive end left through line breaks); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Lowercase back to a search match: opens the backward search input",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-230 (SearchForwards/SearchBackwards enter SearchInProgressMode = probe other-5, src/mode/mode.ts L4-18); Measured by brief B for / and ? without an operator (spike/s2/data/check1/observe-1.141.0.json)"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N WORDS backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 11],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase forward to the end of WORD N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the last line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to line N from top of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to line N from bottom of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to middle line of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 2],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "setup": ["/", "<Space>", "<CR>"],
+      "source": "vim-oracle",
+      "reason": "state: last search; N reads the last search",
+      "label": "Lowercase back to the previous match of the last search",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": [" "]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase till after Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N WORDS forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "Wait for two characters: lowercase back to the previous match (sneak, Z after an operator)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-23 and L74-90 (z/Z after an operator wait for two characters); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the first CHAR of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to the mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase forward to the end of word N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "setup": ["/", "<Space>", "<CR>"],
+      "source": "vim-oracle",
+      "reason": "state: last search; n reads the last search",
+      "label": "Lowercase to the next match of the last search",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": [" "]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/motion.ts L424-520 (n/N, exclusive); setup /<Space><CR> leaves the cursor on (1,17) and the read-only / register at ' ' (src/cmd_line/commandLine.ts L465-480); VSCodeVim 1.32.4 src/actions/operator.ts L353-392 and L420-424 (ChangeCaseOperator: cursor at the range start)"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase till before Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "u",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: undo history; u reads the undo history",
+      "label": "Lowercase the line",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 0],
+          "mode": "normal"
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/operator.ts L57-90 (gu then u is the repeated operator: runRepeat on the line) and L353-392 (cursor at the line start); it reads no undo state"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 0],
+          "mode": "normal"
+        },
+        "expectFrom": "VSCodeVim 1.32.4 src/actions/operator.ts L57-90 (gu then u is the repeated operator: runRepeat on the line) and L353-392 (cursor at the line start); it reads no undo state",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"two\", [three]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "repeated-line-case",
+            "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"two\", [three]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "repeated-line-case",
+            "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "Wait for two characters: lowercase to the next match (sneak, z after an operator)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-23 and L74-90 (z/Z after an operator wait for two characters); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N paragraphs backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "Wait for w, b or e: lowercase a camelCase word (camelCaseMotion)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "expectFrom": "VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-100 (<leader>w/e/b, i<leader>w; leader \\ by default, package.json vim.leader); VSCodeVim 1.32.4 src/actions/base.ts L257-279 (getRelevantAction keeps waiting while an action could still apply)"
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Start a count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase to column N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Lowercase N paragraphs forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

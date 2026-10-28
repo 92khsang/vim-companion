@@ -1,0 +1,54 @@
+{
+  "card": "visual [\"\\\"\"]",
+  "title": "visual after v\"",
+  "keys": ["v", "\""],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Use \" for next delete, yank or put ({.%#:} only work with put)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<register>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "a",
+      "source": "vim-oracle",
+      "label": "Use {register} for next delete, yank or put ({.%#:} only work with put)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 13],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

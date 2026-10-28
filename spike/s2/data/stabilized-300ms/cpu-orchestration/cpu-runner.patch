@@ -1,0 +1,20 @@
+--- cpu.sh
++++ cpu.sh
+@@ -10,7 +10,7 @@
+ # The batch takes the core locks of S2_CPUS exclusively: no other batch can start on those cores
+ # while it runs, and it does not start while another batch holds one of them.
+ # Usage (repository root of a frozen checkout, S2 environment exported): spike/s2/batch/cpu.sh
+-source "$(dirname "$0")/common.sh"
++source "${S2_FROZEN_BATCH:?}/common.sh"
+ exclusive_cores
+ MINUTES=10
+ EXTRA=6
+@@ -22,7 +22,7 @@
+     const [f, s, a, which] = process.argv.slice(1);
+     const rs = fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter(Boolean).map(JSON.parse) : [];
+     const pick = { valid: (r) => r.valid === true, all: () => true,
+-      // The summary's rule: an error may be rerun only before the probe's hello with the adapter
++      // The summary rule: an error may be rerun only before the probe hello with the adapter
+       // off; an invalid window only when cpu.mjs marked it rerunnable.
+       fatal: (r) => r.error ? !(r.phase === "boot" && r.arm === "off") : r.valid !== true && r.rerunnable !== true }[which];
+     console.log(rs.filter((r) => (s === "any" || r.scenario === s) && (a === "any" || r.arm === a) && pick(r)).length);

@@ -1,0 +1,9 @@
+# Source the isolated S2 environment and select the installed Node/pnpm first.
+# FROZEN_CHECKOUT names the immutable f6ba9a24ec885a59ecfe9872d8b05f819f31cd4b checkout.
+# ORCHESTRATION_DIR is outside that checkout; EVIDENCE_DIR is this evidence directory.
+# S2_RESUME_STATUS and S2_RESUME_LOG are private progress files outside the checkout.
+cp "$FROZEN_CHECKOUT/spike/s2/batch/cpu.sh" "$ORCHESTRATION_DIR/cpu.sh"
+(cd "$ORCHESTRATION_DIR" && patch -p0 < "$EVIDENCE_DIR/cpu-runner.patch")
+cp "$EVIDENCE_DIR/resume.sh" "$ORCHESTRATION_DIR/resume.sh"
+export S2_EXTERNAL_CPU="$ORCHESTRATION_DIR/cpu.sh"
+taskset -c 0-7 bash "$ORCHESTRATION_DIR/resume.sh" > "$S2_RESUME_LOG" 2>&1

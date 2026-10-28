@@ -1,0 +1,45 @@
+{
+  "card": "normal [\"\\\"\"]",
+  "title": "normal after \"",
+  "keys": ["\""],
+  "rows": [
+    {
+      "key": "\"",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Use \" for next delete, yank or put ({.%#:} only work with put)",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L254 |quote|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<register>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "a",
+      "source": "vim-oracle",
+      "label": "Use register {char} for the next command",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

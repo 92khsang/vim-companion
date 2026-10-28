@@ -1,0 +1,167 @@
+{
+  "$schema": "../../schema/fixture-grammar.schema.json",
+  "description": "Registers named with \" before a command, alone and with a count and an operator.",
+  "start": {
+    "lines": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+    ],
+    "cursor": {
+      "line": 1,
+      "column": 13
+    }
+  },
+  "cases": [
+    {
+      "id": "register-a",
+      "description": "\"a names register a for the next command.",
+      "help": ["quote", "quote_alpha"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-plus",
+      "description": "\"+ names the clipboard register for the next command.",
+      "help": ["quote", "quote+"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "+",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "+"],
+            "operator": null,
+            "count": null,
+            "register": "+"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-blackhole",
+      "description": "\"_ names the black hole register for the next command.",
+      "help": ["quote", "quote_"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "_",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "_"],
+            "operator": null,
+            "count": null,
+            "register": "_"
+          }
+        }
+      ]
+    },
+    {
+      "id": "register-count-operator",
+      "description": "\"a3d: a register, then a count, then an operator.",
+      "help": ["quote", "quote_alpha", "count", "operator", "map-typing"],
+      "steps": [
+        {
+          "key": "\"",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\""],
+            "operator": null,
+            "count": null,
+            "register": null
+          }
+        },
+        {
+          "key": "a",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a"],
+            "operator": null,
+            "count": null,
+            "register": "a"
+          }
+        },
+        {
+          "key": "3",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a", "3"],
+            "operator": null,
+            "count": 3,
+            "register": "a"
+          }
+        },
+        {
+          "key": "d",
+          "expect": {
+            "mode": "normal",
+            "pending": ["\"", "a", "3", "d"],
+            "operator": "d",
+            "count": 3,
+            "register": "a"
+          },
+          "engines": {
+            "vscodevim": {
+              "expect": {
+                "mode": "normal",
+                "pending": ["\"", "a", "3", "d"],
+                "operator": null,
+                "count": 3,
+                "register": "a"
+              },
+              "deviation": "Measured: on 2026-10-16, in VS Code 1.134.0 and 1.141.0 with VSCodeVim 1.32.4 and its default settings (harness of issue #11; spike/s2/data/fixture-reader-v2), VSCodeVim held d in its remap buffer as a prefix of its default surround mapping ds (vim.surround is on by default) and had not started the d operator 100 ms after the key, in 30 of 30 trials at 10, 30 and 60 ms injected key delay. It started the operator when vim.timeout ran out."
+            }
+          }
+        }
+      ],
+      "afterTimeout": {
+        "expect": {
+          "mode": "normal",
+          "pending": ["\"", "a", "3", "d"],
+          "operator": "d",
+          "count": 3,
+          "register": "a"
+        }
+      }
+    }
+  ]
+}

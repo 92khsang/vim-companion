@@ -1,0 +1,54 @@
+{
+  "card": "normal [\"m\"]",
+  "title": "normal after m",
+  "keys": ["m"],
+  "rows": [
+    {
+      "key": "m",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: mark; sets a mark",
+      "label": "Set mark m at the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L412 |m|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L264-273 (MarkCommand only records the mark); the pilot's m{<character>} row"
+      }
+    },
+    {
+      "key": "{<register>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "a",
+      "source": "vim-oracle",
+      "reason": "outside: mark; sets a mark",
+      "label": "Set mark {char} at the cursor",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L264-273 (MarkCommand keys m <register>, only records the mark); the expectation is the pilot's (spike/s2/cards/pilot.json, verified in spike/s2/data/cards-pilot-v2)",
+        "expectFrom": "pilot"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1784 @@
+[
+ {
+  "set": "extensions",
+  "card": "normal [\"3\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-403 and src/mode/modeHandler.ts L1133-1185 (DotRepeat replays the recorded x 3 times, each a separate delete, so the registers hold the last character); setup x deletes (1,13)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\"]",
+  "key": "<C-o>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    2,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103; VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\"]",
+  "key": "<C-r>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"to\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/undo.ts L34-45 (Redo has no runsOnceForEachCountPrefix, so it redoes one step) and src/history/historyTracker.ts L832-860 (the cursor returns to the step's start); setup xxx uuu"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    2,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-t> is a key of NavigateBack); VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\",\"0\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one,"
+   },
+   "cursor": [
+    1,
+    9
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      " "
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      " "
+     ]
+    }
+   }
+  },
+  "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); 30 replays of x, each one character at the cursor, which moves left at the line end (src/mode/modeHandler.ts L927-967)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\",\"0\"]",
+  "key": "<C-i>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g <C-o> leaves the jump list one step back; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L105-117, src/jumps/jumpTracker.ts L216-232 (jumpForward clamps at the newest jump, [0,0], also with a count)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"3\",\"0\"]",
+  "key": "<C-y>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll); 30 exceeds the 2 lines below the cursor, so the cursor moves 27 lines up, clamped to line 0 at the desired column 13"
+ },
+ {
+  "set": "extensions",
+  "card": "normal []",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"g\"]",
+  "key": "D",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"g\"]",
+  "key": "N",
+  "status": "fail",
+  "reasons": [
+   "cursor"
+  ],
+  "expect": {
+   "text": "unchanged",
+   "cursor": {
+    "vim": [
+     2,
+     21
+    ],
+    "visualStart": [
+     2,
+     19
+    ]
+   },
+   "mode": "visual",
+   "registers": {
+    "/": {
+     "mode": "character",
+     "lines": [
+      "eta"
+     ]
+    }
+   }
+  },
+  "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"g\"]",
+  "key": "i",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twXo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "insert",
+   "registers": {
+    ".": {
+     "mode": "character",
+     "keys": "aX<Esc>"
+    }
+   }
+  },
+  "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"g\",\"u\"]",
+  "key": "u",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L57-90 (gu then u is the repeated operator: runRepeat on the line) and L353-392 (cursor at the line start); it reads no undo state"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"z\"]",
+  "key": "H",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    34
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"z\"]",
+  "key": "L",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    21
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"z\"]",
+  "key": "h",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    14
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"z\"]",
+  "key": "l",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    12
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "o"
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "o"
+     ]
+    }
+   }
+  },
+  "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); the replayed x deletes \"o\" into \" and -, not a"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines up from line 1 clamps to line 0"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "&",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-r>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"to\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "extensions",
+  "card": "visual [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twowo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    14
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "two"
+     ]
+    },
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "t"
+     ]
+    }
+   }
+  },
+  "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line []",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "mma"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "mma"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k ye j yanks 'mma' (charwise, put as the line)"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"3\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": [
+    "alpha beta gamma delta",
+    "two",
+    "two",
+    "two",
+    "epsilon zeta eta theta",
+    "iota kappa lambda mu"
+   ],
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "two"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): the replaced line goes to \" linewise (L104-115, src/state/vimState.ts L288-300)"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-d>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    3,
+    20
+   ],
+   "mode": "visual-line",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-u>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "w"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "w"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    14
+   ],
+   "mode": "visual-block"
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"3\"]",
+  "key": "S",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": ""
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "insert",
+   "registers": {
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"3\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "w"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "w"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    14
+   ],
+   "mode": "visual-block"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L74-183 (CommandScrollAndMoveCursor: the cursor moves by the scrolled lines to the first non-blank, src/common/motion/position.ts L553-560); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "S",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": ""
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "insert",
+   "registers": {
+    "a": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (S in Visual Block mode; surround has no Visual Block S; blockwise register mode, no indent kept)"
+ },
+ {
+  "set": "extensions",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"tmmao\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "mma"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "w"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k \"aye j yanks 'mma' into a and \" (no 0 with a named register)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-403 and src/mode/modeHandler.ts L1133-1185 (DotRepeat replays the recorded x 3 times, each a separate delete, so the registers hold the last character); setup x deletes (1,13)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\"]",
+  "key": "<C-o>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    2,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103; VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\"]",
+  "key": "<C-r>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"to\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/undo.ts L34-45 (Redo has no runsOnceForEachCountPrefix, so it redoes one step) and src/history/historyTracker.ts L832-860 (the cursor returns to the step's start); setup xxx uuu"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    2,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-t> is a key of NavigateBack); VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\",\"0\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one,"
+   },
+   "cursor": [
+    1,
+    9
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      " "
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      " "
+     ]
+    }
+   }
+  },
+  "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); 30 replays of x, each one character at the cursor, which moves left at the line end (src/mode/modeHandler.ts L927-967)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\",\"0\"]",
+  "key": "<C-i>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g <C-o> leaves the jump list one step back; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L105-117, src/jumps/jumpTracker.ts L216-232 (jumpForward clamps at the newest jump, [0,0], also with a count)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"3\",\"0\"]",
+  "key": "<C-y>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L10-69 (CommandEditorScroll: moves the cursor only when the count exceeds the lines between it and the view edge, then editorScroll); VS Code editorScroll without revealCursor does not move the cursor (src/vs/editor/browser/coreCommands.ts, EditorScroll); 30 exceeds the 2 lines below the cursor, so the cursor moves 27 lines up, clamped to line 0 at the desired column 13"
+ },
+ {
+  "set": "defaults",
+  "card": "normal []",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"g\"]",
+  "key": "D",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"g\"]",
+  "key": "N",
+  "status": "fail",
+  "reasons": [
+   "cursor"
+  ],
+  "expect": {
+   "text": "unchanged",
+   "cursor": {
+    "vim": [
+     2,
+     21
+    ],
+    "visualStart": [
+     2,
+     19
+    ]
+   },
+   "mode": "visual",
+   "registers": {
+    "/": {
+     "mode": "character",
+     "lines": [
+      "eta"
+     ]
+    }
+   }
+  },
+  "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"g\"]",
+  "key": "i",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twXo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "insert",
+   "registers": {
+    ".": {
+     "mode": "character",
+     "keys": "aX<Esc>"
+    }
+   }
+  },
+  "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"g\",\"u\"]",
+  "key": "u",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L57-90 (gu then u is the repeated operator: runRepeat on the line) and L353-392 (cursor at the line start); it reads no undo state"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"z\"]",
+  "key": "H",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    34
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"z\"]",
+  "key": "L",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    21
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"z\"]",
+  "key": "h",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    14
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"z\"]",
+  "key": "l",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    12
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "o"
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "o"
+     ]
+    }
+   }
+  },
+  "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); the replayed x deletes \"o\" into \" and -, not a"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines up from line 1 clamps to line 0"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal"
+  },
+  "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)"
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "&",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": ".",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"t [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      ","
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-r>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"to\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "normal",
+   "registers": {
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    },
+    "-": {
+     "mode": "character",
+     "lines": [
+      "\""
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "normal [\"\\\"\",\"a\",\"3\"]",
+  "key": "<C-t>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "normal"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "defaults",
+  "card": "visual [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twowo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    14
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "two"
+     ]
+    },
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "t"
+     ]
+    }
+   }
+  },
+  "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line []",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "mma"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "mma"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k ye j yanks 'mma' (charwise, put as the line)"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line"
+  },
+  "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"3\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": [
+    "alpha beta gamma delta",
+    "two",
+    "two",
+    "two",
+    "epsilon zeta eta theta",
+    "iota kappa lambda mu"
+   ],
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "two"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): the replaced line goes to \" linewise (L104-115, src/state/vimState.ts L288-300)"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-d>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    3,
+    20
+   ],
+   "mode": "visual-line",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "<C-u>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    0
+   ],
+   "mode": "visual-line",
+   "registers": {
+    ":": {
+     "mode": "character",
+     "keys": ""
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-line [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "w"
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "w"
+     ]
+    },
+    "\"": {
+     "mode": "line",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"3\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    14
+   ],
+   "mode": "visual-block"
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"3\"]",
+  "key": "S",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": ""
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "insert",
+   "registers": {
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"3\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "w"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "w"
+     ]
+    }
+   }
+  },
+  "basis": ""
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "<C-b>",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    0,
+    14
+   ],
+   "mode": "visual-block"
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L74-183 (CommandScrollAndMoveCursor: the cursor moves by the scrolled lines to the first non-blank, src/common/motion/position.ts L553-560); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "S",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": ""
+   },
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "insert",
+   "registers": {
+    "a": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (S in Visual Block mode; surround has no Visual Block S; blockwise register mode, no indent kept)"
+ },
+ {
+  "set": "defaults",
+  "card": "visual-block [\"\\\"\",\"a\"]",
+  "key": "p",
+  "status": "pass",
+  "reasons": [],
+  "expect": {
+   "text": {
+    "1": "  if (one, \"tmmao\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    15
+   ],
+   "mode": "normal",
+   "registers": {
+    "a": {
+     "mode": "character",
+     "lines": [
+      "mma"
+     ]
+    },
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "w"
+     ]
+    }
+   }
+  },
+  "basis": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k \"aye j yanks 'mma' into a and \" (no 0 with a named register)"
+ }
+]

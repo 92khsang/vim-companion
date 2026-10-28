@@ -1,0 +1,2438 @@
+{
+  "card": "normal [\"g\",\"U\"]",
+  "title": "normal after gU",
+  "keys": ["g", "U"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase back to the previous match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L256 |#|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the end of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the match of the next bracket on the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L259 |%|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the line of a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one sentence backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one sentence forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA",
+          "3": "IOTA KAPPA LAMBDA MU"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the next match of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L291 |star|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "Uppercase back to the last f, t, F or T in the opposite direction",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": {
+        "text": {
+          "1": "  if (onE, \"TWO\", [THRee]) { four(five) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); from (1,22) , is F e (exclusive): columns 8-21"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Uppercase to a search match forward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt */*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": the probe reads other-5 (SearchInProgressMode), text and cursor unchanged"
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the first character of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "Uppercase to the next repeat of the last f, t, F or T",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"two\", [thrEE]) { four(five) }"
+        },
+        "cursor": [1, 22],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["f", "e"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *;* *,*: the setup's fe is the last f/t; e is at columns 8, 22, 23 and 37 of line 1; a count repeats; , runs the opposite direction (F, exclusive); the setup leaves the cursor at (1,22); ; is f e, inclusive"
+      }
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Uppercase the character to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); gU{motion} change.txt *gU*"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the end of the buffer",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA",
+          "3": "IOTA KAPPA LAMBDA MU"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the lines to the first line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one word backward (VSCodeVim uses b; Vim uses B)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "vimLabel": "Uppercase one word backward",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"Two\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"Two\", [three]) { four(five) }"
+              },
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one word forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<D-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Uppercase to the first character of the line",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1026-L1040: <D-left> is MoveLineBegin with 0 and <Home> (only without a count); the motion is Vim's 0 (motion.txt *0*); change.txt *gU*"
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Uppercase to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L1013-L1024: <D-right> is MoveLineEnd with $ and <End>; the motion is Vim's $ (motion.txt *$*); change.txt *gU*"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the end of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the first character of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Uppercase the character to the left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "src/actions/motion.ts L665-L701: <C-BS> and <S-BS> are MoveLeft with h and do not wrap (shouldWrapKey); the motion is Vim's h (motion.txt *h*); gU{motion} change.txt *gU*"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Uppercase to a search match backward: type the pattern",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *?*: the search prompt opens; rule (b) of spike/s2/README.md \"Check (1) input\": other-5, text and cursor unchanged"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one WORD backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the end of the WORD",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the lines to the last line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA",
+          "3": "IOTA KAPPA LAMBDA MU"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA",
+                "3": "IOTA KAPPA LAMBDA MU"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA",
+                "3": "IOTA KAPPA LAMBDA MU"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the lines to the first line of the window",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the lines to the last line of the window",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA",
+          "3": "IOTA KAPPA LAMBDA MU"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA",
+                "3": "IOTA KAPPA LAMBDA MU"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA",
+                "3": "IOTA KAPPA LAMBDA MU"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase from the cursor to this line's end (VSCodeVim M)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": {
+            "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+          },
+          "cursor": [1, 2],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Uppercase the lines to the middle line of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "other-viewport-center-operators",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 returns viewport-center [2,0] without LineWise; modeHandler.ts L1093-L1100 decreases stop to [1,EOL]. yM (operator.ts L203-L259) reads the suffix without newline because VS Code clamps EOL+1 (extHostDocumentData.ts raw L117-L140/L181-L245, identical in products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c). cM (operator.ts L660-L707, position.ts L313-L318) deletes only that suffix and retains editor selection [2,0] in Insert (transformations/execute.ts L257-L293). >M affects line1 only, adding two detected-indent spaces (operator.ts L449-L463). gU/g~ change only suffix case (operator.ts L353-L443). Scoped to five exact Normal cards, no setup and the fixed fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "other-viewport-center-operators",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 returns viewport-center [2,0] without LineWise; modeHandler.ts L1093-L1100 decreases stop to [1,EOL]. yM (operator.ts L203-L259) reads the suffix without newline because VS Code clamps EOL+1 (extHostDocumentData.ts raw L117-L140/L181-L245, identical in products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c). cM (operator.ts L660-L707, position.ts L313-L318) deletes only that suffix and retains editor selection [2,0] in Insert (transformations/execute.ts L257-L293). >M affects line1 only, adding two detected-indent spaces (operator.ts L449-L463). gU/g~ change only suffix case (operator.ts L353-L443). Scoped to five exact Normal cards, no setup and the fixed fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; N reads the last search",
+      "label": "Uppercase back to the previous match of the last search",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": {
+        "text": {
+          "0": "alpha bETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON Zeta eta theta"
+        },
+        "cursor": [0, 7],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; N goes back to (0,7), exclusive of (2,9): charwise from (0,7) to (2,8)"
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to just after the previous {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "U",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: undo history; U reads the undo history",
+      "label": "Uppercase the line",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *gUU* (gUgU): the line is uppercased and the cursor goes to the first non-blank, as the g~ card's ~ row (Vim 9.1) shows for g~~; the work list's state reason (undo) does not apply after gU"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "repeated-line-case",
+            "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "repeated-line-case",
+            "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one WORD forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak backward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L74-L90: after an operator, Z starts SneakBackward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the first non-blank of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to a mark: waits for the mark",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one word backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the end of the word",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character to the left",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase an inner text object: waits for the object",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line below",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }",
+                "2": "EPSILON ZETA ETA THETA"
+              },
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the line and the line above",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+        },
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 4
+                },
+                "defaults 1.134.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "0": "ALPHA BETA GAMMA DELTA",
+                "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "case-linewise-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/operator.ts L376-L389 (ChangeCaseOperator: a linewise range starts at the line begin and the cursor is put at the range start)",
+            "measured": {
+              "pass": "check1 triage rechecks of 2026-10-28 (1.141.0, 1 trial, harness of cd33f9a), the confirmation run (defaults, 1.141.0, 1 trial, harness of 200a49d) and pass 1 (check1-pass1 at 7946235) where its trials agree",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase the character under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: last search; n reads the last search",
+      "label": "Uppercase to the next match of the last search",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": {
+        "text": {
+          "2": "epsilon zETA eta theta"
+        },
+        "cursor": [2, 9],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["/", "e", "t", "a", "<CR>"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim pattern.txt *n* *N*: the setup's /eta<CR> sets the last search (register / = eta) and leaves the cursor at (2,9); eta matches at (0,7), (2,9), (2,13) and (2,19); 'wrapscan' wraps; n is exclusive: columns 9-12 of line 2"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to just before the next {char} on the line: waits for the character",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one word forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Sneak forward as the motion: waits for two characters (sneak)",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "src/actions/plugins/sneak.ts L7-L23: after an operator, z starts SneakForward; it waits for two characters",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one paragraph backward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": {
+          "0": "ALPHA BETA GAMMA DELTA",
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "labelFrom": "hand",
+      "bySet": {
+        "extensions": {
+          "label": "Wait after the leader for a camelCaseMotion motion",
+          "expect": {
+            "text": "unchanged",
+            "cursor": [1, 13],
+            "mode": "normal"
+          },
+          "basis": "VSCodeVim's leader is \\ (package.json vim.leader default); camelCaseMotion's <leader>w/b/e need vim.camelCaseMotion.enable (src/actions/plugins/camelCaseMotion.ts L11-L18), easymotion's <leader><leader> actions do not check vim.easymotion in couldActionApply (src/actions/plugins/easymotion/easymotion.cmd.ts L74-L77 checks it only in exec), so the leader waits in both sets",
+          "labelFrom": "hand"
+        }
+      }
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Start a count for the motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase to column 1",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": {
+          "1": "  IF (ONE, \"Two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Uppercase one paragraph forward",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }",
+          "2": "EPSILON ZETA ETA THETA",
+          "3": "IOTA KAPPA LAMBDA MU"
+        },
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

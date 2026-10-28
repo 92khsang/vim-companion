@@ -1,0 +1,313 @@
+{
+  "card": "normal [\"]\"]",
+  "title": "normal after ]",
+  "keys": ["]"],
+  "rows": [
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: mark or jump; ]' reads the mark or jump",
+      "label": "Jump to the first non-blank of the next line with a lowercase mark",
+      "labelIndex": "index.txt L684 |]'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 0],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["j", "m", "a", "k"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *]'*: the setup jmak puts mark a on line 2, the nearest possible line below, so marks from earlier rows cannot come between"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the next unmatched )",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L686 |])|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 25],
+              "mode": "normal"
+            },
+            "rule": "relative-parenthesis-pair-search",
+            "documented": "VSCodeVim 1.32.4 motion.ts L2271-L2312 calls PairMatcher for exact [( and ]) without an operator. common/matching/matcher.ts L19-L24/L58-L101 excludes the current character and scans with a zero stack; reverse first-negative opening parenthesis is [1,5], forward first-negative closing parenthesis is [1,25]. Other character kinds and quote delimiters do not affect this scanner. This is relative unmatched-pair search, not a global malformed-parenthesis check. Original Vim oracle was independently rerun on both settings and still returns [1,13]; no causal claim about Vim quote behavior is inferred. Scoped to those two Normal cards, no count/register/operator/setup/sample, the fixed cursor inside two and one cursor.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 25],
+              "mode": "normal"
+            },
+            "rule": "relative-parenthesis-pair-search",
+            "documented": "VSCodeVim 1.32.4 motion.ts L2271-L2312 calls PairMatcher for exact [( and ]) without an operator. common/matching/matcher.ts L19-L24/L58-L101 excludes the current character and scans with a zero stack; reverse first-negative opening parenthesis is [1,5], forward first-negative closing parenthesis is [1,25]. Other character kinds and quote delimiters do not affect this scanner. This is relative unmatched-pair search, not a global malformed-parenthesis check. Original Vim oracle was independently rerun on both settings and still returns [1,13]; no causal claim about Vim quote behavior is inferred. Scoped to those two Normal cards, no count/register/operator/setup/sample, the fixed cursor inside two and one cursor.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "P",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; ]P reads the register",
+      "label": "Put the lines above with the indent of the current line",
+      "labelIndex": "index.txt L671 |[p|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "y"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *]P* (same as [p): like P with the indent adjusted; cursor on the first non-blank of the new line"
+      }
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the next section end",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L698 |][|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [3, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the next section start",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L699 |]]|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [4, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [3, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: mark or jump; ]` reads the mark or jump",
+      "label": "Jump to the next lowercase mark",
+      "labelIndex": "index.txt L688 |]`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 14],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "setup": ["l", "m", "a", "h"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim motion.txt *]`*: the setup lma puts mark a at (1,14), the nearest possible position after the cursor, so marks from earlier rows cannot come between"
+      }
+    },
+    {
+      "key": "d",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
+      "label": "Go to the next problem (VS Code remap)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "spec/generated/vscode/vim-remaps.json: ]d runs editor.action.marker.next (VS Code: Go to Next Problem (Error, Warning, Info)). Inferred: a.txt (plain text) has no problems, so nothing moves"
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
+      "label": "Go to the next problem (VS Code remap)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "basis": "spec/generated/vscode/vim-remaps.json: ]e runs editor.action.marker.next (VS Code: Go to Next Problem (Error, Warning, Info)). Inferred: a.txt (plain text) has no problems, so nothing moves"
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "state: register; ]p reads the register",
+      "label": "Put the lines below with the indent of the current line",
+      "labelIndex": "index.txt L711 |]p|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "  if (one, \"two\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [2, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          },
+          "\"": {
+            "mode": "line",
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["y", "y"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "Vim change.txt *]p*: like p with the indent adjusted to the current line (both have 2 spaces); the setup yy fills the unnamed register and 0 linewise; a linewise put leaves the cursor on the first non-blank of the new line"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the next unmatched }",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L714 |]}|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3069 @@
+[
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 3 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 30 words backward",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"d\"]",
+  "title": "normal after 3d",
+  "keys": [
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete 3 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (onewo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"d\"]",
+  "title": "normal after d",
+  "keys": [
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (one, wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"d\",\"3\"]",
+  "title": "normal after d3",
+  "keys": [
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete back 3 words (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (onewo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\"]",
+  "title": "normal after 2",
+  "keys": [
+   "2"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 2 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      5
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\"]",
+  "title": "normal after 2d",
+  "keys": [
+   "2",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete 2 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (one, wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      5
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "(one, \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "(one, \"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\",\"3\"]",
+  "title": "normal after 2d3",
+  "keys": [
+   "2",
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete 6 words backward",
+    "expect": {
+     "text": {
+      "1": "  wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal []",
+  "title": "normal after d<Esc>",
+  "keys": [
+   "d",
+   "<Esc>"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "insert []",
+  "title": "insert after i",
+  "keys": [
+   "i"
+  ],
+  "rows": [
+   {
+    "key": "<C-[>",
+    "label": "Leave Insert mode",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "keys": "i<C-[>"
+      }
+     }
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "lines": [
+        ""
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode."
+    }
+   },
+   {
+    "key": "<C-a>",
+    "label": "Insert the previously inserted text",
+    "setup": [
+     "i",
+     "X",
+     "<Esc>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "keys": "iX<Esc>"
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "lines": [
+        "X"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode."
+    }
+   },
+   {
+    "key": "<C-c>",
+    "label": "Leave Insert mode",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "keys": "i<C-c>"
+      }
+     }
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "lines": [
+        ""
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode."
+    }
+   },
+   {
+    "key": "<Esc>",
+    "label": "Leave Insert mode",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "keys": "i<Esc>"
+      }
+     }
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      ".": {
+       "mode": "character",
+       "lines": [
+        ""
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "insert-dot-recorded-keys",
+     "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"c\"]",
+  "title": "normal after c",
+  "keys": [
+   "c"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Change back to the start of the word (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (one, wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"y\"]",
+  "title": "normal after y",
+  "keys": [
+   "y"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Yank N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\">\"]",
+  "title": "normal after >",
+  "keys": [
+   ">"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Shift this line right",
+    "expect": {
+     "text": {
+      "1": "    if (one, \"two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      4
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"<\"]",
+  "title": "normal after <",
+  "keys": [
+   "<"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Shift left N words backward",
+    "expect": {
+     "text": {
+      "1": "if (one, \"two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"~\"]",
+  "title": "normal after g~",
+  "keys": [
+   "g",
+   "~"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Switch case N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"Two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": {
+      "1": "  if (one, \"Two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"u\"]",
+  "title": "normal after gu",
+  "keys": [
+   "g",
+   "u"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Lowercase N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"U\"]",
+  "title": "normal after gU",
+  "keys": [
+   "g",
+   "U"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Uppercase one word backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"Two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": {
+      "1": "  if (one, \"Two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\"]",
+  "title": "normal after \"a",
+  "keys": [
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "a",
+    "label": "Ignore a after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   },
+   {
+    "key": "i",
+    "label": "Ignore i after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"+\"]",
+  "title": "normal after \"+",
+  "keys": [
+   "\"",
+   "+"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move one word backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "a",
+    "label": "Ignore a after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   },
+   {
+    "key": "i",
+    "label": "Ignore i after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"_\"]",
+  "title": "normal after \"_",
+  "keys": [
+   "\"",
+   "_"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move one word backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "a",
+    "label": "Ignore a after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   },
+   {
+    "key": "i",
+    "label": "Ignore i after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 3 words back (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "a",
+    "label": "Ignore a after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   },
+   {
+    "key": "i",
+    "label": "Ignore i after this register prefix (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "register-prefix-rejects-insert",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/insert.ts L33-L47 and L61-L67 allows i/a only when actionsRun is empty or contains only CommandNumber. A pending CommandRegister (src/actions/commands/actions.ts L120-L135) fails that guard. This restriction does not apply to uppercase I/A or counts alone."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\",\"d\"]",
+  "title": "normal after \"a3d",
+  "keys": [
+   "\"",
+   "a",
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Delete 3 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": {
+      "1": "  if (onewo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        ", \"t"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  wo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "if (one, \"t"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual []",
+  "title": "visual after v",
+  "keys": [
+   "v"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Block mode: append same text in all lines, after the highlighted area",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert at the selection start (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 2
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"i\"]",
+  "title": "visual after vi",
+  "keys": [
+   "v",
+   "i"
+  ],
+  "rows": [
+   {
+    "key": "p",
+    "label": "Extend highlighted area with inner paragraph",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      20
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874)."
+    }
+   },
+   {
+    "key": "s",
+    "label": "Extend highlighted area with inner sentence",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      20
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"a\"]",
+  "title": "visual after va",
+  "keys": [
+   "v",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "p",
+    "label": "Select a paragraph",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874)."
+    }
+   },
+   {
+    "key": "s",
+    "label": "Select a sentence",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      20
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-text-object-keeps-visual-mode",
+     "documented": "VSCodeVim 1.32.4 src/textobject/textobject.ts L379-L559 selects a sentence or paragraph without changing the Visual mode. With this fixture's four nonempty lines, no sentence terminator and trailing empty line, src/textobject/sentence.ts L16-L29 and L73-L81 returns the paragraph end. Inner paragraph ends on the preceding EOL (textobject.ts L550-L552), which forward Visual selection converts to the next line (modeHandler.ts L866-L874)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"3\"]",
+  "title": "visual after v3",
+  "keys": [
+   "v",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 3 words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Append after the highlighted text",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      1
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert at the selection start (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      1
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"\\\"\",\"a\"]",
+  "title": "visual after v\"a",
+  "keys": [
+   "v",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward (VSCodeVim uses b; Vim uses B)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      12
+     ],
+     "mode": "visual"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      11
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Append text after the highlighted area",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert at the selection start (VSCodeVim)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line []",
+  "title": "visual-line after V",
+  "keys": [
+   "V"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Append at the end of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      41
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert before the first nonblank of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"3\"]",
+  "title": "visual-line after V3",
+  "keys": [
+   "V",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move 3 words backward",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Append at the end of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      41
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      22
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert before the first nonblank of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Move to the last visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      22
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"\\\"\",\"a\"]",
+  "title": "visual-line after V\"a",
+  "keys": [
+   "V",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move the cursor to the start of the word",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "A",
+    "label": "Append at the end of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      41
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   },
+   {
+    "key": "I",
+    "label": "Insert before the first nonblank of the selected line",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert"
+    },
+    "knownDeviation": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 1
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "visual-insert-selection-boundary",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block []",
+  "title": "visual-block after <C-v>",
+  "keys": [
+   "<C-v>"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move one word backward",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"3\"]",
+  "title": "visual-block after <C-v>3",
+  "keys": [
+   "<C-v>",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Extend the block 3 words back",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   },
+   {
+    "key": "H",
+    "label": "Move to the first visible line (VSCodeVim ignores the count)",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "knownDeviation": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+     "measured": {
+      "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+      "trials": {
+       "defaults 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Extend the block to the 3rd line from the bottom of the window",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "prediction": {
+     "rule": "viewport-edge-ignores-count",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge)."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"\\\"\",\"a\"]",
+  "title": "visual-block after <C-v>\"a",
+  "keys": [
+   "<C-v>",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-left>",
+    "label": "Move N words backward",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "prediction": {
+     "rule": "ctrl-left-is-small-word",
+     "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions."
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,45 @@
+{
+  "card": "normal [\"T\"]",
+  "title": "normal after T",
+  "keys": ["T"],
+  "rows": [
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move till after Nth occurrence of T to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "o",
+      "source": "vim-oracle",
+      "label": "Move to just after the previous {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 7],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

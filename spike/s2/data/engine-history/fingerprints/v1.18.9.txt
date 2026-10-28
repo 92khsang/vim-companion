@@ -1,0 +1,22 @@
+export: 1
+base-fn: export async function getAndUpdateModeHandler(
+base-map-use: 9
+map-field: private modeHandlerMap = new Map<EditorIdentity, ModeHandler>();
+map-export: 
+vimState.modeData: 
+vimState.recordedState: public recordedState = new RecordedState();
+recorded.actionsRun: public actionsRun: BaseAction[] = [];
+recorded.actionsRunPressedKeys: public actionsRunPressedKeys: string[] = [];
+recorded.actionKeys: public actionKeys: string[] = [];
+recorded.bufferedKeys: public bufferedKeys: string[] = [];
+recorded.count: public count: number = 0;
+recorded.operatorCount: public operatorCount: number = 0;
+recorded.registerName: public registerName: string;
+recorded.hasRunOperator: public hasRunOperator = false;
+modeData-type: 
+mode-enum: exportenumMode{Normal,Insert,Visual,VisualBlock,VisualLine,SearchInProgressMode,CommandlineInProgress,Replace,EasyMotionMode,EasyMotionInputMode,SurroundInputMode,OperatorPendingMode,//Pseudo-Mode,usedonlywhenremapping.DON'TSETTOTHISMODEDisabled,}
+base.actionType: 
+base.isCompleteAction: isCompleteAction = true;
+base.keysPressed: public keysPressed: string[] = [];
+register-name: 
+webpack-opt: mode: 'production',|devtoolModuleFilenameTemplate: '../[resource-path]',|devtool: 'source-map',|mode: 'development',|devtool: 'inline-source-map',|

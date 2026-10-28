@@ -1,0 +1,70 @@
+[
+  {
+    "id": "normal [\"[\"]",
+    "title": "normal after [",
+    "keys": [
+      "["
+    ],
+    "rows": [
+      {
+        "key": "(",
+        "sets": [
+          "defaults",
+          "extensions"
+        ],
+        "source": "vim-oracle",
+        "label": "Move N times back to unmatched '('",
+        "labelFrom": "index",
+        "labelIndex": "index.txt L644 |[(|",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "single",
+          "doc": "document",
+          "size": "43x42"
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal [\"]\"]",
+    "title": "normal after ]",
+    "keys": [
+      "]"
+    ],
+    "rows": [
+      {
+        "key": ")",
+        "sets": [
+          "defaults",
+          "extensions"
+        ],
+        "source": "vim-oracle",
+        "label": "Move to the next unmatched )",
+        "labelFrom": "hand",
+        "labelIndex": "index.txt L686 |])|",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "single",
+          "doc": "document",
+          "size": "43x42"
+        }
+      }
+    ]
+  }
+]

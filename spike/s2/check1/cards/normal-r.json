@@ -1,0 +1,173 @@
+{
+  "card": "normal [\"r\"]",
+  "title": "normal after r",
+  "keys": ["r"],
+  "rows": [
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Replace N chars with r",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L424 |r|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tro\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": ["r"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tro\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {}
+            },
+            "rule": "replace-character-keeps-dot-register",
+            "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tro\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {}
+            },
+            "rule": "replace-character-keeps-dot-register",
+            "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "{<character>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "X",
+      "source": "vim-oracle",
+      "label": "Replace the character under the cursor with {char}",
+      "labelFrom": "pilot",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tXo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": ["X"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {}
+            },
+            "rule": "replace-character-keeps-dot-register",
+            "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {}
+            },
+            "rule": "replace-character-keeps-dot-register",
+            "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded.",
+            "measured": {
+              "pass": "Source followup 2026-10-28 at a0ef365: source predictions frozen before execution; both VS Code versions and every eligible settings set, 3 trials each; corrected Normal Ctrl-T clearJumps, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

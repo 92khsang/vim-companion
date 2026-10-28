@@ -1,0 +1,3550 @@
+{
+  "card": "visual [\"g\",\"r\"]",
+  "title": "visual after vgr",
+  "keys": ["v", "g", "r"],
+  "rows": [
+    {
+      "key": "\n",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the next line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDownNonBlank src/actions/motion.ts L731-746.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": " ",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then open the leader menu (which-key, the Normal-mode <Space> remap)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: spec/generated/vscode/vim-remaps.json <space> -> whichkey.show; src/configuration/remapper.ts L470-520.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "\"",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a register name",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandRegister src/actions/commands/actions.ts L120-137 waits for <register>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "#",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then search backward for the word under the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<tww\\>"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: SearchCurrentWordExactBackward src/actions/commands/search.ts L24-59, L91-130, L162-176: needle \\<tww\\>, register / (L112), the only match is (1,12).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "$",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 40],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineEnd src/actions/motion.ts L1014-1025; Normal-mode column clamp src/mode/modeHandler.ts L932-966.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "%",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then jump to the match of the next bracket on the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 24],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveToMatchingBracket src/actions/motion.ts L1764-1800: the first bracket from (1,14) is [ at 18, its match ] at 24.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "'",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a mark (jump to its line)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MarkMovementBOL src/actions/motion.ts L572-580 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "(",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the sentence",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MovePreviousSentenceBegin src/actions/motion.ts L1587-1595, src/textobject/sentence.ts L33-55: no sentence end, paragraph start (0,0).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": ")",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the next sentence",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveNextSentenceBegin src/actions/motion.ts L1608-1616, src/textobject/sentence.ts L57-72 and src/textobject/paragraph.ts L7-23: the paragraph ends at the empty line 4 that VS Code shows after the final newline.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "*",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then search forward for the word under the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["\\<tww\\>"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: SearchCurrentWordExactForward src/actions/commands/search.ts L24-59, L91-146: wraps to the only match (1,12).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "+",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the next line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDownNonBlank src/actions/motion.ts L731-746.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": ",",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then repeat the last f/t search backward",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 10],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveRepeatReversed src/actions/motion.ts L989-1012 runs F<Space> (findHelper L800-825): previous space before 14 is at 10.",
+      "setup": ["f", "<Space>", "1", "4", "|", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "-",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the previous line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveUpNonBlank src/actions/motion.ts L748-763.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "/",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start a forward search",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "other-5",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: SearchForwards src/actions/commands/search.ts L201-213 (Mode 5 SearchInProgressMode); updateView draws the Normal cursor (src/mode/modeHandler.ts L1289-1356).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "0",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineBegin src/actions/motion.ts L1027-1042.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": ":",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then open the command line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "other-6",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ShowCommandLine src/actions/commands/actions.ts L276-303 (Mode 6 CommandlineInProgress).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": ";",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then repeat the last f/t search",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 17],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveRepeat src/actions/motion.ts L972-987 runs f<Space> (findHelper L800-825): next space after 14 is at 17.",
+      "setup": ["f", "<Space>", "1", "4", "|", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<BS>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one character left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLeft src/actions/motion.ts L666-701.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-BS>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then move one character left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLeft src/actions/motion.ts L666-701.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-End>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the last line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EndOfSpecificLine src/actions/motion.ts L1407-1422: the last line is the empty line 4 after the final newline.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-Home>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveNonBlankFirst src/actions/motion.ts L1355-1374.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-[>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then cancel (nothing is pending)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandEsc src/actions/commands/actions.ts L139-189 in Normal mode only runs close commands; <C-c> stays <C-c> in Normal mode (src/mode/modeHandler.ts L453-466).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-a>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then add 1 to the number at or after the cursor (none on the line)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: IncrementNumber commands/incrementDecrement.ts L1-185: no number after (1,14) on the line, nothing changes.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-alt+down>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "setup": ["y", "l", "l"],
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+down, which VSCodeVim receives as <S-alt+down> (package.json L427; configuration.ts L163-L167); no Linux key sends <C-alt+down>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Down (add a cursor below) only on Windows",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap."
+      }
+    },
+    {
+      "key": "<C-alt+up>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "setup": ["y", "l", "l"],
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: Linux binds shift+alt+up, which VSCodeVim receives as <S-alt+up> (package.json L434; configuration.ts L163-L167); no Linux key sends <C-alt+up>",
+      "label": "Not available on Linux: VSCodeVim binds Ctrl+Alt+Up (add a cursor above) only on Windows",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<C-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>)."
+      }
+    },
+    {
+      "key": "<C-b>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll a page up and move the cursor up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: moves visibleRanges[0] end-start = 4 lines up from line 1, clamped to line 0, startofline. Setup gg j 1 3 l puts line 0 at the top.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-c>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then cancel (nothing is pending)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandEsc src/actions/commands/actions.ts L139-189 in Normal mode only runs close commands; <C-c> stays <C-c> in Normal mode (src/mode/modeHandler.ts L453-466).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-d>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll half a page down and move the cursor down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [3, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          ":": {
+            "mode": "character",
+            "lines": ["set scroll=0"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172, src/configuration/configuration.ts L449-453: scroll 0 gives ceil(4/2) = 2 lines, line 3, startofline. Setup :set scroll=0 (an earlier counted <C-d> sets it) and gg j 1 3 l. Documented: ExCommandLine.run (commandLine.ts L262-L271) stores the actual setup command set scroll=0 in RecordedState.commandList; the colon register contains that text. Empty action keys omitted it. Fresh verification of colon content with the corrected probe is pending.",
+      "setup": [
+        ":",
+        "s",
+        "e",
+        "t",
+        "<Space>",
+        "s",
+        "c",
+        "r",
+        "o",
+        "l",
+        "l",
+        "=",
+        "0",
+        "<CR>",
+        "g",
+        "g",
+        "j",
+        "1",
+        "3",
+        "l",
+        "y",
+        "l",
+        "l"
+      ],
+      "labelFrom": "hand",
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [3, 0],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            ":": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "basis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172, src/configuration/configuration.ts L449-453: scroll 0 gives ceil(4/2) = 2 lines, line 3, startofline. Setup :set scroll=0 (an earlier counted <C-d> sets it) and gg j 1 3 l."
+      },
+      "measured": {
+        "pass": "ex-register-recheck (a0abfc3; actual Ex contents)",
+        "trials": {
+          "extensions 1.134.0": {
+            "trials": 3
+          },
+          "extensions 1.141.0": {
+            "trials": 3
+          }
+        },
+        "verdict": "match",
+        "note": "Every trial matched the source-authored hand expectation, including actual setup command text in colon and full register preservation."
+      }
+    },
+    {
+      "key": "<C-e>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll the view a line down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlE src/actions/commands/scroll.ts L10-62: the cursor stays because line 1 is still visible after the scroll. Setup gg j 1 3 l puts line 0 at the top.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-f>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll a page down and move the cursor down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandMoveFullPageDown src/actions/commands/scroll.ts L76-160: 4 lines down from line 1, clamped to line 4 (the empty last line).",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-j>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDown src/actions/motion.ts L307-349 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-left>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the word",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveBeginningWord src/actions/motion.ts L1569-1576, src/textobject/word.ts L56-89.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-m>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the next line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDownNonBlank src/actions/motion.ts L731-746.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-n>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDown src/actions/motion.ts L307-349 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-p>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveUp src/actions/motion.ts L350-392 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-pagedown>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then go to the next editor of the group (the group has one editor: no change)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: NextTab src/actions/commands/window.ts L292-316, src/cmd_line/commands/tab.ts L182-199: workbench.action.nextEditorInGroup with a single editor in group 1.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-pageup>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then go to the previous editor of the group (the group has one editor: no change)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: PreviousTab src/actions/commands/window.ts L318-336, src/cmd_line/commands/tab.ts L201-210.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-q>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start Visual Block mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "visual-block",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EnterVisualBlockMode src/actions/commands/visual.ts L53-64; the block selection of line 1 ends at column 15 (src/mode/modeHandler.ts L1328-1346).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-right>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the next WORD",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 18],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveFullWordBegin src/actions/motion.ts L1496-1515, src/textobject/word.ts L91-115.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-u>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll half a page up and move the cursor up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          ":": {
+            "mode": "character",
+            "lines": ["set scroll=0"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: 2 lines up from line 1, clamped to line 0. Documented: ExCommandLine.run (commandLine.ts L262-L271) stores the actual setup command set scroll=0 in RecordedState.commandList; the colon register contains that text. Empty action keys omitted it. Fresh verification of colon content with the corrected probe is pending.",
+      "setup": [
+        ":",
+        "s",
+        "e",
+        "t",
+        "<Space>",
+        "s",
+        "c",
+        "r",
+        "o",
+        "l",
+        "l",
+        "=",
+        "0",
+        "<CR>",
+        "g",
+        "g",
+        "j",
+        "1",
+        "3",
+        "l",
+        "y",
+        "l",
+        "l"
+      ],
+      "labelFrom": "hand",
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            ":": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "basis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: 2 lines up from line 1, clamped to line 0."
+      },
+      "measured": {
+        "pass": "ex-register-recheck (a0abfc3; actual Ex contents)",
+        "trials": {
+          "extensions 1.134.0": {
+            "trials": 3
+          },
+          "extensions 1.141.0": {
+            "trials": 3
+          }
+        },
+        "verdict": "match",
+        "note": "Every trial matched the source-authored hand expectation, including actual setup command text in colon and full register preservation."
+      }
+    },
+    {
+      "key": "<C-v>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start Visual Block mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "visual-block",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EnterVisualBlockMode src/actions/commands/visual.ts L53-64; the block selection of line 1 ends at column 15 (src/mode/modeHandler.ts L1328-1346).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-w>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a window command",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: The <C-w> commands of src/actions/commands/window.ts L71-290 wait for their second key.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-x>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then subtract 1 from the number at or after the cursor (none on the line)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: DecrementNumber commands/incrementDecrement.ts L1-185: no number, nothing changes.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<C-y>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then scroll the view a line up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlY src/actions/commands/scroll.ts L10-70: the view is at the top, the cursor stays.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<D-a>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then select every line (Visual Line mode)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "visual-line",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCmdA src/actions/commands/actions.ts L249-262: Visual Line from line 0 to the last line 4 (empty), whose end is (4,0).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<D-alt+down>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "setup": ["y", "l", "l"],
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+down is the binding's mac field only; Linux binds shift+alt+down (<S-alt+down>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Down (add a cursor below) only on macOS",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<D-alt+down>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line below",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorBelow src/actions/commands/actions.ts L1121-1137 runs editor.action.insertCursorBelow; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorDown keeps the original cursor first (primary). The Linux keybinding sends <S-alt+down> (VSCodeVim package.json linux key, src/configuration/configuration.ts L154-173), so this token reaches VSCodeVim only from a remap."
+      }
+    },
+    {
+      "key": "<D-alt+up>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "setup": ["y", "l", "l"],
+      "source": "unsupported-linux",
+      "reason": "unreachable on Linux: cmd+alt+up is the binding's mac field only; Linux binds shift+alt+up (<S-alt+up>)",
+      "label": "Not available on Linux: VSCodeVim binds Cmd+Alt+Up (add a cursor above) only on macOS",
+      "labelFrom": "hand",
+      "unsupported": {
+        "token": "<D-alt+up>"
+      },
+      "previous": {
+        "source": "hand",
+        "reason": "own: a key token of VSCodeVim's own",
+        "label": "Replace the selection with the register, then add a cursor on the line above",
+        "labelFrom": "hand",
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [1, 14],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            }
+          }
+        },
+        "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertCursorAbove src/actions/commands/actions.ts L1138-1154, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts addCursorUp keeps the original cursor first. Not sent on Linux (see <C-alt+down>)."
+      }
+    },
+    {
+      "key": "<D-d>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then select the word under the cursor (Cmd+D)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "visual",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ActionOverrideCmdD src/actions/commands/actions.ts L1065-1084: editor.action.addSelectionToNextFindMatch on an empty selection selects the word tww (1,12)-(1,15), stop moved left, Visual mode; drawn as (1,12)-(1,15) (src/mode/modeHandler.ts L861-876, L1311-1326).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<D-left>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then move to the start of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineBegin src/actions/motion.ts L1027-1042.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<D-right>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then move to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 40],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineEnd src/actions/motion.ts L1014-1025; Normal-mode column clamp src/mode/modeHandler.ts L932-966.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<End>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 40],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineEnd src/actions/motion.ts L1014-1025; Normal-mode column clamp src/mode/modeHandler.ts L932-966.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<Esc>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then cancel (nothing is pending)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandEsc src/actions/commands/actions.ts L139-189 in Normal mode only runs close commands; <C-c> stays <C-c> in Normal mode (src/mode/modeHandler.ts L453-466).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<ExtensionDisable>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then disable VSCodeVim",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "other-12",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: DisableExtension src/actions/commands/actions.ts L28-48 (Mode 12 Disabled; sent by the toggleVim command, extensionBase.ts L455-458); the selection collapses on the cursor (src/mode/modeHandler.ts L1353-1356).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<Home>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLineBegin src/actions/motion.ts L1027-1042.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<S-BS>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then move one character left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLeft src/actions/motion.ts L666-701.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<copy>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Replace the selection with the register, then copy the selection (there is none) and stay in Normal mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandOverrideCopy src/actions/commands/actions.ts L196-247: an empty selection copies nothing.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<down>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDown src/actions/motion.ts L307-349 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<left>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one character left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLeft src/actions/motion.ts L666-701.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<right>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one character right",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveRight src/actions/motion.ts L703-729.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "<up>",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveUp src/actions/motion.ts L350-392 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "?",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start a backward search",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "other-5",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: SearchBackwards src/actions/commands/search.ts L215-231.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "@",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a register to run as a macro",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ExecuteMacro src/actions/commands/macro.ts L105-130 waits for <register>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "A",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then append at the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 41],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertAtLineEnd src/actions/commands/insert.ts L108-117.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "B",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the WORD",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 11],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveBeginningFullWord src/actions/motion.ts L1578-1585.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "C",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then change to the end of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tw"
+        },
+        "cursor": [1, 14],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w\", [three]) { four(five) }"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ChangeToLineEnd src/actions/commands/actions.ts L489-505, ChangeOperator src/actions/operator.ts L661-707 (writes only the unnamed register: no name, src/register/register.ts L205-249).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "E",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the WORD",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveFullWordEnd src/actions/motion.ts L1535-1549.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "F",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a character to find backward",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveFindBackward src/actions/motion.ts L867-908 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "G",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the last line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveNonBlankLast src/actions/motion.ts L1376-1405: the last line is the empty line 4.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "H",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the top line of the window",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveToLineFromViewPortTop src/actions/motion.ts L1272-1302: visibleRanges[0] starts at line 0 after the setup gg j 1 3 l.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "I",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then insert before the first non-blank of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertAfterFirstWhitespaceOnLine src/actions/commands/insert.ts L85-95.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "J",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then join the next line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) } epsilon zeta eta theta",
+          "2": null
+        },
+        "cursor": [1, 41],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ActionJoin src/actions/commands/join.ts L13-143: one space, cursor at the inserted space.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "L",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the bottom line of the window",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveToLineFromViewPortBottom src/actions/motion.ts L1304-1336: the bottom visible line is the last line 4.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "M",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the middle line of the window",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveToMiddleLineInViewPort src/actions/motion.ts L1338-1344 runs cursorMove viewPortCenter; VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts viewportMove: round((1+5)/2) = line 3 (1-based), first non-blank.",
+      "setup": ["g", "g", "j", "1", "3", "l", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "N",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then repeat the last search backward",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 8],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandPreviousSearchMatch src/actions/motion.ts L474-522: previous e before (1,14) is at (1,8). Setup /e<CR> 1 4 | sets the search and register /.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "O",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then open a line above",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  ",
+          "  if (one, \"tww\", [three]) { four(five) }",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 2],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertAbove src/actions/commands/insert.ts L119-169: editor.action.insertLineBefore (no indent with editor.autoIndent none, VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorTypeEditOperations.ts L547-550, L626-643), then the indent of line 1 (vim.autoindent, src/common/motion/position.ts L463-471).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "P",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then put the register before the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: PutBeforeCommand src/actions/commands/put.ts L421-472, BasePutCommand L37-139: charwise w at (1,14), cursor on the put text.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "R",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start Replace mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "replace",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EnterReplaceMode src/actions/commands/replace.ts L190-205.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "S",
+      "when": {
+        "vim.surround": false,
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for two characters to sneak backward (sneak)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: SneakBackward src/actions/plugins/sneak.ts L75-140 (vim.sneak on; ChangeLine S defers to sneak, src/actions/commands/actions.ts L509-531).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "T",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a character (till backward)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveTilBackward src/actions/motion.ts L943-970 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "V",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start Visual Line mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 41],
+        "mode": "visual-line",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EnterVisualLineMode src/actions/commands/visual.ts L30-42; drawn from the line start to the line end (src/mode/modeHandler.ts L1328-1334).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "W",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the next WORD",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 18],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveFullWordBegin src/actions/motion.ts L1496-1515, src/textobject/word.ts L91-115.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "X",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then delete the character before the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tw\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ActionDeleteLastChar src/actions/commands/actions.ts L583-603, DeleteOperator src/actions/operator.ts L94-190, src/register/register.ts L224-235 (- for a small delete).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true,
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "Replace the selection with the register, then wait for Z or Q (ZZ, ZQ)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: WriteQuit and ForceQuit src/actions/commands/window.ts L28-53 wait for the second key; sneak's Z needs an operator (src/actions/plugins/sneak.ts L82-90).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "[",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for the next key of a bracket command",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: [ and ] start Normal remaps ([d, ]d, [e, ]e in spec/generated/vscode/vim-remaps.json) and motions (src/actions/motion.ts L604-664, L1736-1762): the remapper buffers the key.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "]",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for the next key of a bracket command",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: [ and ] start Normal remaps ([d, ]d, [e, ]e in spec/generated/vscode/vim-remaps.json) and motions (src/actions/motion.ts L604-664, L1736-1762): the remapper buffers the key.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "^",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveNonBlank src/actions/motion.ts L1346-1353.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "_",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the first non-blank of the line",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 2],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDownUnderscore src/actions/motion.ts L765-780 with count 1.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "`",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a mark (jump to it)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MarkMovement src/actions/motion.ts L582-602 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
+      "label": "Show the quick fixes for the selection (g r a remap: editor.action.quickFix)",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 14],
+        "mode": "visual"
+      },
+      "expectBasis": "VSCodeVim 1.32.4: spec/generated/vscode/vim-remaps.json visual g r a -> editor.action.quickFix; src/configuration/remapper.ts L292-372, L470-520 (no VSCodeVim action runs). editor.action.quickFix only opens the code action menu (or a no-code-actions message for plain text), so the Visual selection (1,13)-(1,14) stays.",
+      "labelFrom": "hand"
+    },
+    {
+      "key": "b",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the word",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveBeginningWord src/actions/motion.ts L1569-1576, src/textobject/word.ts L56-89.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "e",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the next word",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveWordEnd src/actions/motion.ts L1517-1533: the next word is the punctuation run \", at 15-16.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "f",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a character to find",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveFindForward src/actions/motion.ts L827-865 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "g",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for the next key of a g command",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: g starts the Normal remaps gO and gr* (spec/generated/vscode/vim-remaps.json): the remapper buffers it.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "h",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one character left",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveLeft src/actions/motion.ts L666-701.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "i",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then insert before the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: Insert src/actions/commands/insert.ts L24-48.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "j",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line down",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [2, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveDown src/actions/motion.ts L307-349 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "k",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one line up",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveUp src/actions/motion.ts L350-392 with desiredColumn 14.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "l",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move one character right",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveRight src/actions/motion.ts L703-729.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "n",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then repeat the last search",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 22],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "/": {
+            "mode": "character",
+            "lines": ["e"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandNextSearchMatch src/actions/motion.ts L425-472: next e after (1,14) is at (1,22). Setup /e<CR> 1 4 |.",
+      "setup": ["/", "e", "<CR>", "1", "4", "|", "y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "o",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then open a line below",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"tww\", [three]) { four(five) }",
+          "",
+          "epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [2, 0],
+        "mode": "insert",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: InsertBelow src/actions/commands/insert.ts L171-208: editor.action.insertLineAfter adds no indent with editor.autoIndent none (VS Code VS Code 1.141.0 src/vs/editor/common/cursor/cursorTypeEditOperations.ts L547-550, L645-656).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "p",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then put the register after the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: PutCommand src/actions/commands/put.ts L332-418: charwise w after (1,14), cursor on the put text.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "q",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a register to record a macro into",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: RecordMacro src/actions/commands/macro.ts L11-37 waits for <macro> (no recording is active).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "r",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for the character that replaces the one under the cursor",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: ReplaceCharacter src/actions/commands/replace.ts L13-75 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "t",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for a character (till)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveTilForward src/actions/motion.ts L910-941 waits for <character>.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "v",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start Visual mode",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "visual",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: EnterVisualMode src/actions/commands/visual.ts L6-18; drawn with the stop one character right (src/mode/modeHandler.ts L861-876, L1311-1326).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "w",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the next word",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveWordBegin src/actions/motion.ts L1424-1494: the punctuation run \", starts at 15.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then wait for the next key of a z command",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: The z commands (src/actions/commands/scroll.ts, src/actions/commands/fold.ts) wait for their second key; sneak's z needs an operator (src/actions/plugins/sneak.ts L15-23).",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "{",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the start of the paragraph",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveParagraphBegin src/actions/motion.ts L1672-1679, src/textobject/paragraph.ts L28-43.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "Replace the selection with the register, then wait for the key after the leader (camelCaseMotion w b e, easymotion)",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: src/actions/plugins/camelCaseMotion.ts L11-60 (<leader>w/e/b) and the easymotion <leader><leader> commands wait for more keys.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "{<number>}",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "sample": "3",
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then start a count",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 14],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandNumber src/actions/commands/actions.ts L61-118 starts a count.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "|",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to column 1",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveToColumn src/actions/motion.ts L782-793 with no count.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    },
+    {
+      "key": "}",
+      "when": {
+        "vim.replaceWithRegister": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:replaceWithRegister: row exists only with vim.replaceWithRegister",
+      "label": "Replace the selection with the register, then move to the end of the paragraph",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"tww\", [three]) { four(five) }"
+        },
+        "cursor": [4, 0],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: MoveParagraphEnd src/actions/motion.ts L1618-1670, src/textobject/paragraph.ts L7-23: the empty line 4.",
+      "setup": ["y", "l", "l"],
+      "labelFrom": "hand"
+    }
+  ]
+}

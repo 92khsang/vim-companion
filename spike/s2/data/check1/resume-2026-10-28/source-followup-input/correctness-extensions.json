@@ -1,0 +1,2012 @@
+[
+ {
+  "id": "normal [\"r\"]",
+  "title": "normal after r",
+  "keys": [
+   "r"
+  ],
+  "rows": [
+   {
+    "key": "r",
+    "label": "Replace N chars with r",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tro\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {}
+    },
+    "prediction": {
+     "rule": "replace-character-keeps-dot-register",
+     "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded."
+    }
+   },
+   {
+    "key": "{<character>}",
+    "label": "Replace the character under the cursor with {char}",
+    "sample": "X",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tXo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {}
+    },
+    "prediction": {
+     "rule": "replace-character-keeps-dot-register",
+     "documented": "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": ".",
+    "label": "Repeat the last change 3 times",
+    "setup": [
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        ","
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        ","
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"t [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         ","
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         ","
+        ]
+       }
+      }
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-403 and src/mode/modeHandler.ts L1133-1185 (DotRepeat replays the recorded x 3 times, each a separate delete, so the registers hold the last character); setup x deletes (1,13)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "dot-replays-recorded-delete",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a."
+    }
+   },
+   {
+    "key": "<C-o>",
+    "label": "Go 3 entries back in the jump list",
+    "setup": [
+     "j",
+     "G",
+     "g",
+     "g",
+     "2",
+     "G",
+     "G"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       2,
+       13
+      ],
+      "mode": "normal"
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103; VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "counted-jump-list-boundary",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Go 3 entries back in the tag stack (VSCodeVim: the jump list)",
+    "setup": [
+     "j",
+     "G",
+     "g",
+     "g",
+     "2",
+     "G",
+     "G"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      2,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       2,
+       13
+      ],
+      "mode": "normal"
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-t> is a key of NavigateBack); VSCodeVim 1.32.4 src/jumps/jumpTracker.ts L145-240 and L320-345 (a count steps that many entries; a jump clears older jumps on the same line); setup j G gg 2G G records (2,13), (0,0), (1,2) after older entries",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": ".",
+    "label": "Repeat the last change 30 times",
+    "setup": [
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one,"
+     },
+     "cursor": [
+      1,
+      9
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        " "
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        " "
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one,"
+      },
+      "cursor": [
+       1,
+       9
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         " "
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         " "
+        ]
+       }
+      }
+     },
+     "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); 30 replays of x, each one character at the cursor, which moves left at the line end (src/mode/modeHandler.ts L927-967)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "dot-replays-recorded-delete",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a."
+    }
+   },
+   {
+    "key": "<C-i>",
+    "label": "Go 30 positions forward in the jump list",
+    "setup": [
+     "g",
+     "g",
+     "<C-o>"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "normal"
+     },
+     "basis": "setup g g <C-o> leaves the jump list one step back; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L105-117, src/jumps/jumpTracker.ts L216-232 (jumpForward clamps at the newest jump, [0,0], also with a count)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "counted-jump-list-boundary",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded."
+    }
+   },
+   {
+    "key": "<C-o>",
+    "label": "Go 30 positions back in the jump list",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "counted-jump-list-boundary",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Go 30 positions back in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"d\"]",
+  "title": "normal after 3d",
+  "keys": [
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "M",
+    "label": "Delete the lines to the middle line of the window",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"tepsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "delete-viewport-center-characterwise",
+     "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"d\",\"3\"]",
+  "title": "normal after d3",
+  "keys": [
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "\n",
+    "label": "Delete this line and the 3 lines below",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "M",
+    "label": "Delete the lines to the middle line of the window",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"tepsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "delete-viewport-center-characterwise",
+     "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\"]",
+  "title": "normal after 2",
+  "keys": [
+   "2"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll the window 2 pages up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Jump 2 entries back in the tag stack",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\"]",
+  "title": "normal after 2d",
+  "keys": [
+   "2",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "M",
+    "label": "Delete to middle line of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"tepsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "delete-viewport-center-characterwise",
+     "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\",\"3\"]",
+  "title": "normal after 2d3",
+  "keys": [
+   "2",
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "\n",
+    "label": "Delete to the first CHAR 6 lines lower",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "M",
+    "label": "Delete to middle line of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"tepsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "delete-viewport-center-characterwise",
+     "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal []",
+  "title": "normal after d<Esc>",
+  "keys": [
+   "d",
+   "<Esc>"
+  ],
+  "rows": [
+   {
+    "key": "<C-t>",
+    "label": "Go to the older position in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal"
+     },
+     "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\"]",
+  "title": "normal after \"a",
+  "keys": [
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": ".",
+    "label": "Repeat the last change",
+    "setup": [
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "o"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "o"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"t\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         "o"
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         "o"
+        ]
+       }
+      }
+     },
+     "basis": "setup x deletes \"w\" (\" and - hold \"w\") and makes it the last full action; VSCodeVim 1.32.4 src/actions/commands/actions.ts L386-405 (DotRepeat replays it count times), src/mode/modeHandler.ts L1142-1197 (rerunRecordedState: a new RecordedState per replay, so a pending register is not used); the replayed x deletes \"o\" into \" and -, not a",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "dot-replays-recorded-delete",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a."
+    }
+   },
+   {
+    "key": "<C-b>",
+    "label": "Scroll a page up and move the cursor a page up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "normal"
+     },
+     "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines up from line 1 clamps to line 0",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Go to the older position in the jump list (VSCodeVim maps <C-t> like <C-o>)",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal"
+     },
+     "basis": "setup g g jumps from [1,13] to [0,0]; VSCodeVim 1.32.4 src/actions/commands/navigate.ts L91-103 (<C-o> <C-t>), src/jumps/jumpTracker.ts L150-214 (jumpBack returns the latest jump, here [1,13] in a.txt)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"+\"]",
+  "title": "normal after \"+",
+  "keys": [
+   "\"",
+   "+"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll the window one page up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Jump to the older entry of the tag stack",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"_\"]",
+  "title": "normal after \"_",
+  "keys": [
+   "\"",
+   "_"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll the window one page up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Jump to the older entry of the tag stack",
+    "setup": [
+     "g",
+     "g"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": ".",
+    "label": "Repeat the last change 3 times (VSCodeVim does not use register a)",
+    "setup": [
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"t [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        ","
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        ","
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"t [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       13
+      ],
+      "mode": "normal",
+      "registers": {
+       "\"": {
+        "mode": "character",
+        "lines": [
+         ","
+        ]
+       },
+       "-": {
+        "mode": "character",
+        "lines": [
+         ","
+        ]
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: DotRepeat src/actions/commands/actions.ts L386-405: replays the previous x 3 times (src/mode/modeHandler.ts L1142-1203 starts each with a new RecordedState, so the register is the unnamed one). Setup x deletes w; the replays delete o, \" and , (src/register/register.ts L224-235).",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "dot-replays-recorded-delete",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a."
+    }
+   },
+   {
+    "key": "<C-b>",
+    "label": "Scroll 3 pages up and move the cursor up",
+    "setup": [
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: 3 x 4 lines up from line 1, clamped to 0, startofline. Setup gg j 1 3 l (line 0 at the top).",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<C-t>",
+    "label": "Jump back 3 times in the jump list (VSCodeVim maps CTRL-T to CTRL-O)",
+    "setup": [
+     "g",
+     "g",
+     "G",
+     "3",
+     "G",
+     "2",
+     "G",
+     "1",
+     "4",
+     "|"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "normal"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: NavigateBack src/actions/commands/navigate.ts L91-103, src/jumps/jumpTracker.ts L158-221, L317-332: from (1,13) back to (2,0), (4,0), (0,0). Setup gg G 3G 2G 1 4 | records jumps from (1,13), (0,0), (4,0), (2,0).",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "normal-control-t-cleared-jumps",
+     "documented": "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\",\"d\"]",
+  "title": "normal after \"a3d",
+  "keys": [
+   "\"",
+   "a",
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "M",
+    "label": "Delete to middle line of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"tepsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "a": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "wo\", [three]) { four(five) }",
+        ""
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "delete-viewport-center-characterwise",
+     "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"3\"]",
+  "title": "visual after v3",
+  "keys": [
+   "v",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll the window 3 pages up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"\\\"\",\"a\"]",
+  "title": "visual after v\"a",
+  "keys": [
+   "v",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll a page up and move the cursor a page up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "visual"
+     },
+     "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Put register a over the highlighted area",
+    "setup": [
+     "\"",
+     "a",
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twowo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      14
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "t"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"twowo\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       14
+      ],
+      "mode": "normal",
+      "registers": {
+       "a": {
+        "mode": "character",
+        "lines": [
+         "two"
+        ]
+       },
+       "\"": {
+        "mode": "character",
+        "lines": [
+         "t"
+        ]
+       }
+      }
+     },
+     "basis": "setup \" a y i w yanks \"two\" into a and \" (copyToUnnamed) and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/register/register.ts L54-76; 0 is not written with a named register, L215-224); v starts on [1,12]; VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): \"t\" is replaced by \"two\" and goes to \" (L104-115)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line []",
+  "title": "visual-line after V",
+  "keys": [
+   "V"
+  ],
+  "rows": [
+   {
+    "key": "Y",
+    "label": "Yank the highlighted lines",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the highlighted lines with the register",
+    "setup": [
+     "k",
+     "y",
+     "e",
+     "j"
+    ],
+    "expect": {
+     "text": {
+      "1": "mma"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "mma"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "mma"
+      },
+      "cursor": [
+       1,
+       0
+      ],
+      "mode": "normal",
+      "registers": {
+       "0": {
+        "mode": "character",
+        "lines": [
+         "mma"
+        ]
+       },
+       "\"": {
+        "mode": "line",
+        "lines": [
+         "  if (one, \"two\", [three]) { four(five) }"
+        ]
+       }
+      }
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k ye j yanks 'mma' (charwise, put as the line)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"3\"]",
+  "title": "visual-line after V3",
+  "keys": [
+   "V",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll 3 pages up and move the cursor as far (to line 0)",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "visual-line"
+     },
+     "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "C",
+    "label": "Delete the highlighted lines and start insert",
+    "expect": {
+     "text": {
+      "1": "  "
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "X",
+    "label": "Delete the highlighted lines",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "Y",
+    "label": "Yank the highlighted lines",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "c",
+    "label": "Delete highlighted area and start insert",
+    "expect": {
+     "text": {
+      "1": "  "
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "p",
+    "label": "Put the unnamed register 3 times over the highlighted lines",
+    "setup": [
+     "y",
+     "i",
+     "w"
+    ],
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "two",
+      "two",
+      "two",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "two"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": [
+       "alpha beta gamma delta",
+       "two",
+       "two",
+       "two",
+       "epsilon zeta eta theta",
+       "iota kappa lambda mu"
+      ],
+      "cursor": [
+       1,
+       0
+      ],
+      "mode": "normal",
+      "registers": {
+       "0": {
+        "mode": "character",
+        "lines": [
+         "two"
+        ]
+       },
+       "\"": {
+        "mode": "line",
+        "lines": [
+         "  if (one, \"two\", [three]) { four(five) }"
+        ]
+       }
+      }
+     },
+     "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L36-140 (BasePutCommand), L326-470 (PutCommand, PutBeforeCommand): the replaced line goes to \" linewise (L104-115, src/state/vimState.ts L288-300)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"\\\"\",\"a\"]",
+  "title": "visual-line after V\"a",
+  "keys": [
+   "V",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll a page up and move the cursor up",
+    "setup": [
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual-line"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "visual-line"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: line 0, startofline. Setup gg j 1 3 l.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "<Del>",
+    "label": "Delete the selected lines into register a",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "registers",
+     "documented": "VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then \" ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name"
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the selected lines with register a; the unnamed register gets the old lines",
+    "setup": [
+     "\"",
+     "a",
+     "y",
+     "l"
+    ],
+    "expect": {
+     "text": {
+      "1": "w"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "w"
+      },
+      "cursor": [
+       1,
+       0
+      ],
+      "mode": "normal",
+      "registers": {
+       "a": {
+        "mode": "character",
+        "lines": [
+         "w"
+        ]
+       },
+       "\"": {
+        "mode": "line",
+        "lines": [
+         "  if (one, \"two\", [three]) { four(five) }"
+        ]
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, BasePutCommand L101-120 (Visual put writes the replaced text to the unnamed register, linewise in Visual Line mode). Setup \"ayl.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block []",
+  "title": "visual-block after <C-v>",
+  "keys": [
+   "<C-v>"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll the window one page up",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"3\"]",
+  "title": "visual-block after <C-v>3",
+  "keys": [
+   "<C-v>",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll 3 pages up and move the cursor up",
+    "setup": [
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       14
+      ],
+      "mode": "visual-block"
+     },
+     "expectBasis": "VSCodeVim 1.32.4: CommandMoveFullPageUp src/actions/commands/scroll.ts L76-150: line 0, startofline (0,0); the block's top line is 0. Setup gg j 1 3 l.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the block with the register 3 times; the unnamed register gets the old block",
+    "setup": [
+     "y",
+     "l"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      15
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "\"": {
+       "mode": "block",
+       "lines": [
+        "w"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"twwwo\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       15
+      ],
+      "mode": "normal",
+      "registers": {
+       "0": {
+        "mode": "character",
+        "lines": [
+         "w"
+        ]
+       },
+       "\"": {
+        "mode": "block",
+        "lines": [
+         "w"
+        ]
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: PutCommand src/actions/commands/put.ts L332-418, BasePutCommand L101-120 (the replaced text, blockwise in Visual Block mode). Setup y l.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-block [\"\\\"\",\"a\"]",
+  "title": "visual-block after <C-v>\"a",
+  "keys": [
+   "<C-v>",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-b>",
+    "label": "Scroll a page up",
+    "setup": [
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      14
+     ],
+     "mode": "visual-block"
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       14
+      ],
+      "mode": "visual-block"
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L74-183 (CommandScrollAndMoveCursor: the cursor moves by the scrolled lines to the first non-blank, src/common/motion/position.ts L553-560); setup gg j 13l scrolls the view to line 0 and returns to (1,13) (gg reveals the cursor, src/mode/modeHandler.ts L1423-1485); Inferred: the sandbox editor shows all five lines, so visibleRanges[0] is lines 0-4; VSCodeVim 1.32.4 src/mode/modeHandler.ts L866-876 and L1288-1356 (Visual stop shift and the drawn selection)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "page-back-clamps-cursor",
+     "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded."
+    }
+   },
+   {
+    "key": "p",
+    "label": "Replace the highlighted block with register a",
+    "setup": [
+     "k",
+     "\"",
+     "a",
+     "y",
+     "e",
+     "j"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tmmao\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      15
+     ],
+     "mode": "normal",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "mma"
+       ]
+      },
+      "\"": {
+       "mode": "block",
+       "lines": [
+        "w"
+       ]
+      }
+     },
+     "shiftNumbered": false,
+     "__shift": false
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (one, \"tmmao\", [three]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       15
+      ],
+      "mode": "normal",
+      "registers": {
+       "a": {
+        "mode": "character",
+        "lines": [
+         "mma"
+        ]
+       },
+       "\"": {
+        "mode": "block",
+        "lines": [
+         "w"
+        ]
+       }
+      }
+     },
+     "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/put.ts L31-135 and L332-470 (Visual p puts the replaced text into \", Visual P keeps the register since Vim 9.0); setup k \"aye j yanks 'mma' into a and \" (no 0 with a named register)",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "visual-put-keeps-delete-history",
+     "documented": "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded."
+    }
+   }
+  ]
+ }
+]

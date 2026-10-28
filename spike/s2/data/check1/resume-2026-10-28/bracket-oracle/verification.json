@@ -1,0 +1,78 @@
+{
+  "status": "pass",
+  "trials": 4,
+  "matched": 4,
+  "configuration": {
+    "cpus": "0-7",
+    "layout": "single",
+    "document": "document",
+    "size": "43x42",
+    "vimrc": "expect-sw2.vimrc"
+  },
+  "results": [
+    {
+      "set": "defaults",
+      "card": "normal [\"[\"]",
+      "key": "(",
+      "authoredMatch": true,
+      "expect": {
+        "text": "unchanged",
+        "cursor": [
+          1,
+          13
+        ],
+        "mode": "normal",
+        "registers": {}
+      }
+    },
+    {
+      "set": "defaults",
+      "card": "normal [\"]\"]",
+      "key": ")",
+      "authoredMatch": true,
+      "expect": {
+        "text": "unchanged",
+        "cursor": [
+          1,
+          13
+        ],
+        "mode": "normal",
+        "registers": {}
+      }
+    },
+    {
+      "set": "extensions",
+      "card": "normal [\"[\"]",
+      "key": "(",
+      "authoredMatch": true,
+      "expect": {
+        "text": "unchanged",
+        "cursor": [
+          1,
+          13
+        ],
+        "mode": "normal",
+        "registers": {}
+      }
+    },
+    {
+      "set": "extensions",
+      "card": "normal [\"]\"]",
+      "key": ")",
+      "authoredMatch": true,
+      "expect": {
+        "text": "unchanged",
+        "cursor": [
+          1,
+          13
+        ],
+        "mode": "normal",
+        "registers": {}
+      }
+    }
+  ],
+  "limitations": [
+    "One fresh Vim run per row per settings label; no additional VS Code run.",
+    "Vim causal quote-handling explanation not separately isolated by this check."
+  ]
+}

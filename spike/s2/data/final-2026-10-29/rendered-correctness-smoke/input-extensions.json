@@ -1,0 +1,334 @@
+[
+ {
+  "id": "normal []",
+  "title": "normal after d<Esc>",
+  "keys": [
+   "d",
+   "<Esc>"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last substitution on the current line",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s"
+       ]
+      },
+      "/": {
+       "mode": "character",
+       "lines": [
+        "e"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+     "measured": {
+      "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    }
+   },
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    }
+   },
+   {
+    "key": "x",
+    "label": "Delete N characters under and after the cursor",
+    "expect": {
+     "text": {
+      "1": "  if (one, \"to\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"g\",\"U\"]",
+  "title": "normal after gU",
+  "keys": [
+   "g",
+   "U"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Uppercase the line",
+    "expect": {
+     "text": {
+      "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": {
+      "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "repeated-line-case",
+     "documented": "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+     "measured": {
+      "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"<C-w>\"]",
+  "title": "normal after <C-w>",
+  "keys": [
+   "<C-w>"
+  ],
+  "rows": [
+   {
+    "key": "l",
+    "label": "Move to the window on the right",
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "%": {
+       "mode": "character",
+       "lines": [
+        "b.txt"
+       ]
+      },
+      "#": {
+       "mode": "character",
+       "lines": [
+        "a.txt"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "right-window-file-registers",
+     "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+     "measured": {
+      "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"+\"]",
+  "title": "normal after \"+",
+  "keys": [
+   "\"",
+   "+"
+  ],
+  "rows": [
+   {
+    "key": "<C-d>",
+    "label": "Scroll half a window down and move the cursor as many lines",
+    "setup": [
+     "z",
+     "b"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      0
+     ],
+     "mode": "normal"
+    },
+    "vim": {
+     "text": "unchanged",
+     "cursor": [
+      4,
+      0
+     ],
+     "mode": "normal"
+    },
+    "knownDeviation": {
+     "rule": "half-page-with-cleared-scroll",
+     "documented": "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+     "measured": {
+      "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "match",
+      "note": "every trial matches"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"_\"]",
+  "title": "normal after \"_",
+  "keys": [
+   "\"",
+   "_"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "~"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,1265 @@
+{
+  "card": "normal [\"g\"]",
+  "title": "normal after g",
+  "keys": ["g"],
+  "rows": [
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Search backward for the Nth occurrence of the word under the cursor, also inside words",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L728 |g#|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last character of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L729 |g$|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 40],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Search forward for the Nth occurrence of the word under the cursor, also inside words",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L736 |gstar|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 12],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "setup": ["x", "0"],
+      "source": "vim-oracle",
+      "reason": "outside: jump list; g, (jump list)",
+      "label": "Go to the newer position in the change list",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L738 |g,|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup x 0 deletes \"w\" at [1,13] (a step whose change position is [1,13], VSCodeVim 1.32.4 src/history/historyTracker.ts L770-786) and moves to [1,0]; src/actions/commands/navigate.ts L74-89 and src/history/historyTracker.ts L357-369 (without a current index g, returns the newest change)"
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first character of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L740 |g0|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "setup": ["x", "0"],
+      "source": "vim-oracle",
+      "reason": "outside: jump list; g; (jump list)",
+      "label": "Go to the older position in the change list",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L746 |g;|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup x 0 deletes \"w\" at [1,13] (a step whose change position is [1,13], VSCodeVim 1.32.4 src/history/historyTracker.ts L770-786) and moves to [1,0]; src/actions/commands/navigate.ts L57-72 and src/history/historyTracker.ts L371-383 (without a current index g; returns the newest change)"
+      }
+    },
+    {
+      "key": "<C-a>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Dump a memory profile (only in a MEM_PROFILE build; nothing here)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L722 |g_CTRL-A|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-x>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Subtract from the numbers after the cursor in steps (none on this line)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/incrementDecrement.ts L15-108 and L130-135 (Normal mode searches the rest of the cursor line; line 1 has no digit)"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move N screen lines down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L790 |gj|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move N screen lines up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L792 |gk|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Rot13 encoding operator",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L748 |g?|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "C",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Toggle a block comment over a motion: waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L806-822 (gC is an operator); src/state/recordedState.ts L221-246 (pending until a motion)"
+    },
+    {
+      "key": "D",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: file or tag; gD (file or tag)",
+      "label": "Go to the declaration of the word under the cursor (VS Code Go to Declaration; none here)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L751 |gD|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\V\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go backwards to the end of the previous WORD",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L753 |gE|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 9],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "I",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Insert text in column 1 of the line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L756 |gI|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 0],
+        "mode": "insert"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "J",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Join lines without inserting space",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L757 |gJ|",
+      "expect": {
+        "text": [
+          "alpha beta gamma delta",
+          "  if (one, \"two\", [three]) { four(five) }epsilon zeta eta theta",
+          "iota kappa lambda mu"
+        ],
+        "cursor": [1, 41],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
+      "source": "vim-oracle",
+      "reason": "state: last search; gN reads the last search",
+      "label": "Select the match of the last search at or before the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L758 |gN|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 19],
+          "visualStart": [2, 21],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [2, 21],
+            "visualStart": [2, 19]
+          },
+          "mode": "visual",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["eta"]
+            }
+          }
+        },
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": {
+            "vim": [2, 21],
+            "visualStart": [2, 19]
+          },
+          "mode": "visual",
+          "registers": {
+            "/": {
+              "mode": "character",
+              "lines": ["eta"]
+            }
+          }
+        },
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 22],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 22],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "O",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "remap: generated remap of spec/generated/vscode/vim-remaps.json",
+      "label": "Go to a symbol in the file (remap: workbench.action.gotoSymbol)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "spec/generated/vscode/vim-remaps.json maps the key to workbench.action.gotoSymbol; VSCodeVim 1.32.4 src/configuration/remapper.ts L494-528 runs a remap's commands (count times) without a mode or cursor change; the command opens the quick open with the @ prefix (VS Code Go to Symbol in Editor) and changes no text or selection"
+    },
+    {
+      "key": "P",
+      "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
+      "source": "vim-oracle",
+      "reason": "state: register; gP reads the register",
+      "label": "Put the unnamed register before the cursor and leave the cursor after it",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L760 |gP|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twotwo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L474-545 (PlaceCursorAfterText for gp gP)"
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; gT (window)",
+      "label": "Go to the previous editor of the group",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L764 |gT|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
+      }
+    },
+    {
+      "key": "U",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the text of a motion uppercase: waits for a motion",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L765 |gU|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the first non-blank character of the screen line",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L770 |g^|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 2],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to the last CHAR N - 1 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L775 |g_|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 40],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: message; ga (message)",
+      "label": "Show the character code of the character under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L776 |ga|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1022-1039 (CommandUnicodeName writes the status bar only)"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Select the word under the cursor (VSCodeVim gb: VS Code Add Selection to Next Find Match)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 14],
+          "visualStart": [1, 12]
+        },
+        "mode": "visual"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1065-1082 (editor.action.addSelectionToNextFindMatch, stop moved one left, Visual mode); VS Code docs (Multiple selections): Ctrl+D selects the word at the cursor, or the next occurrence of the current selection; the word \"two\" [1,12]-[1,15]"
+    },
+    {
+      "key": "c",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Toggle line comments over a motion: waits for a motion",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/operator.ts L746-757 (gc is an operator); src/state/recordedState.ts L221-246"
+    },
+    {
+      "key": "d",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: VSCodeVim redefines gd (hover / go to definition)",
+      "label": "Go to the declaration of the word under the cursor (VSCodeVim gd: VS Code Go to Declaration; none here)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes"
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go backwards to the end of the previous word",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L780 |ge|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 11],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: file or tag; gf (file or tag)",
+      "label": "Edit the file whose name is under the cursor (no such file)",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L782 |gf|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/file.ts L60-118 (gf throws E447 when neither the path next to a.txt nor in the workspace exists; the workspace holds only a.txt and b.txt)"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to line N, default first line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: VSCodeVim redefines gh (hover / go to definition)",
+      "label": "Show the hover at the cursor (VSCodeVim gh)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L1041-1052 (editor.action.showHover); editor.action.showHover finds no hover provider for a plaintext file in the sandbox (Inferred: no language extension handles plaintext), so nothing changes"
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "setup": ["a", "X", "<Esc>", "0"],
+      "source": "vim-oracle",
+      "reason": "state: last insert; gi reads the last insert",
+      "label": "Insert at the end of the last change",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L789 |gi|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"twXo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 15],
+        "mode": "insert",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "lines": ["X"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twXo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "insert",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "aX<Esc>"
+            }
+          }
+        },
+        "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)"
+      },
+      "knownDeviation": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"twXo\", [three]) { four(five) }"
+          },
+          "cursor": [1, 15],
+          "mode": "insert",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "aX<Esc>"
+            }
+          }
+        },
+        "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)",
+        "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "insert",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "aX<Esc>"
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "insert",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "aX<Esc>"
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move N screen lines down",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L790 |gj|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move N screen lines up",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L792 |gk|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "m",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Go to character at middle of the screenline",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L794 |gm|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 21],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 40],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
+      "source": "vim-oracle",
+      "reason": "state: last search; gn reads the last search",
+      "label": "Select the match of the last search at or after the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L796 |gn|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [2, 21],
+          "visualStart": [2, 19],
+          "docLines": 5
+        },
+        "mode": "visual",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
+    },
+    {
+      "key": "o",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Move to byte N in the buffer",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L798 |go|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "p",
+      "sets": ["defaults", "extensions"],
+      "setup": ["y", "i", "w"],
+      "source": "vim-oracle",
+      "reason": "state: register; gp reads the register",
+      "label": "Put the unnamed register after the cursor and leave the cursor after it",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L799 |gp|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"ttwowo\", [three]) { four(five) }"
+        },
+        "cursor": [1, 16],
+        "mode": "normal",
+        "registers": {
+          "0": {
+            "mode": "character",
+            "lines": ["two"]
+          },
+          "\"": {
+            "mode": "character",
+            "lines": ["two"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup y i w yanks \"two\" into \" and 0 and leaves the cursor on [1,12] (VSCodeVim 1.32.4 src/actions/operator.ts L202-243, src/register/register.ts L208-230); VSCodeVim 1.32.4 src/actions/commands/put.ts L474-545 (PlaceCursorAfterText for gp gP)"
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Format the text of a motion: waits for a motion",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L801 |gq|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "r",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Virtual replace N chars with {char}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L802 |gr|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "replace"
+        },
+        "oracle": {
+          "vimrc": "expect.vimrc",
+          "layout": "single"
+        },
+        "reason": "while `r` waits for its character Vim shows Replace mode (mode(1) R), but the state is the card's mode with `r` pending, as the grammar fixture states it (spec/fixtures/grammar/character-arguments.json replace-character, from Vim's help)"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; gt (window)",
+      "label": "Go to the next editor of the group",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L804 |gt|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/window.ts L292-330 and src/cmd_line/commands/tab.ts L162-205 (nextEditorInGroup, previousEditorInGroup, openEditorAtIndex for a count); group 1 holds only a.txt (harness/cards-correctness.mjs L131-149 reopens a.txt and b.txt in two groups), so nothing changes"
+      }
+    },
+    {
+      "key": "u",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Make the text of a motion lowercase: waits for a motion",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L805 |gu|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "v",
+      "sets": ["defaults", "extensions"],
+      "setup": ["v", "l", "l", "<Esc>"],
+      "source": "vim-oracle",
+      "reason": "state: last Visual area; gv reads the last Visual area",
+      "label": "Reselect the last Visual area",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L806 |gv|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": {
+          "vim": [1, 15],
+          "visualStart": [1, 13],
+          "docLines": 5
+        },
+        "mode": "visual"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup v l l <Esc> stores the Visual area [1,13]-[1,16) (VSCodeVim 1.32.4 src/mode/modeHandler.ts L976-985); src/actions/commands/visual.ts L76-96 (gv restores it with the stop moved back to [1,15]); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor"
+      }
+    },
+    {
+      "key": "x",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: not a command of Vim's index.txt",
+      "label": "Open the link under the cursor (no link)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L47-55 (editor.action.openLink; the word under the cursor is no link)"
+    },
+    {
+      "key": "~",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Swap case for the text of a motion: waits for a motion",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L809 |g~|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

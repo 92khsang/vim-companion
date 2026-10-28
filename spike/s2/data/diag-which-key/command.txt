@@ -1,0 +1,17 @@
+# 2026-10-28, from spike/s2/diag with the harness of cbf136f (the frozen checkout of the adapter rows),
+# environment: S2_CPUS=28-31 S2_NAME_PREFIX=g- GIT_OPTIONAL_LOCKS=0, under env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE.
+# wk-on-1.141.0.jsonl comes from the first version of wk-loop.mjs (no editorMoved field, one session).
+node wk-loop.mjs 1.141.0 :139 9549 on 500 wk-on-1.141.0.jsonl
+node lat-loop.mjs 1.141.0 :139 9549 off 3 lat-cold-off-1.141.0.jsonl 25
+node wk-loop.mjs 1.141.0 :139 9549 off 700 wk2-warm-off-1.141.0.jsonl
+node wk-loop.mjs 1.141.0 :139 9549 on 700 wk2-warm-on-1.141.0.jsonl
+node qi-observe.mjs 1.141.0 :139 9549 off 6 qi-3spc-off.jsonl 3 "<Space>" b n
+node qi-observe.mjs 1.141.0 :139 9549 off 4 qi-spc-off.jsonl "<Space>" b n
+node qi-observe.mjs 1.141.0 :139 9549 off 4 qi-3spc-only-off.jsonl 3 "<Space>"
+S2_DIAG_SESSIONS=18 node qi-observe.mjs 1.141.0 :139 9549 off 1 qi-first-off.jsonl 3 "<Space>" b n
+S2_DIAG_SESSIONS=18 node qi-observe.mjs 1.141.0 :139 9549 on 1 qi-first-on.jsonl 3 "<Space>" b n
+S2_DIAG_SESSIONS=34 node qi-observe.mjs 1.141.0 :139 9549 on 1 qi-first2-on.jsonl 3 "<Space>" b n
+S2_DIAG_SESSIONS=34 node qi-observe.mjs 1.141.0 :139 9549 off 1 qi-first2-off.jsonl 3 "<Space>" b n
+S2_DIAG_SESSIONS=34 node qi-observe.mjs 1.141.0 :139 9549 on 1 qi-first3-on.jsonl 3 "<Space>" b n
+S2_DIAG_SESSIONS=34 node qi-observe.mjs 1.141.0 :139 9549 off 1 qi-first3-off.jsonl 3 "<Space>" b n
+python3 -I qi-sum.py ../data/diag-which-key/qi-first-off.jsonl,../data/diag-which-key/qi-first2-off.jsonl,../data/diag-which-key/qi-first3-off.jsonl ../data/diag-which-key/qi-first-on.jsonl,../data/diag-which-key/qi-first2-on.jsonl,../data/diag-which-key/qi-first3-on.jsonl

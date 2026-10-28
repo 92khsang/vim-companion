@@ -1,0 +1,955 @@
+[
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "O",
+    "label": "Begin a new line above the cursor and insert text, repeat 3 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  ",
+      "  ",
+      "  ",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      3,
+      2
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   },
+   {
+    "key": "o",
+    "label": "Begin a new line below the cursor and insert text, repeat 3 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "",
+      "",
+      "",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": "O",
+    "label": "Begin a new line above the cursor and insert text, repeat 30 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  ",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      30,
+      2
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   },
+   {
+    "key": "o",
+    "label": "Begin a new line below the cursor and insert text, repeat 30 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"d\"]",
+  "title": "normal after 3d",
+  "keys": [
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Delete the lines to the 3rd line of the window",
+    "expect": {
+     "text": [
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Delete the lines to the 3rd line from the bottom of the window",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"d\",\"3\"]",
+  "title": "normal after d3",
+  "keys": [
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Delete the lines up to the 3rd line of the window",
+    "expect": {
+     "text": [
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Delete the lines down to the 3rd line from the bottom of the window",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\"]",
+  "title": "normal after 2",
+  "keys": [
+   "2"
+  ],
+  "rows": [
+   {
+    "key": "O",
+    "label": "Open a line above and insert; the text is repeated 2 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  ",
+      "  ",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      2,
+      2
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   },
+   {
+    "key": "o",
+    "label": "Open a line below and insert; the text is repeated 2 times",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "",
+      "",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\"]",
+  "title": "normal after 2d",
+  "keys": [
+   "2",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Delete to line 2 from top of screen",
+    "expect": {
+     "text": [
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Delete to line 2 from bottom of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\",\"d\",\"3\"]",
+  "title": "normal after 2d3",
+  "keys": [
+   "2",
+   "d",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Delete to line 6 from top of screen",
+    "expect": {
+     "text": [
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Delete to line 6 from bottom of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"c\"]",
+  "title": "normal after c",
+  "keys": [
+   "c"
+  ],
+  "rows": [
+   {
+    "key": "L",
+    "label": "Change the lines down to the bottom line of the window",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  "
+     ],
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu",
+        ""
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "change-viewport-bottom-preserves-newline",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1305-L1335 sets LineWise and reaches the trailing empty line4 for L. ChangeOperator (operator.ts L660-L707) reads [1,0]..[4,0] verbatim, retaining the final newline in its register, then replaces the range with the original two-space indentation and enters Insert at [1,2]. Unlike DeleteOperator L146-L152 it never trims the payload. The outer change action has no numbered-register name (register/register.ts L208-L268), and Insert completion does not update dot (modeHandler.ts L820-L841). Scoped to exact normal cL, fixed fixture/viewport, no setup/sample."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "O",
+    "label": "Open a line above (the text is repeated 3 times)",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  ",
+      "  ",
+      "  ",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      3,
+      2
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   },
+   {
+    "key": "o",
+    "label": "Open a line below (the text is repeated 3 times)",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta",
+      "  if (one, \"two\", [three]) { four(five) }",
+      "",
+      "",
+      "",
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "insert"
+    },
+    "prediction": {
+     "rule": "counted-open-lines",
+     "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\",\"d\"]",
+  "title": "normal after \"a3d",
+  "keys": [
+   "\"",
+   "a",
+   "3",
+   "d"
+  ],
+  "rows": [
+   {
+    "key": "H",
+    "label": "Delete to line 3 from top of screen",
+    "expect": {
+     "text": [
+      "epsilon zeta eta theta",
+      "iota kappa lambda mu"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "a": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "alpha beta gamma delta",
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   },
+   {
+    "key": "L",
+    "label": "Delete to line 3 from bottom of screen",
+    "expect": {
+     "text": [
+      "alpha beta gamma delta"
+     ],
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "1": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "a": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      },
+      "\"": {
+       "mode": "line",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }",
+        "epsilon zeta eta theta",
+        "iota kappa lambda mu"
+       ]
+      }
+     },
+     "shiftNumbered": true
+    },
+    "prediction": {
+     "rule": "counted-delete-viewport-edges",
+     "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual []",
+  "title": "visual after v",
+  "keys": [
+   "v"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Delete the highlighted lines and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   },
+   {
+    "key": "R",
+    "label": "Delete the highlighted lines and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"3\"]",
+  "title": "visual after v3",
+  "keys": [
+   "v",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Delete the highlighted lines and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   },
+   {
+    "key": "R",
+    "label": "Delete the highlighted lines and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"\\\"\",\"a\"]",
+  "title": "visual after v\"a",
+  "keys": [
+   "v",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "C",
+    "label": "Delete the highlighted lines into register a and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   },
+   {
+    "key": "R",
+    "label": "Delete the highlighted lines into register a and start insert",
+    "expect": {
+     "text": {
+      "1": ""
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "insert",
+     "registers": {
+      "a": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "  if (one, \"two\", [three]) { four(five) }"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "single-visual-change-line-content",
+     "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START."
+    }
+   }
+  ]
+ }
+]

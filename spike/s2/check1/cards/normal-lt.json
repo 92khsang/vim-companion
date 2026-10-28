@@ -1,0 +1,1482 @@
+{
+  "card": "normal [\"<\"]",
+  "title": "normal after <",
+  "keys": ["<"],
+  "rows": [
+    {
+      "key": "\n",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": " ",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "#",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left the lines to the previous occurrence of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L256 |#|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "$",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the end of Nth next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "%",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left the lines to the matching bracket",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L259 |%|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "'",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR on the line with mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L265 |'|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "(",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N sentences backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L289 |(|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ")",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N sentences forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L290 |)|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "*",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left the lines to the next occurrence of the word under the cursor",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L291 |star|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["\\<two\\>"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ",",
+      "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; , reads the last f/t",
+      "label": "Shift left to the target of the last f, t, F or T in the opposite direction",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L295 |,|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR N lines higher",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L297 |-|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "/",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Shift left to a search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233 (the operator waits while searching)"
+      }
+    },
+    {
+      "key": "0",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": ";",
+      "sets": ["defaults", "extensions"],
+      "setup": ["f", "e"],
+      "source": "vim-oracle",
+      "reason": "state: last f/t; ; reads the last f/t",
+      "label": "Shift left to the target of the last f, t, F or T",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L317 |;|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup f e puts the cursor on [1,22] and sets the last f; VSCodeVim 1.32.4 src/actions/motion.ts L826-857 (MoveFindForward, findHelper L799-823 same line only, getRight for an operator), L971-1011 (MoveRepeat ; and MoveRepeatReversed ,); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift N lines one 'shiftwidth' leftwards",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L320 |<<|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Shift left a char to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+    },
+    {
+      "key": "<C-End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to line N, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to line N, default first line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L787 |gg|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-m>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR N lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L222 |<CR>|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-n>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-p>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<C-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<D-left>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Shift left to the first char of the line (like 0)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1026-1041 (MoveLineBegin keys 0 <Home> <D-left>, only without a count); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+    },
+    {
+      "key": "<D-right>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Shift left to the end of the line (like $)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L1013-1024 (MoveLineEnd keys $ <End> <D-right>: getDown(count-1).getLineEnd()); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+    },
+    {
+      "key": "<End>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the end of Nth next line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L258 |$|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<Home>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first char of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L304 |0|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<S-BS>",
+      "sets": ["defaults", "extensions"],
+      "source": "hand",
+      "reason": "own: a key token of VSCodeVim's own",
+      "label": "Shift left a char to the left (like <BS>)",
+      "labelFrom": "hand",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/motion.ts L665-700 (MoveLeft keys h <left> <BS> <C-BS> <S-BS>) and src/actions/wrapping.ts L9-25 (<C-BS> and <S-BS> wrap like <BS> with the default whichwrap b,s); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "?",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "null-mode: Vim ends in mode(1) \"c\" (the command line or a search prompt), which the fixture has no mode name for",
+      "label": "Shift left to a backward search match: waits for the pattern",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "other-5"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "VSCodeVim 1.32.4 src/actions/commands/search.ts L201-228 (SearchForwards/SearchBackwards) set SearchInProgressMode (Mode 5, probe other-5); src/mode/modeHandler.ts L1294-1301 keeps drawing the previous mode's selection; spike/s2/data/check1/observe-1.141.0.json; src/state/recordedState.ts L221-233"
+      }
+    },
+    {
+      "key": "B",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N WORDS backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L334 |B|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "E",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left forward to the end of WORD N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L341 |E|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "F",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L342 |F|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "G",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to line N, default last line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L344 |G|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "H",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to line N from top of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L345 |H|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "L",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to line N from bottom of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L351 |L|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "M",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to middle line of screen",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L352 |M|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "N",
+      "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
+      "source": "vim-oracle",
+      "reason": "state: last search; N reads the last search",
+      "label": "Shift left to the previous match of the last search",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L353 |N|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [2, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); back from [2,19] to [2,13]; VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
+    },
+    {
+      "key": "T",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left till after Nth occurrence of {char} to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L365 |T|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "W",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N WORDS forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L369 |W|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "Z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "Shift left to a backward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
+    },
+    {
+      "key": "[",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a [ command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "]",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a ] command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "^",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR of the line",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L379 |^|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "_",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the first CHAR N - 1 lines lower",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L380 |_|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "`",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to the mark {a-zA-Z0-9}",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L381 |`|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "a",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "b",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N words backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L394 |b|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "e",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left forward to the end of word N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L403 |e|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "f",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L404 |f|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "g",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Start a g command: waits for the next key",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the left",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L407 |h|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "i",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left a text object: waits for the object",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines downward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L409 |j|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N lines upward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L410 |k|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N chars to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L411 |l|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "n",
+      "sets": ["defaults", "extensions"],
+      "setup": ["j", "g", "*"],
+      "source": "vim-oracle",
+      "reason": "state: last search; n reads the last search",
+      "label": "Shift left to the next match of the last search",
+      "labelFrom": "hand",
+      "labelIndex": "index.txt L413 |n|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal",
+        "registers": {
+          "/": {
+            "mode": "character",
+            "lines": ["eta"]
+          }
+        }
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      },
+      "handBasis": {
+        "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); forward from [2,19] wraps to [0,7], so the range is [0,7]-[2,19); VSCodeVim 1.32.4 src/mode/modeHandler.ts L1082-1138 (executeOperator: sorted range, the stop moved left for a characterwise motion); VSCodeVim 1.32.4 src/actions/operator.ts L548-563 (OutdentOperator: editor.action.outdentLines over the lines, cursor to the first non-blank of the first line); line 1 loses its 2 spaces with tab size 2 or 4 (spike/s2/data/check1/observe-1.141.0.json: << gives 0 spaces)"
+      }
+    },
+    {
+      "key": "t",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left till before Nth occurrence of {char} to the right",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L427 |t|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N words forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L431 |w|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "z",
+      "when": {
+        "vim.sneak": true
+      },
+      "sets": ["extensions"],
+      "source": "hand",
+      "reason": "plugin:sneak: row exists only with vim.sneak",
+      "label": "Shift left to a forward sneak match: waits for two characters",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "VSCodeVim 1.32.4 src/actions/plugins/sneak.ts L7-24 and L74-89 (s S, and z Z after an operator, wait for two characters when vim.sneak is on); src/actions/commands/actions.ts L509-530 and L955-981 (S and s step aside for sneak)"
+    },
+    {
+      "key": "{",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N paragraphs backward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L437 |{|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [0, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "{<leader>}",
+      "when": {
+        "vim.camelCaseMotion.enable": true
+      },
+      "sets": ["extensions"],
+      "sample": "\\",
+      "source": "hand",
+      "reason": "plugin:leader: camelCaseMotion or easymotion leader key",
+      "label": "Shift left over a camelCase motion: waits for the motion key",
+      "labelFrom": "hand",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "basis": "the sample is VSCodeVim's default leader \\ (the sandbox sets no vim.leader); VSCodeVim 1.32.4 src/actions/plugins/camelCaseMotion.ts L11-29 and src/actions/plugins/easymotion/easymotion.cmd.ts L31-95 (easymotion actions check vim.easymotion only when run), so the key is a prefix and VSCodeVim waits"
+    },
+    {
+      "key": "{<number>}",
+      "sets": ["defaults", "extensions"],
+      "sample": "3",
+      "source": "vim-oracle",
+      "label": "Start a count",
+      "labelFrom": "index",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "|",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left to column N",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L438 |bar|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    },
+    {
+      "key": "}",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "label": "Shift left N paragraphs forward",
+      "labelFrom": "index",
+      "labelIndex": "index.txt L439 |}|",
+      "expect": {
+        "text": {
+          "1": "if (one, \"two\", [three]) { four(five) }"
+        },
+        "cursor": [1, 0],
+        "mode": "normal"
+      },
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "single",
+        "doc": "document",
+        "size": "43x42"
+      }
+    }
+  ]
+}

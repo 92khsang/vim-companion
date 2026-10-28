@@ -1,0 +1,1136 @@
+{
+  "card": "normal [\"<C-w>\"]",
+  "title": "normal after <C-w>",
+  "keys": ["<C-w>"],
+  "rows": [
+    {
+      "key": "+",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Increase the window height",
+      "labelIndex": "index.txt L557 |CTRL-W_+|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L261-L273 (IncreasePaneHeight) runs workbench.action.increaseViewHeight, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "-",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Decrease the window height",
+      "labelIndex": "index.txt L558 |CTRL-W_-|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L275-L287 (DecreasePaneHeight) runs workbench.action.decreaseViewHeight, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Decrease the window width",
+      "labelIndex": "index.txt L560 |CTRL-W_<|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L247-L259 (DecreasePaneWidth) runs workbench.action.decreaseViewWidth, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<C-c>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Nothing: CTRL-C cancels the window command",
+      "labelIndex": "index.txt L534 |CTRL-W_CTRL-C|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["x"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_CTRL-C* (index.txt: no-op); VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41). Inferred: on an unchanged a.txt VSCodeVim would close the editor; the setup keeps the run deterministic and hides that difference"
+      }
+    },
+    {
+      "key": "<C-h>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the left (none here)",
+      "labelIndex": "index.txt L600 |CTRL-W_h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<C-j>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window below (none here)",
+      "labelIndex": "index.txt L603 |CTRL-W_j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<C-k>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window above (none here)",
+      "labelIndex": "index.txt L604 |CTRL-W_k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<C-l>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the right",
+      "labelIndex": "index.txt L605 |CTRL-W_l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "harness"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<C-o>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Close all other windows",
+      "labelIndex": "index.txt L607 |CTRL-W_o|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      }
+    },
+    {
+      "key": "<C-q>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "oracle: Vim exits (the key closes its only window)",
+      "label": "Quit the window (refused while the buffer has changes)",
+      "labelIndex": "index.txt L609 |CTRL-W_q|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["x"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
+    },
+    {
+      "key": "<C-s>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Split the window horizontally",
+      "labelIndex": "index.txt L611 |CTRL-W_s|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      }
+    },
+    {
+      "key": "<C-v>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Split the window vertically",
+      "labelIndex": "index.txt L614 |CTRL-W_v|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      }
+    },
+    {
+      "key": "<C-w>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the next window",
+      "labelIndex": "index.txt L616 |CTRL-W_w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "harness"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<down>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window below (none here)",
+      "labelIndex": "index.txt L603 |CTRL-W_j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<left>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the left (none here)",
+      "labelIndex": "index.txt L600 |CTRL-W_h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "<right>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the right",
+      "labelIndex": "index.txt L605 |CTRL-W_l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "harness"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "<up>",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window above (none here)",
+      "labelIndex": "index.txt L604 |CTRL-W_k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "=",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Make all windows the same size",
+      "labelIndex": "index.txt L561 |CTRL-W_=|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L219-L231 (EvenPaneWidths) runs workbench.action.evenEditorWidths, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": ">",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Increase the window width",
+      "labelIndex": "index.txt L562 |CTRL-W_>|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L233-L245 (IncreasePaneWidth) runs workbench.action.increaseViewWidth, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "c",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Close the window (refused while the buffer has changes)",
+      "labelIndex": "index.txt L578 |CTRL-W_c|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["x"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_c* *E444*: fails with 'nohidden', changes and no other window on the buffer; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
+    },
+    {
+      "key": "h",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the left (none here)",
+      "labelIndex": "index.txt L600 |CTRL-W_h|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L66-L87 (MoveToLeftPane) runs workbench.action.navigateLeft, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "j",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window below (none here)",
+      "labelIndex": "index.txt L603 |CTRL-W_j|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L110-L130 (MoveToLowerPane) runs workbench.action.navigateDown, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "k",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window above (none here)",
+      "labelIndex": "index.txt L604 |CTRL-W_k|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt; VSCodeVim src/actions/commands/window.ts L132-L152 (MoveToUpperPane) runs workbench.action.navigateUp, which keeps a.txt active with its cursor"
+      }
+    },
+    {
+      "key": "l",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the window on the right",
+      "labelIndex": "index.txt L605 |CTRL-W_l|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_l*: the cursor goes to b.txt's window, where it is at (0,0); VSCodeVim window.ts L88-L108 (workbench.action.navigateRight); the probe reads the active editor b.txt (same text, cursor never moved)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "harness"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "o",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Close all other windows",
+      "labelIndex": "index.txt L607 |CTRL-W_o|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_o*: a.txt's window stays with its cursor; VSCodeVim window.ts L54-L64 and src/cmd_line/commands/only.ts L6-L12 (workbench.action.joinAllGroups keeps the active editor)"
+      }
+    },
+    {
+      "key": "q",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "oracle: Vim exits (the key closes its only window)",
+      "label": "Quit the window (refused while the buffer has changes)",
+      "labelIndex": "index.txt L609 |CTRL-W_q|",
+      "expect": {
+        "text": {
+          "1": "  if (one, \"to\", [three]) { four(five) }"
+        },
+        "cursor": [1, 13],
+        "mode": "normal",
+        "registers": {
+          "\"": {
+            "mode": "character",
+            "lines": ["w"]
+          },
+          "-": {
+            "mode": "character",
+            "lines": ["w"]
+          }
+        }
+      },
+      "labelFrom": "hand",
+      "setup": ["x"],
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "Vim windows.txt *CTRL-W_q*: with 'nohidden', one window on the buffer and changes, the command fails; VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; the setup x changes a.txt in both engines; VSCodeVim window.ts L10-L25 runs QuitCommand, which throws E37 for a changed document shown once (src/cmd_line/commands/quit.ts L31-L41)"
+      }
+    },
+    {
+      "key": "s",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Split the window horizontally",
+      "labelIndex": "index.txt L611 |CTRL-W_s|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_s*: the new window shows a.txt with the same cursor; VSCodeVim window.ts L191-L206 (workbench.action.splitEditorOrthogonal). Inferred: ctrl+s reaches VS Code's save, not VSCodeVim (vim.handleKeys <C-s> is false by default), which also leaves these fields"
+      }
+    },
+    {
+      "key": "v",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Split the window vertically",
+      "labelIndex": "index.txt L614 |CTRL-W_v|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_v*: the new window shows a.txt with the same cursor and gets the focus; VSCodeVim window.ts L174-L189 (workbench.action.splitEditor; VS Code copies the editor's view state into the split)"
+      }
+    },
+    {
+      "key": "w",
+      "sets": ["defaults", "extensions"],
+      "source": "vim-oracle",
+      "reason": "outside: window; a CTRL-W window command",
+      "label": "Move to the next window",
+      "labelIndex": "index.txt L616 |CTRL-W_w|",
+      "expect": {
+        "text": "unchanged",
+        "cursor": [1, 13],
+        "mode": "normal"
+      },
+      "labelFrom": "hand",
+      "oracle": {
+        "vimrc": "expect-sw2.vimrc",
+        "layout": "harness",
+        "doc": "document",
+        "size": "87x42"
+      },
+      "handBasis": {
+        "basis": "VS Code layout: editor group 1 (a.txt, active) and group 2 (b.txt) side by side, the Vim analogue of two windows; Vim windows.txt *CTRL-W_w*: the next window is b.txt's, cursor at (0,0); VSCodeVim window.ts L154-L172 (workbench.action.navigateEditorGroups)"
+      },
+      "previousOracle": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [0, 0],
+          "mode": "normal"
+        },
+        "oracle": {
+          "vimrc": "expect-sw2.vimrc",
+          "layout": "harness"
+        },
+        "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

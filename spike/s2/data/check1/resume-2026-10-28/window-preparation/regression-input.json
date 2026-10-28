@@ -1,0 +1,103 @@
+[
+  {
+    "id": "normal []",
+    "title": "Leave modified b.txt inactive in group 2",
+    "keys": [],
+    "rows": [
+      {
+        "key": "<Esc>",
+        "setup": [
+          "<C-w>",
+          "l",
+          "i",
+          "X",
+          "<Esc>",
+          "j",
+          "l",
+          "<C-w>",
+          "h"
+        ],
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal",
+          "registers": {
+            ".": {
+              "mode": "character",
+              "keys": "iX<Esc>"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal [\"<C-w>\"]",
+    "title": "Switch to the freshly prepared b.txt group",
+    "keys": [
+      "<C-w>"
+    ],
+    "rows": [
+      {
+        "key": "l",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal",
+          "registers": {
+            "%": {
+              "mode": "character",
+              "lines": [
+                "b.txt"
+              ]
+            },
+            "#": {
+              "mode": "character",
+              "lines": [
+                "a.txt"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal []",
+    "title": "Keep Ctrl-6 target-group preparation",
+    "keys": [],
+    "rows": [
+      {
+        "key": "<C-6>",
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal",
+          "registers": {
+            "%": {
+              "mode": "character",
+              "lines": [
+                "b.txt"
+              ]
+            },
+            "#": {
+              "mode": "character",
+              "lines": [
+                "a.txt"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+]
