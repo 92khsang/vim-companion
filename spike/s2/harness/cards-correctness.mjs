@@ -50,7 +50,7 @@ import { planKeys } from "./card-keys.mjs";
 // '< '> marks are at the start position in every trial.
 const RESET_KEYS = ["<Esc>", "<Esc>"];
 const RESET_TAIL = ["v", "<Esc>"];
-const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>"]);
+const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>", "<C-t>"]);
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -325,7 +325,7 @@ try {
       ? await prepareAlternateFile()
       : null;
     // VSCodeVim keeps one jump list for the session (jumps/jumpTracker.ts), which the oracle's
-    // fresh Vim does not have: a row that reads it (<C-o>, <C-i>, <Tab>) starts with it cleared
+    // fresh Vim does not have: a row that reads it starts with it cleared
     // (:clearjumps, cmd_line/commands/jumps.ts L51). Only those rows: the command line it runs
     // becomes the : register, which other rows may read.
     if (clearJumps) {
@@ -454,7 +454,12 @@ try {
         ...(row.setup ?? []),
         ...card.keys,
         row.sample ?? row.key,
-      ].some((k) => JUMP_KEYS.has(k));
+      ].some(
+        (k) =>
+          JUMP_KEYS.has(k) &&
+          // Ctrl-T aliases NavigateBack in Normal mode; Insert Ctrl-T indents instead.
+          (k !== "<C-t>" || card.id.startsWith("normal ")),
+      );
       for (let trial = 0; trial < Number(trialsArg); trial++) {
         const alternatePreparation = await resetTrial({
           clearJumps,
