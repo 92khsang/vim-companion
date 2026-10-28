@@ -1,0 +1,52 @@
+{
+  "name": "u1-ui-gallery",
+  "publisher": "vim-companion",
+  "displayName": "U1 UI Gallery",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "vscode": "^1.141.0"
+  },
+  "main": "extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "secondarySidebar": [
+        {
+          "id": "u1",
+          "title": "Vim Keys",
+          "icon": "icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "u1": [
+        {
+          "id": "u1.keys",
+          "name": "Keys",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "u1.idle",
+        "title": "U1 Gallery: Idle"
+      },
+      {
+        "command": "u1.prefix",
+        "title": "U1 Gallery: Prefix"
+      },
+      {
+        "command": "u1.badges",
+        "title": "U1 Gallery: Badges and Long Labels"
+      },
+      {
+        "command": "u1.grammar",
+        "title": "U1 Gallery: Grammar"
+      }
+    ]
+  }
+}
