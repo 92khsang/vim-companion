@@ -510,11 +510,16 @@ Ex register contents, with no error/untyped/left-out rows. `S2_CHECK1_TRIALS` an
 `batch/check1-verify.mjs` enforces this separately from the summary. It rebuilds the strict input
 from the clean measured checkout, compares its exact content with the run's input, checks the
 canonical catalog scope, and requires the 32 exact chunk names and every row's trial indices.
-It checks source fingerprints, installed product SHAs, pinned engine versions and settings;
+It checks the full frozen build against the current installation, including source fingerprints,
+installed product SHAs, the pinned engine payload hash, versions and settings;
 positive trials must retain full register snapshots with actual Ex text, and negative trials
 must retain every authored chord attempt. It recomputes the positive state comparison from the
-input and snapshots rather than trusting `ok`. It also requires the scoped fresh-history,
-scroll/viewport and target-editor preparation records. Its 18 synthetic regressions exercise a full
+input and snapshots rather than trusting `ok`. Every chunk must record all actual rendered card
+IDs, headers, keys, labels and unsupported cells, matching the strict input and its byte hash.
+Source rows alone cannot establish that the tested rows were displayed. The cards panel must be
+closed before keyboard trials to preserve the viewport. The verifier also requires
+the scoped fresh-history, scroll/viewport and target-editor preparation records. Its 25 synthetic
+regressions exercise a full
 42,450-trial fixture, including forged success, incomplete evidence and incorrect scope.
 Run it from the final frozen checkout after the batch, with that checkout's full commit SHA:
 

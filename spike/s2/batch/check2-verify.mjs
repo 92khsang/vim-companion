@@ -12,7 +12,7 @@ import { gunzipSync } from "node:zlib";
 import { buildInfo, REPO } from "../harness/lib.mjs";
 import { SETTINGS_SETS } from "../harness/cards-extract.mjs";
 import { auditRendered } from "../harness/cards-completeness.mjs";
-import { PRODUCTS } from "./check1-verify.mjs";
+import { ENGINE_BASE_SHA256, PRODUCTS } from "./check1-verify.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export function verifyCheck2(dir, head) {
@@ -29,6 +29,7 @@ export function verifyCheck2(dir, head) {
         `the sandbox environment does not select pinned product ${version}`,
       );
   if (
+    build.external.extBase !== ENGINE_BASE_SHA256 ||
     !same(build.external.extBaseFolders, [
       "vscodevim.vim-1.32.4",
       "vspacecode.whichkey-0.11.4",

@@ -10,7 +10,12 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test, { after, before } from "node:test";
-import { buildFullInput, PRODUCTS, verifyMatrix } from "./check1-verify.mjs";
+import {
+  buildFullInput,
+  ENGINE_BASE_SHA256,
+  PRODUCTS,
+  verifyMatrix,
+} from "./check1-verify.mjs";
 import { SETTINGS_SETS } from "../harness/cards-extract.mjs";
 import { START } from "../harness/lib.mjs";
 import {
@@ -36,7 +41,7 @@ const build = {
         { version, commit },
       ]),
     ),
-    extBase: "b".repeat(64),
+    extBase: ENGINE_BASE_SHA256,
     extBaseFolders: ["vscodevim.vim-1.32.4", "vspacecode.whichkey-0.11.4"],
   },
 };
@@ -91,6 +96,22 @@ before(() => {
             cards: cards.map((card) => card.id),
             only: `#${from}-${to}`,
             build,
+            inputSha256: createHash("sha256")
+              .update(JSON.stringify(all))
+              .digest("hex"),
+            rendered: all.map((card) => ({
+              id: card.id,
+              headers: ["Key", "Does", "Unsupported"],
+              rows: card.rows.map((row) => ({
+                key: row.key,
+                label: row.label ?? "",
+                unsupported: row.unsupported ?? "",
+              })),
+            })),
+            renderPreparation: {
+              panelBeforeVisible: false,
+              panelAfterVisible: false,
+            },
             hello: {
               vscode: version,
               vim: { version: "1.32.4" },
@@ -204,7 +225,7 @@ after(() => {
 });
 
 test("the entire synthetic 42,450-trial matrix passes independent verification", () => {
-  const result = verifyMatrix(dir, input, head);
+  const result = verifyMatrix(dir, input, head, build);
   assert.equal(result.verdict, "pass", JSON.stringify(result));
   assert.equal(result.chunks, 32);
   assert.equal(result.negatives, 660);
@@ -269,12 +290,62 @@ corrupt(
   /unpinned VS Code product/,
 );
 corrupt(
+  "unchanged engine version labels cannot hide different installed bytes",
+  (records) => {
+    records[0].build.external.extBase = "b".repeat(64);
+  },
+  /missing pinned extension or source fingerprints/,
+);
+corrupt(
+  "source rows alone cannot replace rendered cell evidence",
+  (records) => {
+    delete records[0].rendered;
+  },
+  /rendered card cells or input fingerprint/,
+);
+corrupt(
+  "a rendered label must match the frozen expectation's description",
+  (records) => {
+    records[0].rendered[0].rows[0].label = "Stale description";
+  },
+  /rendered card cells or input fingerprint/,
+);
+corrupt(
+  "an extra rendered key cannot hide behind passing trial identities",
+  (records) => {
+    records[0].rendered[0].rows.push(records[0].rendered[0].rows[0]);
+  },
+  /rendered card cells or input fingerprint/,
+);
+corrupt(
+  "the rendered sandbox input must have the recorded input bytes",
+  (records) => {
+    records[0].inputSha256 = "f".repeat(64);
+  },
+  /rendered card cells or input fingerprint/,
+);
+corrupt(
+  "an open cards panel cannot change the keyboard trial viewport",
+  (records) => {
+    records[0].renderPreparation.panelAfterVisible = true;
+  },
+  /rendered panel changed the trial viewport/,
+);
+corrupt(
   "a completed smoke selection cannot be relabeled a full chunk",
   (records) => {
     records[0].only = "#0-1";
   },
   /card slice differs/,
 );
+test("the measured build must match the verifier's current installation", () => {
+  const current = structuredClone(build);
+  current.sha256.harness = "c".repeat(64);
+  assert.match(
+    verifyMatrix(dir, input, head, current).problems.join("\n"),
+    /recorded build differs from the current frozen installation/,
+  );
+});
 corrupt(
   "the wrong settings or engine version cannot pass",
   (records) => {

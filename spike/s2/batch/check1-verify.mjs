@@ -21,6 +21,8 @@ export const PRODUCTS = {
   "1.134.0": "110a328ea54b42367b803ec53ee0bf52ef26b419",
   "1.141.0": "2a59476c9bfcb90b3ddc372c36762471b7dfad1c",
 };
+export const ENGINE_BASE_SHA256 =
+  "b008ad0920e93c0196d2594da11d4780c3b6b148c5af95fc6fb2af40d260a016";
 const VERSIONS = Object.keys(PRODUCTS);
 const ROWS = { defaults: 3442, extensions: 3633 };
 const NEGATIVES = { defaults: 53, extensions: 57 };
@@ -90,7 +92,7 @@ function registerValue(value, name) {
 }
 
 /** The CLI supplies only freshly rebuilt canonical input; exporting permits synthetic regression tests. */
-export function verifyMatrix(dir, input, head) {
+export function verifyMatrix(dir, input, head, expectedBuild = null) {
   const problems = [];
   let problemCount = 0,
     trials = 0,
@@ -113,12 +115,25 @@ export function verifyMatrix(dir, input, head) {
   const files = readdirSync(dir)
     .filter((file) => file.endsWith(".jsonl"))
     .sort();
+  const inputHashes = {},
+    renderedInputs = {};
   if (!same(files, [...names].sort()))
     fail(
       "expected exactly the 32 final chunk files; no extra or incomplete JSONL files",
     );
   for (const set of SETS) {
-    const actual = json(join(dir, "input", `correctness-${set}.json`));
+    const bytes = readFileSync(join(dir, "input", `correctness-${set}.json`));
+    const actual = JSON.parse(bytes);
+    inputHashes[set] = createHash("sha256").update(bytes).digest("hex");
+    renderedInputs[set] = input[set].map((card) => ({
+      id: card.id,
+      headers: ["Key", "Does", "Unsupported"],
+      rows: card.rows.map((row) => ({
+        key: row.key,
+        label: row.label ?? "",
+        unsupported: row.unsupported ?? "",
+      })),
+    }));
     if (!same(actual, input[set]))
       fail(
         `${set}: recorded input differs from the current strict builder output`,
@@ -169,6 +184,18 @@ export function verifyMatrix(dir, input, head) {
           to = Math.min(from + CHUNK, 59);
         const cards = input[set].slice(from, to);
         if (
+          meta.inputSha256 !== inputHashes[set] ||
+          !same(meta.rendered, renderedInputs[set])
+        )
+          fail(`${file}: rendered card cells or input fingerprint differ`);
+        if (
+          !same(meta.renderPreparation, {
+            panelBeforeVisible: false,
+            panelAfterVisible: false,
+          })
+        )
+          fail(`${file}: rendered panel changed the trial viewport`);
+        if (
           meta.set !== set ||
           meta.version !== version ||
           meta.trials !== 3 ||
@@ -190,6 +217,10 @@ export function verifyMatrix(dir, input, head) {
         )
           fail(`${file}: unexpected installed IDE, engine or adapter`);
         const b = meta.build;
+        if (expectedBuild && !same(b, expectedBuild))
+          fail(
+            `${file}: recorded build differs from the current frozen installation`,
+          );
         if (!b || b.head !== head || !same(b.dirty, []))
           fail(`${file}: not the requested clean frozen build`);
         else {
@@ -213,7 +244,7 @@ export function verifyMatrix(dir, input, head) {
               "vscodevim.vim-1.32.4",
               "vspacecode.whichkey-0.11.4",
             ]) ||
-            !/^[0-9a-f]{64}$/.test(b.external?.extBase ?? "") ||
+            b.external?.extBase !== ENGINE_BASE_SHA256 ||
             ![
               "adapter",
               "probe",
@@ -406,14 +437,7 @@ export function verifyCheck1(dir, head) {
     { encoding: "utf8" },
   ).trim();
   if (dirty) throw new Error("the verifier checkout is not clean");
-  const meta = JSON.parse(
-    readFileSync(join(dir, "defaults-1.134.0-c0.jsonl"), "utf8").split("\n")[0],
-  );
-  if (!same(meta.build?.sha256, buildInfo().sha256))
-    throw new Error(
-      "recorded source fingerprints differ from this frozen checkout",
-    );
-  return verifyMatrix(dir, buildFullInput(), head);
+  return verifyMatrix(dir, buildFullInput(), head, buildInfo());
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

@@ -13,6 +13,44 @@ export const RENDERED_CARDS_JS = `(doc) => [...doc.querySelectorAll('section.car
   }))
 }))`;
 
+/** Select trial rows by actual DOM cells, attaching only the independently authored expectations. */
+export function rowsFromRendered(rendered, authored, set) {
+  const config = configOf(set);
+  const expected = authored.map((card) => ({
+    id: card.id,
+    headers: ["Key", "Does", "Unsupported"],
+    rows: card.rows
+      .filter((row) => holds(row.when, config))
+      .map((row) => ({
+        key: row.key,
+        label: row.label ?? "",
+        unsupported: row.unsupported ?? "",
+      })),
+  }));
+  if (!same(rendered, expected))
+    throw new Error(
+      "rendered cards or cells differ from the correctness input",
+    );
+  if (new Set(rendered.map((card) => card.id)).size !== rendered.length)
+    throw new Error("duplicate rendered card IDs");
+  const byId = new Map(authored.map((card) => [card.id, card]));
+  return rendered.map((card) => {
+    if (new Set(card.rows.map((row) => row.key)).size !== card.rows.length)
+      throw new Error(`duplicate rendered row keys: ${card.id}`);
+    const source = byId.get(card.id);
+    const rows = new Map(
+      source.rows
+        .filter((row) => holds(row.when, config))
+        .map((row) => [row.key, row]),
+    );
+    return {
+      ...source,
+      id: card.id,
+      rows: card.rows.map((cell) => ({ ...rows.get(cell.key), ...cell })),
+    };
+  });
+}
+
 export function auditRendered(rendered, authored, reference) {
   const problems = [],
     cards = [];

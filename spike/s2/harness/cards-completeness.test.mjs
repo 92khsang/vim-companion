@@ -11,7 +11,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { execFileSync } from "node:child_process";
 import { gunzipSync } from "node:zlib";
-import { auditRendered } from "./cards-completeness.mjs";
+import { auditRendered, rowsFromRendered } from "./cards-completeness.mjs";
 import { prepareInstance, REPO, SPIKE_EXTENSIONS } from "./lib.mjs";
 import { configOf, holds } from "../check1/lib.mjs";
 
@@ -52,6 +52,43 @@ test("rendered keys and cells match both the engine and the authored card", () =
   const { reference, authored, rendered } = fixture();
   assert.equal(auditRendered(rendered, authored, reference).verdict, "pass");
 });
+test("correctness joins rendered cells to independently authored expectations", () => {
+  const { authored, rendered } = fixture();
+  authored[0].keys = ["i"];
+  authored[0].rows[0].expect = {
+    text: ["x"],
+    cursor: [0, 1],
+    mode: "insert",
+    registers: {},
+  };
+  const actual = rowsFromRendered(rendered, authored, "defaults");
+  assert.deepEqual(actual[0].keys, ["i"]);
+  assert.deepEqual(actual[0].rows[0].expect, authored[0].rows[0].expect);
+  assert.deepEqual(
+    actual[0].rows.map(({ key, label, unsupported }) => ({
+      key,
+      label,
+      unsupported,
+    })),
+    rendered[0].rows,
+  );
+});
+test("correctness selects only the rows rendered for the active settings", () => {
+  const { authored, rendered } = fixture();
+  authored[0].rows.push({
+    key: "s",
+    label: "Sneak",
+    when: { "vim.sneak": true },
+  });
+  assert.equal(
+    rowsFromRendered(rendered, authored, "defaults")[0].rows.length,
+    2,
+  );
+  assert.throws(
+    () => rowsFromRendered(rendered, authored, "extensions"),
+    /differ/,
+  );
+});
 for (const [name, corrupt] of [
   ["extra card", (r) => r.push({ ...r[0], id: "unexpected" })],
   ["duplicate card", (r) => r.push(r[0])],
@@ -84,7 +121,20 @@ for (const [name, corrupt] of [
       auditRendered(rendered, authored, reference).verdict,
       "not pass",
     );
+    assert.throws(
+      () => rowsFromRendered(rendered, authored, "defaults"),
+      /differ|duplicate/,
+    );
   });
+test("matching duplicated input and DOM cannot run a row twice", () => {
+  const { authored, rendered } = fixture();
+  authored[0].rows.push(authored[0].rows[0]);
+  rendered[0].rows.push(rendered[0].rows[0]);
+  assert.throws(
+    () => rowsFromRendered(rendered, authored, "defaults"),
+    /duplicate/,
+  );
+});
 test("an authored omission does not redefine the engine reference", () => {
   const { reference, authored, rendered } = fixture();
   authored[0].rows.pop();

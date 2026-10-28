@@ -20,6 +20,7 @@
 // (lib.mjs buildInfo) and the probe's hello; an error record carries its phase (`boot` before the
 // probe's first hello, `trials` after it) and the build.
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import {
@@ -33,6 +34,7 @@ import {
   buildInfo,
   portable,
   cdpEvaluate,
+  cdpWebviewEvaluate,
   STATUS_BAR_JS,
 } from "./lib.mjs";
 import { execFileSync } from "node:child_process";
@@ -42,6 +44,7 @@ import {
   needsLineUndoPreparation,
   needsScrollPreparation,
 } from "./trial-preparation.mjs";
+import { RENDERED_CARDS_JS, rowsFromRendered } from "./cards-completeness.mjs";
 
 // The trial reset (resetTrial): <Esc> <Esc>, VS Code's expandLineSelection and <Esc>, the probe's
 // reset of the text and cursor, then `v <Esc>`. Measured (check1 triage, 2026-10-28, 1.134.0 and
@@ -87,13 +90,15 @@ const inForce = { ...DEFAULTS, ...settings };
 const holds = (when) =>
   !when || Object.entries(when).every(([k, v]) => inForce[k] === v);
 const range = /^#(\d+)-(\d+)$/.exec(only ?? "");
-const cards = JSON.parse(readFileSync(cardsFile, "utf8")).filter((c, i) =>
+const inputBytes = readFileSync(cardsFile);
+const authored = JSON.parse(inputBytes);
+const selected = (c, i) =>
   !only
     ? true
     : range
       ? i >= Number(range[1]) && i < Number(range[2])
-      : only.split(",").includes(c.id),
-);
+      : only.split(",").includes(c.id);
+let cards = authored.filter(selected);
 const build = buildInfo();
 let phase = "boot";
 writeFileSync(outFile, "");
@@ -179,10 +184,55 @@ try {
     name: `${process.env.S2_NAME_PREFIX ?? ""}correct-${set}-${version}-${display.slice(1)}`,
     cdpPort: Number(cdpPort),
     settings,
+    cardsFile,
+    spikeExtensions: ["s2-probe", "s2-cards"],
     onHostUp: () => {
       phase = "trials";
     },
   });
+  // Read the same table cells as check (2), then close the panel before editor measurements so
+  // opening the cards cannot change the viewport used by scroll and screen-line commands.
+  const panelVisible = () =>
+    cdpEvaluate(
+      cdpPort,
+      `(() => {
+    const panel = document.querySelector('.part.panel');
+    return !!panel && getComputedStyle(panel).display !== 'none' &&
+      panel.getBoundingClientRect().height > 0;
+  })()`,
+    );
+  const panelBeforeVisible = await panelVisible();
+  if (panelBeforeVisible)
+    throw new Error("the fresh correctness sandbox has an open panel");
+  await code.probe.call("exec", {
+    command: "workbench.view.extension.s2cards",
+  });
+  let rendered, lastRenderError;
+  for (let i = 0; i < 50 && !rendered; i++) {
+    await sleep(300);
+    try {
+      const cells = await cdpWebviewEvaluate(
+        cdpPort,
+        "vim-companion-spike.s2-cards",
+        RENDERED_CARDS_JS,
+      );
+      if (Array.isArray(cells) && cells.length > 0) rendered = cells;
+    } catch (error) {
+      lastRenderError = String(error);
+    }
+  }
+  if (!rendered)
+    throw new Error(`correctness cards did not render: ${lastRenderError}`);
+  cards = rowsFromRendered(rendered, authored, set).filter(selected);
+  await code.probe.call("exec", { command: "workbench.action.closePanel" });
+  await code.probe.call("exec", {
+    command: "workbench.action.focusFirstEditorGroup",
+  });
+  focusWindow(code);
+  await sleep(300);
+  const panelAfterVisible = await panelVisible();
+  if (panelAfterVisible)
+    throw new Error("the cards panel did not close before correctness trials");
   write({
     type: "meta",
     version,
@@ -191,6 +241,9 @@ try {
     trials: Number(trialsArg),
     cards: cards.map((c) => c.id),
     only: only ?? null,
+    rendered,
+    inputSha256: createHash("sha256").update(inputBytes).digest("hex"),
+    renderPreparation: { panelBeforeVisible, panelAfterVisible },
     build,
     hello: code.hello,
     started: new Date().toISOString(),
