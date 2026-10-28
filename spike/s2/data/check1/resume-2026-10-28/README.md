@@ -88,3 +88,26 @@ measurement; it does not change authored cards or count a prediction as measured
 node spike/s2/check1/deviations.mjs predict "$W/current-input" "$W/source-proof-input" \
   ctrl-left-is-small-word,viewport-edge-ignores-count,insert-dot-recorded-keys,register-prefix-rejects-insert,visual-insert-selection-boundary,visual-text-object-keeps-visual-mode
 ```
+
+## Empty-buffer oracle serialization
+
+The document-mode oracle must match the harness's
+`text.replace(/\n$/, "").split("\n")`. A singleton Vim buffer `[""]` represents an empty
+document and must stay `[""]`; only a final empty line with a preceding line is removed. The
+old serializer incorrectly returned `[]`. The regression tests cover empty documents, trailing
+empty lines and interior empty lines.
+
+`empty-buffer-oracle/` preserves the focused input, all four fresh Vim records and the replaced
+expectations. `dap`, `das`, `dip` and `dis` each settled with one buffer line and text `[""]`.
+Every other expectation field equals the fresh Vim result, so only their text representation
+changes (four rows, eight row-setting expectations). Their earlier `previousOracle` history is
+retained. This fixes a representation error; it does not resolve VSCodeVim register differences
+or assert a new IDE pass. These keys have no settings-dependent Vim setup.
+
+```bash
+node --test spike/s2/vim-check/expect.test.mjs
+V=$(mktemp -d /tmp/s2v.XXXXXX)
+S2_VIM_CPUS=8-15 S2_VIM_DOC=document S2_VIM_SIZE=43x42 S2_VIMRC=expect-sw2.vimrc \
+  node spike/s2/vim-check/expect.mjs "$V" defaults "$D/empty-buffer-oracle/cards.json" \
+  "$W/empty-buffer-oracle.jsonl"
+```

@@ -525,13 +525,14 @@ const sameJson = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 // The start buffer of the run: START.lines, plus the empty fifth line with S2_VIM_DOC=document.
 let START_DOC = START.lines;
-/** Vim's buffer as the harness reads VS Code's text: the text with one final line break dropped. */
-const viewOf = (lines) =>
-  START_DOC.length > START.lines.length && lines.length && lines.at(-1) === ""
-    ? lines.slice(0, -1)
-    : lines;
+/** Match text.replace(/\n$/, "").split("\n"): even an empty document has one line. */
+export const documentViewOf = (lines) =>
+  lines.length > 1 && lines.at(-1) === "" ? lines.slice(0, -1) : lines;
 function expectation(dump, baseline) {
-  const lines = viewOf(dump.lines);
+  const lines =
+    START_DOC.length > START.lines.length
+      ? documentViewOf(dump.lines)
+      : dump.lines;
   const text = sameJson(lines, START.lines)
     ? "unchanged"
     : lines.length === START.lines.length
