@@ -595,6 +595,67 @@ export const RULES = [
     },
   },
   {
+    id: "half-page-with-cleared-scroll",
+    title:
+      "uncounted half-page movement uses the explicitly restored two-line scroll size",
+    documented:
+      "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+    applies: ({ card, key }) =>
+      ["<C-d>", "<C-u>"].includes(key) &&
+      [
+        'normal ["\\\"","+"]',
+        'normal ["\\\"","_"]',
+        'visual-line ["\\\"","a"]',
+      ].includes(card),
+    transform(w, { card, key, setup, sample }) {
+      const visual = card.startsWith("visual-line");
+      const prefix = visual
+        ? [
+            ":",
+            "s",
+            "e",
+            "t",
+            "<Space>",
+            "s",
+            "c",
+            "r",
+            "o",
+            "l",
+            "l",
+            "=",
+            "0",
+            "<CR>",
+            "g",
+            "g",
+            "j",
+            "1",
+            "3",
+            "l",
+          ]
+        : ["z", "b"];
+      if (
+        sample !== undefined ||
+        !sameJson(setup, prefix) ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      return {
+        text: "unchanged",
+        cursor:
+          key === "<C-u>" ? [0, 0] : [3, visual ? START.lines[3].length : 0],
+        mode: visual ? "visual-line" : "normal",
+        ...(visual
+          ? {
+              registers: {
+                ":": { mode: "character", lines: ["set scroll=0"] },
+              },
+            }
+          : {}),
+      };
+    },
+  },
+  {
     id: "fixed-scroll-positions",
     title:
       "z horizontal commands move the cursor and counted Ctrl-Y clamps to the first line",

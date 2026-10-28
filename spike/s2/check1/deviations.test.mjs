@@ -23,6 +23,65 @@ const trial = (before, after) => ({
   afterRegisters: after,
 });
 
+test("half-page predictions require exact prepared contexts and preserve actual Ex text", () => {
+  const rule = RULES.find((r) => r.id === "half-page-with-cleared-scroll");
+  const normal = {
+    card: 'normal ["\\\"","+"]',
+    key: "<C-d>",
+    setup: ["z", "b"],
+  };
+  assert.equal(rule.applies(normal), true);
+  assert.deepEqual(rule.transform(expect, normal), {
+    text: "unchanged",
+    cursor: [3, 0],
+    mode: "normal",
+  });
+  assert.deepEqual(
+    rule.transform(expect, { ...normal, key: "<C-u>" }).cursor,
+    [0, 0],
+  );
+  assert.equal(
+    rule.applies({ ...normal, card: 'normal ["\\\"","a","3"]' }),
+    false,
+  );
+  assert.equal(rule.applies({ ...normal, card: "visual-block []" }), false);
+  assert.equal(rule.transform(expect, { ...normal, setup: [] }), null);
+  assert.equal(rule.transform(expect, { ...normal, sample: "x" }), null);
+  const visual = {
+    card: 'visual-line ["\\\"","a"]',
+    key: "<C-d>",
+    setup: [
+      ":",
+      "s",
+      "e",
+      "t",
+      "<Space>",
+      "s",
+      "c",
+      "r",
+      "o",
+      "l",
+      "l",
+      "=",
+      "0",
+      "<CR>",
+      "g",
+      "g",
+      "j",
+      "1",
+      "3",
+      "l",
+    ],
+  };
+  assert.equal(rule.applies(visual), true);
+  assert.deepEqual(rule.transform(expect, visual), {
+    text: "unchanged",
+    cursor: [3, 20],
+    mode: "visual-line",
+    registers: { ":": { mode: "character", lines: ["set scroll=0"] } },
+  });
+});
+
 test("full baselines distinguish an unchanged old assertion from an unexpected write", () => {
   assert.equal(compare(expect, trial({ "-": text }, { "-": text })), "match");
   assert.equal(compare(expect, trial({ "-": old }, { "-": text })), "mismatch");

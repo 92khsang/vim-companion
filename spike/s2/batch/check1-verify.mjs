@@ -8,7 +8,11 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { isDeepStrictEqual as same } from "node:util";
-import { buildInfo, REPO } from "../harness/lib.mjs";
+import { buildInfo, REPO, START } from "../harness/lib.mjs";
+import {
+  needsLineUndoPreparation,
+  needsScrollPreparation,
+} from "../harness/trial-preparation.mjs";
 import { SETTINGS_SETS } from "../harness/cards-extract.mjs";
 import { configOf, holds, SETS } from "../check1/lib.mjs";
 import { compare } from "../check1/deviations.mjs";
@@ -285,6 +289,50 @@ export function verifyMatrix(dir, input, head) {
             !same(record.typed, [...card.keys, row.sample ?? row.key])
           )
             fail(`${label}: positive trial type or typed sequence differs`);
+          if (
+            needsLineUndoPreparation(card, row) &&
+            (record.historyPreparation?.registersPreserved !== true ||
+              !same(record.historyPreparation?.prepared, {
+                handler: true,
+                depth: 0,
+                index: -1,
+                totalChanges: 0,
+                currentChanges: 0,
+                pendingContentChanges: 0,
+                currentDocumentMatches: true,
+              }))
+          )
+            fail(`${label}: fresh line-undo history was not established`);
+          if (
+            needsScrollPreparation(card, row) &&
+            (record.scrollPreparation?.scroll !== 0 ||
+              record.beforeViewport?.scroll !== 0 ||
+              !same(record.beforeViewport?.visibleRanges, [[0, 0, 4, 0]]))
+          )
+            fail(`${label}: zero-scroll visible viewport was not established`);
+          const target =
+            row.key === "<C-6>"
+              ? ["alternatePreparation", 1]
+              : card.id === 'normal ["<C-w>"]' &&
+                  ["<C-l>", "<right>", "l", "<C-w>", "w"].includes(row.key)
+                ? ["windowPreparation", 2]
+                : null;
+          if (target) {
+            const [field, group] = target,
+              prepared = record[field];
+            if (
+              prepared?.file !== "b.txt" ||
+              prepared?.viewColumn !== group ||
+              prepared?.mode !== "normal" ||
+              !same(prepared?.text, START.lines) ||
+              !same(prepared?.selections, [[1, 13, 1, 13]]) ||
+              record.activeFile !== "b.txt" ||
+              record.activeViewColumn !== group
+            )
+              fail(
+                `${label}: target-file preparation or active editor differs`,
+              );
+          }
           let complete = true;
           for (const field of ["beforeRegisters", "afterRegisters"]) {
             const registers = record[field];

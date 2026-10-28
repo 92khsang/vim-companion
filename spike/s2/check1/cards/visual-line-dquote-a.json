@@ -1033,6 +1033,68 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [3, 20],
+              "mode": "visual-line",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["set scroll=0"]
+                }
+              }
+            },
+            "rule": "half-page-with-cleared-scroll",
+            "documented": "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [3, 20],
+              "mode": "visual-line",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["set scroll=0"]
+                }
+              }
+            },
+            "rule": "half-page-with-cleared-scroll",
+            "documented": "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

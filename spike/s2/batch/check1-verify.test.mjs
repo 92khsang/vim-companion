@@ -13,6 +13,10 @@ import test, { after, before } from "node:test";
 import { buildFullInput, PRODUCTS, verifyMatrix } from "./check1-verify.mjs";
 import { SETTINGS_SETS } from "../harness/cards-extract.mjs";
 import { START } from "../harness/lib.mjs";
+import {
+  needsLineUndoPreparation,
+  needsScrollPreparation,
+} from "../harness/trial-preparation.mjs";
 
 // This is synthetic acceptance evidence, never an IDE result. Use the actual strict input so a
 // focused smoke fixture cannot accidentally exercise only the verifier's happy-path counters.
@@ -47,7 +51,7 @@ build.id = createHash("sha256")
   )
   .digest("hex")
   .slice(0, 16);
-let dir, input, first, negativeFile;
+let dir, input, first, negativeFile, historyFile, scrollFile, targetFile;
 const write = (file, records) =>
   writeFileSync(file, records.map(JSON.stringify).join("\n") + "\n");
 const read = (file) =>
@@ -135,14 +139,59 @@ before(() => {
                     ? { quickPick: { visible: true, ...row.expect.quickPick } }
                     : {}),
                 };
-                records.push({
+                const record = {
                   ...common,
                   typed: [...card.keys, row.sample ?? row.key],
                   got,
                   want: got,
                   beforeRegisters,
                   afterRegisters: { ...beforeRegisters, ...registers },
-                });
+                };
+                if (needsLineUndoPreparation(card, row)) {
+                  historyFile ??= file;
+                  record.historyPreparation = {
+                    registersPreserved: true,
+                    prepared: {
+                      handler: true,
+                      depth: 0,
+                      index: -1,
+                      totalChanges: 0,
+                      currentChanges: 0,
+                      pendingContentChanges: 0,
+                      currentDocumentMatches: true,
+                    },
+                  };
+                }
+                if (needsScrollPreparation(card, row)) {
+                  scrollFile ??= file;
+                  record.scrollPreparation = { scroll: 0 };
+                  record.beforeViewport = {
+                    scroll: 0,
+                    visibleRanges: [[0, 0, 4, 0]],
+                  };
+                }
+                const target =
+                  row.key === "<C-6>"
+                    ? ["alternatePreparation", 1]
+                    : card.id === 'normal ["<C-w>"]' &&
+                        ["<C-l>", "<right>", "l", "<C-w>", "w"].includes(
+                          row.key,
+                        )
+                      ? ["windowPreparation", 2]
+                      : null;
+                if (target) {
+                  targetFile ??= file;
+                  record[target[0]] = {
+                    file: "b.txt",
+                    viewColumn: target[1],
+                    mode: "normal",
+                    text: START.lines,
+                    selections: [[1, 13, 1, 13]],
+                  };
+                  record.activeFile = "b.txt";
+                  record.activeViewColumn = target[1];
+                }
+                records.push(record);
               }
             }
         records.push({ type: "end", finished: "2026-10-28T01:00:00.000Z" });
@@ -304,3 +353,44 @@ test("a false delivered flag cannot hide the token in received keys", () => {
     writeFileSync(negativeFile, saved);
   }
 });
+for (const [title, fileOf, find, mutate, pattern] of [
+  [
+    "line-undo preparation cannot be omitted",
+    () => historyFile,
+    (r) => r.historyPreparation,
+    (r) => {
+      delete r.historyPreparation;
+    },
+    /fresh line-undo history/,
+  ],
+  [
+    "uncounted scroll cannot retain a previous count",
+    () => scrollFile,
+    (r) => r.scrollPreparation,
+    (r) => {
+      r.beforeViewport.scroll = 7;
+    },
+    /zero-scroll visible viewport/,
+  ],
+  [
+    "the target editor must be prepared in the correct group",
+    () => targetFile,
+    (r) => r.alternatePreparation,
+    (r) => {
+      r.activeViewColumn = 2;
+    },
+    /target-file preparation/,
+  ],
+])
+  test(title, () => {
+    const file = fileOf(),
+      saved = readFileSync(file);
+    try {
+      const records = read(file);
+      mutate(records.find(find));
+      write(file, records);
+      assert.match(verifyMatrix(dir, input, head).problems.join("\n"), pattern);
+    } finally {
+      writeFileSync(file, saved);
+    }
+  });

@@ -221,7 +221,7 @@
             "rule": "repeat-substitute-current-line",
             "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
             "measured": {
-              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
               "trials": {
                 "defaults 1.134.0": {
                   "trials": 3
@@ -230,8 +230,8 @@
                   "trials": 3
                 }
               },
-              "verdict": "unknown",
-              "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
+              "verdict": "match",
+              "note": "every trial matches"
             }
           }
         },
@@ -253,7 +253,7 @@
             "rule": "repeat-substitute-current-line",
             "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
             "measured": {
-              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
               "trials": {
                 "extensions 1.134.0": {
                   "trials": 3
@@ -262,8 +262,8 @@
                   "trials": 3
                 }
               },
-              "verdict": "unknown",
-              "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
+              "verdict": "match",
+              "note": "every trial matches"
             }
           }
         }

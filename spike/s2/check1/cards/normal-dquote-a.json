@@ -142,7 +142,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "Repeat the last :s on the current line (none in this run: E35)",
+      "label": "Repeat the last substitution on the current line (VSCodeVim ignores the register prefix)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L264 |&|",
       "expect": {
@@ -176,7 +176,74 @@
         },
         "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-417 (& runs :s), src/cmd_line/commands/substitute.ts L509-543 (resolvePatterns throws E35 at L524 without a previous substitute, nothing changes); no card of cards.json types <CR> after :, so no earlier row of the run sets a substitute (Inferred from cards.json); a setup that sets one needs <CR>, which harness/lib.mjs keysym cannot type"
       },
-      "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>"]
+      "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>"],
+      "vimLabel": "Repeat the last :s on the current line (none in this run: E35)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["s/e/X/"]
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["s/e/X/"]
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
     },
     {
       "key": "'",

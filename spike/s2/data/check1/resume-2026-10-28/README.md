@@ -410,13 +410,19 @@ colon data are not silently accepted, and an independent mismatch still takes pr
 The complete second pass must use the repaired probe across all 7,075 row-setting inputs.
 Historical classifications and original direct flags describe their original instrumentation.
 
-The existing three confirmed `&` rows now expect the setup's actual `s/e/X/` command text;
-their complete-register measured status is unknown until rerun. Both hand-authored Visual
+The initial repair changed three `&` rows to the setup's actual `s/e/X/` command text;
+their complete-register status remained unknown until the repaired-probe rerun. Both hand-authored Visual
 `gr` scroll rows preserve their old expectations under `previousHand` and now expect
 `set scroll=0`. `ex-register-recheck-input/` contains 22 row-setting predictions (132 trials):
 all eight Normal `&` contexts, the two named-a VisualLine scroll rows and the two extensions-only
 Visual `gr` scroll rows. The source text/cursor behavior of `&` is unchanged: it directly
 executes the parsed substitute command, without overwriting the last Ex command.
+
+Measured: `ex-register-recheck/` passed all 132 trials at `a0abfc3`, build `6a33c65ff679fc7e`,
+with actual colon command contents and no lossy snapshots. `selected-ex-scroll-rules.json`
+promotes all eight Normal `&` contexts and the named-a VisualLine Ctrl-D source prediction.
+Visual `gr`'s two hand expectations retain `previousHand` and now record the six matching
+trials each. Named `&` labels distinguish ignored register prefixes from ignored counts.
 
 `source-wave4-input/` contains 52 defaults and 51 extensions source predictions for 618 trials,
 covering the reviewed endpoint, register-wrapper, window, Visual-g, redo, join, case and cursor
@@ -458,6 +464,29 @@ trial. Window preparation, scroll-state restoration and history isolation have s
 regressions before the new source matrices. To rerun a source wave, use the loop above with its
 input directory and the frozen commit from its raw metadata; wave3 used `S2_NAME_PREFIX=cw3-`.
 
+Measured: `undo-history-scope/` passed all 96 trials at clean `2231a60`, build
+`573a37be09334292`, and all 96 recorded fresh empty local history plus preserved registers.
+This includes the plain card's actual cancelled-operator prefix `d<Esc>`. The older
+`undo-history-recheck/` result remains separately preserved: 84 preparations and 12 plain-card
+trials without that preparation. No contaminated uppercase result was adopted.
+
+Measured: `scroll-state-recheck/` passed all 72 trials at that same build. Every trial recorded
+runtime `scroll=0` before the keys, visible document lines `0..4`, and the actual preparation
+command `set scroll=0` in the baseline colon register. Normal named `+`/`_` Ctrl-D now has the
+source-derived `[3,0]` expectation; Ctrl-U and both plain VisualBlock expectations remain as
+authored. The half-page rule requires those exact Normal contexts or named-a VisualLine's
+explicit Ex setup. The two new folders contain exact-coverage, preparation-count and raw-hash
+reports. `final-source-rescore.json` independently matches all 306 condition groups (918 trials)
+across source wave4, Ex132, U96 and scroll72, with no unknown register content. This focused
+coverage still does not replace the complete final matrix.
+
+`combined-after-final-source.json` uses the new cohorts first, then the preserved earlier source
+waves, alternate-file proof, targeted proof, representative and residual diagnostics. It has
+828 passing condition groups, 771 unknown groups and no independent failures. Every unknown
+group still lacks legacy colon command text; none is relabeled as passing. This covers only
+the recorded diagnostic/source groups, not all 14,150 row-setting-version combinations of
+the final matrix. The older raw outcomes and their evidence references remain in the report.
+
 
 ## Final-matrix acceptance gates
 
@@ -484,7 +513,8 @@ canonical catalog scope, and requires the 32 exact chunk names and every row's t
 It checks source fingerprints, installed product SHAs, pinned engine versions and settings;
 positive trials must retain full register snapshots with actual Ex text, and negative trials
 must retain every authored chord attempt. It recomputes the positive state comparison from the
-input and snapshots rather than trusting `ok`. Its 15 synthetic regressions exercise a full
+input and snapshots rather than trusting `ok`. It also requires the scoped fresh-history,
+scroll/viewport and target-editor preparation records. Its 18 synthetic regressions exercise a full
 42,450-trial fixture, including forged success, incomplete evidence and incorrect scope.
 Run it from the final frozen checkout after the batch, with that checkout's full commit SHA:
 
@@ -528,6 +558,7 @@ startup cost. This is an estimate, not a cutoff or a reason to reduce coverage.
 `scroll-state-recheck-input/` contains the six precisely scoped uncounted half-page rows:
 Normal named `+`/`_` and plain VisualBlock, each with Ctrl-D/Ctrl-U and `zb` setup, on both
 settings. Its 72 trials require the harness's prepared runtime `scroll=0` and observed viewport
-lines `0..4`. VisualBlock primary-cursor expectations are unchanged; the recorded full selection
-ranges separately show the internal scope. The original counted/setup-count/explicit-Ex scroll
+lines `0..4`. VisualBlock primary-cursor expectations are unchanged. The internal full selection
+ranges are source-derived, not separately recorded by these trials; the measured cursor contract
+is the primary active end. The original counted/setup-count/explicit-Ex scroll
 rows are not replaced by this preparation.

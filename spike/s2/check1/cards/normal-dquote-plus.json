@@ -142,7 +142,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "Repeat the last :s on the line",
+      "label": "Repeat the last substitution on the current line (VSCodeVim ignores the register prefix)",
       "labelIndex": "index.txt L264 |&|",
       "expect": {
         "text": {
@@ -171,6 +171,73 @@
       },
       "handBasis": {
         "basis": "Vim change.txt *&* (synonym for :s; with a count :.,.+N-1s, cmdline.txt *N:*): repeats the setup's :s/o/0/ on the cursor line, cursor on the first non-blank of the last changed line; register : becomes the :s that & ran and / is the :s pattern (checked on another buffer)"
+      },
+      "vimLabel": "Repeat the last :s on the line",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (0ne, \"tw0\", [three]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["s/o/0/"]
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (0ne, \"tw0\", [three]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "lines": ["s/o/0/"]
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -912,6 +979,56 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [3, 0],
+              "mode": "normal"
+            },
+            "rule": "half-page-with-cleared-scroll",
+            "documented": "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [3, 0],
+              "mode": "normal"
+            },
+            "rule": "half-page-with-cleared-scroll",
+            "documented": "VSCodeVim 1.32.4 scroll.ts L76-L155 and configuration.ts L448-L452 use ceil((visibleEnd-visibleStart)/2) when runtime scroll is zero. With the prepared viewport0..4, START[1,13] and default startofline=true, Ctrl-D reaches [3,0] and Ctrl-U clamps to [0,0]. Normal named+/_ ignore their register prefix; the harness restores runtime scroll=0 before the register baseline. VisualLine named-a instead executes its authored :set scroll=0 setup, storing the exact command in colon (commandLine.ts L262-L271), and modeHandler.ts L1328-L1334 renders the forward active end as [3,lineLength] and backward as [0,0]. Scoped to these exact six no-count rows and setups; counted motions, other registers and unprepared runtime state are excluded.",
+            "measured": {
+              "pass": "ex-register-recheck (a0abfc3) or scroll-state-recheck (2231a60), disjoint rows; actual Ex contents; 2 versions x 3 trials per set",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
