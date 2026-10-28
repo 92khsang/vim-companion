@@ -4,7 +4,7 @@
 // nothing on Linux produces), the rows the builder left out, the errors, and a ROW line with the
 // criterion as written: 100% of card rows, in every trial, give the effect that the row states
 // (3 trials per row at 30 ms, both settings sets, both versions).
-// A row passes only when it has at least 3 trials, every one ok. A negative row (a key marked
+// A row passes only with exactly trials 0, 1 and 2, every one ok. A negative row (a key marked
 // unsupported on Linux, check1/unsupported.mjs) is ok in a trial when no chord a Linux user would
 // press delivered its token; such rows are counted apart and stay inside the 100% rule. Untyped,
 // left-out and unmeasured rows do not pass. Every record of the directory counts, kept incomplete runs included. The runs
@@ -43,6 +43,104 @@ const recs = files.flatMap((f) =>
 const metaOf = new Map();
 for (const r of recs) if (r.type === "meta") metaOf.set(r.file, r);
 const problems = [];
+const rowKeys = new Map();
+for (const set of SETS) {
+  const ids = new Set(),
+    keys = new Set();
+  for (const card of input[set].cards) {
+    if (ids.has(card.id))
+      problems.push(`${set}: duplicate input card ${card.id}`);
+    ids.add(card.id);
+    for (const row of card.rows) {
+      const key = `${card.id}\0${row.key}`;
+      if (keys.has(key))
+        problems.push(
+          `${set}: duplicate input row ${card.id} ${JSON.stringify(row.key)}`,
+        );
+      keys.add(key);
+    }
+  }
+  rowKeys.set(set, keys);
+}
+for (const file of files) {
+  const records = recs.filter((record) => record.file === file);
+  const metas = records.filter((record) => record.type === "meta");
+  const ends = records.filter((record) => record.type === "end");
+  if (metas.length !== 1 || records[0]?.type !== "meta")
+    problems.push(
+      `${file}: expected one initial meta record, found ${metas.length}`,
+    );
+  if (ends.length !== 1 || records.at(-1)?.type !== "end")
+    problems.push(
+      `${file}: expected one final end record, found ${ends.length}`,
+    );
+  const errors = records.filter((record) => record.type === "error");
+  if (errors.length) problems.push(`${file}: ${errors.length} error records`);
+  for (const record of records)
+    if (!["meta", "trial", "untyped", "end", "error"].includes(record.type))
+      problems.push(`${file}: unknown record type ${record.type}`);
+  if (metas.length !== 1) continue;
+  const meta = metas[0];
+  if (!VERSIONS.includes(meta.version) || !SETS.includes(meta.set)) {
+    problems.push(`${file}: invalid condition ${meta.set} ${meta.version}`);
+    continue;
+  }
+  const cards = input[meta.set].cards;
+  let selected = cards;
+  if (meta.only) {
+    const range = /^#(\d+)-(\d+)$/.exec(meta.only);
+    if (
+      !range ||
+      Number(range[1]) >= Number(range[2]) ||
+      Number(range[2]) > cards.length
+    ) {
+      problems.push(`${file}: invalid card range ${meta.only}`);
+      continue;
+    }
+    selected = cards.slice(Number(range[1]), Number(range[2]));
+  }
+  const selectedIds = selected.map((card) => card.id);
+  if (JSON.stringify(meta.cards) !== JSON.stringify(selectedIds))
+    problems.push(`${file}: meta cards differ from the selected input range`);
+  const expected = new Set(
+    selected.flatMap((card) =>
+      card.rows.flatMap((row) =>
+        [0, 1, 2].map((index) => `${card.id}\0${row.key}\0${index}`),
+      ),
+    ),
+  );
+  const seen = new Set();
+  for (const trial of records.filter((record) => record.type === "trial")) {
+    const row = `${trial.card}\0${trial.key}`;
+    if (!selectedIds.includes(trial.card) || !rowKeys.get(meta.set).has(row))
+      problems.push(
+        `${file}: trial outside input range ${trial.card} ${JSON.stringify(trial.key)}`,
+      );
+    const id = `${row}\0${trial.trial}`;
+    if (seen.has(id))
+      problems.push(
+        `${file}: duplicate trial ${trial.card} ${JSON.stringify(trial.key)} #${trial.trial}`,
+      );
+    seen.add(id);
+    if (
+      !Number.isInteger(trial.trial) ||
+      trial.trial < 0 ||
+      trial.trial >= TRIALS
+    )
+      problems.push(`${file}: invalid trial index ${trial.trial}`);
+    if (typeof trial.ok !== "boolean" || !Array.isArray(trial.diff))
+      problems.push(
+        `${file}: malformed trial result ${trial.card} ${JSON.stringify(trial.key)}`,
+      );
+    if (trial.ok === true && trial.diff?.length)
+      problems.push(`${file}: passing trial contains differences`);
+  }
+  const missing = [...expected].filter((id) => !seen.has(id)).length;
+  if (missing)
+    problems.push(
+      `${file}: ${missing} expected trial records missing from this chunk`,
+    );
+}
 const builds = new Set(
   recs
     .filter((r) => r.type === "meta" || r.type === "error")
@@ -59,9 +157,9 @@ for (const m of metaOf.values()) {
     problems.push(
       `${m.file}: hello.vscode ${m.hello?.vscode} under ${m.version}`,
     );
-  if (m.trials < TRIALS)
+  if (m.trials !== TRIALS)
     problems.push(
-      `${m.file}: ${m.trials} trials per row (the row needs ${TRIALS})`,
+      `${m.file}: ${m.trials} trials per row (the row needs exactly ${TRIALS})`,
     );
   if (m.only && !/^#\d+-\d+$/.test(m.only))
     problems.push(`${m.file}: card selection ${m.only}`);
@@ -122,11 +220,16 @@ for (const v of VERSIONS)
           neg.trials += ts.length;
         }
         if (untyped.has(k)) continue;
-        if (ts.length < TRIALS) {
+        const indices = new Set(ts.map((trial) => trial.trial));
+        if (
+          ts.length !== TRIALS ||
+          indices.size !== TRIALS ||
+          ![0, 1, 2].every((index) => indices.has(index))
+        ) {
           unmeasured.push({ card: c.id, key: row.key, trials: ts.length });
           continue;
         }
-        if (ts.every((t) => t.ok)) {
+        if (ts.every((t) => t.ok === true)) {
           pass += 1;
           if (row.negative) neg.pass += 1;
         } else
@@ -149,7 +252,11 @@ for (const v of VERSIONS)
     const excluded = input[s].excluded;
     inForce += excluded.length;
     const trials = mine.filter((r) => r.type === "trial").length;
-    const ok = metas.length > 0 && pass === inForce && problems.length === 0;
+    const ok =
+      metas.length > 0 &&
+      pass === inForce &&
+      problems.length === 0 &&
+      errors.length === 0;
     rows.push({ v, s, ok });
     lines.push(
       `${s} ${v}: ${inForce} rows in force, ${trials} trials, ${pass} rows pass every trial (negative rows ${neg.rows}: ${neg.trials} trials, ${neg.pass} pass); failing ${failing.length} (knownDeviation ${failing.filter((f) => f.knownDeviation).length}), untyped ${untyped.size}, left out ${excluded.length}, unmeasured ${unmeasured.length}, errors ${errors.length}`,

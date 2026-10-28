@@ -432,3 +432,38 @@ The corrected harness must prove fresh local Vim history and unchanged registers
 trial. Window preparation, scroll-state restoration and history isolation have separate harness
 regressions before the new source matrices. To rerun a source wave, use the loop above with its
 input directory and the frozen commit from its raw metadata; wave3 used `S2_NAME_PREFIX=cw3-`.
+
+
+## Final-matrix acceptance gates
+
+The summary rejects error records, missing or repeated metadata/end markers, invalid conditions,
+malformed results, trials outside their declared card range, duplicate or missing trial indices,
+and incomplete chunks whose rows happen to be supplied by another chunk. Exactly indices
+`0`, `1`, `2` are required for each row. The 16 synthetic regressions in
+`batch/check1-summary.test.mjs` include the prior false-positive case: passing trials plus an
+error record and no final marker. No original trial is removed. A resumed directory retains
+its incomplete records and therefore cannot become an acceptance pass; a new complete attempt
+uses a separately named data root while preserving the old attempt.
+
+The final check (1) run uses a new clean frozen checkout, three trials, the full card set, the
+repaired probe and all preparation fixes. Defaults has 3,442 rows and extensions 3,633, each
+with 59 cards. Eight-card chunks yield 32 completed chunk files across both versions and settings;
+there are 42,450 trial records, including 660 negative trials. Independent final verification
+must confirm those exact keys, conditions, repetitions, build identity, markers and the complete
+Ex register contents, with no error/untyped/left-out rows. `S2_CHECK1_TRIALS` and
+`S2_CHECK1_CARDS` are unset; source matrices never replace this full run.
+
+Check (2) also runs on that final frozen build: render each freshly built `cards-<set>.json`
+with `harness/cards-complete.mjs`, on both versions and settings, against the matching engine
+reference. Require 59 rendered cards and zero missing, extra or duplicate rows. This validates
+what the webview actually displays after label updates, separately from keyboard effects.
+Measured subset durations are 1.537-1.873 seconds per trial in the saved source-wave metadata;
+a linear 42,450-trial extrapolation is 18-22 hours, before differences in negative-row work and
+startup cost. This is an estimate, not a cutoff or a reason to reduce coverage.
+
+`scroll-state-recheck-input/` contains the six precisely scoped uncounted half-page rows:
+Normal named `+`/`_` and plain VisualBlock, each with Ctrl-D/Ctrl-U and `zb` setup, on both
+settings. Its 72 trials require the harness's prepared runtime `scroll=0` and observed viewport
+lines `0..4`. VisualBlock primary-cursor expectations are unchanged; the recorded full selection
+ranges separately show the internal scope. The original counted/setup-count/explicit-Ex scroll
+rows are not replaced by this preparation.
