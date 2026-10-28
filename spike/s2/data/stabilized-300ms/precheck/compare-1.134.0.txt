@@ -1,0 +1,11 @@
+runs: 100 (0 on, 100 off), errors: 0
+adapter-off outcomes: 1 distinct (100 runs)
+adapter-on runs that differ from the adapter-off outcome: 0
+version 1.134.0: adapter-off majority 100 of 100, minority 0
+  settle effect rule (100 adapter-off runs, cap 2000 ms): waits per run 2
+    extra/count-leader <Space> b n (workbench.action.nextEditorInGroup): 100 waits; a.txt:1 -> no change; wait ms mean 3.4 min 1 max 15; polls mean 1.0 min 1 max 1; effect ms after the earliest leaf time -; quick input visible when the wait ended 0, focus in it 0; no change until the next key in 100 of 100 (ms to the next key mean 239.1 min 236 max 256)
+    extra/leader-macro <Space> w h (workbench.action.focusLeftGroup): 100 waits; b.txt:2 -> a.txt:1; wait ms mean 4.7 min 1 max 21; polls mean 1.2 min 1 max 3; effect ms after the earliest leaf time mean 55.3 min 47 max 79; quick input visible when the wait ended 0, focus in it 0
+counted-leader stabilization: 300 ms
+builds: dfd686159cc2459f
+  counted-leader 1.134.0 off: 100 observations; timer callback after Space ms min 300.3, mean 300.4, max 300.6; Space to b ms min 304.4, mean 305.6, max 306.9; b to n ms min 29.9, mean 30.4, max 32.2
+PRECHECK 1.134.0: 100 off (need 100), 0 on, run errors 0 (replaceable off-arm boot 0, counted 0; on 0, off 0), adapter-off outcomes 1, run numbers 0-99, adapter checks failed 0 on, 0 off, counted-leader stabilization 300 ms, invalid observations 0, VS Code 1.134.0, VSCodeVim 1.32.4, which-key 0.11.4, build dfd686159cc2459f: pass
