@@ -1,0 +1,112 @@
+[
+  {
+    "id": "normal [\"g\",\"U\"]",
+    "keys": [
+      "g",
+      "U"
+    ],
+    "rows": [
+      {
+        "key": "U",
+        "expect": {
+          "text": {
+            "1": "  IF (ONE, \"TWO\", [THREE]) { FOUR(FIVE) }"
+          },
+          "cursor": [
+            1,
+            0
+          ],
+          "mode": "normal"
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal []",
+    "keys": [],
+    "rows": [
+      {
+        "key": "<Esc>",
+        "setup": [
+          ":",
+          "s",
+          "e",
+          "t",
+          " ",
+          "s",
+          "c",
+          "r",
+          "o",
+          "l",
+          "l",
+          "=",
+          "7",
+          "\n"
+        ],
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal",
+          "registers": {
+            ":": {
+              "mode": "character",
+              "lines": [
+                "set scroll=7"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal [\"\\\"\",\"+\"]",
+    "keys": [
+      "\"",
+      "+"
+    ],
+    "rows": [
+      {
+        "key": "<C-d>",
+        "setup": [
+          "z",
+          "b"
+        ],
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            3,
+            0
+          ],
+          "mode": "normal"
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal [\"\\\"\",\"_\"]",
+    "keys": [
+      "\"",
+      "_"
+    ],
+    "rows": [
+      {
+        "key": "U",
+        "setup": [
+          "~"
+        ],
+        "expect": {
+          "text": "unchanged",
+          "cursor": [
+            1,
+            13
+          ],
+          "mode": "normal"
+        }
+      }
+    ]
+  }
+]

@@ -80,7 +80,7 @@ function expectProblems(e) {
     if (!(
       v &&
       REG_MODES.has(v.mode) &&
-      (isLines(v.lines) || typeof v.keys === "string")
+      (isLines(v.lines) || (name !== ":" && typeof v.keys === "string"))
     ))
       p.push(`expect.registers.${name}`);
   if ("shiftNumbered" in e && typeof e.shiftNumbered !== "boolean")

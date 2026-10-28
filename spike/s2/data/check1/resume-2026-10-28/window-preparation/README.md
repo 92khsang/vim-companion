@@ -2,7 +2,7 @@
 
 Documented: [VSCodeVim window actions](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/window.ts#L92-L172) map `Ctrl-W l`, `Ctrl-W Right`, and `Ctrl-W Ctrl-L` to commands that focus the right editor group; `Ctrl-W w` and `Ctrl-W Ctrl-W` focus the next group. In the two-group fixture this is `b.txt` in group 2. Its text, cursor, and mode must be prepared even if the preceding row returned to `a.txt` after changing `b.txt`. The existing conditional reopen alone does not establish that invariant.
 
-Documented: [active-editor handling](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/extensionBase.ts#L218-L228) updates `%` to the active file and `#` to the previous file. [The readonly register writer](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/register/register.ts#L193-L203) uses CharacterWise values.
+Documented: [active-editor handling](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/extensionBase.ts#L218-L228) updates `%` to the active file and `#` to the previous file. [The readonly register writer](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/register/register.ts#L193-L203) uses CharacterWise values.
 
 The harness prepares and verifies the target file before capturing register baselines. These five exact Normal `Ctrl-W` rows without setup use group 2; `Ctrl-6` keeps its group 1 preparation. Each prepared state records the file, group, text, selection, and mode, plus the previous target state. Failed preparation aborts the run. The current/alternate file register baseline must be `a.txt`/`b.txt`.
 

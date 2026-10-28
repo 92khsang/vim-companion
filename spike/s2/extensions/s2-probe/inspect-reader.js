@@ -195,9 +195,34 @@ async function registerClass() {
   throw new Error("Register not found in the closure of deactivate");
 }
 
+let cachedConfiguration;
+/** Read the runtime scroll value, including changes from :set and counted scrolling. */
+async function scrollSetting() {
+  if (!cachedConfiguration) {
+    const path = vimModulePath();
+    if (!path) throw new Error("VSCodeVim module not in require.cache");
+    for (const { value } of await closureValues(
+      require.cache[path].exports.getAndUpdateModeHandler,
+    )) {
+      if (
+        value &&
+        typeof value === "object" &&
+        typeof value.configuration?.scroll === "number"
+      ) {
+        cachedConfiguration = value.configuration;
+        break;
+      }
+    }
+  }
+  if (!cachedConfiguration || !Number.isFinite(cachedConfiguration.scroll))
+    throw new Error("runtime scroll setting not found in VSCodeVim's closure");
+  return cachedConfiguration.scroll;
+}
+
 module.exports = {
   describeVimModule,
   modeHandlerMap,
   actionMap,
   registerClass,
+  scrollSetting,
 };

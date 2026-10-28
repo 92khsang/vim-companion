@@ -52,6 +52,16 @@ const RESET_KEYS = ["<Esc>", "<Esc>"];
 const RESET_TAIL = ["v", "<Esc>"];
 const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>", "<C-t>"]);
 const WINDOW_TARGET_KEYS = new Set(["l", "w", "<right>", "<C-l>", "<C-w>"]);
+const LINE_UNDO_PREFIXES = [
+  [],
+  ["2"],
+  ["3"],
+  ["3", "0"],
+  ['"', "a"],
+  ['"', "a", "3"],
+  ['"', "+"],
+  ['"', "_"],
+];
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -149,10 +159,10 @@ for (const card of cards)
         REGISTER_MODES.includes(v.mode) &&
         ((Array.isArray(v.lines) &&
           v.lines.every((l) => typeof l === "string")) ||
-          typeof v.keys === "string");
+          (name !== ":" && typeof v.keys === "string"));
       if (!ok)
         throw new Error(
-          `${card.id} ${row.key}: register ${name} must be { mode, lines } or { mode, keys }`,
+          `${card.id} ${row.key}: register ${name} must be { mode, lines }; recorded keys are allowed only for non-Ex registers`,
         );
     }
 
@@ -273,12 +283,67 @@ try {
     }
     throw new Error("a macro recording did not stop");
   }
+  // U traverses same-line history beyond a single setup edit. A new handler makes
+  // the row's own setup the complete history while preserving static registers.
+  async function prepareLineUndo() {
+    const previous = await code.probe.call("vimHistory");
+    const beforeRegisters = await code.probe.call("registers");
+    await code.probe.call("exec", { command: "toggleVim" });
+    // toggleVim does not await its internal transition. Observe the disabled
+    // handler map before resetting text, then observe the new Normal handler.
+    let disabled;
+    for (let i = 0; i < 40; i++) {
+      disabled = await code.probe.call("vimState");
+      if (disabled.handler === false && disabled.documents === 0) break;
+      await sleep(50);
+    }
+    if (disabled?.handler !== false || disabled.documents !== 0)
+      throw new Error(
+        "line-undo preparation did not finish disabling VSCodeVim",
+      );
+    await code.probe.call("reset", START);
+    await code.probe.call("exec", { command: "toggleVim" });
+    let enabled;
+    for (let i = 0; i < 40; i++) {
+      enabled = await code.probe.call("vimState");
+      if (
+        enabled.state?.mode === "normal" &&
+        enabled.state.pending?.length === 0
+      )
+        break;
+      await sleep(50);
+    }
+    if (
+      enabled?.state?.mode !== "normal" ||
+      enabled.state.pending?.length !== 0
+    )
+      throw new Error("line-undo preparation did not restore Normal mode");
+    const prepared = await code.probe.call("vimHistory");
+    if (
+      prepared.handler !== true ||
+      prepared.depth !== 0 ||
+      prepared.index !== -1 ||
+      prepared.totalChanges !== 0 ||
+      prepared.currentChanges !== 0 ||
+      prepared.pendingContentChanges !== 0 ||
+      prepared.currentDocumentMatches !== true
+    )
+      throw new Error(
+        "line-undo preparation did not create empty document history",
+      );
+    const afterRegisters = await code.probe.call("registers");
+    if (JSON.stringify(beforeRegisters) !== JSON.stringify(afterRegisters))
+      throw new Error("line-undo preparation changed register contents");
+    return { previous, prepared, registersPreserved: true };
+  }
   // Every trial starts from Normal mode, the two files in their groups with a.txt active, no macro
   // being recorded, and the fixture text and cursor.
   async function resetTrial({
     clearJumps = false,
     alternateFile = false,
     windowTarget = false,
+    clearScroll = false,
+    clearLineUndo = false,
   } = {}) {
     typeKeys(display, RESET_KEYS, 30);
     await sleep(80);
@@ -329,11 +394,25 @@ try {
     });
     await sleep(100);
     await stopRecording();
+    const historyPreparation = clearLineUndo ? await prepareLineUndo() : null;
     // Ctrl-6 uses group 1's independent view state; window navigation uses group 2.
     const alternatePreparation = alternateFile
       ? await prepareTargetFile(1)
       : null;
     const windowPreparation = windowTarget ? await prepareTargetFile(2) : null;
+    let scrollPreparation = null;
+    if (clearScroll) {
+      const previous = await code.probe.call("vimScroll");
+      typeKeys(display, [":", ..."set scroll=0", "\n"], 30);
+      await sleep(300);
+      const prepared = await code.probe.call("vimScroll");
+      if (prepared.scroll !== 0)
+        throw new Error("the runtime scroll setting was not reset to zero");
+      scrollPreparation = {
+        previous: previous.scroll,
+        scroll: prepared.scroll,
+      };
+    }
     // VSCodeVim keeps one jump list for the session (jumps/jumpTracker.ts), which the oracle's
     // fresh Vim does not have: a row that reads it starts with it cleared
     // (:clearjumps, cmd_line/commands/jumps.ts L51). Only those rows: the command line it runs
@@ -365,7 +444,12 @@ try {
       typeKeys(display, ["<Esc>"], 30);
       await sleep(200);
     }
-    return { alternatePreparation, windowPreparation };
+    return {
+      alternatePreparation,
+      windowPreparation,
+      scrollPreparation,
+      historyPreparation,
+    };
   }
   // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
   // A trial sends, in the row's state, each chord a Linux user would press for it (card-keys.mjs
@@ -471,13 +555,31 @@ try {
           (k !== "<C-t>" || card.id.startsWith("normal ")),
       );
       for (let trial = 0; trial < Number(trialsArg); trial++) {
-        const { alternatePreparation, windowPreparation } = await resetTrial({
+        const {
+          alternatePreparation,
+          windowPreparation,
+          scrollPreparation,
+          historyPreparation,
+        } = await resetTrial({
           clearJumps,
           alternateFile: row.key === "<C-6>",
           windowTarget:
             card.id === 'normal ["<C-w>"]' &&
             !row.setup?.length &&
             WINDOW_TARGET_KEYS.has(row.key),
+          clearScroll:
+            row.key === "<C-d>" &&
+            card.id.startsWith("normal ") &&
+            card.keys.length === 2 &&
+            card.keys[0] === '"' &&
+            ["+", "_"].includes(card.keys[1]) &&
+            JSON.stringify(row.setup) === JSON.stringify(["z", "b"]),
+          clearLineUndo:
+            row.key === "U" &&
+            card.id.startsWith("normal ") &&
+            LINE_UNDO_PREFIXES.some(
+              (prefix) => JSON.stringify(card.keys) === JSON.stringify(prefix),
+            ),
         });
         const before = await code.probe.call("registers");
         if (
@@ -496,6 +598,20 @@ try {
         if (setupPlan) {
           await send(setupPlan);
           await sleep(200);
+        }
+        let beforeViewport = null;
+        if (["<C-d>", "<C-u>", "<C-y>"].includes(row.key)) {
+          const snap = await code.probe.call("snapshot");
+          const editor = snap.editors.find(
+            (e) =>
+              e.uri === snap.active && e.viewColumn === snap.activeViewColumn,
+          );
+          beforeViewport = {
+            file: snap.active?.replace(/^.*\//, "") ?? null,
+            viewColumn: snap.activeViewColumn,
+            visibleRanges: editor?.visibleRanges ?? null,
+            scroll: (await code.probe.call("vimScroll")).scroll,
+          };
         }
         const typed = [...card.keys, row.sample ?? row.key];
         await send(plan);
@@ -593,6 +709,9 @@ try {
           trial,
           ...(alternatePreparation ? { alternatePreparation } : {}),
           ...(windowPreparation ? { windowPreparation } : {}),
+          ...(scrollPreparation ? { scrollPreparation } : {}),
+          ...(beforeViewport ? { beforeViewport } : {}),
+          ...(historyPreparation ? { historyPreparation } : {}),
           ok: diff.length === 0,
           diff,
           got,

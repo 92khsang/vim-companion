@@ -8,6 +8,7 @@ const fs = require("node:fs");
 const ADAPTER_ID = "vim-companion-spike.s2-adapter";
 const { fieldsOf, toState, handlerFor } = require("./vimstate.js");
 const reader = require("./inspect-reader.js");
+const { registerContents } = require("./register-contents.js");
 const events = [];
 const record = (type, data) => {
   events.push({ t: Date.now(), type, ...data });
@@ -25,6 +26,12 @@ const editorState = (e) => ({
   viewColumn: e.viewColumn ?? null,
   text: e.document.getText(),
   selections: e.selections.map(sel),
+  visibleRanges: e.visibleRanges.map((r) => [
+    r.start.line,
+    r.start.character,
+    r.end.line,
+    r.end.character,
+  ]),
 });
 
 async function openFiles({ files }) {
@@ -73,37 +80,6 @@ function snapshot() {
     activeViewColumn: active?.viewColumn ?? null,
     editors: vscode.window.visibleTextEditors.map(editorState),
   };
-}
-
-// VSCodeVim's RegisterMode (src/register/register.ts): CharacterWise, LineWise, BlockWise.
-const REGISTER_MODES = { 0: "character", 1: "line", 2: "block" };
-
-/**
- * The per-cursor contents of one register. VSCodeVim 1.32.4 stores a register as an
- * IRegisterContent[] but shifts the numbered registers with `{ ...previous }`
- * (src/register/register.ts L248-254), so a shifted register is an object with the array's
- * numeric keys; Register.get reads it by index, and so does this.
- */
-function registerContents(contents) {
-  const list = Array.isArray(contents)
-    ? contents
-    : contents &&
-        typeof contents === "object" &&
-        Object.keys(contents).every((k) => /^\d+$/.test(k))
-      ? Object.keys(contents)
-          .map(Number)
-          .sort((a, b) => a - b)
-          .map((i) => contents[i])
-      : [contents];
-  return list.map((c) => ({
-    text:
-      typeof c?.text === "string"
-        ? c.text
-        : Array.isArray(c?.text?.actionsRunPressedKeys)
-          ? { keys: c.text.actionsRunPressedKeys.join("") }
-          : `<unreadable ${typeof c?.text}>`,
-    mode: REGISTER_MODES[c?.registerMode] ?? `other-${c?.registerMode}`,
-  }));
 }
 
 // Sample keys for the placeholders of an action's key sequence, to complete a proper prefix into
@@ -197,6 +173,38 @@ const methods = {
   },
   config: ({ section, key }) =>
     vscode.workspace.getConfiguration(section).get(key),
+  vimScroll: async () => ({ scroll: await reader.scrollSetting() }),
+  vimHistory: async () => {
+    const map = await reader.modeHandlerMap();
+    const e = vscode.window.activeTextEditor;
+    const h = e && handlerFor(map, e.document.uri.toString());
+    if (!h) return { handler: false, documents: map.modeHandlerMap.size };
+    const tracker = h.vimState.historyTracker;
+    const steps = tracker?.undoStack?.historySteps;
+    const index = tracker?.undoStack?.currentStepIndex;
+    const current = steps?.[index];
+    return {
+      handler: true,
+      depth: Array.isArray(steps) ? steps.length : null,
+      index: Number.isInteger(index) ? index : null,
+      totalChanges:
+        Array.isArray(steps) && steps.every((s) => Array.isArray(s.changes))
+          ? steps.reduce((total, step) => total + step.changes.length, 0)
+          : null,
+      currentChanges:
+        index === -1 && Array.isArray(steps) && steps.length === 0
+          ? 0
+          : Array.isArray(current?.changes)
+            ? current.changes.length
+            : null,
+      pendingContentChanges: Array.isArray(tracker?.currentContentChanges)
+        ? tracker.currentContentChanges.length
+        : null,
+      currentDocumentMatches:
+        tracker?.previousDocumentState?.versionNumber === e.document.version &&
+        tracker?.previousDocumentState?.text === e.document.getText(),
+    };
+  },
   adapter: adapterReport,
   time: () => Date.now(),
   vimModule: () => reader.describeVimModule(),
@@ -207,7 +215,7 @@ const methods = {
     const Register = await reader.registerClass();
     const out = {};
     for (const [name, contents] of Register.registers)
-      out[name] = registerContents(contents);
+      out[name] = registerContents(name, contents);
     return out;
   },
   // Test-only: the actions of the macro recorded in a register, with the keys each action took
