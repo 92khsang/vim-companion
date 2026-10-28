@@ -1,20 +1,58 @@
-# U1: first UI direction
+# U1: right-docked UI direction
 
-**Initial review only. No IDE approval or U1 verdict has been recorded.**
+**Design review only. Final IDE approvals and the U1 verdict remain pending.**
 
-This throwaway spike covers one direction in one theme per IDE: VS Code **Dark 2026** and IntelliJ **Islands Dark**, compact mode off. It is not Phase 3 product code and must not be merged. The complete acceptance criteria remain in [U1 #15](https://github.com/92khsang/vim-companion/issues/15).
+Vim Keys occupies a native right-side tool window in both IDEs. The user opens it for learning and can hide or reposition it with the IDE's own controls. Updating the displayed hint must not reveal a hidden view or take over another tool window. The intended editing focus stays in the editor; this still requires behavior verification in Phase 3.
 
-Open [the comparison gallery](gallery/index.html) locally for a side-by-side review. The eight images are also embedded below for GitHub review.
+Open [the comparison gallery](gallery/index.html) locally, or review the 16 images below. This throwaway spike must not be merged. [U1 #15](https://github.com/92khsang/vim-companion/issues/15) records the design amendment; its full theme counts and separate approval requirements remain unchanged.
 
-## Design decisions for review
+## Editing space
 
-- Keycaps, command names and group chevrons form the main hierarchy. The prefix stays visible above the group name.
-- Visual mode and the count appear as separate chips. The UI observes and explains; it owns no editor keys.
-- Every exception has an icon and a text label. Badges sit below the command name so they do not compete with long labels.
-- Both IDEs use the same fixture rows. The badge state shows seven rows and `+2 more`; the two alias rows remain in the data. This is a static overflow illustration, not an implemented expansion interaction.
-- The Doctor banner is an illustrative one-conflict scenario. No live diagnostic was run.
-- Grammar is a static operator-and-motion reference card. It makes no claim about S2 input observation or tier qualification.
-- IntelliJ uses native Swing tabs for Leader and Grammar. Its overlay is shown in a neutral frame; S3's selected `POPUP_LAYER` host is not exercised here.
+These are real sandbox IDE windows with synthetic Java files. Other tool windows are closed, so opening a project tree or terminal would reduce the remaining space further. The captures use Dark 2026 / Islands Dark (compact off), at scale 1.
+
+### Single editor, 1440 × 1000
+
+![VS Code single editor with right-docked Vim Keys](gallery/vscode-context-single.png)
+
+![IntelliJ single editor with right-docked Vim Keys](gallery/intellij-context-single.png)
+
+### Split editors, 1440 × 1000
+
+![VS Code split editors with right-docked Vim Keys](gallery/vscode-context-split.png)
+
+![IntelliJ split editors with right-docked Vim Keys](gallery/intellij-context-split.png)
+
+### Small split, 1100 × 800
+
+![VS Code small split with right-docked Vim Keys](gallery/vscode-context-small-split.png)
+
+![IntelliJ small split with right-docked Vim Keys](gallery/intellij-context-small-split.png)
+
+### Same small split, Vim Keys hidden
+
+The user explicitly hides the view. The harness then changes its state to prefix; it remains hidden. The companion does not change the editor layout to make room for itself.
+
+![VS Code small split after hiding Vim Keys and updating its state](gallery/vscode-context-small-hidden.png)
+
+![IntelliJ small split after hiding Vim Keys and updating its state](gallery/intellij-context-small-hidden.png)
+
+## What this establishes
+
+Measured: in one final capture per shown IntelliJ layout, the right tool window was 320 px wide and its bounds did not intersect either editor viewport. In the 1100 px split window, the two code viewports were only 282 and 281 px wide; after hiding the view they were 442 and 441 px. Docking removes code overlap but does not make a small split spacious.
+
+Measured: the VS Code webview content was 289 CSS px wide in each shown layout. The real secondary side bar was captured with one or two editor groups. The images expose the width trade-off; no editor pixel-bound measurement is claimed for VS Code.
+
+Measured: one fixed-state update while hidden in each sandbox left the view hidden. This is a narrow prototype visibility check, not a focus, key-ownership or engine acceptance test. No keys were injected.
+
+The design therefore keeps showing and hiding under user control. A small window with two editors may be better used with the learning view closed, or with one editor group. The prototype does not automatically resize, reposition or open the view while displaying hints. Initial placement, window sizing and editor splits in the capture harness are explicit review setup.
+
+## Content decisions
+
+- Keycaps, command names and group chevrons form the main hierarchy. The prefix stays above the group name; Visual and count use separate chips.
+- Badges have both icons and text, below the command label. Both IDEs show the same seven rows and `+2 more`; the two aliases remain in the data. Expansion is only illustrated.
+- The Doctor notice is a fixed one-conflict scenario, not a live diagnostic result.
+- Grammar is a static operator-and-motion reference card, independent of S2 qualification.
+- IntelliJ uses a real right-anchored, docked, pinned `Vim Keys` tool window with native Leader/Grammar tabs for every state. The POPUP_LAYER host measured by S3 is not used by this direction.
 
 ## Gallery
 
@@ -26,7 +64,7 @@ Open [the comparison gallery](gallery/index.html) locally for a side-by-side rev
 
 ### Prefix
 
-| VS Code: `SPC › w`                           | IntelliJ: neutral overlay                       |
+| VS Code: `SPC › w`                           | IntelliJ: Leader tab                            |
 | -------------------------------------------- | ----------------------------------------------- |
 | ![VS Code prefix](gallery/vscode-prefix.png) | ![IntelliJ prefix](gallery/intellij-prefix.png) |
 
@@ -44,44 +82,42 @@ Open [the comparison gallery](gallery/index.html) locally for a side-by-side rev
 
 ## Sources and capture
 
-The Node preparation tool reads `root-vscode` and `window-vscode` from `spec/fixtures/hint-view/menu.json`, and `each-kind-vscode` from `spec/fixtures/hint-view/badges.json`. It adds the synthetic unsupported row `Move editor to next pane` (24 characters) before the alias rows. Both renderers consume that one prepared data set; the catalogs and original fixtures are unchanged.
+The preparation tool reads `root-vscode` and `window-vscode` from `spec/fixtures/hint-view/menu.json`, and `each-kind-vscode` from `spec/fixtures/hint-view/badges.json`. It adds the synthetic unsupported row `Move editor to next pane` (24 characters) before the aliases. Catalogs and original fixtures are unchanged. The Java files in `sample/` are display fixtures, not product code.
 
-The VS Code spike is a real `WebviewViewProvider`. The extension and static pages use the same HTML builder, CSS and renderer. A fresh VS Code **1.141.0** sandbox captures theme variables from the secondary side bar's webview. Its measured content width is **289 CSS px** at scale **1**; this is the webview content width, not the entire side bar including workbench chrome. The capture runs on a **1440×1000** Xvfb screen. The preliminary PNG viewports use heights of **580 px**, or **820 px** for badges. Full IDE window geometry and a bottom-panel theme capture are deferred to the complete gallery.
+VS Code **1.141.0** supplies the real webview and secondary side bar. Its static component gallery uses the same HTML builder, stylesheet and renderer with the captured Dark 2026 tokens. The existing four static renders used Google Chrome **156.0.8078.73**, at scale 1, with zero CSP violations and no viewport overflow. Their appearance has not changed in this revision. The four new context captures are X11 captures of the VS Code window, not the desktop. The state commands update content without revealing the view; only the explicit sandbox setup opens it.
 
-Headless **Google Chrome 156.0.8078.73** renders the four static pages at scale **1**, with the captured side bar background. Each page uses a nonce-based script CSP and external stylesheets. The capture records CSP violations from before the renderer loads. The four final captures reported **0 CSP events** and no viewport overflow. These checks are capture sanity checks, not the Phase 3 acceptance suite.
+IntelliJ IDEA **2026.2.3 / 262.10968.63** runs through `runIde` in a fresh temporary sandbox. The internal `UI Gallery` action captures the actual docked component and IDE root pane with Swing `printAll`. It uses `themes/islands/ManyIslandsDark.theme.json`, compact mode off, at scale 1. The actual editor scheme is recorded in the metadata. A sandbox JDK configuration prevents unrelated SDK warnings on the synthetic Java project. No personal profile or scheme is copied, and no IdeaVim plugin is loaded.
 
-The Swing prototype runs through `runIde` in a fresh sandbox, using the installed IntelliJ IDEA **2026.2.3 / 262.10968.63**. Its internal `UI Gallery` action draws real Swing components in neutral frames and exports each displayed component with `printAll`, at scale **1**. The theme resource is `themes/islands/ManyIslandsDark.theme.json`. The actual editor scheme is recorded in [the capture metadata](gallery/intellij-capture.json); no personal theme or scheme is copied. The plugin has no IdeaVim dependency and sends no key.
+Metadata: [VS Code theme](gallery/vscode-theme.json), [VS Code components](gallery/vscode-capture.json), [VS Code layouts](gallery/vscode-context.json), [IntelliJ components](gallery/intellij-capture.json), [IntelliJ layouts](gallery/intellij-context.json).
 
-Metadata: [VS Code theme](gallery/vscode-theme.json), [VS Code renders](gallery/vscode-capture.json), [IntelliJ renders](gallery/intellij-capture.json).
+API references: [VS Code webviews](https://code.visualstudio.com/api/extension-guides/webview), [IntelliJ tool window modes](https://www.jetbrains.com/help/idea/viewing-modes.html).
 
-API references consulted: [VS Code webview security and theme variables](https://code.visualstudio.com/api/extension-guides/webview), [IntelliJ local platform dependency](https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-faq.html).
+## Reproduce
 
-## Reproduce this direction
-
-Use the repository's Node 24 and pnpm 11, Java 25, VS Code 1.141.0, Google Chrome, Xvfb and IntelliJ IDEA 2026.2.3. The image checker uses Python 3 and Pillow to decode PNGs. Gradle 9.8.1, the IntelliJ Platform plugin 2.19.0 and Kotlin 2.4.21 follow the existing spike toolchain. No browser automation package is required.
+Use Node 24, pnpm 11, Java 25, VS Code 1.141.0, Google Chrome, Xvfb, xdotool, ImageMagick (`import`), Python 3 with Pillow, and IntelliJ IDEA 2026.2.3. The existing Gradle 9.8.1, IntelliJ Platform plugin 2.19.0 and Kotlin 2.4.21 are unchanged. The IntelliJ build uses the installed IDE and its bundled Java plugin; it never runs Node.
 
 From the repository root:
 
 ```bash
+# Prepare shared fixture data and the component gallery.
 node spec/tools/u1-gallery.mjs
 bash spikes/u1/capture-vscode-theme.sh
 node spec/tools/u1-gallery.mjs --html
 node spec/tools/u1-capture-web.mjs
 
-# JAVA_HOME must point to Java 25. U1_IDEA_HOME points to the installed IDE.
+# Capture real IDE layouts. JAVA_HOME must point to Java 25.
+env -u WAYLAND_DISPLAY xvfb-run -a -s '-screen 0 1440x1000x24' \
+  node spec/tools/u1-capture-context.mjs
 U1_IDEA_HOME="$HOME/.local/share/JetBrains/Toolbox/apps/intellij-idea-ultimate" \
   bash spikes/u1/capture-intellij.sh
 
 node spec/tools/u1-check-images.mjs
-
-# After pushing, verify the eight image URLs at the exact reviewed commit.
+# After pushing, check the exact image permalinks.
 node spec/tools/u1-check-images.mjs --commit "$(git rev-parse HEAD)"
 ```
 
-The IDE scripts use temporary profiles/projects and Xvfb; they do not open the user's project or edit personal IDE settings. The IntelliJ Gradle build consumes the already prepared JSON and never runs Node. Set `U1_CHROME` to use a different Chromium executable; the resulting version is recorded.
-
 ## Remaining work
 
-Review the hierarchy, density, badge placement and grammar card independently for each IDE. A response to this first direction is not the final U1 approval.
+Review the docked layout and its width cost before expanding to the complete **24 VS Code + 28 IntelliJ** theme/state gallery. IntelliJ prefix and badges now belong in the Leader tab instead of an overlay. The eight full-window layout images are additional review material; they do not replace required theme cells.
 
-After the direction is accepted, finish the **24 VS Code + 28 IntelliJ** theme/size gallery in #15, including the narrow and bottom-panel states, both high-contrast themes, compact mode, and One Dark 6.2.2. Capture the remaining environment metadata and verify the final image permalinks. Only then request and record each IDE's approval in #9. No input, focus, timing, accessibility, performance or production UI acceptance claim is made by this spike.
+Bright and high-contrast themes, compact mode, One Dark 6.2.2, the 170 px and bottom-panel layouts, live input/focus, accessibility, performance and native Wayland/macOS remain unverified. No final U1 approval or verdict is claimed. Each IDE still needs its own final gallery approval in #9 before Phase 3 UI implementation.

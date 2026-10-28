@@ -6,6 +6,7 @@ const { page } = require("./page.cjs");
 exports.activate = (context) => {
   let view;
   let state = "idle";
+  let requestId;
   const render = () => {
     if (!view) return;
     view.webview.html = page(
@@ -29,6 +30,25 @@ exports.activate = (context) => {
         };
         context.subscriptions.push(
           view.webview.onDidReceiveMessage(async (message) => {
+            if (message.type === "u1-theme" && process.env.U1_CONTEXT_DIR) {
+              const editors = vscode.window.visibleTextEditors;
+              fs.writeFileSync(
+                path.join(process.env.U1_CONTEXT_DIR, "ready.json"),
+                JSON.stringify({
+                  id: requestId,
+                  vscode: vscode.version,
+                  state: message.capture.state,
+                  viewport: message.capture.viewport,
+                  deviceScaleFactor: message.capture.deviceScaleFactor,
+                  viewVisible: view.visible,
+                  editorGroups: editors.map((editor) => ({
+                    file: path.basename(editor.document.fileName),
+                    column: editor.viewColumn,
+                  })),
+                }),
+              );
+              return;
+            }
             if (message.type !== "u1-theme" || !process.env.U1_CAPTURE_DIR)
               return;
             const file = path.join(
@@ -60,7 +80,6 @@ exports.activate = (context) => {
     context.subscriptions.push(
       vscode.commands.registerCommand(`u1.${next}`, async () => {
         state = next;
-        await vscode.commands.executeCommand("u1.keys.focus");
         render();
       }),
     );
@@ -68,5 +87,71 @@ exports.activate = (context) => {
   // Only the sandbox capture opts into revealing the view on startup.
   if (process.env.U1_CAPTURE_DIR) {
     void vscode.commands.executeCommand("u1.keys.focus");
+  }
+  if (process.env.U1_CONTEXT_DIR) {
+    // The capture driver selects fixed states without installing key handlers.
+    let busy = false;
+    const timer = setInterval(async () => {
+      if (busy) return;
+      const file = path.join(process.env.U1_CONTEXT_DIR, "request.json");
+      if (!fs.existsSync(file)) return;
+      const request = JSON.parse(fs.readFileSync(file, "utf8"));
+      if (request.id === requestId) return;
+      busy = true;
+      try {
+        requestId = request.id;
+        state = request.state;
+        await vscode.commands.executeCommand("workbench.action.closeSidebar");
+        await vscode.commands.executeCommand(
+          request.split
+            ? "workbench.action.editorLayoutTwoColumns"
+            : "workbench.action.editorLayoutSingle",
+        );
+        const folder = vscode.workspace.workspaceFolders[0].uri;
+        await vscode.window.showTextDocument(
+          vscode.Uri.joinPath(folder, "OrderService.java"),
+          { viewColumn: vscode.ViewColumn.One, preview: false },
+        );
+        if (request.split) {
+          await vscode.window.showTextDocument(
+            vscode.Uri.joinPath(folder, "Order.java"),
+            { viewColumn: vscode.ViewColumn.Two, preview: false },
+          );
+        }
+        if (!view) await vscode.commands.executeCommand("u1.keys.focus");
+        await vscode.commands.executeCommand(
+          "workbench.action.focusActiveEditorGroup",
+        );
+        if (request.hidden) {
+          await vscode.commands.executeCommand(
+            "workbench.action.closeAuxiliaryBar",
+          );
+        }
+        render();
+        if (request.hidden) {
+          fs.writeFileSync(
+            path.join(process.env.U1_CONTEXT_DIR, "ready.json"),
+            JSON.stringify({
+              id: requestId,
+              vscode: vscode.version,
+              state,
+              viewVisible: view.visible,
+              editorGroups: vscode.window.visibleTextEditors.map((editor) => ({
+                file: path.basename(editor.document.fileName),
+                column: editor.viewColumn,
+              })),
+            }),
+          );
+        }
+      } catch (error) {
+        fs.writeFileSync(
+          path.join(process.env.U1_CONTEXT_DIR, "error.txt"),
+          String(error),
+        );
+      } finally {
+        busy = false;
+      }
+    }, 100);
+    context.subscriptions.push({ dispose: () => clearInterval(timer) });
   }
 };

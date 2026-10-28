@@ -15,7 +15,10 @@ repositories {
 }
 
 dependencies {
-  intellijPlatform { local(providers.gradleProperty("ideHome")) }
+  intellijPlatform {
+    local(providers.gradleProperty("ideHome"))
+    bundledPlugin("com.intellij.java")
+  }
 }
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(25) } }

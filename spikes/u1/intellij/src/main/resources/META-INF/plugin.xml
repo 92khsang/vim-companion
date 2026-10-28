@@ -4,7 +4,9 @@
   <vendor>vim-companion spike</vendor>
   <description>Throwaway U1 Swing design gallery. No key handling or engine integration.</description>
   <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.java</depends>
   <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="Vim Keys" anchor="right" factoryClass="spike.u1.KeysToolWindowFactory" canCloseContents="false"/>
     <postStartupActivity implementation="spike.u1.GalleryStartup"/>
   </extensions>
   <actions>

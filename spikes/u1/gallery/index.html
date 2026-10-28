@@ -9,20 +9,118 @@
   <body>
     <header class="page-header">
       <p class="kicker">VIM COMPANION / U1</p>
-      <h1>One vocabulary. Two native surfaces.</h1>
+      <h1>Keys beside the code.</h1>
       <p class="intro">
-        A first direction for learning keys without leaving the editor.
+        A right-docked learning view, with the editing space shown in context.
       </p>
       <p class="status">
-        Initial design review · 8 images · Dark themes only · No approval
-        recorded
+        Docked direction · 16 images · Dark themes only · Final approval pending
       </p>
       <nav aria-label="States">
-        <a href="#idle">01 Idle</a><a href="#prefix">02 Prefix</a
-        ><a href="#badges">03 Badges</a><a href="#grammar">04 Grammar</a>
+        <a href="#context">Editing space</a><a href="#idle">01 Idle</a
+        ><a href="#prefix">02 Prefix</a><a href="#badges">03 Badges</a
+        ><a href="#grammar">04 Grammar</a>
       </nav>
     </header>
     <main>
+      <section id="context">
+        <div class="section-title">
+          <span>LAYOUT</span>
+          <div>
+            <h2>Keep the code visible</h2>
+            <p>
+              The real IDE windows, using synthetic Java files. Other tool
+              windows are closed. Click an image to inspect it at its original
+              size.
+            </p>
+          </div>
+        </div>
+        <p class="layout-note">
+          A right dock avoids covering code, but it still consumes width. The
+          small split view makes that trade-off visible. The final pair shows
+          the same window after hiding Vim Keys; a subsequent state update keeps
+          it hidden.
+        </p>
+        <div class="context-grid">
+          <h3>Single editor · 1440 × 1000</h3>
+          <figure>
+            <figcaption><strong>VS Code · Dark 2026</strong></figcaption>
+            <a href="vscode-context-single.png"
+              ><img
+                src="vscode-context-single.png"
+                alt="VS Code · Dark 2026, Single editor · 1440 × 1000"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>
+              <strong>IntelliJ IDEA · Islands Dark</strong>
+            </figcaption>
+            <a href="intellij-context-single.png"
+              ><img
+                src="intellij-context-single.png"
+                alt="IntelliJ IDEA · Islands Dark, Single editor · 1440 × 1000"
+            /></a>
+          </figure>
+          <h3>Split editors · 1440 × 1000</h3>
+          <figure>
+            <figcaption><strong>VS Code · Dark 2026</strong></figcaption>
+            <a href="vscode-context-split.png"
+              ><img
+                src="vscode-context-split.png"
+                alt="VS Code · Dark 2026, Split editors · 1440 × 1000"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>
+              <strong>IntelliJ IDEA · Islands Dark</strong>
+            </figcaption>
+            <a href="intellij-context-split.png"
+              ><img
+                src="intellij-context-split.png"
+                alt="IntelliJ IDEA · Islands Dark, Split editors · 1440 × 1000"
+            /></a>
+          </figure>
+          <h3>Small split · 1100 × 800</h3>
+          <figure>
+            <figcaption><strong>VS Code · Dark 2026</strong></figcaption>
+            <a href="vscode-context-small-split.png"
+              ><img
+                src="vscode-context-small-split.png"
+                alt="VS Code · Dark 2026, Small split · 1100 × 800"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>
+              <strong>IntelliJ IDEA · Islands Dark</strong>
+            </figcaption>
+            <a href="intellij-context-small-split.png"
+              ><img
+                src="intellij-context-small-split.png"
+                alt="IntelliJ IDEA · Islands Dark, Small split · 1100 × 800"
+            /></a>
+          </figure>
+          <h3>Small split, view hidden · 1100 × 800</h3>
+          <figure>
+            <figcaption><strong>VS Code · Dark 2026</strong></figcaption>
+            <a href="vscode-context-small-hidden.png"
+              ><img
+                src="vscode-context-small-hidden.png"
+                alt="VS Code · Dark 2026, Small split, view hidden · 1100 × 800"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>
+              <strong>IntelliJ IDEA · Islands Dark</strong>
+            </figcaption>
+            <a href="intellij-context-small-hidden.png"
+              ><img
+                src="intellij-context-small-hidden.png"
+                alt="IntelliJ IDEA · Islands Dark, Small split, view hidden · 1100 × 800"
+            /></a>
+          </figure>
+        </div>
+      </section>
+
       <section id="idle">
         <div class="section-title">
           <span>01</span>
@@ -78,11 +176,11 @@
           <figure>
             <figcaption>
               <strong>IntelliJ IDEA</strong
-              ><span>Hint overlay · neutral frame</span>
+              ><span>Vim Keys / Leader · right dock</span>
             </figcaption>
             <img
               src="intellij-prefix.png"
-              alt="IntelliJ Swing overlay prototype at prefix SPC w"
+              alt="IntelliJ docked tool window at prefix SPC w"
             />
           </figure>
         </div>
@@ -116,7 +214,7 @@
             </figcaption>
             <img
               src="intellij-badges.png"
-              alt="IntelliJ overlay showing the same seven rows and overflow indicator"
+              alt="IntelliJ docked tool window showing the same seven rows and overflow indicator"
             />
           </figure>
         </div>

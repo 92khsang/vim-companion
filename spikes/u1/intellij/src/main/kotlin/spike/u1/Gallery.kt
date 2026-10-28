@@ -1,69 +1,29 @@
 package spike.u1
 
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import com.intellij.ide.ui.LafManager
-import com.intellij.ide.ui.UISettings
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.application.ApplicationInfo
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.editor.colors.EditorColorsManager
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.ProjectActivity
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Component
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.FlowLayout
-import java.awt.image.BufferedImage
 import java.io.File
-import javax.imageio.ImageIO
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
-import javax.swing.JFrame
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSeparator
-import javax.swing.JTabbedPane
 import javax.swing.SwingConstants
-import javax.swing.SwingUtilities
-import javax.swing.Timer
 import javax.swing.UIManager
 
-class GalleryStartup : ProjectActivity {
-  override suspend fun execute(project: Project) {
-    if (System.getProperty("u1.output") != null) {
-      ApplicationManager.getApplication().invokeLater { GalleryAction().capture() }
-    }
-  }
-}
-
-class GalleryAction : AnAction() {
-  override fun actionPerformed(event: AnActionEvent) = capture()
-
-  fun capture() {
-    val laf = LafManager.getInstance()
-    val theme = laf.installedThemes.first { it.name == "Islands Dark" }
-    laf.setCurrentLookAndFeel(theme, false)
-    laf.updateUI()
-    UISettings.getInstance().compactMode = false
-    UISettings.getInstance().fireUISettingsChanged()
-    SwingUtilities.invokeLater { Gallery().capture() }
-  }
-}
-
-private class Gallery {
+internal class GalleryPanel {
   private val background = UIManager.getColor("Panel.background")
   private val foreground = UIManager.getColor("Label.foreground")
   private val muted = UIManager.getColor("Label.infoForeground") ?: foreground
   private val line = UIManager.getColor("Component.borderColor") ?: muted
   private val data = JsonParser.parseString(File(System.getProperty("u1.data")).readText()).asJsonObject
-  private val output = File(System.getProperty("u1.output")).apply { mkdirs() }
   private val baseFont = UIManager.getFont("Label.font").deriveFont(13f)
-  private val records = mutableListOf<Map<String, Any>>()
 
   private fun label(text: String, size: Float = 13f, color: Color = foreground, bold: Boolean = false) = JLabel(text).apply {
     font = baseFont.deriveFont(if (bold) Font.BOLD else Font.PLAIN, size)
@@ -89,7 +49,7 @@ private class Gallery {
   private fun key(value: String) = label(value, 12f).apply {
     font = Font(Font.MONOSPACED, Font.PLAIN, 12)
     isOpaque = true
-    background = UIManager.getColor("EditorPane.background") ?: this@Gallery.background
+    background = UIManager.getColor("EditorPane.background") ?: this@GalleryPanel.background
     horizontalAlignment = SwingConstants.CENTER
     border = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(line, 1, true), BorderFactory.createEmptyBorder(3, 7, 3, 7))
     minimumSize = Dimension(27, 26)
@@ -123,7 +83,7 @@ private class Gallery {
 
   private fun chip(text: String) = label(text, 11f).apply {
     isOpaque = true
-    background = UIManager.getColor("ActionButton.hoverBackground") ?: this@Gallery.background
+    background = UIManager.getColor("ActionButton.hoverBackground") ?: this@GalleryPanel.background
     border = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(line, 1, true), BorderFactory.createEmptyBorder(2, 6, 2, 6))
   }
 
@@ -158,7 +118,7 @@ private class Gallery {
     return items
   }
 
-  private fun content(state: String): JPanel {
+  fun content(state: String): JPanel {
     val body = column()
     body.border = BorderFactory.createEmptyBorder(18, 18, 18, 18)
     body.add(label(if (state == "grammar") "VIM GRAMMAR" else "LEADER KEYS", 10f, muted, true))
@@ -207,65 +167,4 @@ private class Gallery {
     return body
   }
 
-  fun capture() {
-    captureState(listOf("idle", "prefix", "badges", "grammar"), 0)
-  }
-
-  private fun captureState(states: List<String>, index: Int) {
-    if (index == states.size) {
-      val metadata = mapOf(
-        "ide" to ApplicationInfo.getInstance().fullVersion,
-        "build" to ApplicationInfo.getInstance().build.asString(),
-        "theme" to LafManager.getInstance().currentUIThemeLookAndFeel.name,
-        "themeResource" to "themes/islands/ManyIslandsDark.theme.json",
-        "editorScheme" to EditorColorsManager.getInstance().globalScheme.name,
-        "compactMode" to UISettings.getInstance().compactMode,
-        "captureMethod" to "Swing printAll of displayed components in neutral frames",
-        "xvfbScreen" to mapOf("width" to 1440, "height" to 1000),
-        "captures" to records,
-      )
-      File(output, "intellij-capture.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(metadata) + "\n")
-      ApplicationManager.getApplication().exit(true, true, false)
-      return
-    }
-    val state = states[index]
-    val toolWindow = state == "idle" || state == "grammar"
-    val pane = JPanel(BorderLayout()).apply {
-      background = this@Gallery.background
-      if (toolWindow) {
-        val title = JPanel(BorderLayout()).apply {
-          isOpaque = false
-          border = BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, line), BorderFactory.createEmptyBorder(12, 18, 12, 18))
-          add(label("Vim Keys", 12f, bold = true), BorderLayout.WEST)
-        }
-        add(title, BorderLayout.NORTH)
-        val tabs = JTabbedPane().apply {
-          addTab("Leader", if (state == "idle") content(state) else JPanel())
-          addTab("Grammar", if (state == "grammar") content(state) else JPanel())
-          selectedIndex = if (state == "idle") 0 else 1
-        }
-        add(tabs, BorderLayout.CENTER)
-      } else {
-        add(content(state), BorderLayout.CENTER)
-      }
-    }
-    val frame = JFrame("U1 UI Gallery").apply {
-      contentPane = pane
-      isUndecorated = true
-      pack()
-      setSize(if (toolWindow) 360 else 440, maxOf(height, if (state == "grammar") 560 else 340))
-      setLocation(40, 40)
-      isVisible = true
-    }
-    Timer(400) {
-      val image = BufferedImage(pane.width, pane.height, BufferedImage.TYPE_INT_ARGB)
-      val graphics = image.createGraphics()
-      pane.printAll(graphics)
-      graphics.dispose()
-      ImageIO.write(image, "png", File(output, "intellij-$state.png"))
-      records.add(mapOf("file" to "intellij-$state.png", "width" to pane.width, "height" to pane.height, "deviceScaleFactor" to pane.graphicsConfiguration.defaultTransform.scaleX))
-      frame.dispose()
-      captureState(states, index + 1)
-    }.apply { isRepeats = false; start() }
-  }
 }

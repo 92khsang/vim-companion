@@ -1,4 +1,4 @@
-// Check the exact eight images embedded in the preliminary U1 review index.
+// Check the component and IDE-context images embedded in the U1 review index.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -13,14 +13,19 @@ const index = readFileSync(join(root, "README.md"), "utf8");
 const images = [...index.matchAll(/!\[[^\]]*\]\((gallery\/[^)]+\.png)\)/g)].map(
   (match) => match[1],
 );
-const records = ["vscode", "intellij"].flatMap(
+const records = [
+  "vscode-capture",
+  "intellij-capture",
+  "vscode-context",
+  "intellij-context",
+].flatMap(
   (ide) =>
-    JSON.parse(readFileSync(join(root, `gallery/${ide}-capture.json`), "utf8"))
+    JSON.parse(readFileSync(join(root, `gallery/${ide}.json`), "utf8"))
       .captures,
 );
-assert.equal(images.length, 8);
-assert.equal(new Set(images).size, 8);
-assert.equal(records.length, 8);
+assert.equal(images.length, 16);
+assert.equal(new Set(images).size, 16);
+assert.equal(records.length, 16);
 for (const path of images) {
   let png;
   if (commit) {
@@ -47,5 +52,5 @@ for (const path of images) {
   );
 }
 console.log(
-  `8 embedded PNGs decode and match their recorded capture dimensions${commit ? "; HTTP 200 at " + commit : ""}.`,
+  `${images.length} embedded PNGs decode and match their recorded capture dimensions${commit ? "; HTTP 200 at " + commit : ""}.`,
 );

@@ -143,6 +143,7 @@ if (typeof acquireVsCodeApi === "function") {
     vscode.postMessage({
       type: "u1-theme",
       capture: {
+        state,
         variables,
         viewport: { width: innerWidth, height: innerHeight },
         deviceScaleFactor: devicePixelRatio,
