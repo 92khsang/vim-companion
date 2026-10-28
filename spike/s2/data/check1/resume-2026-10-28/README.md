@@ -453,6 +453,26 @@ must confirm those exact keys, conditions, repetitions, build identity, markers 
 Ex register contents, with no error/untyped/left-out rows. `S2_CHECK1_TRIALS` and
 `S2_CHECK1_CARDS` are unset; source matrices never replace this full run.
 
+`batch/check1-verify.mjs` enforces this separately from the summary. It rebuilds the strict input
+from the clean measured checkout, compares its exact content with the run's input, checks the
+canonical catalog scope, and requires the 32 exact chunk names and every row's trial indices.
+It checks source fingerprints, installed product SHAs, pinned engine versions and settings;
+positive trials must retain full register snapshots with actual Ex text, and negative trials
+must retain every authored chord attempt. It recomputes the positive state comparison from the
+input and snapshots rather than trusting `ok`. Its 15 synthetic regressions exercise a full
+42,450-trial fixture, including forged success, incomplete evidence and incorrect scope.
+Run it from the final frozen checkout after the batch, with that checkout's full commit SHA:
+
+```bash
+node spike/s2/batch/check1-summary.mjs "$S2_BATCH_DATA/check1-pass2" > "$S2_BATCH_DATA/check1-pass2/summary.txt"
+node spike/s2/batch/check1-verify.mjs "$S2_BATCH_DATA/check1-pass2" "$(git rev-parse HEAD)" > "$S2_BATCH_DATA/check1-pass2/verification.json"
+```
+
+The verifier exits nonzero for a failed or incomplete matrix. Both the summary's final `pass`
+and the independent verifier's `pass` are required, along with zero leftover sandbox processes,
+mounts and Xvfb instances in the batch log. A synthetic test pass validates the verifier only;
+no full check (1) result has been claimed from those fixtures.
+
 Check (2) also runs on that final frozen build: render each freshly built `cards-<set>.json`
 with `harness/cards-complete.mjs`, on both versions and settings, against the matching engine
 reference. Require 59 rendered cards and zero missing, extra or duplicate rows. This validates
