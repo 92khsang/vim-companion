@@ -1,0 +1,6 @@
+# Source the original isolated S2 environment and select the installed Node/pnpm.
+# FROZEN_CHECKOUT names f6ba9a24ec885a59ecfe9872d8b05f819f31cd4b; the checkout is unchanged.
+# S2_EXTERNAL_CPU is the external script from ../cpu-orchestration/cpu-runner.patch.
+# S2_RESUME_STATUS / S2_RESUME_LOG are private progress files outside the checkout.
+# This invocation intentionally has no taskset, matching the original queue.
+bash "$ORCHESTRATION_DIR/resume-original-affinity.sh" > "$S2_RESUME_LOG" 2>&1
