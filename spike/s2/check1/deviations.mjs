@@ -345,10 +345,14 @@ export const RULES = [
     title:
       "Ctrl-B moves the cursor toward the document start even when the view cannot scroll",
     documented:
-      "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
-    applies: ({ card, key }) => card === "normal []" && key === "<C-b>",
+      "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L148 subtracts count times the page height and clamps the cursor line regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, the cursor reaches line 0, whose first nonblank is column 0; accepted setups are zb or ggj13l (restoring the fixture cursor). mode/modeHandler.ts L1309-L1334 draws a backward Visual/VisualLine selection with active end [0,0]. Scoped to Normal digit-only prefixes and plain Visual/VisualLine; register prefixes, operators and VisualBlock are excluded.",
+    applies: ({ mode, pending, key }) =>
+      key === "<C-b>" &&
+      ((mode === "normal" && pending.every((k) => /^[0-9]$/.test(k))) ||
+        (["visual", "visual-line"].includes(mode) && pending.length === 0)),
     transform(w, { setup }) {
-      return sameJson(setup, ["z", "b"])
+      return sameJson(setup, ["z", "b"]) ||
+        sameJson(setup, ["g", "g", "j", "1", "3", "l"])
         ? { ...w, cursor: [0, START.lines[0].search(/\S/)] }
         : null;
     },
@@ -374,6 +378,100 @@ export const RULES = [
         cursor: [line, 0],
         mode: "normal",
         registers: { ":": { mode: "character", keys: "" } },
+      };
+    },
+  },
+  {
+    id: "forward-delete-includes-final-newline",
+    title:
+      "d) and d} include the fixture's final newline in the characterwise register",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1608-L1668 and textobject/sentence.ts L56-L100 reach the empty final line [4,0]. mode/modeHandler.ts L1098-L1100 makes the non-Visual characterwise endpoint [3,EOL]. actions/operator.ts L110-L151 adds one, converts EOL+1 to [4,0], and reads text including the final newline; only a linewise register drops that newline. register/register.ts L216-L260 writes the characterwise text to the unnamed and numbered registers and shifts 1-8. Scoped to this fixture's plain Normal d) and d}.",
+    applies: ({ card, key }) =>
+      card === 'normal ["d"]' && [")", "}"].includes(key),
+    transform() {
+      if (!START.lines.every((line) => line.trim() && !/[.!?]/.test(line)))
+        return null;
+      const [line, col] = START_POS;
+      const content = {
+        mode: "character",
+        lines: [
+          START.lines[line].slice(col),
+          ...START.lines.slice(line + 1),
+          "",
+        ],
+      };
+      const { registers, shift } = vscodevimRegisters("delete", '"', content);
+      return {
+        text: [...START.lines.slice(0, line), START.lines[line].slice(0, col)],
+        cursor: [line, col - 1],
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "delete-viewport-center-characterwise",
+    title:
+      "dM uses a characterwise range through the newline before the viewport center",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L326-L346 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+    applies: ({ mode, ops, key }) =>
+      mode === "normal" && sameJson(ops, ["d"]) && key === "M",
+    transform(w, { pending, setup }) {
+      if (setup?.length) return null;
+      const [line, col] = START_POS;
+      const content = {
+        mode: "character",
+        lines: [START.lines[line].slice(col), ""],
+      };
+      const { registers, shift } = vscodevimRegisters(
+        "delete",
+        registerOf(pending),
+        content,
+      );
+      return {
+        text: [
+          ...START.lines.slice(0, line),
+          START.lines[line].slice(0, col) + START.lines[line + 1],
+          ...START.lines.slice(line + 2),
+        ],
+        cursor: START_POS,
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "delete-sentence-object-at-eof",
+    title:
+      "is spans the characterwise document while as resolves to an empty EOF range in this fixture",
+    documented:
+      "VSCodeVim 1.32.4 textobject/textobject.ts L379-L405 takes the as EOF branch when sentenceEnd and nextSentenceBegin are both [4,0], yielding start=stop=[4,0]; L436-L452 gives is range [0,0]..[4,0], without setting LineWise. The operator wrapper L27-L37 adds one to stop, mode/modeHandler.ts L1064-L1075 clamps EOF, L1093-L1100 decreases the endpoint, and actions/operator.ts L114-L154 restores the exclusive range and writes CharacterWise registers. register/register.ts L232-L260 shifts numbered registers for the full newline-containing dis range; an empty das writes unnamed and small-delete registers without a shift. transformations/execute.ts L257-L293 preserves the unchanged editor selection after the empty deletion. Scoped to normal dis/das, START [1,13], four nonempty lines without .!? and the harness's trailing newline.",
+    applies: ({ card, key }) =>
+      key === "s" && ['normal ["d","i"]', 'normal ["d","a"]'].includes(card),
+    transform(w, { card, fixture = START }) {
+      if (
+        fixture.cursor.line !== 1 ||
+        fixture.cursor.column !== 13 ||
+        fixture.lines.length !== 4 ||
+        !fixture.lines.every((line) => line.trim() && !/[.!?]/.test(line))
+      )
+        return null;
+      const inside = card === 'normal ["d","i"]';
+      const content = {
+        mode: "character",
+        lines: inside ? [...fixture.lines, ""] : [""],
+      };
+      const { registers, shift } = vscodevimRegisters("delete", '"', content);
+      return {
+        text: inside ? [""] : "unchanged",
+        cursor: inside ? [0, 0] : START_POS,
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
       };
     },
   },
@@ -519,10 +617,8 @@ export function compare(e, t) {
 const isMain = import.meta.url === `file://${process.argv[1]}`;
 const [cmd, ...args] = isMain ? process.argv.slice(2) : [];
 if (cmd === "classify") {
-  // <pass dir> may list several directories joined by ",": the first (the latest harness) must
-  // match in every trial; a later one counts for a row only where its trials agree with each
-  // other under Vim's expectation (a pass whose harness lost keys mixes outcomes, see
-  // harness/cards-correctness.mjs resetTrial).
+  // Every supplied trial participates. Mixed outcomes in an earlier cohort remain evidence
+  // against a rule; choosing a valid cohort requires a separate, explicit provenance review.
   const [passDirs, buildDir, outFile] = args;
   const dirs = passDirs.split(",");
   // A rule turns Vim's answer into VSCodeVim's: it is tried only on rows whose expectation is
@@ -564,10 +660,11 @@ if (cmd === "classify") {
     }
   });
   const rows = [];
+  let mixedEarlierPassGroups = 0;
+  let mixedEarlierPassTrials = 0;
   for (const [id, all] of trials) {
     const [card, key] = id.split("\0");
-    // Drop the trials of a later pass whose results under Vim's expectation are mixed within a
-    // settings set and version.
+    // Report inconsistent cohorts without removing any of their measurements.
     const mixed = new Set();
     for (const p of new Set(all.map((x) => x.pass)))
       if (p > 0)
@@ -582,9 +679,11 @@ if (cmd === "classify") {
             });
           if (new Set(rs).size > 1) mixed.add(`${p} ${sv}`);
         }
-    const ts = all.filter(
-      (x) => x.pass === 0 || !mixed.has(`${x.pass} ${x.set} ${x.version}`),
-    );
+    mixedEarlierPassGroups += mixed.size;
+    mixedEarlierPassTrials += all.filter((x) =>
+      mixed.has(`${x.pass} ${x.set} ${x.version}`),
+    ).length;
+    const ts = all;
     const results = ts.map(({ set, t }) => {
       const w = want[`${set}\0${card}\0${key}`];
       return w?.expect ? compare(w.vim ?? w.expect, t) : "no expectation";
@@ -601,6 +700,7 @@ if (cmd === "classify") {
       card,
       key,
       status,
+      ...(mixed.size ? { mixedEarlierPasses: [...mixed] } : {}),
       results: Object.fromEntries(
         ts.map(({ set, version, t, pass }, i) => [
           `${set} ${version} #${t.trial} p${pass}`,
@@ -681,7 +781,15 @@ if (cmd === "classify") {
       r.rule ?? (r.status === "unknown" ? "unknown (no mismatch)" : "none");
     tally[k] = (tally[k] ?? 0) + 1;
   }
-  console.log(JSON.stringify({ failing: rows.length, tally }));
+  console.log(
+    JSON.stringify({
+      failing: rows.length,
+      tally,
+      mixedEarlierPassGroups,
+      mixedEarlierPassTrials,
+      excludedTrials: 0,
+    }),
+  );
 } else if (cmd === "predict") {
   // Derive expectations from source rules before measuring them. This writes a focused input,
   // never the authored cards, and marks each result as a prediction rather than measured evidence.
@@ -836,6 +944,18 @@ if (cmd === "classify") {
             value.label = row.label;
           }
         }
+      }
+      if (r.rule === "delete-viewport-center-characterwise") {
+        row.vimLabel ??= row.label;
+        row.label =
+          "Delete to the start of the middle visible line (characterwise in VSCodeVim)";
+      }
+      if (r.rule === "delete-sentence-object-at-eof") {
+        row.vimLabel ??= row.label;
+        row.label =
+          r.card === 'normal ["d","a"]'
+            ? "Delete around the sentence (empty range in this fixture with VSCodeVim)"
+            : "Delete inside the sentence (characterwise in VSCodeVim)";
       }
       for (const set of row.sets) {
         if (!r.engine[set]) continue;

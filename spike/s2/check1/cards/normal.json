@@ -844,9 +844,9 @@
               "mode": "normal"
             },
             "rule": "page-back-clamps-cursor",
-            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L148 subtracts count times the page height and clamps the cursor line regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, the cursor reaches line 0, whose first nonblank is column 0; accepted setups are zb or ggj13l (restoring the fixture cursor). mode/modeHandler.ts L1309-L1334 draws a backward Visual/VisualLine selection with active end [0,0]. Scoped to Normal digit-only prefixes and plain Visual/VisualLine; register prefixes, operators and VisualBlock are excluded.",
             "measured": {
-              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
               "trials": {
                 "defaults 1.134.0": {
                   "trials": 3
@@ -868,9 +868,9 @@
               "mode": "normal"
             },
             "rule": "page-back-clamps-cursor",
-            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L148 subtracts count times the page height and clamps the cursor line regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, the cursor reaches line 0, whose first nonblank is column 0; accepted setups are zb or ggj13l (restoring the fixture cursor). mode/modeHandler.ts L1309-L1334 draws a backward Visual/VisualLine selection with active end [0,0]. Scoped to Normal digit-only prefixes and plain Visual/VisualLine; register prefixes, operators and VisualBlock are excluded.",
             "measured": {
-              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
               "trials": {
                 "extensions 1.134.0": {
                   "trials": 3

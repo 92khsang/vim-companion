@@ -191,3 +191,85 @@ L510-L650). Setup writes `:` as an empty-action RecordedState (`src/cmd_line/com
 L262-L271), which the probe reads as empty keys. The rule checks the setup and excludes register
 prefixes and operators. Its labels describe the repeat and the ignored count; obsolete
 no-previous-substitution wording is retained only as historical `vimLabel`.
+
+## Remaining representative rows
+
+`selected-remaining-representative.json` adds seven corrections and refreshes the pure Normal
+Ctrl-B evidence. Each of its eight rows has four conditions and three trials per condition.
+
+- Ctrl-B subtracts count times the page height. Normal counts 3 and 30 therefore also clamp to
+  line 0. Plain Visual and Visual Line retain their modes and anchor while moving the stop to
+  `[0, 0]`; the backward selection's active end stays there (`modeHandler.ts` L1309-L1334).
+  The accepted row setups are `zb` or `ggj13l`, which restores the fixture cursor. Register
+  prefixes, operators and Visual Block remain outside this rule.
+- `d)` and `d}` reach the final empty line. The operator decreases the exclusive stop to the
+  preceding EOL, then DeleteOperator converts EOL+1 back to the next line's column 0. Its text
+  range includes the fixture's final newline; only LineWise deletes remove that newline from
+  the register (`modeHandler.ts` L1098-L1100, `operator.ts` L110-L151). The CharacterWise
+  register therefore ends in an empty line, with the usual numbered-register shift.
+- `dM` uses a CharacterWise range: MoveByScreenLine overrides the count method and returns a
+  Position without marking it LineWise (`motion.ts` L95-L124/L1338-L1343). VS Code's
+  [1.134.0 viewport-center implementation](https://github.com/microsoft/vscode/blob/474a349ad5b745e512ef86b864d1c74f7264dd7a/src/vs/editor/common/cursor/cursorMoveCommands.ts#L326-L346)
+  and [1.141.0 product commit](https://github.com/microsoft/vscode/blob/2a59476c9bfcb90b3ddc372c36762471b7dfad1c/src/vs/editor/common/cursor/cursorMoveCommands.ts#L326-L346)
+  use the rounded midpoint of the visible five document lines, giving `[2, 0]`. The operator
+  thus deletes the suffix of line 1 and its newline, joining line 2 onto the remaining prefix.
+  The label states that the range is characterwise. Counted/named dM are source predictions
+  only until independently measured; no other M operator is corrected by this selection.
+
+With these source-derived expectations, `representative/rescore-after-source-rules.json`
+reports 282 matching row/setting/version groups, covering all 846 saved trials. This is exact
+diagnostic rescoring of the original records, whose original pass/fail flags remain intact.
+It is not a fresh all-row pass and does not resolve the unmeasured or failing rows outside
+this representative selection.
+
+## Direct targeted confirmation
+
+`targeted/` preserves 168 fresh trials frozen at `4b1d005`: 14 rows per settings set, three
+trials on each version. The original result is 132 pass / 36 fail. The composed Ctrl-Left
+expectation passes all 12 direct trials, as do the named `b` register prediction, count-2
+motion predictions, pure Normal Ctrl-B, the three `&` rows and `dip`.
+
+`selected-targeted-rules.json` adds the two count-2 backward boundary rows and applies the
+existing LineWise delete-register rule to `dap` (drop the final register newline). Each has
+12 trials across the four conditions. It also asserts the source-derived small-delete register
+for named `b`. In this sequence that register already held the expected value, so the direct
+assertion matches all 12 trials but does not prove a new write occurred; register.ts supplies
+the write rule. The selection records this distinction explicitly.
+
+The empty-document oracle correction remains independently supported by Vim. The new IDE
+trials expose remaining real differences: `dis` has different registers, and `das` has different
+text, cursor and registers. The initial rescore leaves those two rows failing; the independently derived sentence rule
+below addresses them. `targeted/rescore-after-source-rules.json` reports 48 matching and eight failing
+row/setting/version groups (144 and 24 trials) after the justified corrections. This initial focused
+result is not an all-row verdict.
+
+## Sentence objects at EOF
+
+`selected-sentence-object-rules.json` records independent source derivation for `dis` and `das`,
+then comparison with all 24 targeted trials. `is` selects `[0, 0]` through the final empty line
+without setting LineWise. `as` reaches the equal sentence-end/next-sentence-begin branch, which
+makes both endpoints the empty EOF position (`textobject/textobject.ts` L379-L405/L436-L452).
+The wrapper, EOF clamp and delete range adjustment preserve those characterwise ranges
+(`textobject.ts` L27-L37, `modeHandler.ts` L1064-L1075/L1093-L1100, `operator.ts` L114-L154).
+Therefore `dis` deletes the entire document including its final newline, writing the unnamed
+and numbered registers with a shift. `das` deletes an empty range, leaving text/cursor unchanged
+and writing only empty-character unnamed/small-delete registers. Its previous numbered
+registers remain unchanged. The labels describe the fixture-specific result.
+
+The rule requires exactly Normal `dis` or `das`, fixture cursor `[1, 13]`, four nonempty lines
+without sentence terminators, and the harness's trailing document newline. Counted, named and
+Visual contexts are excluded. Regression checks cover those exclusions, changed fixture text
+and the absence of a numbered shift for the empty deletion.
+`targeted/rescore-after-sentence-rules.json` matches all 168 saved trials (56 groups), while the
+original 132/36 pass/fail records and intermediate 144/24 comparison remain unchanged.
+
+## Cohort selection audit
+
+The classifier compares every supplied trial, including mixed results in an earlier cohort.
+It reports mixed-cohort counts and excludes zero trials; a regression fixture verifies that
+an earlier contrary trial prevents source-rule acceptance. The targeted cohort and the
+combined source-proof/representative/four legacy directories both reported zero mixed earlier
+groups and zero mixed earlier trials. All newly selected corrections used individual fresh
+cohorts, so none depended on an outcome-based exclusion. `rescore.py` separately preserves
+older cohorts and uses its explicit newest-directory priority for diagnostic comparisons;
+that priority is not an experiment-validity verdict.

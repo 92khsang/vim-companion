@@ -422,6 +422,98 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "forward-delete-includes-final-newline",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1608-L1668 and textobject/sentence.ts L56-L100 reach the empty final line [4,0]. mode/modeHandler.ts L1098-L1100 makes the non-Visual characterwise endpoint [3,EOL]. actions/operator.ts L110-L151 adds one, converts EOL+1 to [4,0], and reads text including the final newline; only a linewise register drops that newline. register/register.ts L216-L260 writes the characterwise text to the unnamed and numbered registers and shifts 1-8. Scoped to this fixture's plain Normal d) and d}.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "forward-delete-includes-final-newline",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1608-L1668 and textobject/sentence.ts L56-L100 reach the empty final line [4,0]. mode/modeHandler.ts L1098-L1100 makes the non-Visual characterwise endpoint [3,EOL]. actions/operator.ts L110-L151 adds one, converts EOL+1 to [4,0], and reads text including the final newline; only a linewise register drops that newline. register/register.ts L216-L260 writes the characterwise text to the unnamed and numbered registers and shifts 1-8. Scoped to this fixture's plain Normal d) and d}.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1923,7 +2015,7 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete to middle line of screen",
+      "label": "Delete to the start of the middle visible line (characterwise in VSCodeVim)",
       "labelFrom": "index",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
@@ -1980,7 +2072,88 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
-      }
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L326-L346 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"tepsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["wo\", [three]) { four(five) }", ""]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-viewport-center-characterwise",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L326-L346 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      },
+      "vimLabel": "Delete to middle line of screen"
     },
     {
       "key": "N",
@@ -3040,6 +3213,98 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "forward-delete-includes-final-newline",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1608-L1668 and textobject/sentence.ts L56-L100 reach the empty final line [4,0]. mode/modeHandler.ts L1098-L1100 makes the non-Visual characterwise endpoint [3,EOL]. actions/operator.ts L110-L151 adds one, converts EOL+1 to [4,0], and reads text including the final newline; only a linewise register drops that newline. register/register.ts L216-L260 writes the characterwise text to the unnamed and numbered registers and shifts 1-8. Scoped to this fixture's plain Normal d) and d}.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "forward-delete-includes-final-newline",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1608-L1668 and textobject/sentence.ts L56-L100 reach the empty final line [4,0]. mode/modeHandler.ts L1098-L1100 makes the non-Visual characterwise endpoint [3,EOL]. actions/operator.ts L110-L151 adds one, converts EOL+1 to [4,0], and reads text including the final newline; only a linewise register drops that newline. register/register.ts L216-L260 writes the characterwise text to the unnamed and numbered registers and shifts 1-8. Scoped to this fixture's plain Normal d) and d}.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived scroll, characterwise viewport-center delete and final-newline register expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     }
   ]

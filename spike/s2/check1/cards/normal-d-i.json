@@ -535,7 +535,7 @@
       "key": "s",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the sentence",
+      "label": "Delete inside the sentence (characterwise in VSCodeVim)",
       "labelFrom": "pilot",
       "expect": {
         "text": [""],
@@ -601,6 +601,103 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Delete the sentence",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [""],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-sentence-object-at-eof",
+            "documented": "VSCodeVim 1.32.4 textobject/textobject.ts L379-L405 takes the as EOF branch when sentenceEnd and nextSentenceBegin are both [4,0], yielding start=stop=[4,0]; L436-L452 gives is range [0,0]..[4,0], without setting LineWise. The operator wrapper L27-L37 adds one to stop, mode/modeHandler.ts L1064-L1075 clamps EOF, L1093-L1100 decreases the endpoint, and actions/operator.ts L114-L154 restores the exclusive range and writes CharacterWise registers. register/register.ts L232-L260 shifts numbered registers for the full newline-containing dis range; an empty das writes unnamed and small-delete registers without a shift. transformations/execute.ts L257-L293 preserves the unchanged editor selection after the empty deletion. Scoped to normal dis/das, START [1,13], four nonempty lines without .!? and the harness's trailing newline.",
+            "measured": {
+              "pass": "Targeted confirmation 2026-10-28 at 4b1d005: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; independently source-derived dis/das EOF ranges and complete register transitions",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [""],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "delete-sentence-object-at-eof",
+            "documented": "VSCodeVim 1.32.4 textobject/textobject.ts L379-L405 takes the as EOF branch when sentenceEnd and nextSentenceBegin are both [4,0], yielding start=stop=[4,0]; L436-L452 gives is range [0,0]..[4,0], without setting LineWise. The operator wrapper L27-L37 adds one to stop, mode/modeHandler.ts L1064-L1075 clamps EOF, L1093-L1100 decreases the endpoint, and actions/operator.ts L114-L154 restores the exclusive range and writes CharacterWise registers. register/register.ts L232-L260 shifts numbered registers for the full newline-containing dis range; an empty das writes unnamed and small-delete registers without a shift. transformations/execute.ts L257-L293 preserves the unchanged editor selection after the empty deletion. Scoped to normal dis/das, START [1,13], four nonempty lines without .!? and the harness's trailing newline.",
+            "measured": {
+              "pass": "Targeted confirmation 2026-10-28 at 4b1d005: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; independently source-derived dis/das EOF ranges and complete register transitions",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
