@@ -294,10 +294,16 @@ export const RULES = [
     id: "ctrl-left-is-small-word",
     title: "Ctrl-Left uses b (word), where Vim uses B (WORD)",
     documented:
-      "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+      "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
     applies: ({ key }) => key === "<C-left>",
-    transform(w, { card, engineOf }) {
-      return engineOf(card, "b");
+    transform(w, ctx) {
+      const motion = ctx.engineOf(ctx.card, "b");
+      if (!motion) return null;
+      const registerRule = RULES.find((rule) => rule.id === "registers");
+      const alias = { ...ctx, key: "b" };
+      return registerRule.applies(alias)
+        ? (registerRule.transform(motion, alias) ?? motion)
+        : motion;
     },
   },
   {
@@ -312,6 +318,26 @@ export const RULES = [
     transform(w, { card, key, pending, mode, engineOf }) {
       const uncounted = pending.filter((k) => !/^[0-9]$/.test(k));
       return engineOf(`${mode} ${JSON.stringify(uncounted)}`, key);
+    },
+  },
+  {
+    id: "counted-sentence-paragraph-boundary",
+    title:
+      "counted sentence and paragraph motions stay at the reached document boundary",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/baseMotion.ts L100-L148 feeds each Position into the next count iteration. motion.ts L1587-L1678 and textobject/paragraph.ts L7-L41, sentence.ts L32-L100 return the document edge repeatedly once reached. This fixture has four nonempty lines, no sentence terminator and a trailing empty document line, so backward motions end at [0,0] and forward motions at [4,0]. Scoped to Normal-mode digit-only prefixes, without a register or operator.",
+    applies: ({ mode, pending, key }) =>
+      mode === "normal" &&
+      pending.length > 0 &&
+      pending.every((k) => /^[0-9]$/.test(k)) &&
+      ["(", ")", "{", "}"].includes(key),
+    transform(w, { key }) {
+      if (!START.lines.every((line) => line.trim() && !/[.!?]/.test(line)))
+        return null;
+      return {
+        ...w,
+        cursor: ["(", "{"].includes(key) ? [0, 0] : [START.lines.length, 0],
+      };
     },
   },
   {
@@ -397,7 +423,7 @@ export const RULES = [
  * name was listed because the pass's expectation named it, and must then differ from what that
  * expectation wanted (the key did not write it). Returns "match", "mismatch" or "unknown".
  */
-function compare(e, t) {
+export function compare(e, t) {
   const g = t.got;
   if (!sameJson(g.text, textOf(e))) return "mismatch";
   if (!sameJson(g.cursor, e.cursor)) return "mismatch";
@@ -405,12 +431,32 @@ function compare(e, t) {
   const named = Object.fromEntries(
     Object.entries(e.registers ?? {}).map(([k, v]) => [k, canon(v)]),
   );
+  const shift = e.__shift ?? e.shiftNumbered ?? false;
+  if (t.beforeRegisters && t.afterRegisters) {
+    const before = t.beforeRegisters;
+    const after = t.afterRegisters;
+    if (shift)
+      for (let n = 1; n <= 8; n++)
+        if (String(n) in before) named[String(n + 1)] = canon(before[n]);
+    const actual = {};
+    for (const k of new Set([...Object.keys(before), ...Object.keys(after)])) {
+      const a = canon(before[k]);
+      const b = canon(after[k]);
+      const emptyClipboard =
+        ["*", "+"].includes(k) &&
+        ((!a && sameJson(b?.lines, [""])) || (!b && sameJson(a?.lines, [""])));
+      if (k in named || (!sameJson(a, b) && !emptyClipboard)) actual[k] = b;
+    }
+    return Object.keys(actual).length === Object.keys(named).length &&
+      Object.entries(named).every(([k, v]) => sameJson(actual[k], v))
+      ? "match"
+      : "mismatch";
+  }
   let unknown = false;
   for (const [k, v] of Object.entries(named)) {
     if (!(k in g.registers)) unknown = true;
     else if (!sameJson(canon(g.registers[k]), v)) return "mismatch";
   }
-  const shift = e.__shift ?? e.shiftNumbered ?? false;
   if (shift) {
     // The shift of the numbered registers: the pass's expectation lists 2-9 with the shifted
     // values when Vim shifted too; otherwise the trial cannot show it.
@@ -433,7 +479,8 @@ function compare(e, t) {
   return unknown ? "unknown" : "match";
 }
 
-const [cmd, ...args] = process.argv.slice(2);
+const isMain = import.meta.url === `file://${process.argv[1]}`;
+const [cmd, ...args] = isMain ? process.argv.slice(2) : [];
 if (cmd === "classify") {
   // <pass dir> may list several directories joined by ",": the first (the latest harness) must
   // match in every trial; a later one counts for a row only where its trials agree with each
@@ -524,12 +571,16 @@ if (cmd === "classify") {
         ]),
       ),
     };
-    const allOracle = ts.every(({ set }) => source[`${set}\0${card}\0${key}`]);
-    for (const rule of allOracle ? RULES : []) {
+    // A plugin can replace the same key in the other settings set. Only the sets whose
+    // authored answer comes from Vim are eligible for a Vim-to-engine source rule.
+    const oracleTrials = ts.filter(
+      ({ set }) => source[`${set}\0${card}\0${key}`],
+    );
+    for (const rule of oracleTrials.length ? RULES : []) {
       if (!rule.applies(ctx)) continue;
       const engine = {};
       let verdict = "match";
-      for (const { set, version, t } of ts) {
+      for (const { set, version, t } of oracleTrials) {
         const w = want[`${set}\0${card}\0${key}`];
         if (!w?.expect) {
           verdict = "mismatch";
@@ -559,6 +610,24 @@ if (cmd === "classify") {
         engine[set] = clean;
       }
       if (verdict !== "mismatch") {
+        const excluded = ts.filter((x) => !oracleTrials.includes(x));
+        if (excluded.length) {
+          failing.excludedFromRule = {
+            reason:
+              "the authored expectation in this settings set is not a Vim oracle answer",
+            settings: [...new Set(excluded.map((x) => x.set))],
+          };
+          failing.results = Object.fromEntries(
+            oracleTrials.map(({ set, version, t, pass }) => [
+              `${set} ${version} #${t.trial} p${pass}`,
+              compare(
+                want[`${set}\0${card}\0${key}`].vim ??
+                  want[`${set}\0${card}\0${key}`].expect,
+                t,
+              ),
+            ]),
+          );
+        }
         failing.rule = rule.id;
         failing.verdict = verdict;
         failing.engine = engine;
@@ -749,4 +818,5 @@ if (cmd === "classify") {
     writeFileSync(file, JSON.stringify(card, null, 2) + "\n");
   }
   console.log(JSON.stringify({ rows: rows.length, rowSets: n }));
-} else throw new Error("usage: deviations.mjs classify|apply ...");
+} else if (isMain)
+  throw new Error("usage: deviations.mjs classify|apply|predict ...");

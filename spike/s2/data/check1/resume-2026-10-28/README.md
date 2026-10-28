@@ -111,3 +111,45 @@ S2_VIM_CPUS=8-15 S2_VIM_DOC=document S2_VIM_SIZE=43x42 S2_VIMRC=expect-sw2.vimrc
   node spike/s2/vim-check/expect.mjs "$V" defaults "$D/empty-buffer-oracle/cards.json" \
   "$W/empty-buffer-oracle.jsonl"
 ```
+
+## Representative measurements and counted boundaries
+
+`representative/` contains the unchanged 846 trials and their inputs: 71 defaults and 70
+extensions rows, three trials per row on each VS Code version, frozen at `104f9ef`. These inputs
+precede the source-rule corrections, so the raw pass flags are not a current-input verdict.
+The complete before/after register snapshots permit an exact diagnostic comparison without
+guessing whether an old asserted register changed.
+
+`selected-count-rules.json` contains eight rows (Normal count 3 or 30, each of `(`, `)`, `{`, `}`).
+VSCodeVim's count loop feeds each returned Position into the next iteration
+(`src/actions/baseMotion.ts` L100-L148). The sentence and paragraph helpers return the document
+edge again after reaching it (`src/actions/motion.ts` L1587-L1678, `src/textobject/paragraph.ts`
+L7-L41 and `src/textobject/sentence.ts` L32-L100). This fixture has no internal blank line or
+sentence terminator and has a trailing empty document line. Therefore backward movement ends
+at `[0, 0]` and forward movement at `[4, 0]`, without rolling back to the initial position.
+All 96 measured trials match this derivation, including unchanged text, mode and registers.
+The rule excludes register prefixes, operators and Visual modes. Count 2 is not covered by
+these measurements and receives no correction from this selection.
+
+`selected-register-rules.json` contains six rows/seven row-setting expectations from the same
+measurements: five defaults `s` rows and `dL` in both settings. They match the existing register
+bookkeeping rule, with full register baselines. The extension set replaces `s` with Sneak, so
+its hand-authored expectation is explicitly excluded from that rule. Classification records
+this exclusion and leaves the plugin rows unchanged. The comparator's regression tests cover
+old assertions of unchanged registers, unexpected writes, numbered shifts, missing legacy
+baselines and this settings-specific eligibility boundary.
+
+The Ctrl-Left alias rule also composes the register bookkeeping rule for operator contexts.
+A same-card `b` expectation may still be Vim's register answer in one settings set; a named
+small delete must nevertheless write `-` according to `src/register/register.ts` L216-L251.
+The focused source-rule run retains the original failed trial that exposed this omission;
+composed expectations require their own measured comparison.
+
+```bash
+node --test spike/s2/check1/deviations.test.mjs
+node spike/s2/check1/build.mjs "$W/current-input"
+node spike/s2/check1/deviations.mjs classify "$D/representative" "$W/current-input" \
+  "$W/representative-classified.json"
+python3 -I -B spike/s2/check1/rescore.py "$W/current-input" "$W/representative-rescore.json" \
+  "$D/representative"
+```
