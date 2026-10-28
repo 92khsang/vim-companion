@@ -2651,7 +2651,7 @@
       "key": "H",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the lines up to the 3rd line of the window",
+      "label": "Delete linewise through the first visible line (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L345 |H|",
       "expect": {
@@ -2681,13 +2681,98 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the lines up to the 3rd line of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["epsilon zeta eta theta", "iota kappa lambda mu"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
       "key": "L",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the lines down to the 3rd line from the bottom of the window",
+      "label": "Delete linewise through the last visible line (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L351 |L|",
       "expect": {
@@ -2744,6 +2829,95 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Delete the lines down to the 3rd line from the bottom of the window",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta"],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-viewport-edges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

@@ -335,9 +335,9 @@ asserted. The installed-product viewport links and descriptions distinguish 1.13
 
 
 Measured: `source-wave2/` preserves 864 of 864 direct passing trials at frozen `9b3bdce`,
-clean build `8888f9ab73d0d9c0`: 72 rows in each settings set, both VS Code versions, three
-trials per condition. `source-wave2-verification.json` checks exact input coverage and complete
-register baselines; `source-wave2-rescore.json` confirms all 288 row/setting/version groups.
+clean build `8888f9ab73d0d9c0`, using the old Ex-register projection described below: 72 rows in each settings set, both VS Code versions, three
+trials per condition. `source-wave2-verification.json` checks exact input coverage and the captured
+register maps; `source-wave2-rescore.json` confirms all 288 row/setting/version groups.
 `selected-source-wave2-rules.json` applies 71 Vim-oracle rows / 142 row-setting corrections.
 The separate `source-wave2-hand.json` verifies the Insert `<copy>` row's recorded dot keys in
 all 12 trials. That row retains its `hand` provenance and original `previousHand` expectation;
@@ -359,13 +359,13 @@ classification containing an unknown verdict.
 
 `source-wave3-input/` freezes 25 source predictions per settings set for the next 300 trials:
 eight counted `o`/`O` rows, ten counted `dH`/`dL` rows, plain `cL`, and six Visual `C`/`R` rows.
-These remain unpromoted. [InsertAbove and InsertBelow](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/insert.ts#L117-L207)
+Their confirmation is recorded below. [InsertAbove and InsertBelow](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/insert.ts#L117-L207)
 produce different indentation and primary cursor order; the older single-line no-indent rule
 now covers only `o`. [H/L](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/motion.ts#L1272-L1335)
 ignore operator counts and set LineWise, while [VisualChangeLine](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/actions.ts#L917-L929)
 keeps CharacterWise for the reviewed single-cell Visual selections. `cL` retains the final
 newline in its register. The exact guarded predictions matched all 50 corresponding diagnostic
-records (`wave3-source-diagnostic-comparison.json`); fresh four-condition confirmation is pending.
+records (`wave3-source-diagnostic-comparison.json`); fresh confirmation is recorded below.
 
 Reproduce either source wave from its frozen checkout after configuring the sandbox paths as
 in `spike/s2/README.md` (`source-wave2` uses `9b3bdce`; wave3's measured commit will be in its raw
@@ -383,3 +383,52 @@ for version in 1.141.0 1.134.0; do
   done
 done
 ```
+
+
+## Third source wave and Ex-register contract repair
+
+Measured: `source-wave3/` passed all 300 direct trials at frozen `fbd3476`, clean build
+`e41dc47581cc6d68`, with 25 rows per settings set, both versions and three trials per condition.
+`source-wave3-verification.json` checks exact coverage. The colon register was absent from
+both baselines in all 300 trials (`ex-projection-audit.json`), so the Ex projection defect
+below does not affect these register comparisons. `selected-source-wave3-rules.json` promotes
+25 rows / 50 row-setting expectations; strict rescoring passes all 100 condition groups.
+
+Documented: [ExCommandLine.run](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/cmd_line/commandLine.ts#L262-L271)
+stores the actual Ex command in `RecordedState.commandList`. The old probe discarded that
+text and reported empty action keys, collapsing different commands to the same value. This
+violates the register-content comparison contract; empty keys are not an engine deviation.
+Raw records remain unchanged. Text, cursor, mode and other observed register fields retain
+their evidence, but colon content and preservation are unobserved wherever only those keys
+were recorded. The prior `864/864` direct result applies to that old projection: 228 trials
+have no colon register, while 636 have the lossy representation. Ex-aware rescoring therefore
+gives 76 passing groups and 212 unknown groups, with no independent failures.
+
+`ex-projection-audit.json` also records affected earlier cohorts. `combined-after-wave3-ex-aware.json`
+is the current diagnostic comparison: 522 pass, 789 unknown and 120 fail groups. Unknown
+colon data are not silently accepted, and an independent mismatch still takes precedence.
+The complete second pass must use the repaired probe across all 7,075 row-setting inputs.
+Historical classifications and original direct flags describe their original instrumentation.
+
+The existing three confirmed `&` rows now expect the setup's actual `s/e/X/` command text;
+their complete-register measured status is unknown until rerun. Both hand-authored Visual
+`gr` scroll rows preserve their old expectations under `previousHand` and now expect
+`set scroll=0`. `ex-register-recheck-input/` contains 22 row-setting predictions (132 trials):
+all eight Normal `&` contexts, the two named-a VisualLine scroll rows and the two extensions-only
+Visual `gr` scroll rows. The source text/cursor behavior of `&` is unchanged: it directly
+executes the parsed substitute command, without overwriting the last Ex command.
+
+`source-wave4-input/` contains 52 defaults and 51 extensions source predictions for 618 trials,
+covering the reviewed endpoint, register-wrapper, window, Visual-g, redo, join, case and cursor
+movement rules. Counted `S` is defaults-only because Sneak replaces it in extensions. These
+predictions are not promoted. `wave4-diagnostic-comparison.json` finds no independently
+mismatching fields in the 103 matching legacy diagnostic records, but all 103 are unknown
+because their colon contents were omitted. New probe measurements are required.
+The engine-specific `yii` hand row will retain that provenance if confirmed.
+
+`undo-history-recheck-input/` retains the original eight Normal `U` expectations and setups
+under both settings, for 96 trials. It does not adopt the contaminated old uppercase result.
+The corrected harness must prove fresh local Vim history and unchanged registers before each
+trial. Window preparation, scroll-state restoration and history isolation have separate harness
+regressions before the new source matrices. To rerun a source wave, use the loop above with its
+input directory and the frozen commit from its raw metadata; wave3 used `S2_NAME_PREFIX=cw3-`.

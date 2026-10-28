@@ -865,11 +865,11 @@
           },
           ":": {
             "mode": "character",
-            "keys": ""
+            "lines": ["set scroll=0"]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172, src/configuration/configuration.ts L449-453: scroll 0 gives ceil(4/2) = 2 lines, line 3, startofline. Setup :set scroll=0 (an earlier counted <C-d> sets it) and gg j 1 3 l.",
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172, src/configuration/configuration.ts L449-453: scroll 0 gives ceil(4/2) = 2 lines, line 3, startofline. Setup :set scroll=0 (an earlier counted <C-d> sets it) and gg j 1 3 l. Documented: ExCommandLine.run (commandLine.ts L262-L271) stores the actual setup command set scroll=0 in RecordedState.commandList; the colon register contains that text. Empty action keys omitted it. Fresh verification of colon content with the corrected probe is pending.",
       "setup": [
         ":",
         "s",
@@ -895,7 +895,31 @@
         "l",
         "l"
       ],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [3, 0],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            ":": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "basis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172, src/configuration/configuration.ts L449-453: scroll 0 gives ceil(4/2) = 2 lines, line 3, startofline. Setup :set scroll=0 (an earlier counted <C-d> sets it) and gg j 1 3 l."
+      }
     },
     {
       "key": "<C-e>",
@@ -1253,11 +1277,11 @@
           },
           ":": {
             "mode": "character",
-            "keys": ""
+            "lines": ["set scroll=0"]
           }
         }
       },
-      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: 2 lines up from line 1, clamped to line 0.",
+      "expectBasis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: 2 lines up from line 1, clamped to line 0. Documented: ExCommandLine.run (commandLine.ts L262-L271) stores the actual setup command set scroll=0 in RecordedState.commandList; the colon register contains that text. Empty action keys omitted it. Fresh verification of colon content with the corrected probe is pending.",
       "setup": [
         ":",
         "s",
@@ -1283,7 +1307,31 @@
         "l",
         "l"
       ],
-      "labelFrom": "hand"
+      "labelFrom": "hand",
+      "previousHand": {
+        "expect": {
+          "text": {
+            "1": "  if (one, \"tww\", [three]) { four(five) }"
+          },
+          "cursor": [0, 0],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["w"]
+            },
+            ":": {
+              "mode": "character",
+              "keys": ""
+            }
+          }
+        },
+        "basis": "VSCodeVim 1.32.4: Setup y l l: unnamed register and 0 = w (src/actions/operator.ts L203-258), cursor (1,14). v g r X: src/configuration/remapper.ts L141-246 (X breaks the potential Visual remap g r a; g, r and X are resent), src/actions/plugins/replaceWithRegister.ts L12-56 and L58-75 (Visual gr runs at once, replaces o with w, Normal mode, cursor at the end of the replacement), src/mode/modeHandler.ts L800-806 and L927-930; then X in Normal mode: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: 2 lines up from line 1, clamped to line 0."
+      }
     },
     {
       "key": "<C-v>",

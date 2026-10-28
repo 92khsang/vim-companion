@@ -1,0 +1,798 @@
+[
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last substitution on the current line (VSCodeVim ignores the count)",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }",
+      "2": "Xpsilon zeta eta theta"
+     },
+     "cursor": [
+      2,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        ".,.+2s"
+       ]
+      },
+      "/": {
+       "mode": "character",
+       "lines": [
+        "e"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+     "measured": {
+      "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "unknown",
+      "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last substitution on the current line (VSCodeVim ignores the count)",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (onX, \"two\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        ".,.+29s"
+       ]
+      },
+      "/": {
+       "mode": "character",
+       "lines": [
+        "e"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+     "measured": {
+      "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "unknown",
+      "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\"]",
+  "title": "normal after 2",
+  "keys": [
+   "2"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last :s on 2 lines",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "o",
+     "/",
+     "0",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (0ne, \"tw0\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/o/0/"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal []",
+  "title": "normal after d<Esc>",
+  "keys": [
+   "d",
+   "<Esc>"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last substitution on the current line",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "vim": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      2
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s"
+       ]
+      },
+      "/": {
+       "mode": "character",
+       "lines": [
+        "e"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
+     "measured": {
+      "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+      "trials": {
+       "extensions 1.134.0": {
+        "trials": 3
+       },
+       "extensions 1.141.0": {
+        "trials": 3
+       }
+      },
+      "verdict": "unknown",
+      "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\"]",
+  "title": "normal after \"a",
+  "keys": [
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last :s on the current line (none in this run: E35)",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"+\"]",
+  "title": "normal after \"+",
+  "keys": [
+   "\"",
+   "+"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last :s on the line",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "o",
+     "/",
+     "0",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (0ne, \"tw0\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/o/0/"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"_\"]",
+  "title": "normal after \"_",
+  "keys": [
+   "\"",
+   "_"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last :s on the line",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "o",
+     "/",
+     "0",
+     "/",
+     "<CR>"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (0ne, \"tw0\", [three]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/o/0/"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "&",
+    "label": "Repeat the last :s on the line (VSCodeVim ignores the count)",
+    "setup": [
+     ":",
+     "s",
+     "/",
+     "e",
+     "/",
+     "X",
+     "/",
+     "<CR>",
+     "1",
+     "4",
+     "|"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+     },
+     "cursor": [
+      1,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "s/e/X/"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": {
+       "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+      },
+      "cursor": [
+       1,
+       0
+      ],
+      "mode": "normal",
+      "registers": {
+       ":": {
+        "mode": "character",
+        "keys": ""
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: RepeatSubstitution src/actions/commands/actions.ts L407-418 runs :s with the previous pattern (src/cmd_line/commands/substitute.ts L510-545), first match per line, cursor to column 0 of the line (L626-640). Setup :s/e/X/<CR> (register : holds a RecordedState with no keys, src/cmd_line/commandLine.ts L262-272) then 1 4 |.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "repeat-substitute-current-line",
+     "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual [\"g\",\"r\"]",
+  "title": "visual after vgr",
+  "keys": [
+   "v",
+   "g",
+   "r"
+  ],
+  "rows": [
+   {
+    "key": "<C-d>",
+    "when": {
+     "vim.replaceWithRegister": true
+    },
+    "label": "Replace the selection with the register, then scroll half a page down and move the cursor down",
+    "setup": [
+     ":",
+     "s",
+     "e",
+     "t",
+     "<Space>",
+     "s",
+     "c",
+     "r",
+     "o",
+     "l",
+     "l",
+     "=",
+     "0",
+     "<CR>",
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l",
+     "y",
+     "l",
+     "l"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tww\", [three]) { four(five) }"
+     },
+     "cursor": [
+      3,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      ":": {
+       "mode": "character",
+       "lines": [
+        "set scroll=0"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "actual-ex-command-content",
+     "documented": "VSCodeVim 1.32.4 commandLine.ts L262-L271 preserves the setup command in RecordedState.commandList. For VisualLine named-a, scroll.ts L76-L155 and configuration.ts L448-L452 use explicit scroll=0 and visible lines0-4, yielding two-line motion; modeHandler.ts L1328-L1334 draws the linewise active end. The Visual gr rows retain their existing independent source derivation for replacement and movement; only the omitted colon command text is corrected."
+    }
+   },
+   {
+    "key": "<C-u>",
+    "when": {
+     "vim.replaceWithRegister": true
+    },
+    "label": "Replace the selection with the register, then scroll half a page up and move the cursor up",
+    "setup": [
+     ":",
+     "s",
+     "e",
+     "t",
+     "<Space>",
+     "s",
+     "c",
+     "r",
+     "o",
+     "l",
+     "l",
+     "=",
+     "0",
+     "<CR>",
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l",
+     "y",
+     "l",
+     "l"
+    ],
+    "expect": {
+     "text": {
+      "1": "  if (one, \"tww\", [three]) { four(five) }"
+     },
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "normal",
+     "registers": {
+      "0": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      ":": {
+       "mode": "character",
+       "lines": [
+        "set scroll=0"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "rule": "actual-ex-command-content",
+     "documented": "VSCodeVim 1.32.4 commandLine.ts L262-L271 preserves the setup command in RecordedState.commandList. For VisualLine named-a, scroll.ts L76-L155 and configuration.ts L448-L452 use explicit scroll=0 and visible lines0-4, yielding two-line motion; modeHandler.ts L1328-L1334 draws the linewise active end. The Visual gr rows retain their existing independent source derivation for replacement and movement; only the omitted colon command text is corrected."
+    }
+   }
+  ]
+ },
+ {
+  "id": "visual-line [\"\\\"\",\"a\"]",
+  "title": "visual-line after V\"a",
+  "keys": [
+   "V",
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "<C-d>",
+    "label": "Scroll half a page down and move the cursor down",
+    "setup": [
+     ":",
+     "s",
+     "e",
+     "t",
+     "<Space>",
+     "s",
+     "c",
+     "r",
+     "o",
+     "l",
+     "l",
+     "=",
+     "0",
+     "<CR>",
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      3,
+      20
+     ],
+     "mode": "visual-line",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "set scroll=0"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       3,
+       20
+      ],
+      "mode": "visual-line",
+      "registers": {
+       ":": {
+        "mode": "character",
+        "keys": ""
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: CommandCtrlD src/actions/commands/scroll.ts L76-140, L163-172: scroll 0 gives 2 lines, line 3. Setup :set scroll=0 and gg j 1 3 l.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "actual-ex-command-content",
+     "documented": "VSCodeVim 1.32.4 commandLine.ts L262-L271 preserves the setup command in RecordedState.commandList. For VisualLine named-a, scroll.ts L76-L155 and configuration.ts L448-L452 use explicit scroll=0 and visible lines0-4, yielding two-line motion; modeHandler.ts L1328-L1334 draws the linewise active end. The Visual gr rows retain their existing independent source derivation for replacement and movement; only the omitted colon command text is corrected."
+    }
+   },
+   {
+    "key": "<C-u>",
+    "label": "Scroll half a page up and move the cursor up",
+    "setup": [
+     ":",
+     "s",
+     "e",
+     "t",
+     "<Space>",
+     "s",
+     "c",
+     "r",
+     "o",
+     "l",
+     "l",
+     "=",
+     "0",
+     "<CR>",
+     "g",
+     "g",
+     "j",
+     "1",
+     "3",
+     "l"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      0,
+      0
+     ],
+     "mode": "visual-line",
+     "registers": {
+      ":": {
+       "mode": "character",
+       "lines": [
+        "set scroll=0"
+       ]
+      }
+     }
+    },
+    "knownDeviation": {
+     "expect": {
+      "text": "unchanged",
+      "cursor": [
+       0,
+       0
+      ],
+      "mode": "visual-line",
+      "registers": {
+       ":": {
+        "mode": "character",
+        "keys": ""
+       }
+      }
+     },
+     "expectBasis": "VSCodeVim 1.32.4: CommandCtrlU src/actions/commands/scroll.ts L76-140, L174-183: line 0.",
+     "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+    },
+    "prediction": {
+     "rule": "actual-ex-command-content",
+     "documented": "VSCodeVim 1.32.4 commandLine.ts L262-L271 preserves the setup command in RecordedState.commandList. For VisualLine named-a, scroll.ts L76-L155 and configuration.ts L448-L452 use explicit scroll=0 and visible lines0-4, yielding two-line motion; modeHandler.ts L1328-L1334 draws the linewise active end. The Visual gr rows retain their existing independent source derivation for replacement and movement; only the omitted colon command text is corrected."
+    }
+   }
+  ]
+ }
+]

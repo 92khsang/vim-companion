@@ -114,14 +114,14 @@ function kindOfVisual(mode, ops, key) {
   if (mode === "visual" || mode === "visual-line") {
     if (key === "d") return "delete"; // DeleteOperator, delete_op (operator.ts L99-L103)
     if (key === "D" || key === "X") return "plain"; // DeleteOperatorVisual, VisualDeleteLine: no name
-    if (key === "<Del>" || (key === "x" && mode === "visual")) return "plain"; // DeleteOperatorXVisual
+    if (key === "<Del>" || key === "x") return "plain"; // DeleteOperatorXVisual
     if (["c", "s", "C", "R", "S"].includes(key)) return "change"; // ChangeOperator, ChangeOperatorSVisual, VisualChangeLine(_2)
     if (key === "y") return "yank"; // YankOperator, yank_op
     if (key === "Y") return "plain"; // ShiftYankOperatorVisual: no name, no "0
   }
   if (mode === "visual-block") {
     if (["d", "x", "X", "D"].includes(key)) return "plain"; // VisualBlockDelete, VisualBlockDeleteToLineEnd
-    if (["c", "s", "C", "R", "S"].includes(key)) return "change"; // VisualBlockChange, ActionChangeToEOLInVisualBlockMode, VisualBlockChangeLine
+    if (["c", "s", "R", "S"].includes(key)) return "change"; // VisualBlockChange, ActionChangeToEOLInVisualBlockMode, VisualBlockChangeLine
     if (key === "y" || key === "Y") return "plain"; // YankVisualBlockMode, ShiftYankOperatorVisual: no name
   }
   return null;
@@ -218,6 +218,445 @@ export const RULES = [
         registers: { ...kept, ...registers },
         shiftNumbered: shift,
         __shift: shift,
+      };
+    },
+  },
+  {
+    id: "eof-change-yank-ranges",
+    title:
+      "change and yank keep their actual exclusive endpoint and register mode",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+    applies: ({ card, key }) =>
+      (card === 'normal ["c"]' && ["G", "<C-End>"].includes(key)) ||
+      (card === 'normal ["y"]' && key === "<C-End>") ||
+      (card === 'normal ["c","i"]' && key === "s") ||
+      (card === 'normal ["y","i"]' && ["s", "i", "p"].includes(key)),
+    transform(w, { card, key, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4 ||
+        !START.lines.every((l) => l.trim() && !/[.!?]/.test(l))
+      )
+        return null;
+      const change = card.startsWith('normal ["c"'),
+        inner = card.includes(',"i"'),
+        linewise = key === "G" || key === "p";
+      const content = {
+        mode: linewise ? "line" : "character",
+        lines:
+          key === "G"
+            ? [...START.lines.slice(1), ""]
+            : key === "<C-End>"
+              ? [START.lines[1].slice(13), ...START.lines.slice(2)]
+              : key === "i"
+                ? [START.lines[1]]
+                : [...START.lines],
+      };
+      return {
+        text: change
+          ? key === "G"
+            ? [START.lines[0], "  "]
+            : inner
+              ? [""]
+              : [START.lines[0], START.lines[1].slice(0, 13)]
+          : "unchanged",
+        cursor:
+          key === "G"
+            ? [1, 2]
+            : key === "p"
+              ? [0, START.lines.at(-1).length]
+              : key === "i"
+                ? [1, 0]
+                : inner
+                  ? [0, 0]
+                  : START_POS,
+        mode: change ? "insert" : "normal",
+        registers: vscodevimRegisters(change ? "change" : "yank", '"', content)
+          .registers,
+      };
+    },
+  },
+  {
+    id: "counted-percent-delete",
+    title:
+      "counted percent selects a percentage position without promoting a delete to linewise",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample.",
+    applies: ({ mode, pending, key }) =>
+      mode === "normal" &&
+      key === "%" &&
+      [
+        ["2", "d"],
+        ["3", "d"],
+        ["d", "3"],
+        ["2", "d", "3"],
+        ['"', "a", "3", "d"],
+      ].some((p) => sameJson(p, pending)),
+    transform(w, { pending, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const digits = pending.filter((k) => /^\d$/.test(k)).map(Number),
+        count = digits.reduce((a, b) => a * b, 1);
+      if (Math.trunc((count * (START.lines.length + 1) + 99) / 100) - 1 !== 0)
+        return null;
+      const { registers, shift } = vscodevimRegisters(
+        "delete",
+        registerOf(pending),
+        {
+          mode: "character",
+          lines: [START.lines[0], START.lines[1].slice(0, 13)],
+        },
+      );
+      return {
+        text: [START.lines[1].slice(13), ...START.lines.slice(2)],
+        cursor: [0, 0],
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "visual-wrapper-registers",
+    title:
+      "Visual X, VisualLine x and VisualBlock C have distinct register paths",
+    documented:
+      "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+    applies: ({ mode, pending, key }) =>
+      [[], ["3"], ['"', "a"]].some((p) => sameJson(p, pending)) &&
+      ((mode === "visual" && key === "X") ||
+        (mode === "visual-line" && key === "x") ||
+        (mode === "visual-block" && key === "C")),
+    transform(w, { mode, pending, cardKeys, setup, sample }) {
+      const enter = {
+        visual: "v",
+        "visual-line": "V",
+        "visual-block": "<C-v>",
+      }[mode];
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, [enter, ...pending]) ||
+        !sameJson(START_POS, [1, 13])
+      )
+        return null;
+      const content =
+        mode === "visual"
+          ? { mode: "character", lines: [START.lines[1], ""] }
+          : { mode: "line", lines: [START.lines[1]] };
+      return {
+        ...w,
+        registers:
+          mode === "visual-block"
+            ? {}
+            : vscodevimRegisters("plain", registerOf(pending), content)
+                .registers,
+        shiftNumbered: false,
+        __shift: false,
+      };
+    },
+  },
+  {
+    id: "right-window-file-registers",
+    title:
+      "moving to the prepared right editor updates the current and alternate file registers",
+    documented:
+      "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+    applies: ({ card, key }) =>
+      card === 'normal ["<C-w>"]' &&
+      ["<C-l>", "<right>", "l", "<C-w>", "w"].includes(key),
+    transform(w, { setup, sample }) {
+      if (setup?.length || sample !== undefined) return null;
+      return {
+        text: "unchanged",
+        cursor: START_POS,
+        mode: "normal",
+        registers: {
+          "%": { mode: "character", lines: ["b.txt"] },
+          "#": { mode: "character", lines: ["a.txt"] },
+        },
+      };
+    },
+  },
+  {
+    id: "visual-g-command-effects",
+    title:
+      "Visual g commands retain their action-specific selection, cursor and register behavior",
+    documented:
+      "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+    applies: ({ card, key }) =>
+      card === 'visual ["g"]' && ["?", "N", "P", "f", "p", "q"].includes(key),
+    transform(w, { key, setup, sample, cardKeys }) {
+      if (
+        sample !== undefined ||
+        !sameJson(cardKeys, ["v", "g"]) ||
+        !sameJson(START_POS, [1, 13])
+      )
+        return null;
+      const expectedSetup =
+        key === "N"
+          ? ["/", "e", "t", "a", "<CR>", "0"]
+          : ["p", "P"].includes(key)
+            ? ["y", "i", "w"]
+            : [];
+      if (!sameJson(setup ?? [], expectedSetup)) return null;
+      if (key === "N")
+        return {
+          text: "unchanged",
+          cursor: [0, 9],
+          mode: "visual",
+          registers: { "/": { mode: "character", lines: ["eta"] } },
+        };
+      if (["p", "P"].includes(key))
+        return {
+          text: {
+            1: START.lines[1].slice(0, 12) + "two" + START.lines[1].slice(13),
+          },
+          cursor: [1, 15],
+          mode: "normal",
+          registers: {
+            0: { mode: "character", lines: ["two"] },
+            '"': { mode: "character", lines: ["t"] },
+          },
+        };
+      if (key === "q")
+        return { text: "unchanged", cursor: [1, 0], mode: "normal" };
+      if (key === "f")
+        return { text: "unchanged", cursor: [1, 14], mode: "visual" };
+      const c = START.lines[1][13],
+        rot = String.fromCharCode(((c.charCodeAt(0) - 97 + 13) % 26) + 97);
+      return {
+        text: {
+          1: START.lines[1].slice(0, 13) + rot + START.lines[1].slice(14),
+        },
+        cursor: [1, 14],
+        mode: "visual",
+      };
+    },
+  },
+  {
+    id: "join-count-overrun",
+    title:
+      "30J joins through EOF and places the cursor at the last nonempty join boundary",
+    documented:
+      "VSCodeVim 1.32.4 join.ts L24-L96 turns count30 into29, getDown (position.ts L323-L329) clamps at final line4, and the join loop adds nonempty lines2/3 separated by one space. Empty line4 does not replace columnDeltaOffset, so the primary column is joined.length minus the final added segment length, namely64. Scoped to Normal30J with no setup/sample and this fixed four-line ASCII fixture.",
+    applies: ({ card, key }) => card === 'normal ["3","0"]' && key === "J",
+    transform(w, { setup, sample }) {
+      if (setup?.length || sample !== undefined || START.lines.length !== 4)
+        return null;
+      const joined = START.lines
+        .slice(1)
+        .map((l, i) => (i ? l.trimStart() : l))
+        .join(" ");
+      return {
+        text: [START.lines[0], joined],
+        cursor: [1, joined.length - (1 + START.lines[3].trimStart().length)],
+        mode: "normal",
+      };
+    },
+  },
+  {
+    id: "repeated-line-case",
+    title:
+      "repeated case operators return to column zero of the transformed line",
+    documented:
+      "VSCodeVim 1.32.4 modeHandler.ts L1111-L1114 uses BaseOperator.runRepeat (operator.ts L75-L84), which sets LineWise. ChangeCaseOperator L353-L392 replaces from line begin with PositionDiff.exactPosition(startPos), entering Normal at [1,0]. It does not write registers. Scoped to gUU, guu and g~~ without setup/sample or counts.",
+    applies: ({ card, key }) =>
+      [
+        ['normal ["g","U"]', "U"],
+        ['normal ["g","u"]', "u"],
+        ['normal ["g","~"]', "~"],
+      ].some(([c, k]) => c === card && k === key),
+    transform(w, { key, setup, sample }) {
+      if (setup?.length || sample !== undefined) return null;
+      const l = START.lines[1],
+        line =
+          key === "U"
+            ? l.toUpperCase()
+            : key === "u"
+              ? l.toLowerCase()
+              : [...l]
+                  .map((c) =>
+                    c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase(),
+                  )
+                  .join("");
+      return { text: { 1: line }, cursor: [1, 0], mode: "normal" };
+    },
+  },
+  {
+    id: "counted-change-line-ending",
+    title:
+      "30S preserves the EOF newline in its unnamed register with Sneak disabled",
+    documented:
+      "VSCodeVim 1.32.4 actions.ts L509-L524 ChangeLine is disabled with Sneak. It calls ChangeOperator.runRepeat (operator.ts L75-L84/L660-L707), whose LineWise range [1,0]..[4,0] retains the final newline in the unnamed register and replaces the range with two-space indentation. No numbered history or dot write occurs. Scoped to defaults Normal30S only, no setup/sample; extensions S is excluded.",
+    applies: ({ card, key }) => card === 'normal ["3","0"]' && key === "S",
+    transform(w, { set, setup, sample }) {
+      if (set !== "defaults" || setup?.length || sample !== undefined)
+        return null;
+      return {
+        text: [START.lines[0], "  "],
+        cursor: [1, 2],
+        mode: "insert",
+        registers: {
+          '"': { mode: "line", lines: [...START.lines.slice(1), ""] },
+        },
+      };
+    },
+  },
+  {
+    id: "normal-redo-and-g",
+    title:
+      "Normal redo and g commands use their actual history and selection paths",
+    documented:
+      "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+    applies: ({ card, key }) =>
+      (['normal ["3"]', 'normal ["\\\"","a","3"]'].includes(card) &&
+        key === "<C-r>") ||
+      (card === 'normal ["g"]' && ["D", "N", "i"].includes(key)),
+    transform(w, { key, setup, sample }) {
+      if (sample !== undefined) return null;
+      const expected =
+        key === "<C-r>"
+          ? ["x", "x", "x", "u", "u", "u"]
+          : key === "N"
+            ? ["j", "g", "*"]
+            : key === "i"
+              ? ["a", "X", "<Esc>", "0"]
+              : [];
+      if (!sameJson(setup ?? [], expected)) return null;
+      if (key === "D")
+        return { text: "unchanged", cursor: START_POS, mode: "normal" };
+      if (key === "N")
+        return {
+          text: "unchanged",
+          cursor: [2, 22],
+          mode: "visual",
+          registers: { "/": { mode: "character", lines: ["eta"] } },
+        };
+      if (key === "i")
+        return {
+          text: {
+            1: START.lines[1].slice(0, 14) + "X" + START.lines[1].slice(14),
+          },
+          cursor: [1, 15],
+          mode: "insert",
+          registers: { ".": { mode: "character", keys: "aX<Esc>" } },
+        };
+      const content = { mode: "character", lines: [START.lines[1][15]] };
+      return {
+        text: { 1: START.lines[1].slice(0, 13) + START.lines[1].slice(14) },
+        cursor: START_POS,
+        mode: "normal",
+        registers: { '"': content, "-": content },
+      };
+    },
+  },
+  {
+    id: "visual-count-delete",
+    title:
+      "Visual count3 Delete removes the selection instead of editing the count",
+    documented:
+      "VSCodeVim 1.32.4 operator.ts L307-L313 routes Visual/VisualLine Delete to DeleteOperator. modeHandler.ts L1111-L1118 calls run without count because it is not a repeated operator. Visual deletes the one selected w; VisualLine deletes line1, and the outer wrapper has no numbered/small-delete name (register.ts L208-L260). The count-digit editing branch in actions.ts L560-L581 is Normal-only. Scoped to the exact v3Del and V3Del cards, no setup/sample, one-cell/line selection entered before count.",
+    applies: ({ card, key }) =>
+      key === "<Del>" && ['visual ["3"]', 'visual-line ["3"]'].includes(card),
+    transform(w, { mode, cardKeys, setup, sample }) {
+      const line = mode === "visual-line";
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, [line ? "V" : "v", "3"])
+      )
+        return null;
+      return {
+        text: line
+          ? [START.lines[0], ...START.lines.slice(2)]
+          : [
+              START.lines[0],
+              START.lines[1].slice(0, 13) + START.lines[1].slice(14),
+              ...START.lines.slice(2),
+            ],
+        cursor: line ? [1, 0] : START_POS,
+        mode: "normal",
+        registers: {
+          '"': {
+            mode: line ? "line" : "character",
+            lines: [line ? START.lines[1] : START.lines[1][13]],
+          },
+        },
+      };
+    },
+  },
+  {
+    id: "fixed-scroll-positions",
+    title:
+      "z horizontal commands move the cursor and counted Ctrl-Y clamps to the first line",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+    applies: ({ card, key }) =>
+      (card === 'normal ["z"]' && ["H", "L", "h", "l"].includes(key)) ||
+      (card === 'normal ["3","0"]' && key === "<C-y>"),
+    transform(w, { key, setup, sample }) {
+      if (
+        sample !== undefined ||
+        !sameJson(setup ?? [], key === "<C-y>" ? ["z", "b"] : []) ||
+        !sameJson(START_POS, [1, 13])
+      )
+        return null;
+      const positions = {
+        H: [1, 13 + Math.round(START.lines[1].length / 2)],
+        L: [0, START.lines[0].length - 1],
+        h: [1, 14],
+        l: [1, 12],
+        "<C-y>": [0, 13],
+      };
+      return { text: "unchanged", cursor: positions[key], mode: "normal" };
+    },
+  },
+  {
+    id: "single-cell-put-and-change",
+    title:
+      "selected-cell put and block change use wrapper-specific register modes",
+    documented:
+      "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+    applies: ({ card, key }) =>
+      (card === 'visual ["3"]' && key === "p") ||
+      (card === "visual-block []" && ["p", "s"].includes(key)),
+    transform(w, { card, key, setup, sample }) {
+      if (
+        sample !== undefined ||
+        !sameJson(setup ?? [], key === "p" ? ["y", "i", "w"] : [])
+      )
+        return null;
+      if (key === "s")
+        return {
+          text: { 1: START.lines[1].slice(0, 13) + START.lines[1].slice(14) },
+          cursor: START_POS,
+          mode: "insert",
+          registers: { '"': { mode: "block", lines: [START.lines[1][13]] } },
+        };
+      const visual = card.startsWith("visual "),
+        count = visual ? 3 : 1;
+      return {
+        text: {
+          1:
+            START.lines[1].slice(0, 12) +
+            "two".repeat(count) +
+            START.lines[1].slice(13),
+        },
+        cursor: [1, visual ? 20 : 14],
+        mode: "normal",
+        registers: {
+          0: { mode: "character", lines: ["two"] },
+          '"': { mode: visual ? "character" : "block", lines: ["t"] },
+        },
       };
     },
   },
@@ -528,22 +967,37 @@ export const RULES = [
     title:
       "& repeats substitution once on the current line and ignores a Normal count",
     documented:
-      "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+      "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
     applies: ({ mode, pending, key }) =>
       mode === "normal" &&
       key === "&" &&
-      pending.every((k) => /^[0-9]$/.test(k)),
-    transform(w, { setup }) {
-      if (!sameJson(setup, [":", "s", "/", "e", "/", "X", "/", "<CR>"]))
-        return null;
-      const line = START_POS[0];
-      // Setup replaces the first e; & replaces the first remaining e on that same line.
-      const after = START.lines[line].replace("e", "X").replace("e", "X");
+      [
+        [],
+        ["2"],
+        ["3"],
+        ["3", "0"],
+        ['"', "a"],
+        ['"', "+"],
+        ['"', "_"],
+        ['"', "a", "3"],
+      ].some((p) => sameJson(p, pending)),
+    transform(w, { setup, pending = [] }) {
+      const tail = sameJson(pending, ['"', "a", "3"]) ? ["1", "4", "|"] : [];
+      const pair = [
+        ["e", "X"],
+        ["o", "0"],
+      ].find(([from, to]) =>
+        sameJson(setup, [":", "s", "/", from, "/", to, "/", "<CR>", ...tail]),
+      );
+      if (!pair) return null;
+      const [from, to] = pair,
+        line = START_POS[0];
+      const after = START.lines[line].replace(from, to).replace(from, to);
       return {
         text: { [line]: after },
         cursor: [line, 0],
         mode: "normal",
-        registers: { ":": { mode: "character", keys: "" } },
+        registers: { ":": { mode: "character", lines: [`s/${from}/${to}/`] } },
       };
     },
   },
@@ -1268,6 +1722,14 @@ export function compare(e, t) {
     Object.entries(e.registers ?? {}).map(([k, v]) => [k, canon(v)]),
   );
   const shift = e.__shift ?? e.shiftNumbered ?? false;
+  // The legacy probe projected Ex RecordedState.commandList as empty action keys.
+  // That representation cannot establish the command text or its preservation.
+  const legacyEx = (value) => value && "keys" in value && !("lines" in value);
+  let unknown = false;
+  if (legacyEx(named[":"])) {
+    unknown = true;
+    delete named[":"];
+  }
   if (t.beforeRegisters && t.afterRegisters) {
     const before = t.beforeRegisters;
     const after = t.afterRegisters;
@@ -1278,6 +1740,22 @@ export function compare(e, t) {
     for (const k of new Set([...Object.keys(before), ...Object.keys(after)])) {
       const a = canon(before[k]);
       const b = canon(after[k]);
+      if (
+        k === ":" &&
+        b &&
+        ((k in named && named[k]?.mode !== b.mode) ||
+          (!(k in named) && a && a.mode !== b.mode))
+      )
+        return "mismatch";
+      if (
+        k === ":" &&
+        ((k in named && legacyEx(b)) ||
+          (!(k in named) && a && b && (legacyEx(a) || legacyEx(b))))
+      ) {
+        unknown = true;
+        delete named[k];
+        continue;
+      }
       const emptyClipboard =
         ["*", "+"].includes(k) &&
         ((!a && sameJson(b?.lines, [""])) || (!b && sameJson(a?.lines, [""])));
@@ -1285,12 +1763,16 @@ export function compare(e, t) {
     }
     return Object.keys(actual).length === Object.keys(named).length &&
       Object.entries(named).every(([k, v]) => sameJson(actual[k], v))
-      ? "match"
+      ? unknown
+        ? "unknown"
+        : "match"
       : "mismatch";
   }
-  let unknown = false;
   for (const [k, v] of Object.entries(named)) {
-    if (!(k in g.registers)) unknown = true;
+    if (k === ":" && legacyEx(g.registers[k])) {
+      if (g.registers[k].mode !== v.mode) return "mismatch";
+      unknown = true;
+    } else if (!(k in g.registers)) unknown = true;
     else if (!sameJson(canon(g.registers[k]), v)) return "mismatch";
   }
   if (shift) {
@@ -1309,6 +1791,10 @@ export function compare(e, t) {
   for (const [k, v] of Object.entries(g.registers)) {
     if (k in named) continue;
     if (/^[2-9]$/.test(k) && shift) continue;
+    if (k === ":" && legacyEx(v) && k in t.want.registers) {
+      unknown = true;
+      continue;
+    }
     if (!(k in t.want.registers)) return "mismatch"; // written by the key, not expected
     if (sameJson(canon(v), canon(t.want.registers[k]))) unknown = true;
   }
@@ -1429,6 +1915,7 @@ if (cmd === "classify") {
         }
         const e = rule.transform(w.vim ?? w.expect, {
           ...ctx,
+          set,
           sample: w.sample,
           setup: w.setup,
           cardKeys: cardKeys[`${set}\0${card}`],
@@ -1518,6 +2005,7 @@ if (cmd === "classify") {
         const pending = pendingOf(card.id);
         const ctx = {
           card: card.id,
+          set,
           key: row.key,
           mode: modeOf(card.id),
           pending,

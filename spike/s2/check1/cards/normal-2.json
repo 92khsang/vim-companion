@@ -2484,7 +2484,7 @@
       "key": "O",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Open a line above and insert; the text is repeated 2 times",
+      "label": "Open 2 lines above and enter Insert mode",
       "labelFrom": "hand",
       "labelIndex": "index.txt L355 |O|",
       "expect": {
@@ -2503,6 +2503,71 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Open a line above and insert; the text is repeated 2 times",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  ",
+                "  ",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 2],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  ",
+                "  ",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 2],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3188,7 +3253,7 @@
       "key": "o",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Open a line below and insert; the text is repeated 2 times",
+      "label": "Open 2 lines below and enter Insert mode",
       "labelFrom": "hand",
       "labelIndex": "index.txt L414 |o|",
       "expect": {
@@ -3207,6 +3272,71 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Open a line below and insert; the text is repeated 2 times",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

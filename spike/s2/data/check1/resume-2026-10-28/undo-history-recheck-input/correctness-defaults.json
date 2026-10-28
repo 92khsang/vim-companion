@@ -1,0 +1,299 @@
+[
+ {
+  "id": "normal [\"3\"]",
+  "title": "normal after 3",
+  "keys": [
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo the latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "o"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "o"
+       ]
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"3\",\"0\"]",
+  "title": "normal after 30",
+  "keys": [
+   "3",
+   "0"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"2\"]",
+  "title": "normal after 2",
+  "keys": [
+   "2"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "~"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal []",
+  "title": "normal after d<Esc>",
+  "keys": [
+   "d",
+   "<Esc>"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\"]",
+  "title": "normal after \"a",
+  "keys": [
+   "\"",
+   "a"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "w"
+       ]
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"+\"]",
+  "title": "normal after \"+",
+  "keys": [
+   "\"",
+   "+"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "~"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"_\"]",
+  "title": "normal after \"_",
+  "keys": [
+   "\"",
+   "_"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo all latest changes on the last changed line",
+    "setup": [
+     "~"
+    ],
+    "expect": {
+     "text": "unchanged",
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal"
+    }
+   }
+  ]
+ },
+ {
+  "id": "normal [\"\\\"\",\"a\",\"3\"]",
+  "title": "normal after \"a3",
+  "keys": [
+   "\"",
+   "a",
+   "3"
+  ],
+  "rows": [
+   {
+    "key": "U",
+    "label": "Undo the latest changes on the last changed line",
+    "setup": [
+     "k",
+     "x",
+     "j",
+     "x",
+     "x",
+     "x"
+    ],
+    "expect": {
+     "text": {
+      "0": "alpha beta gama delta"
+     },
+     "cursor": [
+      1,
+      13
+     ],
+     "mode": "normal",
+     "registers": {
+      "\"": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      },
+      "-": {
+       "mode": "character",
+       "lines": [
+        "\""
+       ]
+      }
+     }
+    }
+   }
+  ]
+ }
+]

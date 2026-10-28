@@ -104,7 +104,9 @@ test("scroll and substitution predictions require their recorded setup", () => {
   assert.deepEqual(result.text, {
     1: '  if (onX, "two", [thrXe]) { four(five) }',
   });
-  assert.deepEqual(result.registers, { ":": { mode: "character", keys: "" } });
+  assert.deepEqual(result.registers, {
+    ":": { mode: "character", lines: ["s/e/X/"] },
+  });
 });
 
 test("counted boundary rule excludes registers, operators and Visual mode", () => {
@@ -323,6 +325,11 @@ test("only DeleteOperator trims a linewise register's trailing newline", () => {
     pending: [],
   });
   assert.deepEqual(visualYank.registers['"'], payload);
+  assert.equal(
+    rule.applies({ mode: "visual-block", ops: [], key: "C" }),
+    false,
+  );
+  assert.equal(rule.applies({ mode: "visual-line", ops: [], key: "x" }), true);
 });
 
 test("open-line source rules distinguish above, below, and unreviewed prefixes", () => {
@@ -370,4 +377,53 @@ test("apply rejects unknown classifications before touching authored cards", () 
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("legacy Ex action keys leave only command content uncertain", () => {
+  const legacy = { mode: "character", keys: "" };
+  const command = { mode: "character", lines: ["set scroll=0"] };
+  const otherCommand = { mode: "character", lines: ["set number"] };
+  const t = trial({ ":": legacy }, { ":": legacy });
+  assert.equal(compare(expect, t), "unknown");
+  assert.equal(
+    compare({ ...expect, registers: { ":": command } }, t),
+    "unknown",
+  );
+  assert.equal(
+    compare(expect, { ...t, got: { ...t.got, cursor: [0, 1] } }),
+    "mismatch",
+  );
+  assert.equal(
+    compare(expect, trial({ ":": legacy }, { ":": legacy, a: text })),
+    "mismatch",
+  );
+  assert.equal(
+    compare(expect, trial({ ":": command }, { ":": otherCommand })),
+    "mismatch",
+  );
+  assert.equal(
+    compare(
+      { ...expect, registers: { ":": command } },
+      trial({ ":": otherCommand }, { ":": command }),
+    ),
+    "match",
+  );
+  assert.equal(compare(expect, trial({}, { ":": legacy })), "mismatch");
+  assert.equal(
+    compare(
+      expect,
+      trial({ ":": legacy }, { ":": { ...legacy, mode: "line" } }),
+    ),
+    "mismatch",
+  );
+});
+
+test("counted S predictions exclude the Sneak setting and unreviewed setup", () => {
+  const rule = RULES.find((r) => r.id === "counted-change-line-ending");
+  assert.equal(rule.transform(expect, { set: "extensions" }), null);
+  assert.equal(rule.transform(expect, { set: "defaults", setup: ["j"] }), null);
+  assert.deepEqual(
+    rule.transform(expect, { set: "defaults" }).registers['"'].lines,
+    [...START.lines.slice(1), ""],
+  );
 });

@@ -214,12 +214,12 @@
               "registers": {
                 ":": {
                   "mode": "character",
-                  "keys": ""
+                  "lines": ["s/e/X/"]
                 }
               }
             },
             "rule": "repeat-substitute-current-line",
-            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
             "measured": {
               "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
               "trials": {
@@ -230,8 +230,8 @@
                   "trials": 3
                 }
               },
-              "verdict": "match",
-              "note": "every trial matches"
+              "verdict": "unknown",
+              "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
             }
           }
         },
@@ -246,12 +246,12 @@
               "registers": {
                 ":": {
                   "mode": "character",
-                  "keys": ""
+                  "lines": ["s/e/X/"]
                 }
               }
             },
             "rule": "repeat-substitute-current-line",
-            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "documented": "VSCodeVim 1.32.4 actions/commands/actions.ts L407-L416 directly executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default and no register prefix is read. substitute.ts L510-L549 reuses the previous pattern/replacement on the current line, and L627-L650 moves to column0 without changing search state. ExCommandLine.run (commandLine.ts L262-L271) stores the setup command text in RecordedState.commandList for the colon register; direct s.command.execute does not call run, so ampersand preserves that exact text. The old empty action-key projection omitted this value and cannot verify it. Scoped to eight exact Normal prefixes with s/e/X/ or s/o/0/ setup, optionally followed by 14| for named-a3.",
             "measured": {
               "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
               "trials": {
@@ -262,8 +262,8 @@
                   "trials": 3
                 }
               },
-              "verdict": "match",
-              "note": "every trial matches"
+              "verdict": "unknown",
+              "note": "The old probe recorded empty action keys instead of the Ex command text. Text, cursor, mode and other captured fields retain their evidence; colon content and preservation require a fresh run with the corrected probe."
             }
           }
         }
@@ -3110,7 +3110,7 @@
       "key": "O",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin a new line above the cursor and insert text, repeat 30 times",
+      "label": "Open 30 lines above and enter Insert mode",
       "labelFrom": "index",
       "labelIndex": "index.txt L355 |O|",
       "expect": {
@@ -3129,6 +3129,127 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Begin a new line above the cursor and insert text, repeat 30 times",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [30, 2],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  ",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [30, 2],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3927,7 +4048,7 @@
       "key": "o",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Begin a new line below the cursor and insert text, repeat 30 times",
+      "label": "Open 30 lines below and enter Insert mode",
       "labelFrom": "index",
       "labelIndex": "index.txt L414 |o|",
       "expect": {
@@ -3946,6 +4067,127 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Begin a new line below the cursor and insert text, repeat 30 times",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) }",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "counted-open-lines",
+            "documented": "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

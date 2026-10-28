@@ -1908,7 +1908,7 @@
       "key": "C",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the highlighted lines and start insert",
+      "label": "Change the current line content (characterwise) (VSCodeVim ignores the count)",
       "labelFrom": "index",
       "labelIndex": "index.txt L938 |v_C|",
       "expect": {
@@ -1934,6 +1934,73 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines and start insert",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-visual-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-visual-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -2500,7 +2567,7 @@
       "key": "R",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the highlighted lines and start insert",
+      "label": "Change the current line content (characterwise) (VSCodeVim ignores the count)",
       "labelFrom": "index",
       "labelIndex": "index.txt L949 |v_R|",
       "expect": {
@@ -2526,6 +2593,73 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines and start insert",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-visual-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-visual-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START.",
+            "measured": {
+              "pass": "source-wave3 at fbd3476: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
