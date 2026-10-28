@@ -1407,7 +1407,7 @@
       "key": "<C-left>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete back 3 words",
+      "label": "Move back by a word (VSCodeVim uses b; Vim uses B)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L394 |b|",
       "expect": {
@@ -1432,6 +1432,42 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete back 3 words",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onewo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 9],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": [", \"t"]
+                }
+              }
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+            "measured": {
+              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "trials": {
+                "defaults 1.141.0": {
+                  "trials": 1
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

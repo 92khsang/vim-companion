@@ -8,10 +8,11 @@
 //   classify <pass dir> <correctness dir> <out.json>
 //       <pass dir>: the JSONL files of batch/check1.sh; <correctness dir>: build.mjs output of the
 //       current input files (the expectations the rows are compared with)
-//   apply <classification.json>   writes `vscodevim` into spike/s2/check1/cards/*.json
+//   apply <classification.json> <pass label> [--merge]
+//       writes `vscodevim` into spike/s2/check1/cards/*.json; --merge preserves other rows
 // Usage: node spike/s2/check1/deviations.mjs classify|apply ...
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { basename, join } from "node:path";
+import { join } from "node:path";
 import { REPO, START } from "../harness/lib.mjs";
 import { cardFile, harnessCursor } from "./lib.mjs";
 
@@ -289,6 +290,52 @@ export const RULES = [
       return { ...w, text: lines, cursor: [l, 0] };
     },
   },
+  {
+    id: "ctrl-left-is-small-word",
+    title: "Ctrl-Left uses b (word), where Vim uses B (WORD)",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+    applies: ({ key }) => key === "<C-left>",
+    transform(w, { card, engineOf }) {
+      return engineOf(card, "b");
+    },
+  },
+  {
+    id: "viewport-edge-ignores-count",
+    title: "H and L ignore the count and move to the visible edge line",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+    applies: ({ key, pending, ops }) =>
+      ["H", "L"].includes(key) &&
+      ops.length === 0 &&
+      pending.some((k) => /^[0-9]$/.test(k)),
+    transform(w, { card, key, pending, mode, engineOf }) {
+      const uncounted = pending.filter((k) => !/^[0-9]$/.test(k));
+      return engineOf(`${mode} ${JSON.stringify(uncounted)}`, key);
+    },
+  },
+  {
+    id: "insert-dot-recorded-keys",
+    title:
+      "the last insertion register stores recorded keys instead of inserted text",
+    documented:
+      "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+    applies: ({ card, key }) =>
+      card === "insert []" &&
+      ["<Esc>", "<C-c>", "<C-[>", "<C-a>"].includes(key),
+    transform(w, { key }) {
+      return {
+        ...w,
+        registers: {
+          ...(w.registers ?? {}),
+          ".": {
+            mode: "character",
+            keys: key === "<C-a>" ? "iX<Esc>" : `i${key}`,
+          },
+        },
+      };
+    },
+  },
 ];
 
 // ---------- comparison of an expectation with a measured trial ----------
@@ -364,12 +411,16 @@ if (cmd === "classify") {
   const trials = new Map();
   dirs.forEach((passDir, d) => {
     for (const f of readdirSync(passDir).filter((f) => f.endsWith(".jsonl"))) {
-      const [set, version] = basename(f).split("-");
+      let meta;
       for (const line of readFileSync(join(passDir, f), "utf8")
         .split("\n")
         .filter(Boolean)) {
         const t = JSON.parse(line);
+        if (t.type === "meta") meta = t;
         if (t.type !== "trial" || t.kind === "negative") continue;
+        if (!meta?.set || !meta?.version)
+          throw new Error(`${f}: trial before metadata`);
+        const { set, version } = meta;
         const id = `${t.card}\0${t.key}`;
         if (!trials.has(id)) trials.set(id, []);
         trials.get(id).push({ set, version, t, pass: d });
@@ -435,6 +486,7 @@ if (cmd === "classify") {
         const e = rule.transform(w.vim ?? w.expect, {
           ...ctx,
           sample: w.sample,
+          engineOf: (c, k) => want[`${set}\0${c}\0${k}`]?.expect ?? null,
           vimOf: (c, k) => {
             const x = want[`${set}\0${c}\0${k}`];
             return x ? (x.vim ?? x.expect) : null;
@@ -484,8 +536,11 @@ if (cmd === "classify") {
   }
   const ruleOf = Object.fromEntries(RULES.map((r) => [r.id, r]));
   let n = 0;
-  // Values of an earlier classification are replaced, not merged.
-  for (const f of readdirSync(IN).filter((f) => f.endsWith(".json"))) {
+  // A full classification replaces its earlier values; a reviewed incremental classification
+  // keeps unrelated measured deviations, so a focused recheck need not re-author every row.
+  for (const f of args.includes("--merge")
+    ? []
+    : readdirSync(IN).filter((f) => f.endsWith(".json"))) {
     const card = JSON.parse(readFileSync(join(IN, f), "utf8"));
     let touched = false;
     for (const row of card.rows) {
@@ -515,6 +570,22 @@ if (cmd === "classify") {
         const sv = k.split(" ").slice(0, 2).join(" ");
         counts[sv] ??= { trials: 0 };
         counts[sv].trials += 1;
+      }
+      if (
+        r.rule === "ctrl-left-is-small-word" ||
+        r.rule === "viewport-edge-ignores-count"
+      ) {
+        row.vimLabel ??= row.label;
+        row.label =
+          r.rule === "ctrl-left-is-small-word"
+            ? "Move back by a word (VSCodeVim uses b; Vim uses B)"
+            : `Move to the ${r.key === "H" ? "first" : "last"} visible line (VSCodeVim ignores the count)`;
+        for (const value of Object.values(row.bySet ?? {})) {
+          if (value.label) {
+            value.vimLabel ??= value.label;
+            value.label = row.label;
+          }
+        }
       }
       for (const set of row.sets) {
         if (!r.engine[set]) continue;
