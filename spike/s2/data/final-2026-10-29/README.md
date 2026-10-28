@@ -63,3 +63,10 @@ produces a nonzero exit and `not pass`. This gate has not yet evaluated a comple
 Restarting the original measurement runner is not a resume command: its check (2) stage refuses
 to overwrite an existing directory. Preserve any interrupted attempt before choosing its resume
 path, and never interpret a queue exit alone as acceptance.
+
+`spike/s2/batch/watch-final.sh` requires both the independent gate and the queue wrapper's
+durable `stage=complete exit=0` record. It also checks systemd's result while the unit remains
+loaded. An unloaded transient unit can return default success/zero properties; these do not
+prove completion and are recorded as unavailable (`null`). This replaces the earlier watcher
+that relied only on the service properties and gate exit. Neither measurement wrapper nor
+frozen source changes.
