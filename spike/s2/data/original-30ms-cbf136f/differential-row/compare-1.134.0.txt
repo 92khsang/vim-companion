@@ -1,0 +1,13 @@
+runs: 1749 (874 on, 875 off), errors: 1
+adapter-off outcomes: 1 distinct (875 runs)
+adapter-on runs that differ from the adapter-off outcome: 0
+error run 1721 on: Error: which-key leaf <Space> b n: workbench.action.nextEditorInGroup expected no change: one editor in group 1 from a.txt:1; not observed within 2000 ms (changes: none; quick input hidden false, closing false, focus in it true) |     at waitEffect (file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s2-run/spike/s2/harness/whichkey-settle.mjs:368:13) |     at async typeKeysSettling (file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s2-run/spike/s2/harness/whichkey-settle.mjs:410:11)
+version 1.134.0: adapter-off majority 875 of 875, minority 0
+  settle effect rule (875 adapter-off runs, cap 2000 ms): waits per run 2
+    extra/count-leader <Space> b n (workbench.action.nextEditorInGroup): 875 waits; a.txt:1 -> no change; wait ms mean 2.6 min 1 max 50; polls mean 1.0 min 1 max 2; effect ms after the earliest leaf time -; quick input visible when the wait ended 0, focus in it 0; no change until the next key in 875 of 875 (ms to the next key mean 238.3 min 234 max 290)
+    extra/leader-macro <Space> w h (workbench.action.focusLeftGroup): 875 waits; b.txt:2 -> a.txt:1; wait ms mean 2.3 min 0 max 32; polls mean 1.0 min 1 max 2; effect ms after the earliest leaf time mean 49.3 min 41 max 93; quick input visible when the wait ended 0, focus in it 0
+  settle effect rule (874 adapter-on runs, cap 2000 ms): waits per run 2
+    extra/count-leader <Space> b n (workbench.action.nextEditorInGroup): 874 waits; a.txt:1 -> no change; wait ms mean 2.6 min 1 max 63; polls mean 1.0 min 1 max 2; effect ms after the earliest leaf time -; quick input visible when the wait ended 0, focus in it 0; no change until the next key in 874 of 874 (ms to the next key mean 238.3 min 235 max 311)
+    extra/leader-macro <Space> w h (workbench.action.focusLeftGroup): 874 waits; b.txt:2 -> a.txt:1; wait ms mean 2.5 min 0 max 83; polls mean 1.0 min 1 max 3; effect ms after the earliest leaf time mean 49.4 min 42 max 138; quick input visible when the wait ended 0, focus in it 0
+builds: 1d862e513b00f4b5
+ROW differential 1.134.0: 874 on, 875 off (need 1000 each), adapter-on runs that differ 0, run errors 1 (replaceable off-arm boot 0, counted 1; on 1, off 0), adapter-off outcomes 1, run numbers 0-1749, alternating, adapter checks failed 0 on, 0 off, VS Code 1.134.0, VSCodeVim 1.32.4, which-key 0.11.4, build 1d862e513b00f4b5: not pass (errors in runs 1721 on script)

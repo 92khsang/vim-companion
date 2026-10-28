@@ -10,12 +10,15 @@ import {
   stopCode,
   typeKeys,
   portable,
+  buildInfo,
+  adapterCheck,
 } from "../harness/lib.mjs";
 import { QuickInputWatcher } from "../harness/whichkey-settle.mjs";
 const [version, display, portArg, arm, nArg, out, ...keys] =
   process.argv.slice(2);
 const cdpPort = Number(portArg);
 const write = (r) => appendFileSync(out, portable(JSON.stringify(r)) + "\n");
+const build = buildInfo();
 const INSTALL = `(() => {
   window.__s2 = [];
   const t0 = () => performance.now();
@@ -56,6 +59,11 @@ for (let s = 0; s < Number(process.env.S2_DIAG_SESSIONS ?? 1); s++) {
       const ev = await code.probe.call("events");
       write({
         type: "obs",
+        version,
+        arm,
+        build,
+        hello: code.hello,
+        adapterCheck: await adapterCheck(code, arm),
         session: s,
         i,
         keys,
@@ -68,6 +76,9 @@ for (let s = 0; s < Number(process.env.S2_DIAG_SESSIONS ?? 1); s++) {
   } catch (e) {
     write({
       type: "error",
+      version,
+      arm,
+      build,
       error: String(e.stack ?? e)
         .split("\n")
         .slice(0, 3)

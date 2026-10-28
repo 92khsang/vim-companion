@@ -1,0 +1,14 @@
+runs: 649 (324 on, 325 off), errors: 1
+adapter-off outcomes: 2 distinct (324, 1 runs)
+adapter-on runs that differ from the adapter-off outcome: 0
+error run 633 on: Error: which-key leaf <Space> b n: workbench.action.nextEditorInGroup expected no change: one editor in group 1 from a.txt:1; not observed within 2000 ms (changes: none; quick input hidden false, closing false, focus in it true) |     at waitEffect (file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s2-run/spike/s2/harness/whichkey-settle.mjs:368:13) |     at async typeKeysSettling (file://$HOME/workspace/plugins/vim-companion/.scratch/worktrees/s2-run/spike/s2/harness/whichkey-settle.mjs:410:11)
+version 1.141.0: adapter-off majority 324 of 325, minority 1
+  minority run 292: no trace; final fields that differ: end.a.txt:1.selections "[[0,17,0,17]]" vs "[[1,1,1,1]]"; pasted.a.txt:1.text 335 chars vs 335 chars; pasted.a.txt:1.selections "[[3,10,3,10]]" vs "[[4,10,4,10]]"
+  settle effect rule (325 adapter-off runs, cap 2000 ms): waits per run 2
+    extra/count-leader <Space> b n (workbench.action.nextEditorInGroup): 325 waits; a.txt:1 -> no change; wait ms mean 2.8 min 1 max 23; polls mean 1.0 min 1 max 1; effect ms after the earliest leaf time -; quick input visible when the wait ended 325, focus in it 0; no change until the next key in 325 of 325 (ms to the next key mean 238.5 min 235 max 261)
+    extra/leader-macro <Space> w h (workbench.action.focusLeftGroup): 325 waits; b.txt:2 -> a.txt:1; wait ms mean 5.5 min 1 max 77; polls mean 1.2 min 1 max 3; effect ms after the earliest leaf time mean 57.2 min 46 max 82; quick input visible when the wait ended 325, focus in it 0
+  settle effect rule (324 adapter-on runs, cap 2000 ms): waits per run 2
+    extra/count-leader <Space> b n (workbench.action.nextEditorInGroup): 324 waits; a.txt:1 -> no change; wait ms mean 2.9 min 1 max 51; polls mean 1.0 min 1 max 1; effect ms after the earliest leaf time -; quick input visible when the wait ended 324, focus in it 0; no change until the next key in 324 of 324 (ms to the next key mean 238.7 min 235 max 291)
+    extra/leader-macro <Space> w h (workbench.action.focusLeftGroup): 324 waits; b.txt:2 -> a.txt:1; wait ms mean 5.7 min 0 max 66; polls mean 1.2 min 1 max 3; effect ms after the earliest leaf time mean 57.2 min 47 max 92; quick input visible when the wait ended 324, focus in it 0
+builds: 1d862e513b00f4b5
+ROW differential 1.141.0: 324 on, 325 off (need 1000 each), adapter-on runs that differ 0, run errors 1 (replaceable off-arm boot 0, counted 1; on 1, off 0), adapter-off outcomes 2, run numbers 0-649, alternating, adapter checks failed 0 on, 0 off, VS Code 1.141.0, VSCodeVim 1.32.4, which-key 0.11.4, build 1d862e513b00f4b5: not pass (errors in runs 633 on script)
