@@ -23,6 +23,24 @@ def canon(value):
     return {"mode": value["mode"], **({"lines": value["lines"]} if "lines" in value else {"keys": value.get("keys")})}
 
 
+def ex_text_missing(value):
+    """The legacy probe omitted commandList from the ':' RecordedState."""
+    if value is None:
+        return False
+    if "cursors" in value:
+        return any(ex_text_missing(x) for x in value["cursors"])
+    return "lines" not in value and value.get("keys") == ""
+
+
+def register_modes(value):
+    """Presence, cursor count and mode remain known even when text is missing."""
+    if value is None:
+        return None
+    if "cursors" in value:
+        return {"cursors": [register_modes(x) for x in value["cursors"]]}
+    return {"mode": value["mode"]}
+
+
 def text_of(expect):
     text = expect["text"]
     if text == "unchanged":
@@ -49,12 +67,21 @@ def compare(row, trial):
     wanted = {k: canon(v) for k, v in expect.get("registers", {}).items()}
     if "beforeRegisters" in trial and "afterRegisters" in trial:
         before, after = trial["beforeRegisters"], trial["afterRegisters"]
+        missing_ex = ex_text_missing(after.get(":")) or (":" not in wanted and ex_text_missing(before.get(":")))
+        if missing_ex:
+            unknown.append("Ex command text not recorded: :")
+            expected_ex = wanted.get(":", before.get(":"))
+            if register_modes(after.get(":")) != register_modes(expected_ex):
+                diffs.append("register: :")
+            wanted.pop(":", None)
         if expect.get("shiftNumbered"):
             for n in range(1, 9):
                 if str(n) in before:
                     wanted[str(n + 1)] = canon(before[str(n)])
         actual = {}
         for k in set(before) | set(after):
+            if k == ":" and missing_ex:
+                continue
             a, b = canon(before.get(k)), canon(after.get(k))
             empty_clipboard = k in ("*", "+") and ((a is None and b and b.get("lines") == [""]) or (b is None and a and a.get("lines") == [""]))
             if k in wanted or (a != b and not empty_clipboard):
@@ -64,6 +91,14 @@ def compare(row, trial):
     else:
         old = trial["want"].get("registers", {})
         actual = {k: canon(v) for k, v in got.get("registers", {}).items()}
+        if ex_text_missing(actual.get(":")):
+            unknown.append("Ex command text not recorded: :")
+            if ":" in wanted:
+                if register_modes(actual[":"]) != register_modes(wanted[":"]):
+                    diffs.append("register: :")
+                del wanted[":"], actual[":"]
+            elif ":" in old:
+                del actual[":"]
         if expect.get("shiftNumbered"):
             if not all(str(n) in old for n in range(2, 10)):
                 unknown.append("numbered-register baseline not recorded")
