@@ -374,7 +374,7 @@
       "sets": ["defaults", "extensions"],
       "source": "hand",
       "reason": "own: not a command of Vim's index.txt",
-      "label": "Yank the lines of the cursor's indentation level",
+      "label": "Yank the cursor's indentation block characterwise (VSCodeVim)",
       "expect": {
         "text": "unchanged",
         "cursor": [1, 0],
@@ -382,16 +382,55 @@
         "registers": {
           "0": {
             "mode": "character",
-            "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
           },
           "\"": {
             "mode": "character",
-            "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+            "lines": ["  if (one, \"two\", [three]) { four(five) }"]
           }
         }
       },
       "labelFrom": "hand",
-      "basis": "src/textobject/textobject.ts L596-L662 and L710-L714 (ii): (1,0) to (2,0), charwise, as the pilot's dii row; cursor at the start"
+      "basis": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 0],
+          "mode": "normal",
+          "registers": {
+            "0": {
+              "mode": "character",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+            },
+            "\"": {
+              "mode": "character",
+              "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+            }
+          }
+        },
+        "label": "Yank the lines of the cursor's indentation level",
+        "reason": "own: not a command of Vim's index.txt",
+        "basis": "src/textobject/textobject.ts L596-L662 and L710-L714 (ii): (1,0) to (2,0), charwise, as the pilot's dii row; cursor at the start"
+      },
+      "measured": {
+        "pass": "source-wave4 (2231a60; actual Ex contents)",
+        "trials": {
+          "defaults 1.134.0": {
+            "trials": 3
+          },
+          "defaults 1.141.0": {
+            "trials": 3
+          },
+          "extensions 1.134.0": {
+            "trials": 3
+          },
+          "extensions 1.141.0": {
+            "trials": 3
+          }
+        },
+        "verdict": "match",
+        "note": "Every trial matched the independently authored source prediction, including full register baselines."
+      }
     },
     {
       "key": "l",
@@ -458,6 +497,96 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 20],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              }
+            },
+            "rule": "eof-change-yank-ranges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 20],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              }
+            },
+            "rule": "eof-change-yank-ranges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -553,6 +682,96 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              }
+            },
+            "rule": "eof-change-yank-ranges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "alpha beta gamma delta",
+                    "  if (one, \"two\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu"
+                  ]
+                }
+              }
+            },
+            "rule": "eof-change-yank-ranges",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

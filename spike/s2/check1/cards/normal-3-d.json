@@ -445,7 +445,7 @@
       "key": "%",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the lines to 3% of the file",
+      "label": "Delete characterwise to the start of the line at 3% of the file (VSCodeVim)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L263 |N%|",
       "expect": {
@@ -475,6 +475,87 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the lines to 3% of the file",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-percent-delete",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-percent-delete",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1825-L1855 uses trunc((count*lineCount+99)/100)-1 for nonzero percent counts and bypasses the operator-inclusive bracket path, without setting LineWise. For the exact counts2,3,6 and five document lines, target is line0; position.ts L553-L559 applies startofline. modeHandler.ts L1090-L1100 sorts and decreases the CharacterWise endpoint, DeleteOperator L111-L157 restores exclusive [1,13], and register.ts L216-L260 writes named/unnamed/1 with numbered shift. Scoped to exact 2d,3d,d3,2d3,named-a3d, no setup/sample.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

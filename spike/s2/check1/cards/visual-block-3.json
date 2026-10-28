@@ -1819,7 +1819,7 @@
       "key": "C",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Change from the block to the line ends",
+      "label": "Change from the block to the line ends without writing a register (VSCodeVim) (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L938 |v_C|",
       "expect": {
@@ -1844,6 +1844,63 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Change from the block to the line ends",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"t"
+              },
+              "cursor": [1, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

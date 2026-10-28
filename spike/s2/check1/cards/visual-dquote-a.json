@@ -2737,7 +2737,7 @@
       "key": "X",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the highlighted lines into register a",
+      "label": "Delete the highlighted lines characterwise into register a (VSCodeVim)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L956 |v_X|",
       "expect": {
@@ -2769,6 +2769,85 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines into register a",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                }
+              }
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                }
+              }
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

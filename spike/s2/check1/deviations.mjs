@@ -2135,7 +2135,12 @@ if (cmd === "classify") {
         row.vimLabel ??= row.label;
         row.label =
           "Repeat the last substitution on the current line" +
-          (pendingOf(r.card).length ? " (VSCodeVim ignores the count)" : "");
+          (pendingOf(r.card).some((key) => /^[0-9]$/.test(key))
+            ? " (VSCodeVim ignores the count)"
+            : "") +
+          (pendingOf(r.card).includes('"')
+            ? " (VSCodeVim ignores the register prefix)"
+            : "");
         for (const value of Object.values(row.bySet ?? {})) {
           if (value.label) {
             value.vimLabel ??= value.label;
@@ -2189,6 +2194,46 @@ if (cmd === "classify") {
       const named = registerOf(pendingOf(r.card));
       const registerLabel = named === '"' ? "" : ` into register ${named}`;
       let sourceLabel;
+      if (r.rule === "normal-redo-and-g" && r.key === "<C-r>")
+        sourceLabel =
+          "Redo one undone change" +
+          ignoredCount +
+          (named === '"' ? "" : " (register prefix ignored)");
+      if (r.rule === "fixed-scroll-positions" && r.key === "<C-y>")
+        sourceLabel =
+          "Scroll up 30 lines and move the cursor into view (VSCodeVim)";
+      if (r.rule === "counted-percent-delete") {
+        const percent = pendingOf(r.card)
+          .filter((key) => /^\d$/.test(key))
+          .map(Number)
+          .reduce((a, b) => a * b, 1);
+        sourceLabel =
+          `Delete characterwise to the start of the line at ${percent}% of the file` +
+          registerLabel +
+          " (VSCodeVim)";
+      }
+      if (r.rule === "visual-wrapper-registers")
+        sourceLabel =
+          r.key === "C"
+            ? "Change from the block to the line ends without writing a register (VSCodeVim)" +
+              ignoredCount
+            : "Delete the highlighted lines characterwise" +
+              registerLabel +
+              " (VSCodeVim)" +
+              ignoredCount;
+      if (r.rule === "visual-count-delete")
+        sourceLabel =
+          (r.card.startsWith("visual-line")
+            ? "Delete the selected lines"
+            : "Delete the selected text") + ignoredCount;
+      if (r.rule === "visual-g-command-effects")
+        sourceLabel = {
+          "?": "Apply ROT13 to the selected text and retain Visual mode",
+          N: "Extend the selection through the previous search match",
+          P: "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
+          p: "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
+          q: "Reflow the highlighted lines and return to Normal mode",
+        }[r.key];
       if (r.rule === "insert-suggestion-and-newline")
         sourceLabel =
           r.key === "<C-m>"

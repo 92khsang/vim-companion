@@ -131,6 +131,56 @@
         },
         "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRightHalf src/actions/motion.ts L1239-1253 runs cursorMove right by halfLine (src/actions/motion.ts L64-110); VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveCommands.ts _moveHalfLineRight: round(41/2) = 21 columns, VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveRight.",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 34],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 34],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -168,6 +218,56 @@
         },
         "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeftHalf src/actions/motion.ts L1255-1270, cursorMove left by halfLine: 21 columns left of column 13 clips to the line start and wraps to the end of line 0 (VS Code 1.141.0 src/vs/editor/common/cursor/cursorMoveOperations.ts moveLeft, leftPosition); the Normal-mode clamp gives (0,21) (src/mode/modeHandler.ts L932-966).",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 21],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 21],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -392,6 +492,56 @@
         },
         "expectBasis": "VSCodeVim 1.32.4: MoveScreenToRight src/actions/motion.ts L1207-1221 runs cursorMove right by one character.",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -429,6 +579,56 @@
         },
         "expectBasis": "VSCodeVim 1.32.4: MoveScreenToLeft src/actions/motion.ts L1223-1237 runs cursorMove left by one character.",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "fixed-scroll-positions",
+            "documented": "VSCodeVim 1.32.4 motion.ts L1207-L1270 maps zH/zL/zh/zl to cursorMove right-halfLine/left-halfLine/right-character/left-character. Pinned VS Code cursorMoveCommands.ts L453-L483 computes round(41/2)=21; cursorMoveOperations.ts L30-L38/L64-L86 moves a left overrun to the previous line end, then modeHandler.ts L932-L966 clamps Normal to its last character. ASCII/wordWrap off gives H[1,34], L[0,21], h[1,14], l[1,12]. Product110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c differ by rightPosition normalization, irrelevant to this ASCII fixture; no whole-file equality is claimed. For exact30Ctrl-Y with zb, scroll.ts L10-L69 computes linesAbove=endLine-1-30<0, clamps line0 and keeps desired column13; coreCommands.ts L199-L207/L1354-L1372 uses default revealCursor=false, so scrolling does not move it again. Scoped to these five exact rows and recorded setups.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

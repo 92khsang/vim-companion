@@ -1,0 +1,99 @@
+[
+ {
+  "card": "normal [\"y\",\"i\"]",
+  "key": "i",
+  "sets": [
+   "defaults",
+   "extensions"
+  ],
+  "source": "hand",
+  "expect": {
+   "text": "unchanged",
+   "cursor": [
+    1,
+    0
+   ],
+   "mode": "normal",
+   "registers": {
+    "0": {
+     "mode": "character",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    },
+    "\"": {
+     "mode": "character",
+     "lines": [
+      "  if (one, \"two\", [three]) { four(five) }"
+     ]
+    }
+   }
+  },
+  "basis": {
+   "rule": "eof-change-yank-ranges",
+   "documented": "VSCodeVim 1.32.4 motion.ts L1380-L1421 distinguishes G (LineWise) from C-End (CharacterWise). TextObject L27-L37/L436-L452 gives is an EOF stop without changing register mode; IndentObjectMatch L597-L672 gives ii the next line start; ip L519-L553 ends at the last nonempty line EOL and sets LineWise. modeHandler.ts L1064-L1100 clamps EOF and decreases CharacterWise endpoints. ChangeOperator L666-L682 uses getRight (position.ts L313-L318 clamps at EOL); YankOperator L209-L255 reads an API-clamped range and retains the movement's end column for a Normal linewise yank. Thus c/y C-End and cis/yis exclude the final newline, yii contains only line1, yip ends at [0,20], while cG retains a LineWise final newline. Scoped to seven exact no-setup rows in the fixed four-line fixture; named/count/Visual variants are excluded."
+  },
+  "measured": {
+   "pass": "source-wave4 (2231a60; actual Ex contents)",
+   "trials": {
+    "defaults 1.134.0": {
+     "trials": 3
+    },
+    "defaults 1.141.0": {
+     "trials": 3
+    },
+    "extensions 1.134.0": {
+     "trials": 3
+    },
+    "extensions 1.141.0": {
+     "trials": 3
+    }
+   },
+   "verdict": "match",
+   "note": "Every trial matched the independently authored source prediction, including full register baselines."
+  }
+ },
+ {
+  "card": "visual-block []",
+  "key": "s",
+  "sets": [
+   "extensions"
+  ],
+  "source": "hand",
+  "expect": {
+   "text": {
+    "1": "  if (one, \"to\", [three]) { four(five) }"
+   },
+   "cursor": [
+    1,
+    13
+   ],
+   "mode": "insert",
+   "registers": {
+    "\"": {
+     "mode": "block",
+     "lines": [
+      "w"
+     ]
+    }
+   }
+  },
+  "basis": {
+   "rule": "single-cell-put-and-change",
+   "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded."
+  },
+  "measured": {
+   "pass": "source-wave4 (2231a60; actual Ex contents)",
+   "trials": {
+    "extensions 1.134.0": {
+     "trials": 3
+    },
+    "extensions 1.141.0": {
+     "trials": 3
+    }
+   },
+   "verdict": "match",
+   "note": "Every trial matched the independently authored source prediction, including full register baselines."
+  }
+ }
+]

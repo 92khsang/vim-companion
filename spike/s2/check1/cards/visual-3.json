@@ -1509,7 +1509,7 @@
       "key": "<Del>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Remove the last digit of the count",
+      "label": "Delete the selected text (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L452 |N<Del>|",
       "expect": {
@@ -1526,6 +1526,79 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Remove the last digit of the count",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"to\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "visual-count-delete",
+            "documented": "VSCodeVim 1.32.4 operator.ts L307-L313 routes Visual/VisualLine Delete to DeleteOperator. modeHandler.ts L1111-L1118 calls run without count because it is not a repeated operator. Visual deletes the one selected w; VisualLine deletes line1, and the outer wrapper has no numbered/small-delete name (register.ts L208-L260). The count-digit editing branch in actions.ts L560-L581 is Normal-only. Scoped to the exact v3Del and V3Del cards, no setup/sample, one-cell/line selection entered before count.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"to\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["w"]
+                }
+              }
+            },
+            "rule": "visual-count-delete",
+            "documented": "VSCodeVim 1.32.4 operator.ts L307-L313 routes Visual/VisualLine Delete to DeleteOperator. modeHandler.ts L1111-L1118 calls run without count because it is not a repeated operator. Visual deletes the one selected w; VisualLine deletes line1, and the outer wrapper has no numbered/small-delete name (register.ts L208-L260). The count-digit editing branch in actions.ts L560-L581 is Normal-only. Scoped to the exact v3Del and V3Del cards, no setup/sample, one-cell/line selection entered before count.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -2827,7 +2900,7 @@
       "key": "X",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the highlighted lines",
+      "label": "Delete the highlighted lines characterwise (VSCodeVim) (VSCodeVim ignores the count)",
       "labelFrom": "index",
       "labelIndex": "index.txt L956 |v_X|",
       "expect": {
@@ -2855,6 +2928,77 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                }
+              }
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }", ""]
+                }
+              }
+            },
+            "rule": "visual-wrapper-registers",
+            "documented": "VSCodeVim 1.32.4 actions.ts L902-L914 VisualDeleteLine sends full line boundaries to DeleteOperator without setting LineWise: Visual X therefore writes CharacterWise line content plus newline. operator.ts L307-L313 wraps VisualLine x in DeleteOperator but the wrapper lacks delete_op, so it writes LineWise content without numbered history. VisualBlock C (actions.ts L730-L750) queues a deletion and enters Insert without calling Register.put at all. register.ts L208-L260 dispatches bookkeeping by the outer action name. Scoped to each plain/count3/named-a context, one-cell/one-line selections entered before the prefix, no setup/sample; other state remains the independently authored Vim answer.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3531,6 +3675,80 @@
       },
       "handBasis": {
         "basis": "Vim change.txt *v_p*: the selection (t at (1,12), after the setup yiw) is replaced by the register put [count] times; the replaced text goes to the unnamed and small delete registers; cursor on the last put character (checked on another buffer)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twotwotwowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 20],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "single-cell-put-and-change",
+            "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twotwotwowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 20],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "single-cell-put-and-change",
+            "documented": "VSCodeVim 1.32.4 put.ts L31-L155/L348-L418 replaces the selected t after yiw with two repeated3 times for Visual3p or once for plain VisualBlock p. Cursor is [1,20] or [1,14], Normal; setup yank0 is character two, overwritten unnamed is character t or block t respectively (vimState.ts L288-L300), with no delete-history name. Plain VisualBlock s (actions.ts L692-L729) deletes the one-column w, stores only unnamed block w and enters Insert at [1,13]; no small-delete/numbered action name applies. Scoped to these three exact cards/keys/setups, one cell and no sample; plain P is excluded.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

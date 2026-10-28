@@ -308,6 +308,56 @@
         },
         "basis": "VSCodeVim 1.32.4 src/actions/commands/navigate.ts L11-46 runs editor.action.goToDeclaration and keeps the editor selection; no provider for a plaintext file in the sandbox (Inferred), so nothing changes",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -435,6 +485,68 @@
         },
         "basis": "setup j g* puts the cursor on [2,19] with the last search \"eta\" forward and the / register \"eta\" (VSCodeVim 1.32.4 src/actions/commands/search.ts L22-128); matches [0,7] [2,9] [2,13] [2,19]; src/state/searchState.ts L154-196 (next match strictly after or before the position, wrapscan); src/actions/motion.ts L424-519 (n N), src/actions/baseMotion.ts L102-140 (count repeats the motion); VSCodeVim 1.32.4 src/actions/commands/search.ts L231-298 (gn gN select the match that contains the cursor, here [2,19]-[2,21], in Visual mode); VSCodeVim 1.32.4 src/mode/modeHandler.ts L735-743 and L862-876 (Visual stop shifted back before an action and right after it), L1309-1346 (selection drawn per mode); check1/lib.mjs harnessCursor",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 22],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 22],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -770,6 +882,72 @@
         },
         "basis": "setup a X <Esc> 0 inserts X at [1,14] (the change ends at [1,15]; the . register becomes the insert's RecordedState, which the probe reads as its pressed keys, src/mode/modeHandler.ts L656-657 and L832-841) and moves to [1,0]; VSCodeVim 1.32.4 src/actions/commands/insert.ts L70-80 (gi goes to getLastChangeEndPosition, src/history/historyTracker.ts L958-960)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "insert",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "aX<Esc>"
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twXo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "insert",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "aX<Esc>"
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

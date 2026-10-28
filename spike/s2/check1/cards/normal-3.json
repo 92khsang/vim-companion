@@ -1719,7 +1719,7 @@
       "setup": ["x", "x", "x", "u", "u", "u"],
       "source": "vim-oracle",
       "reason": "state: undo history; <c-r> reads the undo history",
-      "label": "Redo the last undone change",
+      "label": "Redo one undone change (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L229 |CTRL-R|",
       "expect": {
@@ -1785,6 +1785,81 @@
         },
         "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/undo.ts L34-45 (Redo has no runsOnceForEachCountPrefix, so it redoes one step) and src/history/historyTracker.ts L832-860 (the cursor returns to the step's start); setup xxx uuu",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "vimLabel": "Redo the last undone change",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["\""]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["\""]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"to\", [three]) { four(five) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "\"": {
+                  "mode": "character",
+                  "lines": ["\""]
+                },
+                "-": {
+                  "mode": "character",
+                  "lines": ["\""]
+                }
+              }
+            },
+            "rule": "normal-redo-and-g",
+            "documented": "VSCodeVim 1.32.4 undo.ts L35-L46 Redo inherits one execution per command (base.ts L171-L189), and historyTracker.ts L832-L856 replays one HistoryStep: xxxuuu then count3 Ctrl-r deletes only the original w. The setup's last delete leaves quote in unnamed/small-delete; a is untouched. navigate.ts L12-L28 gD calls goToDeclaration without writing search; the fixed plaintext fixture has no declaration target. gN after jg* uses search.ts L99-L114/L238-L291 to select theta [2,19]..[2,21], drawn active [2,22]. gi after aX<Esc>0 uses insert.ts L72-L82/historyTracker.ts L958-L959 last-change end[1,15], preserving dot RecordedState keys aX<Esc>. Scoped to the exact five rows and setup arrays; no arbitrary earlier history is used.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

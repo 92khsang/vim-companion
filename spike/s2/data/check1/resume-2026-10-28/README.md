@@ -420,11 +420,36 @@ executes the parsed substitute command, without overwriting the last Ex command.
 
 `source-wave4-input/` contains 52 defaults and 51 extensions source predictions for 618 trials,
 covering the reviewed endpoint, register-wrapper, window, Visual-g, redo, join, case and cursor
-movement rules. Counted `S` is defaults-only because Sneak replaces it in extensions. These
-predictions are not promoted. `wave4-diagnostic-comparison.json` finds no independently
+movement rules. Counted `S` is defaults-only because Sneak replaces it in extensions.
+`wave4-diagnostic-comparison.json` found no independently
 mismatching fields in the 103 matching legacy diagnostic records, but all 103 are unknown
-because their colon contents were omitted. New probe measurements are required.
-The engine-specific `yii` hand row will retain that provenance if confirmed.
+because their colon contents were omitted.
+
+Measured: `source-wave4/` passed all 618 trials at frozen
+`2231a60c92d8c7043a8cc81c5e5a184408047e89`, clean build `573a37be09334292`: 156 defaults
+and 153 extensions trials on each version, with exact input keys and indices `0..2`.
+`source-wave4-verification.json` records coverage and byte-preserved raw hashes. Colon was absent
+from all 618 before/after register baselines, so this cohort has no lost Ex contents.
+All 60 window-switch trials recorded target preparation and ended in `b.txt`, group 2.
+`source-wave4-rescore.json` independently matches all 206 condition groups against the promoted
+expectations, including full register transitions. No mixed or later-pass trials were excluded.
+The 51 Vim-backed rows in `selected-source-wave4-rules.json` promote 100 row-setting values;
+the `yii` row and extensions-only VisualBlock `s` remain hand-authored in
+`selected-source-wave4-hand.json` (three row-setting values), preserving their prior hand
+expectations and reasons under `previousHand`. Their new values come from the prewritten source
+predictions, not from copying observed values. Labels now state characterwise counted-percent
+deletion, one-step redo, Visual Delete count handling, Visual `gP` register replacement and
+VisualBlock `C`'s lack of register writes. The full second pass remains required.
+
+Reproduce the source wave from its frozen checkout using the earlier four-condition harness loop,
+`source-wave4-input/`, three trials and `S2_NAME_PREFIX=final-source-`. To rescore these preserved
+records against the current cards:
+
+```bash
+W=$(mktemp -d)
+node spike/s2/check1/build.mjs "$W/input"
+python3 -I -B spike/s2/check1/rescore.py "$W/input" "$W/rescore.json" "$D/source-wave4"
+```
 
 `undo-history-recheck-input/` retains the original eight Normal `U` expectations and setups
 under both settings, for 96 trials. It does not adopt the contaminated old uppercase result.

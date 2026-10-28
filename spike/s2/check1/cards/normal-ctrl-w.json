@@ -210,6 +210,76 @@
           "layout": "harness"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -350,6 +420,76 @@
           "layout": "harness"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -431,6 +571,76 @@
           "layout": "harness"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -640,6 +850,76 @@
           "layout": "harness"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -780,6 +1060,76 @@
           "layout": "harness"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "right-window-file-registers",
+            "documented": "VSCodeVim 1.32.4 window.ts L92-L110 routes C-w l/right/C-l to navigateRight and L154-L172 routes C-w w/C-w to navigateEditorGroups. Pinned VS Code products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c navigationActions.ts L37-L47/L183-L191 and editorActions.ts L240-L257 focus the existing right/NEXT group. extensionBase.ts L218-L228 changes # from old percent a.txt and percent to b.txt, using CharacterWise readonly registers (register.ts L193-L203). Scoped to five exact no-setup rows, a.txt active in group1, b.txt explicitly prepared at START/Normal in group2 by the corrected harness; no hidden editor view is inferred from an earlier trial.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     }
   ]

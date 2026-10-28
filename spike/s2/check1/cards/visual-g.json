@@ -195,7 +195,7 @@
       "key": "?",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Encode the highlighted text with rot13",
+      "label": "Apply ROT13 to the selected text and retain Visual mode",
       "labelFrom": "hand",
       "labelIndex": "index.txt L748 |g?|",
       "expect": {
@@ -210,6 +210,61 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Encode the highlighted text with rot13",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tjo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tjo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -277,7 +332,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: last search; gN reads the last search",
-      "label": "Extend the selection to the start of the previous match of the last search",
+      "label": "Extend the selection through the previous search match",
       "labelIndex": "index.txt L758 |gN|",
       "expect": {
         "text": "unchanged",
@@ -304,6 +359,69 @@
       },
       "handBasis": {
         "basis": "Vim visual.txt *gN*: like gn backward; from (2,0) the previous match starts at (0,7) (checked on another buffer)"
+      },
+      "vimLabel": "Extend the selection to the start of the previous match of the last search",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 9],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 9],
+              "mode": "visual",
+              "registers": {
+                "/": {
+                  "mode": "character",
+                  "lines": ["eta"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -311,7 +429,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: register; gP reads the register",
-      "label": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
+      "label": "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
       "labelIndex": "index.txt L760 |gP|",
       "expect": {
         "text": {
@@ -361,6 +479,81 @@
           }
         },
         "basis": "Vim change.txt *gP* with *v_P*: like v_p but the unnamed register is not changed; cursor just after the new text"
+      },
+      "vimLabel": "Replace the selection with the text, cursor after it (the unnamed register is kept)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -532,6 +725,56 @@
       },
       "handBasis": {
         "basis": "Vim editing.txt *v_gf*: the selected text w names no file, E447, and Visual mode ends with the cursor at the start of the area (checked on another buffer)"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "visual"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -703,7 +946,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: register; gp reads the register",
-      "label": "Replace the selection with the text and put the cursor after it",
+      "label": "Replace the selection, place the cursor after it and save the replaced text in the unnamed register",
       "labelIndex": "index.txt L799 |gp|",
       "expect": {
         "text": {
@@ -736,13 +979,88 @@
       },
       "handBasis": {
         "basis": "Vim change.txt *gp* with *v_p*: the selection (t after the setup yiw) is replaced, the replaced text goes to the unnamed and small delete registers, the cursor goes just after the new text (checked on another buffer)"
+      },
+      "vimLabel": "Replace the selection with the text and put the cursor after it",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"twowo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 15],
+              "mode": "normal",
+              "registers": {
+                "0": {
+                  "mode": "character",
+                  "lines": ["two"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["t"]
+                }
+              }
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
       "key": "q",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Format the highlighted lines",
+      "label": "Reflow the highlighted lines and return to Normal mode",
       "labelFrom": "index",
       "labelIndex": "index.txt L985 |v_gq|",
       "expect": {
@@ -755,6 +1073,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Format the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal"
+            },
+            "rule": "visual-g-command-effects",
+            "documented": "VSCodeVim 1.32.4 ROT13Operator (operator.ts L760-L781) changes the single selected character without leaving Visual. SearchObject (search.ts L238-L291) uses match.end-1 for backwards gN, yielding eta on line0 columns7-9 after /eta then0. PlaceCursorAfterText (put.ts L476-L555) and gP's overwritesRegisterWithSelection replace t with two, place cursor at [1,15], and keep only setup yank0 plus overwritten unnamed t; no delete-history action name applies. gf (file.ts L62-L114) fails for selected w in the harness workspace containing only a.txt/b.txt; modeHandler.ts L526-L536 leaves Visual selection. gq's own reflow (operator.ts L1120-L1137), not a formatter, preserves this line under textwidth80 and returns Normal at column0. Scoped to exact Visual g keys and recorded setups, one-cell fixture, no file w and fixed textwidth.",
+            "measured": {
+              "pass": "source-wave4 (2231a60; 2 versions x 2 settings x 3 trials; actual Ex contents)",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
