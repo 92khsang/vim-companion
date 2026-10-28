@@ -33,9 +33,8 @@ L194-L201). The three Insert cancel rows keep their actual exit token. Insert `C
 Measured: on VS Code 1.141.0 with VSCodeVim 1.32.4, the source-derived expectations matched the
 saved trials selected by `selected-new-rules.json`; its `results` list names every compared
 condition, trial and source-directory index. Vim expectations remain in each card's `expect`.
-The matching VSCodeVim expectations are separate `vscodevim` fields. The raw data does not
-establish that every new expectation passes both settings on both versions; fresh validation
-and the complete second pass are still required.
+The matching VSCodeVim expectations are separate `vscodevim` fields. Those legacy trials alone did not establish both settings on both versions. The later
+source-rule proof below supplies that focused coverage; the complete second pass is still required.
 
 Reproduce from the repository root (Node 24, Python 3):
 
@@ -153,3 +152,42 @@ node spike/s2/check1/deviations.mjs classify "$D/representative" "$W/current-inp
 python3 -I -B spike/s2/check1/rescore.py "$W/current-input" "$W/representative-rescore.json" \
   "$D/representative"
 ```
+
+## Source-rule proof across versions and settings
+
+`source-proof/` preserves the frozen `27a27f9` inputs and all 876 trials: 72 defaults and
+74 extensions rows, three trials each, on VS Code 1.134.0 and 1.141.0. The original result is
+874 passing trials and two failures. Both failures are the first extensions trial of
+`"a3d` + Ctrl-Left, one on each version: its prediction copied the
+same-card `b` expectation without composing the named small-delete register rule. The first
+trial writes `-`; subsequent trials already have that value. The failures remain in the raw
+files and are not relabeled as original passes.
+
+The source-derived composition first obtains `b`'s text/cursor/mode, then applies the existing
+register bookkeeping rule. With that composition, exact diagnostic rescoring of complete
+before/after register snapshots matches all 876 trials (292 row/setting/version groups).
+`rescore-with-composed-register-rule.json` records this diagnostic result. It is not another
+IDE run. `selected-source-proof-rules.json` promotes 59 differing rows / 118 row-setting
+expectations, each supported by all four conditions and three trials per condition. The
+remaining predicted rows already matched Vim and need no override. A separate focused run
+will check the composed expectation directly. This is still not the full second pass.
+
+## Pure Normal scrolling and repeated substitution
+
+`selected-scroll-substitute.json` adds four rows / eight row-setting expectations with
+48 matching representative trials. Pure Normal Ctrl-B with setup `zb` clamps the cursor to
+line 0 despite the view already being at the top (`src/actions/commands/scroll.ts` L89-L148).
+Default `startofline` then selects the first nonblank (`src/common/motion/position.ts`
+L553-L560, `src/configuration/configuration.ts` L441). The fixture and measured editor geometry
+show all five document lines. The raw trials do not directly record viewport state, so this
+does not claim a measured absence of viewport leakage. Count, register, operator and Visual
+contexts are excluded. Pure Normal M already passes and is unchanged.
+
+Normal `&` runs a parsed `s` command once, ignoring a Normal count (`src/actions/commands/actions.ts`
+L407-L416, `src/actions/base.ts` L171-L189). With the exact setup `:s/e/X/`, setup replaces the
+first e on the cursor line and `&` replaces its next e. The command reuses the substitution
+pattern without writing `/` and places the cursor at column 0 (`src/cmd_line/commands/substitute.ts`
+L510-L650). Setup writes `:` as an empty-action RecordedState (`src/cmd_line/commandLine.ts`
+L262-L271), which the probe reads as empty keys. The rule checks the setup and excludes register
+prefixes and operators. Its labels describe the repeat and the ignored count; obsolete
+no-previous-substitution wording is retained only as historical `vimLabel`.

@@ -142,7 +142,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "Repeat the last :s on the current line (none in this run: E35)",
+      "label": "Repeat the last substitution on the current line",
       "labelFrom": "hand",
       "labelIndex": "index.txt L264 |&|",
       "expect": {
@@ -176,7 +176,74 @@
         },
         "basis": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-417 (& runs :s), src/cmd_line/commands/substitute.ts L509-543 (resolvePatterns throws E35 at L524 without a previous substitute, nothing changes); no card of cards.json types <CR> after :, so no earlier row of the run sets a substitute (Inferred from cards.json); a setup that sets one needs <CR>, which harness/lib.mjs keysym cannot type"
       },
-      "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>"]
+      "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>"],
+      "vimLabel": "Repeat the last :s on the current line (none in this run: E35)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "keys": ""
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "keys": ""
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
+      }
     },
     {
       "key": "'",
@@ -767,6 +834,56 @@
         },
         "basis": "setup z b scrolls line 1 to the bottom, so the view starts at line 0 and visibleRanges[0] is lines 0-4 (VSCodeVim 1.32.4 src/actions/commands/scroll.ts L292-311, VS Code revealLine at bottom); VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-161 (CommandScrollAndMoveCursor: cursor count x page lines away, clamped to the 5 document lines, first non-blank with startofline); 1 x 4 lines up from line 1 clamps to line 0",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "page-back-clamps-cursor",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -980,12 +1097,39 @@
               "mode": "normal"
             },
             "rule": "ctrl-left-is-small-word",
-            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",

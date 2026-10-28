@@ -341,6 +341,43 @@ export const RULES = [
     },
   },
   {
+    id: "page-back-clamps-cursor",
+    title:
+      "Ctrl-B moves the cursor toward the document start even when the view cannot scroll",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L138 clamps the cursor line after subtracting the page movement regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture and zb setup, pure Normal Ctrl-B reaches line 0, whose first nonblank is column 0. No count/operator/Visual rule is inferred.",
+    applies: ({ card, key }) => card === "normal []" && key === "<C-b>",
+    transform(w, { setup }) {
+      return sameJson(setup, ["z", "b"])
+        ? { ...w, cursor: [0, START.lines[0].search(/\S/)] }
+        : null;
+    },
+  },
+  {
+    id: "repeat-substitute-current-line",
+    title:
+      "& repeats substitution once on the current line and ignores a Normal count",
+    documented:
+      "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+    applies: ({ mode, pending, key }) =>
+      mode === "normal" &&
+      key === "&" &&
+      pending.every((k) => /^[0-9]$/.test(k)),
+    transform(w, { setup }) {
+      if (!sameJson(setup, [":", "s", "/", "e", "/", "X", "/", "<CR>"]))
+        return null;
+      const line = START_POS[0];
+      // Setup replaces the first e; & replaces the first remaining e on that same line.
+      const after = START.lines[line].replace("e", "X").replace("e", "X");
+      return {
+        text: { [line]: after },
+        cursor: [line, 0],
+        mode: "normal",
+        registers: { ":": { mode: "character", keys: "" } },
+      };
+    },
+  },
+  {
     id: "insert-dot-recorded-keys",
     title:
       "the last insertion register stores recorded keys instead of inserted text",
@@ -589,6 +626,7 @@ if (cmd === "classify") {
         const e = rule.transform(w.vim ?? w.expect, {
           ...ctx,
           sample: w.sample,
+          setup: w.setup,
           engineOf: (c, k) => want[`${set}\0${c}\0${k}`]?.expect ?? null,
           vimOf: (c, k) => {
             const x = want[`${set}\0${c}\0${k}`];
@@ -672,6 +710,7 @@ if (cmd === "classify") {
           pending,
           ops: opsOf(pending),
           sample: row.sample,
+          setup: row.setup,
           engineOf: (c, k) => byKey.get(`${c}\0${k}`)?.expect ?? null,
           vimOf: (c, k) => {
             const r = byKey.get(`${c}\0${k}`);
@@ -779,6 +818,18 @@ if (cmd === "classify") {
               : r.key === "I"
                 ? "Insert at the selection start (VSCodeVim)"
                 : "Append after the selection end (VSCodeVim)";
+        for (const value of Object.values(row.bySet ?? {})) {
+          if (value.label) {
+            value.vimLabel ??= value.label;
+            value.label = row.label;
+          }
+        }
+      }
+      if (r.rule === "repeat-substitute-current-line") {
+        row.vimLabel ??= row.label;
+        row.label =
+          "Repeat the last substitution on the current line" +
+          (pendingOf(r.card).length ? " (VSCodeVim ignores the count)" : "");
         for (const value of Object.values(row.bySet ?? {})) {
           if (value.label) {
             value.vimLabel ??= value.label;

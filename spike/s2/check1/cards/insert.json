@@ -65,10 +65,43 @@
             "rule": "insert-dot-recorded-keys",
             "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "i<C-[>"
+                }
+              }
+            },
+            "rule": "insert-dot-recorded-keys",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -158,10 +191,45 @@
             "rule": "insert-dot-recorded-keys",
             "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tXXwo\", [three]) { four(five) }"
+              },
+              "cursor": [1, 14],
+              "mode": "insert",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "iX<Esc>"
+                }
+              }
+            },
+            "rule": "insert-dot-recorded-keys",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -212,10 +280,43 @@
             "rule": "insert-dot-recorded-keys",
             "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "i<C-c>"
+                }
+              }
+            },
+            "rule": "insert-dot-recorded-keys",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -691,10 +792,43 @@
             "rule": "insert-dot-recorded-keys",
             "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "i<Esc>"
+                }
+              }
+            },
+            "rule": "insert-dot-recorded-keys",
+            "documented": "VSCodeVim 1.32.4 src/mode/modeHandler.ts L657-L700 records the original action keys, and L815-L842 saves RecordedState to . when a repeatable insertion returns to Normal; src/register/register.ts L194-L201 stores it CharacterWise. ExitInsertMode keeps the original Esc/C-c/C-[ token (src/actions/commands/insert.ts L210-L248). InsertPreviousText (L295-L332) replays the previous insertion without its first and last actions, leaving . unchanged while still in Insert mode.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",

@@ -56,7 +56,11 @@ test("legacy missing baselines remain unknown", () => {
 
 test("Ctrl-Left composes b with the named-delete register rule", () => {
   const rule = RULES.find((r) => r.id === "ctrl-left-is-small-word");
-  const b = { ...expect, registers: { a: text, '"': text } };
+  const b = {
+    ...expect,
+    text: ["word result"],
+    registers: { a: text, '"': text },
+  };
   const result = rule.transform(expect, {
     card: 'normal ["\\\"","a","3","d"]',
     pending: ['"', "a", "3", "d"],
@@ -67,6 +71,28 @@ test("Ctrl-Left composes b with the named-delete register rule", () => {
   });
   assert.deepEqual(result.registers, { a: text, '"': text, "-": text });
   assert.deepEqual(result.cursor, b.cursor);
+  assert.deepEqual(result.text, b.text);
+});
+
+test("scroll and substitution predictions require their recorded setup", () => {
+  const scroll = RULES.find((r) => r.id === "page-back-clamps-cursor");
+  assert.equal(scroll.applies({ card: 'normal ["3"]', key: "<C-b>" }), false);
+  assert.equal(scroll.transform(expect, { setup: [] }), null);
+  assert.deepEqual(
+    scroll.transform(expect, { setup: ["z", "b"] }).cursor,
+    [0, 0],
+  );
+  const substitute = RULES.find(
+    (r) => r.id === "repeat-substitute-current-line",
+  );
+  assert.equal(substitute.transform(expect, { setup: [] }), null);
+  const result = substitute.transform(expect, {
+    setup: [":", "s", "/", "e", "/", "X", "/", "<CR>"],
+  });
+  assert.deepEqual(result.text, {
+    1: '  if (onX, "two", [thrXe]) { four(five) }',
+  });
+  assert.deepEqual(result.registers, { ":": { mode: "character", keys: "" } });
 });
 
 test("counted boundary rule excludes registers, operators and Visual mode", () => {

@@ -155,7 +155,7 @@
       "setup": [":", "s", "/", "e", "/", "X", "/", "<CR>"],
       "source": "vim-oracle",
       "reason": "state: last substitute; & reads the last substitute",
-      "label": "Repeat the last :s on the cursor line",
+      "label": "Repeat the last substitution on the current line (VSCodeVim ignores the count)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L264 |&|",
       "expect": {
@@ -214,6 +214,73 @@
         },
         "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L405-416 (RepeatSubstitution runs :s once on the cursor line; the count is not used) and src/cmd_line/commands/substitute.ts L507-650 (the last pattern and replacement; the cursor goes to column 0 of the last changed line); setup :s/e/X/ changes (1,8) and sets the read-only : register, a RecordedState that the probe shows as keys '' (spike/s2/extensions/s2-probe/extension.js registerContents)",
         "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured"
+      },
+      "vimLabel": "Repeat the last :s on the cursor line",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "keys": ""
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (onX, \"two\", [thrXe]) { four(five) }"
+              },
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                ":": {
+                  "mode": "character",
+                  "keys": ""
+                }
+              }
+            },
+            "rule": "repeat-substitute-current-line",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L407-L416 executes the parsed s command once; actions/base.ts L171-L189 does not repeat counts by default. cmd_line/commands/substitute.ts L510-L549 reuses the substitution pattern/replacement on the current line and L627-L650 places the cursor at column 0 without writing the search register. The setup :s/e/X/ is stored in : as an empty-action RecordedState (cmd_line/commandLine.ts L262-L271), whose probe representation is keys ''. Scoped to this exact setup and pure Normal count prefixes.",
+            "measured": {
+              "pass": "Representative check 2026-10-28 at 104f9ef: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; source-derived pure Normal scroll and substitution expectations, full register baselines",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1186,12 +1253,39 @@
               "mode": "normal"
             },
             "rule": "ctrl-left-is-small-word",
-            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 9],
+              "mode": "normal"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -2389,10 +2483,37 @@
             "rule": "viewport-edge-ignores-count",
             "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "normal"
+            },
+            "rule": "viewport-edge-ignores-count",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -2499,10 +2620,37 @@
             "rule": "viewport-edge-ignores-count",
             "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 2
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [4, 0],
+              "mode": "normal"
+            },
+            "rule": "viewport-edge-ignores-count",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",

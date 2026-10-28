@@ -918,12 +918,39 @@
               "mode": "visual"
             },
             "rule": "ctrl-left-is-small-word",
-            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions.",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 1
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 9],
+              "mode": "visual"
+            },
+            "rule": "ctrl-left-is-small-word",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1569-L1574 binds b and <C-left> to MoveBeginningWord; Vim 9.1 doc/motion.txt *<C-Left>* binds CTRL-Left to B. The committed key-delivery proof records <C-left> on both VS Code versions. Operator rows compose the register bookkeeping rule (src/register/register.ts L216-L251), including the small-delete register with a named register.",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -1915,10 +1942,37 @@
             "rule": "viewport-edge-ignores-count",
             "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 1
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 0],
+              "mode": "visual"
+            },
+            "rule": "viewport-edge-ignores-count",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -1958,10 +2012,37 @@
             "rule": "visual-insert-selection-boundary",
             "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, 2026-10-28; independent source inspection at VSCodeVim v1.32.4; raw data in data/check1/resume-2026-10-28/legacy",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 1
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "visual-insert-selection-boundary",
+            "documented": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L814-L827 makes Visual I insert at the selection start and L832-L845 makes Visual A append after its end. Visual Line I uses firstNonWhitespaceCharacter (L794-L800), while A uses line end (L804-L810).",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
@@ -2043,10 +2124,37 @@
             "rule": "viewport-edge-ignores-count",
             "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
             "measured": {
-              "pass": "Recheck guarded and early, confirmation2 and confirmation-all on VS Code 1.141.0, defaults, 2026-10-28; latest harness cd33f9a; independently derived source rules",
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
               "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
                 "defaults 1.141.0": {
-                  "trials": 1
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [4, 0],
+              "mode": "visual"
+            },
+            "rule": "viewport-edge-ignores-count",
+            "documented": "VSCodeVim 1.32.4 src/actions/motion.ts L1272-L1341 overrides execActionWithCount for H and L without using count; it moves to the top or bottom visible line (with editor cursorSurroundingLines away from a document edge).",
+            "measured": {
+              "pass": "Source-rule proof 2026-10-28 at 27a27f9: both settings, VS Code 1.134.0 and 1.141.0, 3 trials each; exact before/after register comparison including composed Ctrl-Left register bookkeeping",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
                 }
               },
               "verdict": "match",
