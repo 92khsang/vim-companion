@@ -209,6 +209,51 @@ try {
     });
     await sleep(150);
   }
+  // Ctrl-6 opens b.txt in group 1. Its view state is independent of group 2's
+  // visible editor, so seed the target group before capturing the trial baseline.
+  async function prepareAlternateFile() {
+    await code.probe.call("open", {
+      files: [{ path: files[1].path, viewColumn: 1 }],
+    });
+    focusWindow(code);
+    await code.probe.call("exec", {
+      command: "workbench.action.focusFirstEditorGroup",
+    });
+    typeKeys(display, RESET_KEYS, 30);
+    await sleep(150);
+    await code.probe.call("reset", START);
+    await sleep(150);
+    const snap = await code.probe.call("snapshot");
+    const editor = snap.editors.find(
+      (e) => e.uri === snap.active && e.viewColumn === 1,
+    );
+    const mode = (await code.probe.call("vimState")).state?.mode ?? null;
+    const prepared = {
+      file: snap.active?.replace(/^.*\//, "") ?? null,
+      viewColumn: snap.activeViewColumn,
+      text: editor?.text.replace(/\n$/, "").split("\n") ?? null,
+      selections: editor?.selections ?? null,
+      mode,
+    };
+    const { line, column } = START.cursor;
+    if (
+      prepared.file !== "b.txt" ||
+      prepared.viewColumn !== 1 ||
+      JSON.stringify(prepared.text) !== JSON.stringify(START.lines) ||
+      JSON.stringify(prepared.selections) !==
+        JSON.stringify([[line, column, line, column]]) ||
+      prepared.mode !== "normal"
+    )
+      throw new Error(
+        "alternate-file preparation did not reach the fixture state",
+      );
+    await code.probe.call("open", { files: [files[0]] });
+    await code.probe.call("exec", {
+      command: "workbench.action.closeOtherEditors",
+    });
+    await sleep(150);
+    return prepared;
+  }
   await resetB();
   // A row such as `q a` leaves a macro recording on, which would record the next rows and make a
   // later `q` stop it instead of starting one: every trial starts with no recording (up to 3 tries).
@@ -223,7 +268,10 @@ try {
   }
   // Every trial starts from Normal mode, the two files in their groups with a.txt active, no macro
   // being recorded, and the fixture text and cursor.
-  async function resetTrial({ clearJumps = false } = {}) {
+  async function resetTrial({
+    clearJumps = false,
+    alternateFile = false,
+  } = {}) {
     typeKeys(display, RESET_KEYS, 30);
     await sleep(80);
     await code.probe.call("exec", { command: "expandLineSelection" });
@@ -273,6 +321,9 @@ try {
     });
     await sleep(100);
     await stopRecording();
+    const alternatePreparation = alternateFile
+      ? await prepareAlternateFile()
+      : null;
     // VSCodeVim keeps one jump list for the session (jumps/jumpTracker.ts), which the oracle's
     // fresh Vim does not have: a row that reads it (<C-o>, <C-i>, <Tab>) starts with it cleared
     // (:clearjumps, cmd_line/commands/jumps.ts L51). Only those rows: the command line it runs
@@ -304,6 +355,7 @@ try {
       typeKeys(display, ["<Esc>"], 30);
       await sleep(200);
     }
+    return alternatePreparation;
   }
   // A negative row (check1/unsupported.mjs): the row's token is one that nothing on Linux produces.
   // A trial sends, in the row's state, each chord a Linux user would press for it (card-keys.mjs
@@ -404,8 +456,23 @@ try {
         row.sample ?? row.key,
       ].some((k) => JUMP_KEYS.has(k));
       for (let trial = 0; trial < Number(trialsArg); trial++) {
-        await resetTrial({ clearJumps });
+        const alternatePreparation = await resetTrial({
+          clearJumps,
+          alternateFile: row.key === "<C-6>",
+        });
         const before = await code.probe.call("registers");
+        if (
+          alternatePreparation &&
+          (!sameReg(regValue(before["%"]), {
+            mode: "character",
+            lines: ["a.txt"],
+          }) ||
+            !sameReg(regValue(before["#"]), {
+              mode: "character",
+              lines: ["b.txt"],
+            }))
+        )
+          throw new Error("alternate-file register baseline was not restored");
         // A row may set up a precondition (such as a mark) after the reset and before the card's keys.
         if (setupPlan) {
           await send(setupPlan);
@@ -505,6 +572,7 @@ try {
             st.keys ? { keys: st.keys.map(keysym) } : { exec: st.exec },
           ),
           trial,
+          ...(alternatePreparation ? { alternatePreparation } : {}),
           ok: diff.length === 0,
           diff,
           got,
