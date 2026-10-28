@@ -477,6 +477,25 @@ Check (2) also runs on that final frozen build: render each freshly built `cards
 with `harness/cards-complete.mjs`, on both versions and settings, against the matching engine
 reference. Require 59 rendered cards and zero missing, extra or duplicate rows. This validates
 what the webview actually displays after label updates, separately from keyboard effects.
+`batch/check2.sh` builds the current labels, decompresses the four pinned `cards3` engine
+references into a new data directory, and runs those four conditions with the same batch locks.
+It installs the card input only into each sandbox's extension copy; the frozen source remains
+unchanged. The raw result includes every rendered card ID and row's key, description and
+unsupported text, plus input/reference hashes and the clean build. The independent
+`batch/check2-verify.mjs` rebuilds the current input and checks the rendered cells against both
+that input and the matching engine reference. Extra or duplicate card IDs, stale labels and
+missing unsupported explanations fail alongside missing/extra/duplicate keys. Twelve synthetic
+and sandbox-copy regressions pass; actual rendering with this instrument still requires the
+final four-condition run.
+
+```bash
+# Run from the final frozen checkout with the same S2 environment and a new check2 directory.
+bash spike/s2/batch/check2.sh
+node spike/s2/batch/check2-verify.mjs "$S2_BATCH_DATA/check2" "$(git rev-parse HEAD)" > "$S2_BATCH_DATA/check2/verification.json"
+```
+
+The batch stops on any failed renderer condition, verification failure or leftover sandbox
+resource. Preserve the failed attempt and select a new data root; never overwrite its evidence.
 Measured subset durations are 1.537-1.873 seconds per trial in the saved source-wave metadata;
 a linear 42,450-trial extrapolation is 18-22 hours, before differences in negative-row work and
 startup cost. This is an estimate, not a cutoff or a reason to reduce coverage.

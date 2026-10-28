@@ -485,7 +485,10 @@ export function prepareInstance({
   name,
   spikeExtensions = ["s2-probe"],
   settings = {},
+  cardsFile,
 }) {
+  if (cardsFile && !spikeExtensions.includes("s2-cards"))
+    throw new Error("cardsFile requires the s2-cards sandbox extension");
   const inst = join(ROOT(), "inst", name);
   rmSync(inst, { recursive: true, force: true });
   for (const d of ["data/User", "ext", "home", "ws", "logs"])
@@ -509,6 +512,11 @@ export function prepareInstance({
       }
     }
   }
+  if (cardsFile)
+    cpSync(
+      cardsFile,
+      join(inst, "ext", "vim-companion-spike.s2-cards-0.0.1", "cards.json"),
+    );
   const text = START.lines.join("\n") + "\n";
   writeFileSync(join(inst, "ws/a.txt"), text);
   writeFileSync(join(inst, "ws/b.txt"), text);
@@ -736,9 +744,10 @@ export async function openSession({
   disable = [],
   spikeExtensions,
   settings,
+  cardsFile,
   onHostUp,
 }) {
-  const inst = prepareInstance({ name, spikeExtensions, settings });
+  const inst = prepareInstance({ name, spikeExtensions, settings, cardsFile });
   const code = await startCode({
     version,
     display,
