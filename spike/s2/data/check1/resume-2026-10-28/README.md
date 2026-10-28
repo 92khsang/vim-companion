@@ -209,8 +209,8 @@ Ctrl-B evidence. Each of its eight rows has four conditions and three trials per
   register therefore ends in an empty line, with the usual numbered-register shift.
 - `dM` uses a CharacterWise range: MoveByScreenLine overrides the count method and returns a
   Position without marking it LineWise (`motion.ts` L95-L124/L1338-L1343). VS Code's
-  [1.134.0 viewport-center implementation](https://github.com/microsoft/vscode/blob/474a349ad5b745e512ef86b864d1c74f7264dd7a/src/vs/editor/common/cursor/cursorMoveCommands.ts#L326-L346)
-  and [1.141.0 product commit](https://github.com/microsoft/vscode/blob/2a59476c9bfcb90b3ddc372c36762471b7dfad1c/src/vs/editor/common/cursor/cursorMoveCommands.ts#L326-L346)
+  [1.134.0 viewport-center implementation](https://github.com/microsoft/vscode/blob/110a328ea54b42367b803ec53ee0bf52ef26b419/src/vs/editor/common/cursor/cursorMoveCommands.ts#L357-L392)
+  and [1.141.0 product commit](https://github.com/microsoft/vscode/blob/2a59476c9bfcb90b3ddc372c36762471b7dfad1c/src/vs/editor/common/cursor/cursorMoveCommands.ts#L357-L392)
   use the rounded midpoint of the visible five document lines, giving `[2, 0]`. The operator
   thus deletes the suffix of line 1 and its newline, joining line 2 onto the remaining prefix.
   The label states that the range is characterwise. Counted/named dM are source predictions
@@ -273,3 +273,32 @@ groups and zero mixed earlier trials. All newly selected corrections used indivi
 cohorts, so none depended on an outcome-based exclusion. `rescore.py` separately preserves
 older cohorts and uses its explicit newest-directory priority for diagnostic comparisons;
 that priority is not an experiment-validity verdict.
+
+## Fresh residual diagnosis and pending source confirmations
+
+`residual-diagnostic/` preserves 568 trials at frozen `4b1d005`: 284 selected rows per settings
+set, one trial each on VS Code 1.141.0. Original flags are 105 pass / 463 fail. With the source
+rules confirmed above, exact diagnostic rescoring gives 129 pass / 439 fail and no unknown
+register baselines. This one-trial diagnosis is not the required final matrix.
+
+The source classifier identifies 25 additional row corrections / 39 row-setting expectations
+from existing register, dM and scroll rules. `source-candidates.json` contains only expectations
+computed by those rules. `unverified-known-deviation-candidates.json` separately checks earlier
+inferences: 76 of 78 candidate row-setting values match, but matching does not verify their
+source reasoning and is not permission to apply them.
+
+`source-followup-input/` contains 107 row-setting predictions for the next two-version,
+three-trial confirmation (642 trials). Besides the 39 existing-rule candidates it includes
+Normal r's preserved dot register, three precisely prepared jump sequences, remaining Ctrl-B
+count/register/Visual contexts, eight Normal Ctrl-T rows with the corrected clearJumps reset,
+four dot-repeat rows and six Visual put rows. These predictions are derived from source before
+measurement; their unconfirmed rows are not promoted to the authored cards. Insert Ctrl-T
+and Tab are excluded. The Visual put rule applies only with the harness's default false
+useSystemClipboard setting and each recorded setup.
+
+The alternate-file source rule is independently confirmed by the parent's `alternate-file/`
+96-trial run with explicit group-1 b.txt preparation. `selected-alternate-rules.json` applies
+its eight rows / 16 row-setting expectations, with `%` and `#` swaps and count-aware labels.
+Ctrl-^ negative-delivery rows remain unchanged. Viewport-center source links now use the
+actual installed 1.134.0 product commit `110a328ea54b42367b803ec53ee0bf52ef26b419`; the compared
+1.134.0/1.141.0 source files are byte-identical, and the raw-source viewport range is L357-L392.

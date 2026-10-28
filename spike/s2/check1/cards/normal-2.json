@@ -518,7 +518,7 @@
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
       "reason": "outside: file or tag; <c-^> (file or tag)",
-      "label": "Edit buffer 2",
+      "label": "Edit the alternate file (VSCodeVim ignores the count)",
       "labelIndex": "index.txt L245 |CTRL-^|",
       "expect": {
         "text": "unchanged",
@@ -539,6 +539,77 @@
         "description": "VSCodeVim opens the file of register # (b.txt, the previous active editor) in the active group, whatever the count and whether a.txt has unsaved changes; the cursor is where VS Code puts b.txt's editor",
         "basis": "src/actions/commands/file.ts L30-58 (GoToAlternateFile: Register.get('#'), workspace.findFiles, window.showTextDocument; no count, no dirty check); extensionBase.ts L218-227 (sets # to the previous active editor's path)",
         "status": "Inferred: read from the VSCodeVim 1.32.4 source for this re-derivation; not measured"
+      },
+      "vimLabel": "Edit buffer 2",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "alternate-file-prepared-view",
+            "documented": "VSCodeVim 1.32.4 actions/commands/file.ts L29-L58 opens the # file in the active group. actions/base.ts L176/L188-L189 does not repeat the command for a count, and the command does not use registerName. extensionBase.ts L218-L227 updates # from the old % and % from the new relative path. The harness prepares b.txt at START in group 1 before the register baseline; this rule is valid only with that explicit precondition. Scoped to Normal Ctrl-6 with empty/positive-digit prefixes, optionally naming a/+/_, and no setup. Ctrl-^ negative delivery rows are excluded.",
+            "measured": {
+              "pass": "Alternate-file confirmation 2026-10-28 at 365bcb4: explicit group-1 b.txt preparation at START before baseline; both settings, VS Code 1.134.0 and 1.141.0, 3 trials each, all activeFile values b.txt",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                "%": {
+                  "mode": "character",
+                  "lines": ["b.txt"]
+                },
+                "#": {
+                  "mode": "character",
+                  "lines": ["a.txt"]
+                }
+              }
+            },
+            "rule": "alternate-file-prepared-view",
+            "documented": "VSCodeVim 1.32.4 actions/commands/file.ts L29-L58 opens the # file in the active group. actions/base.ts L176/L188-L189 does not repeat the command for a count, and the command does not use registerName. extensionBase.ts L218-L227 updates # from the old % and % from the new relative path. The harness prepares b.txt at START in group 1 before the register baseline; this rule is valid only with that explicit precondition. Scoped to Normal Ctrl-6 with empty/positive-digit prefixes, optionally naming a/+/_, and no setup. Ctrl-^ negative delivery rows are excluded.",
+            "measured": {
+              "pass": "Alternate-file confirmation 2026-10-28 at 365bcb4: explicit group-1 b.txt preparation at START before baseline; both settings, VS Code 1.134.0 and 1.141.0, 3 trials each, all activeFile values b.txt",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

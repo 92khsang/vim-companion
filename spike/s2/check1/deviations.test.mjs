@@ -87,11 +87,11 @@ test("scroll and substitution predictions require their recorded setup", () => {
   );
   assert.equal(
     scroll.applies({ mode: "visual-block", pending: [], key: "<C-b>" }),
-    false,
+    true,
   );
   assert.equal(scroll.transform(expect, { setup: [] }), null);
   assert.deepEqual(
-    scroll.transform(expect, { setup: ["z", "b"] }).cursor,
+    scroll.transform(expect, { setup: ["z", "b"], mode: "normal" }).cursor,
     [0, 0],
   );
   const substitute = RULES.find(
@@ -151,6 +151,37 @@ test("sentence EOF rule preserves distinct writer sets and rejects other context
       fixture: { ...START, lines: ["Sentence.", ...START.lines.slice(1)] },
     }),
     null,
+  );
+});
+
+test("replace and jump predictions reject unreviewed modes and setups", () => {
+  const replace = RULES.find(
+    (r) => r.id === "replace-character-keeps-dot-register",
+  );
+  assert.equal(replace.applies({ card: "normal []", key: "R" }), false);
+  assert.equal(
+    replace.transform(expect, { key: "{<character>}", sample: "e" }),
+    null,
+  );
+  const result = replace.transform(
+    { ...expect, registers: { ".": text, a: old } },
+    { key: "r" },
+  );
+  assert.deepEqual(result.registers, { a: old });
+  const jump = RULES.find((r) => r.id === "counted-jump-list-boundary");
+  assert.equal(jump.applies({ card: "insert []", key: "<C-o>" }), false);
+  assert.equal(jump.applies({ card: 'normal ["3","0"]', key: "<Tab>" }), false);
+  assert.equal(
+    jump.transform(expect, { card: 'normal ["3"]', key: "<C-o>", setup: [] }),
+    null,
+  );
+  assert.deepEqual(
+    jump.transform(expect, {
+      card: 'normal ["3","0"]',
+      key: "<C-o>",
+      setup: ["g", "g"],
+    }).cursor,
+    [1, 13],
   );
 });
 

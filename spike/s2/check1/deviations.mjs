@@ -127,6 +127,18 @@ function kindOfVisual(mode, ops, key) {
   return null;
 }
 const START_POS = [START.cursor.line, START.cursor.column];
+const countRegisterPrefix = (pending) => {
+  let count = pending;
+  if (count[0] === '"') {
+    if (!["a", "+", "_"].includes(count[1])) return false;
+    count = count.slice(2);
+  }
+  return (
+    count.length === 0 ||
+    (count.every((key) => /^[0-9]$/.test(key)) &&
+      /^[1-9][0-9]*$/.test(count.join("")))
+  );
+};
 /** Known VSCodeVim behaviours that explain a group of rows only in part; listed with residual rows. */
 export const NOTES = {
   "dot-register-keys":
@@ -345,15 +357,25 @@ export const RULES = [
     title:
       "Ctrl-B moves the cursor toward the document start even when the view cannot scroll",
     documented:
-      "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L89-L148 subtracts count times the page height and clamps the cursor line regardless of whether the editor scrolls. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, the cursor reaches line 0, whose first nonblank is column 0; accepted setups are zb or ggj13l (restoring the fixture cursor). mode/modeHandler.ts L1309-L1334 draws a backward Visual/VisualLine selection with active end [0,0]. Scoped to Normal digit-only prefixes and plain Visual/VisualLine; register prefixes, operators and VisualBlock are excluded.",
+      "VSCodeVim 1.32.4 src/actions/commands/scroll.ts L76-L155 supports Normal and all Visual modes, subtracts count times the page height and ignores registerName. actions/commands/actions.ts L61-L135 only records count/register prefixes. common/motion/position.ts L553-L560 applies startofline (configuration/configuration.ts L441 defaults true). With this short fixture, stop reaches [0,0]; setups are zb or ggj13l. mode/modeHandler.ts L1309-L1346 draws active [0,0] for backward Visual/VisualLine, and textEditor.ts L209-L241 draws the first block selection at [0,14] from anchor [1,13]. Scoped to empty/positive-digit prefixes, optionally naming a/+/_; operators and other prefixes are excluded.",
     applies: ({ mode, pending, key }) =>
       key === "<C-b>" &&
-      ((mode === "normal" && pending.every((k) => /^[0-9]$/.test(k))) ||
-        (["visual", "visual-line"].includes(mode) && pending.length === 0)),
-    transform(w, { setup }) {
+      ["normal", "visual", "visual-line", "visual-block"].includes(mode) &&
+      countRegisterPrefix(pending),
+    transform(w, { setup, mode }) {
       return sameJson(setup, ["z", "b"]) ||
         sameJson(setup, ["g", "g", "j", "1", "3", "l"])
-        ? { ...w, cursor: [0, START.lines[0].search(/\S/)] }
+        ? {
+            ...w,
+            cursor: harnessCursor(
+              {
+                mode,
+                cursor: [0, START.lines[0].search(/\S/)],
+                visualStart: START_POS,
+              },
+              START.lines,
+            ),
+          }
         : null;
     },
   },
@@ -416,7 +438,7 @@ export const RULES = [
     title:
       "dM uses a characterwise range through the newline before the viewport center",
     documented:
-      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L326-L346 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
+      "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 overrides execActionWithCount, delegates viewportCenter to cursorMove and returns Position without setting LineWise. VS Code cursorMoveCommands.ts L357-L392 (1.134.0 and 1.141.0 product commit 2a59476c9bfcb90b3ddc372c36762471b7dfad1c) uses the rounded visible-line midpoint and ignores count, giving [2,0] for this five-line document. mode/modeHandler.ts L1015-L1047/L1098-L1100 preserves start [1,13] and decreases stop to [1,EOL]; actions/operator.ts L110-L151 includes that newline in the delete. register/register.ts L216-L260 performs characterwise deletion bookkeeping. Scoped to Normal dM without setup; counted/named prefixes are predictions until measured.",
     applies: ({ mode, ops, key }) =>
       mode === "normal" && sameJson(ops, ["d"]) && key === "M",
     transform(w, { pending, setup }) {
@@ -472,6 +494,185 @@ export const RULES = [
         mode: "normal",
         registers,
         shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "replace-character-keeps-dot-register",
+    title:
+      "Normal r replaces a character without updating the last-insertion register",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/replace.ts L12-L75 queues replaceText in Normal mode without entering Insert. state/recordedState.ts L146 initializes isInsertion=false; mode/modeHandler.ts L715-L716 only sets it in Insert, and L838-L840 guards the dot-register write with isInsertion. Thus normal r/r and r/X leave the prior dot register unchanged. Scoped to the two normal-r card rows without setup; counted, Visual and Replace mode are excluded.",
+    applies: ({ card, key }) =>
+      card === 'normal ["r"]' && ["r", "{<character>}"].includes(key),
+    transform(w, { key, sample, setup }) {
+      if (setup?.length || (key === "{<character>}" && sample !== "X"))
+        return null;
+      return {
+        ...w,
+        registers: Object.fromEntries(
+          Object.entries(w.registers ?? {}).filter(([name]) => name !== "."),
+        ),
+      };
+    },
+  },
+  {
+    id: "counted-jump-list-boundary",
+    title:
+      "counted jumps follow VSCodeVim's same-line deduplication and endpoint clamping",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L117 and jumps/jumpTracker.ts L162-L233 loop the count before updating the cursor; L311-L348 appends jumps and removes older entries on the same line. From the harness's cleared list, setup j G gg 2G G followed by 3<C-o> reaches [2,13]; setup gg <C-o> followed by 30<C-i> clamps at [0,0]; setup gg followed by 30<C-o> clamps at [1,13]. modeHandler.ts L722-L726 records jump motions; motion.ts L1354-L1403 defines gg/G. Scoped to these exact Normal cards and setups, START [1,13], and the harness clearJumps precondition. Insert Ctrl-O and Tab are excluded.",
+    applies: ({ card, key }) =>
+      (card === 'normal ["3"]' && key === "<C-o>") ||
+      (card === 'normal ["3","0"]' && ["<C-o>", "<C-i>"].includes(key)),
+    transform(w, { card, key, setup }) {
+      if (!sameJson(START_POS, [1, 13]) || START.lines.length !== 4)
+        return null;
+      if (
+        card === 'normal ["3"]' &&
+        sameJson(setup, ["j", "G", "g", "g", "2", "G", "G"])
+      )
+        return { ...w, cursor: [START_POS[0] + 1, START_POS[1]] };
+      if (
+        card === 'normal ["3","0"]' &&
+        key === "<C-i>" &&
+        sameJson(setup, ["g", "g", "<C-o>"])
+      )
+        return { ...w, cursor: [0, 0] };
+      if (
+        card === 'normal ["3","0"]' &&
+        key === "<C-o>" &&
+        sameJson(setup, ["g", "g"])
+      )
+        return { ...w, cursor: START_POS };
+      return null;
+    },
+  },
+  {
+    id: "alternate-file-prepared-view",
+    title:
+      "Ctrl-6 opens the prepared alternate file and ignores count/register prefixes",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/file.ts L29-L58 opens the # file in the active group. actions/base.ts L176/L188-L189 does not repeat the command for a count, and the command does not use registerName. extensionBase.ts L218-L227 updates # from the old % and % from the new relative path. The harness prepares b.txt at START in group 1 before the register baseline; this rule is valid only with that explicit precondition. Scoped to Normal Ctrl-6 with empty/positive-digit prefixes, optionally naming a/+/_, and no setup. Ctrl-^ negative delivery rows are excluded.",
+    applies: ({ mode, key, pending }) =>
+      mode === "normal" && key === "<C-6>" && countRegisterPrefix(pending),
+    transform(w, { setup }) {
+      if (setup?.length) return null;
+      return {
+        text: "unchanged",
+        cursor: START_POS,
+        mode: "normal",
+        registers: {
+          "%": { mode: "character", lines: ["b.txt"] },
+          "#": { mode: "character", lines: ["a.txt"] },
+        },
+      };
+    },
+  },
+  {
+    id: "normal-control-t-cleared-jumps",
+    title:
+      "Normal Ctrl-T follows the jump list after an explicit clearJumps precondition",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/navigate.ts L91-L103 binds Ctrl-T to NavigateBack. jumps/jumpTracker.ts L162-L233/L311-L348 loops counts, clamps at the first entry and removes older same-line entries. From a cleared list, setup gg returns to START for empty/2/30/a/+/_ prefixes; j G gg 2G G then 3 back reaches [2,13]; gg G 3G 2G 14| then named-a count 3 back reaches [0,0]. Scoped to eight exact Normal cards/setups and the corrected harness clearJumps precondition; Insert Ctrl-T is excluded.",
+    applies: ({ card, key }) =>
+      key === "<C-t>" &&
+      [
+        "normal []",
+        'normal ["2"]',
+        'normal ["3"]',
+        'normal ["3","0"]',
+        'normal ["\\\"","a"]',
+        'normal ["\\\"","+"]',
+        'normal ["\\\"","_"]',
+        'normal ["\\\"","a","3"]',
+      ].includes(card),
+    transform(w, { card, setup }) {
+      if (!sameJson(START_POS, [1, 13]) || START.lines.length !== 4)
+        return null;
+      let cursor;
+      if (card === 'normal ["3"]') {
+        if (sameJson(setup, ["j", "G", "g", "g", "2", "G", "G"]))
+          cursor = [2, 13];
+      } else if (card === 'normal ["\\\"","a","3"]') {
+        if (sameJson(setup, ["g", "g", "G", "3", "G", "2", "G", "1", "4", "|"]))
+          cursor = [0, 0];
+      } else if (sameJson(setup, ["g", "g"])) cursor = START_POS;
+      return cursor ? { text: "unchanged", cursor, mode: "normal" } : null;
+    },
+  },
+  {
+    id: "dot-replays-recorded-delete",
+    title:
+      "dot repeats the recorded x action with count but without a pending named register",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/actions.ts L386-L405 replays previousFullAction for the count, while mode/modeHandler.ts L1142-L1203 constructs a new RecordedState per replay and discards the pending register prefix. x (actions.ts L533-L552) deletes one current character; modeHandler.ts L933-L970 clamps the cursor left after deleting EOL. register/register.ts L232-L244 writes only the last deleted character to unnamed and small-delete registers. This rule simulates setup x plus N repetitions for exactly count 3/30 or named a/a3, without changing register a.",
+    applies: ({ card, key }) =>
+      key === "." &&
+      [
+        'normal ["3"]',
+        'normal ["3","0"]',
+        'normal ["\\\"","a"]',
+        'normal ["\\\"","a","3"]',
+      ].includes(card),
+    transform(w, { setup, pending }) {
+      if (!sameJson(setup, ["x"])) return null;
+      const count =
+        Number(pending.filter((key) => /^[0-9]$/.test(key)).join("")) || 1;
+      const [line, start] = START_POS;
+      let value = START.lines[line],
+        cursor = start,
+        deleted;
+      for (let i = 0; i <= count; i++) {
+        deleted = value[cursor];
+        if (deleted === undefined) return null;
+        value = value.slice(0, cursor) + value.slice(cursor + 1);
+        cursor = Math.min(cursor, Math.max(0, value.length - 1));
+      }
+      const content = { mode: "character", lines: [deleted] };
+      return {
+        text: { [line]: value },
+        cursor: [line, cursor],
+        mode: "normal",
+        registers: { '"': content, "-": content },
+      };
+    },
+  },
+  {
+    id: "visual-put-keeps-delete-history",
+    title:
+      "Visual p writes the replaced selection to unnamed without changing delete-history registers",
+    documented:
+      "VSCodeVim 1.32.4 actions/commands/put.ts L31-L136 reads the source register first, then records replaced Visual text in unnamed (useSystemClipboard is false in both harness settings; configuration.ts L231). PutCommand has no delete/yank name, so register/register.ts L208-L260 does not write small-delete or numbered registers. put.ts L145-L155/L348-L418 and state/vimState.ts L288-L300 give the existing range/count/cursor and register mode. Scoped to six exact p card/setup pairs; P, system clipboard, other setups and multiple cursors are excluded.",
+    applies: ({ card, key }) =>
+      key === "p" &&
+      [
+        'visual ["\\\"","a"]',
+        "visual-line []",
+        'visual-line ["3"]',
+        'visual-line ["\\\"","a"]',
+        'visual-block ["3"]',
+        'visual-block ["\\\"","a"]',
+      ].includes(card),
+    transform(w, { card, setup, useSystemClipboard = false }) {
+      const setups = {
+        'visual ["\\\"","a"]': ['"', "a", "y", "i", "w"],
+        "visual-line []": ["k", "y", "e", "j"],
+        'visual-line ["3"]': ["y", "i", "w"],
+        'visual-line ["\\\"","a"]': ['"', "a", "y", "l"],
+        'visual-block ["3"]': ["y", "l"],
+        'visual-block ["\\\"","a"]': ["k", '"', "a", "y", "e", "j"],
+      };
+      if (useSystemClipboard || !sameJson(setup, setups[card])) return null;
+      return {
+        ...w,
+        registers: Object.fromEntries(
+          Object.entries(w.registers ?? {}).filter(
+            ([name]) => !/^[-1-9]$/.test(name),
+          ),
+        ),
+        shiftNumbered: false,
+        __shift: false,
       };
     },
   },
@@ -956,6 +1157,14 @@ if (cmd === "classify") {
           r.card === 'normal ["d","a"]'
             ? "Delete around the sentence (empty range in this fixture with VSCodeVim)"
             : "Delete inside the sentence (characterwise in VSCodeVim)";
+      }
+      if (r.rule === "alternate-file-prepared-view") {
+        row.vimLabel ??= row.label;
+        row.label =
+          "Edit the alternate file" +
+          (pendingOf(r.card).some((key) => /^[0-9]$/.test(key))
+            ? " (VSCodeVim ignores the count)"
+            : "");
       }
       for (const set of row.sets) {
         if (!r.engine[set]) continue;
