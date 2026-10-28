@@ -544,9 +544,13 @@ unchanged. The raw result includes every rendered card ID and row's key, descrip
 unsupported text, plus input/reference hashes and the clean build. The independent
 `batch/check2-verify.mjs` rebuilds the current input and checks the rendered cells against both
 that input and the matching engine reference. Extra or duplicate card IDs, stale labels and
-missing unsupported explanations fail alongside missing/extra/duplicate keys. Twelve synthetic
-and sandbox-copy regressions pass; actual rendering with this instrument still requires the
-final four-condition run.
+missing unsupported explanations fail alongside missing/extra/duplicate keys. Fifteen synthetic
+and sandbox-copy regressions pass. Measured: the four-condition run at clean `78c86e9` passed
+with 59 rendered cards per condition and zero missing, extra, duplicate or differing cells.
+The same build also passed a 28-trial smoke that selected correctness rows from the actual DOM
+and restored the panel before typing. Complete raw data, portable commands and independent
+checks are preserved in [the final-build evidence](../../final-2026-10-29/README.md).
+The full 42,450-trial correctness matrix remains pending.
 
 ```bash
 # Run from the final frozen checkout with the same S2 environment and a new check2 directory.
