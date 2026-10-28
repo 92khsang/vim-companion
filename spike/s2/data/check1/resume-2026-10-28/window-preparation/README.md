@@ -8,7 +8,7 @@ The harness prepares and verifies the target file before capturing register base
 
 `regression-input.json` has three ordered rows. The first inserts `X` into `b.txt`, moves its cursor to `[2,14]`, and returns to `a.txt`. Its last-insertion register is independently predicted as `iX<Esc>` from [modeHandler.ts](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/mode/modeHandler.ts#L831-L841). The next row must prepare group 2 and switch to the fixture's `b.txt` state. The final row checks that the shared preparation helper still prepares the independent group 1 view for `Ctrl-6`.
 
-These are harness regression inputs, separate from the card acceptance matrix. They have not yet been executed.
+These are harness regression inputs, separate from the card acceptance matrix. Measured: all 12 trials passed on VS Code 1.134.0 and 1.141.0, defaults and extensions, at clean commit `576d3dac7bfe9f13869fb18aeecd24ba22a4e512` (build `134d801b576f438f`). The four window trials recorded the deliberately modified `b.txt` and cursor `[2,14]` before preparation, then START text/cursor/Normal and active group 2. All four `Ctrl-6` trials used group 1. Raw records are in `raw/`; no colon register was present in these trials, so the separate legacy Ex-register projection defect does not affect this check.
 
 From a clean frozen checkout, with the standard sandbox paths exported, run each of the two versions and two settings sets:
 
