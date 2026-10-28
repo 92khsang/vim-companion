@@ -513,6 +513,86 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -532,6 +612,98 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3753,6 +3925,86 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [0, 0],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": ["alpha beta gamma delta", "  if (one, \"t"]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -3840,6 +4092,98 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": ["alpha beta gamma delta", "  if (one, \"t"],
+              "cursor": [1, 12],
+              "mode": "normal",
+              "registers": {
+                "1": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                },
+                "\"": {
+                  "mode": "character",
+                  "lines": [
+                    "wo\", [three]) { four(five) }",
+                    "epsilon zeta eta theta",
+                    "iota kappa lambda mu",
+                    ""
+                  ]
+                }
+              },
+              "shiftNumbered": true
+            },
+            "rule": "counted-delete-boundaries",
+            "documented": "VSCodeVim 1.32.4 baseMotion.ts L100-L148 and motion.ts L1587-L1678 saturate repeated sentence/paragraph motions at [0,0] or [4,0]; the paragraph starts at column13 so remains CharacterWise. modeHandler.ts L1093-L1100 sorts the range and decreases its exclusive endpoint, then operator.ts L110-L155 restores the exclusive endpoint for deletion. Backward range is [0,0]..[1,13], forward [1,13]..[4,0] including the final newline. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 3d,2d,d3,2d3,named-a3d contexts without setup and the four-nonempty-line/no-terminator fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     }
   ]

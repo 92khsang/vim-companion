@@ -1534,7 +1534,7 @@
       "key": "=",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Re-indent the highlighted lines",
+      "label": "Format the selected lines and return to Normal mode (no plaintext formatter is installed)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L931 |v_=|",
       "expect": {
@@ -1549,6 +1549,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Re-indent the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -1893,7 +1944,7 @@
       "key": "J",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Join the highlighted lines",
+      "label": "Join the next line and retain Visual Block mode",
       "labelFrom": "index",
       "labelIndex": "index.txt L943 |v_J|",
       "expect": {
@@ -1910,6 +1961,65 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Join the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 42],
+              "mode": "visual-block"
+            },
+            "rule": "single-block-join-retains-visual-mode",
+            "documented": "VSCodeVim 1.32.4 visual.ts L54-L63 enters the single-cell block before the following count/register prefix. commands/join.ts L161-L170 passes count=1; execJoinLines L87-L96 keeps VisualBlock when start equals stop and applies column diff41-13. transformations/execute.ts L297-L300 moves both block endpoints to [1,41]; textEditor.ts L232-L240 and modeHandler.ts L1336-L1346 render primary active [1,42]. Text is line1 + space + trimmed line2; all registers stay unchanged. Scoped to exact plain/count3/named-a VisualBlock contexts, C-v before the prefix, no setup/sample, fixed single-cell fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"two\", [three]) { four(five) } epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [1, 42],
+              "mode": "visual-block"
+            },
+            "rule": "single-block-join-retains-visual-mode",
+            "documented": "VSCodeVim 1.32.4 visual.ts L54-L63 enters the single-cell block before the following count/register prefix. commands/join.ts L161-L170 passes count=1; execJoinLines L87-L96 keeps VisualBlock when start equals stop and applies column diff41-13. transformations/execute.ts L297-L300 moves both block endpoints to [1,41]; textEditor.ts L232-L240 and modeHandler.ts L1336-L1346 render primary active [1,42]. Text is line1 + space + trimmed line2; all registers stay unchanged. Scoped to exact plain/count3/named-a VisualBlock contexts, C-v before the prefix, no setup/sample, fixed single-cell fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -2111,7 +2221,7 @@
       "key": "R",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Delete the highlighted lines and start insert",
+      "label": "Change the current line content (blockwise into register a)",
       "labelFrom": "index",
       "labelIndex": "index.txt L949 |v_R|",
       "expect": {
@@ -2141,6 +2251,81 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Delete the highlighted lines and start insert",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "a": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "a": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -2150,7 +2335,7 @@
         "defaults": {
           "source": "vim-oracle",
           "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
-          "label": "Delete the highlighted lines into register a and start insert",
+          "label": "Change the current line content (blockwise into register a)",
           "labelFrom": "hand",
           "expect": {
             "text": {
@@ -2218,12 +2403,47 @@
             },
             "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (S in Visual Block mode; surround has no Visual Block S; blockwise register mode, no indent kept)",
             "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured; the card's C and R rows run the same VSCodeVim code"
+          },
+          "vimLabel": "Delete the highlighted lines into register a and start insert",
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "a": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
           }
         },
         "extensions": {
           "source": "vim-oracle",
           "reason": "vim: v_S, the same command as v_R in Vim (change.txt *v_S* *v_R*); surround has no Visual Block S, so VSCodeVim runs VisualBlockChangeLine (src/actions/commands/actions.ts L917-953)",
-          "label": "Delete the highlighted lines into register a and start insert",
+          "label": "Change the current line content (blockwise into register a)",
           "labelFrom": "hand",
           "expect": {
             "text": {
@@ -2291,9 +2511,45 @@
             },
             "expectFrom": "VSCodeVim 1.32.4 src/actions/commands/actions.ts L915-955 (VisualChangeLine_2 when vim.surround is off, VisualBlockChangeLine) and src/actions/operator.ts L661-708 (S in Visual Block mode; surround has no Visual Block S; blockwise register mode, no indent kept)",
             "status": "Inferred: the hand author's reading of the VSCodeVim 1.32.4 source; not measured; the card's C and R rows run the same VSCodeVim code"
+          },
+          "vimLabel": "Delete the highlighted lines into register a and start insert",
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": ""
+              },
+              "cursor": [1, 0],
+              "mode": "insert",
+              "registers": {
+                "a": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "block",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-change-line-content",
+            "documented": "VSCodeVim 1.32.4 commands/actions.ts L946-L953 sends R/S to VisualChangeLine L917-L929. With a single-cell block, ChangeOperator (operator.ts L666-L704) expands the range to line content [1,0]..[1,41], excludes the newline and retains BlockWise mode (state/vimState.ts L288-L299), skipping linewise autoindent. Count is not used. transformations/execute.ts L72-L73/L118-L122/L257-L291 retains Insert selection [1,0]. The outer command has no delete/yank name, so register/register.ts L208-L268 preserves 0,1-9,-; named-a and unnamed receive the old line in BlockWise mode. Remaining Insert means dot is not written (modeHandler.ts L820-L841). Scoped to exact plain/count3/named-a blocks with C-v before prefix, no setup/sample; surround does not support VisualBlock and incomplete Sneak S does not preempt this full match.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
           }
         }
-      }
+      },
+      "label": "Change the current line content (blockwise into register a)"
     },
     {
       "key": "T",
@@ -2424,7 +2680,7 @@
       "key": "Y",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Yank the highlighted block into register a",
+      "label": "Yank the current line linewise into register a and return to Normal mode",
       "labelFrom": "hand",
       "labelIndex": "index.txt L957 |v_Y|",
       "expect": {
@@ -2447,6 +2703,77 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Yank the highlighted block into register a",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-yank-linewise",
+            "documented": "VSCodeVim 1.32.4 operator.ts L294-L303 forces LineWise for ShiftYankOperatorVisual; YankOperator L213-L215 reads the entire selected line and L249-L254 returns Normal at [1,0] from VisualBlock. Count after C-v does not extend the selection. The outer command has no yank_op/yank_full_line name, so register/register.ts L208-L228 does not write 0. Only named-a plus unnamed, or unnamed alone, receive the line; all other baseline registers remain. Scoped to the exact plain/count3/named-a single-cell VisualBlock contexts, no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 0],
+              "mode": "normal",
+              "registers": {
+                "a": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                },
+                "\"": {
+                  "mode": "line",
+                  "lines": ["  if (one, \"two\", [three]) { four(five) }"]
+                }
+              }
+            },
+            "rule": "single-block-yank-linewise",
+            "documented": "VSCodeVim 1.32.4 operator.ts L294-L303 forces LineWise for ShiftYankOperatorVisual; YankOperator L213-L215 reads the entire selected line and L249-L254 returns Normal at [1,0] from VisualBlock. Count after C-v does not extend the selection. The outer command has no yank_op/yank_full_line name, so register/register.ts L208-L228 does not write 0. Only named-a plus unnamed, or unnamed alone, receive the line; all other baseline registers remain. Scoped to the exact plain/count3/named-a single-cell VisualBlock contexts, no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

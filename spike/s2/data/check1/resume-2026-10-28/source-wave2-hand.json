@@ -1,0 +1,39 @@
+{
+ "card": "insert []",
+ "key": "<copy>",
+ "source": "hand",
+ "rule": "insert-mode-register-recording",
+ "expect": {
+  "text": "unchanged",
+  "cursor": [
+   1,
+   13
+  ],
+  "mode": "normal",
+  "registers": {
+   ".": {
+    "mode": "character",
+    "keys": "i<copy>"
+   }
+  }
+ },
+ "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+ "measured": {
+  "pass": "source-wave2 at 9b3bdce",
+  "trials": {
+   "defaults 1.134.0": {
+    "trials": 3
+   },
+   "extensions 1.134.0": {
+    "trials": 3
+   },
+   "defaults 1.141.0": {
+    "trials": 3
+   },
+   "extensions 1.141.0": {
+    "trials": 3
+   }
+  },
+  "verdict": "match"
+ }
+}

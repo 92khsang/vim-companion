@@ -411,7 +411,7 @@
       "key": "<C-j>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a new line",
+      "label": "Select the next suggestion (no change when suggestions are hidden)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L67 |i_<CR>|",
       "expect": {
@@ -430,6 +430,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Start a new line",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -455,7 +506,7 @@
       "key": "<C-m>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Start a new line",
+      "label": "Insert a newline without copying indentation",
       "labelFrom": "hand",
       "labelIndex": "index.txt L67 |i_<CR>|",
       "expect": {
@@ -474,13 +525,76 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Start a new line",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"t",
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": [
+                "alpha beta gamma delta",
+                "  if (one, \"t",
+                "wo\", [three]) { four(five) }",
+                "epsilon zeta eta theta",
+                "iota kappa lambda mu"
+              ],
+              "cursor": [2, 0],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
       "key": "<C-n>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Complete the word before the cursor (next match)",
+      "label": "Select the next suggestion (no change when suggestions are hidden)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L69 |i_CTRL-N|",
       "expect": {
@@ -495,6 +609,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Complete the word before the cursor (next match)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -520,13 +685,75 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "i<C-o>"
+                }
+              }
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "normal",
+              "registers": {
+                ".": {
+                  "mode": "character",
+                  "keys": "i<C-o>"
+                }
+              }
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
       "key": "<C-p>",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Complete the word before the cursor (previous match)",
+      "label": "Select the previous suggestion (no change when suggestions are hidden)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L73 |i_CTRL-P|",
       "expect": {
@@ -541,6 +768,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Complete the word before the cursor (previous match)",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 13],
+              "mode": "insert"
+            },
+            "rule": "insert-suggestion-and-newline",
+            "documented": "VSCodeVim 1.32.4 insert.ts L647-L668 registers suggestion actions before NewLineInsertMode L701-L710; actions/base.ts L264-L296 chooses the first matching action. Ctrl-J/N/P therefore call suggestion selection, whose VS Code controller/widget do nothing when hidden (product commits110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c, suggestController.ts L924-L926/L962-L964 and suggestWidget.ts L624-L634/L666-L676; byte-identical). The harness disables suggestions. Ctrl-M queues a literal newline without autoindent. All four stay Insert and preserve registers; modeHandler.ts L820-L841 does not store dot until a repeatable insertion returns to Normal. Scoped to plain Insert with no setup/sample.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -880,10 +1158,24 @@
       "expect": {
         "text": "unchanged",
         "cursor": [1, 13],
-        "mode": "normal"
+        "mode": "normal",
+        "registers": {
+          ".": {
+            "mode": "character",
+            "keys": "i<copy>"
+          }
+        }
       },
-      "expectBasis": "VSCodeVim 1.32.4: CommandOverrideCopy src/actions/commands/actions.ts L196-247: an empty selection copies nothing, Normal mode without moving the cursor left.",
-      "labelFrom": "hand"
+      "expectBasis": "Documented: VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay. Measured: source-wave2 at 9b3bdce matched all 12 trials (two VS Code versions, two settings sets, three trials per condition). The original hand expectation is retained in previousHand; this is not a Vim oracle row.",
+      "labelFrom": "hand",
+      "previousHand": {
+        "expect": {
+          "text": "unchanged",
+          "cursor": [1, 13],
+          "mode": "normal"
+        },
+        "basis": "VSCodeVim 1.32.4: CommandOverrideCopy src/actions/commands/actions.ts L196-247: an empty selection copies nothing, Normal mode without moving the cursor left."
+      }
     },
     {
       "key": "<down>",
@@ -908,6 +1200,58 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [2, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -933,6 +1277,58 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 12],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -958,6 +1354,58 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 14],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {
@@ -983,6 +1431,58 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [0, 13],
+              "mode": "insert",
+              "registers": {}
+            },
+            "rule": "insert-mode-register-recording",
+            "documented": "VSCodeVim 1.32.4 insert.ts L736-L769 resets actionsRun for arrows but stays Insert, so modeHandler.ts L820-L841 leaves dot unchanged; a following trial's reset Esc can store the preceding insertion and is not an arrow write. Insert Ctrl-O (insert.ts L544-L555) exits to Normal while preserving its original action key. Empty-selection copy (actions.ts L229-L245) also exits without copying; package.json L411 binds cmd+c, configuration.ts L237 enables overrideCopy, and modeHandler.ts L453-L458 normalizes D-c to copy before recording L657. Thus these two exits store i<C-o> or i<copy>, while arrows preserve every register. Scoped to plain Insert with prefix i, a single collapsed fixture selection, no setup/sample and no macro replay.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

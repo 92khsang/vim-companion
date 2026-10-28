@@ -1507,7 +1507,7 @@
       "key": "M",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Switch case to middle line of screen",
+      "label": "Toggle case from the cursor to this line's end (VSCodeVim M)",
       "labelFrom": "index",
       "labelIndex": "index.txt L352 |M|",
       "expect": {
@@ -1537,6 +1537,61 @@
           "layout": "single"
         },
         "reason": "the first oracle run used a four-line buffer in a 100x12 terminal; VS Code's document has a fifth, empty line and each editor group shows 43 columns and 40 lines"
+      },
+      "vimLabel": "Switch case to middle line of screen",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "other-viewport-center-operators",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 returns viewport-center [2,0] without LineWise; modeHandler.ts L1093-L1100 decreases stop to [1,EOL]. yM (operator.ts L203-L259) reads the suffix without newline because VS Code clamps EOL+1 (extHostDocumentData.ts raw L117-L140/L181-L245, identical in products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c). cM (operator.ts L660-L707, position.ts L313-L318) deletes only that suffix and retains editor selection [2,0] in Insert (transformations/execute.ts L257-L293). >M affects line1 only, adding two detected-indent spaces (operator.ts L449-L463). gU/g~ change only suffix case (operator.ts L353-L443). Scoped to five exact Normal cards, no setup and the fixed fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": {
+                "1": "  if (one, \"tWO\", [THREE]) { FOUR(FIVE) }"
+              },
+              "cursor": [1, 13],
+              "mode": "normal"
+            },
+            "rule": "other-viewport-center-operators",
+            "documented": "VSCodeVim 1.32.4 motion.ts L95-L124/L1338-L1343 returns viewport-center [2,0] without LineWise; modeHandler.ts L1093-L1100 decreases stop to [1,EOL]. yM (operator.ts L203-L259) reads the suffix without newline because VS Code clamps EOL+1 (extHostDocumentData.ts raw L117-L140/L181-L245, identical in products110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c). cM (operator.ts L660-L707, position.ts L313-L318) deletes only that suffix and retains editor selection [2,0] in Insert (transformations/execute.ts L257-L293). >M affects line1 only, adding two detected-indent spaces (operator.ts L449-L463). gU/g~ change only suffix case (operator.ts L353-L443). Scoped to five exact Normal cards, no setup and the fixed fixture.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

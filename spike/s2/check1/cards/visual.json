@@ -1775,7 +1775,7 @@
       "key": "=",
       "sets": ["defaults", "extensions"],
       "source": "vim-oracle",
-      "label": "Re-indent the highlighted lines",
+      "label": "Format the selected lines and return to Normal mode (no plaintext formatter is installed)",
       "labelFrom": "hand",
       "labelIndex": "index.txt L931 |v_=|",
       "expect": {
@@ -1790,6 +1790,57 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "vimLabel": "Re-indent the highlighted lines",
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 2],
+              "mode": "normal"
+            },
+            "rule": "visual-format-without-plaintext-provider",
+            "documented": "VSCodeVim 1.32.4 operator.ts L332-L351 runs whole-line formatSelection, moves to first nonblank and enters Normal. VS Code formatActions.ts L248-L250 and editorExtensions.ts L317-L324 require hasDocumentSelectionFormattingProvider even for executeCommand. Static inspection of both installed products (110a328ea54b42367b803ec53ee0bf52ef26b419 and2a59476c9bfcb90b3ddc372c36762471b7dfad1c), builtin selectors and the pinned Vim/which-key extensions finds no plaintext range provider. This is not a runtime registry observation and does not follow from formatOnType=false. Scoped to nine exact Visual mode/prefix contexts, a.txt plaintext, the fixed extension set, no setup/sample and no provider.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

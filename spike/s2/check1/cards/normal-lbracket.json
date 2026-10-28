@@ -44,6 +44,56 @@
         "layout": "single",
         "doc": "document",
         "size": "43x42"
+      },
+      "bySet": {
+        "defaults": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 5],
+              "mode": "normal"
+            },
+            "rule": "relative-parenthesis-pair-search",
+            "documented": "VSCodeVim 1.32.4 motion.ts L2271-L2312 calls PairMatcher for exact [( and ]) without an operator. common/matching/matcher.ts L19-L24/L58-L101 excludes the current character and scans with a zero stack; reverse first-negative opening parenthesis is [1,5], forward first-negative closing parenthesis is [1,25]. Other character kinds and quote delimiters do not affect this scanner. This is relative unmatched-pair search, not a global malformed-parenthesis check. Original Vim oracle was independently rerun on both settings and still returns [1,13]; no causal claim about Vim quote behavior is inferred. Scoped to those two Normal cards, no count/register/operator/setup/sample, the fixed cursor inside two and one cursor.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "defaults 1.134.0": {
+                  "trials": 3
+                },
+                "defaults 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        },
+        "extensions": {
+          "vscodevim": {
+            "expect": {
+              "text": "unchanged",
+              "cursor": [1, 5],
+              "mode": "normal"
+            },
+            "rule": "relative-parenthesis-pair-search",
+            "documented": "VSCodeVim 1.32.4 motion.ts L2271-L2312 calls PairMatcher for exact [( and ]) without an operator. common/matching/matcher.ts L19-L24/L58-L101 excludes the current character and scans with a zero stack; reverse first-negative opening parenthesis is [1,5], forward first-negative closing parenthesis is [1,25]. Other character kinds and quote delimiters do not affect this scanner. This is relative unmatched-pair search, not a global malformed-parenthesis check. Original Vim oracle was independently rerun on both settings and still returns [1,13]; no causal claim about Vim quote behavior is inferred. Scoped to those two Normal cards, no count/register/operator/setup/sample, the fixed cursor inside two and one cursor.",
+            "measured": {
+              "pass": "source-wave2 at 9b3bdce: both settings, VS Code 1.134.0 and 1.141.0, 3 trials per row and condition",
+              "trials": {
+                "extensions 1.134.0": {
+                  "trials": 3
+                },
+                "extensions 1.141.0": {
+                  "trials": 3
+                }
+              },
+              "verdict": "match",
+              "note": "every trial matches"
+            }
+          }
+        }
       }
     },
     {

@@ -295,3 +295,79 @@ test("mixed earlier trials remain evidence against a source rule", () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("only DeleteOperator trims a linewise register's trailing newline", () => {
+  const rule = RULES.find((r) => r.id === "registers");
+  const payload = { mode: "line", lines: ["line", ""] };
+  const answer = { ...expect, registers: { '"': payload } };
+  for (const key of ["c", "y"]) {
+    const result = rule.transform(answer, {
+      mode: "normal",
+      ops: [key],
+      key: "L",
+      pending: [key],
+    });
+    assert.deepEqual(result.registers['"'], payload);
+  }
+  const deletion = rule.transform(answer, {
+    mode: "normal",
+    ops: ["d"],
+    key: "L",
+    pending: ["d"],
+  });
+  assert.deepEqual(deletion.registers['"'].lines, ["line"]);
+  const visualYank = rule.transform(answer, {
+    mode: "visual",
+    ops: [],
+    key: "Y",
+    pending: [],
+  });
+  assert.deepEqual(visualYank.registers['"'], payload);
+});
+
+test("open-line source rules distinguish above, below, and unreviewed prefixes", () => {
+  const single = RULES.find((r) => r.id === "open-line-no-indent");
+  assert.equal(single.applies({ mode: "normal", ops: [], key: "O" }), false);
+  const rule = RULES.find((r) => r.id === "counted-open-lines");
+  const ctx = { mode: "normal", pending: ["3"], key: "O" };
+  assert.equal(rule.applies(ctx), true);
+  assert.equal(rule.applies({ ...ctx, pending: ['"', "b", "3"] }), false);
+  assert.equal(rule.applies({ ...ctx, mode: "visual" }), false);
+  assert.deepEqual(rule.transform(expect, ctx).cursor, [3, 2]);
+  assert.deepEqual(rule.transform(expect, { ...ctx, key: "o" }).cursor, [2, 0]);
+  assert.equal(rule.transform(expect, { ...ctx, autoIndent: "full" }), null);
+  assert.equal(rule.transform(expect, { ...ctx, setup: ["j"] }), null);
+});
+
+test("apply rejects unknown classifications before touching authored cards", () => {
+  const dir = mkdtempSync(join(tmpdir(), "s2-unconfirmed-"));
+  try {
+    const input = join(dir, "classification.json");
+    writeFileSync(
+      input,
+      JSON.stringify([
+        { card: "normal []", key: "s", rule: "registers", verdict: "unknown" },
+      ]),
+    );
+    assert.throws(
+      () =>
+        execFileSync(
+          process.execPath,
+          [
+            join(import.meta.dirname, "deviations.mjs"),
+            "apply",
+            input,
+            "unconfirmed",
+            "--merge",
+          ],
+          { stdio: "pipe" },
+        ),
+      (error) =>
+        String(error.stderr).includes(
+          "apply requires a reviewed classification",
+        ),
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

@@ -303,7 +303,7 @@ Ctrl-^ negative-delivery rows remain unchanged. Viewport-center source links now
 actual installed 1.134.0 product commit `110a328ea54b42367b803ec53ee0bf52ef26b419`; the compared
 1.134.0/1.141.0 source files are byte-identical, and the raw-source viewport range is L357-L392.
 
-## Source followup confirmed, second wave pending
+## Source followup and second wave confirmed
 
 `source-followup/` preserves all 642 direct trials at frozen `a0ef365`; every trial passes.
 The 59 rows cover 107 row-setting expectations, with three trials on each version for every
@@ -318,7 +318,7 @@ counted as current failures when newer cohorts are available.
 `source-wave2-input/` freezes 72 further source predictions per settings set for 864 trials:
 14 counted selection-boundary rows, 20 counted-delete boundary rows, ten Insert rows, five
 other M operators, twelve single-cell VisualBlock J/Y/R/S rows, nine Visual-format rows and
-two parenthesis-pair-search rows. These are not yet promoted. Source descriptions and exact
+two parenthesis-pair-search rows. Their confirmation is recorded below. Source descriptions and exact
 guards are carried by each prediction. Arrow dot registers must equal arbitrary baselines;
 literal values left by an earlier trial are never used as expectations. The copy row is an
 engine-specific hand expectation and will retain that provenance if confirmed.
@@ -326,8 +326,60 @@ engine-specific hand expectation and will retain that provenance if confirmed.
 The Visual-format predictions rely on static inspection of the pinned extension selectors
 showing no plaintext range formatter; they do not claim the runtime registry/context was
 observed. `formatOnType=false` is not the justification.
-`bracket-oracle/` preserves the independent four-row Vim recheck of [( and ]): both settings
-still yield unchanged text/cursor/mode/registers at [1,13]. The VSCodeVim predictions follow
+`bracket-oracle/` preserves the independent four-row Vim recheck of `[(` and `])`: both settings
+still yield unchanged text/cursor/mode/registers at `[1,13]`. The VSCodeVim predictions follow
 its relative PairMatcher scan; no unverified causal explanation of Vim's quote handling is
 asserted. The installed-product viewport links and descriptions distinguish 1.134.0 product
-110a328ea54b42367b803ec53ee0bf52ef26b419 from 1.141.0 product2a59476c9bfcb90b3ddc372c36762471b7dfad1c.
+`110a328ea54b42367b803ec53ee0bf52ef26b419` from 1.141.0 product
+`2a59476c9bfcb90b3ddc372c36762471b7dfad1c`.
+
+
+Measured: `source-wave2/` preserves 864 of 864 direct passing trials at frozen `9b3bdce`,
+clean build `8888f9ab73d0d9c0`: 72 rows in each settings set, both VS Code versions, three
+trials per condition. `source-wave2-verification.json` checks exact input coverage and complete
+register baselines; `source-wave2-rescore.json` confirms all 288 row/setting/version groups.
+`selected-source-wave2-rules.json` applies 71 Vim-oracle rows / 142 row-setting corrections.
+The separate `source-wave2-hand.json` verifies the Insert `<copy>` row's recorded dot keys in
+all 12 trials. That row retains its `hand` provenance and original `previousHand` expectation;
+it is never relabeled as a Vim oracle. Labels now distinguish suggestion selection, literal
+newlines, characterwise middle-line operators and single-cell block commands.
+
+`combined-after-wave2.json` selects the newest available cohort per row/setting/version and
+retains all trials within it. It has 1,209 passing groups and 172 failing groups. All 172 failures
+come from the residual diagnostic, with one trial per setting on VS Code 1.141.0; this count is
+not a completed second-pass verdict. The older alternate-file and Ctrl-T failures remain in
+history, while their new harness confirmations supply the current comparison.
+
+Documented: only the linewise [DeleteOperator payload](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/operator.ts#L145-L154)
+drops its final newline. ChangeOperator and YankOperator store their range text without that
+trim. `linewise-trim-audit.json` lists the 70 existing row-setting overrides that met the old
+predicate; all are actual delete paths, so narrowing the rule changes none of those values.
+The regression checks cover delete/change/yank distinctions, and `apply` rejects any reviewed
+classification containing an unknown verdict.
+
+`source-wave3-input/` freezes 25 source predictions per settings set for the next 300 trials:
+eight counted `o`/`O` rows, ten counted `dH`/`dL` rows, plain `cL`, and six Visual `C`/`R` rows.
+These remain unpromoted. [InsertAbove and InsertBelow](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/insert.ts#L117-L207)
+produce different indentation and primary cursor order; the older single-line no-indent rule
+now covers only `o`. [H/L](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/motion.ts#L1272-L1335)
+ignore operator counts and set LineWise, while [VisualChangeLine](https://github.com/VSCodeVim/Vim/blob/ee59baec19a071384128b34c5de87cd24b11d36b/src/actions/commands/actions.ts#L917-L929)
+keeps CharacterWise for the reviewed single-cell Visual selections. `cL` retains the final
+newline in its register. The exact guarded predictions matched all 50 corresponding diagnostic
+records (`wave3-source-diagnostic-comparison.json`); fresh four-condition confirmation is pending.
+
+Reproduce either source wave from its frozen checkout after configuring the sandbox paths as
+in `spike/s2/README.md` (`source-wave2` uses `9b3bdce`; wave3's measured commit will be in its raw
+metadata):
+
+```bash
+D=spike/s2/data/check1/resume-2026-10-28
+W=$(mktemp -d)
+wave=source-wave2
+for version in 1.141.0 1.134.0; do
+  for settings in defaults extensions; do
+    env -u WAYLAND_DISPLAY -u XDG_SESSION_TYPE S2_CPUS=8-15 S2_NAME_PREFIX=cw2- \
+      node spike/s2/harness/cards-correctness.mjs "$version" :124 9524 "$settings" \
+      "$D/$wave-input/correctness-$settings.json" 3 "$W/$settings-$version.jsonl"
+  done
+done
+```

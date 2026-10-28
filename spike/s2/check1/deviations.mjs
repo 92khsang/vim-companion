@@ -142,13 +142,13 @@ const countRegisterPrefix = (pending) => {
 /** Known VSCodeVim behaviours that explain a group of rows only in part; listed with residual rows. */
 export const NOTES = {
   "dot-register-keys":
-    "VSCodeVim 1.32.4 keeps the . register as the recorded keys of the last insertion (src/mode/modeHandler.ts L839-L841, Register.setReadonlyRegister('.', recordedState)); Vim keeps the inserted text. Which keys it records (an arrow adds <Esc>, CTRL-A and gi record the setup's insertion) needs judging per row.",
+    "VSCodeVim 1.32.4 keeps the . register as the recorded keys of the last insertion (src/mode/modeHandler.ts L839-L841, Register.setReadonlyRegister('.', recordedState)); Vim keeps the inserted text. Insert arrows preserve the current dot register; a later reset's <Esc> may store the preceding insertion. CTRL-A and gi need per-row checks against their setup and the recorded baseline.",
 };
 export const RULES = [
   {
     id: "registers",
     title:
-      'VSCodeVim\'s register bookkeeping: only the actions named delete_op, delete_char, delete_last_char, delete_char_visual_line_mode and delete_char_with_del write "- (text without a line break, not linewise) or "1 with the shift (otherwise), whatever register the command names; D (DeleteToLineEnd), C, s, S and the c operator write neither; a yank writes "0 only without a named register; a linewise delete or change through the document\'s last line stores its text without the final line break (the empty last line is not a line of the register)',
+      'VSCodeVim\'s register bookkeeping: only the actions named delete_op, delete_char, delete_last_char, delete_char_visual_line_mode and delete_char_with_del write "- (text without a line break, not linewise) or "1 with the shift (otherwise), whatever register the command names; D (DeleteToLineEnd), C, s, S and the c operator write neither; a yank writes "0 only without a named register; a linewise DeleteOperator path through the document\'s last line stores its text without the final line break (the empty last line is not a line of the register)',
     documented:
       'VSCodeVim 1.32.4 src/register/register.ts L60-L78 (put: the named or unnamed register, then " ), L132-L136 and L216-L251 (processNumberedRegisters: yank_op/yank_full_line write 0 without cmd_register; the five delete action names write - when the text has no line break and the mode is not linewise, else shift 1-8 and write 1); src/actions/commands/actions.ts L453-L468 (D runs DeleteOperator from a command without a name), L489-L524 (C, S), L955-L966 (s); src/actions/operator.ts L661-L677 (ChangeOperator puts the text, no name), L146-L152 (a linewise delete drops the final line break of its text); Visual modes: operator.ts L99 (d: delete_op), L188 (D: DeleteOperatorVisual), L202 (y: yank_op), L294 (Y: ShiftYankOperatorVisual), L306 (x, <Del>: DeleteOperatorXVisual), L316 (s), L660 (c), L711 (Visual Block y), commands/actions.ts L604, L635, L691, L730, L901, L916, L931, L945 (Visual Block d x X D c s C R S, Visual X C R S): none of these but delete_op and yank_op has a name',
     applies: ({ mode, ops, key }) =>
@@ -174,7 +174,15 @@ export const RULES = [
           __shift: false,
         };
       let text = vimText;
+      // Only DeleteOperator trims its linewise payload; ChangeOperator and YankOperator
+      // store the range text verbatim. VisualBlock commands have separate implementations.
+      const usesDeleteOperator =
+        mode === "normal"
+          ? kind === "delete" || kind === "delete-plain"
+          : (mode === "visual" || mode === "visual-line") &&
+            ["d", "D", "X", "x", "<Del>"].includes(key);
       if (
+        usesDeleteOperator &&
         text.mode === "line" &&
         text.lines.length > 1 &&
         text.lines.at(-1) === ""
@@ -289,17 +297,153 @@ export const RULES = [
   {
     id: "open-line-no-indent",
     title:
-      "o and O run VS Code's editor.action.insertLineAfter / insertLineBefore, which follow editor.autoIndent (none in the sandbox), so the new line has no indent where Vim's autoindent copies it",
+      "o runs VS Code's editor.action.insertLineAfter with editor.autoIndent=none, so its new line has no indent where Vim's autoindent copies it",
     documented:
-      "VSCodeVim 1.32.4 src/actions/commands/insert.ts L173-L190 (o: editor.action.insertLineAfter) and the O command next to it (editor.action.insertLineBefore); harness/lib.mjs sandboxSettings sets editor.autoIndent to none (the criterion's harness)",
+      "VSCodeVim 1.32.4 src/actions/commands/insert.ts L171-L207 (o: editor.action.insertLineAfter); harness/lib.mjs sandboxSettings sets editor.autoIndent to none. O is excluded: InsertAbove L117-L167 explicitly restores the original indentation.",
     applies: ({ mode, ops, key }) =>
-      mode === "normal" && ops.length === 0 && (key === "o" || key === "O"),
+      mode === "normal" && ops.length === 0 && key === "o",
     transform(w) {
       const lines = [...textOf(w)];
       const l = w.cursor[0];
       if (!/^\s+$/.test(lines[l] ?? "")) return null;
       lines[l] = "";
       return { ...w, text: lines, cursor: [l, 0] };
+    },
+  },
+  {
+    id: "counted-open-lines",
+    title:
+      "counted o/O create multiple insertion lines with distinct indentation and primary cursors",
+    documented:
+      "VSCodeVim 1.32.4 commands/insert.ts L117-L167 InsertAbove repeats insertLineBefore, explicitly restores the original two-space indentation on every new line, then reverses its cursor list: primary [1+count-1,2]. InsertBelow L171-L207 repeats insertLineAfter under sandbox editor.autoIndent=none, creates empty lines, then reverses its cursor list: primary [2,0]. Both remain Insert and do not write registers at this point (modeHandler.ts L820-L841); named-a is not read by these commands. Scoped to exact counts2/3/30/named-a3, no setup/sample, fixed four-line fixture and autoIndent=none.",
+    applies: ({ mode, pending, key }) =>
+      mode === "normal" &&
+      ["o", "O"].includes(key) &&
+      [["2"], ["3"], ["3", "0"], ['"', "a", "3"]].some((p) =>
+        sameJson(p, pending),
+      ),
+    transform(w, { pending, key, setup, sample, autoIndent = "none" }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        autoIndent !== "none" ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4 ||
+        !/^  \S/.test(START.lines[1])
+      )
+        return null;
+      const count = Number(
+        (pending[0] === '"' ? pending.slice(2) : pending).join(""),
+      );
+      const above = key === "O",
+        index = above ? 1 : 2;
+      return {
+        text: [
+          ...START.lines.slice(0, index),
+          ...Array(count).fill(above ? "  " : ""),
+          ...START.lines.slice(index),
+        ],
+        cursor: above ? [count, 2] : [2, 0],
+        mode: "insert",
+      };
+    },
+  },
+  {
+    id: "counted-delete-viewport-edges",
+    title:
+      "counted dH/dL ignore counts and delete linewise through the visible edge",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1272-L1335 overrides the BaseMovement count loop (baseMotion.ts L100-L124), ignores count and sets LineWise for H/L. With all five document lines visible, H ends at0 and L at the trailing empty line4. modeHandler.ts L1090-L1100 keeps the LineWise endpoint; DeleteOperator (operator.ts L110-L177) expands the line range, trims its final newline and deletes the preceding newline when the last document line is included. H deletes lines0-1 and leaves cursor [0,0]; L deletes lines1-4 and leaves only line0 at [0,0]. register/register.ts L216-L260 writes named/unnamed/1 and shifts numbered registers. Scoped to exact 2d,3d,d3,2d3,named-a3d with no setup/sample in the fixed viewport and fixture.",
+    applies: ({ mode, pending, key }) =>
+      mode === "normal" &&
+      ["H", "L"].includes(key) &&
+      [
+        ["2", "d"],
+        ["3", "d"],
+        ["d", "3"],
+        ["2", "d", "3"],
+        ['"', "a", "3", "d"],
+      ].some((p) => sameJson(p, pending)),
+    transform(w, { pending, key, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const up = key === "H";
+      const content = {
+        mode: "line",
+        lines: up ? START.lines.slice(0, 2) : START.lines.slice(1),
+      };
+      const { registers, shift } = vscodevimRegisters(
+        "delete",
+        registerOf(pending),
+        content,
+      );
+      return {
+        text: up ? START.lines.slice(2) : START.lines.slice(0, 1),
+        cursor: [0, 0],
+        mode: "normal",
+        registers,
+        shiftNumbered: shift,
+      };
+    },
+  },
+  {
+    id: "change-viewport-bottom-preserves-newline",
+    title:
+      "cL preserves the final newline in its linewise register while retaining indentation",
+    documented:
+      "VSCodeVim 1.32.4 motion.ts L1305-L1335 sets LineWise and reaches the trailing empty line4 for L. ChangeOperator (operator.ts L660-L707) reads [1,0]..[4,0] verbatim, retaining the final newline in its register, then replaces the range with the original two-space indentation and enters Insert at [1,2]. Unlike DeleteOperator L146-L152 it never trims the payload. The outer change action has no numbered-register name (register/register.ts L208-L268), and Insert completion does not update dot (modeHandler.ts L820-L841). Scoped to exact normal cL, fixed fixture/viewport, no setup/sample.",
+    applies: ({ card, key }) => card === 'normal ["c"]' && key === "L",
+    transform(w, { setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4 ||
+        !/^  \S/.test(START.lines[1])
+      )
+        return null;
+      return {
+        text: [START.lines[0], "  "],
+        cursor: [1, 2],
+        mode: "insert",
+        registers: {
+          '"': { mode: "line", lines: [...START.lines.slice(1), ""] },
+        },
+      };
+    },
+  },
+  {
+    id: "single-visual-change-line-content",
+    title:
+      "single-cell Visual C/R change line content with characterwise registers",
+    documented:
+      "VSCodeVim 1.32.4 commands/actions.ts L917-L929 routes Visual C/R to the same VisualChangeLine action and expands the range to [1,0]..[1,40]. ChangeOperator (operator.ts L666-L675) makes the exclusive endpoint [1,41], excluding the newline. The Visual default remains CharacterWise (state/vimState.ts L288-L299), so linewise autoindent is skipped. Count after v is ignored (BaseCommand L176-L189). The selected line becomes empty and transformations/execute.ts L257-L291 keeps Insert cursor [1,0]. Named-a plus unnamed, or unnamed alone, receive the old line; the outer action has no numbered-register name, and Insert completion does not update dot. Scoped to exact plain/count3/named-a Visual contexts with v before prefix, no setup/sample and a single-cell selection at START.",
+    applies: ({ mode, pending, key }) =>
+      mode === "visual" &&
+      ["C", "R"].includes(key) &&
+      [[], ["3"], ['"', "a"]].some((p) => sameJson(p, pending)),
+    transform(w, { pending, cardKeys, setup, sample }) {
+      if (
+        setup?.length ||
+        sample !== undefined ||
+        !sameJson(cardKeys, ["v", ...pending]) ||
+        !sameJson(START_POS, [1, 13]) ||
+        START.lines.length !== 4
+      )
+        return null;
+      const content = { mode: "character", lines: [START.lines[1]] };
+      return {
+        text: { 1: "" },
+        cursor: [1, 0],
+        mode: "insert",
+        registers: vscodevimRegisters("change", registerOf(pending), content)
+          .registers,
+      };
     },
   },
   {
@@ -1414,6 +1558,10 @@ if (cmd === "classify") {
   const rows = JSON.parse(readFileSync(classFile, "utf8")).filter(
     (r) => r.rule,
   );
+  if (rows.some((row) => row.verdict !== "match"))
+    throw new Error(
+      "apply requires a reviewed classification containing only confirmed matches",
+    );
   const byFile = new Map();
   for (const r of rows) {
     const f = cardFile({ id: r.card });
@@ -1546,6 +1694,78 @@ if (cmd === "classify") {
       ) {
         row.vimLabel ??= row.label;
         row.label = `${row.vimLabel} (VSCodeVim ignores the register prefix)`;
+      }
+      const ignoredCount = pendingOf(r.card).some((key) => /^[0-9]$/.test(key))
+        ? " (VSCodeVim ignores the count)"
+        : "";
+      const named = registerOf(pendingOf(r.card));
+      const registerLabel = named === '"' ? "" : ` into register ${named}`;
+      let sourceLabel;
+      if (r.rule === "insert-suggestion-and-newline")
+        sourceLabel =
+          r.key === "<C-m>"
+            ? "Insert a newline without copying indentation"
+            : `Select the ${r.key === "<C-p>" ? "previous" : "next"} suggestion (no change when suggestions are hidden)`;
+      if (r.rule === "single-block-join-retains-visual-mode")
+        sourceLabel =
+          "Join the next line and retain Visual Block mode" + ignoredCount;
+      if (r.rule === "single-block-yank-linewise")
+        sourceLabel =
+          "Yank the current line linewise" +
+          registerLabel +
+          " and return to Normal mode" +
+          ignoredCount;
+      if (r.rule === "single-block-change-line-content")
+        sourceLabel =
+          "Change the current line content (blockwise" +
+          registerLabel +
+          ")" +
+          ignoredCount;
+      if (r.rule === "other-viewport-center-operators")
+        sourceLabel = {
+          'normal ["c"]':
+            "Change from the cursor to this line's end (VSCodeVim M)",
+          'normal ["y"]':
+            "Yank from the cursor to this line's end (VSCodeVim M)",
+          'normal [">"]': "Indent the current line (VSCodeVim M)",
+          'normal ["g","U"]':
+            "Uppercase from the cursor to this line's end (VSCodeVim M)",
+          'normal ["g","~"]':
+            "Toggle case from the cursor to this line's end (VSCodeVim M)",
+        }[r.card];
+      if (r.rule === "visual-format-without-plaintext-provider")
+        sourceLabel =
+          "Format the selected lines and return to Normal mode (no plaintext formatter is installed)";
+      if (r.rule === "counted-open-lines") {
+        const pending = pendingOf(r.card);
+        const count = Number(
+          (pending[0] === '"' ? pending.slice(2) : pending).join(""),
+        );
+        sourceLabel =
+          `Open ${count} lines ${r.key === "O" ? "above" : "below"} and enter Insert mode` +
+          (named === '"' ? "" : " (VSCodeVim ignores the register prefix)");
+      }
+      if (r.rule === "counted-delete-viewport-edges")
+        sourceLabel =
+          `Delete linewise through the ${r.key === "H" ? "first" : "last"} visible line` +
+          registerLabel +
+          ignoredCount;
+      if (r.rule === "single-visual-change-line-content")
+        sourceLabel =
+          "Change the current line content (characterwise" +
+          registerLabel +
+          ")" +
+          ignoredCount;
+      if (sourceLabel) {
+        row.vimLabel ??= row.label;
+        row.label = sourceLabel;
+        for (const set of Object.keys(r.engine)) {
+          const value = row.bySet?.[set];
+          if (value?.label) {
+            value.vimLabel ??= value.label;
+            value.label = sourceLabel;
+          }
+        }
       }
       for (const set of row.sets) {
         if (!r.engine[set]) continue;
