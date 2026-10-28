@@ -38,6 +38,10 @@ import {
 import { execFileSync } from "node:child_process";
 import { SETTINGS_SETS } from "./cards-extract.mjs";
 import { planKeys } from "./card-keys.mjs";
+import {
+  needsLineUndoPreparation,
+  needsScrollPreparation,
+} from "./trial-preparation.mjs";
 
 // The trial reset (resetTrial): <Esc> <Esc>, VS Code's expandLineSelection and <Esc>, the probe's
 // reset of the text and cursor, then `v <Esc>`. Measured (check1 triage, 2026-10-28, 1.134.0 and
@@ -52,16 +56,6 @@ const RESET_KEYS = ["<Esc>", "<Esc>"];
 const RESET_TAIL = ["v", "<Esc>"];
 const JUMP_KEYS = new Set(["<C-o>", "<C-i>", "<Tab>", "<C-t>"]);
 const WINDOW_TARGET_KEYS = new Set(["l", "w", "<right>", "<C-l>", "<C-w>"]);
-const LINE_UNDO_PREFIXES = [
-  [],
-  ["2"],
-  ["3"],
-  ["3", "0"],
-  ['"', "a"],
-  ['"', "a", "3"],
-  ['"', "+"],
-  ['"', "_"],
-];
 // VSCodeVim turned off (toggleVim): DisableExtension sets Mode.Disabled (actions.ts L43-L46), whose
 // status bar text is "-- VIM: DISABLED --" (statusBar.ts L191-L192) and whose `vim.mode` context is
 // "Disabled" (modeHandler.ts L1661); toggleExtension then clears every mode handler
@@ -567,19 +561,8 @@ try {
             card.id === 'normal ["<C-w>"]' &&
             !row.setup?.length &&
             WINDOW_TARGET_KEYS.has(row.key),
-          clearScroll:
-            row.key === "<C-d>" &&
-            card.id.startsWith("normal ") &&
-            card.keys.length === 2 &&
-            card.keys[0] === '"' &&
-            ["+", "_"].includes(card.keys[1]) &&
-            JSON.stringify(row.setup) === JSON.stringify(["z", "b"]),
-          clearLineUndo:
-            row.key === "U" &&
-            card.id.startsWith("normal ") &&
-            LINE_UNDO_PREFIXES.some(
-              (prefix) => JSON.stringify(card.keys) === JSON.stringify(prefix),
-            ),
+          clearScroll: needsScrollPreparation(card, row),
+          clearLineUndo: needsLineUndoPreparation(card, row),
         });
         const before = await code.probe.call("registers");
         if (
