@@ -298,6 +298,14 @@ try {
   inject(["Escape"]);
   await sleep(200);
   result.initial = await call("warm");
+  if (process.env.S1_DIAG_ONLY === "1") {
+    await call("diagnose");
+    await call("prepare");
+    await settled();
+    inject([process.env.S1_DIAG_KEY ?? "ctrl+alt+9"]);
+    result.diagnostic = await settled();
+    throw new Error("Diagnostic-only run; inspect sandbox renderer log");
+  }
   console.log("Sandbox ready; proving 1000 probe keys.");
 
   const pattern = ["space", "w", "h", "j", "a", "b", "c", "d", "e", "f"];
@@ -331,7 +339,7 @@ try {
   for (let index = 0; index < 1000; index++) {
     await call("prepare");
     const prepared = await settled();
-    inject(["F6"]);
+    inject(["ctrl+alt+9"]);
     const before = await settled();
     result.lastPreparation = { index, prepared, before };
     assert.equal(
@@ -348,7 +356,7 @@ try {
     assert.equal(before.text, text);
     inject(["space", "w", "h", "j"]);
     const after = await settled();
-    inject(["F6"]);
+    inject(["ctrl+alt+9"]);
     const sentinel = await settled();
     const errors = [];
     const check = (condition, message) => {

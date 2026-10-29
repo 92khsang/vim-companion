@@ -73,6 +73,15 @@ exports.activate = async (context) => {
     }),
   );
   const methods = {
+    diagnose: async () => {
+      await vscode.commands.executeCommand(
+        "workbench.action.toggleKeybindingsLog",
+      );
+      await vscode.commands.executeCommand(
+        "workbench.action.focusActiveEditorGroup",
+      );
+      return true;
+    },
     hello: () => ({
       vscode: vscode.version,
       vim: vscode.extensions.getExtension("vscodevim.vim").packageJSON.version,
