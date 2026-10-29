@@ -46,7 +46,7 @@ function snapshot() {
       jobs: queue.jobs.length,
       running: queue.running,
     },
-    leader: leader.snapshot(),
+    leader: leader?.snapshot() ?? null,
     sentinel,
     sentinelSequence,
   };
@@ -62,7 +62,7 @@ exports.activate = async (context) => {
   await vscode.extensions.getExtension("vscodevim.vim").activate();
   leader = await vscode.extensions
     .getExtension("vim-companion-spike.s1-leader")
-    .activate();
+    ?.activate();
   load = await vscode.extensions
     .getExtension("vim-companion-spike.s1-load")
     ?.activate();
@@ -89,8 +89,9 @@ exports.activate = async (context) => {
       vscode: vscode.version,
       vim: vscode.extensions.getExtension("vscodevim.vim").packageJSON.version,
       pid: process.pid,
-      leaderPid: leader.pid,
+      leaderPid: leader?.pid ?? null,
       loadPid: load?.pid ?? null,
+      extensions: vscode.extensions.all.map((extension) => extension.id).sort(),
     }),
     loadWindows: () => load?.windows() ?? [],
     open: async ({ file }) => {
@@ -125,7 +126,7 @@ exports.activate = async (context) => {
       await position(vscode.window.activeTextEditor);
       await vscode.commands.executeCommand("workbench.action.focusRightGroup");
       await position(vscode.window.activeTextEditor);
-      leader.clearEvents();
+      leader?.clearEvents();
       sentinel = null;
       return true;
     },
@@ -138,6 +139,10 @@ exports.activate = async (context) => {
         if (!ok) throw new Error("buffer reset rejected");
       }
       await position(e);
+      return true;
+    },
+    reset: async () => {
+      await vscode.commands.executeCommand("vimCompanion.resetInputState");
       return true;
     },
   };

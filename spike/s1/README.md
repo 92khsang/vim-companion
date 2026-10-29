@@ -52,6 +52,39 @@ from these three points: the host's blocking duration and scheduling can change.
 Review only mitigations compatible with the companion's leader-only capture
 rule. No product input route or existing passing test changes in this stage.
 
+## Bounded cancellation and native-argument gate
+
+Keep V-a and the existing input handlers. Use only the idle, shared-host,
+10 ms, X11/US condition on VS Code 1.141.0 / VSCodeVim 1.32.4. Do not repeat
+the completed interval batches or start S2.
+
+1. Prove 1000 ordered probe keys, including the three cancellation chords and
+   native-argument keys, and the fixed 1000-character Vim insertion script in
+   every sandbox. Probe bindings exist only under the delivery-test context.
+2. Cycle through `SPC <cancel> j` and `SPC w <cancel> j` for `Escape`, `Ctrl+[`
+   and `Ctrl+C`. Require the companion's exact cancel event, no leaf, unchanged
+   buffer/registers, one downward Vim motion and a fresh capture-off sentinel.
+   Stop the gate at the first discrepancy; otherwise run 1000 trials per case.
+3. In a fresh sandbox without the leader extension or its remaps, record two
+   cycles of `f<Space>`, `r<Space>`, `d<Space>`. These six reference trials cover
+   initial registers and the repeat state after a small delete. They are an
+   engine-only reference, not a 1000-trial reliability claim.
+4. Run the same native cases with V-a, comparing each complete before/after
+   engine state to the corresponding reference (the second cycle for later
+   rounds). Assert the reference reaches a repeatable state. Require no leader
+   events and fresh capture-off sentinels. Stop at the first discrepancy;
+   otherwise run 1000 trials per case. Restore text and cursor between trials
+   through the probe; never write engine registers or input state.
+5. Reproduce a discrepancy once in a fresh sandbox. After preserving the failed
+   trial, observe the watchdog for at most 6.5 seconds if capture remains active,
+   then diagnose explicit reset, the next `j`, and a fresh leader/cancel cycle.
+   Recovery observations do not turn the failed trial into a pass, qualify the
+   fault-injection matrix, or restore input already lost.
+
+Other loads, delays, versions, platforms, full fault injection and integrated UI
+remain unverified. A failure-free cancellation gate qualifies recovery from these
+cancel sequences only, not recovery from an extension-host failure.
+
 ## Support and acceptance policy
 
 - Keep V-a and live prefix hints as the development direction. There is no

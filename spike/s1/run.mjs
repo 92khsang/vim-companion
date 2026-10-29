@@ -14,6 +14,7 @@ import { createHash } from "node:crypto";
 import net from "node:net";
 import { setTimeout as sleep } from "node:timers/promises";
 import assert from "node:assert/strict";
+import { runBoundedGate } from "./bounded-gates.mjs";
 
 const source = import.meta.dirname;
 const code = process.env.S1_CODE ?? "/usr/share/code/code";
@@ -30,9 +31,18 @@ assert.ok([10, 30, 60].includes(delayMs), "S1_DELAY_MS must be 10, 30 or 60");
 const root = mkdtempSync(join(tmpdir(), "s1-"));
 const socketPath = join(root, "probe.sock");
 const loaded = process.env.S1_LOAD === "1";
+const gate = process.env.S1_GATE ?? "entry-exit";
+assert.ok(["entry-exit", "cancel", "native-baseline", "native"].includes(gate));
+assert.ok(gate === "entry-exit" || (!loaded && delayMs === 10));
+const baseline = gate === "native-baseline";
+const referencePath = process.env.S1_BASELINE;
+assert.ok(gate !== "native" || referencePath, "S1_BASELINE is required");
+const reference =
+  gate === "native" ? JSON.parse(readFileSync(referencePath, "utf8")) : null;
 let phaseSeed = 1053;
 const result = {
   scope: "Bounded V-a support investigation; not a final S1 acceptance result",
+  gate,
   started: new Date().toISOString(),
   sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], {
     encoding: "utf8",
@@ -155,12 +165,25 @@ try {
   ])
     mkdirSync(dir, { recursive: true, mode: 0o700 });
   cpSync(vim, join(extensions, "vscodevim.vim-1.32.4"), { recursive: true });
-  for (const name of ["leader", "probe", ...(loaded ? ["load"] : [])])
+  for (const name of [
+    ...(baseline ? [] : ["leader"]),
+    "probe",
+    ...(loaded ? ["load"] : []),
+  ])
     cpSync(
       join(source, name),
       join(extensions, `vim-companion-spike.s1-${name}-0.0.0`),
       { recursive: true },
     );
+  if (baseline) {
+    const path = join(
+      extensions,
+      "vim-companion-spike.s1-probe-0.0.0/package.json",
+    );
+    const probeManifest = JSON.parse(readFileSync(path, "utf8"));
+    probeManifest.extensionDependencies = ["vscodevim.vim"];
+    writeFileSync(path, JSON.stringify(probeManifest));
+  }
   const settings = {
     "workbench.startupEditor": "none",
     "workbench.tips.enabled": false,
@@ -197,6 +220,10 @@ try {
       { before: ["<space>"], commands: ["vimCompanion.startLeader"] },
     ],
   };
+  if (baseline) {
+    delete settings["vim.normalModeKeyBindingsNonRecursive"];
+    delete settings["vim.visualModeKeyBindingsNonRecursive"];
+  }
   result.settings = settings;
   writeFileSync(join(data, "User/settings.json"), JSON.stringify(settings));
   const text = "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n";
@@ -292,7 +319,8 @@ try {
   });
   client.on("error", (error) => pending?.reject(error));
   result.hello = await call("hello");
-  assert.equal(result.hello.pid, result.hello.leaderPid);
+  if (baseline) assert.equal(result.hello.leaderPid, null);
+  else assert.equal(result.hello.pid, result.hello.leaderPid);
   if (loaded) assert.equal(result.hello.pid, result.hello.loadPid);
   const window = await until(() => {
     try {
@@ -319,7 +347,21 @@ try {
   }
   console.log("Sandbox ready; proving 1000 probe keys.");
 
-  const pattern = ["space", "w", "h", "j", "a", "b", "c", "d", "e", "f"];
+  const pattern =
+    gate === "entry-exit"
+      ? ["space", "w", "h", "j", "a", "b", "c", "d", "e", "f"]
+      : [
+          "space",
+          "w",
+          "h",
+          "j",
+          "f",
+          "r",
+          "d",
+          "Escape",
+          "ctrl+bracketleft",
+          "ctrl+c",
+        ];
   const keys = Array.from(
     { length: 1000 },
     (_, i) => pattern[i % pattern.length],
@@ -343,116 +385,132 @@ try {
   assert.equal(script.text, scriptText);
   assert.equal(script.mode, 0);
   assert.ok(noPending(script));
-  console.log(`Delivery proved; checking V-a entry/exit at ${delayMs} ms.`);
+  console.log(`Delivery proved; checking ${gate} at ${delayMs} ms.`);
   await call("text", { value: text });
   await settled();
 
-  for (let index = 0; index < 1000; index++) {
-    await call("prepare");
-    const prepared = await settled();
-    inject(["ctrl+alt+9"]);
-    const before = await settled();
-    result.lastPreparation = { index, prepared, before };
-    assert.equal(
-      before.sentinelSequence,
-      prepared.sentinelSequence + 1,
-      "pre-trial sentinel key was not received exactly once",
-    );
-    assert.equal(before.sentinel, "normal-editor-capture-off");
-    assert.equal(before.viewColumn, 2);
-    assert.equal(before.mode, 0);
-    assert.ok(noPending(before));
-    assert.equal(before.leader.active, false);
-    assert.deepEqual(before.selections, [[0, 0, 0, 0]]);
-    assert.equal(before.text, text);
-    let phaseDelayMs = 0;
-    if (loaded) {
-      phaseSeed = (Math.imul(1664525, phaseSeed) + 1013904223) >>> 0;
-      phaseDelayMs = phaseSeed % 100;
-      await sleep(phaseDelayMs);
-    }
-    const injectedAt = Date.now();
-    inject(["space", "w", "h", "j"]);
-    const injectionFinishedAt = Date.now();
-    const after = await settled();
-    inject(["ctrl+alt+9"]);
-    const sentinel = await settled();
-    const errors = [];
-    const check = (condition, message) => {
-      if (!condition) errors.push(message);
-    };
-    check(
-      after.leader.events.filter((e) => e.type === "leaf-end").length === 1,
-      "leaf did not complete exactly once",
-    );
-    check(
-      JSON.stringify(
-        after.leader.events.filter((e) => e.type === "key").map((e) => e.value),
-      ) === JSON.stringify(["w", "h"]),
-      "leader did not receive exactly w,h",
-    );
-    check(after.viewColumn === 1, "left group not active");
-    check(
-      JSON.stringify(after.selections) === JSON.stringify([[1, 0, 1, 0]]),
-      "j did not move down once in left editor",
-    );
-    check(after.text === before.text, "buffer changed");
-    check(
-      after.mode === 0 && noPending(after),
-      "mode or pending input changed",
-    );
-    check(
-      JSON.stringify(after.registers) === JSON.stringify(before.registers),
-      "registers changed",
-    );
-    check(
-      !after.leader.active &&
-        sentinel.sentinel === "normal-editor-capture-off" &&
-        sentinel.sentinelSequence === after.sentinelSequence + 1,
-      "capture/focus was not released",
-    );
-    result.trials.push({
-      index,
-      phaseDelayMs,
-      injectedAt,
-      injectionFinishedAt,
-      before,
-      after,
-      finalSentinel: sentinel.sentinel,
-      finalSentinelSequence: sentinel.sentinelSequence,
-      errors,
+  if (gate !== "entry-exit") {
+    await runBoundedGate({
+      gate,
+      result,
+      reference,
+      referencePath,
+      call,
+      inject,
+      settled,
+      noPending,
+      save,
+      text,
     });
-    if (errors.length) {
-      result.status = "discrepancy";
-      console.log(`Stopped at trial ${index + 1}: ${errors.join("; ")}`);
-      if (after.leader.active) {
-        // Observe the existing watchdog without sending recovery keys or changing the failed trial.
-        const recovery = { startedAt: Date.now(), samples: [] };
-        result.recoveryObservation = recovery;
-        const deadline = Date.now() + 6500;
-        let value;
-        do {
-          await sleep(100);
-          value = await call("snapshot");
-          recovery.samples.push({
-            at: Date.now(),
-            active: value.leader.active,
-          });
-        } while (value.leader.active && Date.now() < deadline);
-        recovery.after = value;
-        inject(["ctrl+alt+9"]);
-        recovery.confirmed = await settled();
-        recovery.freshSentinel =
-          recovery.confirmed.sentinelSequence === value.sentinelSequence + 1;
-        recovery.finishedAt = Date.now();
+  } else
+    for (let index = 0; index < 1000; index++) {
+      await call("prepare");
+      const prepared = await settled();
+      inject(["ctrl+alt+9"]);
+      const before = await settled();
+      result.lastPreparation = { index, prepared, before };
+      assert.equal(
+        before.sentinelSequence,
+        prepared.sentinelSequence + 1,
+        "pre-trial sentinel key was not received exactly once",
+      );
+      assert.equal(before.sentinel, "normal-editor-capture-off");
+      assert.equal(before.viewColumn, 2);
+      assert.equal(before.mode, 0);
+      assert.ok(noPending(before));
+      assert.equal(before.leader.active, false);
+      assert.deepEqual(before.selections, [[0, 0, 0, 0]]);
+      assert.equal(before.text, text);
+      let phaseDelayMs = 0;
+      if (loaded) {
+        phaseSeed = (Math.imul(1664525, phaseSeed) + 1013904223) >>> 0;
+        phaseDelayMs = phaseSeed % 100;
+        await sleep(phaseDelayMs);
       }
-      break;
+      const injectedAt = Date.now();
+      inject(["space", "w", "h", "j"]);
+      const injectionFinishedAt = Date.now();
+      const after = await settled();
+      inject(["ctrl+alt+9"]);
+      const sentinel = await settled();
+      const errors = [];
+      const check = (condition, message) => {
+        if (!condition) errors.push(message);
+      };
+      check(
+        after.leader.events.filter((e) => e.type === "leaf-end").length === 1,
+        "leaf did not complete exactly once",
+      );
+      check(
+        JSON.stringify(
+          after.leader.events
+            .filter((e) => e.type === "key")
+            .map((e) => e.value),
+        ) === JSON.stringify(["w", "h"]),
+        "leader did not receive exactly w,h",
+      );
+      check(after.viewColumn === 1, "left group not active");
+      check(
+        JSON.stringify(after.selections) === JSON.stringify([[1, 0, 1, 0]]),
+        "j did not move down once in left editor",
+      );
+      check(after.text === before.text, "buffer changed");
+      check(
+        after.mode === 0 && noPending(after),
+        "mode or pending input changed",
+      );
+      check(
+        JSON.stringify(after.registers) === JSON.stringify(before.registers),
+        "registers changed",
+      );
+      check(
+        !after.leader.active &&
+          sentinel.sentinel === "normal-editor-capture-off" &&
+          sentinel.sentinelSequence === after.sentinelSequence + 1,
+        "capture/focus was not released",
+      );
+      result.trials.push({
+        index,
+        phaseDelayMs,
+        injectedAt,
+        injectionFinishedAt,
+        before,
+        after,
+        finalSentinel: sentinel.sentinel,
+        finalSentinelSequence: sentinel.sentinelSequence,
+        errors,
+      });
+      if (errors.length) {
+        result.status = "discrepancy";
+        console.log(`Stopped at trial ${index + 1}: ${errors.join("; ")}`);
+        if (after.leader.active) {
+          // Observe the existing watchdog without sending recovery keys or changing the failed trial.
+          const recovery = { startedAt: Date.now(), samples: [] };
+          result.recoveryObservation = recovery;
+          const deadline = Date.now() + 6500;
+          let value;
+          do {
+            await sleep(100);
+            value = await call("snapshot");
+            recovery.samples.push({
+              at: Date.now(),
+              active: value.leader.active,
+            });
+          } while (value.leader.active && Date.now() < deadline);
+          recovery.after = value;
+          inject(["ctrl+alt+9"]);
+          recovery.confirmed = await settled();
+          recovery.freshSentinel =
+            recovery.confirmed.sentinelSequence === value.sentinelSequence + 1;
+          recovery.finishedAt = Date.now();
+        }
+        break;
+      }
+      if ((index + 1) % 100 === 0) {
+        save();
+        console.log(`${index + 1}/1000 entry/exit trials recorded`);
+      }
     }
-    if ((index + 1) % 100 === 0) {
-      save();
-      console.log(`${index + 1}/1000 entry/exit trials recorded`);
-    }
-  }
   result.status ??= "first-gate-passed";
   result.loadWindows = await call("loadWindows");
 } catch (error) {
