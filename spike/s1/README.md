@@ -100,6 +100,88 @@ cancel sequences only, not recovery from an extension-host failure.
 - The complete S1 matrix and #7 results are still open; remaining work should be
   chosen against the support that will actually be claimed. S2 stays stopped.
 
+## Cancellation and recovery results
+
+Measured: two fresh idle/shared-host sandboxes at 10 ms each stopped on an exit
+discrepancy. Both first proved 1000 ordered probe keys, including the cancellation
+chords, and the exact 1000-character Vim insertion script. The input handlers were
+unchanged. These first-discrepancy stops are not failure-rate estimates.
+
+| Run                                                                                                                                                        | Trials retained                                                                     | First discrepancy                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------- |
+| [Cancellation 1](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/cancel-idle-02.json)                | Root `Escape` and `Ctrl+[` passed once each; root `Ctrl+C` failed on trial 3        | `SPC Ctrl+C j`: no downward motion |
+| [Fresh cancellation repetition](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/cancel-idle-03.json) | All six cases passed 276 times each; root `Escape` failed on trial 1657 (round 277) | `SPC Escape j`: no downward motion |
+
+Measured: in both failures, the companion received the cancel while `active=true`,
+then received `j` while `active=false`, before recording the cancel's completed
+`end`. The cursor stayed at zero-based `(0, 0)` in the right editor. Buffer and
+registers were unchanged. Fresh sentinels confirmed capture off at the final
+quiet state. The repeated effect is loss of the first Vim key after cancellation;
+the two failures used different cancel chords. No cancel case reached a completed
+1000-trial batch, and no cancellation case is qualified as lossless.
+
+Inferred: the renderer can still dispatch a key to the leader binding while the
+extension has already cleared its local active flag and is awaiting the context
+release. The recorded `key`/`end` order and unchanged cursor support this exit
+boundary explanation; the measured sequences did not enable renderer tracing.
+This adds an idle-host cancellation limitation to the earlier loaded-entry
+limitations. Retaining V-a does not waive either failure.
+
+Measured: after each failure, a separate delayed `j` moved down once. A fresh
+`SPC w Escape j` cycle and a reset command issued during a confirmed active `w`
+prefix each also released capture and allowed `j` to move down once, with
+unchanged buffer/registers and fresh sentinels. Each diagnostic ran once per
+sandbox. The initial post-failure reset was a no-op because capture was already
+off; it must not be credited with repairing the lost `j`. The active-prefix reset
+was a separate observation. Neither failure triggered the watchdog observation.
+These diagnostics show subsequent input can resume in the observed states; they
+do not qualify reset, watchdog or the full fault-injection matrix.
+
+Measured: the preliminary [rejected delivery run](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/cancel-idle-01.json)
+received only 800 of 1000 probe keys and ran no leader trials.
+The [renderer trace](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/cancel-delivery-dispatch.log.txt) and
+[diagnostic snapshot](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/cancel-delivery-diagnostic.json) show that `Ctrl+[` and
+`Ctrl+C` arrived as requested but selected VSCodeVim commands instead of probe
+commands. Delivery-only sandbox user bindings resolved that instrumentation
+conflict. Both measured cancellation runs passed the complete delivery proof;
+the user bindings were inactive during their measured leader sequences.
+
+## Native-argument preservation results
+
+Measured: in the same idle/shared-host, X11/US, 10 ms condition, one fresh V-a
+sandbox completed **1000 trials each** of `f<Space>`, `r<Space>` and `d<Space>`
+(3000 total), with zero detected discrepancies against the
+[engine-only reference](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/native-baseline-01.json). The
+[V-a result](https://github.com/92khsang/vim-companion/blob/da9966cc486c85310dc88097be18ddb6b05d4d10/spike/s1/data/native-idle-01.json) records no leader activity in any trial.
+Every before/after buffer, selection, Vim mode, pending-input field and register
+matched the corresponding reference. Fresh sentinels confirmed Normal editor
+focus with capture off; the final sentinel did not change the observed engine
+or leader state.
+
+| Input      | Engine-only effect from the start of `alpha beta gamma`                                            | V-a comparison    |
+| ---------- | -------------------------------------------------------------------------------------------------- | ----------------- |
+| `f<Space>` | Cursor moved to zero-based `(0, 5)`; text/registers unchanged                                      | 1000/1000 matched |
+| `r<Space>` | First character replaced by Space; cursor stayed at `(0, 0)`                                       | 1000/1000 matched |
+| `d<Space>` | First character `a` deleted into the unnamed and small-delete registers; cursor stayed at `(0, 0)` | 1000/1000 matched |
+
+Measured: the reference sandbox had no leader extension or leader remaps and
+ran six trials, two cycles of the three cases. The first cycle established the
+initial register effects; the second confirmed the repeat state. This is a
+deterministic comparison reference, not a separate 1000-trial reliability batch.
+Both sandboxes first passed the 1000-key delivery proof and exact Vim insertion
+script. Independent raw-data checks verified all 3000 comparisons, empty leader
+events, idle queues, fresh sentinel counts, source/environment/settings and the
+reference file's SHA-256. Raw measurement bytes are excluded from formatting to
+preserve that hash reference.
+
+**Decision:** keep V-a, with measured preservation of these three Normal-mode
+arguments only in this condition. Retain the cancellation exit-loss limitation
+and the previous loaded-entry limitations. Delayed follow-up input and active
+reset were observed only in the two failure diagnostics; watchdog and broader
+fault recovery remain unqualified. No final S1 pass, full ordinary-key support,
+minimum safe interval or integrated UI qualification is claimed. No further
+matrix expansion is part of this gate; S2 stays stopped.
+
 ## 30/60 ms results and current support boundary
 
 Measured: each of two fresh 30 ms sandboxes passed its first entry/exit trial
@@ -269,6 +351,18 @@ VS Code keyboard-shortcut troubleshooting, writes a snapshot, and exits
 nonzero before any delivery or leader trial. Read the retained sandbox's
 `data/logs/*/window*/renderer.log`. Normal runs keep this logging off.
 
+The cancellation delivery diagnostic used the following command before the
+delivery-only user rules were added. Its raw file records dirty instrumentation
+source and is not an acceptance run. `S1_DIAG_KEY` accepts comma-separated XTEST
+key names; `S1_DIAG_DELIVERY=1` activates and records the delivery probe context.
+
+```bash
+S1_GATE=cancel S1_DIAG_ONLY=1 S1_DIAG_DELIVERY=1 \
+  S1_DIAG_KEY=Escape,ctrl+bracketleft,ctrl+c \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-delivery-diagnostic.json"
+```
+
 ## Remaining V-a boundary and mitigation assessment
 
 Documented: VSCodeVim 1.32.4 places typed keys in its serial task queue and awaits
@@ -308,9 +402,10 @@ integration, personal remaps, another input method or another platform.
 
 V-a remains the selected development direction with experimental input
 limitations. No input handler was changed to improve these measurements. The
-next bounded work should qualify cancellation/recovery and preservation of
-native Vim arguments before claiming those behaviours are supported; the full
-matrix and #7 remain open.
+cancellation gate above adds a measured idle exit limitation; it must be
+resolved or retained as an explicit limitation before any lossless cancellation
+claim. The full matrix and #7 remain open, including watchdog/fault recovery and
+the timing of the eventual integrated UI.
 
 ## Validation and provenance
 
@@ -320,12 +415,23 @@ commit `886baf4a83ad19880332d0fcdcaa0c8eeb022a8b`. The two 30 ms runs and the
 60 ms run used clean source commit `95cbf9cb88054010db0b4037db2db54a32efce20`.
 Their original commands were the commands above with `spike/s1/data/` as the
 output directory; fresh temporary output paths make replay preserve that evidence.
+
+The two valid cancellation runs used clean source commit
+`dd2a86d27451a8a7700345495241cb9b9e6c2e80`; the engine-only reference and V-a native
+comparison used clean source commit `1ff9be8345ff06e7886e2c98c5c606096f52cae1`.
+The rejected cancellation delivery run used clean `1dc970d636e724feb66bddf360e9ce876df2735b`;
+the subsequent renderer diagnostic recorded dirty instrumentation and no acceptance
+trials. The leader input handlers were unchanged throughout. The commands above name
+the completed valid runs; the rejected first cancellation attempt used the same
+cancel invocation with `cancel-idle-01.json` before delivery-only user rules existed.
+
 The runner records the engine
 bundle hash, IDE build, settings and process identities. Each run used one IDE
-instance, with the prototype, probe, engine and optional load in the same host.
+instance. V-a runs placed the prototype, probe, engine and optional load in the
+same host; the engine-only reference omitted the prototype.
 Node syntax, changed-file formatting, raw-data consistency, diff and publication
-privacy checks were run. Invalid-delay and existing-output guards were also
-checked without launching an IDE. The unrelated spec suite was not rerun, and remote CI
+privacy checks were run. The earlier entry/exit validation also checked invalid-delay
+and existing-output guards without launching an IDE. The unrelated spec suite was not rerun, and remote CI
 was not awaited.
 
 The test-only inspector/register readers were adapted from
