@@ -2,7 +2,7 @@ const vscode = require("vscode");
 const net = require("node:net");
 const reader = require("./inspect-reader.cjs");
 const { registerContents } = require("./register-contents.cjs");
-let map, Register, queue, leader;
+let map, Register, queue, leader, load;
 let delivery = [];
 let sentinel = null;
 let sentinelSequence = 0;
@@ -63,6 +63,9 @@ exports.activate = async (context) => {
   leader = await vscode.extensions
     .getExtension("vim-companion-spike.s1-leader")
     .activate();
+  load = await vscode.extensions
+    .getExtension("vim-companion-spike.s1-load")
+    ?.activate();
   context.subscriptions.push(
     vscode.commands.registerCommand("s1.deliveryKey", (key) =>
       delivery.push({ key, t: performance.now() }),
@@ -87,7 +90,9 @@ exports.activate = async (context) => {
       vim: vscode.extensions.getExtension("vscodevim.vim").packageJSON.version,
       pid: process.pid,
       leaderPid: leader.pid,
+      loadPid: load?.pid ?? null,
     }),
+    loadWindows: () => load?.windows() ?? [],
     open: async ({ file }) => {
       const doc = await vscode.workspace.openTextDocument(
         vscode.Uri.file(file),

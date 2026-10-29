@@ -22,6 +22,8 @@ if (!vim)
 const output = resolve(process.argv[2] ?? "spike/s1/data/first-gate.json");
 const root = mkdtempSync(join(tmpdir(), "s1-"));
 const socketPath = join(root, "probe.sock");
+const loaded = process.env.S1_LOAD === "1";
+let phaseSeed = 1053;
 const result = {
   scope: "Initial feasibility gate only; not a final S1 acceptance result",
   started: new Date().toISOString(),
@@ -36,11 +38,12 @@ const result = {
   node: process.version,
   condition: {
     delayMs: 10,
-    load: "idle",
+    load: loaded ? "50 ms blocking every 100 ms" : "idle",
     affinity: "same extension host",
     instances: 1,
     display: "X11 under Xvfb",
     layout: "us",
+    phaseSeed: loaded ? phaseSeed : null,
   },
   trials: [],
 };
@@ -145,7 +148,7 @@ try {
   ])
     mkdirSync(dir, { recursive: true, mode: 0o700 });
   cpSync(vim, join(extensions, "vscodevim.vim-1.32.4"), { recursive: true });
-  for (const name of ["leader", "probe"])
+  for (const name of ["leader", "probe", ...(loaded ? ["load"] : [])])
     cpSync(
       join(source, name),
       join(extensions, `vim-companion-spike.s1-${name}-0.0.0`),
@@ -283,6 +286,7 @@ try {
   client.on("error", (error) => pending?.reject(error));
   result.hello = await call("hello");
   assert.equal(result.hello.pid, result.hello.leaderPid);
+  if (loaded) assert.equal(result.hello.pid, result.hello.loadPid);
   const window = await until(() => {
     try {
       return xdo(["search", "--onlyvisible", "--name", "Visual Studio Code"])
@@ -354,6 +358,13 @@ try {
     assert.equal(before.leader.active, false);
     assert.deepEqual(before.selections, [[0, 0, 0, 0]]);
     assert.equal(before.text, text);
+    let phaseDelayMs = 0;
+    if (loaded) {
+      phaseSeed = (Math.imul(1664525, phaseSeed) + 1013904223) >>> 0;
+      phaseDelayMs = phaseSeed % 100;
+      await sleep(phaseDelayMs);
+    }
+    const injectedAt = Date.now();
     inject(["space", "w", "h", "j"]);
     const after = await settled();
     inject(["ctrl+alt+9"]);
@@ -394,6 +405,8 @@ try {
     );
     result.trials.push({
       index,
+      phaseDelayMs,
+      injectedAt,
       before,
       after,
       finalSentinel: sentinel.sentinel,
@@ -411,6 +424,7 @@ try {
     }
   }
   result.status ??= "first-gate-passed";
+  result.loadWindows = await call("loadWindows");
 } catch (error) {
   result.status = "harness-error";
   result.error = String(error);
