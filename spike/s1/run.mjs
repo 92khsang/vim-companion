@@ -226,6 +226,20 @@ try {
   }
   result.settings = settings;
   writeFileSync(join(data, "User/settings.json"), JSON.stringify(settings));
+  if (gate !== "entry-exit") {
+    // Vim's extension bindings can shadow probe Ctrl chords. The delivery-only
+    // user rules prove injection, then become ineligible before measured input.
+    const probeManifest = JSON.parse(
+      readFileSync(join(source, "probe/package.json"), "utf8"),
+    );
+    result.deliveryKeybindings = probeManifest.contributes.keybindings.filter(
+      (binding) => binding.when === "s1.delivery",
+    );
+    writeFileSync(
+      join(data, "User/keybindings.json"),
+      JSON.stringify(result.deliveryKeybindings),
+    );
+  }
   const text = "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n";
   const file = join(workspace, "sample.txt");
   writeFileSync(file, text);
@@ -341,8 +355,12 @@ try {
     await call("diagnose");
     await call("prepare");
     await settled();
-    inject([process.env.S1_DIAG_KEY ?? "ctrl+alt+9"]);
+    if (process.env.S1_DIAG_DELIVERY === "1")
+      await call("delivery", { enabled: true });
+    inject((process.env.S1_DIAG_KEY ?? "ctrl+alt+9").split(","));
     result.diagnostic = await settled();
+    if (process.env.S1_DIAG_DELIVERY === "1")
+      result.diagnosticDelivery = await call("delivery", { enabled: false });
     throw new Error("Diagnostic-only run; inspect sandbox renderer log");
   }
   console.log("Sandbox ready; proving 1000 probe keys.");

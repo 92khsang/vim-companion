@@ -117,6 +117,11 @@ export async function runBoundedGate({
         if (!ok) errors.push(message);
       };
       check(
+        equal(engineState(after), engineState(sentinel)) &&
+          equal(after.leader, sentinel.leader),
+        "state changed before final sentinel",
+      );
+      check(
         !after.leader?.active &&
           sentinel.sentinel === "normal-editor-capture-off" &&
           sentinel.sentinelSequence === after.sentinelSequence + 1,
@@ -132,6 +137,35 @@ export async function runBoundedGate({
           !after.leader?.events.length,
           "native argument started or reached the leader",
         );
+        if (baseline) {
+          const expectedText =
+            variant.id === "r-space"
+              ? ` ${text.slice(1)}`
+              : variant.id === "d-space"
+                ? text.slice(1)
+                : text;
+          check(
+            after.text === expectedText,
+            "engine-only native text effect differs",
+          );
+          check(
+            equal(
+              after.selections,
+              variant.id === "f-space" ? [[0, 5, 0, 5]] : [[0, 0, 0, 0]],
+            ),
+            "engine-only native cursor effect differs",
+          );
+          if (variant.id === "f-space")
+            check(
+              equal(after.registers, before.registers),
+              "engine-only find changed registers",
+            );
+          if (variant.id === "d-space")
+            check(
+              equal(after.registers["-"], [{ text: "a", mode: "character" }]),
+              "engine-only delete register differs",
+            );
+        }
         if (expected)
           check(
             equal(engineState(after), engineState(expected.after)),
@@ -193,7 +227,13 @@ export async function runBoundedGate({
           `Stopped at ${variant.id}, round ${round + 1}: ${errors.join("; ")}`,
         );
         save();
-        if (!baseline) await recoveryDiagnostic(after);
+        if (!baseline) {
+          try {
+            await recoveryDiagnostic(after);
+          } catch (error) {
+            result.recoveryDiagnosticError = String(error);
+          }
+        }
         return;
       }
     }
