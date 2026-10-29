@@ -330,8 +330,15 @@ try {
 
   for (let index = 0; index < 1000; index++) {
     await call("prepare");
+    const prepared = await settled();
     inject(["F6"]);
     const before = await settled();
+    result.lastPreparation = { index, prepared, before };
+    assert.equal(
+      before.sentinelSequence,
+      prepared.sentinelSequence + 1,
+      "pre-trial sentinel key was not received exactly once",
+    );
     assert.equal(before.sentinel, "normal-editor-capture-off");
     assert.equal(before.viewColumn, 2);
     assert.equal(before.mode, 0);
@@ -372,7 +379,9 @@ try {
       "registers changed",
     );
     check(
-      !after.leader.active && sentinel.sentinel === "normal-editor-capture-off",
+      !after.leader.active &&
+        sentinel.sentinel === "normal-editor-capture-off" &&
+        sentinel.sentinelSequence === after.sentinelSequence + 1,
       "capture/focus was not released",
     );
     result.trials.push({
@@ -380,6 +389,7 @@ try {
       before,
       after,
       finalSentinel: sentinel.sentinel,
+      finalSentinelSequence: sentinel.sentinelSequence,
       errors,
     });
     if (errors.length) {

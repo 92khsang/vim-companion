@@ -5,6 +5,7 @@ const { registerContents } = require("./register-contents.cjs");
 let map, Register, queue, leader;
 let delivery = [];
 let sentinel = null;
+let sentinelSequence = 0;
 
 function snapshot() {
   const e = vscode.window.activeTextEditor;
@@ -47,6 +48,7 @@ function snapshot() {
     },
     leader: leader.snapshot(),
     sentinel,
+    sentinelSequence,
   };
 }
 
@@ -67,6 +69,7 @@ exports.activate = async (context) => {
     ),
     vscode.commands.registerCommand("s1.sentinel", (value) => {
       sentinel = value;
+      sentinelSequence += 1;
     }),
   );
   const methods = {
