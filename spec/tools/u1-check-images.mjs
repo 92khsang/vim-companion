@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
+import { vscodeCases, intellijCases } from "./u1-matrix.mjs";
 
 const commit = process.argv[2] === "--commit" ? process.argv[3] : null;
 if (commit) assert.match(commit, /^[a-f0-9]{40}$/);
@@ -18,12 +19,19 @@ const records = [
   "intellij-capture",
   "vscode-context",
   "intellij-context",
-].flatMap(
-  (ide) =>
-    JSON.parse(readFileSync(join(root, `gallery/${ide}.json`), "utf8"))
-      .captures,
-);
-const expected = ["vscode", "intellij"].flatMap((ide) =>
+  "vscode-matrix",
+  "intellij-matrix",
+].flatMap((ide) => {
+  const evidence = JSON.parse(
+    readFileSync(join(root, `gallery/${ide}.json`), "utf8"),
+  );
+  if (ide === "intellij-capture" || ide === "intellij-context") {
+    assert.equal(evidence.awtToolkit, "sun.awt.X11.XToolkit");
+    assert.equal(evidence.backgroundWriteActionProperty, "false");
+  }
+  return evidence.captures;
+});
+const original = ["vscode", "intellij"].flatMap((ide) =>
   [
     "idle",
     "prefix",
@@ -41,13 +49,21 @@ const expected = ["vscode", "intellij"].flatMap((ide) =>
     "context-small-hidden",
   ].map((state) => `gallery/${ide}-${state}.png`),
 );
+const expected = [
+  ...new Set([
+    ...original,
+    ...vscodeCases.map((cell) => `gallery/${cell.name}.png`),
+    ...intellijCases.map((cell) => `gallery/${cell.name}.png`),
+  ]),
+];
+assert.equal(expected.length, 72);
 assert.deepEqual(
   [...images].sort(),
   [...expected].sort(),
-  "Review images must preserve every original case and include all six Vim scenarios per IDE",
+  "Review images must preserve every original case and cover the complete theme/size matrix",
 );
 assert.deepEqual(
-  records.map((record) => `gallery/${record.file}`).sort(),
+  [...new Set(records.map((record) => `gallery/${record.file}`))].sort(),
   [...expected].sort(),
 );
 for (const path of images) {
@@ -62,10 +78,12 @@ for (const path of images) {
     png = readFileSync(join(root, path));
   }
   assert.equal(png.subarray(0, 8).toString("hex"), "89504e470d0a1a0a", path);
-  const record = records.find((item) => path === `gallery/${item.file}`);
-  assert.ok(record, path);
-  assert.equal(png.readUInt32BE(16), record.width, path);
-  assert.equal(png.readUInt32BE(20), record.height, path);
+  const matches = records.filter((item) => path === `gallery/${item.file}`);
+  assert.ok(matches.length, path);
+  for (const record of matches) {
+    assert.equal(png.readUInt32BE(16), record.width, path);
+    assert.equal(png.readUInt32BE(20), record.height, path);
+  }
   execFileSync(
     "python3",
     [

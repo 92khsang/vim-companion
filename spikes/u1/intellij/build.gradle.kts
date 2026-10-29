@@ -1,3 +1,4 @@
+import org.gradle.process.CommandLineArgumentProvider
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -18,6 +19,9 @@ dependencies {
   intellijPlatform {
     local(providers.gradleProperty("ideHome"))
     bundledPlugin("com.intellij.java")
+    if (providers.gradleProperty("u1.theme").orNull == "One Dark") {
+      plugin("com.markskelton.one-dark-theme", "6.2.2")
+    }
   }
 }
 
@@ -38,7 +42,15 @@ intellijPlatform {
 }
 
 tasks.runIde {
+  // The sandbox uses the legacy VFS write path to avoid progress collection before Registry is ready.
+  systemProperty("idea.background.write.action.enabled", "false")
+  if (providers.gradleProperty("u1.traceStartup").orNull == "true") {
+    systemProperty("idea.log.trace.categories", "#com.intellij.openapi.progress.impl.TaskInfoEntityCollector")
+  }
   args(providers.gradleProperty("u1.project").get())
+  for (name in listOf("theme", "compact", "condition")) {
+    providers.gradleProperty("u1.$name").orNull?.let { systemProperty("u1.$name", it) }
+  }
   systemProperty("u1.output", providers.gradleProperty("u1.output").get())
   systemProperty("u1.data", rootDir.resolve("../gallery/data.json").canonicalPath)
   systemProperty("idea.trust.all.projects", "true")
@@ -47,6 +59,7 @@ tasks.runIde {
   systemProperty("jb.consents.confirmation.enabled", "false")
   systemProperty("jb.privacy.policy.text", "<!--999.999-->")
   systemProperty("ide.browser.jcef.enabled", "false")
-  systemProperty("awt.toolkit.name", "XToolkit")
+  // Product launch arguments can override systemProperties; this provider must come last.
+  jvmArgumentProviders.add(CommandLineArgumentProvider { listOf("-Dawt.toolkit.name=XToolkit") })
   systemProperty("sun.java2d.uiScale", "1")
 }

@@ -4,6 +4,8 @@ const path = require("node:path");
 const { page } = require("./page.cjs");
 
 exports.activate = (context) => {
+  const captureHost = process.env.U1_CAPTURE_HOST ?? "sidebar";
+  const viewId = captureHost === "panel" ? "u1.panel" : "u1.keys";
   let view;
   let state = "idle";
   let requestId;
@@ -16,10 +18,12 @@ exports.activate = (context) => {
           .toString(),
       state,
       view.webview.cspSource,
+      null,
+      captureHost,
     );
   };
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider("u1.keys", {
+    vscode.window.registerWebviewViewProvider(viewId, {
       resolveWebviewView(next) {
         view = next;
         view.webview.options = {
@@ -53,7 +57,7 @@ exports.activate = (context) => {
               return;
             const file = path.join(
               process.env.U1_CAPTURE_DIR,
-              "vscode-theme.json",
+              process.env.U1_CAPTURE_FILE ?? "vscode-theme.json",
             );
             fs.writeFileSync(
               file,
@@ -97,7 +101,7 @@ exports.activate = (context) => {
   }
   // Only the sandbox capture opts into revealing the view on startup.
   if (process.env.U1_CAPTURE_DIR) {
-    void vscode.commands.executeCommand("u1.keys.focus");
+    void vscode.commands.executeCommand(`${viewId}.focus`);
   }
   if (process.env.U1_CONTEXT_DIR) {
     // The capture driver selects fixed states without installing key handlers.

@@ -18,4 +18,14 @@ if grep -q 'SEVERE' "$work/gradle.log"; then
   exit 1
 fi
 test -s "$root/spikes/u1/gallery/intellij-capture.json"
+# These four component files are also the matrix's normal-density Islands Dark cells.
+python3 - "$root/spikes/u1/gallery" <<'PYTHON'
+from pathlib import Path
+import json,sys
+root=Path(sys.argv[1])
+data=json.loads((root/'intellij-capture.json').read_text())
+data.update(condition='islands-dark-normal', logSevereCount=0, startupTraceEnabled=False)
+data['captures']=[item for item in data['captures'] if item['state'] in ['idle','prefix','badges','grammar']]
+(root/'intellij-islands-dark-normal.json').write_text(json.dumps(data,indent=2)+'\n')
+PYTHON
 printf '%s\n' 'Captured ten docked components and four IDE layouts in Islands Dark.'

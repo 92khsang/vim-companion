@@ -230,8 +230,10 @@ if (typeof acquireVsCodeApi === "function") {
       type: "u1-theme",
       capture: {
         state,
+        host: document.documentElement.dataset.host,
         variables,
         viewport: { width: innerWidth, height: innerHeight },
+        windowSize: { width: outerWidth, height: outerHeight },
         deviceScaleFactor: devicePixelRatio,
         bodyBackground: getComputedStyle(document.body).backgroundColor,
         themeKind: document.body.className,

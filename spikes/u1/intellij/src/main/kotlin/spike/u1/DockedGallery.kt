@@ -1,13 +1,18 @@
 package spike.u1
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import com.intellij.ide.ui.LafManager
 import com.intellij.ide.ui.UISettings
+import com.intellij.ide.ui.UIThemeProvider
+import com.intellij.ide.plugins.PluginManagerCore
+import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
@@ -29,6 +34,7 @@ import com.intellij.openapi.wm.WindowManager
 import com.intellij.openapi.wm.ex.ToolWindowEx
 import com.intellij.ui.content.ContentFactory
 import java.awt.Component
+import java.awt.Container
 import java.awt.Frame
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
@@ -76,10 +82,12 @@ class GalleryAction : AnAction() {
 
 private fun startGallery(project: Project) {
   check(System.getProperty("u1.output") != null) { "UI Gallery requires a capture sandbox" }
+  check(java.awt.Toolkit.getDefaultToolkit().javaClass.name == "sun.awt.X11.XToolkit") { "U1 captures require the X11 toolkit under Xvfb" }
   val laf = LafManager.getInstance()
-  laf.setCurrentLookAndFeel(laf.installedThemes.first { it.name == "Islands Dark" }, false)
-  laf.updateUI()
-  UISettings.getInstance().compactMode = false
+  val themeName = System.getProperty("u1.theme", "Islands Dark")
+  UISettings.getInstance().compactMode = System.getProperty("u1.compact", "false").toBooleanStrict()
+  laf.setCurrentLookAndFeel(laf.installedThemes.single { it.name == themeName }, false)
+  laf.applyDensity()
   UISettings.getInstance().fireUISettingsChanged()
   val app = ApplicationManager.getApplication()
   app.executeOnPooledThread {
@@ -94,6 +102,7 @@ private class DockedGallery(private val project: Project) {
   private val root get() = frame.rootPane
   private val tool = ToolWindowManager.getInstance(project).getToolWindow("Vim Keys")!!
   private val manager = FileEditorManagerEx.getInstanceEx(project)
+  private val condition = System.getProperty("u1.condition")
   private val components = mutableListOf<Map<String, Any>>()
   private val layouts = mutableListOf<Map<String, Any>>()
   private lateinit var first: Editor
@@ -101,7 +110,12 @@ private class DockedGallery(private val project: Project) {
 
   private fun later(action: () -> Unit) {
     Timer(650) {
-      ApplicationManager.getApplication().invokeLater({ action() }, ModalityState.nonModal())
+      ApplicationManager.getApplication().invokeLater({
+        try { action() } catch (error: Exception) {
+          Logger.getInstance(DockedGallery::class.java).error("U1 capture failed", error)
+          ApplicationManager.getApplication().exit(true, true, false)
+        }
+      }, ModalityState.nonModal())
     }.apply { isRepeats = false; start() }
   }
 
@@ -140,8 +154,9 @@ private class DockedGallery(private val project: Project) {
   }
 
   private fun captureComponent(index: Int) {
-    val states = listOf("idle", "prefix", "badges", "grammar", "vim-reference", "vim-d", "vim-di", "vim-f", "vim-register", "vim-unavailable")
+    val states = if (condition != null) listOf("idle", "prefix", "badges", "grammar") else listOf("idle", "prefix", "badges", "grammar", "vim-reference", "vim-d", "vim-di", "vim-f", "vim-register", "vim-unavailable")
     if (index == states.size) {
+      if (condition != null) { finish(); return }
       val learning = (tool.contentManager.getContent(1)!!.component as JScrollPane).viewport.view as VimLearningPanel
       learning.selectCategory("objects")
       state("vim-d")
@@ -169,7 +184,21 @@ private class DockedGallery(private val project: Project) {
         val scroll = tool.contentManager.getContent(1)!!.component as JScrollPane
         check(scroll.viewport.view.preferredSize.height <= scroll.viewport.height) { "Vim content exceeds the capture viewport: $value" }
       }
-      components.add(capture((tool as ToolWindowEx).decorator, "intellij-$value.png"))
+      val name = if (condition == null || condition == "islands-dark-normal") "intellij-$value.png" else "intellij-$condition-$value.png"
+      val badgeChecks = mutableListOf<Map<String, Any>>()
+      if (value == "badges") {
+        fun inspect(component: Component) {
+          if (component is JComponent && component.getClientProperty("u1.badge") != null) {
+            val ratio = component.getClientProperty("u1.contrast") as Double
+            check(ratio >= 4.5) { "Badge text has insufficient contrast: $ratio" }
+            badgeChecks.add(mapOf("kind" to component.getClientProperty("u1.badge"), "contrast" to ratio, "colorFallback" to component.getClientProperty("u1.colorFallback")))
+          }
+          if (component is Container) component.components.forEach { inspect(it) }
+        }
+        inspect(tool.contentManager.selectedContent!!.component)
+        check(badgeChecks.size == 5) { "Expected the five badged rows in the shared fixture" }
+      }
+      components.add(capture((tool as ToolWindowEx).decorator, name) + mapOf("state" to value, "badgeChecks" to badgeChecks))
       captureComponent(index + 1)
     }
   }
@@ -231,19 +260,44 @@ private class DockedGallery(private val project: Project) {
   }
 
   private fun finish() {
+    val currentTheme = LafManager.getInstance().currentUIThemeLookAndFeel
+    val provider = UIThemeProvider.EP_NAME.extensionList.single { it.id == currentTheme.id }
+    val actualScheme = EditorColorsManager.getInstance().globalScheme.name
+    val oneDark = PluginManagerCore.getPlugin(PluginId.getId("com.markskelton.one-dark-theme"))
+    if (currentTheme.name == "One Dark") {
+      check(oneDark?.version == "6.2.2")
+      check(provider.path == "/one_dark.theme.json")
+      val themeResource = oneDark.pluginClassLoader!!.getResourceAsStream("one_dark.theme.json")!!
+      val definition = themeResource.bufferedReader().use { JsonParser.parseReader(it).asJsonObject }
+      check(definition["editorScheme"].asString == "/one_dark.xml")
+      check(currentTheme.editorSchemeId == "One Dark") { "Unexpected installed scheme ID: ${currentTheme.editorSchemeId}" }
+      check(actualScheme == "One Dark" || actualScheme == "_@user_One Dark") { "Unexpected One Dark scheme: $actualScheme" }
+    }
     val common = mapOf(
       "ide" to ApplicationInfo.getInstance().fullVersion,
       "build" to ApplicationInfo.getInstance().build.asString(),
       "theme" to LafManager.getInstance().currentUIThemeLookAndFeel.name,
-      "themeResource" to "themes/islands/ManyIslandsDark.theme.json",
+      "themeId" to currentTheme.id,
+      "themeResource" to provider.path,
+      "installedEditorSchemeId" to currentTheme.editorSchemeId,
+      "editorSchemeResource" to if (currentTheme.name == "One Dark") "/one_dark.xml" else null,
+      "themePluginVersion" to oneDark?.version,
       "editorScheme" to EditorColorsManager.getInstance().globalScheme.name,
       "compactMode" to UISettings.getInstance().compactMode,
-      "referenceSelectionPreserved" to referenceSelectionPreserved,
+      "uiDensity" to UISettings.getInstance().uiDensity.toString(),
+      "backgroundWriteActionProperty" to System.getProperty("idea.background.write.action.enabled"),
+      "awtToolkit" to java.awt.Toolkit.getDefaultToolkit().javaClass.name,
+      "toolWindowBounds" to rect((tool as ToolWindowEx).decorator.bounds),
+      "referenceSelectionPreserved" to if (condition == null) referenceSelectionPreserved else null,
       "captureMethod" to "Swing printAll of real docked tool window and IDE root pane",
     )
     val json = GsonBuilder().setPrettyPrinting().create()
-    File(output, "intellij-capture.json").writeText(json.toJson(common + ("captures" to components)) + "\n")
-    File(output, "intellij-context.json").writeText(json.toJson(common + ("captures" to layouts)) + "\n")
+    if (condition != null) {
+      File(output, "intellij-$condition.json").writeText(json.toJson(common + mapOf("condition" to condition, "captures" to components)) + "\n")
+    } else {
+      File(output, "intellij-capture.json").writeText(json.toJson(common + ("captures" to components)) + "\n")
+      File(output, "intellij-context.json").writeText(json.toJson(common + ("captures" to layouts)) + "\n")
+    }
     ApplicationManager.getApplication().exit(true, true, false)
   }
 }

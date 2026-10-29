@@ -1,4 +1,4 @@
-// Capture only the four U1 direction pages, using the same assets as the webview.
+// Capture the U1 review cells using the same assets as the webview.
 import { spawn, execFileSync } from "node:child_process";
 import { createServer } from "node:http";
 import {
@@ -12,6 +12,8 @@ import { tmpdir } from "node:os";
 import { join, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { setTimeout as delay } from "node:timers/promises";
+import { vscodeCases, vscodeFixture } from "./u1-matrix.mjs";
+const matrix = process.argv.includes("--matrix");
 
 const gallery = fileURLToPath(
   new URL("../../spikes/u1/gallery/", import.meta.url),
@@ -106,20 +108,35 @@ try {
       "window.captureViolations=[]; document.addEventListener('securitypolicyviolation', e => captureViolations.push({directive:e.violatedDirective,blocked:e.blockedURI}));",
   });
   const captures = [];
-  const width = theme.viewport.width;
-  for (const state of [
-    "idle",
-    "prefix",
-    "badges",
-    "grammar",
-    "vim-reference",
-    "vim-d",
-    "vim-di",
-    "vim-f",
-    "vim-register",
-    "vim-unavailable",
-  ]) {
-    const height = state === "badges" || state.startsWith("vim-") ? 820 : 640;
+  const cases = matrix
+    ? vscodeCases
+    : [
+        "idle",
+        "prefix",
+        "badges",
+        "grammar",
+        "vim-reference",
+        "vim-d",
+        "vim-di",
+        "vim-f",
+        "vim-register",
+        "vim-unavailable",
+      ].map((state) => ({
+        state,
+        name: `vscode-${state}`,
+        height: state === "badges" || state.startsWith("vim-") ? 820 : 640,
+      }));
+  for (const cell of cases) {
+    const { state, name, height } = cell;
+    const fixture = matrix
+      ? JSON.parse(
+          readFileSync(
+            join(gallery, vscodeFixture(cell.theme, cell.host)),
+            "utf8",
+          ),
+        )
+      : theme;
+    const width = cell.width ?? fixture.viewport.width;
     await call("Emulation.setDeviceMetricsOverride", {
       width,
       height,
@@ -127,12 +144,12 @@ try {
       mobile: false,
     });
     await call("Page.navigate", {
-      url: `http://127.0.0.1:${server.address().port}/vscode-${state}.html`,
+      url: `http://127.0.0.1:${server.address().port}/${name}.html`,
     });
     let ready = false;
     for (let i = 0; i < 60; i++) {
       const result = await call("Runtime.evaluate", {
-        expression: `window.u1Ready === true && location.pathname === '/vscode-${state}.html'`,
+        expression: `window.u1Ready === true && location.pathname === '/${name}.html'`,
         returnByValue: true,
       });
       if (result.result.value) {
@@ -149,7 +166,7 @@ try {
     });
     const result = await call("Runtime.evaluate", {
       expression:
-        "({violations:window.captureViolations, scrollWidth:document.documentElement.scrollWidth, scrollHeight:document.documentElement.scrollHeight, rowCount:[...document.querySelectorAll('.row')].filter(row => row.getClientRects().length).length})",
+        "({violations:window.captureViolations, scrollWidth:document.documentElement.scrollWidth, scrollHeight:document.documentElement.scrollHeight, bodyBackground:getComputedStyle(document.body).backgroundColor, rowCount:[...document.querySelectorAll('.row')].filter(row => row.getClientRects().length).length})",
       returnByValue: true,
     });
     const checks = result.result.value;
@@ -163,12 +180,31 @@ try {
       format: "png",
       captureBeyondViewport: false,
     });
-    const file = `vscode-${state}.png`;
+    if (checks.bodyBackground !== fixture.bodyBackground)
+      throw new Error(`${name}: incorrect host background`);
+    const file = `${name}.png`;
     writeFileSync(join(gallery, file), Buffer.from(png.data, "base64"));
-    captures.push({ file, width, height, deviceScaleFactor: 1, ...checks });
+    captures.push({
+      file,
+      width,
+      height,
+      deviceScaleFactor: 1,
+      ...(matrix
+        ? {
+            theme: fixture.theme,
+            host: cell.host,
+            size: cell.size,
+            state,
+            fixture: vscodeFixture(cell.theme, cell.host),
+          }
+        : {}),
+      ...checks,
+    });
   }
-  const interaction = await call("Runtime.evaluate", {
-    expression: `(() => {
+  const interaction = matrix
+    ? null
+    : await call("Runtime.evaluate", {
+        expression: `(() => {
       document.querySelector('[data-category="objects"]').click();
       window.dispatchEvent(new MessageEvent('message', {data:{type:'u1-context',state:'vim-d'}}));
       const pendingPreserved = document.querySelector('.reference').dataset.category === 'objects' && document.querySelector('.context-card kbd').textContent === 'd';
@@ -180,21 +216,21 @@ try {
       document.querySelectorAll('.tab')[1].click();
       return {pendingPreserved, preserved, unavailable, leaderVisible, vimVisible: !document.querySelector('.learning').hidden};
     })()`,
-    returnByValue: true,
-  });
-  if (!Object.values(interaction.result.value).every(Boolean))
+        returnByValue: true,
+      });
+  if (interaction && !Object.values(interaction.result.value).every(Boolean))
     throw new Error(JSON.stringify(interaction));
   writeFileSync(
-    join(gallery, "vscode-capture.json"),
+    join(gallery, matrix ? "vscode-matrix.json" : "vscode-capture.json"),
     JSON.stringify(
       {
         chromium: execFileSync(chromePath, ["--version"], {
           encoding: "utf8",
         }).trim(),
-        theme: theme.theme,
+        theme: matrix ? "required four-theme matrix" : theme.theme,
         vscode: theme.vscode,
         xvfbScreen: { width: 1440, height: 1000 },
-        interaction: interaction.result.value,
+        ...(interaction ? { interaction: interaction.result.value } : {}),
         captures,
       },
       null,

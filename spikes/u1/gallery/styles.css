@@ -1,9 +1,10 @@
 :root {
-  color-scheme: dark light;
+  --u1-background: var(--vscode-sideBar-background);
+  color-scheme: var(--u1-color-scheme, dark light);
   font-family: var(--vscode-font-family, sans-serif);
   font-size: var(--vscode-font-size, 13px);
   color: var(--vscode-foreground);
-  background: var(--vscode-sideBar-background);
+  background: var(--u1-background);
 }
 * {
   box-sizing: border-box;
@@ -11,7 +12,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: var(--vscode-sideBar-background);
+  background: var(--u1-background);
 }
 #keys {
   padding: 18px 16px;
@@ -159,7 +160,7 @@ h2 {
   padding: 11px 12px;
   margin-top: 18px;
   border-left: 2px solid var(--vscode-editorWarning-foreground);
-  background: var(--vscode-textBlockQuote-background);
+  background: var(--vscode-textBlockQuote-background, transparent);
   font-size: 11px;
   line-height: 1.6;
 }
@@ -326,4 +327,115 @@ button:focus-visible {
   border-top: 1px solid var(--vscode-widget-border);
   padding-top: 12px;
   margin-top: 8px;
+}
+
+:root[data-host="panel"] {
+  --u1-background: var(--vscode-panel-background);
+}
+@media (max-width: 200px) {
+  #keys {
+    padding: 14px 10px;
+  }
+  .tabs {
+    gap: 0;
+  }
+  .row {
+    gap: 8px;
+  }
+  .badge {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .categories {
+    grid-template-columns: 1fr;
+  }
+  .context-card {
+    padding: 10px;
+  }
+}
+/* A short bottom panel uses a horizontal strip; the same rows stay available. */
+@media (min-width: 600px) and (max-height: 250px) {
+  #keys {
+    padding: 8px 12px;
+  }
+  .tabs {
+    margin: 0 0 8px;
+    padding: 0;
+    border: 0;
+  }
+  .tab {
+    padding: 2px 10px;
+  }
+  .content {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 70px;
+    gap: 14px;
+    align-items: start;
+  }
+  .content > .header {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    margin: 0;
+  }
+  .content .eyebrow {
+    font-size: 9px;
+    margin-bottom: 6px;
+  }
+  .content .sequence {
+    margin-bottom: 5px;
+    gap: 5px;
+  }
+  .content h1 {
+    font-size: 14px;
+  }
+  .content > .rows {
+    grid-column: 2;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    padding: 0;
+    border: 0;
+  }
+  .content .row {
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+  }
+  .content .keycap {
+    min-height: 20px;
+    padding: 1px 5px;
+    font-size: 11px;
+  }
+  .content .row-label {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .content .row-content {
+    gap: 3px;
+  }
+  .content .badge {
+    max-width: 100%;
+    font-size: 9px;
+    line-height: 12px;
+    padding: 1px 3px;
+  }
+  .content .badge-icon {
+    font-size: 11px;
+  }
+  .content > .more {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 0;
+    font-size: 11px;
+  }
+  .content > .footer {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 26px 0 0;
+    padding: 0;
+    border: 0;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
 }

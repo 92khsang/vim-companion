@@ -1,0 +1,45 @@
+{
+  "scope": "UI capture conditions and preliminary harness diagnostics; no engine or startup reliability qualification",
+  "preliminaryFailures": [
+    {
+      "condition": "islands-light-compact",
+      "count": 2,
+      "stage": "IDE startup before gallery code",
+      "reason": "LoadingState: Registry accessed before COMPONENTS_LOADED while collecting the Synchronizing files progress task"
+    },
+    {
+      "condition": "high-contrast-normal",
+      "count": 2,
+      "stage": "IDE startup before gallery code",
+      "reason": "Same early VFS progress collection path"
+    },
+    {
+      "condition": "islands-dark-compact",
+      "count": 1,
+      "stage": "IDE startup before gallery code",
+      "reason": "Same early VFS progress collection path"
+    },
+    {
+      "condition": "one-dark-compact",
+      "count": 1,
+      "stage": "Gallery assertion",
+      "reason": "Harness compared loaded scheme ID with XML path; corrected to check source resource, installed name and actual scheme separately"
+    },
+    {
+      "condition": "islands-light-normal",
+      "count": 1,
+      "stage": "Gallery assertion",
+      "reason": "The shared fixture has five badged rows among seven visible rows; corrected the new harness assertion from six to five"
+    }
+  ],
+  "supersededHost": "IDE launch arguments overrode the original XToolkit property with WLToolkit; all published native images were recaptured with a final XToolkit argument and a runtime toolkit check",
+  "acceptedMatrixRuns": 7,
+  "acceptedMatrixScreenshots": 28,
+  "acceptedMatrixLogSevereCount": 0,
+  "finalToolkit": "sun.awt.X11.XToolkit",
+  "sandboxProperties": {
+    "idea.background.write.action.enabled": "false"
+  },
+  "defaultBackgroundWritePathQualified": false,
+  "startupTrace": "Enabled for matrix-only runs; disabled for the baseline Islands Dark run which supplies its four matrix cells"
+}

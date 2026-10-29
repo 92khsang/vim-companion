@@ -16,6 +16,7 @@ import javax.swing.JPanel
 import javax.swing.JSeparator
 import javax.swing.SwingConstants
 import javax.swing.UIManager
+import kotlin.math.pow
 
 internal class GalleryPanel {
   private val background = UIManager.getColor("Panel.background")
@@ -75,10 +76,28 @@ internal class GalleryPanel {
       "experimental" -> UIManager.getColor("Link.activeForeground")
       else -> UIManager.getColor("Component.warningFocusColor")
     } ?: muted
-    return label("$symbol  $text", 11f, color).apply {
+    // Theme focus-ring colors can be too dim for small badge text, notably in One Dark.
+    val readable = if (color.alpha == 255 && contrast(color, background) >= 4.5) color else foreground
+    return label("$symbol  $text", 11f, readable).apply {
+      putClientProperty("u1.badge", kind)
+      putClientProperty("u1.contrast", contrast(readable, this@GalleryPanel.background))
+      putClientProperty("u1.colorFallback", readable != color)
       border = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(line, 1, true), BorderFactory.createEmptyBorder(2, 5, 2, 5))
       maximumSize = preferredSize
     }
+  }
+
+  private fun contrast(first: Color, second: Color): Double {
+    fun luminance(color: Color): Double {
+      fun channel(value: Int): Double {
+        val scaled = value / 255.0
+        return if (scaled <= 0.04045) scaled / 12.92 else ((scaled + 0.055) / 1.055).pow(2.4)
+      }
+      return 0.2126 * channel(color.red) + 0.7152 * channel(color.green) + 0.0722 * channel(color.blue)
+    }
+    val a = luminance(first)
+    val b = luminance(second)
+    return (maxOf(a, b) + 0.05) / (minOf(a, b) + 0.05)
   }
 
   private fun chip(text: String) = label(text, 11f).apply {
