@@ -33,12 +33,12 @@ another IDE version, Hangul, native Wayland or macOS. These remain unverified
 requirements for any claimed support; they are not waived by retaining V-a.
 S2 stays stopped and is not run by this harness.
 
-## Current bounded investigation
+## Completed interval investigation
 
-After the recorded 10 ms runs, test **30 ms and 60 ms** requested inter-key
-intervals under the same 50 ms blocking work every 100 ms. Keep VS Code 1.141.0,
-VSCodeVim 1.32.4, X11, the shared host and the prototype unchanged, so the input
-interval is the measured difference. Run one sandbox at a time.
+The agreed **30 ms and 60 ms** investigation is complete. It used the same
+50 ms blocking work every 100 ms, VS Code 1.141.0, VSCodeVim 1.32.4, X11 and
+shared host. The prototype, probe and load extension were unchanged; the input
+interval was the measured difference. Only one sandbox ran at a time.
 
 Each fresh sandbox must first prove 1000 ordered probe keys and the fixed
 1000-character Vim script at its selected interval. Then run at most 1000
@@ -66,6 +66,47 @@ rule. No product input route or existing passing test changes in this stage.
   typing in general, arbitrary extension-host stalls or other sequences.
 - The complete S1 matrix and #7 results are still open; remaining work should be
   chosen against the support that will actually be claimed. S2 stays stopped.
+
+## 30/60 ms results and current support boundary
+
+Measured: each of two fresh 30 ms sandboxes passed its first entry/exit trial
+and failed its second. In both failures, only `h` reached the companion, which
+cancelled it as an undefined root key. No leaf ran; the right editor remained
+active at zero-based cursor `(1, 6)`. The buffer and registers were unchanged,
+and capture was off at the final fresh sentinel. This matches `w` moving in
+Vim, `h` being consumed by the companion, then `j` moving in the right editor.
+That routing explanation is inferred from the state/events, not a renderer
+trace. These first-discrepancy stops do not estimate a real-use failure rate.
+
+Measured: one 60 ms sandbox completed **1000/1000** entry/exit trials with zero
+detected discrepancies. Every leaf completed once, the left editor became
+active at cursor `(1, 0)`, buffer/registers matched, and fresh sentinels confirmed
+Normal editor focus with capture off. This qualifies only this entry/exit
+sequence and synthetic workload in the recorded environment.
+
+| Condition                                                                                  | Recorded outcome                                                        | Status                              |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- | ----------------------------------- |
+| 10 ms, idle                                                                                | 1000 trials, zero discrepancies; retained original evidence below       | Measured success for this condition |
+| 10 ms, blocking host                                                                       | Two fresh runs each failed on trial 1; retained original evidence below | Known input limitation              |
+| [30 ms, blocking host, run 1](data/loaded-30ms-01.json)                                    | Trial 1 passed; trial 2 failed                                          | Known input limitation              |
+| [30 ms, blocking host, run 2](data/loaded-30ms-02.json)                                    | Same result in a fresh sandbox                                          | Reproduced limitation               |
+| [60 ms, blocking host](data/loaded-60ms-01.json)                                           | 1000 trials, zero discrepancies                                         | Measured success for this condition |
+| Other input sequences, cancellation/fault recovery, versions, platforms and host placement | Not measured by these interval runs                                     | Unverified                          |
+
+Measured: all three new runs first received 1000 probe keys in exact order and
+produced the expected 1000-character Vim insertion script at their selected
+interval. Independent raw-data checks confirmed the source/environment, shared
+process identities, load windows, trial order, fresh sentinel counters and
+final editor/engine state. No watchdog observation was triggered: the 30 ms
+failures had already cancelled capture, and no 60 ms trial failed. Therefore
+watchdog cleanup, Escape/reset recovery and the previously observed 10 ms
+stale capture remain **unqualified**, not implicitly passed.
+
+**Decision:** retain V-a with the known loaded-input limitations. No V-b fallback
+is adopted. There is no claimed minimum safe input interval: 60 ms passing this
+fixed workload does not cover longer host stalls, personal configurations or
+integrated UI timing. The original failed conditions remain failed. V-a's input
+path remains experimental, and no final S1 pass is claimed.
 
 ## Recorded 10 ms results
 
@@ -98,8 +139,8 @@ for these four measured keys.
 
 The earlier V-b recommendation is superseded by the user's V-a decision above.
 No V-b experiment is scheduled. No product input code, catalog or `vscode.exit`
-contract has changed. #10 and draft PR #21 stay open for the bounded V-a
-investigation and its documented limits.
+contract has changed. #10 and draft PR #21 stay open for remaining V-a
+qualification; the 30/60 ms investigation itself is complete.
 
 ## Run
 
@@ -111,20 +152,25 @@ its original installation. It leaves sandbox logs available for diagnosis and
 terminates its own IDE/Xvfb process groups on exit.
 
 ```bash
+S1_RESULTS="$(mktemp -d /tmp/s1-results.XXXXXX)"
 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
-  node spike/s1/run.mjs spike/s1/data/first-gate-03.json
+  node spike/s1/run.mjs "$S1_RESULTS/first-gate-03.json"
 
 S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
-  node spike/s1/run.mjs spike/s1/data/loaded-gate-01.json
+  node spike/s1/run.mjs "$S1_RESULTS/loaded-gate-01.json"
 
 S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
-  node spike/s1/run.mjs spike/s1/data/loaded-gate-02.json
+  node spike/s1/run.mjs "$S1_RESULTS/loaded-gate-02.json"
 
 S1_LOAD=1 S1_DELAY_MS=30 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
-  node spike/s1/run.mjs spike/s1/data/loaded-30ms-01.json
+  node spike/s1/run.mjs "$S1_RESULTS/loaded-30ms-01.json"
+
+# Fresh-sandbox reproduction after the first 30 ms discrepancy.
+S1_LOAD=1 S1_DELAY_MS=30 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  node spike/s1/run.mjs "$S1_RESULTS/loaded-30ms-02.json"
 
 S1_LOAD=1 S1_DELAY_MS=60 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
-  node spike/s1/run.mjs spike/s1/data/loaded-60ms-01.json
+  node spike/s1/run.mjs "$S1_RESULTS/loaded-60ms-01.json"
 ```
 
 `S1_CODE` can select another installation of the same required VS Code version;
@@ -166,15 +212,63 @@ VS Code keyboard-shortcut troubleshooting, writes a snapshot, and exits
 nonzero before any delivery or leader trial. Read the retained sandbox's
 `data/logs/*/window*/renderer.log`. Normal runs keep this logging off.
 
+## Remaining V-a boundary and mitigation assessment
+
+Documented: VSCodeVim 1.32.4 places typed keys in its serial task queue and awaits
+remap commands ([typed input](https://github.com/VSCodeVim/Vim/blob/v1.32.4/extensionBase.ts#L322-L335),
+[command dispatch](https://github.com/VSCodeVim/Vim/blob/v1.32.4/src/configuration/remapper.ts#L487-L522)).
+VS Code 1.141.0 translates `setContext` into `_setContext` and sends nonlocal
+commands over its main-thread proxy ([API mapping](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/api/common/extHostApiCommands.ts#L520-L528),
+[RPC](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/api/common/extHostCommands.ts#L163-L204)).
+Keybinding resolution reads the current context for each key and starts command
+execution without awaiting its completion before returning
+([dispatch](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/platform/keybinding/common/abstractKeybindingService.ts#L304-L368)).
+
+Inferred: removing `await` from leader entry or shortening the watchdog cannot
+recover keys already routed into the engine queue. Moving only the companion to
+another extension host also leaves the engine's initial processing delay; its
+actual effect still requires an affinity experiment. The measured behaviour is
+consistent with this asynchronous boundary, but these runs did not trace every
+measured key through the renderer.
+
+A credible next mitigation is a ready indication shown only after the leader
+context acknowledgement, without automatically revealing the dock. This could
+support a guided input flow; it would not protect typing that precedes readiness
+and has not been tested as a workaround. Detecting unexpected selection changes
+may help cancel a stale leader, but requires Visual-mode and legitimate-selection
+checks. Neither idea is claimed as a completed fix.
+
+The existing 5-second timer is a recovery attempt, not a guaranteed wall-clock
+deadline under a blocked host. Existing cancellation/reset commands and watchdog
+behaviour are separate qualification work. Recovery cannot restore an already
+missed leaf or reverse an unintended Vim motion. Do not replay keys or undo
+changes automatically from these observations.
+
+The runs use a synthetic plain-text document in two editor groups, fresh profiles,
+the US keyboard layout and `editor.editContext=true`. No companion hint renderer
+is loaded. They do not qualify the timing or correctness of the eventual UI
+integration, personal remaps, another input method or another platform.
+
+V-a remains the selected development direction with experimental input
+limitations. No input handler was changed to improve these measurements. The
+next bounded work should qualify cancellation/recovery and preservation of
+native Vim arguments before claiming those behaviours are supported; the full
+matrix and #7 remain open.
+
 ## Validation and provenance
 
 The recorded idle run used clean source commit
 `b2dcb0c1ca014702c523a5f8ba13d491640b12ae`; both loaded runs used clean source
-commit `886baf4a83ad19880332d0fcdcaa0c8eeb022a8b`. The runner records the engine
+commit `886baf4a83ad19880332d0fcdcaa0c8eeb022a8b`. The two 30 ms runs and the
+60 ms run used clean source commit `95cbf9cb88054010db0b4037db2db54a32efce20`.
+Their original commands were the commands above with `spike/s1/data/` as the
+output directory; fresh temporary output paths make replay preserve that evidence.
+The runner records the engine
 bundle hash, IDE build, settings and process identities. Each run used one IDE
 instance, with the prototype, probe, engine and optional load in the same host.
 Node syntax, changed-file formatting, raw-data consistency, diff and publication
-privacy checks were run. The unrelated spec suite was not rerun, and remote CI
+privacy checks were run. Invalid-delay and existing-output guards were also
+checked without launching an IDE. The unrelated spec suite was not rerun, and remote CI
 was not awaited.
 
 The test-only inspector/register readers were adapted from
