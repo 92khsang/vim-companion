@@ -41,6 +41,57 @@ before spending time on the remaining cancellation/native-command matrix.
 Do not start the full matrix automatically or adopt V-b solely because the
 initial scope is bounded. The user must approve any change to final criteria.
 
+## Results and proposed direction
+
+Measured: on VS Code 1.141.0 with VSCodeVim 1.32.4, at 10 ms requested inter-key
+delay, one idle shared-host sandbox completed **1000/1000** `SPC w h j` trials
+with zero detected entry/exit discrepancies. The buffer and registers matched,
+the left editor became active, `j` moved down once, and fresh sentinels confirmed
+Normal editor focus with capture off before and after each trial.
+
+Measured: two fresh sandboxes with the required **50 ms blocking work every
+100 ms** each stopped on their **first** entry/exit trial. In both, `w h` never
+reached the leader, no leaf completed, and the right editor remained active.
+Each sandbox first passed 1000 ordered calibration keys and the exact
+1000-character Vim insertion script. These are two stopped reproductions, not a
+failure-rate estimate or completed 1000-trial loaded batches.
+
+| Run                                               | Observed result after `SPC w h j`                    | Leader keys received                    | Capture after the trial             |
+| ------------------------------------------------- | ---------------------------------------------------- | --------------------------------------- | ----------------------------------- |
+| [Idle gate](data/first-gate-03.json)              | Left editor, zero-based cursor `(1, 0)`, 1000 trials | `w`, `h`                                | Off in all 1000 trials              |
+| [Loaded reproduction 1](data/loaded-gate-01.json) | Right editor, cursor `(1, 5)`, first trial           | None                                    | Still on at the sampled quiet state |
+| [Loaded reproduction 2](data/loaded-gate-02.json) | Right editor, cursor `(0, 5)`, first trial           | `j`, cancelled as an undefined root key | Off                                 |
+
+Inferred: the context handoff can occur after subsequent keys have already been
+routed to VSCodeVim while its extension host is blocked. The first reproduction
+matches Vim executing `w h j`; the second matches Vim executing `w h` while the
+late companion capture consumes `j`. The raw records include actual blocking
+windows, injection timestamps, queue state, leader events, editor state and
+registers. They establish the discrepancy, not a renderer-level dispatch trace
+for these four measured keys.
+
+**Recommendation:** stop expanding the current V-a capture design and proceed
+with the planned V-b whole-sequence remap alternative, subject to the user's
+acceptance of its product differences and of the revised remaining S1 scope.
+This is a proposal, not an adopted input route or a final S1 verdict.
+
+- VSCodeVim would own every key of the leader sequence. The companion could keep
+  the approved right-docked reference UI, but could not follow each typed leader
+  prefix through this route. A larger UI or different dock position cannot fix
+  the input handoff observed here.
+- A count before the leader would repeat the leaf, as specified for V-b in #10,
+  instead of V-a's proposed count consumption.
+- V-b still needs its own comparison experiment, including timeout and post-leaf
+  input behaviour. It has **not** been measured by these runs.
+- The remaining S1 versions, delay/load/affinity conditions, cancellation,
+  native Vim arguments, counts, Visual modes, faults, Hangul, Wayland, macOS and
+  #7 command-focus/exit results remain unverified. Do not silently discard or
+  mark these criteria passed. The issue's full matrix is not complete.
+
+No product input code, catalog or `vscode.exit` contract was changed. S2 remains
+stopped. The existing S1 issue and draft PR remain open pending the direction
+and scope decision.
+
 ## Run
 
 Use Node 24.21.0, VS Code 1.141.0, VSCodeVim 1.32.4, Xvfb, xdotool,
@@ -56,6 +107,9 @@ S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
 
 S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   node spike/s1/run.mjs spike/s1/data/loaded-gate-01.json
+
+S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  node spike/s1/run.mjs spike/s1/data/loaded-gate-02.json
 ```
 
 `S1_CODE` can select another installation of the same required VS Code version;
@@ -94,3 +148,20 @@ Reproduce dispatch diagnostics with `S1_DIAG_ONLY=1` (optionally
 VS Code keyboard-shortcut troubleshooting, writes a snapshot, and exits
 nonzero before any delivery or leader trial. Read the retained sandbox's
 `data/logs/*/window*/renderer.log`. Normal runs keep this logging off.
+
+## Validation and provenance
+
+The recorded idle run used clean source commit
+`b2dcb0c1ca014702c523a5f8ba13d491640b12ae`; both loaded runs used clean source
+commit `886baf4a83ad19880332d0fcdcaa0c8eeb022a8b`. The runner records the engine
+bundle hash, IDE build, settings and process identities. Each run used one IDE
+instance, with the prototype, probe, engine and optional load in the same host.
+Node syntax, changed-file formatting, raw-data consistency, diff and publication
+privacy checks were run. The unrelated spec suite was not rerun, and remote CI
+was not awaited.
+
+The test-only inspector/register readers were adapted from
+[S2's instrument](https://github.com/92khsang/vim-companion/tree/eb4374dda56943b6ea23b6da784ac59daa4da9d3/spike/s2/extensions/s2-probe).
+No S2 measurements were resumed. The prototype's nonblocking leader entry also
+follows the pinned engine's
+[awaited remap command dispatch](https://github.com/VSCodeVim/Vim/blob/v1.32.4/src/configuration/remapper.ts#L487-L522).
