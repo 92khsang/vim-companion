@@ -204,6 +204,18 @@ S1_LOAD=1 S1_DELAY_MS=30 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" 
 
 S1_LOAD=1 S1_DELAY_MS=60 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   node spike/s1/run.mjs "$S1_RESULTS/loaded-60ms-01.json"
+
+# Cancellation and native arguments: idle host, 10 ms, one sandbox at a time.
+S1_GATE=cancel S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-idle-02.json"
+S1_GATE=cancel S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-idle-03.json"
+
+S1_GATE=native-baseline S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-baseline-01.json"
+S1_GATE=native S1_BASELINE="$S1_RESULTS/native-baseline-01.json" \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-idle-01.json"
 ```
 
 `S1_CODE` can select another installation of the same required VS Code version;
@@ -213,6 +225,18 @@ each run; the runner refuses to overwrite evidence. `S1_DELAY_MS` accepts only
 An exit status of zero means the experiment recorded a result; inspect
 `status` and every trial's `errors` before interpreting it. A discrepancy stops
 the gate and is not a pass. A harness error exits nonzero.
+
+`S1_GATE` defaults to the unchanged `entry-exit` gate. The new `cancel`,
+`native-baseline` and `native` gates accept only idle/10 ms. `native` requires
+`S1_BASELINE` and checks its IDE, engine hash, Node, settings, condition and
+repeat state before comparison. Its raw record identifies the reference by
+filename and SHA-256. The baseline has neither the leader extension nor its
+remaps; the probe records the installed extension IDs.
+
+The new gates install sandbox user keybindings guarded only by `s1.delivery`
+for the injection proof. They are ineligible during measured input; no user
+override is installed for the leader's cancel rules. This matters because
+VSCodeVim's Ctrl bindings can shadow the probe's extension bindings.
 
 The test probe reads VSCodeVim's already loaded module through the in-process V8
 inspector. It caches the mode-handler map, register class and key-queue reference
