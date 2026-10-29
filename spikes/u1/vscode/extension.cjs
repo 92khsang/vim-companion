@@ -76,11 +76,22 @@ exports.activate = (context) => {
       },
     }),
   );
-  for (const next of ["idle", "prefix", "badges", "grammar"]) {
+  for (const next of [
+    "idle",
+    "prefix",
+    "badges",
+    "grammar",
+    ...Object.keys(require("../vim-learning.json").scenarios),
+  ]) {
     context.subscriptions.push(
       vscode.commands.registerCommand(`u1.${next}`, async () => {
-        state = next;
-        render();
+        if (next.startsWith("vim-") && view) {
+          void view.webview.postMessage({ type: "u1-context", state: next });
+          state = next;
+        } else {
+          state = next;
+          render();
+        }
       }),
     );
   }

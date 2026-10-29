@@ -23,9 +23,33 @@ const records = [
     JSON.parse(readFileSync(join(root, `gallery/${ide}.json`), "utf8"))
       .captures,
 );
-assert.equal(images.length, 16);
-assert.equal(new Set(images).size, 16);
-assert.equal(records.length, 16);
+const expected = ["vscode", "intellij"].flatMap((ide) =>
+  [
+    "idle",
+    "prefix",
+    "badges",
+    "grammar",
+    "vim-reference",
+    "vim-d",
+    "vim-di",
+    "vim-f",
+    "vim-register",
+    "vim-unavailable",
+    "context-single",
+    "context-split",
+    "context-small-split",
+    "context-small-hidden",
+  ].map((state) => `gallery/${ide}-${state}.png`),
+);
+assert.deepEqual(
+  [...images].sort(),
+  [...expected].sort(),
+  "Review images must preserve every original case and include all six Vim scenarios per IDE",
+);
+assert.deepEqual(
+  records.map((record) => `gallery/${record.file}`).sort(),
+  [...expected].sort(),
+);
 for (const path of images) {
   let png;
   if (commit) {

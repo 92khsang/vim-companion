@@ -8,7 +8,7 @@ document.addEventListener("securitypolicyviolation", (event) => {
 });
 window.u1Violations = violations;
 
-const root = document.querySelector("#keys");
+const container = document.querySelector("#keys");
 const state = document.body.dataset.state;
 const data = U1_DATA;
 const badgeNames = {
@@ -23,6 +23,7 @@ const element = (tag, className, text) => {
   if (text) node.textContent = text;
   return node;
 };
+const root = element("div", "content");
 const key = (value) => element("kbd", "keycap", value);
 const label = (text) => element("p", "eyebrow", text);
 const muted = (text) => element("p", "muted", text);
@@ -36,9 +37,9 @@ function sequence(values) {
   return group;
 }
 
-function header(title, prefix = []) {
+function header(title, prefix = [], eyebrow = "LEADER KEYS") {
   const header = element("header", "header");
-  header.append(label(state === "grammar" ? "VIM GRAMMAR" : "LEADER KEYS"));
+  header.append(label(eyebrow));
   if (prefix.length) header.append(sequence(prefix));
   const heading = element("div", "heading");
   heading.append(element("h1", "", title));
@@ -80,7 +81,13 @@ function rows(items) {
   return list;
 }
 
-if (state === "idle") {
+if (data.vim.scenarios[state]) {
+  root.append(
+    header("Start with Space"),
+    muted("In the editor, press Space, then choose a key."),
+    rows(data.idle.rows),
+  );
+} else if (state === "idle") {
   root.append(header("Start with Space"));
   const intro = muted("In the editor, press Space, then choose a key.");
   intro.classList.add("intro");
@@ -92,7 +99,7 @@ if (state === "idle") {
   );
   root.append(doctor);
 } else if (state === "grammar") {
-  root.append(header("Build a Vim command"));
+  root.append(header("Build a Vim command", [], "VIM GRAMMAR"));
   root.append(muted("A small pattern. Many combinations."));
   const card = element("section", "grammar-card");
   card.append(
@@ -128,6 +135,85 @@ if (state === "idle") {
   const footer = element("footer", "footer");
   footer.append(key("Esc"), element("span", "", "Cancel"));
   root.append(footer);
+}
+
+const tabs = element("nav", "tabs");
+tabs.setAttribute("aria-label", "Learning views");
+const leaderButton = element("button", "tab", "Leader");
+const vimButton = element("button", "tab", "Vim");
+leaderButton.type = vimButton.type = "button";
+tabs.append(leaderButton, vimButton);
+const learning = element("section", "learning");
+learning.append(element("h1", "", "Learn Vim"));
+const context = element("section", "context-card");
+context.setAttribute("aria-label", "Example input guidance");
+const browse = element("section", "browse");
+browse.append(label("BROWSE REFERENCE"));
+const categories = element("div", "categories");
+const reference = element("div", "reference");
+function selectCategory(id) {
+  const category = data.vim.categories.find((item) => item.id === id);
+  if (!category) throw new Error(`Unknown reference category: ${id}`);
+  reference.dataset.category = id;
+  for (const button of categories.children) {
+    button.setAttribute("aria-pressed", String(button.dataset.category === id));
+  }
+  reference.replaceChildren(muted(category.note), learningRows(category.rows));
+}
+function learningRows(items) {
+  return rows(items.map(([key, label]) => ({ key, label })));
+}
+for (const category of data.vim.categories) {
+  const button = element("button", "category", category.title);
+  button.type = "button";
+  button.dataset.category = category.id;
+  button.addEventListener("click", () => selectCategory(category.id));
+  categories.append(button);
+}
+browse.append(categories, reference);
+learning.append(context, browse, muted("Read here · type in the editor"));
+function updateContext(next) {
+  const scenario = data.vim.scenarios[next];
+  if (!scenario) throw new Error(`Unknown Vim scenario: ${next}`);
+  context.dataset.scenario = next;
+  context.replaceChildren(label("EXAMPLE INPUT · PREVIEW"));
+  if (scenario.input) context.append(sequence([scenario.input]));
+  context.append(element("h2", "", scenario.title), muted(scenario.detail));
+  if (scenario.rows.length) context.append(learningRows(scenario.rows));
+  context.append(muted(scenario.footer));
+}
+function selectTab(name) {
+  const isVim = name === "vim";
+  leaderButton.setAttribute("aria-pressed", String(!isVim));
+  vimButton.setAttribute("aria-pressed", String(isVim));
+  root.hidden = isVim;
+  learning.hidden = !isVim;
+}
+leaderButton.addEventListener("click", () => {
+  if (state === "grammar")
+    root.replaceChildren(
+      header("Start with Space"),
+      muted("In the editor, press Space, then choose a key."),
+      rows(data.idle.rows),
+    );
+  selectTab("leader");
+});
+vimButton.addEventListener("click", () => selectTab("vim"));
+// Reference selection is independent of context updates, including unavailable input.
+window.addEventListener("message", ({ data: message }) => {
+  if (message?.type === "u1-context") updateContext(message.state);
+});
+const initialVim = data.vim.scenarios[state] ? state : "vim-reference";
+selectCategory(data.vim.scenarios[initialVim].category);
+updateContext(initialVim);
+container.append(tabs, root, learning);
+selectTab(data.vim.scenarios[state] ? "vim" : "leader");
+if (state === "grammar") {
+  // Preserve the original operator + motion review cell under the Vim tab.
+  learning.hidden = true;
+  root.hidden = false;
+  leaderButton.setAttribute("aria-pressed", "false");
+  vimButton.setAttribute("aria-pressed", "true");
 }
 
 window.u1Ready = true;

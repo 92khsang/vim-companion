@@ -20,6 +20,7 @@ const longLabel = "Move editor to next pane";
 if (longLabel.length !== 24)
   throw new Error("The long label must have 24 characters");
 const data = {
+  vim: read(join(u1, "vim-learning.json")),
   idle: { rows: fixture("menu", "root-vscode") },
   prefix: { rows: fixture("menu", "window-vscode") },
   badges: {
@@ -76,7 +77,13 @@ if (process.argv.includes("--html")) {
   const { page } = createRequire(import.meta.url)(join(u1, "vscode/page.cjs"));
   for (const name of ["styles.css", "renderer.js", "data.js"])
     copyFileSync(join(u1, "vscode/web", name), join(gallery, name));
-  for (const state of ["idle", "prefix", "badges", "grammar"]) {
+  for (const state of [
+    "idle",
+    "prefix",
+    "badges",
+    "grammar",
+    ...Object.keys(data.vim.scenarios),
+  ]) {
     writeFileSync(
       join(gallery, `vscode-${state}.html`),
       page((name) => name, state, "'self'", "theme.css"),
@@ -85,5 +92,5 @@ if (process.argv.includes("--html")) {
 }
 console.log(
   "U1 data prepared" +
-    (process.argv.includes("--html") ? " with four webview pages" : ""),
+    (process.argv.includes("--html") ? " with ten webview pages" : ""),
 );

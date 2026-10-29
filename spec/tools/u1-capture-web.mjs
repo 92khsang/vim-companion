@@ -107,8 +107,19 @@ try {
   });
   const captures = [];
   const width = theme.viewport.width;
-  for (const state of ["idle", "prefix", "badges", "grammar"]) {
-    const height = state === "badges" ? 820 : 580;
+  for (const state of [
+    "idle",
+    "prefix",
+    "badges",
+    "grammar",
+    "vim-reference",
+    "vim-d",
+    "vim-di",
+    "vim-f",
+    "vim-register",
+    "vim-unavailable",
+  ]) {
+    const height = state === "badges" || state.startsWith("vim-") ? 820 : 640;
     await call("Emulation.setDeviceMetricsOverride", {
       width,
       height,
@@ -138,7 +149,7 @@ try {
     });
     const result = await call("Runtime.evaluate", {
       expression:
-        "({violations:window.captureViolations, scrollWidth:document.documentElement.scrollWidth, scrollHeight:document.documentElement.scrollHeight, rowCount:document.querySelectorAll('.row').length})",
+        "({violations:window.captureViolations, scrollWidth:document.documentElement.scrollWidth, scrollHeight:document.documentElement.scrollHeight, rowCount:[...document.querySelectorAll('.row')].filter(row => row.getClientRects().length).length})",
       returnByValue: true,
     });
     const checks = result.result.value;
@@ -156,6 +167,23 @@ try {
     writeFileSync(join(gallery, file), Buffer.from(png.data, "base64"));
     captures.push({ file, width, height, deviceScaleFactor: 1, ...checks });
   }
+  const interaction = await call("Runtime.evaluate", {
+    expression: `(() => {
+      document.querySelector('[data-category="objects"]').click();
+      window.dispatchEvent(new MessageEvent('message', {data:{type:'u1-context',state:'vim-d'}}));
+      const pendingPreserved = document.querySelector('.reference').dataset.category === 'objects' && document.querySelector('.context-card kbd').textContent === 'd';
+      window.dispatchEvent(new MessageEvent('message', {data:{type:'u1-context',state:'vim-unavailable'}}));
+      const preserved = document.querySelector('.reference').dataset.category === 'objects';
+      const unavailable = document.querySelector('.context-card').dataset.scenario === 'vim-unavailable' && !document.querySelector('.context-card kbd');
+      document.querySelector('.tab').click();
+      const leaderVisible = !document.querySelector('.content').hidden;
+      document.querySelectorAll('.tab')[1].click();
+      return {pendingPreserved, preserved, unavailable, leaderVisible, vimVisible: !document.querySelector('.learning').hidden};
+    })()`,
+    returnByValue: true,
+  });
+  if (!Object.values(interaction.result.value).every(Boolean))
+    throw new Error(JSON.stringify(interaction));
   writeFileSync(
     join(gallery, "vscode-capture.json"),
     JSON.stringify(
@@ -166,6 +194,7 @@ try {
         theme: theme.theme,
         vscode: theme.vscode,
         xvfbScreen: { width: 1440, height: 1000 },
+        interaction: interaction.result.value,
         captures,
       },
       null,

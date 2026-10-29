@@ -1,4 +1,124 @@
 {
+  "vim": {
+    "categories": [
+      {
+        "id": "movement",
+        "title": "Movement",
+        "note": "Move in Normal mode. No Space prefix.",
+        "rows": [
+          ["w / b", "Next / previous word"],
+          ["0 / $", "Start / end of line"],
+          ["f{char}", "Find a character on this line"],
+          ["%", "Jump to the matching bracket"]
+        ]
+      },
+      {
+        "id": "editing",
+        "title": "Editing",
+        "note": "Combine an operator with a motion.",
+        "rows": [
+          ["d{motion}", "Delete a range"],
+          ["c{motion}", "Change a range"],
+          ["y{motion}", "Yank a range"],
+          ["p", "Put after the cursor"]
+        ]
+      },
+      {
+        "id": "objects",
+        "title": "Text objects",
+        "note": "Use after an operator or in Visual mode.",
+        "rows": [
+          ["iw", "Inner word"],
+          ["aw", "A word with whitespace"],
+          ["i\" / a\"", "Inside / including quotes"],
+          ["i( / a(", "Inside / including parentheses"]
+        ]
+      },
+      {
+        "id": "counts",
+        "title": "Counts / registers",
+        "note": "Keep the destination and count explicit.",
+        "rows": [
+          ["3w", "Move forward three words"],
+          ["d2w", "Delete over two word motions"],
+          ["\"ayiw", "Yank an inner word into a"],
+          ["\"ap", "Put from register a"]
+        ]
+      },
+      {
+        "id": "repeat",
+        "title": "Repeat / macros",
+        "note": "Macro playback has reference help only.",
+        "rows": [
+          [".", "Repeat the last change"],
+          ["qa", "Start recording into register a"],
+          ["q", "Stop recording a macro"],
+          ["@a", "Play the macro in register a"]
+        ]
+      }
+    ],
+    "scenarios": {
+      "vim-reference": {
+        "category": "movement",
+        "title": "Start with a movement",
+        "input": "",
+        "detail": "Browse a topic below, then try it in the editor.",
+        "rows": [],
+        "footer": "Vim reference · engine mappings may differ."
+      },
+      "vim-d": {
+        "category": "editing",
+        "title": "Choose a deletion range",
+        "input": "d",
+        "detail": "Delete operator · waiting for a motion or text object.",
+        "rows": [
+          ["w", "To the next word"],
+          ["$", "To the end of the line"],
+          ["iw", "An inner word"]
+        ],
+        "footer": "Continue in the editor · Esc cancels."
+      },
+      "vim-di": {
+        "category": "objects",
+        "title": "Choose a text object",
+        "input": "di",
+        "detail": "Delete inside · waiting for the object.",
+        "rows": [
+          ["w", "Inner word"],
+          ["\"", "Inside double quotes"],
+          ["(", "Inside parentheses"]
+        ],
+        "footer": "Continue in the editor · Esc cancels."
+      },
+      "vim-f": {
+        "category": "movement",
+        "title": "Type the character to find",
+        "input": "f",
+        "detail": "Find the next occurrence on this line.",
+        "rows": [["{char}", "Any target character"]],
+        "footer": "Waiting for a character · Esc cancels."
+      },
+      "vim-register": {
+        "category": "counts",
+        "title": "Choose a deletion range",
+        "input": "\"a3d",
+        "detail": "Register a · count 3 · delete operator.",
+        "rows": [
+          ["w", "Three word motions into a"],
+          ["d", "Three lines into a"]
+        ],
+        "footer": "Continue in the editor · Esc cancels."
+      },
+      "vim-unavailable": {
+        "category": "repeat",
+        "title": "Live guidance unavailable",
+        "input": "",
+        "detail": "The pending command cannot be read. Browse the reference below.",
+        "rows": [],
+        "footer": "Reference remains available."
+      }
+    }
+  },
   "idle": {
     "rows": [
       {

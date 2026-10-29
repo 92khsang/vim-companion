@@ -44,10 +44,15 @@ class KeysToolWindowFactory : ToolWindowFactory, DumbAware {
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
     val factory = ContentFactory.getInstance()
     toolWindow.contentManager.addContent(factory.createContent(panel("idle"), "Leader", false))
-    toolWindow.contentManager.addContent(factory.createContent(panel("grammar"), "Grammar", false))
+    toolWindow.contentManager.addContent(factory.createContent(vimPanel(), "Vim", false))
     toolWindow.setType(ToolWindowType.DOCKED, null)
     toolWindow.isAutoHide = false
   }
+}
+
+private fun vimPanel() = JScrollPane(VimLearningPanel()).apply {
+  border = null
+  horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 }
 
 private fun panel(state: String) = JScrollPane(GalleryPanel().content(state)).apply {
@@ -92,6 +97,7 @@ private class DockedGallery(private val project: Project) {
   private val components = mutableListOf<Map<String, Any>>()
   private val layouts = mutableListOf<Map<String, Any>>()
   private lateinit var first: Editor
+  private var referenceSelectionPreserved = false
 
   private fun later(action: () -> Unit) {
     Timer(650) {
@@ -122,22 +128,47 @@ private class DockedGallery(private val project: Project) {
   }
 
   private fun state(value: String) {
-    val content = tool.contentManager.getContent(if (value == "grammar") 1 else 0)!!
-    content.component = panel(value)
+    val isVim = value.startsWith("vim-")
+    val content = tool.contentManager.getContent(if (value == "grammar" || isVim) 1 else 0)!!
+    if (isVim) {
+      val current = (content.component as? JScrollPane)?.viewport?.view as? VimLearningPanel
+      if (current == null) content.component = vimPanel()
+      ((content.component as JScrollPane).viewport.view as VimLearningPanel).updateContext(value)
+    } else content.component = panel(value)
     // Updating a visible tab does not activate or reveal the tool window.
     tool.contentManager.setSelectedContent(content, false)
   }
 
   private fun captureComponent(index: Int) {
-    val states = listOf("idle", "prefix", "badges", "grammar")
+    val states = listOf("idle", "prefix", "badges", "grammar", "vim-reference", "vim-d", "vim-di", "vim-f", "vim-register", "vim-unavailable")
     if (index == states.size) {
+      val learning = (tool.contentManager.getContent(1)!!.component as JScrollPane).viewport.view as VimLearningPanel
+      learning.selectCategory("objects")
+      state("vim-d")
+      state("vim-unavailable")
+      check(learning.selectedCategory == "objects") { "A context update reset reference browsing" }
+      referenceSelectionPreserved = true
       state("prefix")
       later { captureLayout("single", false); split() }
       return
     }
     val value = states[index]
     state(value)
+    if (value.startsWith("vim-")) {
+      val learning = (tool.contentManager.getContent(1)!!.component as JScrollPane).viewport.view as VimLearningPanel
+      learning.selectCategory(when (value) {
+        "vim-d" -> "editing"
+        "vim-di" -> "objects"
+        "vim-register" -> "counts"
+        "vim-unavailable" -> "repeat"
+        else -> "movement"
+      })
+    }
     later {
+      if (value.startsWith("vim-")) {
+        val scroll = tool.contentManager.getContent(1)!!.component as JScrollPane
+        check(scroll.viewport.view.preferredSize.height <= scroll.viewport.height) { "Vim content exceeds the capture viewport: $value" }
+      }
       components.add(capture((tool as ToolWindowEx).decorator, "intellij-$value.png"))
       captureComponent(index + 1)
     }
@@ -207,6 +238,7 @@ private class DockedGallery(private val project: Project) {
       "themeResource" to "themes/islands/ManyIslandsDark.theme.json",
       "editorScheme" to EditorColorsManager.getInstance().globalScheme.name,
       "compactMode" to UISettings.getInstance().compactMode,
+      "referenceSelectionPreserved" to referenceSelectionPreserved,
       "captureMethod" to "Swing printAll of real docked tool window and IDE root pane",
     )
     val json = GsonBuilder().setPrettyPrinting().create()

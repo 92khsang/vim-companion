@@ -236,3 +236,94 @@ h2 {
   color: var(--vscode-textLink-foreground);
   font-size: 12px;
 }
+
+[hidden] {
+  display: none !important;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--vscode-widget-border);
+  margin: -6px 0 18px;
+  padding-bottom: 8px;
+}
+button {
+  font: inherit;
+  color: var(--vscode-descriptionForeground);
+  cursor: pointer;
+}
+.tab {
+  background: transparent;
+  border: 0;
+  padding: 5px 12px;
+  border-bottom: 2px solid transparent;
+}
+.tab[aria-pressed="true"] {
+  color: var(--vscode-foreground);
+  border-bottom-color: var(--vscode-textLink-foreground);
+}
+button:focus-visible {
+  outline: 1px solid var(--vscode-textLink-foreground);
+  outline-offset: 2px;
+}
+.context-card {
+  margin: 14px 0 16px;
+  padding: 12px;
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: 6px;
+  background: var(--vscode-editor-background);
+}
+.context-card h2 {
+  margin-bottom: 8px;
+}
+.context-card .rows {
+  margin: 10px 0;
+}
+.context-card .row {
+  padding: 6px 0;
+  gap: 8px;
+}
+.context-card .row-label {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.context-card .sequence {
+  margin-bottom: 10px;
+}
+.categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.category {
+  border: 1px solid var(--vscode-widget-border);
+  background: transparent;
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 6px 3px;
+}
+.category[aria-pressed="true"] {
+  color: var(--vscode-foreground);
+  background: var(--vscode-badge-background);
+  border-color: var(--vscode-textLink-foreground);
+}
+.category:last-child {
+  grid-column: 1 / -1;
+}
+.reference .rows {
+  margin-top: 10px;
+}
+.reference .row {
+  padding: 5px 0;
+  gap: 8px;
+}
+.reference .row-label {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.learning > .muted {
+  border-top: 1px solid var(--vscode-widget-border);
+  padding-top: 12px;
+  margin-top: 8px;
+}

@@ -18,4 +18,4 @@ if grep -q 'SEVERE' "$work/gradle.log"; then
   exit 1
 fi
 test -s "$root/spikes/u1/gallery/intellij-capture.json"
-printf '%s\n' 'Captured four docked components and four IDE layouts in Islands Dark.'
+printf '%s\n' 'Captured ten docked components and four IDE layouts in Islands Dark.'

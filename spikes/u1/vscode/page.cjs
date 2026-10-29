@@ -1,7 +1,15 @@
 const { randomBytes } = require("node:crypto");
 
 exports.page = (asset, state, source = "'self'", theme = null) => {
-  if (!["idle", "prefix", "badges", "grammar"].includes(state)) {
+  if (
+    ![
+      "idle",
+      "prefix",
+      "badges",
+      "grammar",
+      ...Object.keys(require("../vim-learning.json").scenarios),
+    ].includes(state)
+  ) {
     throw new Error(`Unknown gallery state: ${state}`);
   }
   const nonce = randomBytes(18).toString("hex");
