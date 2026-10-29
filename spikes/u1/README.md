@@ -1,6 +1,6 @@
 # U1: right-docked UI direction
 
-**Design review only. Final IDE approvals and the U1 verdict remain pending.**
+**Current layout and content approved on 2026-10-29. Full theme/size review, final IDE approvals and the U1 verdict remain pending.**
 
 Vim Keys occupies a native right-side tool window in both IDEs. The user opens it for learning and can hide or reposition it with the IDE's own controls. Updating the displayed hint must not reveal a hidden view or take over another tool window. The intended editing focus stays in the editor; this still requires behavior verification in Phase 3.
 
@@ -8,14 +8,16 @@ Open [the comparison gallery](gallery/index.html) locally, or review the 28 imag
 
 ## Delivery status
 
-| Area                | Current state                                                              | Next action                                                             |
-| ------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Docked layout       | Direction accepted for continued design; original 16 review cases retained | Preserve the layout and user-controlled visibility                      |
-| Native Vim learning | Five reference topics and six simulated scenarios per IDE implemented      | Review the learning content and wording                                 |
-| Final U1 approval   | Pending for each IDE                                                       | Review the Vim content, then complete the 24+28 theme/size gallery      |
-| Product behavior    | Not implemented by this spike                                              | Verify live input, focus, accessibility and performance in product work |
+| Area                | Current state                                                      | Next action                                                             |
+| ------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Docked layout       | Current design approved; original 16 review cases retained         | Preserve the layout and user-controlled visibility                      |
+| Native Vim learning | Five reference topics and six simulated scenarios per IDE approved | Preserve this content while expanding theme coverage                    |
+| Final U1 approval   | Pending for each IDE                                               | Complete the 24+28 theme/size gallery, then review each IDE             |
+| Product behavior    | Not implemented by this spike                                      | Verify live input, focus, accessibility and performance in product work |
 
 The prototype follows **reference browsing plus contextual guidance**. The six additional cases are reference, `d`, `di`, `f`, `"a3d`, and live guidance unavailable. They use fixed presentation data, not an engine observer. The reference topics are Movement, Editing, Text objects, Counts / registers, and Repeat / macros. Changing the example input does not change the selected topic. If live guidance is unavailable, no pending command is guessed and the reference stays usable. Next-parameter, next-method and next-class mappings remain separate requirements; no mappings are added here. Project-wide status is maintained in [Phase 2 #9](https://github.com/92khsang/vim-companion/issues/9).
+
+The approved design is the [28-image gallery at the reviewed commit](https://github.com/92khsang/vim-companion/blob/9f034d3869256081378d2ac4ec8dc36aa721b5ae/spikes/u1/README.md). The decision covers both IDEs' current layout and content; the remaining theme/size criteria still apply. Scoped approvals are recorded in [Phase 2 #9](https://github.com/92khsang/vim-companion/issues/9).
 
 ## Editing space
 
@@ -185,6 +187,6 @@ node spec/tools/u1-check-images.mjs --commit "$(git rev-parse HEAD)"
 
 ## Remaining work
 
-Review the native Vim learning content before expanding to the complete **24 VS Code + 28 IntelliJ** theme/state gallery. IntelliJ prefix and badges now belong in the Leader tab instead of an overlay. The twelve native Vim scenario images and eight full-window layout images are additional review material; they do not replace required theme cells.
+Expand the approved layout and native Vim learning content to the complete **24 VS Code + 28 IntelliJ** theme/state gallery. Check the remaining bright and high-contrast themes, compact mode, One Dark, and narrow/bottom layouts before seeking final approval for each IDE. IntelliJ prefix and badges now belong in the Leader tab instead of an overlay. The twelve native Vim scenario images and eight full-window layout images are additional review material; they do not replace required theme cells.
 
 Bright and high-contrast themes, compact mode, One Dark 6.2.2, the 170 px and bottom-panel layouts, live input/focus, accessibility, performance and native Wayland/macOS remain unverified. No final U1 approval or verdict is claimed. Each IDE still needs its own final gallery approval in #9 before Phase 3 UI implementation.
