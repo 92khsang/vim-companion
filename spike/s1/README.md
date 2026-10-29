@@ -1,8 +1,13 @@
 # S1: leader input routing
 
 Throwaway experiment for [S1 #10](https://github.com/92khsang/vim-companion/issues/10).
-Never merge this branch. The issue retains the complete acceptance criteria; this
-first feasibility gate cannot produce an S1 pass or choose the product input path.
+Never merge this branch. The user selected **V-a as the development direction**
+on 2026-10-29, retaining live leader-prefix hints and allowing explicitly
+documented operating limits. This is not a full input-correctness qualification.
+The decision supersedes the opening issue's automatic switch to V-b after a
+failed condition; measured failures remain failures and unmeasured rows remain
+unverified. The issue note and tracker record this amendment without rewriting
+the original evidence or thresholds.
 
 ## First gate
 
@@ -22,26 +27,47 @@ same extension host. No user profile is changed. Only one IDE instance runs.
    reproduce a suspected product-path failure before recommending further work.
    Otherwise stop after the 1000-trial entry/exit batch and report this condition.
 
-This is a staged investigation, not a reduction of the issue's criteria. A
-failure-free first batch does not qualify cancellation, native Vim arguments,
-counts, Visual modes, input-opening leaves, load/host separation, another IDE
-version, Hangul, native Wayland or macOS. Those results remain required for a
-final S1 verdict. S2 stays stopped and is not run by this harness.
+A failure-free entry/exit batch does not qualify cancellation, native Vim
+arguments, counts, Visual modes, input-opening leaves, load/host separation,
+another IDE version, Hangul, native Wayland or macOS. These remain unverified
+requirements for any claimed support; they are not waived by retaining V-a.
+S2 stays stopped and is not run by this harness.
 
-## Next decision
+## Current bounded investigation
 
-If the idle gate completes, the next bounded gate repeats delivery and entry/exit
-with the required blocking host: 50 ms of work every 100 ms in the engine's host,
-still at 10 ms between keys. A seeded delay of 0–99 ms before each four-key trial
-varies the injection phase relative to the periodic work. Store actual load
-windows and injection times. Stop on the first discrepancy, then reproduce it
-in a fresh sandbox before recommending a route. This tests a central assumption
-before spending time on the remaining cancellation/native-command matrix.
+After the recorded 10 ms runs, test **30 ms and 60 ms** requested inter-key
+intervals under the same 50 ms blocking work every 100 ms. Keep VS Code 1.141.0,
+VSCodeVim 1.32.4, X11, the shared host and the prototype unchanged, so the input
+interval is the measured difference. Run one sandbox at a time.
 
-Do not start the full matrix automatically or adopt V-b solely because the
-initial scope is bounded. The user must approve any change to final criteria.
+Each fresh sandbox must first prove 1000 ordered probe keys and the fixed
+1000-character Vim script at its selected interval. Then run at most 1000
+`SPC w h j` trials, stopping at the first discrepancy. If a discrepancy occurs,
+repeat that interval in one fresh sandbox; do not keep enlarging a failed batch.
+If capture remains active, observe its existing watchdog for at most 6.5 seconds
+without sending recovery keys; this measures cleanup, not repair of lost input.
 
-## Results and proposed direction
+Keep the original 10 ms evidence. Do not declare a minimum safe typing interval
+from these three points: the host's blocking duration and scheduling can change.
+Review only mitigations compatible with the companion's leader-only capture
+rule. No product input route or existing passing test changes in this stage.
+
+## Support and acceptance policy
+
+- Keep V-a and live prefix hints as the development direction. There is no
+  automatic V-b fallback after a failed experiment.
+- Each supported claim must identify its measured environment and behaviour.
+  A zero-discrepancy claim still requires 1000 trials in that condition. The
+  user-approved scope change does not turn a stopped failure into a pass.
+- An unresolved limitation must state the reproduction conditions, actual
+  user-visible effect, recovery evidence and any unverified impact. Keep that
+  behaviour experimental instead of advertising reliable input.
+- A slower interval passing this one synthetic workload does not qualify normal
+  typing in general, arbitrary extension-host stalls or other sequences.
+- The complete S1 matrix and #7 results are still open; remaining work should be
+  chosen against the support that will actually be claimed. S2 stays stopped.
+
+## Recorded 10 ms results
 
 Measured: on VS Code 1.141.0 with VSCodeVim 1.32.4, at 10 ms requested inter-key
 delay, one idle shared-host sandbox completed **1000/1000** `SPC w h j` trials
@@ -70,27 +96,10 @@ windows, injection timestamps, queue state, leader events, editor state and
 registers. They establish the discrepancy, not a renderer-level dispatch trace
 for these four measured keys.
 
-**Recommendation:** stop expanding the current V-a capture design and proceed
-with the planned V-b whole-sequence remap alternative, subject to the user's
-acceptance of its product differences and of the revised remaining S1 scope.
-This is a proposal, not an adopted input route or a final S1 verdict.
-
-- VSCodeVim would own every key of the leader sequence. The companion could keep
-  the approved right-docked reference UI, but could not follow each typed leader
-  prefix through this route. A larger UI or different dock position cannot fix
-  the input handoff observed here.
-- A count before the leader would repeat the leaf, as specified for V-b in #10,
-  instead of V-a's proposed count consumption.
-- V-b still needs its own comparison experiment, including timeout and post-leaf
-  input behaviour. It has **not** been measured by these runs.
-- The remaining S1 versions, delay/load/affinity conditions, cancellation,
-  native Vim arguments, counts, Visual modes, faults, Hangul, Wayland, macOS and
-  #7 command-focus/exit results remain unverified. Do not silently discard or
-  mark these criteria passed. The issue's full matrix is not complete.
-
-No product input code, catalog or `vscode.exit` contract was changed. S2 remains
-stopped. The existing S1 issue and draft PR remain open pending the direction
-and scope decision.
+The earlier V-b recommendation is superseded by the user's V-a decision above.
+No V-b experiment is scheduled. No product input code, catalog or `vscode.exit`
+contract has changed. #10 and draft PR #21 stay open for the bounded V-a
+investigation and its documented limits.
 
 ## Run
 
@@ -110,11 +119,19 @@ S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
 
 S1_LOAD=1 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   node spike/s1/run.mjs spike/s1/data/loaded-gate-02.json
+
+S1_LOAD=1 S1_DELAY_MS=30 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  node spike/s1/run.mjs spike/s1/data/loaded-30ms-01.json
+
+S1_LOAD=1 S1_DELAY_MS=60 S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  node spike/s1/run.mjs spike/s1/data/loaded-60ms-01.json
 ```
 
 `S1_CODE` can select another installation of the same required VS Code version;
 the default binary is `/usr/share/code/code`. Choose a new output filename for
-each run. An exit status of zero means the experiment recorded a result; inspect
+each run; the runner refuses to overwrite evidence. `S1_DELAY_MS` accepts only
+`10`, `30` or `60` and applies to both delivery proof and measured input.
+An exit status of zero means the experiment recorded a result; inspect
 `status` and every trial's `errors` before interpreting it. A discrepancy stops
 the gate and is not a pass. A harness error exits nonzero.
 

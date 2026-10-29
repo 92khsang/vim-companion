@@ -6,6 +6,7 @@ import {
   readFileSync,
   writeFileSync,
   openSync,
+  existsSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
@@ -20,12 +21,18 @@ const vim = process.env.S1_VIM;
 if (!vim)
   throw new Error("Set S1_VIM to the unmodified VSCodeVim 1.32.4 directory");
 const output = resolve(process.argv[2] ?? "spike/s1/data/first-gate.json");
+if (existsSync(output))
+  throw new Error(
+    "Choose a new result path; existing evidence is never overwritten",
+  );
+const delayMs = Number(process.env.S1_DELAY_MS ?? "10");
+assert.ok([10, 30, 60].includes(delayMs), "S1_DELAY_MS must be 10, 30 or 60");
 const root = mkdtempSync(join(tmpdir(), "s1-"));
 const socketPath = join(root, "probe.sock");
 const loaded = process.env.S1_LOAD === "1";
 let phaseSeed = 1053;
 const result = {
-  scope: "Initial feasibility gate only; not a final S1 acceptance result",
+  scope: "Bounded V-a support investigation; not a final S1 acceptance result",
   started: new Date().toISOString(),
   sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], {
     encoding: "utf8",
@@ -37,7 +44,7 @@ const result = {
   ).trim(),
   node: process.version,
   condition: {
-    delayMs: 10,
+    delayMs,
     load: loaded ? "50 ms blocking every 100 ms" : "idle",
     affinity: "same extension host",
     instances: 1,
@@ -99,7 +106,7 @@ async function until(fn, message, timeout = 10000) {
 const xdo = (args) =>
   execFileSync("xdotool", args, { env: environment, encoding: "utf8" }).trim();
 const inject = (keys) =>
-  xdo(["key", "--clearmodifiers", "--delay", "10", ...keys]);
+  xdo(["key", "--clearmodifiers", "--delay", String(delayMs), ...keys]);
 const idle = (s) =>
   s.queue.pending === 0 && s.queue.jobs === 0 && s.queue.running === false;
 const noPending = (s) =>
@@ -336,7 +343,7 @@ try {
   assert.equal(script.text, scriptText);
   assert.equal(script.mode, 0);
   assert.ok(noPending(script));
-  console.log("Delivery proved; checking V-a entry/exit at 10 ms.");
+  console.log(`Delivery proved; checking V-a entry/exit at ${delayMs} ms.`);
   await call("text", { value: text });
   await settled();
 
@@ -366,6 +373,7 @@ try {
     }
     const injectedAt = Date.now();
     inject(["space", "w", "h", "j"]);
+    const injectionFinishedAt = Date.now();
     const after = await settled();
     inject(["ctrl+alt+9"]);
     const sentinel = await settled();
@@ -407,6 +415,7 @@ try {
       index,
       phaseDelayMs,
       injectedAt,
+      injectionFinishedAt,
       before,
       after,
       finalSentinel: sentinel.sentinel,
@@ -416,6 +425,27 @@ try {
     if (errors.length) {
       result.status = "discrepancy";
       console.log(`Stopped at trial ${index + 1}: ${errors.join("; ")}`);
+      if (after.leader.active) {
+        // Observe the existing watchdog without sending recovery keys or changing the failed trial.
+        const recovery = { startedAt: Date.now(), samples: [] };
+        result.recoveryObservation = recovery;
+        const deadline = Date.now() + 6500;
+        let value;
+        do {
+          await sleep(100);
+          value = await call("snapshot");
+          recovery.samples.push({
+            at: Date.now(),
+            active: value.leader.active,
+          });
+        } while (value.leader.active && Date.now() < deadline);
+        recovery.after = value;
+        inject(["ctrl+alt+9"]);
+        recovery.confirmed = await settled();
+        recovery.freshSentinel =
+          recovery.confirmed.sentinelSequence === value.sentinelSequence + 1;
+        recovery.finishedAt = Date.now();
+      }
       break;
     }
     if ((index + 1) % 100 === 0) {
