@@ -139,7 +139,45 @@ The `cancel-release` gate is separate from the unchanged six-case `cancel` gate:
 - The complete S1 matrix and #7 results are still open; remaining work should be
   chosen against the support that will actually be claimed. S2 stays stopped.
 
-## Cancellation and recovery results
+## Renderer-release candidate results
+
+Measured: the candidate's two fresh idle/shared-host sandboxes on VS Code 1.141.0
+/ VSCodeVim 1.32.4, X11/US and 10 ms each proved 1000 ordered probe keys and the
+fixed 1000-character Vim insertion script before testing the two root cancels.
+
+| Run                                                                                                                                                        | Result                                                                                |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [Candidate 1](https://github.com/92khsang/vim-companion/blob/abd847db0cf6334b2d24201b2ad9ff77a99a9d73/spike/s1/data/cancel-release-01.json)                | One successful trial per case, then `SPC Ctrl+C j` failed on trial 3 (round 2).       |
+| [Fresh candidate repetition](https://github.com/92khsang/vim-companion/blob/abd847db0cf6334b2d24201b2ad9ff77a99a9d73/spike/s1/data/cancel-release-02.json) | `SPC Ctrl+C j` and `SPC Escape j` each completed 1000 trials with zero discrepancies. |
+
+Measured: the failed candidate trial recorded `start`, `context-on`, `key(j,
+active=true)` and `end(undefined-key)`. It recorded no companion cancel event.
+The cursor stayed at zero-based `(0, 0)`; text, registers, Normal mode and pending
+input were unchanged, and a fresh final sentinel confirmed capture off. This is
+different from the original exit failures, which recorded the cancel followed by
+`j` with `active=false`. The candidate's failure is still a lost first Vim key
+after the injected cancel sequence, so the bounded candidate gate failed across
+the two runs. The first-discrepancy stop is not a failure-rate estimate.
+
+Inferred: missing cancellation followed by an active leader consuming `j` is
+consistent with an entry timing problem that renderer-first cancellation cannot
+fix. The measured run did not trace renderer dispatch, so the cancel's actual
+route and this causal explanation remain unverified. The successful repetition
+does not isolate the original exit race or prove that it has been eliminated.
+
+Measured: in the failed sandbox, a separate delayed `j`, a fresh `SPC w Escape j`
+cycle and an active-prefix reset each allowed one downward motion with unchanged
+text/registers and fresh capture-off sentinels. Each diagnostic ran once; the
+initial reset was a no-op and the watchdog observation did not run. These do not
+qualify recovery or repair the lost key.
+
+**Decision:** retain V-a and its existing limitations; do not adopt this candidate
+as a lossless cancellation fix. Keep the candidate only as reproducible spike
+code. Internal `_setContext` dependence, rapid re-entry, `Ctrl+[`, prefixed
+cancels, other conditions and integrated UI remain unqualified. No second
+candidate or broader matrix was started; S2 stays stopped and S1 stays open.
+
+## Original cancellation and recovery results
 
 Measured: two fresh idle/shared-host sandboxes at 10 ms each stopped on an exit
 discrepancy. Both first proved 1000 ordered probe keys, including the cancellation
@@ -335,6 +373,8 @@ S1_GATE=cancel S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
 # Renderer-release candidate: only the two previously failing root cancels.
 S1_GATE=cancel-release S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-release-01.json"
+S1_GATE=cancel-release S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-release-02.json"
 
 S1_GATE=native-baseline S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-baseline-01.json"
@@ -477,6 +517,19 @@ Node syntax, changed-file formatting, raw-data consistency, diff and publication
 privacy checks were run. The earlier entry/exit validation also checked invalid-delay
 and existing-output guards without launching an IDE. The unrelated spec suite was not rerun, and remote CI
 was not awaited.
+
+The two renderer-release candidate runs used clean source commit
+`65686d801125a05c07d4455653e7ed19434fb8e3`. Their commands above originally wrote
+to `spike/s1/data/`; use fresh temporary output filenames when replaying. Replay
+each experiment from its recorded source commit: the current candidate bindings
+differ from the original cancellation/native-input source. Independent raw-data
+checks covered all 2003 candidate trials, exact case order, the first-discrepancy
+stop, successful cancel events and cursor moves, text/register/mode/pending state,
+fresh sentinels, recovery snapshots, delivery proof and source/environment.
+Node syntax, changed-file formatting, unchanged guards and binding positions,
+diff and commitlint checks passed. All previous raw evidence and both new files
+retained their byte hashes through formatting. Unrelated spec tests were not
+rerun; remote CI was not awaited.
 
 The test-only inspector/register readers were adapted from
 [S2's instrument](https://github.com/92khsang/vim-companion/tree/eb4374dda56943b6ea23b6da784ac59daa4da9d3/spike/s2/extensions/s2-probe).
