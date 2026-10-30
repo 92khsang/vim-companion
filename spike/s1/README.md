@@ -175,6 +175,63 @@ No second candidate, rapid re-entry test, wider matrix or S2 work is included.
 - The complete S1 matrix and #7 results are still open; remaining work should be
   chosen against the support that will actually be claimed. S2 stays stopped.
 
+## Entry/cancellation diagnostic results
+
+Measured: all four fresh sandboxes first proved 1000 ordered probe keys and the
+fixed 1000-character Vim script, with clean instrumentation source
+`c0b52fe9faba5f8bdfc4fed2c1b0976b12883acf`, the pinned IDE/engine, idle/shared
+host, X11/US and 10 ms requested delay. Renderer traces are embedded in each raw
+JSON file. No batch reached its 20-per-case cap; each stopped at its first
+discrepancy or readiness rejection.
+
+| Run                                                                                                                                                                   | Result                                                                                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [Original 1](https://github.com/92khsang/vim-companion/blob/6ba0d34fa71a77172176d9d2a0e48c884b19be32/spike/s1/data/cancel-boundary-original-01.json)                  | Two successful trials, then trial 3 (`Ctrl+C`) lost `j` after capture-on confirmation; cleanup ended with `document-change`. |
+| [Fresh original repetition](https://github.com/92khsang/vim-companion/blob/6ba0d34fa71a77172176d9d2a0e48c884b19be32/spike/s1/data/cancel-boundary-original-02.json)   | Trial 1 (`Ctrl+C`) lost `j` after capture-on confirmation; cleanup ended with `ctrl+c`.                                      |
+| [Candidate 1](https://github.com/92khsang/vim-companion/blob/6ba0d34fa71a77172176d9d2a0e48c884b19be32/spike/s1/data/cancel-boundary-candidate-01.json)                | Five completed trials without discrepancy (three `Ctrl+C`, two `Escape`); attempt 6 stopped during entry confirmation.       |
+| [Fresh candidate repetition](https://github.com/92khsang/vim-companion/blob/6ba0d34fa71a77172176d9d2a0e48c884b19be32/spike/s1/data/cancel-boundary-candidate-02.json) | Two completed trials without discrepancy (one per cancel); attempt 3 stopped during entry confirmation.                      |
+
+Measured: the fresh original repetition's renderer selected the capture-on
+sentinel at `07:57:58.614`, selected `vimCompanion.leaderKey` for `Ctrl+C` at
+`07:57:58.646`, and selected the same command for `j` at `07:57:58.660` (renderer
+log time on 2026-10-31). The actual cancel-to-`j` keydown interval was 16 ms;
+10 ms was the injection request. The host recorded `key(ctrl+c, active=true)`,
+`key(j, active=false)`, then `end(ctrl+c)`. The cursor stayed at zero-based
+`(0, 0)` with unchanged text/registers, Normal mode, no pending input and a fresh
+final capture-off sentinel.
+
+Inferred: this repetition isolates the original cancellation exit race from
+entry readiness. The cancel reached the active companion after renderer capture
+was proved; `j` still selected the companion while host cleanup had already set
+its local flag false. This matches the unchanged handler's local deactivation
+before awaiting renderer context release. It cannot be explained as cancellation
+arriving before capture entry.
+
+Measured: original run 1 trial 3 first selected a capture-off sentinel 21 ms
+after the renderer received `SPC`, then a capture-on sentinel 56 ms after `SPC`.
+After confirmation, both `Ctrl+C` and `j` selected the companion but reached the
+host with `active=false`; `end(document-change)` followed. This establishes a
+different cleanup overlap, not a second cancellation-initiated exit reproduction.
+
+Measured: both candidate runs stopped with raw status `harness-error` because a
+fresh capture-on sentinel response was accompanied by an already inactive host
+and `end(document-change)`. No cancel or `j` was injected for those rejected
+attempts. Across the seven completed candidate trials, the trace selected
+`runCommands` for cancellation; `j` matched no keybinding and moved down once.
+All complete trials' renderer cancel-to-`j` intervals ranged from 10 to 16 ms.
+
+Inferred: the original exit race is independently demonstrated, but the candidate
+comparison remains incomplete. The probe did not record document-change URI,
+version or contents; unchanged engine snapshots cannot exclude delayed events,
+transient changes or another document, including tracing output. Instrumentation
+interference is possible, not established. Investigate that event's source before
+using this traced setup for further candidate claims; no such experiment or
+additional reliability gate was started. The seven successful candidate trials
+do not qualify the fix, ordinary unpaused input, rapid re-entry or a minimum safe
+interval. The older missing-cancel failure remains untraced and unresolved.
+Keep V-a and its experimental limits; S1 remains open, PR #21 stays draft and S2
+stays stopped.
+
 ## Renderer-release candidate results
 
 Measured: the candidate's two fresh idle/shared-host sandboxes on VS Code 1.141.0
@@ -420,6 +477,13 @@ S1_GATE=cancel-boundary S1_BINDINGS=candidate \
   S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-boundary-candidate-01.json"
 # If either variant has a discrepancy, repeat only that variant once with -02.json.
+# The recorded candidate repetition followed an entry-precondition rejection.
+S1_GATE=cancel-boundary S1_BINDINGS=original \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-boundary-original-02.json"
+S1_GATE=cancel-boundary S1_BINDINGS=candidate \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-boundary-candidate-02.json"
 
 S1_GATE=native-baseline S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-baseline-01.json"
@@ -575,6 +639,16 @@ Node syntax, changed-file formatting, unchanged guards and binding positions,
 diff and commitlint checks passed. All previous raw evidence and both new files
 retained their byte hashes through formatting. Unrelated spec tests were not
 rerun; remote CI was not awaited.
+
+The entry/cancellation diagnostic commands above originally wrote to
+`spike/s1/data/`; use fresh paths for replay. Independent checks covered all 11
+completed trials and both rejected entry attempts: delivery proof, pinned
+environment, installed binding/handler hashes, exact alternating case order,
+first-stop boundaries, fresh entry/final sentinels, engine/leader state and each
+trial's renderer sentinel/cancel/`j` dispatch. Node syntax, changed-file formatting,
+four pre-launch guards, diff and commitlint checks passed. Existing and new raw
+data retained their byte hashes. No leader handler or candidate binding changed.
+Unrelated spec tests were not rerun; remote CI was not awaited.
 
 The test-only inspector/register readers were adapted from
 [S2's instrument](https://github.com/92khsang/vim-companion/tree/eb4374dda56943b6ea23b6da784ac59daa4da9d3/spike/s2/extensions/s2-probe).
