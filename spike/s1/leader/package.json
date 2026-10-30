@@ -335,20 +335,62 @@
       },
       {
         "key": "escape",
-        "command": "vimCompanion.leaderKey",
-        "args": "escape",
+        "command": "runCommands",
+        "args": {
+          "commands": [
+            {
+              "command": "_setContext",
+              "args": [
+                "vimCompanion.leaderActive",
+                false
+              ]
+            },
+            {
+              "command": "vimCompanion.leaderKey",
+              "args": "escape"
+            }
+          ]
+        },
         "when": "vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ && (editorTextFocus || !inputFocus)"
       },
       {
         "key": "ctrl+[",
-        "command": "vimCompanion.leaderKey",
-        "args": "ctrl+[",
+        "command": "runCommands",
+        "args": {
+          "commands": [
+            {
+              "command": "_setContext",
+              "args": [
+                "vimCompanion.leaderActive",
+                false
+              ]
+            },
+            {
+              "command": "vimCompanion.leaderKey",
+              "args": "ctrl+["
+            }
+          ]
+        },
         "when": "vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ && (editorTextFocus || !inputFocus)"
       },
       {
         "key": "ctrl+c",
-        "command": "vimCompanion.leaderKey",
-        "args": "ctrl+c",
+        "command": "runCommands",
+        "args": {
+          "commands": [
+            {
+              "command": "_setContext",
+              "args": [
+                "vimCompanion.leaderActive",
+                false
+              ]
+            },
+            {
+              "command": "vimCompanion.leaderKey",
+              "args": "ctrl+c"
+            }
+          ]
+        },
         "when": "vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ && (editorTextFocus || !inputFocus)"
       }
     ]

@@ -32,7 +32,15 @@ const root = mkdtempSync(join(tmpdir(), "s1-"));
 const socketPath = join(root, "probe.sock");
 const loaded = process.env.S1_LOAD === "1";
 const gate = process.env.S1_GATE ?? "entry-exit";
-assert.ok(["entry-exit", "cancel", "native-baseline", "native"].includes(gate));
+assert.ok(
+  [
+    "entry-exit",
+    "cancel",
+    "cancel-release",
+    "native-baseline",
+    "native",
+  ].includes(gate),
+);
 assert.ok(gate === "entry-exit" || (!loaded && delayMs === 10));
 const baseline = gate === "native-baseline";
 const referencePath = process.env.S1_BASELINE;

@@ -35,7 +35,7 @@ export async function runBoundedGate({
 }) {
   const native = gate.startsWith("native");
   const baseline = gate === "native-baseline";
-  const cases = native
+  const availableCases = native
     ? ["f", "r", "d"].map((key) => ({
         id: `${key}-space`,
         keys: [key, "space"],
@@ -52,6 +52,12 @@ export async function runBoundedGate({
           reason,
         })),
       );
+  const cases =
+    gate === "cancel-release"
+      ? ["root-ctrl+c", "root-escape"].map((id) =>
+          availableCases.find((variant) => variant.id === id),
+        )
+      : availableCases;
   if (reference) {
     assert.equal(reference.gate, "native-baseline");
     assert.equal(reference.status, "native-baseline-recorded");

@@ -85,6 +85,45 @@ Other loads, delays, versions, platforms, full fault injection and integrated UI
 remain unverified. A failure-free cancellation gate qualifies recovery from these
 cancel sequences only, not recovery from an extension-host failure.
 
+## Bounded renderer-release candidate gate
+
+Candidate: keep V-a and the existing leader handlers, but make the three cancel
+bindings run `_setContext(vimCompanion.leaderActive, false)` through `runCommands`
+before invoking their existing `vimCompanion.leaderKey` cancellation. Preserve
+each binding's position and `when` clause. Do not replay or forward input.
+
+Documented: VS Code 1.141.0's [`runCommands`](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/contrib/commands/common/commands.contribution.ts)
+awaits commands in order and spreads array arguments. Its renderer-side
+[`_setContext`](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/platform/contextkey/browser/contextKeyService.ts)
+updates the context directly. The public `setContext` API is an extension-host
+wrapper, registered locally with `registerCommand(false, ...)`
+([API mapping](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/api/common/extHostApiCommands.ts),
+[registration](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/api/common/extHostCommands.ts)).
+The candidate therefore depends on an internal command, not a supported public
+renderer API. [Command activation](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/services/commands/common/commandService.ts)
+can also be asynchronous; this is not an unconditional atomic-release guarantee.
+
+Inferred: releasing the routing context before the host receives the cancellation
+can remove the measured exit race for the following `j`. It does not solve entry
+delay, and a delayed host cleanup may still interact with rapid leader re-entry.
+Neither production adoption nor another version is qualified by this experiment.
+
+The `cancel-release` gate is separate from the unchanged six-case `cancel` gate:
+
+1. Use a fresh idle/shared-host sandbox, VS Code 1.141.0 / VSCodeVim 1.32.4,
+   X11/US and 10 ms requested inter-key delay. Prove the same 1000 ordered probe
+   keys and fixed 1000-character Vim insertion script first.
+2. Alternate only `SPC Ctrl+C j` and `SPC Escape j`, the two observed failures.
+   Retain every existing cancellation assertion: exact companion cancel events,
+   no leaf, unchanged text/registers, one downward motion, Normal mode, no pending
+   input and fresh capture-off sentinels.
+3. Stop at the first discrepancy and retain the existing recovery diagnostics;
+   reproduce a discrepancy once in a fresh sandbox. Otherwise require 1000 trials
+   per case before claiming zero discrepancies in this condition.
+4. Do not repeat native-argument or interval batches. `Ctrl+[`, prefixed cancels,
+   rapid re-entry, cold start, loads, other versions/platforms, fault recovery and
+   integrated UI remain outside this candidate gate.
+
 ## Support and acceptance policy
 
 - Keep V-a and live prefix hints as the development direction. There is no
@@ -293,6 +332,10 @@ S1_GATE=cancel S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
 S1_GATE=cancel S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-idle-03.json"
 
+# Renderer-release candidate: only the two previously failing root cancels.
+S1_GATE=cancel-release S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-release-01.json"
+
 S1_GATE=native-baseline S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-baseline-01.json"
 S1_GATE=native S1_BASELINE="$S1_RESULTS/native-baseline-01.json" \
@@ -308,7 +351,7 @@ An exit status of zero means the experiment recorded a result; inspect
 `status` and every trial's `errors` before interpreting it. A discrepancy stops
 the gate and is not a pass. A harness error exits nonzero.
 
-`S1_GATE` defaults to the unchanged `entry-exit` gate. The new `cancel`,
+`S1_GATE` defaults to the unchanged `entry-exit` gate. The `cancel`, `cancel-release`,
 `native-baseline` and `native` gates accept only idle/10 ms. `native` requires
 `S1_BASELINE` and checks its IDE, engine hash, Node, settings, condition and
 repeat state before comparison. Its raw record identifies the reference by
@@ -401,7 +444,8 @@ is loaded. They do not qualify the timing or correctness of the eventual UI
 integration, personal remaps, another input method or another platform.
 
 V-a remains the selected development direction with experimental input
-limitations. No input handler was changed to improve these measurements. The
+limitations. The original measurements used unchanged input handlers and cancel
+bindings; the renderer-release candidate is a separate experiment. The
 cancellation gate above adds a measured idle exit limitation; it must be
 resolved or retained as an explicit limitation before any lossless cancellation
 claim. The full matrix and #7 remain open, including watchdog/fault recovery and
