@@ -7,6 +7,7 @@ import {
   writeFileSync,
   openSync,
   existsSync,
+  globSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
@@ -37,11 +38,19 @@ assert.ok(
     "entry-exit",
     "cancel",
     "cancel-release",
+    "cancel-boundary",
     "native-baseline",
     "native",
   ].includes(gate),
 );
 assert.ok(gate === "entry-exit" || (!loaded && delayMs === 10));
+const boundary = gate === "cancel-boundary";
+const bindings = process.env.S1_BINDINGS ?? "candidate";
+assert.ok(["original", "candidate"].includes(bindings));
+assert.ok(
+  boundary || bindings === "candidate",
+  "S1_BINDINGS is diagnostic-only",
+);
 const baseline = gate === "native-baseline";
 const referencePath = process.env.S1_BASELINE;
 assert.ok(gate !== "native" || referencePath, "S1_BASELINE is required");
@@ -49,7 +58,9 @@ const reference =
   gate === "native" ? JSON.parse(readFileSync(referencePath, "utf8")) : null;
 let phaseSeed = 1053;
 const result = {
-  scope: "Bounded V-a support investigation; not a final S1 acceptance result",
+  scope: boundary
+    ? "Sentinel-gated cancellation diagnostic with renderer tracing; not an acceptance gate"
+    : "Bounded V-a support investigation; not a final S1 acceptance result",
   gate,
   started: new Date().toISOString(),
   sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], {
@@ -87,6 +98,7 @@ const processes = [];
 let client;
 let requestId = 0;
 let pending;
+let tracing = false;
 async function call(method, params = {}) {
   if (pending) throw new Error("overlapping probe requests");
   const id = ++requestId;
@@ -183,6 +195,55 @@ try {
       join(extensions, `vim-companion-spike.s1-${name}-0.0.0`),
       { recursive: true },
     );
+  if (boundary) {
+    const originalCommit = "eaa78ae4b5e7c28b3b3ecbd699b716e9d5cc333a";
+    const original = execFileSync("git", [
+      "show",
+      `${originalCommit}:spike/s1/leader/package.json`,
+    ]);
+    const candidate = readFileSync(join(source, "leader/package.json"));
+    const originalManifest = JSON.parse(original);
+    const candidateManifest = JSON.parse(candidate);
+    const cancelKeys = ["escape", "ctrl+[", "ctrl+c"];
+    const expectedCandidate = structuredClone(originalManifest);
+    for (const binding of expectedCandidate.contributes.keybindings) {
+      if (!cancelKeys.includes(binding.key)) continue;
+      const command = { command: binding.command, args: binding.args };
+      binding.command = "runCommands";
+      binding.args = {
+        commands: [
+          {
+            command: "_setContext",
+            args: ["vimCompanion.leaderActive", false],
+          },
+          command,
+        ],
+      };
+    }
+    assert.deepEqual(candidateManifest, expectedCandidate);
+    assert.deepEqual(
+      readFileSync(join(source, "leader/extension.cjs")),
+      execFileSync("git", [
+        "show",
+        `${originalCommit}:spike/s1/leader/extension.cjs`,
+      ]),
+      "diagnostic must keep the original leader handlers",
+    );
+    const selected = bindings === "original" ? original : candidate;
+    writeFileSync(
+      join(extensions, "vim-companion-spike.s1-leader-0.0.0/package.json"),
+      selected,
+    );
+    const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+    result.bindingComparison = {
+      selected: bindings,
+      originalCommit,
+      originalSha256: hash(original),
+      candidateSha256: hash(candidate),
+      installedSha256: hash(selected),
+      handlersSha256: hash(readFileSync(join(source, "leader/extension.cjs"))),
+    };
+  }
   if (baseline) {
     const path = join(
       extensions,
@@ -414,6 +475,11 @@ try {
   console.log(`Delivery proved; checking ${gate} at ${delayMs} ms.`);
   await call("text", { value: text });
   await settled();
+  if (boundary) {
+    await call("diagnose");
+    tracing = true;
+    await settled();
+  }
 
   if (gate !== "entry-exit") {
     await runBoundedGate({
@@ -545,6 +611,30 @@ try {
   process.exitCode = 1;
   console.error(String(error));
 } finally {
+  if (tracing) {
+    // Built-in tracing records dispatch, not the exact context-update instant.
+    // Allow the log writer to flush after the final observed state.
+    try {
+      await sleep(1000);
+      result.rendererTrace = globSync("data/logs/*/window*/renderer.log", {
+        cwd: root,
+      }).map((file) => ({
+        file,
+        lines: readFileSync(join(root, file), "utf8")
+          .split("\n")
+          .filter((line) => line.includes("[KeybindingService]")),
+      }));
+      assert.ok(
+        result.rendererTrace.length === 1 &&
+          result.rendererTrace[0].lines.length,
+        "Expected one nonempty renderer keybinding trace",
+      );
+    } catch (error) {
+      result.status = "harness-error";
+      result.traceError = String(error);
+      process.exitCode = 1;
+    }
+  }
   result.finished = new Date().toISOString();
   save();
   client?.destroy();

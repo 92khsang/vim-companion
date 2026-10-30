@@ -35,6 +35,7 @@ export async function runBoundedGate({
 }) {
   const native = gate.startsWith("native");
   const baseline = gate === "native-baseline";
+  const boundary = gate === "cancel-boundary";
   const availableCases = native
     ? ["f", "r", "d"].map((key) => ({
         id: `${key}-space`,
@@ -53,7 +54,7 @@ export async function runBoundedGate({
         })),
       );
   const cases =
-    gate === "cancel-release"
+    gate === "cancel-release" || boundary
       ? ["root-ctrl+c", "root-escape"].map((id) =>
           availableCases.find((variant) => variant.id === id),
         )
@@ -82,7 +83,7 @@ export async function runBoundedGate({
       sourceCommit: reference.sourceCommit,
     };
   }
-  const rounds = baseline ? 2 : 1000;
+  const rounds = boundary ? 20 : baseline ? 2 : 1000;
   result.cases = cases;
   for (let round = 0; round < rounds; round++) {
     for (const [caseIndex, variant] of cases.entries()) {
@@ -112,8 +113,10 @@ export async function runBoundedGate({
           "baseline precondition differs",
         );
       }
+      const entry = boundary ? await confirmCapture(before) : undefined;
+      const keys = boundary ? variant.keys.slice(1) : variant.keys;
       const injectedAt = Date.now();
-      inject(variant.keys);
+      inject(keys);
       const injectionFinishedAt = Date.now();
       const after = await settled();
       inject(["ctrl+alt+9"]);
@@ -219,6 +222,7 @@ export async function runBoundedGate({
         round,
         case: variant.id,
         keys: variant.keys,
+        ...(boundary ? { entry, cancellationKeys: keys } : {}),
         injectedAt,
         injectionFinishedAt,
         before,
@@ -233,7 +237,7 @@ export async function runBoundedGate({
           `Stopped at ${variant.id}, round ${round + 1}: ${errors.join("; ")}`,
         );
         save();
-        if (!baseline) {
+        if (!baseline && !boundary) {
           try {
             await recoveryDiagnostic(after);
           } catch (error) {
@@ -257,7 +261,66 @@ export async function runBoundedGate({
       "reference did not reach a repeatable state",
     );
   }
-  result.status = baseline ? "native-baseline-recorded" : `${gate}-gate-passed`;
+  result.status = boundary
+    ? "cancel-boundary-diagnostic-complete"
+    : baseline
+      ? "native-baseline-recorded"
+      : `${gate}-gate-passed`;
+
+  async function confirmCapture(before) {
+    const entry = { startedAt: Date.now(), samples: [] };
+    result.lastEntry = entry;
+    const deadline = entry.startedAt + 1000;
+    let previous = before;
+    do {
+      const injectedAt = Date.now();
+      // The first sentinel follows SPC at the requested input interval. Later
+      // sentinels only observe readiness; none runs between cancel and j.
+      inject(entry.samples.length ? ["ctrl+alt+9"] : ["space", "ctrl+alt+9"]);
+      const injectionFinishedAt = Date.now();
+      let observed;
+      do {
+        observed = await call("snapshot");
+        if (observed.sentinelSequence !== previous.sentinelSequence) break;
+        await sleep(5);
+      } while (Date.now() < deadline);
+      entry.samples.push({
+        injectedAt,
+        injectionFinishedAt,
+        observedAt: Date.now(),
+        observed,
+      });
+      assert.equal(
+        observed.sentinelSequence,
+        previous.sentinelSequence + 1,
+        "entry sentinel was not received exactly once within 1000 ms",
+      );
+      assert.ok(
+        ["normal-editor-capture-on", "normal-editor-capture-off"].includes(
+          observed.sentinel,
+        ),
+        "entry sentinel lost Normal editor focus",
+      );
+      assert.deepEqual(
+        engineState(observed),
+        engineState(before),
+        "entry/sentinel changed engine state",
+      );
+      if (observed.sentinel === "normal-editor-capture-on") {
+        assert.ok(observed.leader.active);
+        assert.ok(
+          Date.now() <= deadline,
+          "entry confirmation exceeded 1000 ms",
+        );
+        entry.confirmedAt = Date.now();
+        return entry;
+      }
+      previous = observed;
+    } while (Date.now() < deadline);
+    throw new Error(
+      "Renderer capture was not confirmed within 1000 ms; cancellation was not injected",
+    );
+  }
 
   async function recoveryDiagnostic(failed) {
     const recovery = {

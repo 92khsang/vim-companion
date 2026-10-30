@@ -124,6 +124,42 @@ The `cancel-release` gate is separate from the unchanged six-case `cancel` gate:
    rapid re-entry, cold start, loads, other versions/platforms, fault recovery and
    integrated UI remain outside this candidate gate.
 
+## Bounded entry/cancellation diagnostic
+
+Keep V-a, the original leader handlers and the recorded renderer-release candidate.
+The `cancel-boundary` diagnostic compares only the original cancel bindings from
+`eaa78ae4b5e7c28b3b3ecbd699b716e9d5cc333a` with the candidate. `S1_BINDINGS=original`
+replaces only the sandbox manifest, without changing the working-tree prototype.
+The runner asserts that the manifests differ only in the three recorded cancel
+commands, and that the original handlers are unchanged; it records their hashes.
+
+1. Use one fresh sandbox per variant, idle/shared host, VS Code 1.141.0,
+   VSCodeVim 1.32.4, X11/US and 10 ms requested input delay. Prove 1000 ordered
+   probe keys and the fixed 1000-character Vim insertion script first.
+2. Enable built-in renderer keybinding tracing. Alternate root `Ctrl+C` and
+   `Escape` for at most 20 trials per case. Stop at the first discrepancy;
+   repeat a discrepant variant once in a fresh sandbox. Do not extend the batch.
+3. Confirm a fresh capture-off sentinel before each trial. Inject `SPC` and
+   `Ctrl+Alt+9` together at the requested delay. Require a new sentinel response;
+   if it reports capture off, retry only the sentinel within a 1000 ms deadline.
+   An explicit `normal-editor-capture-on` binding proves renderer readiness.
+   A local leader flag or the fallback `other` response cannot qualify entry.
+4. Only after capture-on confirmation, inject `<cancel> j` in one call with
+   the existing 10 ms delay and no intervening observation. Preserve the exact
+   cancellation, cursor, text, register, mode, pending-input and final fresh
+   capture-off assertions from the cancellation gate.
+5. Retain the entry observations, complete trial and renderer dispatch trace in
+   the JSON record. Do not repeat the already completed recovery diagnostics.
+
+Entry observation times include injection, probe transport and polling: they are
+readiness observation bounds, not precise renderer activation latency. The trace
+records key dispatch and selected commands, not the exact `_setContext` execution
+instant. Its wall clock must not be subtracted from host `performance.now()`.
+The requested 10 ms delay is not a guarantee of 10 ms renderer event spacing.
+Tracing and sentinel waiting perturb timing. Even zero discrepancies cannot
+qualify ordinary unpaused input or replace 1000 trials per reliability condition.
+No second candidate, rapid re-entry test, wider matrix or S2 work is included.
+
 ## Support and acceptance policy
 
 - Keep V-a and live prefix hints as the development direction. There is no
@@ -376,6 +412,15 @@ S1_GATE=cancel-release S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
 S1_GATE=cancel-release S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-release-02.json"
 
+# Sentinel-gated diagnostic; run variants sequentially, never concurrently.
+S1_GATE=cancel-boundary S1_BINDINGS=original \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-boundary-original-01.json"
+S1_GATE=cancel-boundary S1_BINDINGS=candidate \
+  S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/cancel-boundary-candidate-01.json"
+# If either variant has a discrepancy, repeat only that variant once with -02.json.
+
 S1_GATE=native-baseline S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
   mise exec node@24.21.0 -- node spike/s1/run.mjs "$S1_RESULTS/native-baseline-01.json"
 S1_GATE=native S1_BASELINE="$S1_RESULTS/native-baseline-01.json" \
@@ -392,7 +437,7 @@ An exit status of zero means the experiment recorded a result; inspect
 the gate and is not a pass. A harness error exits nonzero.
 
 `S1_GATE` defaults to the unchanged `entry-exit` gate. The `cancel`, `cancel-release`,
-`native-baseline` and `native` gates accept only idle/10 ms. `native` requires
+`cancel-boundary`, `native-baseline` and `native` gates accept only idle/10 ms. `native` requires
 `S1_BASELINE` and checks its IDE, engine hash, Node, settings, condition and
 repeat state before comparison. Its raw record identifies the reference by
 filename and SHA-256. The baseline has neither the leader extension nor its
