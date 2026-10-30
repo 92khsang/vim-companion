@@ -1,0 +1,5888 @@
+{
+  "scope": "Sentinel-gated cancellation diagnostic with renderer tracing; not an acceptance gate",
+  "gate": "cancel-boundary",
+  "started": "2026-10-30T22:57:31.824Z",
+  "sourceCommit": "c0b52fe9faba5f8bdfc4fed2c1b0976b12883acf",
+  "sourceDirty": "",
+  "node": "v24.21.0",
+  "condition": {
+    "delayMs": 10,
+    "load": "idle",
+    "affinity": "same extension host",
+    "instances": 1,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": null
+  },
+  "trials": [
+    {
+      "index": 0,
+      "round": 0,
+      "case": "root-ctrl+c",
+      "keys": [
+        "space",
+        "ctrl+c",
+        "j"
+      ],
+      "entry": {
+        "startedAt": 1793401078589,
+        "samples": [
+          {
+            "injectedAt": 1793401078589,
+            "injectionFinishedAt": 1793401078635,
+            "observedAt": 1793401078635,
+            "observed": {
+              "viewColumn": 2,
+              "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+              "selections": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "mode": 0,
+              "pending": {
+                "actionKeys": [],
+                "bufferedKeys": [],
+                "actionsRunPressedKeys": [],
+                "count": 0,
+                "operatorCount": 0,
+                "registerName": "\""
+              },
+              "registers": {
+                "%": [
+                  {
+                    "text": "sample.txt",
+                    "mode": "character"
+                  }
+                ],
+                ".": [
+                  {
+                    "text": {
+                      "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                    },
+                    "mode": "character"
+                  }
+                ],
+                "#": [
+                  {
+                    "text": "rendererLog",
+                    "mode": "character"
+                  }
+                ]
+              },
+              "queue": {
+                "pending": 0,
+                "jobs": 0,
+                "running": false
+              },
+              "leader": {
+                "active": true,
+                "prefix": [],
+                "events": [
+                  {
+                    "t": 25121.677147,
+                    "type": "start"
+                  },
+                  {
+                    "t": 25122.172349,
+                    "type": "context-on"
+                  }
+                ]
+              },
+              "sentinel": "normal-editor-capture-on",
+              "sentinelSequence": 2
+            }
+          }
+        ],
+        "confirmedAt": 1793401078635
+      },
+      "cancellationKeys": [
+        "ctrl+c",
+        "j"
+      ],
+      "injectedAt": 1793401078635,
+      "injectionFinishedAt": 1793401078670,
+      "before": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": []
+        },
+        "sentinel": "normal-editor-capture-off",
+        "sentinelSequence": 1
+      },
+      "after": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": [
+            {
+              "t": 25121.677147,
+              "type": "start"
+            },
+            {
+              "t": 25122.172349,
+              "type": "context-on"
+            },
+            {
+              "t": 25171.986068,
+              "type": "key",
+              "value": "ctrl+c",
+              "active": true
+            },
+            {
+              "t": 25187.930919,
+              "type": "key",
+              "value": "j",
+              "active": false
+            },
+            {
+              "t": 25193.116984,
+              "type": "end",
+              "reason": "ctrl+c"
+            }
+          ]
+        },
+        "sentinel": "normal-editor-capture-on",
+        "sentinelSequence": 2
+      },
+      "finalSentinel": "normal-editor-capture-off",
+      "finalSentinelSequence": 3,
+      "errors": [
+        "unexpected leader event sequence",
+        "leader did not receive exactly the prefix and cancel",
+        "j did not move down once in right editor"
+      ]
+    }
+  ],
+  "vimBundleSha256": "545bd89c5f518e2f5140729c9be4cf2ddf6daa2399af99aac21ea4f4e117aa17",
+  "product": {
+    "version": "1.141.0",
+    "commit": "2a59476c9bfcb90b3ddc372c36762471b7dfad1c"
+  },
+  "bindingComparison": {
+    "selected": "original",
+    "originalCommit": "eaa78ae4b5e7c28b3b3ecbd699b716e9d5cc333a",
+    "originalSha256": "6ecdadaf835615951d328bec2cf2be00a47adbe74d369ad7d6c8493df017a156",
+    "candidateSha256": "3c3dfa7d01d417c9ec1f545544413abe71a491f200a5ebf7fb47f516d58be81d",
+    "installedSha256": "6ecdadaf835615951d328bec2cf2be00a47adbe74d369ad7d6c8493df017a156",
+    "handlersSha256": "6203da3011392babf2db7d79e8960fbeded135c81e387a0e3561ae4de5ca62ff"
+  },
+  "settings": {
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "workbench.editor.enablePreview": false,
+    "window.restoreWindows": "none",
+    "files.autoSave": "off",
+    "files.hotExit": "off",
+    "update.mode": "none",
+    "extensions.autoCheckUpdates": false,
+    "extensions.autoUpdate": false,
+    "telemetry.telemetryLevel": "off",
+    "chat.disableAIFeatures": true,
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.autoClosingComments": "never",
+    "editor.autoSurround": "never",
+    "editor.autoIndent": "none",
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": false,
+    "editor.quickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.wordBasedSuggestions": "off",
+    "editor.parameterHints.enabled": false,
+    "editor.inlineSuggest.enabled": false,
+    "editor.snippetSuggestions": "none",
+    "editor.tabCompletion": "off",
+    "editor.editContext": true,
+    "vim.vimrc.enable": false,
+    "vim.useSystemClipboard": false,
+    "vim.normalModeKeyBindingsNonRecursive": [
+      {
+        "before": [
+          "<space>"
+        ],
+        "commands": [
+          "vimCompanion.startLeader"
+        ]
+      }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+      {
+        "before": [
+          "<space>"
+        ],
+        "commands": [
+          "vimCompanion.startLeader"
+        ]
+      }
+    ]
+  },
+  "deliveryKeybindings": [
+    {
+      "key": "space",
+      "command": "s1.deliveryKey",
+      "args": "space",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "w",
+      "command": "s1.deliveryKey",
+      "args": "w",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "h",
+      "command": "s1.deliveryKey",
+      "args": "h",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "j",
+      "command": "s1.deliveryKey",
+      "args": "j",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "a",
+      "command": "s1.deliveryKey",
+      "args": "a",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "b",
+      "command": "s1.deliveryKey",
+      "args": "b",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "c",
+      "command": "s1.deliveryKey",
+      "args": "c",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "d",
+      "command": "s1.deliveryKey",
+      "args": "d",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "e",
+      "command": "s1.deliveryKey",
+      "args": "e",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "f",
+      "command": "s1.deliveryKey",
+      "args": "f",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "r",
+      "command": "s1.deliveryKey",
+      "args": "r",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "escape",
+      "command": "s1.deliveryKey",
+      "args": "Escape",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "ctrl+[",
+      "command": "s1.deliveryKey",
+      "args": "ctrl+bracketleft",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "ctrl+c",
+      "command": "s1.deliveryKey",
+      "args": "ctrl+c",
+      "when": "s1.delivery"
+    }
+  ],
+  "hello": {
+    "vscode": "1.141.0",
+    "vim": "1.32.4",
+    "pid": 2027075,
+    "leaderPid": 2027075,
+    "loadPid": null,
+    "extensions": [
+      "TypeScriptTeam.jsts-chat-features",
+      "ms-vscode.js-debug",
+      "ms-vscode.js-debug-companion",
+      "ms-vscode.vscode-js-profile-table",
+      "vim-companion-spike.s1-leader",
+      "vim-companion-spike.s1-probe",
+      "vscode.bat",
+      "vscode.builtin-notebook-renderers",
+      "vscode.clojure",
+      "vscode.coffeescript",
+      "vscode.configuration-editing",
+      "vscode.cpp",
+      "vscode.csharp",
+      "vscode.css",
+      "vscode.css-language-features",
+      "vscode.dart",
+      "vscode.debug-auto-launch",
+      "vscode.debug-server-ready",
+      "vscode.diff",
+      "vscode.docker",
+      "vscode.dotenv",
+      "vscode.emmet",
+      "vscode.extension-editing",
+      "vscode.fsharp",
+      "vscode.git",
+      "vscode.git-base",
+      "vscode.github",
+      "vscode.github-authentication",
+      "vscode.go",
+      "vscode.groovy",
+      "vscode.grunt",
+      "vscode.gulp",
+      "vscode.handlebars",
+      "vscode.hlsl",
+      "vscode.html",
+      "vscode.html-language-features",
+      "vscode.ini",
+      "vscode.ipynb",
+      "vscode.jake",
+      "vscode.java",
+      "vscode.javascript",
+      "vscode.json",
+      "vscode.json-language-features",
+      "vscode.julia",
+      "vscode.latex",
+      "vscode.less",
+      "vscode.log",
+      "vscode.lua",
+      "vscode.make",
+      "vscode.markdown",
+      "vscode.markdown-language-features",
+      "vscode.markdown-math",
+      "vscode.media-preview",
+      "vscode.merge-conflict",
+      "vscode.mermaid-markdown-features",
+      "vscode.microsoft-authentication",
+      "vscode.npm",
+      "vscode.objective-c",
+      "vscode.perl",
+      "vscode.php",
+      "vscode.php-language-features",
+      "vscode.powershell",
+      "vscode.prompt",
+      "vscode.pug",
+      "vscode.python",
+      "vscode.r",
+      "vscode.razor",
+      "vscode.references-view",
+      "vscode.restructuredtext",
+      "vscode.ruby",
+      "vscode.rust",
+      "vscode.scss",
+      "vscode.search-result",
+      "vscode.shaderlab",
+      "vscode.shellscript",
+      "vscode.simple-browser",
+      "vscode.sql",
+      "vscode.swift",
+      "vscode.terminal-suggest",
+      "vscode.theme-abyss",
+      "vscode.theme-defaults",
+      "vscode.theme-kimbie-dark",
+      "vscode.theme-monokai",
+      "vscode.theme-monokai-dimmed",
+      "vscode.theme-quietlight",
+      "vscode.theme-red",
+      "vscode.theme-solarized-dark",
+      "vscode.theme-solarized-light",
+      "vscode.theme-tomorrow-night-blue",
+      "vscode.tunnel-forwarding",
+      "vscode.typescript",
+      "vscode.typescript-language-features",
+      "vscode.vb",
+      "vscode.vscode-modern-icons",
+      "vscode.vscode-theme-seti",
+      "vscode.xml",
+      "vscode.yaml",
+      "vscodevim.vim"
+    ]
+  },
+  "initial": {
+    "viewColumn": 2,
+    "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+    "selections": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "mode": 0,
+    "pending": {
+      "actionKeys": [],
+      "bufferedKeys": [],
+      "actionsRunPressedKeys": [],
+      "count": 0,
+      "operatorCount": 0,
+      "registerName": "\""
+    },
+    "registers": {
+      "%": [
+        {
+          "text": "sample.txt",
+          "mode": "character"
+        }
+      ]
+    },
+    "queue": {
+      "pending": 0,
+      "jobs": 0,
+      "running": false
+    },
+    "leader": {
+      "active": false,
+      "prefix": [],
+      "events": []
+    },
+    "sentinel": null,
+    "sentinelSequence": 0
+  },
+  "delivery": {
+    "expected": [
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c"
+    ],
+    "observed": [
+      {
+        "key": "space",
+        "t": 1403.472373
+      },
+      {
+        "key": "w",
+        "t": 1413.282356
+      },
+      {
+        "key": "h",
+        "t": 1423.583413
+      },
+      {
+        "key": "j",
+        "t": 1433.804627
+      },
+      {
+        "key": "f",
+        "t": 1443.906754
+      },
+      {
+        "key": "r",
+        "t": 1454.35121
+      },
+      {
+        "key": "d",
+        "t": 1464.560653
+      },
+      {
+        "key": "Escape",
+        "t": 1474.966456
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1490.620848
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1511.460675
+      },
+      {
+        "key": "space",
+        "t": 1526.718549
+      },
+      {
+        "key": "w",
+        "t": 1536.962889
+      },
+      {
+        "key": "h",
+        "t": 1547.19559
+      },
+      {
+        "key": "j",
+        "t": 1557.386375
+      },
+      {
+        "key": "f",
+        "t": 1567.505575
+      },
+      {
+        "key": "r",
+        "t": 1578.044741
+      },
+      {
+        "key": "d",
+        "t": 1587.977896
+      },
+      {
+        "key": "Escape",
+        "t": 1598.488874
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1614.03745
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1634.59185
+      },
+      {
+        "key": "space",
+        "t": 1650.077582
+      },
+      {
+        "key": "w",
+        "t": 1660.273288
+      },
+      {
+        "key": "h",
+        "t": 1670.491264
+      },
+      {
+        "key": "j",
+        "t": 1680.778025
+      },
+      {
+        "key": "f",
+        "t": 1690.971511
+      },
+      {
+        "key": "r",
+        "t": 1701.387763
+      },
+      {
+        "key": "d",
+        "t": 1711.908455
+      },
+      {
+        "key": "Escape",
+        "t": 1722.248065
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1737.467138
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1758.753694
+      },
+      {
+        "key": "space",
+        "t": 1774.083937
+      },
+      {
+        "key": "w",
+        "t": 1784.271944
+      },
+      {
+        "key": "h",
+        "t": 1794.384645
+      },
+      {
+        "key": "j",
+        "t": 1804.873063
+      },
+      {
+        "key": "f",
+        "t": 1815.227494
+      },
+      {
+        "key": "r",
+        "t": 1825.630476
+      },
+      {
+        "key": "d",
+        "t": 1836.013625
+      },
+      {
+        "key": "Escape",
+        "t": 1845.997488
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1861.47272
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1882.272405
+      },
+      {
+        "key": "space",
+        "t": 1898.051383
+      },
+      {
+        "key": "w",
+        "t": 1908.153829
+      },
+      {
+        "key": "h",
+        "t": 1918.610051
+      },
+      {
+        "key": "j",
+        "t": 1928.826785
+      },
+      {
+        "key": "f",
+        "t": 1938.869241
+      },
+      {
+        "key": "r",
+        "t": 1949.404598
+      },
+      {
+        "key": "d",
+        "t": 1959.532319
+      },
+      {
+        "key": "Escape",
+        "t": 1970.005696
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1985.725727
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2007.863385
+      },
+      {
+        "key": "space",
+        "t": 2023.277149
+      },
+      {
+        "key": "w",
+        "t": 2033.371343
+      },
+      {
+        "key": "h",
+        "t": 2043.737897
+      },
+      {
+        "key": "j",
+        "t": 2053.690492
+      },
+      {
+        "key": "f",
+        "t": 2064.459384
+      },
+      {
+        "key": "r",
+        "t": 2074.611524
+      },
+      {
+        "key": "d",
+        "t": 2085.066219
+      },
+      {
+        "key": "Escape",
+        "t": 2095.624076
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2111.057272
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2131.821472
+      },
+      {
+        "key": "space",
+        "t": 2147.119549
+      },
+      {
+        "key": "w",
+        "t": 2157.328971
+      },
+      {
+        "key": "h",
+        "t": 2167.51209
+      },
+      {
+        "key": "j",
+        "t": 2177.996985
+      },
+      {
+        "key": "f",
+        "t": 2188.427118
+      },
+      {
+        "key": "r",
+        "t": 2198.710258
+      },
+      {
+        "key": "d",
+        "t": 2208.740298
+      },
+      {
+        "key": "Escape",
+        "t": 2219.07862
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2234.602254
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2255.740862
+      },
+      {
+        "key": "space",
+        "t": 2271.991718
+      },
+      {
+        "key": "w",
+        "t": 2282.089395
+      },
+      {
+        "key": "h",
+        "t": 2292.47699
+      },
+      {
+        "key": "j",
+        "t": 2302.606237
+      },
+      {
+        "key": "f",
+        "t": 2312.761062
+      },
+      {
+        "key": "r",
+        "t": 2323.163384
+      },
+      {
+        "key": "d",
+        "t": 2333.174229
+      },
+      {
+        "key": "Escape",
+        "t": 2343.478897
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2359.158817
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2380.190678
+      },
+      {
+        "key": "space",
+        "t": 2396.284343
+      },
+      {
+        "key": "w",
+        "t": 2406.685301
+      },
+      {
+        "key": "h",
+        "t": 2416.93888
+      },
+      {
+        "key": "j",
+        "t": 2427.131637
+      },
+      {
+        "key": "f",
+        "t": 2437.345308
+      },
+      {
+        "key": "r",
+        "t": 2447.873994
+      },
+      {
+        "key": "d",
+        "t": 2458.045184
+      },
+      {
+        "key": "Escape",
+        "t": 2468.244455
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2491.523012
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2505.485695
+      },
+      {
+        "key": "space",
+        "t": 2528.047832
+      },
+      {
+        "key": "w",
+        "t": 2531.495204
+      },
+      {
+        "key": "h",
+        "t": 2567.688755
+      },
+      {
+        "key": "j",
+        "t": 2567.797407
+      },
+      {
+        "key": "f",
+        "t": 2567.867256
+      },
+      {
+        "key": "r",
+        "t": 2574.546205
+      },
+      {
+        "key": "d",
+        "t": 2586.812856
+      },
+      {
+        "key": "Escape",
+        "t": 2596.034791
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2666.984709
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2667.75755
+      },
+      {
+        "key": "space",
+        "t": 2671.13096
+      },
+      {
+        "key": "w",
+        "t": 2671.229275
+      },
+      {
+        "key": "h",
+        "t": 2675.166809
+      },
+      {
+        "key": "j",
+        "t": 2680.423823
+      },
+      {
+        "key": "f",
+        "t": 2695.544604
+      },
+      {
+        "key": "r",
+        "t": 2699.159519
+      },
+      {
+        "key": "d",
+        "t": 2708.260362
+      },
+      {
+        "key": "Escape",
+        "t": 2718.308753
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2734.354359
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2754.748257
+      },
+      {
+        "key": "space",
+        "t": 2770.178015
+      },
+      {
+        "key": "w",
+        "t": 2780.66383
+      },
+      {
+        "key": "h",
+        "t": 2790.930671
+      },
+      {
+        "key": "j",
+        "t": 2801.223705
+      },
+      {
+        "key": "f",
+        "t": 2811.282742
+      },
+      {
+        "key": "r",
+        "t": 2821.52457
+      },
+      {
+        "key": "d",
+        "t": 2831.748853
+      },
+      {
+        "key": "Escape",
+        "t": 2841.964877
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2857.301676
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2877.988358
+      },
+      {
+        "key": "space",
+        "t": 2893.383535
+      },
+      {
+        "key": "w",
+        "t": 2903.487283
+      },
+      {
+        "key": "h",
+        "t": 2913.861097
+      },
+      {
+        "key": "j",
+        "t": 2923.970731
+      },
+      {
+        "key": "f",
+        "t": 2934.431754
+      },
+      {
+        "key": "r",
+        "t": 2944.785776
+      },
+      {
+        "key": "d",
+        "t": 2955.003457
+      },
+      {
+        "key": "Escape",
+        "t": 2965.053331
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2980.584838
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3001.162494
+      },
+      {
+        "key": "space",
+        "t": 3016.732832
+      },
+      {
+        "key": "w",
+        "t": 3026.86955
+      },
+      {
+        "key": "h",
+        "t": 3036.980445
+      },
+      {
+        "key": "j",
+        "t": 3047.308857
+      },
+      {
+        "key": "f",
+        "t": 3057.802393
+      },
+      {
+        "key": "r",
+        "t": 3067.938605
+      },
+      {
+        "key": "d",
+        "t": 3078.230309
+      },
+      {
+        "key": "Escape",
+        "t": 3088.461824
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3104.320162
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3125.544669
+      },
+      {
+        "key": "space",
+        "t": 3141.111318
+      },
+      {
+        "key": "w",
+        "t": 3151.592501
+      },
+      {
+        "key": "h",
+        "t": 3161.675428
+      },
+      {
+        "key": "j",
+        "t": 3172.127057
+      },
+      {
+        "key": "f",
+        "t": 3182.348696
+      },
+      {
+        "key": "r",
+        "t": 3192.560666
+      },
+      {
+        "key": "d",
+        "t": 3202.791906
+      },
+      {
+        "key": "Escape",
+        "t": 3213.081136
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3228.449269
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3249.342102
+      },
+      {
+        "key": "space",
+        "t": 3264.843575
+      },
+      {
+        "key": "w",
+        "t": 3274.980751
+      },
+      {
+        "key": "h",
+        "t": 3285.346089
+      },
+      {
+        "key": "j",
+        "t": 3295.476575
+      },
+      {
+        "key": "f",
+        "t": 3305.801518
+      },
+      {
+        "key": "r",
+        "t": 3316.223709
+      },
+      {
+        "key": "d",
+        "t": 3326.406619
+      },
+      {
+        "key": "Escape",
+        "t": 3336.746064
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3353.863511
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3374.230556
+      },
+      {
+        "key": "space",
+        "t": 3389.679251
+      },
+      {
+        "key": "w",
+        "t": 3399.814782
+      },
+      {
+        "key": "h",
+        "t": 3410.094083
+      },
+      {
+        "key": "j",
+        "t": 3420.165258
+      },
+      {
+        "key": "f",
+        "t": 3430.528674
+      },
+      {
+        "key": "r",
+        "t": 3440.739045
+      },
+      {
+        "key": "d",
+        "t": 3451.056628
+      },
+      {
+        "key": "Escape",
+        "t": 3461.294872
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3477.795339
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3498.860951
+      },
+      {
+        "key": "space",
+        "t": 3514.709484
+      },
+      {
+        "key": "w",
+        "t": 3525.09556
+      },
+      {
+        "key": "h",
+        "t": 3535.387521
+      },
+      {
+        "key": "j",
+        "t": 3545.561592
+      },
+      {
+        "key": "f",
+        "t": 3555.810212
+      },
+      {
+        "key": "r",
+        "t": 3565.971261
+      },
+      {
+        "key": "d",
+        "t": 3576.251768
+      },
+      {
+        "key": "Escape",
+        "t": 3586.199039
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3602.319847
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3623.840708
+      },
+      {
+        "key": "space",
+        "t": 3639.298096
+      },
+      {
+        "key": "w",
+        "t": 3649.664326
+      },
+      {
+        "key": "h",
+        "t": 3659.749929
+      },
+      {
+        "key": "j",
+        "t": 3670.011122
+      },
+      {
+        "key": "f",
+        "t": 3680.170557
+      },
+      {
+        "key": "r",
+        "t": 3690.547692
+      },
+      {
+        "key": "d",
+        "t": 3700.599991
+      },
+      {
+        "key": "Escape",
+        "t": 3710.920482
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3726.711267
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3746.856207
+      },
+      {
+        "key": "space",
+        "t": 3762.365055
+      },
+      {
+        "key": "w",
+        "t": 3772.436299
+      },
+      {
+        "key": "h",
+        "t": 3782.785136
+      },
+      {
+        "key": "j",
+        "t": 3792.905037
+      },
+      {
+        "key": "f",
+        "t": 3803.167462
+      },
+      {
+        "key": "r",
+        "t": 3813.380572
+      },
+      {
+        "key": "d",
+        "t": 3823.629163
+      },
+      {
+        "key": "Escape",
+        "t": 3833.877914
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3849.299496
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3870.101303
+      },
+      {
+        "key": "space",
+        "t": 3885.474455
+      },
+      {
+        "key": "w",
+        "t": 3895.709983
+      },
+      {
+        "key": "h",
+        "t": 3905.947343
+      },
+      {
+        "key": "j",
+        "t": 3916.439388
+      },
+      {
+        "key": "f",
+        "t": 3927.048979
+      },
+      {
+        "key": "r",
+        "t": 3937.103256
+      },
+      {
+        "key": "d",
+        "t": 3947.57115
+      },
+      {
+        "key": "Escape",
+        "t": 3957.709325
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3973.18783
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3993.823085
+      },
+      {
+        "key": "space",
+        "t": 4009.715339
+      },
+      {
+        "key": "w",
+        "t": 4020.139169
+      },
+      {
+        "key": "h",
+        "t": 4030.3559
+      },
+      {
+        "key": "j",
+        "t": 4040.757999
+      },
+      {
+        "key": "f",
+        "t": 4051.144857
+      },
+      {
+        "key": "r",
+        "t": 4061.401291
+      },
+      {
+        "key": "d",
+        "t": 4071.588795
+      },
+      {
+        "key": "Escape",
+        "t": 4081.716026
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4097.533449
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4118.528941
+      },
+      {
+        "key": "space",
+        "t": 4133.943881
+      },
+      {
+        "key": "w",
+        "t": 4143.988118
+      },
+      {
+        "key": "h",
+        "t": 4154.113827
+      },
+      {
+        "key": "j",
+        "t": 4164.327785
+      },
+      {
+        "key": "f",
+        "t": 4174.498731
+      },
+      {
+        "key": "r",
+        "t": 4184.821036
+      },
+      {
+        "key": "d",
+        "t": 4195.04047
+      },
+      {
+        "key": "Escape",
+        "t": 4205.188139
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4220.555147
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4241.147934
+      },
+      {
+        "key": "space",
+        "t": 4256.51629
+      },
+      {
+        "key": "w",
+        "t": 4266.620315
+      },
+      {
+        "key": "h",
+        "t": 4276.899071
+      },
+      {
+        "key": "j",
+        "t": 4287.01825
+      },
+      {
+        "key": "f",
+        "t": 4297.300379
+      },
+      {
+        "key": "r",
+        "t": 4307.497469
+      },
+      {
+        "key": "d",
+        "t": 4317.630504
+      },
+      {
+        "key": "Escape",
+        "t": 4328.011024
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4343.441593
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4363.993439
+      },
+      {
+        "key": "space",
+        "t": 4379.512613
+      },
+      {
+        "key": "w",
+        "t": 4389.653174
+      },
+      {
+        "key": "h",
+        "t": 4400.1635
+      },
+      {
+        "key": "j",
+        "t": 4410.291085
+      },
+      {
+        "key": "f",
+        "t": 4420.659262
+      },
+      {
+        "key": "r",
+        "t": 4430.981971
+      },
+      {
+        "key": "d",
+        "t": 4441.357218
+      },
+      {
+        "key": "Escape",
+        "t": 4451.597387
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4467.132084
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4487.846689
+      },
+      {
+        "key": "space",
+        "t": 4503.624153
+      },
+      {
+        "key": "w",
+        "t": 4514.366329
+      },
+      {
+        "key": "h",
+        "t": 4524.412324
+      },
+      {
+        "key": "j",
+        "t": 4534.804933
+      },
+      {
+        "key": "f",
+        "t": 4545.069214
+      },
+      {
+        "key": "r",
+        "t": 4555.231074
+      },
+      {
+        "key": "d",
+        "t": 4565.578037
+      },
+      {
+        "key": "Escape",
+        "t": 4575.599526
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4591.247168
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4612.088878
+      },
+      {
+        "key": "space",
+        "t": 4628.073476
+      },
+      {
+        "key": "w",
+        "t": 4638.3047
+      },
+      {
+        "key": "h",
+        "t": 4648.515307
+      },
+      {
+        "key": "j",
+        "t": 4658.867134
+      },
+      {
+        "key": "f",
+        "t": 4669.015739
+      },
+      {
+        "key": "r",
+        "t": 4679.360148
+      },
+      {
+        "key": "d",
+        "t": 4689.520512
+      },
+      {
+        "key": "Escape",
+        "t": 4699.818517
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4716.241796
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4737.260738
+      },
+      {
+        "key": "space",
+        "t": 4752.780548
+      },
+      {
+        "key": "w",
+        "t": 4762.96827
+      },
+      {
+        "key": "h",
+        "t": 4773.458543
+      },
+      {
+        "key": "j",
+        "t": 4783.715655
+      },
+      {
+        "key": "f",
+        "t": 4793.828267
+      },
+      {
+        "key": "r",
+        "t": 4804.301413
+      },
+      {
+        "key": "d",
+        "t": 4814.521329
+      },
+      {
+        "key": "Escape",
+        "t": 4824.832822
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4840.342675
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4860.83416
+      },
+      {
+        "key": "space",
+        "t": 4876.172879
+      },
+      {
+        "key": "w",
+        "t": 4886.670464
+      },
+      {
+        "key": "h",
+        "t": 4896.417407
+      },
+      {
+        "key": "j",
+        "t": 4906.837843
+      },
+      {
+        "key": "f",
+        "t": 4917.155554
+      },
+      {
+        "key": "r",
+        "t": 4927.425022
+      },
+      {
+        "key": "d",
+        "t": 4937.700452
+      },
+      {
+        "key": "Escape",
+        "t": 4948.028031
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4963.620793
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4984.730964
+      },
+      {
+        "key": "space",
+        "t": 5000.239472
+      },
+      {
+        "key": "w",
+        "t": 5010.233328
+      },
+      {
+        "key": "h",
+        "t": 5020.392846
+      },
+      {
+        "key": "j",
+        "t": 5030.642396
+      },
+      {
+        "key": "f",
+        "t": 5041.271999
+      },
+      {
+        "key": "r",
+        "t": 5051.55869
+      },
+      {
+        "key": "d",
+        "t": 5061.908272
+      },
+      {
+        "key": "Escape",
+        "t": 5072.346454
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5087.509335
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5107.926589
+      },
+      {
+        "key": "space",
+        "t": 5123.403812
+      },
+      {
+        "key": "w",
+        "t": 5133.659671
+      },
+      {
+        "key": "h",
+        "t": 5143.839441
+      },
+      {
+        "key": "j",
+        "t": 5154.123693
+      },
+      {
+        "key": "f",
+        "t": 5164.571316
+      },
+      {
+        "key": "r",
+        "t": 5174.873548
+      },
+      {
+        "key": "d",
+        "t": 5185.132461
+      },
+      {
+        "key": "Escape",
+        "t": 5195.266256
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5210.912966
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5231.4227
+      },
+      {
+        "key": "space",
+        "t": 5246.576751
+      },
+      {
+        "key": "w",
+        "t": 5257.014695
+      },
+      {
+        "key": "h",
+        "t": 5267.200393
+      },
+      {
+        "key": "j",
+        "t": 5277.576287
+      },
+      {
+        "key": "f",
+        "t": 5287.587548
+      },
+      {
+        "key": "r",
+        "t": 5297.977288
+      },
+      {
+        "key": "d",
+        "t": 5308.489323
+      },
+      {
+        "key": "Escape",
+        "t": 5318.50709
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5333.714531
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5354.111686
+      },
+      {
+        "key": "space",
+        "t": 5369.486703
+      },
+      {
+        "key": "w",
+        "t": 5379.536943
+      },
+      {
+        "key": "h",
+        "t": 5389.787824
+      },
+      {
+        "key": "j",
+        "t": 5400.133823
+      },
+      {
+        "key": "f",
+        "t": 5410.267614
+      },
+      {
+        "key": "r",
+        "t": 5420.557062
+      },
+      {
+        "key": "d",
+        "t": 5431.086789
+      },
+      {
+        "key": "Escape",
+        "t": 5441.500474
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5456.983318
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5478.056396
+      },
+      {
+        "key": "space",
+        "t": 5493.45863
+      },
+      {
+        "key": "w",
+        "t": 5503.681795
+      },
+      {
+        "key": "h",
+        "t": 5514.036631
+      },
+      {
+        "key": "j",
+        "t": 5524.096023
+      },
+      {
+        "key": "f",
+        "t": 5534.746995
+      },
+      {
+        "key": "r",
+        "t": 5544.79348
+      },
+      {
+        "key": "d",
+        "t": 5555.103174
+      },
+      {
+        "key": "Escape",
+        "t": 5565.319193
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5581.720366
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5602.511417
+      },
+      {
+        "key": "space",
+        "t": 5617.702355
+      },
+      {
+        "key": "w",
+        "t": 5628.147688
+      },
+      {
+        "key": "h",
+        "t": 5638.216263
+      },
+      {
+        "key": "j",
+        "t": 5648.442972
+      },
+      {
+        "key": "f",
+        "t": 5658.735359
+      },
+      {
+        "key": "r",
+        "t": 5668.898583
+      },
+      {
+        "key": "d",
+        "t": 5679.234757
+      },
+      {
+        "key": "Escape",
+        "t": 5689.594738
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5705.539286
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5727.116207
+      },
+      {
+        "key": "space",
+        "t": 5743.055607
+      },
+      {
+        "key": "w",
+        "t": 5753.154603
+      },
+      {
+        "key": "h",
+        "t": 5763.463366
+      },
+      {
+        "key": "j",
+        "t": 5773.733715
+      },
+      {
+        "key": "f",
+        "t": 5783.885084
+      },
+      {
+        "key": "r",
+        "t": 5794.269131
+      },
+      {
+        "key": "d",
+        "t": 5804.667741
+      },
+      {
+        "key": "Escape",
+        "t": 5814.819176
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5830.407825
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5852.997358
+      },
+      {
+        "key": "space",
+        "t": 5868.354532
+      },
+      {
+        "key": "w",
+        "t": 5878.573041
+      },
+      {
+        "key": "h",
+        "t": 5888.83739
+      },
+      {
+        "key": "j",
+        "t": 5899.110087
+      },
+      {
+        "key": "f",
+        "t": 5909.252924
+      },
+      {
+        "key": "r",
+        "t": 5919.414193
+      },
+      {
+        "key": "d",
+        "t": 5929.538934
+      },
+      {
+        "key": "Escape",
+        "t": 5939.872341
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5955.223221
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5976.707776
+      },
+      {
+        "key": "space",
+        "t": 5993.209061
+      },
+      {
+        "key": "w",
+        "t": 6003.551295
+      },
+      {
+        "key": "h",
+        "t": 6013.875293
+      },
+      {
+        "key": "j",
+        "t": 6023.865574
+      },
+      {
+        "key": "f",
+        "t": 6034.47629
+      },
+      {
+        "key": "r",
+        "t": 6044.497004
+      },
+      {
+        "key": "d",
+        "t": 6054.809099
+      },
+      {
+        "key": "Escape",
+        "t": 6065.162174
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6081.564965
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6102.695795
+      },
+      {
+        "key": "space",
+        "t": 6118.168311
+      },
+      {
+        "key": "w",
+        "t": 6128.502603
+      },
+      {
+        "key": "h",
+        "t": 6138.733486
+      },
+      {
+        "key": "j",
+        "t": 6149.461864
+      },
+      {
+        "key": "f",
+        "t": 6160.07293
+      },
+      {
+        "key": "r",
+        "t": 6169.965197
+      },
+      {
+        "key": "d",
+        "t": 6180.364467
+      },
+      {
+        "key": "Escape",
+        "t": 6190.808815
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6206.153231
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6227.220901
+      },
+      {
+        "key": "space",
+        "t": 6242.51038
+      },
+      {
+        "key": "w",
+        "t": 6252.786972
+      },
+      {
+        "key": "h",
+        "t": 6263.029684
+      },
+      {
+        "key": "j",
+        "t": 6273.430798
+      },
+      {
+        "key": "f",
+        "t": 6283.588763
+      },
+      {
+        "key": "r",
+        "t": 6293.855465
+      },
+      {
+        "key": "d",
+        "t": 6304.113487
+      },
+      {
+        "key": "Escape",
+        "t": 6314.320801
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6330.513661
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6352.161752
+      },
+      {
+        "key": "space",
+        "t": 6367.433365
+      },
+      {
+        "key": "w",
+        "t": 6377.65194
+      },
+      {
+        "key": "h",
+        "t": 6387.895111
+      },
+      {
+        "key": "j",
+        "t": 6398.110366
+      },
+      {
+        "key": "f",
+        "t": 6408.345615
+      },
+      {
+        "key": "r",
+        "t": 6418.621386
+      },
+      {
+        "key": "d",
+        "t": 6428.982816
+      },
+      {
+        "key": "Escape",
+        "t": 6439.531781
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6454.920135
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6476.380543
+      },
+      {
+        "key": "space",
+        "t": 6492.331982
+      },
+      {
+        "key": "w",
+        "t": 6502.280017
+      },
+      {
+        "key": "h",
+        "t": 6512.611792
+      },
+      {
+        "key": "j",
+        "t": 6522.7867
+      },
+      {
+        "key": "f",
+        "t": 6533.159969
+      },
+      {
+        "key": "r",
+        "t": 6543.554667
+      },
+      {
+        "key": "d",
+        "t": 6553.861002
+      },
+      {
+        "key": "Escape",
+        "t": 6563.941834
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6579.426723
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6600.025238
+      },
+      {
+        "key": "space",
+        "t": 6615.536152
+      },
+      {
+        "key": "w",
+        "t": 6626.19276
+      },
+      {
+        "key": "h",
+        "t": 6636.18018
+      },
+      {
+        "key": "j",
+        "t": 6646.668486
+      },
+      {
+        "key": "f",
+        "t": 6656.760091
+      },
+      {
+        "key": "r",
+        "t": 6666.972876
+      },
+      {
+        "key": "d",
+        "t": 6677.3556
+      },
+      {
+        "key": "Escape",
+        "t": 6687.551263
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6702.981447
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6723.475205
+      },
+      {
+        "key": "space",
+        "t": 6738.792699
+      },
+      {
+        "key": "w",
+        "t": 6749.112421
+      },
+      {
+        "key": "h",
+        "t": 6759.362266
+      },
+      {
+        "key": "j",
+        "t": 6769.772158
+      },
+      {
+        "key": "f",
+        "t": 6780.061222
+      },
+      {
+        "key": "r",
+        "t": 6790.231014
+      },
+      {
+        "key": "d",
+        "t": 6800.463048
+      },
+      {
+        "key": "Escape",
+        "t": 6810.83948
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6826.96147
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6847.565869
+      },
+      {
+        "key": "space",
+        "t": 6862.906564
+      },
+      {
+        "key": "w",
+        "t": 6873.1866
+      },
+      {
+        "key": "h",
+        "t": 6883.38565
+      },
+      {
+        "key": "j",
+        "t": 6893.513264
+      },
+      {
+        "key": "f",
+        "t": 6903.80687
+      },
+      {
+        "key": "r",
+        "t": 6913.998267
+      },
+      {
+        "key": "d",
+        "t": 6924.264299
+      },
+      {
+        "key": "Escape",
+        "t": 6934.36017
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6949.854962
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6971.47083
+      },
+      {
+        "key": "space",
+        "t": 6987.170498
+      },
+      {
+        "key": "w",
+        "t": 6997.295553
+      },
+      {
+        "key": "h",
+        "t": 7007.652778
+      },
+      {
+        "key": "j",
+        "t": 7017.767516
+      },
+      {
+        "key": "f",
+        "t": 7028.033158
+      },
+      {
+        "key": "r",
+        "t": 7038.395488
+      },
+      {
+        "key": "d",
+        "t": 7048.463502
+      },
+      {
+        "key": "Escape",
+        "t": 7058.906834
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7074.163706
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7094.78149
+      },
+      {
+        "key": "space",
+        "t": 7110.311187
+      },
+      {
+        "key": "w",
+        "t": 7120.369671
+      },
+      {
+        "key": "h",
+        "t": 7130.845365
+      },
+      {
+        "key": "j",
+        "t": 7141.169462
+      },
+      {
+        "key": "f",
+        "t": 7151.872258
+      },
+      {
+        "key": "r",
+        "t": 7161.903413
+      },
+      {
+        "key": "d",
+        "t": 7172.430626
+      },
+      {
+        "key": "Escape",
+        "t": 7182.903178
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7198.376603
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7219.154532
+      },
+      {
+        "key": "space",
+        "t": 7234.541393
+      },
+      {
+        "key": "w",
+        "t": 7244.70413
+      },
+      {
+        "key": "h",
+        "t": 7255.183199
+      },
+      {
+        "key": "j",
+        "t": 7265.295995
+      },
+      {
+        "key": "f",
+        "t": 7275.730636
+      },
+      {
+        "key": "r",
+        "t": 7285.737324
+      },
+      {
+        "key": "d",
+        "t": 7296.114429
+      },
+      {
+        "key": "Escape",
+        "t": 7306.400535
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7322.490742
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7343.460987
+      },
+      {
+        "key": "space",
+        "t": 7359.083954
+      },
+      {
+        "key": "w",
+        "t": 7369.207053
+      },
+      {
+        "key": "h",
+        "t": 7379.652793
+      },
+      {
+        "key": "j",
+        "t": 7389.828802
+      },
+      {
+        "key": "f",
+        "t": 7400.125553
+      },
+      {
+        "key": "r",
+        "t": 7410.263351
+      },
+      {
+        "key": "d",
+        "t": 7420.50769
+      },
+      {
+        "key": "Escape",
+        "t": 7430.923868
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7446.671393
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7467.105385
+      },
+      {
+        "key": "space",
+        "t": 7482.366076
+      },
+      {
+        "key": "w",
+        "t": 7492.579576
+      },
+      {
+        "key": "h",
+        "t": 7502.921051
+      },
+      {
+        "key": "j",
+        "t": 7513.160853
+      },
+      {
+        "key": "f",
+        "t": 7523.461197
+      },
+      {
+        "key": "r",
+        "t": 7533.739532
+      },
+      {
+        "key": "d",
+        "t": 7544.26605
+      },
+      {
+        "key": "Escape",
+        "t": 7554.362373
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7569.766546
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7590.391557
+      },
+      {
+        "key": "space",
+        "t": 7605.815373
+      },
+      {
+        "key": "w",
+        "t": 7615.995949
+      },
+      {
+        "key": "h",
+        "t": 7626.202961
+      },
+      {
+        "key": "j",
+        "t": 7636.509786
+      },
+      {
+        "key": "f",
+        "t": 7646.931796
+      },
+      {
+        "key": "r",
+        "t": 7657.210826
+      },
+      {
+        "key": "d",
+        "t": 7667.739755
+      },
+      {
+        "key": "Escape",
+        "t": 7677.913747
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7693.632764
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7714.627875
+      },
+      {
+        "key": "space",
+        "t": 7729.990631
+      },
+      {
+        "key": "w",
+        "t": 7740.269387
+      },
+      {
+        "key": "h",
+        "t": 7750.898847
+      },
+      {
+        "key": "j",
+        "t": 7760.904462
+      },
+      {
+        "key": "f",
+        "t": 7771.097877
+      },
+      {
+        "key": "r",
+        "t": 7781.387558
+      },
+      {
+        "key": "d",
+        "t": 7791.504342
+      },
+      {
+        "key": "Escape",
+        "t": 7801.638249
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7817.20723
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7837.785478
+      },
+      {
+        "key": "space",
+        "t": 7853.062745
+      },
+      {
+        "key": "w",
+        "t": 7863.26747
+      },
+      {
+        "key": "h",
+        "t": 7873.459299
+      },
+      {
+        "key": "j",
+        "t": 7884.23641
+      },
+      {
+        "key": "f",
+        "t": 7893.771957
+      },
+      {
+        "key": "r",
+        "t": 7904.013524
+      },
+      {
+        "key": "d",
+        "t": 7914.26583
+      },
+      {
+        "key": "Escape",
+        "t": 7924.444371
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7939.851169
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7960.379242
+      },
+      {
+        "key": "space",
+        "t": 7975.448895
+      },
+      {
+        "key": "w",
+        "t": 7985.817921
+      },
+      {
+        "key": "h",
+        "t": 7996.013814
+      },
+      {
+        "key": "j",
+        "t": 8006.48324
+      },
+      {
+        "key": "f",
+        "t": 8016.490266
+      },
+      {
+        "key": "r",
+        "t": 8026.813772
+      },
+      {
+        "key": "d",
+        "t": 8036.776021
+      },
+      {
+        "key": "Escape",
+        "t": 8047.199143
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8062.625539
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8083.083205
+      },
+      {
+        "key": "space",
+        "t": 8098.61462
+      },
+      {
+        "key": "w",
+        "t": 8108.904823
+      },
+      {
+        "key": "h",
+        "t": 8119.237013
+      },
+      {
+        "key": "j",
+        "t": 8129.453917
+      },
+      {
+        "key": "f",
+        "t": 8139.6319
+      },
+      {
+        "key": "r",
+        "t": 8149.710151
+      },
+      {
+        "key": "d",
+        "t": 8160.012076
+      },
+      {
+        "key": "Escape",
+        "t": 8170.159113
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8185.723157
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8206.572493
+      },
+      {
+        "key": "space",
+        "t": 8222.079544
+      },
+      {
+        "key": "w",
+        "t": 8232.339286
+      },
+      {
+        "key": "h",
+        "t": 8242.466938
+      },
+      {
+        "key": "j",
+        "t": 8252.620815
+      },
+      {
+        "key": "f",
+        "t": 8262.854658
+      },
+      {
+        "key": "r",
+        "t": 8272.982749
+      },
+      {
+        "key": "d",
+        "t": 8283.293919
+      },
+      {
+        "key": "Escape",
+        "t": 8293.565592
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8309.548417
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8330.267253
+      },
+      {
+        "key": "space",
+        "t": 8345.933382
+      },
+      {
+        "key": "w",
+        "t": 8356.577944
+      },
+      {
+        "key": "h",
+        "t": 8366.953052
+      },
+      {
+        "key": "j",
+        "t": 8377.282454
+      },
+      {
+        "key": "f",
+        "t": 8387.392892
+      },
+      {
+        "key": "r",
+        "t": 8397.581375
+      },
+      {
+        "key": "d",
+        "t": 8407.837695
+      },
+      {
+        "key": "Escape",
+        "t": 8418.106253
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8433.947426
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8455.203803
+      },
+      {
+        "key": "space",
+        "t": 8470.556754
+      },
+      {
+        "key": "w",
+        "t": 8480.93884
+      },
+      {
+        "key": "h",
+        "t": 8490.973866
+      },
+      {
+        "key": "j",
+        "t": 8501.214083
+      },
+      {
+        "key": "f",
+        "t": 8511.406614
+      },
+      {
+        "key": "r",
+        "t": 8521.653264
+      },
+      {
+        "key": "d",
+        "t": 8531.909373
+      },
+      {
+        "key": "Escape",
+        "t": 8542.254938
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8558.292193
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8578.974256
+      },
+      {
+        "key": "space",
+        "t": 8595.232792
+      },
+      {
+        "key": "w",
+        "t": 8605.380359
+      },
+      {
+        "key": "h",
+        "t": 8615.796074
+      },
+      {
+        "key": "j",
+        "t": 8626.003424
+      },
+      {
+        "key": "f",
+        "t": 8636.130969
+      },
+      {
+        "key": "r",
+        "t": 8646.513132
+      },
+      {
+        "key": "d",
+        "t": 8656.807349
+      },
+      {
+        "key": "Escape",
+        "t": 8667.64817
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8683.233735
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8704.627067
+      },
+      {
+        "key": "space",
+        "t": 8720.497321
+      },
+      {
+        "key": "w",
+        "t": 8730.817253
+      },
+      {
+        "key": "h",
+        "t": 8741.066183
+      },
+      {
+        "key": "j",
+        "t": 8751.170529
+      },
+      {
+        "key": "f",
+        "t": 8761.471739
+      },
+      {
+        "key": "r",
+        "t": 8771.918021
+      },
+      {
+        "key": "d",
+        "t": 8781.960719
+      },
+      {
+        "key": "Escape",
+        "t": 8792.3045
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8808.741408
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8829.445259
+      },
+      {
+        "key": "space",
+        "t": 8844.981891
+      },
+      {
+        "key": "w",
+        "t": 8855.510149
+      },
+      {
+        "key": "h",
+        "t": 8865.484451
+      },
+      {
+        "key": "j",
+        "t": 8875.763963
+      },
+      {
+        "key": "f",
+        "t": 8886.078186
+      },
+      {
+        "key": "r",
+        "t": 8896.032749
+      },
+      {
+        "key": "d",
+        "t": 8906.297373
+      },
+      {
+        "key": "Escape",
+        "t": 8916.550652
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8932.174038
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8952.667597
+      },
+      {
+        "key": "space",
+        "t": 8968.126794
+      },
+      {
+        "key": "w",
+        "t": 8978.373389
+      },
+      {
+        "key": "h",
+        "t": 8988.537627
+      },
+      {
+        "key": "j",
+        "t": 8998.791942
+      },
+      {
+        "key": "f",
+        "t": 9009.114805
+      },
+      {
+        "key": "r",
+        "t": 9019.297117
+      },
+      {
+        "key": "d",
+        "t": 9029.571153
+      },
+      {
+        "key": "Escape",
+        "t": 9039.716147
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9055.991488
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9076.899267
+      },
+      {
+        "key": "space",
+        "t": 9091.913315
+      },
+      {
+        "key": "w",
+        "t": 9102.271821
+      },
+      {
+        "key": "h",
+        "t": 9112.280795
+      },
+      {
+        "key": "j",
+        "t": 9122.920427
+      },
+      {
+        "key": "f",
+        "t": 9132.962301
+      },
+      {
+        "key": "r",
+        "t": 9143.213872
+      },
+      {
+        "key": "d",
+        "t": 9153.559374
+      },
+      {
+        "key": "Escape",
+        "t": 9163.640299
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9180.020024
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9202.025285
+      },
+      {
+        "key": "space",
+        "t": 9217.462298
+      },
+      {
+        "key": "w",
+        "t": 9227.5079
+      },
+      {
+        "key": "h",
+        "t": 9237.571014
+      },
+      {
+        "key": "j",
+        "t": 9247.82935
+      },
+      {
+        "key": "f",
+        "t": 9258.186084
+      },
+      {
+        "key": "r",
+        "t": 9268.589166
+      },
+      {
+        "key": "d",
+        "t": 9278.585103
+      },
+      {
+        "key": "Escape",
+        "t": 9288.784554
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9304.104224
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9324.834864
+      },
+      {
+        "key": "space",
+        "t": 9340.921868
+      },
+      {
+        "key": "w",
+        "t": 9351.186164
+      },
+      {
+        "key": "h",
+        "t": 9361.607957
+      },
+      {
+        "key": "j",
+        "t": 9372.066092
+      },
+      {
+        "key": "f",
+        "t": 9382.292125
+      },
+      {
+        "key": "r",
+        "t": 9392.44995
+      },
+      {
+        "key": "d",
+        "t": 9402.50267
+      },
+      {
+        "key": "Escape",
+        "t": 9412.489783
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9427.821086
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9448.387601
+      },
+      {
+        "key": "space",
+        "t": 9463.942542
+      },
+      {
+        "key": "w",
+        "t": 9474.109502
+      },
+      {
+        "key": "h",
+        "t": 9484.463969
+      },
+      {
+        "key": "j",
+        "t": 9494.760776
+      },
+      {
+        "key": "f",
+        "t": 9505.14013
+      },
+      {
+        "key": "r",
+        "t": 9515.308216
+      },
+      {
+        "key": "d",
+        "t": 9525.347846
+      },
+      {
+        "key": "Escape",
+        "t": 9535.751922
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9551.103679
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9571.538524
+      },
+      {
+        "key": "space",
+        "t": 9586.955756
+      },
+      {
+        "key": "w",
+        "t": 9597.038699
+      },
+      {
+        "key": "h",
+        "t": 9607.325538
+      },
+      {
+        "key": "j",
+        "t": 9617.581796
+      },
+      {
+        "key": "f",
+        "t": 9627.783458
+      },
+      {
+        "key": "r",
+        "t": 9638.113312
+      },
+      {
+        "key": "d",
+        "t": 9648.221258
+      },
+      {
+        "key": "Escape",
+        "t": 9658.549536
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9673.843727
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9694.179768
+      },
+      {
+        "key": "space",
+        "t": 9709.584801
+      },
+      {
+        "key": "w",
+        "t": 9719.63659
+      },
+      {
+        "key": "h",
+        "t": 9730.061227
+      },
+      {
+        "key": "j",
+        "t": 9740.14112
+      },
+      {
+        "key": "f",
+        "t": 9750.29059
+      },
+      {
+        "key": "r",
+        "t": 9760.589097
+      },
+      {
+        "key": "d",
+        "t": 9770.825676
+      },
+      {
+        "key": "Escape",
+        "t": 9781.119881
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9796.458556
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9817.096986
+      },
+      {
+        "key": "space",
+        "t": 9832.380667
+      },
+      {
+        "key": "w",
+        "t": 9842.527524
+      },
+      {
+        "key": "h",
+        "t": 9852.685738
+      },
+      {
+        "key": "j",
+        "t": 9863.111394
+      },
+      {
+        "key": "f",
+        "t": 9873.18855
+      },
+      {
+        "key": "r",
+        "t": 9883.578483
+      },
+      {
+        "key": "d",
+        "t": 9894.013091
+      },
+      {
+        "key": "Escape",
+        "t": 9904.200027
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9920.034715
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9940.530499
+      },
+      {
+        "key": "space",
+        "t": 9956.112453
+      },
+      {
+        "key": "w",
+        "t": 9966.102771
+      },
+      {
+        "key": "h",
+        "t": 9976.354807
+      },
+      {
+        "key": "j",
+        "t": 9986.664045
+      },
+      {
+        "key": "f",
+        "t": 9996.943799
+      },
+      {
+        "key": "r",
+        "t": 10007.145531
+      },
+      {
+        "key": "d",
+        "t": 10017.334405
+      },
+      {
+        "key": "Escape",
+        "t": 10027.690215
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10043.058073
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10063.51054
+      },
+      {
+        "key": "space",
+        "t": 10079.192021
+      },
+      {
+        "key": "w",
+        "t": 10089.126202
+      },
+      {
+        "key": "h",
+        "t": 10099.571779
+      },
+      {
+        "key": "j",
+        "t": 10109.713468
+      },
+      {
+        "key": "f",
+        "t": 10120.032323
+      },
+      {
+        "key": "r",
+        "t": 10130.209837
+      },
+      {
+        "key": "d",
+        "t": 10140.356562
+      },
+      {
+        "key": "Escape",
+        "t": 10150.729878
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10166.736905
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10189.221336
+      },
+      {
+        "key": "space",
+        "t": 10204.608528
+      },
+      {
+        "key": "w",
+        "t": 10214.802566
+      },
+      {
+        "key": "h",
+        "t": 10225.044676
+      },
+      {
+        "key": "j",
+        "t": 10235.222291
+      },
+      {
+        "key": "f",
+        "t": 10245.49337
+      },
+      {
+        "key": "r",
+        "t": 10255.83314
+      },
+      {
+        "key": "d",
+        "t": 10266.124167
+      },
+      {
+        "key": "Escape",
+        "t": 10276.424686
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10291.887624
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10312.359139
+      },
+      {
+        "key": "space",
+        "t": 10327.793052
+      },
+      {
+        "key": "w",
+        "t": 10338.034753
+      },
+      {
+        "key": "h",
+        "t": 10348.327323
+      },
+      {
+        "key": "j",
+        "t": 10358.371122
+      },
+      {
+        "key": "f",
+        "t": 10368.902399
+      },
+      {
+        "key": "r",
+        "t": 10379.086764
+      },
+      {
+        "key": "d",
+        "t": 10389.201273
+      },
+      {
+        "key": "Escape",
+        "t": 10399.41705
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10414.887049
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10435.373419
+      },
+      {
+        "key": "space",
+        "t": 10450.614877
+      },
+      {
+        "key": "w",
+        "t": 10461.026299
+      },
+      {
+        "key": "h",
+        "t": 10471.279056
+      },
+      {
+        "key": "j",
+        "t": 10481.489285
+      },
+      {
+        "key": "f",
+        "t": 10491.946089
+      },
+      {
+        "key": "r",
+        "t": 10502.111424
+      },
+      {
+        "key": "d",
+        "t": 10512.625928
+      },
+      {
+        "key": "Escape",
+        "t": 10522.885728
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10538.406382
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10559.054507
+      },
+      {
+        "key": "space",
+        "t": 10574.550158
+      },
+      {
+        "key": "w",
+        "t": 10584.841781
+      },
+      {
+        "key": "h",
+        "t": 10595.008491
+      },
+      {
+        "key": "j",
+        "t": 10605.270697
+      },
+      {
+        "key": "f",
+        "t": 10615.621996
+      },
+      {
+        "key": "r",
+        "t": 10625.793093
+      },
+      {
+        "key": "d",
+        "t": 10636.099833
+      },
+      {
+        "key": "Escape",
+        "t": 10646.66825
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10662.074854
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10682.496016
+      },
+      {
+        "key": "space",
+        "t": 10697.964501
+      },
+      {
+        "key": "w",
+        "t": 10708.230082
+      },
+      {
+        "key": "h",
+        "t": 10718.497491
+      },
+      {
+        "key": "j",
+        "t": 10729.273628
+      },
+      {
+        "key": "f",
+        "t": 10739.372494
+      },
+      {
+        "key": "r",
+        "t": 10749.540872
+      },
+      {
+        "key": "d",
+        "t": 10759.756912
+      },
+      {
+        "key": "Escape",
+        "t": 10769.965689
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10785.439455
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10806.956319
+      },
+      {
+        "key": "space",
+        "t": 10823.305155
+      },
+      {
+        "key": "w",
+        "t": 10833.564152
+      },
+      {
+        "key": "h",
+        "t": 10843.67115
+      },
+      {
+        "key": "j",
+        "t": 10853.807749
+      },
+      {
+        "key": "f",
+        "t": 10863.953921
+      },
+      {
+        "key": "r",
+        "t": 10874.459506
+      },
+      {
+        "key": "d",
+        "t": 10884.421943
+      },
+      {
+        "key": "Escape",
+        "t": 10894.758849
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10910.533367
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10931.381811
+      },
+      {
+        "key": "space",
+        "t": 10946.955013
+      },
+      {
+        "key": "w",
+        "t": 10957.283605
+      },
+      {
+        "key": "h",
+        "t": 10967.471462
+      },
+      {
+        "key": "j",
+        "t": 10977.85946
+      },
+      {
+        "key": "f",
+        "t": 10988.342609
+      },
+      {
+        "key": "r",
+        "t": 10998.479016
+      },
+      {
+        "key": "d",
+        "t": 11008.786951
+      },
+      {
+        "key": "Escape",
+        "t": 11019.050368
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11034.709667
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11055.26365
+      },
+      {
+        "key": "space",
+        "t": 11070.855489
+      },
+      {
+        "key": "w",
+        "t": 11081.030616
+      },
+      {
+        "key": "h",
+        "t": 11091.450317
+      },
+      {
+        "key": "j",
+        "t": 11101.607522
+      },
+      {
+        "key": "f",
+        "t": 11111.984085
+      },
+      {
+        "key": "r",
+        "t": 11122.319132
+      },
+      {
+        "key": "d",
+        "t": 11132.567992
+      },
+      {
+        "key": "Escape",
+        "t": 11142.976283
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11158.455102
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11179.092366
+      },
+      {
+        "key": "space",
+        "t": 11194.767168
+      },
+      {
+        "key": "w",
+        "t": 11205.136616
+      },
+      {
+        "key": "h",
+        "t": 11215.603478
+      },
+      {
+        "key": "j",
+        "t": 11225.889582
+      },
+      {
+        "key": "f",
+        "t": 11236.600839
+      },
+      {
+        "key": "r",
+        "t": 11246.883303
+      },
+      {
+        "key": "d",
+        "t": 11257.208363
+      },
+      {
+        "key": "Escape",
+        "t": 11267.903762
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11283.447604
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11304.077629
+      },
+      {
+        "key": "space",
+        "t": 11319.519295
+      },
+      {
+        "key": "w",
+        "t": 11330.195609
+      },
+      {
+        "key": "h",
+        "t": 11340.561676
+      },
+      {
+        "key": "j",
+        "t": 11350.89809
+      },
+      {
+        "key": "f",
+        "t": 11361.450281
+      },
+      {
+        "key": "r",
+        "t": 11371.66959
+      },
+      {
+        "key": "d",
+        "t": 11382.456148
+      },
+      {
+        "key": "Escape",
+        "t": 11392.79564
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11408.36014
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11428.918966
+      },
+      {
+        "key": "space",
+        "t": 11444.14851
+      },
+      {
+        "key": "w",
+        "t": 11454.467048
+      },
+      {
+        "key": "h",
+        "t": 11465.099062
+      },
+      {
+        "key": "j",
+        "t": 11475.532536
+      },
+      {
+        "key": "f",
+        "t": 11485.886122
+      },
+      {
+        "key": "r",
+        "t": 11496.480338
+      },
+      {
+        "key": "d",
+        "t": 11506.816811
+      },
+      {
+        "key": "Escape",
+        "t": 11517.201315
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11532.777477
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11553.714258
+      },
+      {
+        "key": "space",
+        "t": 11569.518608
+      },
+      {
+        "key": "w",
+        "t": 11579.852045
+      },
+      {
+        "key": "h",
+        "t": 11590.087572
+      },
+      {
+        "key": "j",
+        "t": 11600.280636
+      },
+      {
+        "key": "f",
+        "t": 11610.667583
+      },
+      {
+        "key": "r",
+        "t": 11620.958727
+      },
+      {
+        "key": "d",
+        "t": 11631.300235
+      },
+      {
+        "key": "Escape",
+        "t": 11641.359221
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11657.942963
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11678.80038
+      },
+      {
+        "key": "space",
+        "t": 11693.978251
+      },
+      {
+        "key": "w",
+        "t": 11704.117359
+      },
+      {
+        "key": "h",
+        "t": 11714.47132
+      },
+      {
+        "key": "j",
+        "t": 11724.507891
+      },
+      {
+        "key": "f",
+        "t": 11735.092735
+      },
+      {
+        "key": "r",
+        "t": 11745.035296
+      },
+      {
+        "key": "d",
+        "t": 11755.337202
+      },
+      {
+        "key": "Escape",
+        "t": 11765.584657
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11780.867401
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11801.46979
+      },
+      {
+        "key": "space",
+        "t": 11816.726876
+      },
+      {
+        "key": "w",
+        "t": 11826.935502
+      },
+      {
+        "key": "h",
+        "t": 11837.349289
+      },
+      {
+        "key": "j",
+        "t": 11847.330751
+      },
+      {
+        "key": "f",
+        "t": 11857.764205
+      },
+      {
+        "key": "r",
+        "t": 11868.061606
+      },
+      {
+        "key": "d",
+        "t": 11878.498374
+      },
+      {
+        "key": "Escape",
+        "t": 11888.80766
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11904.211098
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11924.721005
+      },
+      {
+        "key": "space",
+        "t": 11940.001436
+      },
+      {
+        "key": "w",
+        "t": 11950.305145
+      },
+      {
+        "key": "h",
+        "t": 11960.614288
+      },
+      {
+        "key": "j",
+        "t": 11970.7404
+      },
+      {
+        "key": "f",
+        "t": 11981.156429
+      },
+      {
+        "key": "r",
+        "t": 11991.257562
+      },
+      {
+        "key": "d",
+        "t": 12001.648357
+      },
+      {
+        "key": "Escape",
+        "t": 12011.920069
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12028.092114
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12048.522746
+      },
+      {
+        "key": "space",
+        "t": 12063.946993
+      },
+      {
+        "key": "w",
+        "t": 12074.364999
+      },
+      {
+        "key": "h",
+        "t": 12084.476356
+      },
+      {
+        "key": "j",
+        "t": 12094.646523
+      },
+      {
+        "key": "f",
+        "t": 12105.004791
+      },
+      {
+        "key": "r",
+        "t": 12115.195041
+      },
+      {
+        "key": "d",
+        "t": 12125.510772
+      },
+      {
+        "key": "Escape",
+        "t": 12135.723258
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12151.148637
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12171.773334
+      },
+      {
+        "key": "space",
+        "t": 12187.191602
+      },
+      {
+        "key": "w",
+        "t": 12197.33545
+      },
+      {
+        "key": "h",
+        "t": 12207.595766
+      },
+      {
+        "key": "j",
+        "t": 12217.873369
+      },
+      {
+        "key": "f",
+        "t": 12228.165091
+      },
+      {
+        "key": "r",
+        "t": 12238.323168
+      },
+      {
+        "key": "d",
+        "t": 12248.761855
+      },
+      {
+        "key": "Escape",
+        "t": 12258.873557
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12274.471594
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12296.051976
+      },
+      {
+        "key": "space",
+        "t": 12311.647894
+      },
+      {
+        "key": "w",
+        "t": 12322.037974
+      },
+      {
+        "key": "h",
+        "t": 12332.114433
+      },
+      {
+        "key": "j",
+        "t": 12342.564746
+      },
+      {
+        "key": "f",
+        "t": 12352.755918
+      },
+      {
+        "key": "r",
+        "t": 12362.999616
+      },
+      {
+        "key": "d",
+        "t": 12373.501743
+      },
+      {
+        "key": "Escape",
+        "t": 12383.734503
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12399.33951
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12421.182472
+      },
+      {
+        "key": "space",
+        "t": 12436.609375
+      },
+      {
+        "key": "w",
+        "t": 12446.573176
+      },
+      {
+        "key": "h",
+        "t": 12456.917696
+      },
+      {
+        "key": "j",
+        "t": 12467.104626
+      },
+      {
+        "key": "f",
+        "t": 12477.308381
+      },
+      {
+        "key": "r",
+        "t": 12487.560816
+      },
+      {
+        "key": "d",
+        "t": 12497.674891
+      },
+      {
+        "key": "Escape",
+        "t": 12508.096509
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12524.46487
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12545.459899
+      },
+      {
+        "key": "space",
+        "t": 12561.019834
+      },
+      {
+        "key": "w",
+        "t": 12571.098412
+      },
+      {
+        "key": "h",
+        "t": 12581.492455
+      },
+      {
+        "key": "j",
+        "t": 12591.716178
+      },
+      {
+        "key": "f",
+        "t": 12602.113336
+      },
+      {
+        "key": "r",
+        "t": 12612.226533
+      },
+      {
+        "key": "d",
+        "t": 12622.561887
+      },
+      {
+        "key": "Escape",
+        "t": 12632.77886
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12649.384385
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12670.375536
+      },
+      {
+        "key": "space",
+        "t": 12685.77133
+      },
+      {
+        "key": "w",
+        "t": 12696.003021
+      },
+      {
+        "key": "h",
+        "t": 12706.024266
+      },
+      {
+        "key": "j",
+        "t": 12716.361727
+      },
+      {
+        "key": "f",
+        "t": 12727.361562
+      },
+      {
+        "key": "r",
+        "t": 12736.750296
+      },
+      {
+        "key": "d",
+        "t": 12746.987082
+      },
+      {
+        "key": "Escape",
+        "t": 12757.205615
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12773.300783
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12795.185654
+      },
+      {
+        "key": "space",
+        "t": 12810.635624
+      },
+      {
+        "key": "w",
+        "t": 12820.667431
+      },
+      {
+        "key": "h",
+        "t": 12831.144156
+      },
+      {
+        "key": "j",
+        "t": 12841.39512
+      },
+      {
+        "key": "f",
+        "t": 12851.712932
+      },
+      {
+        "key": "r",
+        "t": 12862.190752
+      },
+      {
+        "key": "d",
+        "t": 12872.266928
+      },
+      {
+        "key": "Escape",
+        "t": 12882.669718
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12898.770124
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12920.077279
+      },
+      {
+        "key": "space",
+        "t": 12935.543441
+      },
+      {
+        "key": "w",
+        "t": 12945.722067
+      },
+      {
+        "key": "h",
+        "t": 12956.0285
+      },
+      {
+        "key": "j",
+        "t": 12966.226804
+      },
+      {
+        "key": "f",
+        "t": 12976.430258
+      },
+      {
+        "key": "r",
+        "t": 12986.597579
+      },
+      {
+        "key": "d",
+        "t": 12996.573345
+      },
+      {
+        "key": "Escape",
+        "t": 13006.883429
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13022.278286
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13042.675173
+      },
+      {
+        "key": "space",
+        "t": 13058.273286
+      },
+      {
+        "key": "w",
+        "t": 13068.341687
+      },
+      {
+        "key": "h",
+        "t": 13078.583503
+      },
+      {
+        "key": "j",
+        "t": 13088.752328
+      },
+      {
+        "key": "f",
+        "t": 13099.173609
+      },
+      {
+        "key": "r",
+        "t": 13109.411292
+      },
+      {
+        "key": "d",
+        "t": 13119.191154
+      },
+      {
+        "key": "Escape",
+        "t": 13129.600902
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13145.276082
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13166.00989
+      },
+      {
+        "key": "space",
+        "t": 13181.436728
+      },
+      {
+        "key": "w",
+        "t": 13191.270143
+      },
+      {
+        "key": "h",
+        "t": 13201.427902
+      },
+      {
+        "key": "j",
+        "t": 13211.599675
+      },
+      {
+        "key": "f",
+        "t": 13221.751067
+      },
+      {
+        "key": "r",
+        "t": 13232.129176
+      },
+      {
+        "key": "d",
+        "t": 13242.151835
+      },
+      {
+        "key": "Escape",
+        "t": 13252.662095
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13268.600746
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13290.302656
+      },
+      {
+        "key": "space",
+        "t": 13306.302569
+      },
+      {
+        "key": "w",
+        "t": 13316.339687
+      },
+      {
+        "key": "h",
+        "t": 13326.775259
+      },
+      {
+        "key": "j",
+        "t": 13336.889498
+      },
+      {
+        "key": "f",
+        "t": 13347.238778
+      },
+      {
+        "key": "r",
+        "t": 13357.394122
+      },
+      {
+        "key": "d",
+        "t": 13367.557458
+      },
+      {
+        "key": "Escape",
+        "t": 13378.010078
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13394.600577
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13415.374889
+      },
+      {
+        "key": "space",
+        "t": 13430.840942
+      },
+      {
+        "key": "w",
+        "t": 13440.983747
+      },
+      {
+        "key": "h",
+        "t": 13451.380984
+      },
+      {
+        "key": "j",
+        "t": 13461.483109
+      },
+      {
+        "key": "f",
+        "t": 13471.820991
+      },
+      {
+        "key": "r",
+        "t": 13482.163234
+      },
+      {
+        "key": "d",
+        "t": 13492.239002
+      },
+      {
+        "key": "Escape",
+        "t": 13502.69414
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13518.783884
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13540.968947
+      },
+      {
+        "key": "space",
+        "t": 13557.12321
+      },
+      {
+        "key": "w",
+        "t": 13567.652981
+      },
+      {
+        "key": "h",
+        "t": 13577.94682
+      },
+      {
+        "key": "j",
+        "t": 13588.205863
+      },
+      {
+        "key": "f",
+        "t": 13598.172873
+      },
+      {
+        "key": "r",
+        "t": 13608.403028
+      },
+      {
+        "key": "d",
+        "t": 13618.810734
+      },
+      {
+        "key": "Escape",
+        "t": 13628.994124
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13644.432742
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13665.133195
+      },
+      {
+        "key": "space",
+        "t": 13680.504031
+      },
+      {
+        "key": "w",
+        "t": 13690.771307
+      },
+      {
+        "key": "h",
+        "t": 13701.035619
+      },
+      {
+        "key": "j",
+        "t": 13711.277693
+      },
+      {
+        "key": "f",
+        "t": 13721.743271
+      },
+      {
+        "key": "r",
+        "t": 13731.842637
+      },
+      {
+        "key": "d",
+        "t": 13742.165913
+      },
+      {
+        "key": "Escape",
+        "t": 13752.399633
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13767.834276
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13788.241664
+      }
+    ]
+  },
+  "vimScript": {
+    "expected": "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij",
+    "observed": {
+      "viewColumn": 2,
+      "text": "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij",
+      "selections": [
+        [
+          0,
+          999,
+          0,
+          999
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": null,
+      "sentinelSequence": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "root-ctrl+c",
+      "keys": [
+        "space",
+        "ctrl+c",
+        "j"
+      ],
+      "received": [
+        "ctrl+c"
+      ],
+      "reason": "ctrl+c"
+    },
+    {
+      "id": "root-escape",
+      "keys": [
+        "space",
+        "Escape",
+        "j"
+      ],
+      "received": [
+        "escape"
+      ],
+      "reason": "escape"
+    }
+  ],
+  "lastPreparation": {
+    "round": 0,
+    "case": "root-ctrl+c",
+    "prepared": {
+      "viewColumn": 2,
+      "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "selections": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ],
+        "#": [
+          {
+            "text": "rendererLog",
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": null,
+      "sentinelSequence": 0
+    },
+    "before": {
+      "viewColumn": 2,
+      "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "selections": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ],
+        "#": [
+          {
+            "text": "rendererLog",
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": "normal-editor-capture-off",
+      "sentinelSequence": 1
+    }
+  },
+  "lastEntry": {
+    "startedAt": 1793401078589,
+    "samples": [
+      {
+        "injectedAt": 1793401078589,
+        "injectionFinishedAt": 1793401078635,
+        "observedAt": 1793401078635,
+        "observed": {
+          "viewColumn": 2,
+          "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+          "selections": [
+            [
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "mode": 0,
+          "pending": {
+            "actionKeys": [],
+            "bufferedKeys": [],
+            "actionsRunPressedKeys": [],
+            "count": 0,
+            "operatorCount": 0,
+            "registerName": "\""
+          },
+          "registers": {
+            "%": [
+              {
+                "text": "sample.txt",
+                "mode": "character"
+              }
+            ],
+            ".": [
+              {
+                "text": {
+                  "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                },
+                "mode": "character"
+              }
+            ],
+            "#": [
+              {
+                "text": "rendererLog",
+                "mode": "character"
+              }
+            ]
+          },
+          "queue": {
+            "pending": 0,
+            "jobs": 0,
+            "running": false
+          },
+          "leader": {
+            "active": true,
+            "prefix": [],
+            "events": [
+              {
+                "t": 25121.677147,
+                "type": "start"
+              },
+              {
+                "t": 25122.172349,
+                "type": "context-on"
+              }
+            ]
+          },
+          "sentinel": "normal-editor-capture-on",
+          "sentinelSequence": 2
+        }
+      }
+    ],
+    "confirmedAt": 1793401078635
+  },
+  "status": "discrepancy",
+  "loadWindows": [],
+  "rendererTrace": [
+    {
+      "file": "data/logs/20261031T075732/window1/renderer.log",
+      "lines": [
+        "2026-10-31 07:57:58.433 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:57:58.433 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:57:58.433 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.438 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:57:58.438 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:57:58.438 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.443 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:57:58.443 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:57:58.443 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:57:58.443 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:57:58.443 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:57:58.449 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:57:58.593 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: Space, keyCode: 32, key:  ",
+        "2026-10-31 07:57:58.593 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: Space, keyCode: 10 ('Space')",
+        "2026-10-31 07:57:58.593 [info] [KeybindingService]: | Resolving [Space]",
+        "2026-10-31 07:57:58.594 [info] [KeybindingService]: \\ From 12 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:57:58.603 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:57:58.603 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:57:58.603 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.609 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:57:58.609 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:57:58.609 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.614 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:57:58.614 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:57:58.614 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:57:58.614 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:57:58.614 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:57:58.619 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:57:58.640 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:57:58.640 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:57:58.640 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.644 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: KeyC, keyCode: 67, key: c",
+        "2026-10-31 07:57:58.646 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: KeyC, keyCode: 33 ('C')",
+        "2026-10-31 07:57:58.646 [info] [KeybindingService]: | Resolving ctrl+[KeyC]",
+        "2026-10-31 07:57:58.646 [info] [KeybindingService]: \\ From 13 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:57:58.646 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:57:58.651 [info] [KeybindingService]: + Storing single modifier for possible chord ctrl.",
+        "2026-10-31 07:57:58.655 [info] [KeybindingService]: + Clearing single modifier due to other key up.",
+        "2026-10-31 07:57:58.660 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: KeyJ, keyCode: 74, key: j",
+        "2026-10-31 07:57:58.660 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: KeyJ, keyCode: 40 ('J')",
+        "2026-10-31 07:57:58.660 [info] [KeybindingService]: | Resolving [KeyJ]",
+        "2026-10-31 07:57:58.660 [info] [KeybindingService]: \\ From 5 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:57:58.660 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:57:58.800 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:57:58.800 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:57:58.800 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.806 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:57:58.806 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:57:58.807 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:57:58.811 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:57:58.811 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:57:58.811 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:57:58.811 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:57:58.811 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:57:58.817 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys."
+      ]
+    }
+  ],
+  "finished": "2026-10-30T22:57:59.962Z"
+}
