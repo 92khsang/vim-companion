@@ -1818,6 +1818,22 @@ Without the explicit review, the missing raw lifetime remains an exclusion.
 The reviewed invocation is listed under `resolvedPrelaunchInterruptions`; its
 matrix cell stays unmeasured and is retried in the replacement batch.
 
+Measured: the next checkpoint completed 1,000 editor-change and 1,000 mouse-selection
+fault trials without discrepancies on VS Code 1.141.0, idle/shared host, 10 ms.
+Window-blur recovery stopped at trial 16: renderer blur preceded `j`, but the
+leader recorded `j` with its internal active flag already false, before the
+context-off acknowledgement. The cursor stayed at `(0, 0)`. Its independent
+fault-order audit qualified all 16 observations; resource reviews found no
+errors in these three runs. These results remain specific to this condition.
+
+Measured: VS Code 1.134.0, idle/separate hosts, 10 ms completed all 47 focus
+scenarios with nine observations each, including accessibility-on hover. The
+independent analysis found no unresolved observations, and each delayed-provider
+scenario proved nine keys inside its fixed 200 ms server wait. The
+[third report checkpoint](data/portable-report-03.md) selects 168 conditional
+cells and 1,269 focus observations. It retains final outcomes as `unverified`
+until the running batches and final overlap qualification finish.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
