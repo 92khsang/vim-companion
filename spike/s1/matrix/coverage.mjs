@@ -4,6 +4,7 @@ import { join, resolve, relative } from "node:path";
 import { createHash } from "node:crypto";
 import { completionJobs } from "./plan.mjs";
 import { focusScenarios } from "./focus-scenarios.mjs";
+import { countRegisterOracle } from "./count.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
@@ -141,6 +142,13 @@ export function qualification(raw, rawSha256, audit, resource, termination) {
     requireEvidence(
       !["harness-error", "measurement-inconclusive"].includes(raw.status),
       "run has no qualified outcome",
+    );
+  if (raw.gate === "count")
+    requireEvidence(
+      raw.countFixture?.registerOracle === countRegisterOracle &&
+        audit?.countRegisterOracle?.method === countRegisterOracle &&
+        audit.countRegisterOracle.validatedTrials === raw.trials.length,
+      "count filename-register transition oracle absent or unaudited",
     );
   return reasons;
 }

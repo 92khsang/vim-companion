@@ -196,6 +196,30 @@ test("provisional overlap retains observed conflicts and missing evidence", () =
   );
 });
 
+test("count evidence cannot qualify with the obsolete unchanged-register oracle", () => {
+  const raw = {
+    gate: "count",
+    matrix: {},
+    trials: [{}],
+    status: "discrepancy",
+  };
+  const reason =
+    "count filename-register transition oracle absent or unaudited";
+  assert.ok(qualification(raw, "raw", {}, {}, {}).includes(reason));
+  raw.countFixture = {
+    registerOracle: "exact-filename-register-transition-v1",
+  };
+  const audit = {
+    countRegisterOracle: {
+      method: raw.countFixture.registerOracle,
+      validatedTrials: 0,
+    },
+  };
+  assert.ok(qualification(raw, "raw", audit, {}, {}).includes(reason));
+  audit.countRegisterOracle.validatedTrials = 1;
+  assert.ok(!qualification(raw, "raw", audit, {}, {}).includes(reason));
+});
+
 test("coverage requires matching evidence, isolation and completed cleanup", () => {
   const cleanup = { errors: [], remaining: [] };
   const raw = {

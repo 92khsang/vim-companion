@@ -1,7 +1,34 @@
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, basename } from "node:path";
 import { pathToFileURL } from "node:url";
+
+export const countRegisterOracle = "exact-filename-register-transition-v1";
+export function expectedCountRegisters(before, fixture) {
+  assert.equal(before.documentUri, fixture.files[0]);
+  const filename = (uri) => [
+    {
+      text: basename(decodeURIComponent(new URL(uri).pathname)),
+      mode: "character",
+    },
+  ];
+  assert.deepEqual(
+    before.registers["%"],
+    filename(fixture.files[0]),
+    "count fixture current-file register differs",
+  );
+  assert.deepEqual(
+    before.registers["#"],
+    filename(fixture.files[1]),
+    "count fixture alternate-file register differs",
+  );
+  // The fixture switches back to its alternate file; every other register stays unchanged.
+  return {
+    ...before.registers,
+    "%": filename(fixture.files[1]),
+    "#": filename(fixture.files[0]),
+  };
+}
 
 const comparable = (state) => ({
   ...state,
@@ -31,6 +58,7 @@ export async function runCount({
   await call("command", { command: "workbench.action.joinAllGroups" });
   for (const path of files) await call("openTab", { file: path, column: 1 });
   result.countFixture = {
+    registerOracle: countRegisterOracle,
     files: files.map((path) => pathToFileURL(path).href),
     tabs: await call("editors"),
   };
@@ -56,6 +84,10 @@ export async function runCount({
     assert.equal(before.mode, 0);
     assert.ok(noPending(before));
     assert.deepEqual(before.selections, [[0, 0, 0, 0]]);
+    const expectedRegisters = expectedCountRegisters(
+      before,
+      result.countFixture,
+    );
     const rendererBefore = await observer.begin();
     const phaseDelayMs = await phase();
     const injectedAt = Date.now();
@@ -77,9 +109,10 @@ export async function runCount({
       equal(after.selections, [[1, 0, 1, 0]]),
       "count carried over to j or j was lost",
     );
+    check(after.text === text, "count changed text");
     check(
-      after.text === text && equal(before.registers, after.registers),
-      "count changed text/registers",
+      equal(expectedRegisters, after.registers),
+      "count registers differ from the expected tab transition",
     );
     check(
       after.mode === 0 && noPending(after),

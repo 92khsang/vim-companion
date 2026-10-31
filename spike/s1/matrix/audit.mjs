@@ -12,8 +12,23 @@ import { tmpdir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import { faultOrder, rendererTimeErrorMs } from "./fault.mjs";
+import { countRegisterOracle, expectedCountRegisters } from "./count.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+export function auditCountRegisters(raw) {
+  assert.equal(raw.countFixture.registerOracle, countRegisterOracle);
+  for (const trial of raw.trials) {
+    const expected = expectedCountRegisters(trial.before, raw.countFixture);
+    assert.equal(
+      trial.errors.includes(
+        "count registers differ from the expected tab transition",
+      ),
+      JSON.stringify(expected) !== JSON.stringify(trial.after.registers),
+      "count register discrepancy is not recorded accurately",
+    );
+  }
+  return { method: countRegisterOracle, validatedTrials: raw.trials.length };
+}
 const quantiles = (values) => {
   const sorted = [...values].sort((a, b) => a - b);
   return Object.fromEntries(
@@ -486,6 +501,11 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
       bounds,
     };
   }
+  if (
+    raw.gate === "count" &&
+    raw.countFixture?.registerOracle === countRegisterOracle
+  )
+    review.countRegisterOracle = auditCountRegisters(raw);
   return review;
 }
 

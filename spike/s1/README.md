@@ -1758,6 +1758,32 @@ immutable source snapshots are in `source-snapshots-part-01.tar.gz` in each batc
 directory. Later parts may add finished runs; restore every part without replacing
 earlier archives. Active raw runs are not included in this checkpoint.
 
+### Count register oracle correction
+
+Measured: the original idle/shared-host, 10 ms count trial on VS Code 1.141.0
+stopped with `count changed text/registers`, although it moved from `sample.txt`
+to `count-1.txt` once, moved `j` one line and left no pending count. Its only
+register differences were `%` changing to `count-1.txt` and `#` changing to
+`sample.txt`; text and every other register were unchanged.
+
+Documented: VSCodeVim 1.32.4 updates `%` to the active workspace-relative path
+and `#` to the previous `%` when the active editor changes
+([pinned implementation](https://github.com/VSCodeVim/Vim/blob/v1.32.4/extensionBase.ts#L200-L209)).
+Inferred: this discrepancy came from the count oracle forbidding an expected
+tab-switch effect, not from observed count carryover. The original raw result
+and its audit remain intact, but it supplies neither a qualified failure nor a
+passing 1,000-trial result. `portable-report-01` predates this correction; its
+conditional count result must not be used.
+
+The corrected fixture validates the exact initial current/alternate filenames,
+expects their precise transition to the next tab, and still compares every
+other register unchanged. The independent audit checks that any register
+discrepancy is recorded accurately. Coverage requires this declared oracle and
+its completed audit, rejecting earlier count results. The four-editor fixture,
+unpaused key sequence, 1,000-trial threshold and first-discrepancy stop are
+unchanged. The remaining X11 plan is restarted with corrected frozen sources;
+completed unrelated conditions remain reusable after final qualification.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
