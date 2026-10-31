@@ -143,3 +143,26 @@ test("startup readiness accepts the first latched response between polling itera
   assert.equal(injections, 1);
   assert.equal(result.ready.startupSentinel.capture, true);
 });
+
+test("cold uses the first context sentinel while restart still waits for extension activation", async () => {
+  for (const requireVimActivation of [false, true]) {
+    let calls = 0,
+      injections = 0;
+    const endpoint = {
+      call: async () => ({
+        epoch: 2,
+        vimActive: ++calls >= 2,
+        startupSequence: 1,
+        startupSentinel: { ready: true, capture: false },
+      }),
+    };
+    const result = await awaitStartupReady({
+      endpoint,
+      inject: () => injections++,
+      ...(requireVimActivation ? {} : { requireVimActivation: false }),
+    });
+    assert.equal(calls, requireVimActivation ? 2 : 1);
+    assert.equal(injections, requireVimActivation ? 1 : 0);
+    assert.equal(result.ready.vimActive, requireVimActivation);
+  }
+});

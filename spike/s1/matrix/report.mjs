@@ -8,6 +8,7 @@ import {
   selectRemapAnalysis,
   remapQualification,
   inputEvidenceSources,
+  startupEvidenceSha256,
 } from "./coverage.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -316,6 +317,11 @@ export function buildReport(coverage, { provisional = false } = {}) {
     coverage.inputEvidenceSources,
     inputEvidenceSources(),
     "input-evidence classifiers changed; regenerate coverage",
+  );
+  assert.equal(
+    coverage.startupEvidenceSha256,
+    startupEvidenceSha256,
+    "startup classifier changed; regenerate coverage",
   );
   const expected = expectedCells();
   assert.deepEqual(

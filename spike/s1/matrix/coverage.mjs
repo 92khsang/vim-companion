@@ -10,6 +10,11 @@ import {
   inputEvidenceSources,
 } from "./input-evidence.mjs";
 export { inputEvidenceSources } from "./input-evidence.mjs";
+import {
+  auditColdReadiness,
+  startupEvidenceSha256,
+} from "./startup-evidence.mjs";
+export { startupEvidenceSha256 } from "./startup-evidence.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
@@ -255,7 +260,7 @@ export function qualification(
         audit.countRegisterOracle.validatedTrials === raw.trials.length,
       "count filename-register transition oracle absent or unaudited",
     );
-  if (raw.gate === "cold")
+  if (raw.gate === "cold") {
     requireEvidence(
       audit?.coldProcesses?.method === "cold-child-owned-cleanup-v1" &&
         audit.coldProcesses.validatedReferences === 2 &&
@@ -263,6 +268,11 @@ export function qualification(
         audit.finalSnapshotAvailable === true,
       "cold child ownership, cleanup or final snapshots unaudited",
     );
+    requireEvidence(
+      auditColdReadiness(raw).unqualified.length === 0,
+      "cold input did not follow its first context-ready observation",
+    );
+  }
   if (raw.gate === "hangul")
     requireEvidence(
       raw.trials.length > 0 &&
@@ -538,6 +548,7 @@ export function collectCoverage(directories, overlapArtifact = null) {
     generatedAt: new Date().toISOString(),
     methodSha256: hash(readFileSync(import.meta.filename)),
     inputEvidenceSources: inputEvidenceSources(),
+    startupEvidenceSha256,
     overlapReviewSha256: overlapArtifact?.sha256 ?? null,
     scope:
       "Linux only; macOS deferred by the user. A first-discrepancy failure is a result, not a rate estimate. Missing, tainted and incomplete evidence stays unverified.",

@@ -201,7 +201,12 @@ export async function runCold({
         }
       }, "cold IDE window missing");
       xdo(["windowfocus", "--sync", window]);
-      const readiness = await awaitStartupReady({ endpoint, inject, check });
+      const readiness = await awaitStartupReady({
+        endpoint,
+        inject,
+        check,
+        requireVimActivation: false,
+      });
       measured.readiness = readiness;
       // Reject a bad saved fixture immediately; waiting for its restoration here
       // would turn the first-readiness measurement into a warmed trial.

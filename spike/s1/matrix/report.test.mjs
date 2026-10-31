@@ -9,6 +9,7 @@ import {
   remapMethodSha256,
   remapClockMethodSha256,
   inputEvidenceSources,
+  startupEvidenceSha256,
   overlapQualification,
 } from "./coverage.mjs";
 import {
@@ -72,6 +73,7 @@ test("report binds selected raw and audit hashes and counts a first discrepancy 
   cell.evidence.push(evidence);
   const coverage = {
     inputEvidenceSources: inputEvidenceSources(),
+    startupEvidenceSha256,
     methodSha256: hash(
       readFileSync(new URL("./coverage.mjs", import.meta.url)),
     ),
@@ -95,6 +97,9 @@ test("report binds selected raw and audit hashes and counts a first discrepancy 
       /input-evidence classifiers changed/,
     );
     coverage.inputEvidenceSources = sources;
+    coverage.startupEvidenceSha256 = "obsolete-startup-classifier";
+    assert.throws(() => buildReport(coverage), /startup classifier changed/);
+    coverage.startupEvidenceSha256 = startupEvidenceSha256;
     writeFileSync(file, bytes + " ");
     assert.throws(() => buildReport(coverage), /artifact changed/);
     writeFileSync(file, bytes);
@@ -291,6 +296,7 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
   cells.find((cell) => cell.job.row === "vb-entry").evidence.push(evidence);
   const coverage = {
     inputEvidenceSources: inputEvidenceSources(),
+    startupEvidenceSha256,
     methodSha256: hash(
       readFileSync(new URL("./coverage.mjs", import.meta.url)),
     ),

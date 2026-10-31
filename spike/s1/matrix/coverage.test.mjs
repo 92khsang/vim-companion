@@ -291,6 +291,45 @@ test("cold coverage requires independent child cleanup and actual final snapshot
     assert.ok(qualification(raw, "raw", changed, {}, {}).includes(reason));
 });
 
+test("cold coverage independently rejects readiness that skipped the first context sentinel", () => {
+  const first = {
+    vimActive: false,
+    startupSequence: 1,
+    startupSentinel: { ready: true },
+  };
+  const later = { ...first, vimActive: true };
+  const raw = {
+    gate: "cold",
+    matrix: {},
+    status: "discrepancy",
+    trials: [
+      {
+        index: 0,
+        firstInputRequestedAt: 21,
+        readiness: {
+          observedAt: 20,
+          attempts: [{ before: first, after: later }],
+          ready: later,
+        },
+      },
+    ],
+  };
+  const reason =
+    "cold input did not follow its first context-ready observation";
+  assert.ok(
+    qualification(
+      raw,
+      "raw",
+      { coldReadiness: { unqualified: [] } },
+      {},
+      {},
+    ).includes(reason),
+  );
+  raw.trials[0].readiness.attempts = [{ before: first }];
+  raw.trials[0].readiness.ready = first;
+  assert.ok(!qualification(raw, "raw", {}, {}, {}).includes(reason));
+});
+
 test("termination evidence binds raw identities while allowing the wrapper runner superset", () => {
   const started = "2026-01-01T00:00:00.000Z",
     finished = "2026-01-01T00:00:01.000Z";

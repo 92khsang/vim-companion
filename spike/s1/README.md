@@ -1974,6 +1974,27 @@ and sends its first sequence immediately after the required readiness sentinel.
 Readiness never waits for companion activation or capture-off. Engine inspection
 and companion observations follow the measured input.
 
+Inferred: requiring `Extension.isActive` in addition to the first context sentinel
+could postpone the cold sequence beyond its prescribed boundary. Documented:
+[VSCodeVim 1.32.4](https://github.com/VSCodeVim/Vim/blob/v1.32.4/extensionBase.ts)
+sets `vim.active` before awaiting further mode-handler initialization. The cold
+readiness helper therefore accepts the first context-ready response even while
+extension activation is incomplete. Restart retains its separate fresh-host
+activation requirement. Regression tests cover both policies.
+
+The independent startup review verifies that no earlier context-ready response
+was skipped, and that the input request follows that observation on the runner's
+clock. This is an ordering check, not a zero-latency claim. Coverage recomputes it
+from the raw attempts, and the report binds the classifier hash. Measured:
+retrospective review found no skipped readiness response in 22 retained cold
+observations, including controls; the prior failures and incomplete runs keep
+their existing limitations. Reproduce the review without replacing an artifact:
+
+```bash
+taskset -c 0-3 mise exec node@24.21.0 -- node \
+  spike/s1/matrix/startup-evidence.mjs "$RAW_RESULT" "$STARTUP_REVIEW_OUTPUT"
+```
+
 Restart requires a new probe PID/epoch and a passive check that Vim is active in
 that new host. A renderer `vim.active` value alone can outlive the old host. The
 restart command's promise does not await host startup in either pinned IDE version

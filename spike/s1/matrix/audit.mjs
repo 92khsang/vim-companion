@@ -15,6 +15,7 @@ import { faultOrder, rendererTimeErrorMs } from "./fault.mjs";
 import { countRegisterOracle, expectedCountRegisters } from "./count.mjs";
 import { engineState } from "../bounded-gates.mjs";
 import { analyzeInputEvidence } from "./input-evidence.mjs";
+import { auditColdReadiness } from "./startup-evidence.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export function auditCountRegisters(raw) {
@@ -500,7 +501,12 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
         }
       : {}),
     finalSnapshotAvailable,
-    ...(raw.gate === "cold" ? { coldProcesses: auditColdProcesses(raw) } : {}),
+    ...(raw.gate === "cold"
+      ? {
+          coldProcesses: auditColdProcesses(raw),
+          coldReadiness: auditColdReadiness(raw),
+        }
+      : {}),
     failures: failed.map((trial) => ({
       index: trial.index,
       case: trial.case,

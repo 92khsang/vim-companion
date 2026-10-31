@@ -103,11 +103,12 @@ export async function awaitStartupReady({
   check = () => {},
   timeoutMs = 60000,
   previousEpoch,
+  requireVimActivation = true,
 }) {
   const deadline = performance.now() + timeoutMs,
     attempts = [];
   const isReady = (value) =>
-    value.vimActive &&
+    (!requireVimActivation || value.vimActive) &&
     value.startupSequence > 0 &&
     value.startupSentinel?.ready;
   while (performance.now() < deadline) {
