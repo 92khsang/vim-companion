@@ -1784,6 +1784,40 @@ unpaused key sequence, 1,000-trial threshold and first-discrepancy stop are
 unchanged. The remaining X11 plan is restarted with corrected frozen sources;
 completed unrelated conditions remain reusable after final qualification.
 
+Measured: the corrected idle/shared-host, 10 ms count run on VS Code 1.141.0
+stopped at trial 11. The tab changed once and all registers matched the expected
+transition, but the selected tab's cursor remained at `(0, 0)` instead of moving
+down once. Its single error was `count carried over to j or j was lost`. The
+source/delivery and resource audits passed. This is a new first-discrepancy
+observation, not a relabeling of the obsolete trial or a failure-rate estimate.
+The [corrected report checkpoint](data/portable-report-02.md) excludes the
+obsolete count oracle and selects 118 conditional cells, including 846 focus
+observations. Final overlap qualification and the remaining matrix are still
+incomplete.
+
+The X11 replacement retained the completed 1,000-trial document-fault condition.
+Its next wrapper was interrupted during source preparation before any raw
+measurement or termination record existed. The preserved partial source tree
+lacks `matrix-options.json`, which the reviewed frozen wrapper writes before its
+only execution-child spawn. A case-specific prelaunch review binds that control
+flow, the exact batch/run record and both source inventories; it never creates
+a substitute measurement or cleanup record. The separate exact-CPU-mask process
+observation is retained with its limitations and is not the no-launch proof.
+
+Include this explicit review when computing overlap across the replacement:
+
+```bash
+taskset -c 0-3 mise exec node@24.21.0 -- node spike/s1/matrix/overlap.mjs \
+  --prelaunch-review spike/s1/data/matrix-x11-complete-02/fault-editor-11410-idle-same-10-prelaunch-review.json \
+  "$OVERLAP_OUTPUT" "$BATCH_DIRECTORY" [...]
+```
+
+The verifier rejects changed hashes, changed source trees, a present pre-spawn
+marker, contradictory measurement fields or a review for a different invocation.
+Without the explicit review, the missing raw lifetime remains an exclusion.
+The reviewed invocation is listed under `resolvedPrelaunchInterruptions`; its
+matrix cell stays unmeasured and is retried in the replacement batch.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains

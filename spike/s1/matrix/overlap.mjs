@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
 import { createHash } from "node:crypto";
+import { verifyPrelaunchReview } from "./prelaunch-review.mjs";
 
 export function cpuIds(value) {
   assert.match(value, /^\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*$/);
@@ -57,10 +58,20 @@ export function overlapSegments(intervals) {
   }
   return segments;
 }
-export function reviewOverlap(directories, allowLive = false) {
+export function reviewOverlap(
+  directories,
+  allowLive = false,
+  prelaunchReviewFiles = [],
+) {
   const intervals = [],
     exclusions = [],
     batches = [];
+  const prelaunchReviews = prelaunchReviewFiles.map((file) => ({
+    file,
+    value: JSON.parse(readFileSync(file)),
+  }));
+  const resolvedPrelaunchInterruptions = [],
+    usedReviews = new Set();
   const asOf = Date.now();
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
   for (const directory of directories) {
@@ -89,6 +100,20 @@ export function reviewOverlap(directories, allowLive = false) {
     for (const run of batch.runs) {
       const file = join(directory, run.id + ".json");
       if (!existsSync(file)) {
+        const candidates = prelaunchReviews.filter(
+          (review) =>
+            resolve(review.value.batchDirectory) === resolve(directory) &&
+            review.value.run.id === run.id,
+        );
+        assert.ok(candidates.length <= 1, "duplicate prelaunch reviews");
+        if (candidates.length) {
+          const review = candidates[0];
+          resolvedPrelaunchInterruptions.push(
+            verifyPrelaunchReview(review.file, directory, bytes, run),
+          );
+          usedReviews.add(review.file);
+          continue;
+        }
         exclusions.push({
           file,
           reason: "no raw result yet; launcher not observed",
@@ -149,6 +174,11 @@ export function reviewOverlap(directories, allowLive = false) {
     }
   }
   const segments = overlapSegments(intervals);
+  assert.equal(
+    usedReviews.size,
+    prelaunchReviewFiles.length,
+    "prelaunch review did not match an unmeasured invocation",
+  );
   return {
     reviewedAt: new Date(asOf).toISOString(),
     provisional: allowLive,
@@ -162,6 +192,7 @@ export function reviewOverlap(directories, allowLive = false) {
     ),
     intervals,
     exclusions,
+    resolvedPrelaunchInterruptions,
     segments,
     maximumObservedInstances: Math.max(
       0,
@@ -185,12 +216,18 @@ export function reviewOverlap(directories, allowLive = false) {
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
   const args = process.argv.slice(2),
     allowLive = args.includes("--live");
+  const prelaunchReviews = [];
+  while (args.includes("--prelaunch-review")) {
+    const index = args.indexOf("--prelaunch-review");
+    assert.ok(args[index + 1], "prelaunch review path missing");
+    prelaunchReviews.push(args.splice(index, 2)[1]);
+  }
   const [output, ...directories] = args.filter((arg) => arg !== "--live");
   assert.ok(
     output && directories.length,
-    "usage: overlap.mjs [--live] OUTPUT.json BATCH_DIRECTORY [...]",
+    "usage: overlap.mjs [--live] [--prelaunch-review REVIEW.json] OUTPUT.json BATCH_DIRECTORY [...]",
   );
-  const review = reviewOverlap(directories, allowLive);
+  const review = reviewOverlap(directories, allowLive, prelaunchReviews);
   writeFileSync(output, JSON.stringify(review, null, 2) + "\n", { flag: "wx" });
   console.log(
     JSON.stringify({
