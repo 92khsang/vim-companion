@@ -1842,6 +1842,22 @@ process-termination qualification and selects 169 conditional cells with 1,269
 focus observations. The live overlap review still observed at most two IDEs
 without recorded conflicts; all final outcomes remain `unverified`.
 
+Measured: prefix reset also completed 1,000 trials without discrepancies on
+1.141.0, idle/shared host, 10 ms; all post-fault orderings qualified and the
+resource review found no errors. On 1.134.0, loaded/shared host, 10 ms, the next
+focus run completed 46 scenarios with nine observations each. Independent
+analysis found no unresolved observations, but the four delayed-provider
+scenarios proved `j` inside the fixed 200 ms server wait in only 4, 6, 7 and 6
+of their nine trials respectively (`cq`, `cr`, `cf`, `cd`). Those four cells
+remain unverified under the unchanged criterion.
+
+The [fifth report checkpoint](data/portable-report-05.md) applies fresh input
+qualification and the V-b aggregation rules, selecting 212 conditional cells
+and 1,647 focus observations. Its live overlap review still found at most two
+IDEs, no physical-core conflicts, no native overlap and no exclusions. The
+remaining matrix and final overlap qualification are incomplete; all 2,400
+final cell outcomes remain `unverified`.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
@@ -2037,6 +2053,55 @@ hover fixture. The current setup requires a fresh response and confirms effectiv
 settings after each update. Proof `04` was interrupted for resource review. These
 proof runs do not finish #7.
 
+### Fresh composition and native InputMode evidence
+
+Measured: a regression fixture based on a retained composed-cancel observation
+still satisfied the old composition check after removing its new composition
+events and Hangul payload. An unchanged `contextText` containing `ㅎ` was enough.
+The independent input review now requires a new `compositionstart` and fresh
+`textupdate.text` or `compositionupdate`/`input.data` on the same element and
+EditContext kind. Committed cases require an episode end; native no-leaf cases
+may retain their observed open preedit. Query evidence connects each syllable
+to the final focused input. Fresh input at another destination can support a
+retained routing failure, but cannot qualify a passing trial. A whole
+`contextText` snapshot, `beforeinput` or final value alone is not fresh evidence.
+
+Inferred: the former native plain-cancel checks could accept a trial that stayed
+in Latin mode because they checked the resulting cursor and capture without
+proving the intervening Hangul-mode switch. An ending `EN` value cannot distinguish
+that counterexample from a successful Hangul-to-Latin Escape sequence.
+
+Documented: [GNOME Shell 50.1](https://github.com/GNOME/gnome-shell/blob/50.1/js/ui/status/keyboard.js)
+emits `current-source-changed` after updating the current IBus properties.
+[ibus-hangul 1.5.5](https://github.com/libhangul/ibus-hangul/blob/1.5.5/src/engine.c)
+switches mode for `Shift+Space`, turns Hangul off for the configured `Escape`
+off-key, and flushes preedit for a Control chord without turning Hangul off.
+The private Shell observer copies those property observations with their sequence,
+receipt time and focused native client. Calibration must show `EN → 한 → EN`.
+Escape cancellation requires that path; `Ctrl+[` requires `EN → 한` and keeps
+Hangul mode after flushing composition. A missing transition remains unverified.
+The observer starts before the existing input batch and ends before diagnostic
+cleanup. It adds no observation, wait or changed interval between measured keys.
+
+Measured: independent retrospective checks examined 2,175 retained observations
+from the first Hangul proof and the two native letter proofs without adding an
+unqualified input-evidence result. Their earlier environment limitations remain;
+the two native five-second deadline failures are unchanged. The corresponding
+`input-evidence-01` artifacts bind each raw hash to the current classifiers.
+Reproduce a review with an unused output path:
+
+```bash
+taskset -c 0-3 mise exec node@24.21.0 -- node \
+  spike/s1/matrix/input-evidence.mjs "$RAW_RESULT" "$INPUT_REVIEW_OUTPUT"
+```
+
+Coverage recomputes this evidence even for an older frozen runner and records
+the classifier hashes; the report rejects changed classifiers. The source
+manifest also binds the new runtime helper and Shell observer. The unused native
+queue was stopped with zero runs and replaced with updated frozen sources.
+All 80 matrix tests passed, including the report aggregation regressions. The real Shell signal connection still awaits its
+per-sandbox calibration when native execution can run alone after X11 work.
+
 ### V-b trace preservation
 
 Measured: the first root-pause batch completed all 1000 observations. The frozen
@@ -2072,6 +2137,16 @@ portable argv isolation and do not qualify the current environment matrix.
 Current V-b coverage requires both the analyzer and renderer clock-bound source
 hashes. The runner still records every 1,000-trial condition without an early
 failure stop or pass threshold; injection timing is unchanged.
+
+The report retains each selected V-b condition's observed paths, leaf effects,
+native key counts, entry-leak trials and following-`j` delivery. It binds these
+counts to the raw and independent-analysis hashes and keeps every trial's index,
+requested pause, actual path and final engine state. The requested pause never
+chooses the observed path. A timeout that leaves `j` in the right editor is normal
+delivery, even if the original left-editor expectation produced an error string.
+Leaf effects are not exact command invocation counts. Missing paths, inconsistent
+key arrays or contradictory final states are rejected; unresolved analyses remain
+unverified in coverage instead of contributing successful observations.
 
 Inferred: the previous independent audit would treat a successful cold trial's
 process cleanup as a query dismissal snapshot, despite their different fields.

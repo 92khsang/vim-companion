@@ -183,6 +183,13 @@ export async function startWayland({ root, processes, result, until, check }) {
     environment,
     state,
     dbus,
+    beginModeTrace() {
+      dbus("BeginModeTrace");
+    },
+    endModeTrace() {
+      dbus("EndModeTrace");
+      return state().modeTrace;
+    },
     inject(keys, delayMs) {
       check();
       const batch = request({ method: "keys", keys, delayMs });

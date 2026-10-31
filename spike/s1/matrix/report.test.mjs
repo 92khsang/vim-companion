@@ -8,6 +8,7 @@ import {
   expectedCells,
   remapMethodSha256,
   remapClockMethodSha256,
+  inputEvidenceSources,
   overlapQualification,
 } from "./coverage.mjs";
 import {
@@ -18,6 +19,7 @@ import {
   selectEvidence,
   focusCohort,
   providerSummary,
+  remapSummary,
 } from "./report.mjs";
 
 test("report binds selected raw and audit hashes and counts a first discrepancy once", () => {
@@ -69,6 +71,7 @@ test("report binds selected raw and audit hashes and counts a first discrepancy 
   };
   cell.evidence.push(evidence);
   const coverage = {
+    inputEvidenceSources: inputEvidenceSources(),
     methodSha256: hash(
       readFileSync(new URL("./coverage.mjs", import.meta.url)),
     ),
@@ -85,6 +88,13 @@ test("report binds selected raw and audit hashes and counts a first discrepancy 
     ]);
     assert.equal(report.entryLatency[0].timing.count, 390);
     assert.equal(report.summary.complete, false);
+    const sources = coverage.inputEvidenceSources;
+    coverage.inputEvidenceSources = {};
+    assert.throws(
+      () => buildReport(coverage),
+      /input-evidence classifiers changed/,
+    );
+    coverage.inputEvidenceSources = sources;
     writeFileSync(file, bytes + " ");
     assert.throws(() => buildReport(coverage), /artifact changed/);
     writeFileSync(file, bytes);
@@ -238,7 +248,13 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
   const rawSha256 = save(file, {
     gate: "vb-entry",
     status: "remap-recorded",
-    trials: Array.from({ length: 1000 }, (_, index) => ({ index, errors: [] })),
+    trials: Array.from({ length: 1000 }, (_, index) => ({
+      index,
+      errors: [],
+      case: "unpaused",
+      leafEffect: true,
+      after: { viewColumn: 1, selections: [[1, 0, 1, 0]], mode: 0 },
+    })),
   });
   const auditFile = file.replace(/\.json$/, "-audit.json");
   const analysisFile = file.replace(/\.json$/, "-native-keys-01.json");
@@ -250,6 +266,8 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
     trials: Array.from({ length: 1000 }, (_, index) => ({
       index,
       classification: "inferred from stock trace and engine state",
+      observedPath: "remap",
+      requestedPause: "unpaused",
       keys: ["j"],
     })),
   };
@@ -272,13 +290,23 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
   const cells = expectedCells();
   cells.find((cell) => cell.job.row === "vb-entry").evidence.push(evidence);
   const coverage = {
+    inputEvidenceSources: inputEvidenceSources(),
     methodSha256: hash(
       readFileSync(new URL("./coverage.mjs", import.meta.url)),
     ),
     cells,
   };
   try {
-    assert.equal(buildReport(coverage).summary.selectedCells, 1);
+    const report = buildReport(coverage);
+    assert.equal(report.summary.selectedCells, 1);
+    assert.equal(report.remaps.length, 1);
+    assert.equal(report.remaps[0].rawSha256, rawSha256);
+    assert.equal(report.remaps[0].analysisSha256, evidence.analysisSha256);
+    assert.deepEqual(report.remaps[0].followingJ, {
+      delivered: 1000,
+      failed: 0,
+      unresolved: 0,
+    });
     save(auditFile, { rawSha256, modified: true });
     assert.throws(() => buildReport(coverage), /artifact changed/);
     save(auditFile, { rawSha256 });
@@ -291,6 +319,81 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test("V-b aggregates observed paths independently of requested pauses and left-editor errors", () => {
+  const raw = {
+    trials: [
+      {
+        index: 0,
+        case: "unpaused",
+        leafEffect: false,
+        errors: ["left-group leaf effect absent"],
+        after: { viewColumn: 2, selections: [[1, 5, 1, 5]], mode: 0 },
+      },
+      {
+        index: 1,
+        case: "root",
+        leafEffect: true,
+        errors: [],
+        after: { viewColumn: 1, selections: [[1, 0, 1, 0]], mode: 0 },
+      },
+      {
+        index: 2,
+        case: "prefix",
+        leafEffect: false,
+        errors: [],
+        after: { viewColumn: 2, selections: [[1, 5, 1, 5]], mode: 0 },
+      },
+    ],
+  };
+  const analysis = {
+    trials: [
+      {
+        index: 0,
+        requestedPause: "unpaused",
+        observedPath: "root-timeout",
+        keys: ["space", "w", "h", "j"],
+      },
+      { index: 1, requestedPause: "root", observedPath: "remap", keys: ["j"] },
+      {
+        index: 2,
+        requestedPause: "prefix",
+        observedPath: "prefix-timeout",
+        keys: ["space", "w", "h", "j"],
+      },
+    ],
+  };
+  const summary = remapSummary(raw, analysis);
+  assert.deepEqual(summary.observedPaths, {
+    "root-timeout": 1,
+    remap: 1,
+    "prefix-timeout": 1,
+  });
+  assert.deepEqual(summary.leafEffectCounts, { true: 1, false: 2 });
+  assert.equal(summary.entryLeakTrials, 2);
+  assert.deepEqual(summary.entryNativeKeyCounts, { space: 2, w: 2, h: 2 });
+  assert.deepEqual(summary.nativeKeyCounts, { space: 2, w: 2, h: 2, j: 3 });
+  assert.deepEqual(summary.followingJ, {
+    delivered: 3,
+    failed: 0,
+    unresolved: 0,
+  });
+  const missing = structuredClone(analysis);
+  delete missing.trials[0].observedPath;
+  assert.throws(() => remapSummary(raw, missing), /path is missing/);
+  const contradictory = structuredClone(analysis);
+  contradictory.trials[0].keys = ["j"];
+  assert.throws(() => remapSummary(raw, contradictory), /keys contradict/);
+  const incomplete = structuredClone(analysis);
+  incomplete.trials.pop();
+  assert.throws(() => remapSummary(raw, incomplete), /must partition/);
+  const wrongState = structuredClone(raw);
+  wrongState.trials[0].after.selections = [[0, 5, 0, 5]];
+  assert.throws(
+    () => remapSummary(wrongState, analysis),
+    /engine state contradicts/,
+  );
 });
 
 const cells = Array.from({ length: 12 }, (_, index) => ({

@@ -1,13 +1,17 @@
 // Test-only extension for the headless GNOME Shell harness. It reads what the top bar would show, selects an input
 // source when the harness asks (as a user would from the top bar), and saves screenshots of the virtual monitor.
 import Gio from "gi://Gio";
+import GLib from "gi://GLib";
 import Shell from "gi://Shell";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import * as Keyboard from "resource:///org/gnome/shell/ui/status/keyboard.js";
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+import { ModeTrace } from "./mode-trace.js";
 
 const IFACE = `<node><interface name="org.vimcompanion.S1Harness">
   <method name="State"><arg type="s" direction="out" name="json"/></method>
+  <method name="BeginModeTrace"/>
+  <method name="EndModeTrace"/>
   <method name="HideOverview"/>
   <method name="FocusPid"><arg type="u" direction="in" name="pid"/><arg type="b" direction="out" name="found"/></method>
   <method name="SelectSource"><arg type="s" direction="in" name="id"/><arg type="b" direction="out" name="found"/></method>
@@ -34,6 +38,15 @@ function findInputMode(props) {
 
 export default class S1HarnessExtension extends Extension {
   enable() {
+    this._sources = Keyboard.getInputSourceManager();
+    this._modeTrace = new ModeTrace(
+      () => this._inputState(),
+      () => GLib.get_monotonic_time() / 1000,
+    );
+    // GNOME Shell emits this after registering/updating current IBus properties.
+    this._modeSignal = this._sources.connect("current-source-changed", () =>
+      this._modeTrace.capture(),
+    );
     this._dbus = Gio.DBusExportedObject.wrapJSObject(IFACE, this);
     this._dbus.export(Gio.DBus.session, "/org/vimcompanion/S1Harness");
     this._startupId = Main.layoutManager.connect("startup-complete", () =>
@@ -43,24 +56,43 @@ export default class S1HarnessExtension extends Extension {
   }
 
   disable() {
+    if (this._modeSignal) this._sources.disconnect(this._modeSignal);
+    this._modeSignal = 0;
+    this._modeTrace = null;
+    this._sources = null;
     this._dbus?.unexport();
     this._dbus = null;
     if (this._startupId) Main.layoutManager.disconnect(this._startupId);
     this._startupId = 0;
   }
 
-  State() {
-    const ism = Keyboard.getInputSourceManager();
-    const src = ism.currentSource;
+  _inputState() {
+    const src = this._sources.currentSource;
     const win = global.display.focus_window;
-    return JSON.stringify({
+    return {
       source: src ? `${src.type}:${src.id}` : null,
       inputMode: src ? findInputMode(src.properties) : null,
+      focusPid: win ? win.get_pid() : null,
+      focusClientType: win ? win.get_client_type() : null,
+    };
+  }
+
+  BeginModeTrace() {
+    this._modeTrace.begin();
+  }
+
+  EndModeTrace() {
+    this._modeTrace.end();
+  }
+
+  State() {
+    const win = global.display.focus_window;
+    return JSON.stringify({
+      ...this._inputState(),
+      modeTrace: this._modeTrace.snapshot(),
       overview: Main.overview.visible,
       focusWindow: win ? win.get_title() : null,
       focusWmClass: win ? win.get_wm_class() : null,
-      focusPid: win ? win.get_pid() : null,
-      focusClientType: win ? win.get_client_type() : null,
       focusSequence: win ? win.get_stable_sequence() : null,
       windows: global.get_window_actors().map((actor) => ({
         pid: actor.meta_window.get_pid(),

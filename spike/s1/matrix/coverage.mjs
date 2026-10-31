@@ -5,6 +5,11 @@ import { createHash } from "node:crypto";
 import { completionJobs } from "./plan.mjs";
 import { focusScenarios } from "./focus-scenarios.mjs";
 import { countRegisterOracle } from "./count.mjs";
+import {
+  analyzeInputEvidence,
+  inputEvidenceSources,
+} from "./input-evidence.mjs";
+export { inputEvidenceSources } from "./input-evidence.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
@@ -172,7 +177,14 @@ export function terminationQualification(
   return reasons;
 }
 
-export function qualification(raw, rawSha256, audit, resource, termination) {
+export function qualification(
+  raw,
+  rawSha256,
+  audit,
+  resource,
+  termination,
+  inputEvidence = raw.gate === "hangul" ? analyzeInputEvidence(raw) : null,
+) {
   const reasons = [];
   const requireEvidence = (condition, reason) => {
     if (!condition) reasons.push(reason);
@@ -250,6 +262,15 @@ export function qualification(raw, rawSha256, audit, resource, termination) {
         audit.coldProcesses.validatedTrials === raw.trials.length &&
         audit.finalSnapshotAvailable === true,
       "cold child ownership, cleanup or final snapshots unaudited",
+    );
+  if (raw.gate === "hangul")
+    requireEvidence(
+      raw.trials.length > 0 &&
+        inputEvidence?.validatedTrials === raw.trials.length &&
+        inputEvidence.unqualified?.length === 0 &&
+        JSON.stringify(inputEvidence.sources) ===
+          JSON.stringify(inputEvidenceSources()),
+      "fresh composition or native mode evidence is unqualified",
     );
   return reasons;
 }
@@ -389,6 +410,8 @@ export function collectCoverage(directories, overlapArtifact = null) {
         load: raw.condition.load !== "idle",
         delay: raw.condition.delayMs,
       };
+      const inputEvidence =
+        raw.gate === "hangul" ? analyzeInputEvidence(raw) : null;
       const evidence = {
         file: relative(process.cwd(), file),
         rawSha256: artifact.sha256,
@@ -398,6 +421,7 @@ export function collectCoverage(directories, overlapArtifact = null) {
         resourceReviewSha256: resource?.sha256,
         terminationSha256: termination?.sha256,
         batchSha256: batch.sha256,
+        ...(inputEvidence ? { inputEvidence } : {}),
         reasons: [
           ...qualification(
             raw,
@@ -405,6 +429,7 @@ export function collectCoverage(directories, overlapArtifact = null) {
             audit?.value,
             resource?.value,
             termination?.value,
+            inputEvidence,
           ),
           ...overlapQualification(
             artifact.sha256,
@@ -512,6 +537,7 @@ export function collectCoverage(directories, overlapArtifact = null) {
   return {
     generatedAt: new Date().toISOString(),
     methodSha256: hash(readFileSync(import.meta.filename)),
+    inputEvidenceSources: inputEvidenceSources(),
     overlapReviewSha256: overlapArtifact?.sha256 ?? null,
     scope:
       "Linux only; macOS deferred by the user. A first-discrepancy failure is a result, not a rate estimate. Missing, tainted and incomplete evidence stays unverified.",

@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 import { setTimeout as sleep } from "node:timers/promises";
 import { engineState } from "../bounded-gates.mjs";
 import { compositionDeadline } from "./hangul.mjs";
+import {
+  modeTraceEvidence,
+  freshCompositionEvidence,
+  nativeModeEvidence,
+} from "./input-evidence.mjs";
 
 export const waylandCases = [
   "letter",
@@ -86,6 +91,7 @@ export async function runWayland({
   }, "native Hangul calibration renderer did not reach the empty editor");
   const proofBefore = await observer.begin();
   proof.before = proofBefore;
+  native.beginModeTrace();
   await mode("한");
   for (const key of ["g", "k", "s", "r", "m", "f", "shift+space"]) {
     const step = { key, requestedAt: performance.now() };
@@ -99,12 +105,14 @@ export async function runWayland({
   const composed = await settled(),
     proofAfter = await observer.read(),
     proofMode = native.state();
+  const proofModeTrace = native.endModeTrace();
   result.nativeCompositionProof = {
     ...proof,
     before: proofBefore,
     after: proofAfter,
     snapshot: composed,
     mode: proofMode,
+    modeTrace: proofModeTrace,
     batchRange: [proofStart, result.nativeSession.batches.length],
   };
   save();
@@ -114,6 +122,14 @@ export async function runWayland({
     "real IBus did not commit the Hangul calibration",
   );
   assert.equal(symbol(proofMode), "EN");
+  assert.ok(
+    modeTraceEvidence(
+      proofModeTrace,
+      ["EN", "한", "EN"],
+      result.nativeSession.focus.focusPid,
+    ).qualified,
+    "passive InputMode observer did not prove both calibration transitions",
+  );
   assert.ok(
     proofAfter.events.some(
       (event) =>
@@ -185,6 +201,8 @@ export async function runWayland({
     watchdog: noLeaf
       ? "Observe 5500 ms after injection with no capture-off wait; compare the unchanged 5000 ms release deadline"
       : null,
+    modeObservation:
+      "Passive current-source-changed events in the private GNOME Shell; no observation or wait between injected keys",
   };
   for (let index = 0; index < 1000; index++) {
     check();
@@ -201,6 +219,7 @@ export async function runWayland({
     assert.equal(before.text, text);
     assert.deepEqual(before.selections, [[0, 0, 0, 0]]);
     const initial = await mode(initialMode);
+    native.beginModeTrace();
     const rendererBefore = await observer.begin(),
       phaseDelayMs = await phase();
     const injectedAt = performance.now(),
@@ -209,6 +228,7 @@ export async function runWayland({
     if (noLeaf) await sleep(5500);
     const after = await settled(),
       rendererAfter = await observer.read(),
+      modeTrace = native.endModeTrace(),
       imeAfter = native.state();
     const errors = [],
       inconclusive = [],
@@ -304,23 +324,6 @@ export async function runWayland({
       );
     }
     verify(!after.leader.active, "native capture remains active");
-    if (
-      noLeaf ||
-      (query && kind !== "latin-query") ||
-      kind.endsWith("composed")
-    ) {
-      const expected = kind === "shift-hangul" ? "조" : query ? "다" : "ㅎ";
-      if (
-        !rendererAfter.events.some((event) =>
-          [event.text, event.data, event.contextText].some((value) =>
-            value?.includes(expected),
-          ),
-        )
-      )
-        inconclusive.push(
-          "native per-trial preedit/commit target evidence missing",
-        );
-    }
     const trial = {
       index,
       case: kind,
@@ -333,6 +336,7 @@ export async function runWayland({
       after,
       renderer: { before: rendererBefore, after: rendererAfter },
       imeAfter,
+      modeTrace,
       deadline,
       errors,
       inconclusive,
@@ -375,6 +379,14 @@ export async function runWayland({
         equal(engineState(comparison), engineState(trial.finalSnapshot)),
         "native state changed before final sentinel",
       );
+    trial.inputEvidence = {
+      composition: freshCompositionEvidence(trial, "wayland"),
+      mode: nativeModeEvidence(result, trial),
+    };
+    if (!trial.inputEvidence.composition.qualified)
+      inconclusive.push("fresh native composition episode is unproven");
+    if (!trial.inputEvidence.mode.qualified)
+      inconclusive.push("native per-trial InputMode transitions are unproven");
     if (errors.length || inconclusive.length) {
       result.status = errors.length
         ? "discrepancy"

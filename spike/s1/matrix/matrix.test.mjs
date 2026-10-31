@@ -3,11 +3,12 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync, cpSync, rmSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { observe } from "./observe.cjs";
-import { matrixLeader, matrixProbe } from "./install.mjs";
+import { matrixLeader, matrixProbe, installMatrix } from "./install.mjs";
 import { buildMatrixRunner } from "./runner.mjs";
 import { buildMatrixBounded } from "./bounded.mjs";
 
@@ -26,6 +27,45 @@ test("engine changes during a cross-host observation reject stability", async ()
   );
   const stable = await observe(read, async () => ({ active: false }));
   assert.equal(stable.matrixObservation.engineStable, true);
+});
+
+test("installed source manifest binds the runtime composition and native mode observer", () => {
+  const root = resolve(import.meta.dirname, "..");
+  const extensions = mkdtempSync(join(tmpdir(), "s1-mode-install-test-"));
+  try {
+    for (const name of ["leader", "probe"])
+      cpSync(
+        join(root, name),
+        join(extensions, `vim-companion-spike.s1-${name}-0.0.0`),
+        { recursive: true },
+      );
+    const result = {};
+    installMatrix({
+      source: root,
+      extensions,
+      result,
+      options: {
+        row: "hangul",
+        case: "escape-plain",
+        backend: "wayland",
+        version: "1.141.0",
+        affinity: "same",
+        editContext: true,
+      },
+    });
+    for (const name of [
+      "matrix/input-evidence.mjs",
+      "wayland/extension/s1-harness@vimcompanion.spike/mode-trace.js",
+    ])
+      assert.equal(
+        result.matrix.sources[name],
+        createHash("sha256")
+          .update(readFileSync(join(root, name)))
+          .digest("hex"),
+      );
+  } finally {
+    rmSync(extensions, { recursive: true, force: true });
+  }
 });
 
 test("matrix observation hooks preserve leader input code and reject a changed baseline", () => {

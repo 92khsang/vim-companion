@@ -7,6 +7,7 @@ import {
   selectFocusAnalysis,
   selectRemapAnalysis,
   remapQualification,
+  inputEvidenceSources,
 } from "./coverage.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -244,11 +245,77 @@ export function providerSummary(rows) {
   };
 }
 
+export function remapSummary(raw, analysis) {
+  assert.deepEqual(
+    analysis.trials.map((trial) => trial.index),
+    raw.trials.map((trial) => trial.index),
+    "V-b analysis must partition the selected raw trials",
+  );
+  const trials = raw.trials.map((trial, index) => {
+    const inferred = analysis.trials[index];
+    const remapped = inferred.observedPath === "remap";
+    assert.ok(
+      ["remap", "root-timeout", "prefix-timeout"].includes(
+        inferred.observedPath,
+      ),
+      "V-b observed path is missing or unresolved",
+    );
+    assert.deepEqual(
+      inferred.keys,
+      remapped ? ["j"] : ["space", "w", "h", "j"],
+      "V-b native keys contradict the observed path",
+    );
+    assert.equal(inferred.requestedPause, trial.case);
+    assert.deepEqual(
+      [
+        trial.leafEffect,
+        trial.after.viewColumn,
+        trial.after.selections,
+        trial.after.mode,
+      ],
+      [remapped, remapped ? 1 : 2, [remapped ? [1, 0, 1, 0] : [1, 5, 1, 5]], 0],
+      "V-b engine state contradicts the classified path",
+    );
+    return {
+      index: trial.index,
+      requestedPause: trial.case,
+      observedPath: inferred.observedPath,
+      nativeKeys: inferred.keys,
+      entryNativeKeys: inferred.keys.filter((key) => key !== "j"),
+      leafEffect: trial.leafEffect,
+      finalColumn: trial.after.viewColumn,
+      selections: trial.after.selections,
+      mode: trial.after.mode,
+      followingJ: "delivered",
+    };
+  });
+  return {
+    observations: trials.length,
+    observedPaths: counts(trials.map((trial) => trial.observedPath)),
+    leafEffectCounts: counts(trials.map((trial) => trial.leafEffect)),
+    nativeKeyCounts: counts(trials.flatMap((trial) => trial.nativeKeys)),
+    entryLeakTrials: trials.filter((trial) => trial.entryNativeKeys.length)
+      .length,
+    entryNativeKeyCounts: counts(
+      trials.flatMap((trial) => trial.entryNativeKeys),
+    ),
+    followingJ: { delivered: trials.length, failed: 0, unresolved: 0 },
+    definition:
+      "Native actions are inferred from stock trace and engine state. Entry leakage counts leader keys only. The following j is delivered in the left editor after remapping or the right editor after timeout. Leaf effect is an observed effect, not an exact command invocation count. Unresolved analyses are excluded by coverage, never counted as successful trials.",
+    trials,
+  };
+}
+
 export function buildReport(coverage, { provisional = false } = {}) {
   assert.equal(
     coverage.methodSha256,
     hash(readFileSync(new URL("./coverage.mjs", import.meta.url))),
     "regenerate coverage with the current parser",
+  );
+  assert.deepEqual(
+    coverage.inputEvidenceSources,
+    inputEvidenceSources(),
+    "input-evidence classifiers changed; regenerate coverage",
   );
   const expected = expectedCells();
   assert.deepEqual(
@@ -318,6 +385,7 @@ export function buildReport(coverage, { provisional = false } = {}) {
   const checkedReferences = new Set();
   const matrix = [],
     entryLatency = [],
+    remaps = [],
     focusRows = [];
   for (const cell of coverage.cells) {
     const selected = selectEvidence(cell, provisional);
@@ -371,6 +439,15 @@ export function buildReport(coverage, { provisional = false } = {}) {
         [],
         "V-b native-key analysis no longer qualifies",
       );
+      remaps.push({
+        key: cell.key,
+        job: cell.job,
+        rawSha256: selected.rawSha256,
+        analysisSha256: selected.analysisSha256,
+        outcome: record.outcome,
+        conditionalOutcome: selected.outcome,
+        ...remapSummary(raw, remap.value),
+      });
     }
     const trials =
       cell.kind === "focus"
@@ -484,6 +561,7 @@ export function buildReport(coverage, { provisional = false } = {}) {
     },
     matrix,
     entryLatency,
+    remaps,
     focus,
     providers,
   };
@@ -534,6 +612,28 @@ export function markdownReport(report) {
           "`" + row.key + "`",
           `${row.observations} / ${row.timing.unresolved}`,
           ...Object.values(row.timing.cohort).map(timingLabel),
+        ]),
+      ),
+      "## V-b observed native paths",
+      "Only selected complete 1,000-trial conditions appear here. Native action names are inferred from stock traces and engine state. Leaf effects are not invocation counts. Entry leakage excludes the following j; a right-editor j after timeout is normal delivery. Missing or unresolved conditions remain unverified in the matrix.",
+      table(
+        [
+          "Cell",
+          "N",
+          "Observed paths",
+          "Leaf effect true / false",
+          "Entry leak trials / native keys",
+          "Following j delivered / failed / unresolved",
+          "Raw / analysis SHA-256",
+        ],
+        report.remaps.map((row) => [
+          "`" + row.key + "`",
+          row.observations,
+          JSON.stringify(row.observedPaths),
+          `${row.leafEffectCounts.true ?? 0} / ${row.leafEffectCounts.false ?? 0}`,
+          `${row.entryLeakTrials} / ${JSON.stringify(row.entryNativeKeyCounts)}`,
+          `${row.followingJ.delivered} / ${row.followingJ.failed} / ${row.followingJ.unresolved}`,
+          `${row.rawSha256} / ${row.analysisSha256}`,
         ]),
       ),
       "## Focus and command settlement (ms)",

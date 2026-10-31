@@ -14,6 +14,7 @@ import { createHash } from "node:crypto";
 import { faultOrder, rendererTimeErrorMs } from "./fault.mjs";
 import { countRegisterOracle, expectedCountRegisters } from "./count.mjs";
 import { engineState } from "../bounded-gates.mjs";
+import { analyzeInputEvidence } from "./input-evidence.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export function auditCountRegisters(raw) {
@@ -477,6 +478,9 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
           : "resource checks absent; consult supplemental resource review",
     ...(cdpProof ? { cdpProof } : {}),
     ...(nativeProof ? { nativeProof } : {}),
+    ...(raw.gate === "hangul"
+      ? { inputEvidence: analyzeInputEvidence(raw) }
+      : {}),
     checks: [
       "source hashes",
       "reconstructed installed artifacts",

@@ -14,6 +14,7 @@ import {
   selectRemapAnalysis,
   selectFocusAnalysis,
   focusMethodSources,
+  inputEvidenceSources,
 } from "./coverage.mjs";
 
 test("coverage preserves every Linux condition and separates focus states", () => {
@@ -240,6 +241,30 @@ test("count evidence cannot qualify with the obsolete unchanged-register oracle"
   assert.ok(qualification(raw, "raw", audit, {}, {}).includes(reason));
   audit.countRegisterOracle.validatedTrials = 1;
   assert.ok(!qualification(raw, "raw", audit, {}, {}).includes(reason));
+});
+
+test("Hangul coverage independently rejects absent fresh composition and stale classifier evidence", () => {
+  const raw = {
+    gate: "hangul",
+    matrix: { backend: "x11" },
+    status: "discrepancy",
+    trials: [{ index: 0, case: "escape-composed", errors: [] }],
+  };
+  const reason = "fresh composition or native mode evidence is unqualified";
+  assert.ok(qualification(raw, "raw", {}, {}, {}).includes(reason));
+  raw.trials[0].case = "escape-plain";
+  assert.ok(!qualification(raw, "raw", {}, {}, {}).includes(reason));
+  const evidence = {
+    sources: inputEvidenceSources(),
+    validatedTrials: 1,
+    unqualified: [],
+  };
+  for (const changed of [
+    { ...evidence, sources: {} },
+    { ...evidence, unqualified: [0] },
+    { ...evidence, validatedTrials: 0 },
+  ])
+    assert.ok(qualification(raw, "raw", {}, {}, {}, changed).includes(reason));
 });
 
 test("cold coverage requires independent child cleanup and actual final snapshots", () => {
