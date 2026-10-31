@@ -2026,6 +2026,18 @@ of two IDEs with no conflicts or exclusions; all final outcomes remain unverifie
 All 305 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: focus checks on 1.134.0, idle/separate hosts at 30 ms completed all
+414 observations across 46 scenarios, followed by nine accessible-hover
+observations. Each scenario recorded nine observations with no analysis or
+resource errors. Each of the four delayed-provider scenarios proved all nine
+inputs inside its original fixed 200 ms wait. The
+[separate-host checkpoint](data/portable-report-16.md) selects 364 conditional
+cells and 2,889 focus observations. Its live overlap review observed at most two
+IDEs without conflicts or exclusions. All final outcomes remain unverified
+pending completion of the matrix and its final overlap review.
+All 315 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
