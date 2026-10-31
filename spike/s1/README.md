@@ -1509,6 +1509,75 @@ The full portable X11 and focus batches now use two disjoint workers. Native
 Wayland batches remain separate and run alone. All unfinished cells remain
 unverified; the Linux inventory and macOS deferral are unchanged.
 
+Measured: `matrix-wayland-minimum-proof-01` also passed native delivery, the Vim
+script and exact real-IBus Hangul calibration on 1.134.0, idle/shared host at
+10 ms. Its first no-leaf letter trial exceeded the watchdog deadline at
+5,003.444–5,004.430 ms. Source/delivery, resource and owned-process cleanup checks
+passed. This establishes the minimum-version harness and one failure cell.
+
+### Focus fixture reset and timing review
+
+Measured: `matrix-focus-complete-02` stopped after 326 observations when setup of
+`wc-dirty` round 2 timed out. The owned renderer log recorded one
+`File Modified Since` save error. Round 1 had accumulated two `dirty ` prefixes;
+round 0 had one. Earlier complete `bd-dirty` and `bo-dirty` observations had one
+prefix and no preceding save-conflict log. The raw result, incomplete attempt and
+protocol review remain retained. Neither of the two completed `wc-dirty` trials
+constitutes a nine-observation scenario.
+
+The setup saved prior edits without checking the boolean result, then overwrote
+fixed paths while text models could remain cached. Current setup discards owned
+sandbox editors after observation and resets their baseline through
+`WorkspaceEdit` and a checked `TextDocument.save()`. It creates only missing files
+through filesystem writes, and verifies every fixture's model, disk and expected
+dirty state before measured keys. The measured dirty edit remains unsaved.
+Documented: `revertAndCloseActiveEditor` attempts normal revert, falls back to soft
+revert, and closes the editor in both
+[1.134.0](https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/browser/parts/editor/editorActions.ts#L518-L558)
+and [1.141.0](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/browser/parts/editor/editorActions.ts#L518-L558).
+
+The independent timing review also retains exact observation-end bounds. A
+snapshot that overlaps the five-second boundary cannot prove a negative result
+through five seconds. New recording uses a monotonic deadline plus a 25 ms tail;
+analysis still applies the unchanged five-second window. Earlier positive focus
+or settlement observations remain evidence; deficient negative observations need
+supplemental measurements.
+
+A focus event whose clock bounds straddle command start cannot alone establish
+the upper bound of the first post-command change. Numeric bounds now require a
+candidate certainly inside the five-second window. Their lower endpoint retains
+all eligible candidates and their upper endpoint uses only certainly-in-window
+candidates. Negative lower endpoints express ordering uncertainty, never a
+measured negative delay. The original first-candidate bounds remain separate.
+
+Measured: `matrix-focus-repair-01` completed the nine observations for each
+remaining dirty/close state without a repeated dirty prefix. Its delayed Quick
+Fix and rename cases each placed `j` inside the fixed 200 ms server wait in all
+nine observations. The formatting and hover requests, however, received an
+immediate cancellation reply in 9.622–12.472 ms and 6.537–9.290 ms respectively.
+Those 18 observations do not qualify the fixed-delay fixture. The server now
+records cancellation receipt separately and sends the cancellation response only
+at the original 200 ms deadline. `matrix-focus-repair-02` repeated formatting and
+hover at 10 ms, idle/shared host, with nine qualified wait observations each.
+
+Measured: the same repaired fixture recorded nine observations per delayed leaf
+at 10 ms under both loaded host placements on 1.141.0. The response deadline was
+at least 200 ms, but the actual key did not always arrive after request receipt:
+
+| Leaf      | Shared host: `j` proven inside wait | Separate host: `j` proven inside wait |
+| --------- | ----------------------------------- | ------------------------------------- |
+| `SPC c q` | 4/9                                 | 7/9                                   |
+| `SPC c r` | 4/9                                 | 5/9                                   |
+| `SPC c f` | 6/9                                 | 7/9                                   |
+| `SPC c d` | 3/9                                 | 6/9                                   |
+
+The other observations contain either a key before request receipt or overlapping
+clock bounds; they remain original inter-key-spacing evidence, not proof of input
+during a server wait. The coverage inventory requires nine proven fixed-delay
+wait observations and therefore keeps these eight cells incomplete. Adding
+request-observed supplemental trials is awaiting the user's protocol decision;
+the original unpaused trials and response deadline remain unchanged.
+
 ### Lossless storage of large raw artifacts
 
 `matrix/archive.mjs` stores large raw files as standard gzip, with a neighboring
@@ -1563,18 +1632,35 @@ Replaying a historical plan preserves its historical protocol limitations; only
 the new portable plans establish the new isolation checks.
 
 The original directories and raw files remain available locally while measurement
-continues. Git stores their verified compressed representation. An interrupted
+continues. Git stores their verified compressed representation. An incomplete
 focus run requires an explicit `--partial-focus` audit; its original error and
 status remain intact, and only complete nine-observation scenarios can contribute
 to the independent coverage inventory. `matrix/coverage.mjs` requires matching
 raw/audit/resource hashes, portable isolation and completed owned-process cleanup.
 It never substitutes a V-b failure for that row's 1,000 required observations.
+Native and Visual rows also inherit every qualification failure of the comparison
+baseline identified by its raw SHA. V-b requires a matching, source-hashed
+native-key analysis of all 1,000 distinct observations; unknown paths remain
+unresolved. The raw count alone is not completion.
+
+Final coverage additionally requires `--overlap REVIEW.json`, produced by
+`matrix/overlap.mjs OUTPUT.json BATCH_DIRECTORY [...]` after the relevant batches
+finish. Include every batch that shared the measurement period, including later
+workers absent from an earlier plan's `externalBatches`. The review binds raw and
+batch hashes, includes cold-start child IDEs, and records actual instance counts,
+physical CPU-core sharing, native coexistence and configured-limit violations.
+Unobserved lifetimes or omitted declared workers prevent qualification. A
+`--live` overlap review is provisional and cannot qualify final coverage.
 
 The focus analyzer considers all recorded DOM and native-window transitions,
 including returns to the original target. It retains changes definitely before
 the command or after five seconds separately. A pre-command change cannot hide
 a later transition within the observation interval; uncertain boundary overlap
 remains explicit.
+Whether `j` preceded command settlement is evaluated separately from whether it
+followed command start or arrived inside the server wait. A pre-command key can
+still be proven to precede settlement when the command remains pending after
+five seconds.
 
 ### Renderer clock bounds
 

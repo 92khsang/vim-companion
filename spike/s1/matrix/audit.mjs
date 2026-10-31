@@ -87,7 +87,7 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
   assert.ok(raw.finished, "run has not finished");
   if (allowPartialFocus) {
     assert.equal(raw.gate, "focus");
-    assert.equal(raw.status, "interrupted");
+    assert.ok(["interrupted", "harness-error"].includes(raw.status));
   }
   if (raw.sandboxIsolation) {
     assert.equal(raw.hello.sandbox.portable, raw.sandboxIsolation.portable);
@@ -333,7 +333,7 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
           originalError: raw.error ?? null,
           originalAbort: raw.abort ?? null,
           qualification:
-            "Interrupted run; only complete scenario observations may contribute after independent analysis. The run is not a completed focus condition.",
+            "Incomplete run; only complete scenario observations may contribute after independent analysis. The original interruption or harness error remains unchanged; this is not a completed focus condition.",
         }
       : {}),
     environmentQualification:

@@ -38,12 +38,7 @@ process.stdin.on(
         trial: request?.configuration.trial,
       });
       if (request) {
-        clearTimeout(request.timer);
-        pending.delete(params.id);
-        respond(params.id, null, {
-          code: -32800,
-          message: "Request cancelled",
-        });
+        request.cancelled = true;
       }
       return;
     }
@@ -129,6 +124,17 @@ process.stdin.on(
       }
       pending.delete(id);
       const config = request.configuration;
+      if (request.cancelled) {
+        log({
+          type: "cancelled-response",
+          id,
+          method,
+          trial: config.trial,
+          delayMs: performance.now() - request.started,
+        });
+        respond(id, null, { code: -32800, message: "Request cancelled" });
+        return;
+      }
       let result;
       if (method === "textDocument/codeAction")
         result = Array.from({ length: config.actions }, (_, index) => ({

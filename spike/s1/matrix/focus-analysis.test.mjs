@@ -4,11 +4,13 @@ import {
   clockOffset,
   latency,
   insideWait,
+  beforeSettlement,
   firstFocus,
   commandTiming,
   observationWindow,
   targetPredicate,
   focusTransitions,
+  providerResponse,
 } from "./focus-analysis.mjs";
 import { rendererTimeErrorMs } from "./fault.mjs";
 import { focusKind } from "./focus.mjs";
@@ -45,6 +47,33 @@ test("provider wait evidence requires strict containment of the whole key interv
     "before request",
   );
   assert.equal(insideWait(null, request, response), "unobserved");
+});
+test("settlement ordering does not require a key to follow command start", () => {
+  assert.equal(
+    beforeSettlement({ lower: -8, upper: -6 }, { lower: 200, upper: 202 }),
+    "proven before settlement",
+  );
+  assert.equal(
+    beforeSettlement({ lower: 203, upper: 204 }, { lower: 200, upper: 202 }),
+    "proven after settlement",
+  );
+  assert.equal(
+    beforeSettlement({ lower: 201, upper: 203 }, { lower: 200, upper: 202 }),
+    "clock bounds overlap",
+  );
+  assert.equal(
+    beforeSettlement(null, { lower: 200, upper: 202 }),
+    "unobserved/pending",
+  );
+  assert.equal(
+    commandTiming(
+      10,
+      null,
+      { lowerMs: -8, upperMs: -6 },
+      { lowerMs: 5025, upperMs: 5027 },
+    ).jWhilePending,
+    "proven before settlement; pending at 5 s",
+  );
 });
 test("a focused list inside Quick Open remains a list target", () => {
   assert.equal(
@@ -161,5 +190,46 @@ test("a pre-command focus departure cannot hide a later return to the baseline t
   const boundary = firstFocus([
     { observed: true, bounds: { lowerMs: -1, upperMs: 2 }, source: "DOM" },
   ]);
-  assert.equal(boundary.window, "boundary overlap");
+  assert.equal(boundary.window, "command or five-second boundary unresolved");
+  assert.equal(boundary.bounds, null);
+});
+
+test("a command-boundary candidate cannot truncate the upper bound of the first post-command change", () => {
+  const result = firstFocus([
+    {
+      observed: true,
+      bounds: { lowerMs: -0.171, upperMs: 0.745 },
+      source: "focusout",
+    },
+    {
+      observed: true,
+      bounds: { lowerMs: 3.529, upperMs: 4.445 },
+      source: "focusin",
+    },
+  ]);
+  assert.deepEqual(result.bounds, { lowerMs: -0.171, upperMs: 4.445 });
+  assert.deepEqual(result.firstObservedBounds, {
+    lowerMs: -0.171,
+    upperMs: 0.745,
+  });
+  const tail = firstFocus([
+    {
+      observed: true,
+      bounds: { lowerMs: 4999, upperMs: 5001 },
+      source: "native",
+    },
+  ]);
+  assert.equal(tail.bounds, null);
+  assert.equal(tail.window, "command or five-second boundary unresolved");
+});
+
+test("cancel receipt cannot replace a later fixed-delay cancellation response", () => {
+  const events = [
+    { id: 1, type: "cancel", time: 10 },
+    { id: 1, type: "cancelled-response", time: 201, delayMs: 200.5 },
+  ];
+  const reply = { error: { code: -32800 } };
+  assert.equal(providerResponse(events, 1, reply), events[1]);
+  assert.equal(providerResponse(events.slice(0, 1), 1, reply), events[0]);
+  assert.equal(providerResponse(events.slice(0, 1), 1, {}), null);
 });

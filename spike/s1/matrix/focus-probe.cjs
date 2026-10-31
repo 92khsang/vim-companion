@@ -1,6 +1,97 @@
 const { join, dirname } = require("node:path");
-const { writeFileSync, existsSync } = require("node:fs");
+const { writeFileSync, readFileSync, existsSync } = require("node:fs");
 const { execFileSync } = require("node:child_process");
+const assert = require("node:assert/strict");
+
+exports.discardFixtureEditors = async (vscode, execute, workspace) => {
+  const outside = join(dirname(workspace), "outside.s1focus");
+  for (const group of vscode.window.tabGroups.all)
+    for (const tab of group.tabs) {
+      const uri = tab.input?.uri;
+      assert.ok(
+        uri &&
+          (uri.scheme === "untitled" ||
+            (uri.scheme === "file" &&
+              (uri.fsPath.startsWith(workspace + "/") ||
+                uri.fsPath === outside))),
+        "refusing to discard an editor outside the disposable fixture",
+      );
+    }
+  await execute("workbench.action.joinAllGroups");
+  const count = () =>
+    vscode.window.tabGroups.all.reduce(
+      (sum, group) => sum + group.tabs.length,
+      0,
+    );
+  const initial = count();
+  while (count()) {
+    const before = count();
+    await execute("workbench.action.revertAndCloseActiveEditor");
+    const deadline = performance.now() + 5000;
+    while (count() >= before && performance.now() < deadline)
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    assert.ok(count() < before, "fixture editor did not close after revert");
+  }
+  assert.ok(
+    !vscode.workspace.textDocuments.some(
+      (document) => !document.isClosed && document.isDirty,
+    ),
+    "a dirty document survived fixture discard",
+  );
+  return { discardedTabs: initial, remainingTabs: count() };
+};
+
+exports.resetFixtureFiles = async (vscode, files, fixtureText) => {
+  const records = [];
+  for (const file of files) {
+    if (!existsSync(file)) writeFileSync(file, fixtureText);
+    const uri = vscode.Uri.file(file);
+    const document = await vscode.workspace.openTextDocument(uri);
+    if (document.getText() !== fixtureText) {
+      const edit = new vscode.WorkspaceEdit();
+      edit.replace(
+        uri,
+        new vscode.Range(
+          document.positionAt(0),
+          document.positionAt(document.getText().length),
+        ),
+        fixtureText,
+      );
+      assert.equal(
+        await vscode.workspace.applyEdit(edit),
+        true,
+        "fixture document reset failed",
+      );
+    }
+    assert.equal(
+      await document.save(),
+      true,
+      "fixture baseline could not be saved",
+    );
+    assert.equal(
+      document.isDirty,
+      false,
+      "saved fixture baseline remains dirty",
+    );
+    assert.equal(
+      document.getText(),
+      fixtureText,
+      "fixture model differs from baseline",
+    );
+    assert.equal(
+      readFileSync(file, "utf8"),
+      fixtureText,
+      "fixture disk differs from baseline",
+    );
+    records.push({
+      uri: uri.toString(),
+      version: document.version,
+      text: document.getText(),
+      dirty: document.isDirty,
+    });
+  }
+  return records;
+};
 
 exports.createFocusProbe = (vscode, context) => {
   let sentinel = null,
@@ -66,9 +157,11 @@ exports.createFocusProbe = (vscode, context) => {
     state,
     async setup({ scenario, trial, workspace, fixtureText }) {
       await execute("vimCompanion.resetInputState");
-      await vscode.workspace.saveAll(false);
-      await execute("workbench.action.closeAllEditors");
-      await execute("workbench.action.joinAllGroups");
+      const reset = await exports.discardFixtureEditors(
+        vscode,
+        execute,
+        workspace,
+      );
       const chosen = {
         "files.autoSave": "off",
         "editor.accessibilitySupport":
@@ -97,7 +190,11 @@ exports.createFocusProbe = (vscode, context) => {
         (name) => join(workspace, name),
       );
       const outside = join(dirname(workspace), "outside.s1focus");
-      for (const file of [...files, outside]) writeFileSync(file, fixtureText);
+      const baselines = await exports.resetFixtureFiles(
+        vscode,
+        [...files, outside],
+        fixtureText,
+      );
       const providerConfig = {
         trial,
         delayMs: scenario.delayed ? 200 : 0,
@@ -180,8 +277,39 @@ exports.createFocusProbe = (vscode, context) => {
       }
       if (scenario.state === "visible")
         await execute("editor.action.showHover");
+      const documents = [];
+      for (const file of [...files, outside]) {
+        const document = await vscode.workspace.openTextDocument(
+          vscode.Uri.file(file),
+        );
+        const expectedDirty = file === dirtyFile;
+        assert.equal(
+          document.isDirty,
+          expectedDirty,
+          "fixture dirty state differs",
+        );
+        assert.equal(
+          document.getText(),
+          (expectedDirty ? "dirty " : "") + fixtureText,
+          "fixture text differs before measured keys",
+        );
+        assert.equal(
+          readFileSync(file, "utf8"),
+          fixtureText,
+          "fixture disk changed before measured keys",
+        );
+        documents.push({
+          uri: document.uri.toString(),
+          text: document.getText(),
+          dirty: document.isDirty,
+          version: document.version,
+        });
+      }
       return {
         ...state(),
+        reset,
+        baselines,
+        documents,
         active,
         dirtyFile,
         settings: chosen,

@@ -27,7 +27,14 @@ for (const directory of directories) {
       );
       continue;
     }
-    const auditFile = file.replace(/\.json$/, "-audit.json");
+    const partial =
+      allowPartialFocus &&
+      raw.gate === "focus" &&
+      ["interrupted", "harness-error"].includes(raw.status);
+    const auditFile = file.replace(
+      /\.json$/,
+      partial ? "-audit-partial.json" : "-audit.json",
+    );
     if (existsSync(auditFile))
       assert.equal(
         JSON.parse(readFileSync(auditFile)).rawSha256,
@@ -40,10 +47,7 @@ for (const directory of directories) {
           auditFile,
           JSON.stringify(
             await audit(file, {
-              allowPartialFocus:
-                allowPartialFocus &&
-                raw.gate === "focus" &&
-                raw.status === "interrupted",
+              allowPartialFocus: partial,
             }),
             null,
             2,

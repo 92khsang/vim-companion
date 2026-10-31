@@ -6,6 +6,9 @@ import { completionJobs } from "./plan.mjs";
 import { focusScenarios } from "./focus-scenarios.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+export const remapMethodSha256 = hash(
+  readFileSync(new URL("./remap-analysis.mjs", import.meta.url)),
+);
 const catalog = JSON.parse(
   readFileSync(new URL("./catalog.json", import.meta.url)),
 );
@@ -61,39 +64,61 @@ export function expectedCells() {
 
 export function qualification(raw, rawSha256, audit, resource, termination) {
   const reasons = [];
-  const require = (condition, reason) => {
+  const requireEvidence = (condition, reason) => {
     if (!condition) reasons.push(reason);
   };
-  require(Boolean(raw.finished), "run unfinished");
-  require(Boolean(raw.sandboxIsolation), "portable argv isolation absent");
-  require(audit?.rawSha256 ===
-    rawSha256, "matching source/delivery audit absent");
-  require(audit?.installedManifestHashesAreFinal ===
-    true, "installed manifest not final");
-  require(resource?.rawSha256 === rawSha256, "matching resource review absent");
-  require(resource?.classification === "no-resource-errors-observed" &&
-    resource.errors?.length === 0, "resource errors or review absent");
-  require(!raw.environmentInvalid &&
-    raw.resourcePreflight?.errors?.length === 0 &&
-    raw.resourceFinal?.errors?.length ===
-      0, "runtime resource qualification missing");
+  requireEvidence(Boolean(raw.finished), "run unfinished");
+  requireEvidence(
+    Boolean(raw.sandboxIsolation),
+    "portable argv isolation absent",
+  );
+  requireEvidence(
+    audit?.rawSha256 === rawSha256,
+    "matching source/delivery audit absent",
+  );
+  requireEvidence(
+    audit?.installedManifestHashesAreFinal === true,
+    "installed manifest not final",
+  );
+  requireEvidence(
+    resource?.rawSha256 === rawSha256,
+    "matching resource review absent",
+  );
+  requireEvidence(
+    resource?.classification === "no-resource-errors-observed" &&
+      resource.errors?.length === 0,
+    "resource errors or review absent",
+  );
+  requireEvidence(
+    !raw.environmentInvalid &&
+      raw.resourcePreflight?.errors?.length === 0 &&
+      raw.resourceFinal?.errors?.length === 0,
+    "runtime resource qualification missing",
+  );
   for (const [name, cleanup] of [
     ["raw", raw.cleanup],
     ["wrapper", termination?.cleanup],
   ])
-    require(cleanup?.remaining?.length === 0 &&
-      cleanup?.errors?.length === 0, name + " cleanup incomplete");
+    requireEvidence(
+      cleanup?.remaining?.length === 0 && cleanup?.errors?.length === 0,
+      name + " cleanup incomplete",
+    );
   if (raw.matrix.backend === "wayland")
-    require(raw.nativeCleanup?.remaining?.length === 0 &&
-      raw.nativeCleanup?.errors?.length === 0, "native cleanup incomplete");
-  if (raw.status === "interrupted")
-    require(raw.gate === "focus" &&
-      audit?.partialFocus ===
-        true, "interrupted run lacks explicit partial focus audit");
+    requireEvidence(
+      raw.nativeCleanup?.remaining?.length === 0 &&
+        raw.nativeCleanup?.errors?.length === 0,
+      "native cleanup incomplete",
+    );
+  if (["interrupted", "harness-error"].includes(raw.status))
+    requireEvidence(
+      raw.gate === "focus" && audit?.partialFocus === true,
+      "incomplete run lacks explicit partial focus audit",
+    );
   else
-    require(!["harness-error", "measurement-inconclusive"].includes(
-      raw.status,
-    ), "run has no qualified outcome");
+    requireEvidence(
+      !["harness-error", "measurement-inconclusive"].includes(raw.status),
+      "run has no qualified outcome",
+    );
   return reasons;
 }
 
@@ -125,7 +150,76 @@ function readArtifact(file) {
   const bytes = readFileSync(file);
   return { value: JSON.parse(bytes), sha256: hash(bytes), file };
 }
-export function collectCoverage(directories) {
+export function referenceQualification(sha256, references) {
+  const reference = references.find((item) => item.rawSha256 === sha256);
+  if (!reference) return ["matching comparison baseline absent"];
+  return reference.reasons.map((reason) => "comparison baseline: " + reason);
+}
+
+export function remapQualification(rawSha256, analysis) {
+  if (analysis?.rawSha256 !== rawSha256)
+    return ["matching V-b native-key analysis absent"];
+  const reasons = [];
+  if (analysis.methodSha256 !== remapMethodSha256)
+    reasons.push("V-b analysis source hash differs from the current parser");
+  if (
+    analysis.unknown !== 0 ||
+    analysis.trials?.length !== 1000 ||
+    analysis.trials.some(
+      (trial, index) =>
+        trial.index !== index ||
+        trial.classification !== "inferred from stock trace and engine state" ||
+        !Array.isArray(trial.keys) ||
+        !trial.keys.length ||
+        trial.keys.some((key) => !["space", "w", "h", "j"].includes(key)),
+    )
+  )
+    reasons.push("V-b native-key analysis is incomplete or unresolved");
+  return reasons;
+}
+
+export function selectRemapAnalysis(candidates, rawSha256) {
+  const revision = (candidate) =>
+    Number(candidate.file.match(/-native-keys(?:-(\d+))?\.json$/)?.[1] ?? 0);
+  return candidates
+    .filter(
+      (candidate) =>
+        candidate.value.rawSha256 === rawSha256 &&
+        candidate.value.methodSha256 === remapMethodSha256,
+    )
+    .sort((a, b) => revision(b) - revision(a))[0];
+}
+
+export function overlapQualification(rawSha256, batchSha256, review) {
+  const reasons = [];
+  if (!review || review.provisional !== false)
+    return ["final observed-overlap review absent"];
+  if (review.exclusions?.length !== 0)
+    reasons.push("overlap review has unobserved IDE lifetimes");
+  if (review.missingExternalBatches?.length !== 0)
+    reasons.push("overlap review omits declared external batches");
+  if (!review.batches?.some((batch) => batch.sha256 === batchSha256))
+    reasons.push("overlap review does not match the batch manifest");
+  const ids = new Set(
+    (review.intervals ?? [])
+      .filter((interval) => interval.rawSha256 === rawSha256)
+      .map((interval) => interval.id),
+  );
+  if (!ids.size) reasons.push("raw IDE lifetime absent from overlap review");
+  for (const key of [
+    "physicalCoreConflicts",
+    "nativeOverlap",
+    "configuredLimitViolations",
+  ])
+    if (
+      !Array.isArray(review[key]) ||
+      review[key].some((segment) => segment.ids.some((id) => ids.has(id)))
+    )
+      reasons.push("observed overlap is unresolved or invalid: " + key);
+  return reasons;
+}
+
+export function collectCoverage(directories, overlapArtifact = null) {
   const cells = expectedCells(),
     byKey = new Map(cells.map((cell) => [cell.key, cell]));
   const ignored = [],
@@ -141,7 +235,9 @@ export function collectCoverage(directories) {
       }
       const artifact = readArtifact(file),
         raw = artifact.value;
-      const audit = readArtifact(file.replace(/\.json$/, "-audit.json"));
+      const audit =
+        readArtifact(file.replace(/\.json$/, "-audit-partial.json")) ??
+        readArtifact(file.replace(/\.json$/, "-audit.json"));
       const resource = readArtifact(
         file.replace(/\.json$/, "-resource-review.json"),
       );
@@ -162,13 +258,20 @@ export function collectCoverage(directories) {
         resourceReviewSha256: resource?.sha256,
         terminationSha256: termination?.sha256,
         batchSha256: batch.sha256,
-        reasons: qualification(
-          raw,
-          artifact.sha256,
-          audit?.value,
-          resource?.value,
-          termination?.value,
-        ),
+        reasons: [
+          ...qualification(
+            raw,
+            artifact.sha256,
+            audit?.value,
+            resource?.value,
+            termination?.value,
+          ),
+          ...overlapQualification(
+            artifact.sha256,
+            batch.sha256,
+            overlapArtifact?.value,
+          ),
+        ],
       };
       if (job.row.endsWith("-baseline")) {
         references.push(evidence);
@@ -177,6 +280,24 @@ export function collectCoverage(directories) {
       if (job.row !== "focus") {
         const cell = byKey.get(cellKey(job));
         assert.ok(cell, "unrecognized measured cell: " + file);
+        if (["native", "visual"].includes(job.row))
+          evidence.referenceSha256 = raw.reference?.sha256 ?? null;
+        if (job.row.startsWith("vb-")) {
+          const analysis = selectRemapAnalysis(
+            readdirSync(directory)
+              .filter(
+                (name) =>
+                  name.startsWith(run.id + "-native-keys") &&
+                  name.endsWith(".json"),
+              )
+              .map((name) => readArtifact(join(directory, name))),
+            artifact.sha256,
+          );
+          evidence.reasons.push(
+            ...remapQualification(artifact.sha256, analysis?.value),
+          );
+          evidence.analysisSha256 = analysis?.sha256;
+        }
         cell.evidence.push({
           ...evidence,
           outcome: automatedOutcome(raw, audit?.value ?? {}),
@@ -213,6 +334,10 @@ export function collectCoverage(directories) {
           reasons.push(
             "j not proven inside command-associated server wait in all nine trials",
           );
+        if (summary?.delayed && summary.fixedDelayWaitTrials !== 9)
+          reasons.push(
+            "the fixed 200 ms server-response delay is not proven for all nine wait trials",
+          );
         if (
           rows.length !== 9 ||
           new Set(rows.map((row) => row.round)).size !== 9
@@ -229,6 +354,11 @@ export function collectCoverage(directories) {
     }
   }
   for (const cell of cells) {
+    for (const evidence of cell.evidence)
+      if (Object.hasOwn(evidence, "referenceSha256"))
+        evidence.reasons.push(
+          ...referenceQualification(evidence.referenceSha256, references),
+        );
     const eligible = cell.evidence.filter(
       (item) =>
         !item.reasons.length &&
@@ -244,6 +374,7 @@ export function collectCoverage(directories) {
   return {
     generatedAt: new Date().toISOString(),
     methodSha256: hash(readFileSync(import.meta.filename)),
+    overlapReviewSha256: overlapArtifact?.sha256 ?? null,
     scope:
       "Linux only; macOS deferred by the user. A first-discrepancy failure is a result, not a rate estimate. Missing, tainted and incomplete evidence stays unverified.",
     summary: {
@@ -263,12 +394,16 @@ export function collectCoverage(directories) {
   };
 }
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
-  const [output, ...directories] = process.argv.slice(2);
+  const args = process.argv.slice(2);
+  const overlapIndex = args.indexOf("--overlap");
+  const overlapArtifact =
+    overlapIndex === -1 ? null : readArtifact(args.splice(overlapIndex, 2)[1]);
+  const [output, ...directories] = args;
   assert.ok(
     output && directories.length,
-    "usage: coverage.mjs OUTPUT.json BATCH_DIRECTORY [...]",
+    "usage: coverage.mjs [--overlap REVIEW.json] OUTPUT.json BATCH_DIRECTORY [...]",
   );
-  const result = collectCoverage(directories);
+  const result = collectCoverage(directories, overlapArtifact);
   writeFileSync(output, JSON.stringify(result, null, 2) + "\n", { flag: "wx" });
   console.log(JSON.stringify(result.summary));
 }

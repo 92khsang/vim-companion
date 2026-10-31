@@ -216,6 +216,9 @@ export function analyzeRemaps(raw, supplement) {
     return { index: trial.index, ...inferNativeKeys(trial, text) };
   });
   return {
+    methodSha256: createHash("sha256")
+      .update(readFileSync(import.meta.filename))
+      .digest("hex"),
     method:
       "Bounded inference from complete stock trace frames, action/selection markers, renderer key sequence and final engine state; unknown paths remain explicit",
     trials,

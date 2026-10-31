@@ -71,6 +71,13 @@ export function insideWait(key, request, response) {
   return "clock bounds overlap";
 }
 
+export function beforeSettlement(key, settlement) {
+  if (!key || !settlement) return "unobserved/pending";
+  if (key.upper < settlement.lower) return "proven before settlement";
+  if (key.lower > settlement.upper) return "proven after settlement";
+  return "clock bounds overlap";
+}
+
 export function observationWindow(bounds) {
   if (!bounds) return "clock bounds unresolved";
   if (bounds.upperMs < 0) return "before command";
@@ -102,9 +109,25 @@ export function firstFocus(candidates) {
       window: "clock bounds unresolved",
       excluded,
     };
-  const first = {
+  const firstObservedBounds = {
     lowerMs: Math.min(...observed.map((candidate) => candidate.bounds.lowerMs)),
     upperMs: Math.min(...observed.map((candidate) => candidate.bounds.upperMs)),
+  };
+  const certain = observed.filter(
+    (candidate) => observationWindow(candidate.bounds) === "within 5 s",
+  );
+  if (!certain.length)
+    return {
+      observed: true,
+      bounds: null,
+      firstObservedBounds,
+      source: "only boundary-overlapping candidates",
+      window: "command or five-second boundary unresolved",
+      excluded,
+    };
+  const first = {
+    lowerMs: Math.min(...observed.map((candidate) => candidate.bounds.lowerMs)),
+    upperMs: Math.min(...certain.map((candidate) => candidate.bounds.upperMs)),
   };
   const possible = observed.filter(
     (candidate) => candidate.bounds.lowerMs <= first.upperMs,
@@ -112,6 +135,7 @@ export function firstFocus(candidates) {
   return {
     observed: true,
     bounds: first,
+    firstObservedBounds,
     source: possible.map((candidate) => candidate.source).join(" or "),
     window: observationWindow(first),
     excluded,
@@ -182,7 +206,9 @@ export function commandTiming(start, end, keyLatency, snapshotLatency = null) {
         ? {}
         : { elapsedMs: elapsed }),
     jWhilePending:
-      pending && observationWindow(keyLatency) === "within 5 s"
+      pending &&
+      keyLatency &&
+      keyLatency.upperMs < (elapsed ?? snapshotLatency.lowerMs)
         ? "proven before settlement; pending at 5 s"
         : null,
   };
@@ -206,6 +232,19 @@ export function targetPredicate(trial) {
     capture: "unobserved",
     underlyingWorkbench: "unobserved",
   };
+}
+
+export function providerResponse(serverEvents, id, response) {
+  return (
+    serverEvents.find(
+      (event) =>
+        event.id === id &&
+        ["response", "cancelled-response"].includes(event.type),
+    ) ??
+    (response?.error?.code === -32800
+      ? serverEvents.find((event) => event.id === id && event.type === "cancel")
+      : null)
+  );
 }
 
 function providerAnalysis(raw, trial, offsets, keyBounds, start) {
@@ -237,12 +276,7 @@ function providerAnalysis(raw, trial, offsets, keyBounds, start) {
       const response = provider.events.find(
         (event) => event.type === "response" && event.id === request.id,
       );
-      const sent = provider.server.find(
-        (event) =>
-          event.id === request.id &&
-          (event.type === "response" ||
-            (event.type === "cancel" && response?.error?.code === -32800)),
-      );
+      const sent = providerResponse(provider.server, request.id, response);
       if (received && response && sent)
         relations.push({
           lower: request.time - received.time,
@@ -277,12 +311,7 @@ function providerAnalysis(raw, trial, offsets, keyBounds, start) {
       const received = provider.server.find(
         (event) => event.type === "request" && event.id === request.id,
       );
-      const sent = provider.server.find(
-        (event) =>
-          event.id === request.id &&
-          (event.type === "response" ||
-            (event.type === "cancel" && response?.error?.code === -32800)),
-      );
+      const sent = providerResponse(provider.server, request.id, response);
       records.push({
         provider: name,
         clientPid: provider.pid,
@@ -303,6 +332,7 @@ function providerAnalysis(raw, trial, offsets, keyBounds, start) {
         ),
         clientWaitMs: response ? response.time - request.time : null,
         serverResponseDelayMs: sent?.delayMs ?? null,
+        serverResponseEvent: sent?.type ?? null,
         response: response?.error
           ? "cancelled/error " + response.error.code
           : response
@@ -495,8 +525,8 @@ export function analyzeFocusTrial(raw, trial) {
       ...Object.entries(offsets)
         .filter(([, value]) => !value)
         .map(([name]) => name + " clock bounds unresolved"),
-      ...(firstChange.window === "clock bounds unresolved"
-        ? ["first focus change ordering lacks bounded clocks"]
+      ...(firstChange.window.endsWith("unresolved")
+        ? ["first focus change ordering unresolved: " + firstChange.window]
         : []),
       ...(noQualifiedChange && !observationCoverage.focusCoversFiveSeconds
         ? [
@@ -523,7 +553,7 @@ export function analyzeFocusTrial(raw, trial) {
       noQualifiedChange && !observationCoverage.focusCoversFiveSeconds
         ? "observation incomplete at 5 s"
         : firstChange.window,
-    firstObservedChange: firstChange.bounds,
+    firstObservedChange: firstChange.firstObservedBounds ?? firstChange.bounds,
     excludedFocusChanges: firstChange.excluded,
     targetObservedAt: eventLatency(trial.renderer),
     observationCoverage,
@@ -555,9 +585,7 @@ export function analyzeFocusTrial(raw, trial) {
     provider: providerAnalysis(raw, trial, offsets, keyBounds, start),
     jBeforeCommandSettled:
       command.jWhilePending ??
-      (keyBounds && end && offsets.leader
-        ? insideWait(keyBounds, start, local(end.t, offsets.leader))
-        : "unobserved/pending"),
+      beforeSettlement(keyBounds, end && local(end.t, offsets.leader)),
   };
 }
 
@@ -602,6 +630,14 @@ export function analyzeFocus(raw) {
                   request.jDuringServerWait === "proven inside",
               ),
             ).length,
+            fixedDelayWaitTrials: rows.filter((row) =>
+              row.provider.requests.some(
+                (request) =>
+                  request.commandAssociated &&
+                  request.jDuringServerWait === "proven inside" &&
+                  request.serverResponseDelayMs >= 200,
+              ),
+            ).length,
           }
         : {}),
     };
@@ -631,7 +667,7 @@ export function analyzeFocus(raw) {
       ),
       rendererTimestampErrorBoundMs: rendererTimeErrorMs,
       focus:
-        "All DOM focus events and actual native window transitions are candidates. Changes definitely before the command or after five seconds are retained separately; boundary-overlapping changes remain candidates. Native poll intervals require bounded IPC clocks. Negative bounds are never clamped.",
+        "All DOM focus events and actual native window transitions are candidates. Changes definitely before the command or after five seconds are retained separately. Numeric first-post-command bounds require a certainly-in-window candidate: the lower bound uses all remaining candidates, the upper bound only certainly-in-window candidates. Native poll intervals require bounded IPC clocks. Negative lower bounds express ordering uncertainty and are never clamped or interpreted as measured negative latency.",
       visibility:
         "Last preserved false sample to first true sample; the nominal 25 ms interval is not substituted for missing polls.",
       predicate:

@@ -54,6 +54,7 @@ test("separate language server delays prepareRename and honours cancellation", a
     });
     assert.ok(performance.now() - started >= 200);
     assert.equal(value.result.placeholder, "alpha");
+    const cancelStarted = performance.now();
     const cancelled = request(4, "textDocument/hover", {
       textDocument: { uri: "file:///fixture.s1focus" },
       position: { line: 0, character: 0 },
@@ -62,6 +63,7 @@ test("separate language server delays prepareRename and honours cancellation", a
       frame({ jsonrpc: "2.0", method: "$/cancelRequest", params: { id: 4 } }),
     );
     assert.equal((await cancelled).error.code, -32800);
+    assert.ok(performance.now() - cancelStarted >= 200);
     assert.equal(
       (
         await request(5, "textDocument/codeAction", {
@@ -86,6 +88,11 @@ test("separate language server delays prepareRename and honours cancellation", a
       events.filter((event) => event.type === "response" && event.id === 4)
         .length,
       0,
+    );
+    assert.ok(
+      events.find(
+        (event) => event.type === "cancelled-response" && event.id === 4,
+      ).delayMs >= 200,
     );
   } finally {
     child.stdin.end();
