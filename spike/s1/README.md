@@ -2011,6 +2011,21 @@ not selected because the next runner had not yet recorded its IDE launch.
 All 300 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the V-b root-pause condition on 1.141.0, idle/shared host at 10 ms
+recorded all 1,000 trials with a requested 1,500 ms pause after `SPC` and a
+1,000 ms engine timeout. Independent analysis classified every path as
+`root-timeout`, with native `Space`, `w`, `h` and `j`, no unknown paths and no
+observed left-group leaf effect. Every final cursor was zero-based `(1, 5)` in
+editor group 2. The following `j` was delivered in all trials; its delivery to
+the right group after timeout is not an exit-input loss. No recorded or resource
+errors occurred. This remains a comparison without a pass threshold, and the
+leaf-effect observation does not prove an exact command invocation count.
+The [root-timeout checkpoint](data/portable-report-15.md) selects 317 conditional
+cells and 2,466 focus observations. Its live overlap review retained the maximum
+of two IDEs with no conflicts or exclusions; all final outcomes remain unverified.
+All 305 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
