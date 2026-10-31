@@ -219,8 +219,9 @@ export function selectRemapAnalysis(
 
 export function overlapQualification(rawSha256, batchSha256, review) {
   const reasons = [];
-  if (!review || review.provisional !== false)
-    return ["final observed-overlap review absent"];
+  if (!review) return ["final observed-overlap review absent"];
+  if (review.provisional !== false)
+    reasons.push("final observed-overlap review absent");
   if (review.exclusions?.length !== 0)
     reasons.push("overlap review has unobserved IDE lifetimes");
   if (review.missingExternalBatches?.length !== 0)

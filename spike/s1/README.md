@@ -1708,6 +1708,36 @@ followed command start or arrived inside the server wait. A pre-command key can
 still be proven to precede settlement when the command remains pending after
 five seconds.
 
+`matrix/report.mjs COVERAGE.json OUTPUT.json` produces the combined JSON inventory
+and a sibling Markdown report with matrix, entry-latency, focus and delayed-provider
+tables. Generate coverage with the final overlap review first. The report verifies
+the coverage parser hash and every selected raw, audit, resource-review and
+cleanup-artifact hash, including comparison baselines. It also requires the
+current focus or V-b analysis parser and the analysis SHA selected by coverage.
+Each cell selects one evidence file, preserving its raw SHA, trial indices, actual
+denominator, stop reason and failed-trial errors. A qualified failure takes
+precedence over a passing rerun; otherwise selection uses sorted evidence paths,
+independent of input-directory order. Other reruns remain explicit alternatives.
+
+Nearest-rank quantiles are recomputed from individual observations in milliseconds.
+The focus cohorts require twelve distinct conditions with rounds `0` through `8`
+per condition, or explicitly report missing observations. Proven five-second
+non-occurrences stay right-censored as `>5000 ms`; missing coverage and uncertain
+boundaries stay unresolved. Observed-only statistics state their smaller
+denominator. Negative clock-bound lower limits remain uncertainty, without
+clamping. Command settlement, provider responses, key routes and polled UI
+observations remain separate. A first-discrepancy result is not a failure-rate
+estimate, and multiple error messages in one trial are not multiple failures.
+
+During ongoing measurement, `--provisional` permits only a missing final overlap
+review, including that inherited from a comparison baseline. Those cells still
+have final outcome `unverified`; their selected observations are conditional.
+It does not waive source, resource, delivery, timing, wait or cleanup failures.
+When coverage receives a live overlap review, observed conflicts, missing
+lifetimes, omitted workers and mismatched hashes remain rejection reasons.
+The report is an inventory, not the S1 verdict, and never publishes or closes
+issues.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains

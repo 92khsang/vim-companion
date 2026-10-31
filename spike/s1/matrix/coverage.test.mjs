@@ -169,6 +169,33 @@ test("final overlap qualification binds manifests and raw lifetimes and rejects 
   );
 });
 
+test("provisional overlap retains observed conflicts and missing evidence", () => {
+  const review = {
+    provisional: true,
+    exclusions: [{ id: "missing" }],
+    missingExternalBatches: ["omitted"],
+    batches: [{ sha256: "batch" }],
+    intervals: [{ rawSha256: "raw", id: "run" }],
+    physicalCoreConflicts: [{ ids: ["run", "other"] }],
+    nativeOverlap: [],
+    configuredLimitViolations: [],
+  };
+  const reasons = overlapQualification("raw", "batch", review);
+  assert.ok(reasons.includes("final observed-overlap review absent"));
+  assert.ok(reasons.includes("overlap review has unobserved IDE lifetimes"));
+  assert.ok(reasons.includes("overlap review omits declared external batches"));
+  assert.ok(
+    reasons.includes(
+      "observed overlap is unresolved or invalid: physicalCoreConflicts",
+    ),
+  );
+  assert.ok(
+    overlapQualification("raw", "changed", review).includes(
+      "overlap review does not match the batch manifest",
+    ),
+  );
+});
+
 test("coverage requires matching evidence, isolation and completed cleanup", () => {
   const cleanup = { errors: [], remaining: [] };
   const raw = {
