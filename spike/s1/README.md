@@ -1921,6 +1921,32 @@ generation timestamp. The observed overlap remained at most two IDEs with no
 conflicts or exclusions. All 2,400 final outcomes remain unverified while the
 matrix continues.
 
+Measured: on 1.141.0, idle/shared host at 10 ms under X11/CDP, the
+pre-composition Escape case stopped at trial 489. Its leader log omitted `w`,
+and the cursor ended at zero-based `(1, 6)` instead of `(1, 0)`. The composed
+Escape case stopped at trial 2: the leader recorded `j` with `active=false`
+after the Escape release request and before its release acknowledgement; the
+cursor stayed at `(0, 0)`. Both runs preserved the document and registers,
+qualified delivery and fresh-input evidence, and had no observed resource
+errors. These are first-discrepancy results, not failure-rate estimates.
+
+Inferred: the pre-composition result is consistent with `w` escaping entry
+capture and the following `j` reaching Vim. The composed result demonstrates
+the following `j` reaching the companion during release. The accumulated
+EditContext text is not a document change or fresh-composition proof; the
+composed failure retained its own same-target composition start, new `ㅎ`
+updates and composition end. The effect of that EditContext history on timing
+is not isolated by these observations.
+
+Measured: the same X11/CDP condition completed all 1,000 pre-composition
+`Ctrl+[` trials without discrepancies or resource errors. The
+[cancellation checkpoint](data/portable-report-12.md) selects 267 conditional
+cells and 2,043 focus observations. Its live overlap review still observed at
+most two IDEs, without conflicts or exclusions. Final outcomes remain
+unverified pending completion of the matrix and its final overlap review.
+All 276 selected-evidence dependencies were verified from the Git index, and
+an isolated replay matched the report apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains

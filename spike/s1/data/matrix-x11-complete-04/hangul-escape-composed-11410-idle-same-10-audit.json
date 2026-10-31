@@ -1,0 +1,167 @@
+{
+  "rawFile": "hangul-escape-composed-11410-idle-same-10.json",
+  "rawSha256": "44cf75b70d49b2480bd4fca7460acf2d8ecf6c79d35d2cc1c036b77f32e5e0a6",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "inputEvidence": {
+    "sources": {
+      "matrix/input-evidence.mjs": "7254771e90f84d5d9c0441d31491ddb8f52c60b19b3acfe45472894d1e141f1d",
+      "wayland/extension/s1-harness@vimcompanion.spike/mode-trace.js": "de25ad94bf206e34ca6ebf690914a81a34256fe49b2d1dab0c72ad96714c6991"
+    },
+    "validatedTrials": 2,
+    "unqualified": [],
+    "observations": [
+      {
+        "index": 0,
+        "composition": {
+          "required": true,
+          "qualified": true,
+          "expected": [
+            "ㅎ"
+          ],
+          "requireEnd": true,
+          "proof": [
+            {
+              "text": "ㅎ",
+              "episodes": [
+                {
+                  "target": 1,
+                  "editContext": true,
+                  "startIndex": 6,
+                  "endIndex": 9,
+                  "payloads": [
+                    {
+                      "index": 7,
+                      "targetMatches": true
+                    },
+                    {
+                      "index": 8,
+                      "targetMatches": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "destinationMatches": true,
+          "limitation": "A fresh payload at a different destination may support a retained failed trial; it never qualifies a passing trial."
+        },
+        "mode": {
+          "required": false,
+          "qualified": true
+        }
+      },
+      {
+        "index": 1,
+        "composition": {
+          "required": true,
+          "qualified": true,
+          "expected": [
+            "ㅎ"
+          ],
+          "requireEnd": true,
+          "proof": [
+            {
+              "text": "ㅎ",
+              "episodes": [
+                {
+                  "target": 1,
+                  "editContext": true,
+                  "startIndex": 6,
+                  "endIndex": 9,
+                  "payloads": [
+                    {
+                      "index": 7,
+                      "targetMatches": true
+                    },
+                    {
+                      "index": 8,
+                      "targetMatches": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "destinationMatches": true,
+          "limitation": "A fresh payload at a different destination may support a retained failed trial; it never qualifies a passing trial."
+        },
+        "mode": {
+          "required": false,
+          "qualified": true
+        }
+      }
+    ]
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "case": "escape-composed",
+      "errors": [
+        "Hangul cancel did not use the expected leader rule",
+        "first post-cancel key did not move down once"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 964.4203600059602,
+      "upper": 964.9852099940424,
+      "uncertaintyMs": 0.5648499880821873
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2357.8271989999994,
+      "upper": 2357.911275999999,
+      "uncertaintyMs": 0.08407699999952456
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": -0.07953701192082191,
+      "p95": 0.19866498807323113,
+      "p99": 0.19866498807323113,
+      "maximum": 0.19866498807323113
+    },
+    "upperMs": {
+      "p50": 1.7054969761570664,
+      "p95": 6.829225976156069,
+      "p99": 6.829225976156069,
+      "maximum": 6.829225976156069
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.19866498807323113,
+        "upperMs": 1.7054969761570664
+      },
+      {
+        "index": 1,
+        "lowerMs": -0.07953701192082191,
+        "upperMs": 6.829225976156069
+      }
+    ]
+  }
+}
