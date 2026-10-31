@@ -1535,6 +1535,33 @@ Restore those directories before an audit rebuilds the installed extensions:
 python3 -B spike/s1/matrix/archive-tree.py restore "$BATCH/source-snapshots.tar.gz"
 ```
 
+Each retained `batch.json` contains the exact job plan, CPU assignments, selected
+cases and settings. Replay with its frozen runner, an unused output directory and
+the version-pinned IDE binaries above. For example, the native proof uses:
+
+```bash
+BATCH=spike/s1/data/matrix-wayland-proof-07
+OUTPUT=spike/s1/data/matrix-wayland-replay-01
+PLAN=$(mktemp /tmp/s1-replay-plan.XXXXXX.json)
+python3 -B spike/s1/matrix/archive-tree.py restore "$BATCH/source-snapshots.tar.gz"
+python3 - "$BATCH/batch.json" "$PLAN" <<'PY'
+import json
+import sys
+from pathlib import Path
+record = json.loads(Path(sys.argv[1]).read_text())
+Path(sys.argv[2]).write_text(json.dumps(record["plan"], indent=2) + "\n")
+PY
+TMPDIR=/var/tmp S1_VIM="$HOME/.vscode/extensions/vscodevim.vim-1.32.4" \
+  S1_CODE_1141=/usr/share/code/code \
+  taskset -c 0-3 mise exec node@24.21.0 -- node \
+  "$BATCH/sources/matrix/batch.mjs" "$PLAN" "$OUTPUT"
+```
+
+Set `S1_CODE_1134` to the pinned 1.134.0 executable for a plan using that version.
+Wait for other measured IDEs to finish before replaying a native Wayland plan.
+Replaying a historical plan preserves its historical protocol limitations; only
+the new portable plans establish the new isolation checks.
+
 The original directories and raw files remain available locally while measurement
 continues. Git stores their verified compressed representation. An interrupted
 focus run requires an explicit `--partial-focus` audit; its original error and
