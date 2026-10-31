@@ -2038,6 +2038,21 @@ pending completion of the matrix and its final overlap review.
 All 315 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the V-b prefix-pause condition on 1.141.0, idle/shared host at 10 ms
+recorded all 1,000 trials with a requested 1,500 ms pause after `SPC w` and a
+1,000 ms engine timeout. Independent analysis classified every path as
+`prefix-timeout`, with native `Space`, `w`, `h` and `j`, no unknown paths and no
+observed left-group leaf effect. Every final cursor was zero-based `(1, 5)` in
+editor group 2, with `j` delivered in all trials. No recorded or resource errors
+occurred. As in the root-pause comparison, the leaf effect does not establish
+an exact command invocation count, and this row has no pass threshold.
+The [prefix-timeout checkpoint](data/portable-report-17.md) selects 365
+conditional cells and 2,889 focus observations. Its live overlap review retained
+the maximum of two IDEs with no conflicts or exclusions; final outcomes remain
+unverified.
+All 320 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
