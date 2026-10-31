@@ -10,6 +10,9 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
   readFileSync(new URL("./remap-analysis.mjs", import.meta.url)),
 );
+export const remapClockMethodSha256 = hash(
+  readFileSync(new URL("./fault.mjs", import.meta.url)),
+);
 export function focusMethodSources() {
   return Object.fromEntries(
     ["focus-analysis.mjs", "focus.mjs", "fault.mjs"].map((name) => [
@@ -86,6 +89,89 @@ export function expectedCells() {
   return cells;
 }
 
+export function terminationQualification(
+  raw,
+  termination,
+  partialFocus = false,
+) {
+  const reasons = [];
+  const validGroups = (groups) =>
+    Array.isArray(groups) &&
+    groups.length > 0 &&
+    groups.every(
+      (group) =>
+        Number.isSafeInteger(group.pid) &&
+        group.pid > 1 &&
+        group.group === group.pid &&
+        typeof group.startTicks === "string" &&
+        /^\d+$/.test(group.startTicks),
+    ) &&
+    new Set(groups.map((group) => group.group)).size === groups.length;
+  const owned = raw.cleanup?.groups,
+    cleaned = termination?.cleanup?.groups;
+  const identity = (group) => `${group.pid}:${group.group}:${group.startTicks}`;
+  const launchers = raw.matrix.ideLaunchers ?? [raw.matrix.ideLauncher];
+  if (
+    !validGroups(owned) ||
+    !validGroups(cleaned) ||
+    !owned.every((group) =>
+      cleaned.some((item) => identity(item) === identity(group)),
+    ) ||
+    !launchers.length ||
+    !launchers.every(
+      (launcher) =>
+        launcher && owned.some((group) => group.pid === launcher.pid),
+    )
+  )
+    reasons.push("wrapper cleanup is not linked to every owned IDE process");
+  const interval = (value) =>
+    value &&
+    Number.isFinite(Date.parse(value.started)) &&
+    Date.parse(value.finished) >= Date.parse(value.started);
+  if (
+    !interval(raw.cleanup) ||
+    !interval(termination?.cleanup) ||
+    !(
+      Date.parse(termination?.cleanup?.finished) >=
+      Date.parse(raw.cleanup?.finished)
+    ) ||
+    !(
+      Date.parse(termination?.finished) >=
+      Date.parse(termination?.cleanup?.finished)
+    ) ||
+    !(Date.parse(termination?.finished) >= Date.parse(raw.finished))
+  )
+    reasons.push("wrapper termination lifetime is incomplete or contradictory");
+  if (
+    termination?.wrapperError ||
+    !Number.isInteger(termination?.exitCode) ||
+    termination.exitCode < 0 ||
+    (!partialFocus && (termination.exitCode !== 0 || termination.stopSignal)) ||
+    (termination.stopSignal &&
+      !["SIGINT", "SIGTERM"].includes(termination.stopSignal))
+  )
+    reasons.push(
+      "wrapper termination reported an error or unexpected interruption",
+    );
+  if (raw.matrix.backend === "wayland") {
+    const cleanNative = (value) =>
+      value &&
+      value.errors?.length === 0 &&
+      value.remaining?.length === 0 &&
+      value.exitCode === 0 &&
+      !value.signal &&
+      Number.isFinite(value.started) &&
+      Number.isFinite(value.finished) &&
+      value.finished >= value.started;
+    if (
+      !cleanNative(raw.nativeCleanup) ||
+      !cleanNative(termination?.nativeCleanup)
+    )
+      reasons.push("native cleanup is incomplete in the runner or wrapper");
+  }
+  return reasons;
+}
+
 export function qualification(raw, rawSha256, audit, resource, termination) {
   const reasons = [];
   const requireEvidence = (condition, reason) => {
@@ -127,6 +213,13 @@ export function qualification(raw, rawSha256, audit, resource, termination) {
       cleanup?.remaining?.length === 0 && cleanup?.errors?.length === 0,
       name + " cleanup incomplete",
     );
+  reasons.push(
+    ...terminationQualification(
+      raw,
+      termination,
+      raw.gate === "focus" && audit?.partialFocus === true,
+    ),
+  );
   if (raw.matrix.backend === "wayland")
     requireEvidence(
       raw.nativeCleanup?.remaining?.length === 0 &&
@@ -149,6 +242,14 @@ export function qualification(raw, rawSha256, audit, resource, termination) {
         audit?.countRegisterOracle?.method === countRegisterOracle &&
         audit.countRegisterOracle.validatedTrials === raw.trials.length,
       "count filename-register transition oracle absent or unaudited",
+    );
+  if (raw.gate === "cold")
+    requireEvidence(
+      audit?.coldProcesses?.method === "cold-child-owned-cleanup-v1" &&
+        audit.coldProcesses.validatedReferences === 2 &&
+        audit.coldProcesses.validatedTrials === raw.trials.length &&
+        audit.finalSnapshotAvailable === true,
+      "cold child ownership, cleanup or final snapshots unaudited",
     );
   return reasons;
 }
@@ -193,6 +294,8 @@ export function remapQualification(rawSha256, analysis) {
   const reasons = [];
   if (analysis.methodSha256 !== remapMethodSha256)
     reasons.push("V-b analysis source hash differs from the current parser");
+  if (analysis.clockMethodSha256 !== remapClockMethodSha256)
+    reasons.push("V-b renderer clock bounds differ from the current parser");
   if (
     analysis.unknown !== 0 ||
     analysis.trials?.length !== 1000 ||
@@ -220,7 +323,8 @@ export function selectRemapAnalysis(
     .filter(
       (candidate) =>
         candidate.value.rawSha256 === rawSha256 &&
-        candidate.value.methodSha256 === methodSha256,
+        candidate.value.methodSha256 === methodSha256 &&
+        candidate.value.clockMethodSha256 === remapClockMethodSha256,
     )
     .sort((a, b) => revision(b) - revision(a))[0];
 }

@@ -2045,6 +2045,42 @@ positions completed 1,000 observations in the first proof condition; the prefix
 export also classified all 1,000 paths with no unknowns. Their resource reviews
 still govern whether they qualify an environment condition.
 
+Measured: parser regression fixtures exposed three independent-analysis gaps:
+the requested pause case selected the expected engine path, a selection action
+in the `h` trace frame could be attributed to `j`, and an alleged pause with
+only 10 ms renderer gaps was accepted. The analyzer now chooses among complete
+remap, root-timeout and prefix-timeout trace shapes independently of the requested
+case. It checks frame nesting by index and action ownership, unchanged fixture
+state, a complete renderer observation on one clock, and a pause-gap lower bound
+greater than the configured `vim.timeout`. It adds no exact-1,500 ms tolerance.
+Unrecognized or mixed paths remain unresolved. Trace nesting supports bounded
+inference; it is not a general proof of asynchronous call ancestry.
+
+Measured: reanalysis of the retained first proof's unpaused, root-pause and
+prefix-pause data classified all 1,000 observations in each without unknowns.
+The new `native-keys-03`, `native-keys-04` and `native-keys-03` revisions preserve
+the original raw data and earlier analyses. These historical runs still lack
+portable argv isolation and do not qualify the current environment matrix.
+Current V-b coverage requires both the analyzer and renderer clock-bound source
+hashes. The runner still records every 1,000-trial condition without an early
+failure stop or pass threshold; injection timing is unchanged.
+
+Inferred: the previous independent audit would treat a successful cold trial's
+process cleanup as a query dismissal snapshot, despite their different fields.
+Regression tests now distinguish query
+dismissal snapshots from process termination. Cold qualification requires two
+consistent fresh-process controls, distinct owned children, matching launcher
+records, completed child cleanup and actual final snapshots. A process cleanup
+record never substitutes for a final editor snapshot.
+
+The environment review also links every raw owned-process identity, including
+its start tick, to the wrapper cleanup's permitted superset. It verifies wrapper
+status and lifetime ordering, and both native cleanup sweeps for Wayland. An
+explicit partial-focus audit may retain an interrupted measurement, but never a
+wrapper ownership or cleanup error. Clean termination records from another run
+cannot qualify the result. These checks run after measurement and do not change
+the frozen running experiments.
+
 ## Validation and provenance
 
 The recorded idle run used clean source commit

@@ -7,6 +7,7 @@ import { createHash } from "node:crypto";
 import {
   expectedCells,
   remapMethodSha256,
+  remapClockMethodSha256,
   overlapQualification,
 } from "./coverage.mjs";
 import {
@@ -244,6 +245,7 @@ test("V-b reporting revalidates every audit and the current native-key analysis"
   const analysis = {
     rawSha256,
     methodSha256: remapMethodSha256,
+    clockMethodSha256: remapClockMethodSha256,
     unknown: 0,
     trials: Array.from({ length: 1000 }, (_, index) => ({
       index,

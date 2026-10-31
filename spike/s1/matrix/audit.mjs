@@ -13,6 +13,7 @@ import { pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import { faultOrder, rendererTimeErrorMs } from "./fault.mjs";
 import { countRegisterOracle, expectedCountRegisters } from "./count.mjs";
+import { engineState } from "../bounded-gates.mjs";
 
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export function auditCountRegisters(raw) {
@@ -93,6 +94,165 @@ export function auditFocusSchedule(raw) {
       .map((scenario) => scenario.id),
     limitation:
       "Counts and schedule only; per-observation timing, resource and protocol qualification remain separate.",
+  };
+}
+
+export function auditTrialSnapshots(raw) {
+  const wayland = raw.matrix.backend === "wayland";
+  for (const [index, trial] of raw.trials.entries()) {
+    assert.equal(trial.index, index);
+    if (raw.cases) {
+      assert.equal(trial.case, raw.cases[index % raw.cases.length].id);
+      assert.equal(trial.round, Math.floor(index / raw.cases.length));
+    }
+    if (
+      !trial.errors.length &&
+      trial.finalSnapshot &&
+      !(wayland && ["letter", "shift-hangul"].includes(trial.case))
+    ) {
+      const comparable = (snapshot) => ({
+        ...snapshot,
+        matrixObservation: undefined,
+        sentinel: undefined,
+        sentinelSequence: undefined,
+      });
+      assert.deepEqual(
+        comparable(trial.after),
+        comparable(trial.finalSnapshot),
+        "late state change in a passing trial",
+      );
+      assert.equal(
+        trial.finalSnapshot.sentinelSequence,
+        trial.after.sentinelSequence + 1,
+      );
+    }
+    if (!trial.errors.length && raw.gate === "query") {
+      assert.ok(
+        trial.dismissed && trial.cleanup,
+        "query cleanup snapshots absent",
+      );
+      assert.equal(
+        trial.cleanup.sentinelSequence,
+        trial.dismissed.sentinelSequence + 1,
+      );
+      const fields = (snapshot) => [
+        snapshot.viewColumn,
+        snapshot.text,
+        snapshot.selections,
+        snapshot.mode,
+        snapshot.pending,
+        snapshot.registers,
+      ];
+      assert.deepEqual(fields(trial.after), fields(trial.dismissed));
+      assert.deepEqual(fields(trial.dismissed), fields(trial.cleanup));
+      assert.deepEqual(trial.dismissed.leader, trial.cleanup.leader);
+    }
+  }
+  return raw.trials.every((trial) =>
+    Boolean(trial.finalSnapshot ?? (raw.gate === "query" && trial.cleanup)),
+  );
+}
+
+export const coldProcessAuditMethod = "cold-child-owned-cleanup-v1";
+export function auditColdProcesses(raw) {
+  assert.equal(
+    raw.coldReferences.length,
+    2,
+    "cold fresh-process controls absent",
+  );
+  assert.ok(
+    auditTrialSnapshots({ ...raw, trials: raw.coldReferences }),
+    "cold control final snapshots absent",
+  );
+  for (const reference of raw.coldReferences) {
+    assert.deepEqual(reference.errors, [], "cold control failed");
+    assert.deepEqual(
+      reference.inconclusive,
+      [],
+      "cold control is inconclusive",
+    );
+  }
+  assert.deepEqual(
+    engineState(raw.coldReferences[0].after),
+    engineState(raw.coldReferences[1].after),
+    "cold fresh-process controls differ",
+  );
+  const seen = new Set();
+  for (const [reference, trials] of [
+    [true, raw.coldReferences],
+    [false, raw.trials],
+  ]) {
+    for (const [index, trial] of trials.entries()) {
+      const id =
+        (reference ? "reference-" : "trial-") + String(index).padStart(4, "0");
+      assert.equal(trial.index, index);
+      assert.equal(trial.case, reference ? "cold-reference" : "cold");
+      assert.equal(trial.launcher.id, id);
+      const matching = raw.matrix.ideLaunchers.filter(
+        (launcher) => launcher.id === id,
+      );
+      assert.equal(
+        matching.length,
+        1,
+        "cold launcher identity absent or duplicated",
+      );
+      assert.deepEqual(
+        matching[0],
+        trial.launcher,
+        "cold launcher record differs",
+      );
+      const { pid, started, finished, exit } = trial.launcher;
+      assert.ok(Number.isSafeInteger(pid) && pid > 1);
+      assert.ok(
+        Number.isFinite(Date.parse(started)) &&
+          Date.parse(finished) >= Date.parse(started),
+        "cold launcher lifetime incomplete",
+      );
+      assert.ok(
+        exit &&
+          (Number.isInteger(exit.code) || typeof exit.signal === "string"),
+        "cold launcher exit absent",
+      );
+      const cleanup = trial.cleanup;
+      assert.deepEqual(cleanup.remaining, [], "cold child survived cleanup");
+      assert.deepEqual(
+        cleanup.errors,
+        [],
+        "cold child cleanup reported errors",
+      );
+      assert.equal(
+        cleanup.groups.length,
+        1,
+        "cold owned child identity absent",
+      );
+      const owner = cleanup.groups[0];
+      assert.equal(owner.pid, pid, "cold cleanup belongs to another launcher");
+      assert.equal(owner.group, pid, "cold launcher lacks a private group");
+      assert.match(owner.startTicks, /^\d+$/);
+      const identity = `${pid}:${owner.startTicks}`;
+      assert.ok(!seen.has(identity), "cold process reused across observations");
+      seen.add(identity);
+      assert.ok(
+        raw.cleanup.groups.some(
+          (group) =>
+            group.pid === pid &&
+            group.group === pid &&
+            group.startTicks === owner.startTicks,
+        ),
+        "cold child missing from final ownership ledger",
+      );
+      assert.ok(
+        Date.parse(cleanup.started) >= Date.parse(started) &&
+          Date.parse(cleanup.finished) >= Date.parse(cleanup.started) &&
+          Date.parse(cleanup.finished) >= Date.parse(finished),
+        "cold cleanup lifetime incomplete",
+      );
+    }
+  }
+  return {
+    method: coldProcessAuditMethod,
+    validatedReferences: raw.coldReferences.length,
+    validatedTrials: raw.trials.length,
   };
 }
 
@@ -290,51 +450,7 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
       assert.equal(failed.length, 0, "a passing row contains failed trials");
     assert.equal(raw.trials.length, target, "required trial count not reached");
   }
-  for (const [index, trial] of raw.trials.entries()) {
-    assert.equal(trial.index, index);
-    if (raw.cases) {
-      assert.equal(trial.case, raw.cases[index % raw.cases.length].id);
-      assert.equal(trial.round, Math.floor(index / raw.cases.length));
-    }
-    if (
-      !trial.errors.length &&
-      trial.finalSnapshot &&
-      !(wayland && ["letter", "shift-hangul"].includes(trial.case))
-    ) {
-      const comparable = (snapshot) => ({
-        ...snapshot,
-        matrixObservation: undefined,
-        sentinel: undefined,
-        sentinelSequence: undefined,
-      });
-      assert.deepEqual(
-        comparable(trial.after),
-        comparable(trial.finalSnapshot),
-        "late state change in a passing trial",
-      );
-      assert.equal(
-        trial.finalSnapshot.sentinelSequence,
-        trial.after.sentinelSequence + 1,
-      );
-    }
-    if (!trial.errors.length && trial.cleanup) {
-      assert.equal(
-        trial.cleanup.sentinelSequence,
-        trial.dismissed.sentinelSequence + 1,
-      );
-      const fields = (snapshot) => [
-        snapshot.viewColumn,
-        snapshot.text,
-        snapshot.selections,
-        snapshot.mode,
-        snapshot.pending,
-        snapshot.registers,
-      ];
-      assert.deepEqual(fields(trial.after), fields(trial.dismissed));
-      assert.deepEqual(fields(trial.dismissed), fields(trial.cleanup));
-      assert.deepEqual(trial.dismissed.leader, trial.cleanup.leader);
-    }
-  }
+  const finalSnapshotAvailable = auditTrialSnapshots(raw);
   const review = {
     rawFile: basename(file),
     rawSha256: hash(bytes),
@@ -379,9 +495,8 @@ export async function audit(file, { allowPartialFocus = false } = {}) {
             "The retained baseline runner rewrote the manifest after installer hashes were recorded; the final manifest hash above reconstructs that exact rewrite.",
         }
       : {}),
-    finalSnapshotAvailable: raw.trials.every((trial) =>
-      Boolean(trial.finalSnapshot ?? trial.cleanup),
-    ),
+    finalSnapshotAvailable,
+    ...(raw.gate === "cold" ? { coldProcesses: auditColdProcesses(raw) } : {}),
     failures: failed.map((trial) => ({
       index: trial.index,
       case: trial.case,

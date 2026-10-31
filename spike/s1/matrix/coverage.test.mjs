@@ -9,6 +9,8 @@ import {
   remapQualification,
   overlapQualification,
   remapMethodSha256,
+  remapClockMethodSha256,
+  terminationQualification,
   selectRemapAnalysis,
   selectFocusAnalysis,
   focusMethodSources,
@@ -46,6 +48,7 @@ test("V-b recording needs a complete matching native-key analysis without unknow
   const analysis = {
     rawSha256: "raw",
     methodSha256: remapMethodSha256,
+    clockMethodSha256: remapClockMethodSha256,
     unknown: 0,
     trials: Array.from({ length: 1000 }, (_, index) => ({
       index,
@@ -63,6 +66,12 @@ test("V-b recording needs a complete matching native-key analysis without unknow
     remapQualification("raw", { ...analysis, methodSha256: "different-parser" })
       .length,
   );
+  assert.ok(
+    remapQualification("raw", {
+      ...analysis,
+      clockMethodSha256: "old-clock-bounds",
+    }).length,
+  );
   analysis.trials[999].index = 998;
   assert.ok(remapQualification("raw", analysis).length);
   analysis.trials[999].index = 999;
@@ -74,6 +83,7 @@ test("V-b analysis selection uses numeric revisions of the current parser and pr
   const value = {
     rawSha256: "raw",
     methodSha256: remapMethodSha256,
+    clockMethodSha256: remapClockMethodSha256,
     unknown: 0,
   };
   const candidates = [
@@ -94,6 +104,18 @@ test("V-b analysis selection uses numeric revisions of the current parser and pr
   });
   assert.equal(selectRemapAnalysis(candidates, "raw").value.unknown, 1);
   assert.equal(selectRemapAnalysis(candidates, "different"), undefined);
+  assert.equal(
+    selectRemapAnalysis(
+      [
+        {
+          file: "run-native-keys-99.json",
+          value: { ...value, clockMethodSha256: "old-clock-bounds" },
+        },
+      ],
+      "raw",
+    ),
+    undefined,
+  );
 });
 
 test("focus analysis selection validates imported classifiers as well as the main parser", () => {
@@ -220,12 +242,146 @@ test("count evidence cannot qualify with the obsolete unchanged-register oracle"
   assert.ok(!qualification(raw, "raw", audit, {}, {}).includes(reason));
 });
 
+test("cold coverage requires independent child cleanup and actual final snapshots", () => {
+  const raw = { gate: "cold", matrix: {}, trials: [{}], status: "discrepancy" };
+  const reason = "cold child ownership, cleanup or final snapshots unaudited";
+  const audit = {
+    coldProcesses: {
+      method: "cold-child-owned-cleanup-v1",
+      validatedReferences: 2,
+      validatedTrials: 1,
+    },
+    finalSnapshotAvailable: true,
+  };
+  assert.ok(qualification(raw, "raw", {}, {}, {}).includes(reason));
+  assert.ok(!qualification(raw, "raw", audit, {}, {}).includes(reason));
+  for (const changed of [
+    { ...audit, finalSnapshotAvailable: false },
+    { ...audit, coldProcesses: { ...audit.coldProcesses, validatedTrials: 0 } },
+    {
+      ...audit,
+      coldProcesses: { ...audit.coldProcesses, validatedReferences: 1 },
+    },
+  ])
+    assert.ok(qualification(raw, "raw", changed, {}, {}).includes(reason));
+});
+
+test("termination evidence binds raw identities while allowing the wrapper runner superset", () => {
+  const started = "2026-01-01T00:00:00.000Z",
+    finished = "2026-01-01T00:00:01.000Z";
+  const group = { pid: 100, group: 100, startTicks: "1000" };
+  const cleanup = {
+    started,
+    finished,
+    groups: [group],
+    errors: [],
+    remaining: [],
+  };
+  const raw = { finished, matrix: { ideLauncher: { pid: 100 } }, cleanup };
+  const termination = {
+    finished,
+    exitCode: 0,
+    cleanup: {
+      ...cleanup,
+      groups: [group, { pid: 101, group: 101, startTicks: "1010" }],
+    },
+  };
+  assert.deepEqual(terminationQualification(raw, termination), []);
+  for (const mutate of [
+    (value) => {
+      value.cleanup.groups.shift();
+    },
+    (value) => {
+      value.cleanup.groups[0].startTicks = "999";
+    },
+    (value) => {
+      value.cleanup.groups[0].group = 999;
+    },
+    (value) => {
+      value.cleanup.groups.push({ ...group, startTicks: "999" });
+    },
+    (value) => {
+      value.cleanup.finished = "invalid";
+    },
+    (value) => {
+      value.finished = started;
+    },
+    (value) => {
+      value.exitCode = 1;
+    },
+    (value) => {
+      value.stopSignal = "SIGTERM";
+    },
+    (value) => {
+      value.wrapperError = "ownership error";
+    },
+  ]) {
+    const changed = structuredClone(termination);
+    mutate(changed);
+    assert.ok(terminationQualification(raw, changed).length);
+  }
+  assert.deepEqual(
+    terminationQualification(
+      raw,
+      { ...termination, exitCode: 1, stopSignal: "SIGTERM" },
+      true,
+    ),
+    [],
+  );
+  assert.ok(
+    terminationQualification(
+      raw,
+      { ...termination, wrapperError: "ownership error" },
+      true,
+    ).length,
+  );
+  const nativeCleanup = {
+    started: 1,
+    finished: 2,
+    errors: [],
+    remaining: [],
+    exitCode: 0,
+  };
+  const nativeRaw = {
+    ...raw,
+    matrix: { ...raw.matrix, backend: "wayland" },
+    nativeCleanup: { ...nativeCleanup, signals: [{ signal: "SIGTERM" }] },
+  };
+  const nativeTermination = {
+    ...termination,
+    nativeCleanup: { ...nativeCleanup, signals: [] },
+  };
+  assert.deepEqual(terminationQualification(nativeRaw, nativeTermination), []);
+  for (const native of [
+    undefined,
+    { ...nativeCleanup, exitCode: 1 },
+    { ...nativeCleanup, errors: ["failed"] },
+    { ...nativeCleanup, remaining: [100] },
+    { ...nativeCleanup, signal: "SIGKILL" },
+  ])
+    assert.ok(
+      terminationQualification(nativeRaw, {
+        ...termination,
+        nativeCleanup: native,
+      }).length,
+    );
+});
+
 test("coverage requires matching evidence, isolation and completed cleanup", () => {
-  const cleanup = { errors: [], remaining: [] };
+  const started = "2026-01-01T00:00:00.000Z",
+    finished = "2026-01-01T00:00:01.000Z";
+  const cleanup = {
+    errors: [],
+    remaining: [],
+    started,
+    finished,
+    groups: [{ pid: 100, group: 100, startTicks: "1000" }],
+  };
+  const termination = { cleanup, finished, exitCode: 0 };
   const raw = {
-    finished: "done",
+    finished,
     sandboxIsolation: {},
-    matrix: {},
+    matrix: { ideLauncher: { pid: 100 } },
     gate: "query",
     status: "query-gate-passed",
     resourcePreflight: { errors: [] },
@@ -238,7 +394,7 @@ test("coverage requires matching evidence, isolation and completed cleanup", () 
     classification: "no-resource-errors-observed",
     errors: [],
   };
-  assert.deepEqual(qualification(raw, "sha", audit, resource, { cleanup }), []);
+  assert.deepEqual(qualification(raw, "sha", audit, resource, termination), []);
   assert.ok(
     qualification(raw, "changed", audit, resource, { cleanup }).includes(
       "matching source/delivery audit absent",
@@ -265,7 +421,7 @@ test("coverage requires matching evidence, isolation and completed cleanup", () 
       "sha",
       { ...audit, partialFocus: true },
       resource,
-      { cleanup },
+      { ...termination, exitCode: 1, stopSignal: "SIGTERM" },
     ),
     [],
   );
