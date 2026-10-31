@@ -1,0 +1,42 @@
+{
+  "method": "Independent state corroboration against a resource-clean reference; original reference linkage and raw data are unchanged.",
+  "inputs": [
+    {
+      "file": "native-1141-idle-same-10.json",
+      "sha256": "8678a712e84f5e1e48ce19898fe1518fe67f3a8cf42116b0b63bd2a5d20d029b"
+    },
+    {
+      "file": "native-baseline-1141-idle-same-10.json",
+      "sha256": "4d8ea519d15848660c8375e629daa412e35ecc86c89f93c595ced3b8ede202a9"
+    },
+    {
+      "file": "native-baseline-1141-idle-same-10.json",
+      "sha256": "b383058f87a57f26ac4d3cfc2372ab593d9cc27279d39c724cda544733318d00"
+    }
+  ],
+  "measuredTrials": 3000,
+  "verifiedEngineStates": 6000,
+  "originalCondition": {
+    "delayMs": 10,
+    "load": "idle",
+    "affinity": "same extension host",
+    "instances": 4,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": null,
+    "instanceCountMeaning": "configured maximum; batch overlap intervals recorded separately",
+    "cpuAffinity": "28-31"
+  },
+  "supplementalCondition": {
+    "delayMs": 10,
+    "load": "idle",
+    "affinity": "same extension host",
+    "instances": 2,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": null,
+    "instanceCountMeaning": "configured maximum; batch overlap intervals recorded separately",
+    "cpuAffinity": "20-23"
+  },
+  "limitation": "Separate CPU/concurrency conditions and newer harness instrumentation; this is not a new reliability run. The reference reproduces interleaved native cases only, not individually repeated cases."
+}

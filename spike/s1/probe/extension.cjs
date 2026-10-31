@@ -1,11 +1,45 @@
 const vscode = require("vscode");
 const net = require("node:net");
+const { createHash } = require("node:crypto");
 const reader = require("./inspect-reader.cjs");
 const { registerContents } = require("./register-contents.cjs");
 let map, Register, queue, leader, load;
 let delivery = [];
 let sentinel = null;
 let sentinelSequence = 0;
+let documents;
+
+function documentState(document) {
+  const text = document.getText();
+  return {
+    uri: document.uri.toString(),
+    scheme: document.uri.scheme,
+    version: document.version,
+    languageId: document.languageId,
+    isDirty: document.isDirty,
+    length: text.length,
+    sha256: createHash("sha256").update(text).digest("hex"),
+  };
+}
+
+function recordDocument(type, document, extra = {}) {
+  if (!documents) return;
+  if (documents.events.length >= 2048) {
+    documents.overflow += 1;
+    return;
+  }
+  const editor = vscode.window.activeTextEditor;
+  documents.events.push({
+    t: performance.now(),
+    type,
+    document: documentState(document),
+    activeEditor: editor ? documentState(editor.document) : null,
+    isActiveDocument: editor?.document === document,
+    // The leader listener was registered first and may already have set active=false.
+    leaderAtObservation: leader?.snapshot() ?? null,
+    ...extra,
+  });
+}
 
 function snapshot() {
   const e = vscode.window.activeTextEditor;
@@ -67,6 +101,26 @@ exports.activate = async (context) => {
     .getExtension("vim-companion-spike.s1-load")
     ?.activate();
   context.subscriptions.push(
+    vscode.workspace.onDidOpenTextDocument((document) =>
+      recordDocument("open", document),
+    ),
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      if (!documents) return;
+      recordDocument("change", event.document, {
+        reason: event.reason ?? null,
+        contentChanges: event.contentChanges.map((change) => ({
+          range: [
+            change.range.start.line,
+            change.range.start.character,
+            change.range.end.line,
+            change.range.end.character,
+          ],
+          rangeOffset: change.rangeOffset,
+          rangeLength: change.rangeLength,
+          text: change.text,
+        })),
+      });
+    }),
     vscode.commands.registerCommand("s1.deliveryKey", (key) =>
       delivery.push({ key, t: performance.now() }),
     ),
@@ -76,6 +130,18 @@ exports.activate = async (context) => {
     }),
   );
   const methods = {
+    documents: ({ start = false }) => {
+      if (start) {
+        if (documents) throw new Error("document recording already started");
+        documents = {
+          startedAt: performance.now(),
+          initial: vscode.workspace.textDocuments.map(documentState),
+          events: [],
+          overflow: 0,
+        };
+      }
+      return documents;
+    },
     diagnose: async () => {
       await vscode.commands.executeCommand(
         "workbench.action.toggleKeybindingsLog",

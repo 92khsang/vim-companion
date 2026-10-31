@@ -1,6 +1,7 @@
 const vscode = require("vscode");
 
 let active = false;
+let leaderDocumentUri = null;
 let prefix = [];
 let watchdog;
 const events = [];
@@ -10,6 +11,7 @@ const record = (type, extra = {}) =>
 async function end(reason) {
   if (!active) return;
   active = false;
+  leaderDocumentUri = null;
   clearTimeout(watchdog);
   prefix = [];
   await vscode.commands.executeCommand(
@@ -28,6 +30,8 @@ function armWatchdog() {
 async function start() {
   if (active) return;
   active = true;
+  leaderDocumentUri =
+    vscode.window.activeTextEditor?.document.uri.toString() ?? null;
   prefix = [];
   record("start");
   armWatchdog();
@@ -86,7 +90,11 @@ exports.activate = async (context) => {
         void end("mouse");
     }),
     vscode.workspace.onDidChangeTextDocument((event) => {
-      if (event.contentChanges.length) void end("document-change");
+      if (
+        event.contentChanges.length &&
+        event.document.uri.toString() === leaderDocumentUri
+      )
+        void end("document-change");
     }),
     { dispose: () => clearTimeout(watchdog) },
   );

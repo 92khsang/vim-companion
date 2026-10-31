@@ -1,0 +1,72 @@
+{
+  "rawFile": "wayland-letter-1141-idle-same-10.json",
+  "rawSha256": "2360e7bb6f5e6e8f116d356908b7a4557a5fb2304cee45849179aefb0c53f6e4",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "nativeProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "realCompositionPassed": true,
+    "clientType": "native Wayland"
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "letter",
+      "errors": [
+        "native composition release exceeded 5000 ms"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 2501.456626994038,
+      "upper": 2501.9320380119198,
+      "uncertaintyMs": 0.47541101788192464
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 3863.6444550000015,
+      "upper": 3863.736349999999,
+      "uncertaintyMs": 0.09189499999774853
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.2731439761575966,
+      "p95": 0.2731439761575966,
+      "p99": 0.2731439761575966,
+      "maximum": 0.2731439761575966
+    },
+    "upperMs": {
+      "p50": 1.7719499940410532,
+      "p95": 1.7719499940410532,
+      "p99": 1.7719499940410532,
+      "maximum": 1.7719499940410532
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.2731439761575966,
+        "upperMs": 1.7719499940410532
+      }
+    ]
+  }
+}

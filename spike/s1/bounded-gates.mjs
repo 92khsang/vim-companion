@@ -35,7 +35,12 @@ export async function runBoundedGate({
 }) {
   const native = gate.startsWith("native");
   const baseline = gate === "native-baseline";
-  const boundary = gate === "cancel-boundary";
+  const boundary = [
+    "cancel-boundary",
+    "document-change",
+    "document-scope",
+  ].includes(gate);
+  const diagnostic = boundary || gate === "cancel-unpaused";
   const availableCases = native
     ? ["f", "r", "d"].map((key) => ({
         id: `${key}-space`,
@@ -54,7 +59,7 @@ export async function runBoundedGate({
         })),
       );
   const cases =
-    gate === "cancel-release" || boundary
+    gate === "cancel-release" || diagnostic
       ? ["root-ctrl+c", "root-escape"].map((id) =>
           availableCases.find((variant) => variant.id === id),
         )
@@ -83,7 +88,7 @@ export async function runBoundedGate({
       sourceCommit: reference.sourceCommit,
     };
   }
-  const rounds = boundary ? 20 : baseline ? 2 : 1000;
+  const rounds = diagnostic ? 20 : baseline ? 2 : 1000;
   result.cases = cases;
   for (let round = 0; round < rounds; round++) {
     for (const [caseIndex, variant] of cases.entries()) {
@@ -237,7 +242,7 @@ export async function runBoundedGate({
           `Stopped at ${variant.id}, round ${round + 1}: ${errors.join("; ")}`,
         );
         save();
-        if (!baseline && !boundary) {
+        if (!baseline && !diagnostic) {
           try {
             await recoveryDiagnostic(after);
           } catch (error) {
@@ -261,8 +266,8 @@ export async function runBoundedGate({
       "reference did not reach a repeatable state",
     );
   }
-  result.status = boundary
-    ? "cancel-boundary-diagnostic-complete"
+  result.status = diagnostic
+    ? `${gate}-diagnostic-complete`
     : baseline
       ? "native-baseline-recorded"
       : `${gate}-gate-passed`;

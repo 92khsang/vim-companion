@@ -1,0 +1,110 @@
+{
+  "started": "2026-10-31T16:36:43.691Z",
+  "maximumConcurrentInstances": 1,
+  "maximumConcurrentExperimentInstances": 2,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "20-23"
+    ],
+    "externalCpuSets": [
+      "16-19"
+    ],
+    "externalBatches": [
+      "matrix-focus-clean-01"
+    ],
+    "globalConcurrentLimit": 2,
+    "jobs": [
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-baseline-f-space-1141-idle-same-10",
+        "row": "native-baseline",
+        "case": "f-space"
+      },
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-f-space-1141-idle-same-10",
+        "row": "native",
+        "case": "f-space",
+        "baseline": "native-baseline-f-space-1141-idle-same-10.json"
+      },
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-baseline-r-space-1141-idle-same-10",
+        "row": "native-baseline",
+        "case": "r-space"
+      },
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-r-space-1141-idle-same-10",
+        "row": "native",
+        "case": "r-space",
+        "baseline": "native-baseline-r-space-1141-idle-same-10.json"
+      },
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-baseline-d-space-1141-idle-same-10",
+        "row": "native-baseline",
+        "case": "d-space"
+      },
+      {
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10,
+        "id": "native-d-space-1141-idle-same-10",
+        "row": "native",
+        "case": "d-space",
+        "baseline": "native-baseline-d-space-1141-idle-same-10.json"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "native-baseline-f-space-1141-idle-same-10",
+      "cpuSet": "20-23",
+      "started": "2026-10-31T16:36:43.691Z",
+      "signal": null,
+      "exitCode": 1,
+      "finished": "2026-10-31T16:37:13.316Z",
+      "status": "harness-error",
+      "trials": 2,
+      "measuredStarted": "2026-10-31T16:36:43.772Z",
+      "measuredFinished": "2026-10-31T16:37:13.307Z",
+      "ideLauncher": {
+        "pid": 3678777,
+        "started": "2026-10-31T16:36:43.876Z",
+        "finished": "2026-10-31T16:37:13.236Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    }
+  ],
+  "finished": "2026-10-31T16:37:13.317Z",
+  "stoppedOnHarnessError": true,
+  "notStarted": [
+    "native-f-space-1141-idle-same-10",
+    "native-baseline-r-space-1141-idle-same-10",
+    "native-r-space-1141-idle-same-10",
+    "native-baseline-d-space-1141-idle-same-10",
+    "native-d-space-1141-idle-same-10"
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "started": "2026-10-31T14:51:50.709Z",
+  "maximumConcurrentInstances": 1,
+  "maximumConcurrentExperimentInstances": 6,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "12-15"
+    ],
+    "externalCpuSets": [
+      "8-11",
+      "16-19",
+      "20-23",
+      "24-27",
+      "28-31"
+    ],
+    "externalBatches": [
+      "matrix-completion-01",
+      "matrix-fault-proof-01"
+    ],
+    "globalConcurrentLimit": 6,
+    "jobs": [
+      {
+        "id": "fault-hang-immediate-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "hang-immediate",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-undefined-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "undefined",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-document-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "document",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-editor-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "editor",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-mouse-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "mouse",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-blur-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "blur",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-reset-root-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "reset-root",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      },
+      {
+        "id": "fault-reset-prefix-1141-loaded-separate-10",
+        "row": "fault",
+        "case": "reset-prefix",
+        "version": "1.141.0",
+        "load": true,
+        "affinity": "separate",
+        "delay": 10
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "fault-hang-immediate-1141-loaded-separate-10",
+      "cpuSet": "12-15",
+      "started": "2026-10-31T14:51:50.710Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T14:52:17.578Z",
+      "status": "discrepancy",
+      "trials": 1,
+      "measuredStarted": "2026-10-31T14:51:50.773Z",
+      "measuredFinished": "2026-10-31T14:52:17.569Z",
+      "ideLauncher": {
+        "pid": 3308709,
+        "started": "2026-10-31T14:51:50.841Z",
+        "finished": "2026-10-31T14:52:17.519Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "fault-undefined-1141-loaded-separate-10",
+      "cpuSet": "12-15",
+      "started": "2026-10-31T14:52:17.579Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T14:52:48.463Z",
+      "status": "measurement-inconclusive",
+      "trials": 4,
+      "measuredStarted": "2026-10-31T14:52:17.643Z",
+      "measuredFinished": "2026-10-31T14:52:48.455Z",
+      "ideLauncher": {
+        "pid": 3310289,
+        "started": "2026-10-31T14:52:17.714Z",
+        "finished": "2026-10-31T14:52:48.404Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "fault-document-1141-loaded-separate-10",
+      "cpuSet": "12-15",
+      "started": "2026-10-31T14:52:48.464Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T15:13:41.793Z",
+      "status": "fault-gate-passed",
+      "trials": 1000,
+      "measuredStarted": "2026-10-31T14:52:48.525Z",
+      "measuredFinished": "2026-10-31T15:13:41.610Z",
+      "ideLauncher": {
+        "pid": 3311968,
+        "started": "2026-10-31T14:52:48.597Z",
+        "finished": "2026-10-31T15:13:41.535Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "fault-editor-1141-loaded-separate-10",
+      "cpuSet": "12-15",
+      "started": "2026-10-31T15:13:41.879Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T15:34:31.173Z",
+      "status": "fault-gate-passed",
+      "trials": 1000,
+      "measuredStarted": "2026-10-31T15:13:41.945Z",
+      "measuredFinished": "2026-10-31T15:34:30.980Z",
+      "ideLauncher": {
+        "pid": 3358115,
+        "started": "2026-10-31T15:13:42.019Z",
+        "finished": "2026-10-31T15:34:30.944Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "fault-mouse-1141-loaded-separate-10",
+      "cpuSet": "12-15",
+      "started": "2026-10-31T15:34:31.259Z",
+      "signal": null,
+      "exitCode": 1,
+      "finished": "2026-10-31T15:34:57.781Z",
+      "status": "harness-error",
+      "trials": 0,
+      "measuredStarted": "2026-10-31T15:34:31.328Z",
+      "measuredFinished": "2026-10-31T15:34:57.771Z",
+      "ideLauncher": {
+        "pid": 3418113,
+        "started": "2026-10-31T15:34:31.400Z",
+        "finished": "2026-10-31T15:34:57.722Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    }
+  ],
+  "finished": "2026-10-31T15:34:57.782Z",
+  "stoppedOnHarnessError": true,
+  "notStarted": [
+    "fault-blur-1141-loaded-separate-10",
+    "fault-reset-root-1141-loaded-separate-10",
+    "fault-reset-prefix-1141-loaded-separate-10"
+  ]
+}

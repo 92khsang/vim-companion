@@ -16,6 +16,12 @@ import net from "node:net";
 import { setTimeout as sleep } from "node:timers/promises";
 import assert from "node:assert/strict";
 import { runBoundedGate } from "./bounded-gates.mjs";
+import { buildReadyPrototype } from "./ready/prototype.mjs";
+import { connectObserver } from "./ready/observer.mjs";
+import { runReadyGate } from "./ready/gate.mjs";
+import { buildDockPrototype, withDockManifest } from "./dock/prototype.mjs";
+import { connectDockObserver } from "./dock/observer.mjs";
+import { runDockGate } from "./dock/gate.mjs";
 
 const source = import.meta.dirname;
 const code = process.env.S1_CODE ?? "/usr/share/code/code";
@@ -33,23 +39,54 @@ const root = mkdtempSync(join(tmpdir(), "s1-"));
 const socketPath = join(root, "probe.sock");
 const loaded = process.env.S1_LOAD === "1";
 const gate = process.env.S1_GATE ?? "entry-exit";
+const readyDiagnostic = gate === "ready-indication";
+const dockDiagnostic = gate === "dock-integration";
+const visualDiagnostic = readyDiagnostic || dockDiagnostic;
+const imageDirectory = output.replace(/\.json$/, "") + "-images";
+if (visualDiagnostic) {
+  assert.ok(!existsSync(imageDirectory), "Choose a new screenshot directory");
+  assert.ok(
+    process.env.S1_DIAG_ONLY === undefined,
+    "visual diagnostics cannot use the tracing-only diagnostic",
+  );
+}
 assert.ok(
   [
     "entry-exit",
     "cancel",
     "cancel-release",
     "cancel-boundary",
+    "document-change",
+    "document-scope",
+    "cancel-unpaused",
+    "ready-indication",
+    "dock-integration",
     "native-baseline",
     "native",
   ].includes(gate),
 );
 assert.ok(gate === "entry-exit" || (!loaded && delayMs === 10));
-const boundary = gate === "cancel-boundary";
+const scopedDocuments = ["document-scope", "cancel-unpaused"].includes(gate);
+const documentDiagnostic = gate === "document-change" || scopedDocuments;
+const boundary = gate === "cancel-boundary" || documentDiagnostic;
 const bindings = process.env.S1_BINDINGS ?? "candidate";
 assert.ok(["original", "candidate"].includes(bindings));
 assert.ok(
-  boundary || bindings === "candidate",
+  gate === "cancel-boundary" || bindings === "candidate",
   "S1_BINDINGS is diagnostic-only",
+);
+assert.ok(
+  documentDiagnostic || visualDiagnostic || process.env.S1_TRACE === undefined,
+  "S1_TRACE is only available for document, unpaused and visual diagnostics",
+);
+const trace = process.env.S1_TRACE;
+assert.ok(
+  !visualDiagnostic || trace === "off",
+  "visual diagnostics require S1_TRACE=off",
+);
+assert.ok(
+  !documentDiagnostic || ["on", "off"].includes(trace),
+  "Document and unpaused diagnostics require S1_TRACE=on or off",
 );
 const baseline = gate === "native-baseline";
 const referencePath = process.env.S1_BASELINE;
@@ -58,9 +95,17 @@ const reference =
   gate === "native" ? JSON.parse(readFileSync(referencePath, "utf8")) : null;
 let phaseSeed = 1053;
 const result = {
-  scope: boundary
-    ? "Sentinel-gated cancellation diagnostic with renderer tracing; not an acceptance gate"
-    : "Bounded V-a support investigation; not a final S1 acceptance result",
+  scope: dockDiagnostic
+    ? "Six guided dock integration sequences; not input reliability acceptance"
+    : readyDiagnostic
+      ? "Four guided cancellations with a session-scoped ready indication and external visual/focus observation; not an acceptance gate"
+      : gate === "cancel-unpaused"
+        ? "Candidate-only unpaused cancellation diagnostic with entry-document cleanup; not an acceptance gate"
+        : documentDiagnostic
+          ? "Candidate-only document-change provenance and tracing interference diagnostic; not an acceptance gate"
+          : boundary
+            ? "Sentinel-gated cancellation diagnostic with renderer tracing; not an acceptance gate"
+            : "Bounded V-a support investigation; not a final S1 acceptance result",
   gate,
   started: new Date().toISOString(),
   sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], {
@@ -99,6 +144,8 @@ let client;
 let requestId = 0;
 let pending;
 let tracing = false;
+let recordingDocuments = false;
+let observer;
 async function call(method, params = {}) {
   if (pending) throw new Error("overlapping probe requests");
   const id = ++requestId;
@@ -195,7 +242,7 @@ try {
       join(extensions, `vim-companion-spike.s1-${name}-0.0.0`),
       { recursive: true },
     );
-  if (boundary) {
+  if (boundary || visualDiagnostic) {
     const originalCommit = "eaa78ae4b5e7c28b3b3ecbd699b716e9d5cc333a";
     const original = execFileSync("git", [
       "show",
@@ -221,14 +268,43 @@ try {
       };
     }
     assert.deepEqual(candidateManifest, expectedCandidate);
-    assert.deepEqual(
-      readFileSync(join(source, "leader/extension.cjs")),
-      execFileSync("git", [
-        "show",
-        `${originalCommit}:spike/s1/leader/extension.cjs`,
-      ]),
-      "diagnostic must keep the original leader handlers",
-    );
+    const originalHandlers = execFileSync("git", [
+      "show",
+      `${originalCommit}:spike/s1/leader/extension.cjs`,
+    ]);
+    const handlers = readFileSync(join(source, "leader/extension.cjs"));
+    if (scopedDocuments || visualDiagnostic) {
+      // Permit only the authorized document-scope change against the original.
+      const expectedHandlers = originalHandlers
+        .toString()
+        .replace(
+          "let active = false;",
+          "let active = false;\nlet leaderDocumentUri = null;",
+        )
+        .replace(
+          "  active = false;",
+          "  active = false;\n  leaderDocumentUri = null;",
+        )
+        .replace(
+          "  active = true;",
+          "  active = true;\n  leaderDocumentUri =\n    vscode.window.activeTextEditor?.document.uri.toString() ?? null;",
+        )
+        .replace(
+          '      if (event.contentChanges.length) void end("document-change");',
+          '      if (\n        event.contentChanges.length &&\n        event.document.uri.toString() === leaderDocumentUri\n      )\n        void end("document-change");',
+        );
+      assert.equal(
+        handlers.toString(),
+        expectedHandlers,
+        "only entry-document cleanup may change",
+      );
+    } else {
+      assert.deepEqual(
+        handlers,
+        originalHandlers,
+        "diagnostic must keep the original leader handlers",
+      );
+    }
     const selected = bindings === "original" ? original : candidate;
     writeFileSync(
       join(extensions, "vim-companion-spike.s1-leader-0.0.0/package.json"),
@@ -241,7 +317,122 @@ try {
       originalSha256: hash(original),
       candidateSha256: hash(candidate),
       installedSha256: hash(selected),
-      handlersSha256: hash(readFileSync(join(source, "leader/extension.cjs"))),
+      handlersSha256: hash(handlers),
+      originalHandlersSha256: hash(originalHandlers),
+      documentScope:
+        scopedDocuments || visualDiagnostic
+          ? "entry-document"
+          : "all-documents",
+    };
+  }
+  if (readyDiagnostic) {
+    const installed = join(extensions, "vim-companion-spike.s1-leader-0.0.0");
+    const prototype = buildReadyPrototype(
+      readFileSync(join(source, "leader/extension.cjs")),
+    );
+    writeFileSync(join(installed, "extension.cjs"), prototype);
+    cpSync(
+      join(source, "ready/indicator.cjs"),
+      join(installed, "indicator.cjs"),
+    );
+    result.readyDiagnostic = {
+      maxTrialsPerCase: 2,
+      observationBudgetMs: 1000,
+      rendererTracing: false,
+      installedHandlersSha256: createHash("sha256")
+        .update(readFileSync(join(installed, "extension.cjs")))
+        .digest("hex"),
+      instrumentationSha256: Object.fromEntries(
+        [
+          "run.mjs",
+          "bounded-gates.mjs",
+          "probe/extension.cjs",
+          "probe/package.json",
+          "probe/inspect-reader.cjs",
+          "probe/register-contents.cjs",
+          "ready/prototype.mjs",
+          "ready/indicator.cjs",
+          "ready/observer.mjs",
+          "ready/gate.mjs",
+        ].map((file) => [
+          file,
+          createHash("sha256")
+            .update(readFileSync(join(source, file)))
+            .digest("hex"),
+        ]),
+      ),
+    };
+    mkdirSync(imageDirectory, { recursive: true });
+    writeFileSync(join(imageDirectory, "installed-leader.cjs"), prototype);
+  }
+  if (dockDiagnostic) {
+    const installed = join(extensions, "vim-companion-spike.s1-leader-0.0.0");
+    const installedProbe = join(
+      extensions,
+      "vim-companion-spike.s1-probe-0.0.0/extension.cjs",
+    );
+    const prototype = buildDockPrototype(
+      readFileSync(join(source, "leader/extension.cjs")),
+    );
+    const dockManifest = withDockManifest(
+      JSON.parse(readFileSync(join(installed, "package.json"))),
+    );
+    writeFileSync(
+      join(installed, "package.json"),
+      JSON.stringify(dockManifest, null, 2),
+    );
+    writeFileSync(join(installed, "extension.cjs"), prototype);
+    cpSync(join(source, "dock"), join(installed, "dock"), { recursive: true });
+    const probeSource = readFileSync(installedProbe, "utf8");
+    const hook = "  const methods = {";
+    assert.equal(probeSource.split(hook).length, 2);
+    writeFileSync(
+      installedProbe,
+      probeSource.replace(
+        hook,
+        hook + "\n    dock: (params) => leader.dockControl(params),",
+      ),
+    );
+    const hash = (path) =>
+      createHash("sha256").update(readFileSync(path)).digest("hex");
+    result.dockDiagnostic = {
+      maxTrials: 6,
+      observationBudgetMs: 1000,
+      rendererTracing: false,
+      designCommit: "2775307b332dcff673f89d02990b2651cf16b0aa",
+      installedHandlersSha256: hash(join(installed, "extension.cjs")),
+      installedManifestSha256: hash(join(installed, "package.json")),
+      installedProbeSha256: hash(installedProbe),
+      instrumentationSha256: Object.fromEntries(
+        [
+          "run.mjs",
+          "bounded-gates.mjs",
+          "probe/extension.cjs",
+          "probe/package.json",
+          "probe/inspect-reader.cjs",
+          "probe/register-contents.cjs",
+          ...globSync("dock/**/*", { cwd: source }).filter((file) =>
+            /\.(cjs|mjs|js|css|svg)$/.test(file),
+          ),
+        ].map((file) => [file, hash(join(source, file))]),
+      ),
+    };
+    mkdirSync(imageDirectory, { recursive: true });
+    writeFileSync(join(imageDirectory, "installed-leader.cjs"), prototype);
+  }
+  if (documentDiagnostic) {
+    result.documentDiagnostic = {
+      rendererTracing: trace === "on",
+      entryConfirmation: gate !== "cancel-unpaused",
+      maxTrialsPerCase: 20,
+      instrumentationSha256: Object.fromEntries(
+        ["run.mjs", "bounded-gates.mjs", "probe/extension.cjs"].map((file) => [
+          file,
+          createHash("sha256")
+            .update(readFileSync(join(source, file)))
+            .digest("hex"),
+        ]),
+      ),
     };
   }
   if (baseline) {
@@ -294,6 +485,8 @@ try {
     delete settings["vim.visualModeKeyBindingsNonRecursive"];
   }
   result.settings = settings;
+  if (readyDiagnostic) settings["workbench.statusBar.visible"] = true;
+  if (dockDiagnostic) settings["workbench.colorTheme"] = "Dark 2026";
   writeFileSync(join(data, "User/settings.json"), JSON.stringify(settings));
   if (gate !== "entry-exit") {
     // Vim's extension bindings can shadow probe Ctrl chords. The delivery-only
@@ -334,6 +527,16 @@ try {
     xvfb.once("error", reject);
   });
   execFileSync("setxkbmap", ["us"], { env: environment });
+  let debugPort;
+  if (visualDiagnostic) {
+    const reservation = net.createServer();
+    await new Promise((resolve, reject) => {
+      reservation.once("error", reject);
+      reservation.listen(0, "127.0.0.1", resolve);
+    });
+    debugPort = reservation.address().port;
+    await new Promise((resolve) => reservation.close(resolve));
+  }
   const log = openSync(join(root, "code.log"), "w");
   const ide = spawn(
     "dbus-run-session",
@@ -350,6 +553,12 @@ try {
       "--skip-release-notes",
       "--disable-telemetry",
       "--new-window",
+      ...(visualDiagnostic
+        ? [
+            "--remote-debugging-port=" + debugPort,
+            "--remote-debugging-address=127.0.0.1",
+          ]
+        : []),
       workspace,
     ],
     {
@@ -420,6 +629,15 @@ try {
   inject(["Escape"]);
   await sleep(200);
   result.initial = await call("warm");
+  if (visualDiagnostic) {
+    observer = await (dockDiagnostic ? connectDockObserver : connectObserver)({
+      port: debugPort,
+      directory: imageDirectory,
+      environment,
+      until,
+    });
+    result.visual = observer.metadata;
+  }
   if (process.env.S1_DIAG_ONLY === "1") {
     await call("diagnose");
     await call("prepare");
@@ -475,13 +693,39 @@ try {
   console.log(`Delivery proved; checking ${gate} at ${delayMs} ms.`);
   await call("text", { value: text });
   await settled();
-  if (boundary) {
+  if (documentDiagnostic) {
+    await call("documents", { start: true });
+    recordingDocuments = true;
+  }
+  if (boundary && (!documentDiagnostic || trace === "on")) {
     await call("diagnose");
     tracing = true;
     await settled();
   }
 
-  if (gate !== "entry-exit") {
+  if (dockDiagnostic) {
+    await runDockGate({
+      result,
+      call,
+      inject,
+      settled,
+      noPending,
+      save,
+      text,
+      observer,
+    });
+  } else if (readyDiagnostic) {
+    await runReadyGate({
+      result,
+      call,
+      inject,
+      settled,
+      noPending,
+      save,
+      text,
+      observer,
+    });
+  } else if (gate !== "entry-exit") {
     await runBoundedGate({
       gate,
       result,
@@ -635,8 +879,23 @@ try {
       process.exitCode = 1;
     }
   }
+  if (recordingDocuments) {
+    try {
+      result.documentEvents = await call("documents");
+      assert.equal(
+        result.documentEvents.overflow,
+        0,
+        "document event overflow",
+      );
+    } catch (error) {
+      result.status = "harness-error";
+      result.documentError = String(error);
+      process.exitCode = 1;
+    }
+  }
   result.finished = new Date().toISOString();
   save();
+  observer?.close();
   client?.destroy();
   for (const child of processes.reverse()) {
     try {

@@ -1,0 +1,75 @@
+{
+  "rawFile": "hangul-ctrl-bracket-plain-1141-idle-same-10.json",
+  "rawSha256": "c30847194192b84498013083394bd4263c6196e9818a3e53dbf2e0e22a0f542f",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "case": "ctrl-bracket-plain",
+      "errors": [
+        "Hangul cancel did not use the expected leader rule"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 668.1360469880794,
+      "upper": 668.5398999880806,
+      "uncertaintyMs": 0.4038530000011633
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 1668.4926170000035,
+      "upper": 1668.5369080000019,
+      "uncertaintyMs": 0.04429099999833852
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": -0.15680098211805854,
+      "p95": 0.040140005965893566,
+      "p99": 0.040140005965893566,
+      "maximum": 0.040140005965893566
+    },
+    "upperMs": {
+      "p50": 1.3098340059636957,
+      "p95": 12.792210017881645,
+      "p99": 12.792210017881645,
+      "maximum": 12.792210017881645
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.040140005965893566,
+        "upperMs": 1.3098340059636957
+      },
+      {
+        "index": 1,
+        "lowerMs": -0.15680098211805854,
+        "upperMs": 12.792210017881645
+      }
+    ]
+  }
+}
