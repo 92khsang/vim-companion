@@ -1578,6 +1578,39 @@ wait observations and therefore keeps these eight cells incomplete. Adding
 request-observed supplemental trials is awaiting the user's protocol decision;
 the original unpaused trials and response deadline remain unchanged.
 
+### Clean fixture preparation
+
+Measured: the 1.134.0 idle/shared-host focus run at 30 ms stopped during setup
+of the ninth `wl-default` observation, after 314 completed observations.
+`TextDocument.save()` returned false before the next measured keys were sent.
+The four retained fixture files still matched the 51-byte baseline, and their
+modification times were unchanged. The retained logs contained no failure-time
+write or conflict error. The failing URI and pre-save model state were not
+recorded, so the precise cause remains unverified. The
+[protocol review](data/matrix-focus-complete-04/focus-clean-baseline-protocol-review-01.json)
+preserves these limits and the log hashes.
+
+Documented: 1.134.0's [save RPC](https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/api/browser/mainThreadDocuments.ts#L232-L235)
+returns whether the text-file service supplied a target. Its
+[file-save implementation](https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/services/textfile/browser/textFileService.ts#L351-L385)
+can return no target when the file model is absent or its save returns false.
+These paths do not establish which occurred in this observation.
+
+Fixture preparation now saves only dirty models. Every dirty save must still
+succeed, and every fixture must still be clean with model and disk contents
+equal to the baseline. Rejected saves include the URI and model state before
+and after the call. The new regression failed against the unconditional save;
+all 86 matrix tests passed after the change, including disk mismatch and dirty
+save rejection. Input timing and acceptance criteria are unchanged.
+
+Measured: independent analysis found no issues in the 314 completed observations
+and no resource errors. Their 1,256 baseline records were clean and exact.
+The 34 complete scenarios supply 306 reusable observations. The eight
+`wl-default` observations remain incomplete; that entire scenario is repeated
+before the unstarted scenarios continue. The queued native batch was stopped
+with zero runs so its replacement can wait for both replacement focus and X11
+measurements to finish.
+
 ### Actual Open Editors visibility
 
 The earlier `fp-outside-visible` setup recorded
@@ -1946,6 +1979,16 @@ most two IDEs, without conflicts or exclusions. Final outcomes remain
 unverified pending completion of the matrix and its final overlap review.
 All 276 selected-evidence dependencies were verified from the Git index, and
 an isolated replay matched the report apart from its generation timestamp.
+
+Measured: composed `Ctrl+[` also completed 1,000 trials without discrepancies
+in the same X11/CDP condition, with all 1,000 fresh-composition observations
+qualified and no resource errors. The
+[fixture-recovery checkpoint](data/portable-report-13.md) selects 302 conditional
+cells and 2,349 focus observations, retaining the incomplete `wl-default`
+observations as unselected evidence. Its live overlap review recorded no
+conflicts or exclusions and at most two IDEs. Final outcomes remain unverified.
+The 285 selected-evidence dependencies were verified from the Git index; an
+isolated replay matched apart from the report generation timestamp.
 
 ### Provisional answers for issue #7
 

@@ -122,3 +122,48 @@ test("fixture reset edits the cached model, checks save results and preserves di
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("clean fixture baselines need no save while dirty saves and disk agreement remain mandatory", async () => {
+  const root = mkdtempSync(join(tmpdir(), "s1-focus-clean-test-")),
+    file = join(root, "alpha.s1focus");
+  try {
+    const baseline = "alpha beta\n";
+    writeFileSync(file, baseline);
+    const uri = { fsPath: file, toString: () => "file:" + file };
+    let saveCalls = 0;
+    const document = {
+      uri,
+      isDirty: false,
+      isClosed: false,
+      version: 1,
+      getText: () => baseline,
+      async save() {
+        saveCalls++;
+        return false;
+      },
+    };
+    const vscode = {
+      Uri: { file: () => uri },
+      workspace: { openTextDocument: async () => document },
+    };
+    assert.deepEqual(await resetFixtureFiles(vscode, [file], baseline), [
+      { uri: uri.toString(), version: 1, text: baseline, dirty: false },
+    ]);
+    assert.equal(saveCalls, 0);
+    writeFileSync(file, "different disk content\n");
+    await assert.rejects(
+      resetFixtureFiles(vscode, [file], baseline),
+      /disk differs from baseline/,
+    );
+    assert.equal(saveCalls, 0);
+    writeFileSync(file, baseline);
+    document.isDirty = true;
+    await assert.rejects(
+      resetFixtureFiles(vscode, [file], baseline),
+      /baseline could not be saved/,
+    );
+    assert.equal(saveCalls, 1);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

@@ -63,11 +63,30 @@ exports.resetFixtureFiles = async (vscode, files, fixtureText) => {
         "fixture document reset failed",
       );
     }
-    assert.equal(
-      await document.save(),
-      true,
-      "fixture baseline could not be saved",
-    );
+    // Avoid a save RPC for clean editorless models, whose lifetime is independent
+    // of the baseline content checks below.
+    if (document.isDirty) {
+      const beforeSave = {
+        version: document.version,
+        closed: document.isClosed,
+        dirty: document.isDirty,
+      };
+      const saved = await document.save();
+      assert.equal(
+        saved,
+        true,
+        "fixture baseline could not be saved: " +
+          JSON.stringify({
+            uri: uri.toString(),
+            beforeSave,
+            afterSave: {
+              version: document.version,
+              closed: document.isClosed,
+              dirty: document.isDirty,
+            },
+          }),
+      );
+    }
     assert.equal(
       document.isDirty,
       false,
