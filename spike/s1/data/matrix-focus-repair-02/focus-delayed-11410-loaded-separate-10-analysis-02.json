@@ -1,0 +1,5276 @@
+{
+  "rawSha256": "33a5cd1ddcca8fb6b390aa04eb325b00712b4fa4e69b27319f16b65228518f73",
+  "status": "focus-recorded",
+  "finished": "2026-10-31T18:07:16.141Z",
+  "condition": {
+    "delayMs": 10,
+    "load": "50 ms blocking every 100 ms",
+    "affinity": "separate extension hosts",
+    "instances": 2,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": 1053,
+    "instanceCountMeaning": "configured maximum; batch overlap intervals recorded separately",
+    "cpuAffinity": "16-19"
+  },
+  "version": "1.141.0",
+  "completeScenarioCounts": true,
+  "resourceQualification": "no resource errors observed",
+  "method": {
+    "sources": {
+      "focus-analysis.mjs": "3838199d4ce38de17f99b4e5e85c7be9a35ad83033b3b3bf3b36055c854d6d42",
+      "focus.mjs": "58594b94468d627caca0e46b395a5a181f1b3fd6b64090da3bafab076d82bb47",
+      "fault.mjs": "46eacee4d2971c44c8d6175465b71d5595d97773ae86076930ef85cc7df9329a"
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "focus": "All DOM focus events and actual native window transitions are candidates. Changes definitely before the command or after five seconds are retained separately. Numeric first-post-command bounds require a certainly-in-window candidate: the lower bound uses all remaining candidates, the upper bound only certainly-in-window candidates. Native poll intervals require bounded IPC clocks. Negative lower bounds express ordering uncertainty and are never clamped or interpreted as measured negative latency.",
+    "visibility": "Last preserved false sample to first true sample; the nominal 25 ms interval is not substituted for missing polls.",
+    "predicate": "Fresh sentinel after the five-second observation; it does not establish the predicate at the first focus transition. An owned native dialog with an unfocused renderer and no fresh sentinel has no workbench keybinding target; its underlying workbench context remains unobserved.",
+    "provider": "Actual command-associated request candidates, client/server causal clock bounds and strict containment of the j keydown. Ambiguity remains explicit."
+  },
+  "scenarios": [
+    {
+      "id": "delayed-cq",
+      "leader": "SPC c q",
+      "state": "many",
+      "delayed": true,
+      "trials": 9,
+      "rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "issues": 0,
+      "targets": {
+        "editor text": 9
+      },
+      "predicates": {
+        "true": 9
+      },
+      "firstFocusChange": {
+        "count": 0,
+        "lowerMs": null,
+        "upperMs": null
+      },
+      "noFocusChangeObserved": 9,
+      "focusTimingOutcomes": {
+        "none observed": 9
+      },
+      "commandSettlementMs": {
+        "median": 0.5129040000028908,
+        "p95": 0.9539399999994203,
+        "maximum": 0.9539399999994203
+      },
+      "commandOutcomes": {
+        "fulfilled": 9
+      },
+      "keyRoutes": {
+        "inferred Vim line movement": 9
+      },
+      "provenServerWaitTrials": 7,
+      "fixedDelayWaitTrials": 7
+    },
+    {
+      "id": "delayed-cr",
+      "leader": "SPC c r",
+      "state": "allowed",
+      "delayed": true,
+      "trials": 9,
+      "rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "issues": 0,
+      "targets": {
+        "text input": 9
+      },
+      "predicates": {
+        "false": 9
+      },
+      "firstFocusChange": {
+        "count": 9,
+        "lowerMs": {
+          "median": 343.6274640118936,
+          "p95": 400.12380199998734,
+          "maximum": 400.12380199998734
+        },
+        "upperMs": {
+          "median": 344.8384740059555,
+          "p95": 401.3511289940361,
+          "maximum": 401.3511289940361
+        }
+      },
+      "noFocusChangeObserved": 0,
+      "focusTimingOutcomes": {
+        "within 5 s": 9
+      },
+      "commandSettlementMs": null,
+      "commandOutcomes": {
+        "none within 5 s": 9
+      },
+      "keyRoutes": {
+        "leader handler": 9
+      },
+      "provenServerWaitTrials": 5,
+      "fixedDelayWaitTrials": 5
+    },
+    {
+      "id": "delayed-cf",
+      "leader": "SPC c f",
+      "state": "single",
+      "delayed": true,
+      "trials": 9,
+      "rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "issues": 0,
+      "targets": {
+        "editor text": 9
+      },
+      "predicates": {
+        "true": 9
+      },
+      "firstFocusChange": {
+        "count": 0,
+        "lowerMs": null,
+        "upperMs": null
+      },
+      "noFocusChangeObserved": 9,
+      "focusTimingOutcomes": {
+        "none observed": 9
+      },
+      "commandSettlementMs": {
+        "median": 14.828815999993822,
+        "p95": 61.1056319999916,
+        "maximum": 61.1056319999916
+      },
+      "commandOutcomes": {
+        "fulfilled": 9
+      },
+      "keyRoutes": {
+        "inferred Vim line movement": 9
+      },
+      "provenServerWaitTrials": 7,
+      "fixedDelayWaitTrials": 7
+    },
+    {
+      "id": "delayed-cd",
+      "leader": "SPC c d",
+      "state": "first",
+      "delayed": true,
+      "trials": 9,
+      "rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "issues": 0,
+      "targets": {
+        "editor text": 9
+      },
+      "predicates": {
+        "true": 9
+      },
+      "firstFocusChange": {
+        "count": 0,
+        "lowerMs": null,
+        "upperMs": null
+      },
+      "noFocusChangeObserved": 9,
+      "focusTimingOutcomes": {
+        "none observed": 9
+      },
+      "commandSettlementMs": {
+        "median": 0.4840670000121463,
+        "p95": 3.0820789999852423,
+        "maximum": 3.0820789999852423
+      },
+      "commandOutcomes": {
+        "fulfilled": 9
+      },
+      "keyRoutes": {
+        "inferred Vim line movement": 9
+      },
+      "provenServerWaitTrials": 6,
+      "fixedDelayWaitTrials": 6
+    }
+  ],
+  "trials": [
+    {
+      "index": 0,
+      "scenario": "delayed-cq",
+      "round": 0,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4258209999982,
+          "upper": 966.9910780000016,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4440680000007,
+          "upper": 2324.7426379999997,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4972469999993,
+          "upper": 2895.795921000001,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5041.598763988077,
+        "upperMs": 5042.866694988075
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5041.598763988077,
+          "upperMs": 5042.866694988075
+        },
+        "nativeEnd": {
+          "lowerMs": 5046.147337000002,
+          "upperMs": 5046.508958000002
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5040.288074000004,
+          "upperMs": 5040.885318000004
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.8046570000005886,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 6,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 200.92212199999994,
+            "serverResponseDelayMs": 200.31622500000003,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.446999,
+              "upper": 28326.130127
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 7,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 249.51416899999822,
+            "serverResponseDelayMs": 200.35886000000005,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.446999,
+              "upper": 28326.130127
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 1,
+      "scenario": "delayed-cq",
+      "round": 1,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4387610119204,
+          "upper": 966.991337000002,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.436581999995,
+          "upper": 2324.8058170000004,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4667959999933,
+          "upper": 2895.823040999996,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5058.946123000009,
+        "upperMs": 5060.258943988083
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5058.946123000009,
+          "upperMs": 5060.258943988083
+        },
+        "nativeEnd": {
+          "lowerMs": 5065.778804000009,
+          "upperMs": 5066.191153000007
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5057.7870330000005,
+          "upperMs": 5058.512513000009
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5129040000028908,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 17,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 200.67752299999847,
+            "serverResponseDelayMs": 200.3318820000004,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.491194999995,
+              "upper": 28326.106065999997
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 18,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 250.53636800000095,
+            "serverResponseDelayMs": 200.3650719999996,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.491194999995,
+              "upper": 28326.106065999997
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 2,
+      "scenario": "delayed-cq",
+      "round": 2,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4289460178818,
+          "upper": 966.9772260059569,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4417539999995,
+          "upper": 2324.7660259999975,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4821850000008,
+          "upper": 2895.8066709999985,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.130329994048,
+        "upperMs": 5080.407095982111
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.130329994048,
+          "upperMs": 5080.407095982111
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.551119000003,
+          "upperMs": 5083.935902999998
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.624118,
+          "upperMs": 5029.272875999995
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.4620730000024196,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 28,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 225.3257550000053,
+            "serverResponseDelayMs": 200.32194999999956,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.505176,
+              "upper": 28325.979986
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 29,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 215.5521460000018,
+            "serverResponseDelayMs": 200.31563300000016,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.505176,
+              "upper": 28325.979986
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 3,
+      "scenario": "delayed-cq",
+      "round": 3,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4447270178837,
+          "upper": 966.9224100119197,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.443106999999,
+          "upper": 2324.7773559999987,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4846160000016,
+          "upper": 2895.818865000001,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.903896000003,
+        "upperMs": 5081.119827994029
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.903896000003,
+          "upperMs": 5081.119827994029
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.811474999995,
+          "upperMs": 5085.193289999996
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.0417189999935,
+          "upperMs": 5029.710216999993
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.9539399999994203,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 36,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 250.5632409999962,
+            "serverResponseDelayMs": 200.9440480000012,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "clock bounds overlap",
+            "jDuringServerWait": "clock bounds overlap",
+            "serverClockOffset": {
+              "lower": 28325.484818999998,
+              "upper": 28326.100757999997
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 37,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 249.65405199999805,
+            "serverResponseDelayMs": 200.33350500000233,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.484818999998,
+              "upper": 28326.100757999997
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 4,
+      "scenario": "delayed-cq",
+      "round": 4,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4892400059591,
+          "upper": 966.978761000001,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.445449000006,
+          "upper": 2324.7625130000015,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.488348000006,
+          "upper": 2895.8054120000015,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5076.204328982123,
+        "upperMs": 5077.41491397615
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5076.204328982123,
+          "upperMs": 5077.41491397615
+        },
+        "nativeEnd": {
+          "lowerMs": 5080.556852999995,
+          "upperMs": 5080.919606999996
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5025.618951000004,
+          "upperMs": 5026.253078999995
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.47072599999955855,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 44,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 235.58569500000158,
+            "serverResponseDelayMs": 200.341593000001,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.46866700001,
+              "upper": 28326.037945
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 45,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 225.47363400000177,
+            "serverResponseDelayMs": 200.32935999999972,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.46866700001,
+              "upper": 28326.037945
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 5,
+      "scenario": "delayed-cq",
+      "round": 5,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4607660119193,
+          "upper": 966.9369870059552,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.43894,
+          "upper": 2324.8004930000025,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.469756999999,
+          "upper": 2895.827480000007,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5034.928038011909,
+        "upperMs": 5036.165982005965
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5034.928038011909,
+          "upperMs": 5036.165982005965
+        },
+        "nativeEnd": {
+          "lowerMs": 5039.140956999989,
+          "upperMs": 5039.545076000002
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5033.680721999983,
+          "upperMs": 5034.399998000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.7421570000005886,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 52,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 227.29684300000372,
+            "serverResponseDelayMs": 200.32604699999501,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.501429000004,
+              "upper": 28326.02560200001
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 53,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 213.47110299999622,
+            "serverResponseDelayMs": 200.48476999999548,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.501429000004,
+              "upper": 28326.02560200001
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 6,
+      "scenario": "delayed-cq",
+      "round": 6,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4891549999932,
+          "upper": 966.9925570238363,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4462790000107,
+          "upper": 2324.7767550000135,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4812789999996,
+          "upper": 2895.812526000009,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.17151499998,
+        "upperMs": 5080.410164023851
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.17151499998,
+          "upperMs": 5080.410164023851
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.287276999996,
+          "upperMs": 5083.662670999998
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.556570000001,
+          "upperMs": 5029.218293000013
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.49731800000881776,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 58,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 231.41256900000735,
+            "serverResponseDelayMs": 200.31950399999914,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.47639100001,
+              "upper": 28326.289712000013
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 59,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 216.50701099999424,
+            "serverResponseDelayMs": 200.3070360000056,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.47639100001,
+              "upper": 28326.289712000013
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 7,
+      "scenario": "delayed-cq",
+      "round": 7,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4720830178751,
+          "upper": 966.9590720119256,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4485660000064,
+          "upper": 2324.749503999992,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4920890000067,
+          "upper": 2895.7915869999997,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5080.447273017868,
+        "upperMs": 5081.63776001193
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5080.447273017868,
+          "upperMs": 5081.63776001193
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.970281000002,
+          "upperMs": 5085.312116999994
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.813533000008,
+          "upperMs": 5030.4139689999865
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5267429999948945,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 69,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 249.42456899999524,
+            "serverResponseDelayMs": 200.3286969999972,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.506688000016,
+              "upper": 28325.963613999993
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 70,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 240.63580699999875,
+            "serverResponseDelayMs": 200.35557400000107,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.506688000016,
+              "upper": 28325.963613999993
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 8,
+      "scenario": "delayed-cq",
+      "round": 8,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4779550238356,
+          "upper": 966.9359560059627,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4445819999964,
+          "upper": 2324.7568769999925,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.487141000005,
+          "upper": 2895.7976259999996,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5078.329292005947,
+        "upperMs": 5079.501777988087
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5078.329292005947,
+          "upperMs": 5079.501777988087
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.152317,
+          "upperMs": 5083.506525999997
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5027.907364999992,
+          "upperMs": 5028.530144999982
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5103859999944689,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 77,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 1,
+            "commandAssociated": true,
+            "clientWaitMs": 200.49026700000104,
+            "serverResponseDelayMs": 200.21059999999852,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.496452,
+              "upper": 28326.04100299999
+            }
+          },
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 78,
+            "method": "textDocument/codeAction",
+            "commandRequestOrder": "after command start",
+            "triggerKind": 2,
+            "commandAssociated": false,
+            "clientWaitMs": 250.63547700000345,
+            "serverResponseDelayMs": 200.43416000000434,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.496452,
+              "upper": 28326.04100299999
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 9,
+      "scenario": "delayed-cr",
+      "round": 0,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4591540178856,
+          "upper": 966.9617410059534,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.448528000008,
+          "upper": 2324.7468320000044,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.488584999999,
+          "upper": 2895.7904770000023,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 328.7060219999985,
+        "upperMs": 329.91450098808855
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 328.7060219999985,
+        "upperMs": 329.91450098808855
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5078.306021994038,
+        "upperMs": 5079.514500982128
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5078.306021994038,
+          "upperMs": 5079.514500982128
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.961202999999,
+          "upperMs": 5085.310238999999
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5027.703366000016,
+          "upperMs": 5028.3035620000155
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 328.7060219999985,
+        "upperMs": 329.91450098808855
+      },
+      "newTargetFocus": {
+        "lowerMs": 329.306021994038,
+        "upperMs": 330.5145009821281
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -74.69397800596198,
+            "upperMs": 251.814500994049
+          },
+          "firstTrueSample": {
+            "lowerMs": 250.60602200595895,
+            "upperMs": 251.814500994049
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 88,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 225.1772850000125,
+            "serverResponseDelayMs": 200.36493399999745,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.512187000015,
+              "upper": 28325.978395000006
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 85686.114297,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 10,
+      "scenario": "delayed-cr",
+      "round": 1,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4494610000013,
+          "upper": 966.9529810238407,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4483489999984,
+          "upper": 2324.778894999996,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4805909999995,
+          "upper": 2895.812441000002,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 365.25536899999133,
+        "upperMs": 366.49473902385216
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 365.25536899999133,
+        "upperMs": 366.49473902385216
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5027.255368999991,
+        "upperMs": 5028.494739023852
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5027.255368999991,
+          "upperMs": 5028.494739023852
+        },
+        "nativeEnd": {
+          "lowerMs": 5032.090851999994,
+          "upperMs": 5032.464862000008
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.137992999997,
+          "upperMs": 5026.800388999996
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 365.25536899999133,
+        "upperMs": 366.49473902385216
+      },
+      "newTargetFocus": {
+        "lowerMs": 365.85536899403087,
+        "upperMs": 367.0947390178917
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -36.544631011929596,
+            "upperMs": 289.8947390000103
+          },
+          "firstTrueSample": {
+            "lowerMs": 288.6553689761495,
+            "upperMs": 289.8947390000103
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 98,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.2216269999917,
+            "serverResponseDelayMs": 200.311772999994,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.485403999992,
+              "upper": 28325.99442599999
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 92153.379682,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 11,
+      "scenario": "delayed-cr",
+      "round": 2,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4553210059578,
+          "upper": 966.9588420000025,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.445774000007,
+          "upper": 2324.7812209999975,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4753899999923,
+          "upper": 2895.8152509999927,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 394.9777429821115,
+        "upperMs": 396.2251249761757
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 394.9777429821115,
+        "upperMs": 396.2251249761757
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5043.4777429821115,
+        "upperMs": 5044.725124976176
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5043.4777429821115,
+          "upperMs": 5044.725124976176
+        },
+        "nativeEnd": {
+          "lowerMs": 5047.782113000008,
+          "upperMs": 5048.164665000004
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5042.39695200001,
+          "upperMs": 5043.072260000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 394.9777429821115,
+        "upperMs": 396.2251249761757
+      },
+      "newTargetFocus": {
+        "lowerMs": 395.4777429821115,
+        "upperMs": 396.7251249761757
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -55.72225700596755,
+            "upperMs": 320.7251249761757
+          },
+          "firstTrueSample": {
+            "lowerMs": 319.4777429821115,
+            "upperMs": 320.7251249761757
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 103,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.59648999999627,
+            "serverResponseDelayMs": 200.345061,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.44704900001,
+              "upper": 28326.069912000006
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 98756.748525,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 12,
+      "scenario": "delayed-cr",
+      "round": 3,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4706099999942,
+          "upper": 966.9475680178828,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4500810000027,
+          "upper": 2324.7638149999984,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.48444,
+          "upper": 2895.798173999996,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 302.5783829999855,
+        "upperMs": 303.7730750178889
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 302.5783829999855,
+        "upperMs": 303.7730750178889
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5074.0783829999855,
+        "upperMs": 5075.273075017889
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5074.0783829999855,
+          "upperMs": 5075.273075017889
+        },
+        "nativeEnd": {
+          "lowerMs": 5078.806186000002,
+          "upperMs": 5079.163413000002
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5072.962111000001,
+          "upperMs": 5073.589578999992
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 302.5783829999855,
+        "upperMs": 303.7730750178889
+      },
+      "newTargetFocus": {
+        "lowerMs": 303.0783829999855,
+        "upperMs": 304.2730750178889
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -126.42161700001452,
+            "upperMs": 224.97307500596798
+          },
+          "firstTrueSample": {
+            "lowerMs": 223.77838298806455,
+            "upperMs": 224.97307500596798
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 113,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.50574900000356,
+            "serverResponseDelayMs": 200.19911899999715,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.516898,
+              "upper": 28325.976421
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 105347.951836,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 13,
+      "scenario": "delayed-cr",
+      "round": 4,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4767610238389,
+          "upper": 966.9803430178824,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.445982999998,
+          "upper": 2324.748382000005,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4810510000098,
+          "upper": 2895.784479000009,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 343.6274640118936,
+        "upperMs": 344.8384740059555
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 343.6274640118936,
+        "upperMs": 344.8384740059555
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5031.027464017854,
+        "upperMs": 5032.238474011916
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5031.027464017854,
+          "upperMs": 5032.238474011916
+        },
+        "nativeEnd": {
+          "lowerMs": 5035.933906999984,
+          "upperMs": 5036.279814999987
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.814849999981,
+          "upperMs": 5030.420676999987
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 343.6274640118936,
+        "upperMs": 344.8384740059555
+      },
+      "newTargetFocus": {
+        "lowerMs": 344.22746400593314,
+        "upperMs": 345.43847399999504
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -107.07253597618546,
+            "upperMs": 244.43847399999504
+          },
+          "firstTrueSample": {
+            "lowerMs": 243.22746400593314,
+            "upperMs": 244.43847399999504
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 120,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 235.13672999999835,
+            "serverResponseDelayMs": 200.31061800000316,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.507994999993,
+              "upper": 28326.01767100001
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 111951.913772,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 14,
+      "scenario": "delayed-cr",
+      "round": 5,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4673980059645,
+          "upper": 966.9708579999958,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.448497999998,
+          "upper": 2324.776861999999,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4897920000076,
+          "upper": 2895.809659000006,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 400.12380199998734,
+        "upperMs": 401.3511289940361
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 400.12380199998734,
+        "upperMs": 401.3511289940361
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5028.423801982106,
+        "upperMs": 5029.651128976155
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5028.423801982106,
+          "upperMs": 5029.651128976155
+        },
+        "nativeEnd": {
+          "lowerMs": 5034.126632999978,
+          "upperMs": 5034.491293999992
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5027.378459999993,
+          "upperMs": 5028.026690999992
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 400.12380199998734,
+        "upperMs": 401.3511289940361
+      },
+      "newTargetFocus": {
+        "lowerMs": 400.62380199998734,
+        "upperMs": 401.8511289940361
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -50.57619801789406,
+            "upperMs": 300.8511289940361
+          },
+          "firstTrueSample": {
+            "lowerMs": 299.62380199998734,
+            "upperMs": 300.8511289940361
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 130,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 249.53931300000113,
+            "serverResponseDelayMs": 200.30011300000479,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.511272999996,
+              "upper": 28326.00051099999
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 118424.42704,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 15,
+      "scenario": "delayed-cr",
+      "round": 6,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4724750238431,
+          "upper": 966.9278440178848,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4494769999874,
+          "upper": 2324.7769689999986,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4884709999897,
+          "upper": 2895.812391000014,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 301.5859879999771,
+        "upperMs": 302.76927699406224
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 301.5859879999771,
+        "upperMs": 302.76927699406224
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5027.385988011927,
+        "upperMs": 5028.569277005969
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5027.385988011927,
+          "upperMs": 5028.569277005969
+        },
+        "nativeEnd": {
+          "lowerMs": 5031.695803999959,
+          "upperMs": 5032.066107000021
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.482595999958,
+          "upperMs": 5027.134007999994
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 301.5859879999771,
+        "upperMs": 302.76927699406224
+      },
+      "newTargetFocus": {
+        "lowerMs": 302.0859879999771,
+        "upperMs": 303.26927699406224
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -108.51401199406246,
+            "upperMs": 217.96927701194363
+          },
+          "firstTrueSample": {
+            "lowerMs": 216.78598801785847,
+            "upperMs": 217.96927701194363
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 135,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.63616100000218,
+            "serverResponseDelayMs": 200.31019500001275,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.48085899999,
+              "upper": 28326.119684999998
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 124985.216477,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 16,
+      "scenario": "delayed-cr",
+      "round": 7,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4591790119205,
+          "upper": 967.0154860119317,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.445120999997,
+          "upper": 2324.7606050000177,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.483157999988,
+          "upper": 2895.7989290000114,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 373.7175419999985,
+        "upperMs": 374.9936199999938
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 373.7175419999985,
+        "upperMs": 374.9936199999938
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5027.017542011919,
+        "upperMs": 5028.293620011915
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5027.017542011919,
+          "upperMs": 5028.293620011915
+        },
+        "nativeEnd": {
+          "lowerMs": 5032.450695999956,
+          "upperMs": 5032.809013999999
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.104466999968,
+          "upperMs": 5026.735722000012
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 373.7175419999985,
+        "upperMs": 374.9936199999938
+      },
+      "newTargetFocus": {
+        "lowerMs": 374.4175419880776,
+        "upperMs": 375.6936199880729
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -76.7824580000015,
+            "upperMs": 274.59361999403336
+          },
+          "firstTrueSample": {
+            "lowerMs": 273.31754199403804,
+            "upperMs": 274.59361999403336
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 142,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.16737000001012,
+            "serverResponseDelayMs": 200.31168899999466,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.513689,
+              "upper": 28326.00130200002
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 131618.875856,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 17,
+      "scenario": "delayed-cr",
+      "round": 8,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4591480000138,
+          "upper": 966.962970023839,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4458100000047,
+          "upper": 2324.7826469999854,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4770140000037,
+          "upper": 2895.811810000014,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "text input",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 302.1672519821441,
+        "upperMs": 303.4098700059403
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 302.1672519821441,
+        "upperMs": 303.4098700059403
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5063.467251994065,
+        "upperMs": 5064.709870017861
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5063.467251994065,
+          "upperMs": 5064.709870017861
+        },
+        "nativeEnd": {
+          "lowerMs": 5067.687287999986,
+          "upperMs": 5068.063695999997
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5062.516359000001,
+          "upperMs": 5063.187991999992
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 302.1672519821441,
+        "upperMs": 303.4098700059403
+      },
+      "newTargetFocus": {
+        "lowerMs": 302.6672519821441,
+        "upperMs": 303.9098700059403
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "none within 5 s",
+        "jWhilePending": "proven before settlement; pending at 5 s"
+      },
+      "predicate": false,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": false,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": -137.13274799997453,
+            "upperMs": 214.30987001190078
+          },
+          "firstTrueSample": {
+            "lowerMs": 213.06725198810454,
+            "upperMs": 214.30987001190078
+          },
+          "window": "boundary overlap"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 147,
+            "method": "textDocument/prepareRename",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.71183200000087,
+            "serverResponseDelayMs": 200.36734900000738,
+            "serverResponseEvent": "response",
+            "response": "completed",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.471871,
+              "upper": 28326.07614799998
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "leader handler",
+        "leaderKeys": [
+          {
+            "t": 138200.856343,
+            "type": "key",
+            "value": "j",
+            "active": true
+          }
+        ],
+        "finalSelections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          },
+          {
+            "value": "alpha",
+            "focused": true,
+            "label": "Rename input. Type new name and press Enter to commit."
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement; pending at 5 s"
+    },
+    {
+      "index": 18,
+      "scenario": "delayed-cf",
+      "round": 0,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4407420178952,
+          "upper": 966.9352490059489,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4495330000063,
+          "upper": 2324.758008999983,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.489346999995,
+          "upper": 2895.7980419999803,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5059.468827000062,
+        "upperMs": 5060.676028988062
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5059.468827000062,
+          "upperMs": 5060.676028988062
+        },
+        "nativeEnd": {
+          "lowerMs": 5064.250722000026,
+          "upperMs": 5064.606029999995
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5058.403861000028,
+          "upperMs": 5059.02103199999
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 55.98065000001225,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 154,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.93298099999083,
+            "serverResponseDelayMs": 200.54381200000353,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.488222000015,
+              "upper": 28326.018653999985
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 19,
+      "scenario": "delayed-cf",
+      "round": 1,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4923610238377,
+          "upper": 966.9934460238535,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4506720000063,
+          "upper": 2324.746092000016,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.492823000008,
+          "upper": 2895.7868930000113,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5030.077806999994,
+        "upperMs": 5031.276961999974
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5030.077806999994,
+          "upperMs": 5031.276961999974
+        },
+        "nativeEnd": {
+          "lowerMs": 5034.287008999992,
+          "upperMs": 5034.624528999993
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.964092999988,
+          "upperMs": 5029.553583000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 27.361146999988705,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 160,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.28414999999222,
+            "serverResponseDelayMs": 200.05480399999942,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.478228000007,
+              "upper": 28326.076778999995
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 20,
+      "scenario": "delayed-cf",
+      "round": 2,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4527140119073,
+          "upper": 966.9497430119179,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4501969999983,
+          "upper": 2324.748523999995,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.494233000005,
+          "upper": 2895.792900999979,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5077.62054299406,
+        "upperMs": 5078.8202399940055
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5077.62054299406,
+          "upperMs": 5078.8202399940055
+        },
+        "nativeEnd": {
+          "lowerMs": 5081.694215000025,
+          "upperMs": 5082.034952999995
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5027.117868000001,
+          "upperMs": 5027.714862999972
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 11.277108999987831,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 168,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.4207710000046,
+            "serverResponseDelayMs": 200.10889500001213,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.527452999988,
+              "upper": 28326.00725699999
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 21,
+      "scenario": "delayed-cf",
+      "round": 3,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.431416023833,
+          "upper": 966.9259249999984,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.445356000011,
+          "upper": 2324.771596000006,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4756380000035,
+          "upper": 2895.8018560000055,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5076.530623017898,
+        "upperMs": 5077.755349994026
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5076.530623017898,
+          "upperMs": 5077.755349994026
+        },
+        "nativeEnd": {
+          "lowerMs": 5081.415255000029,
+          "upperMs": 5081.788920999999
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5025.892055000004,
+          "upperMs": 5026.544513000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 54.87059800000861,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 174,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.94635500002187,
+            "serverResponseDelayMs": 200.61972699998296,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.47576900001,
+              "upper": 28326.073744000023
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 22,
+      "scenario": "delayed-cf",
+      "round": 4,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.437874023851,
+          "upper": 966.9297700119303,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.446939000016,
+          "upper": 2324.7917829999933,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4786739999836,
+          "upper": 2895.8213749999995,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.753418000037,
+        "upperMs": 5080.992014988093
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.753418000037,
+          "upperMs": 5080.992014988093
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.110633000004,
+          "upperMs": 5084.498503000039
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.217776000034,
+          "upperMs": 5029.9053210000275
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 14.828815999993822,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 182,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.56844699999783,
+            "serverResponseDelayMs": 200.24172300001374,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.502574000013,
+              "upper": 28326.048809
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 23,
+      "scenario": "delayed-cf",
+      "round": 5,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4422580119183,
+          "upper": 966.9081040178814,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.451227999991,
+          "upper": 2324.7517189999926,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.498496999993,
+          "upper": 2895.798987999995,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5069.088372011931,
+        "upperMs": 5070.258709017857
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5069.088372011931,
+          "upperMs": 5070.258709017857
+        },
+        "nativeEnd": {
+          "lowerMs": 5073.755917000002,
+          "upperMs": 5074.102282999986
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5068.09434499999,
+          "upperMs": 5068.695326999994
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 61.1056319999916,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 188,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.4702770000149,
+            "serverResponseDelayMs": 200.1460430000152,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.487854000006,
+              "upper": 28326.100949999993
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 24,
+      "scenario": "delayed-cf",
+      "round": 6,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.470091023851,
+          "upper": 966.953665023854,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.452093,
+          "upper": 2324.7505219999875,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.495756999997,
+          "upper": 2895.793002999999,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.988569023873,
+        "upperMs": 5081.173389023839
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.988569023873,
+          "upperMs": 5081.173389023839
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.128728999989,
+          "upperMs": 5084.46983300001
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.309011000005,
+          "upperMs": 5029.904685999994
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 13.064182000001892,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 196,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 248.00646899998537,
+            "serverResponseDelayMs": 200.00602299999446,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.51041799999,
+              "upper": 28326.000196999987
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 25,
+      "scenario": "delayed-cf",
+      "round": 7,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4448070000119,
+          "upper": 966.9248420178872,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4502059999795,
+          "upper": 2324.747610999999,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.49755,
+          "upper": 2895.7949620000145,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5078.648284976167,
+        "upperMs": 5079.8297319940175
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5078.648284976167,
+          "upperMs": 5079.8297319940175
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.634526000009,
+          "upperMs": 5083.978365000017
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.079219999956,
+          "upperMs": 5028.67403699999
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 11.664497999998275,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 204,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 222.02257199998712,
+            "serverResponseDelayMs": 200.4115800000145,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.487630999967,
+              "upper": 28326.117981999996
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 26,
+      "scenario": "delayed-cf",
+      "round": 8,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4698420178804,
+          "upper": 966.9513670119147,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.452484999987,
+          "upper": 2324.7379650000075,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.506866999989,
+          "upper": 2895.7848430000013,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5077.219875994051,
+        "upperMs": 5078.383376988058
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5077.219875994051,
+          "upperMs": 5078.383376988058
+        },
+        "nativeEnd": {
+          "lowerMs": 5082.124764000007,
+          "upperMs": 5082.448674000014
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.605600999988,
+          "upperMs": 5027.169057000021
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 13.416456999984803,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 212,
+            "method": "textDocument/formatting",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 249.04677499999525,
+            "serverResponseDelayMs": 200.8980440000014,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.473066999984,
+              "upper": 28325.962885999994
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven before settlement"
+    },
+    {
+      "index": 27,
+      "scenario": "delayed-cd",
+      "round": 0,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4633250178788,
+          "upper": 966.9418700119229,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4508170000045,
+          "upper": 2324.774025999999,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.49000000002,
+          "upper": 2895.8078270000115,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5076.667309011915,
+        "upperMs": 5077.867681005911
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5076.667309011915,
+          "upperMs": 5077.867681005911
+        },
+        "nativeEnd": {
+          "lowerMs": 5080.885792999936,
+          "upperMs": 5081.246890999959
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.040108999994,
+          "upperMs": 5026.6811449999805
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 3.0820789999852423,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 218,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.14165999999386,
+            "serverResponseDelayMs": 200.35634500000742,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.475856000005,
+              "upper": 28326.169830999977
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 28,
+      "scenario": "delayed-cd",
+      "round": 1,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4738090059739,
+          "upper": 966.9402370119158,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.451767999999,
+          "upper": 2324.746987999999,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4980550000037,
+          "upper": 2895.7932750000036,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5081.581227982155,
+        "upperMs": 5082.746875988058
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5081.581227982155,
+          "upperMs": 5082.746875988058
+        },
+        "nativeEnd": {
+          "lowerMs": 5085.9560169999895,
+          "upperMs": 5086.293437000015
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5031.041247000016,
+          "upperMs": 5031.6316870000155
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.7444830000167713,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 227,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 225.85590100000263,
+            "serverResponseDelayMs": 201.0584019999951,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.502701999998,
+              "upper": 28326.010825000005
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 29,
+      "scenario": "delayed-cd",
+      "round": 2,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4217560119189,
+          "upper": 966.9255760059557,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4513179999776,
+          "upper": 2324.7511569999915,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.499480999977,
+          "upper": 2895.792603000009,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.25049598809,
+        "upperMs": 5080.451437982119
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.25049598809,
+          "upperMs": 5080.451437982119
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.431886999984,
+          "upperMs": 5083.769316999998
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.739527999976,
+          "upperMs": 5029.332489000022
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5069010000152048,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 235,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 200.69985399997677,
+            "serverResponseDelayMs": 200.4171679999854,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.504633999983,
+              "upper": 28326.05811099999
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 30,
+      "scenario": "delayed-cd",
+      "round": 3,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4889270119213,
+          "upper": 966.9715309999981,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.450351000007,
+          "upper": 2324.7528440000024,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4975969999796,
+          "upper": 2895.7920169999998,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5078.13845499407,
+        "upperMs": 5079.319478982128
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5078.13845499407,
+          "upperMs": 5079.319478982128
+        },
+        "nativeEnd": {
+          "lowerMs": 5082.142962000013,
+          "upperMs": 5082.479239000037
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5027.613257000019,
+          "upperMs": 5028.210170000035
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5097440000099596,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 243,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 201.182444999984,
+            "serverResponseDelayMs": 200.91331800000626,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.492475000006,
+              "upper": 28326.05106900001
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 31,
+      "scenario": "delayed-cd",
+      "round": 4,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4441060119327,
+          "upper": 966.9359140119147,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4460770000005,
+          "upper": 2324.7844769999792,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4733270000143,
+          "upper": 2895.8145760000043,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5027.179513988114,
+        "upperMs": 5028.416570988047
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5027.179513988114,
+          "upperMs": 5028.416570988047
+        },
+        "nativeEnd": {
+          "lowerMs": 5031.833375999995,
+          "upperMs": 5032.216823999974
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5026.150481999997,
+          "upperMs": 5026.830130999966
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.4840670000121463,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 249,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.50090199999977,
+            "serverResponseDelayMs": 200.40077099998598,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.47032199998,
+              "upper": 28326.13289799998
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 32,
+      "scenario": "delayed-cd",
+      "round": 5,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4678340119328,
+          "upper": 966.9395309999916,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.4517570000025,
+          "upper": 2324.7429739999934,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.497924000025,
+          "upper": 2895.788502999989,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5075.94568498811,
+        "upperMs": 5077.1119609760935
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5075.94568498811,
+          "upperMs": 5077.1119609760935
+        },
+        "nativeEnd": {
+          "lowerMs": 5079.989856,
+          "upperMs": 5080.322144999955
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5025.4013200000045,
+          "upperMs": 5025.983115999959
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.42274699997506104,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 257,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 249.60702399999718,
+            "serverResponseDelayMs": 200.32762500000536,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "before request",
+            "jDuringServerWait": "before request",
+            "serverClockOffset": {
+              "lower": 28325.511969000014,
+              "upper": 28326.105826999992
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 33,
+      "scenario": "delayed-cd",
+      "round": 6,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4647870178935,
+          "upper": 966.9264620238489,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.453269999998,
+          "upper": 2324.728964000009,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.5039389999874,
+          "upper": 2895.778735,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.257524005981,
+        "upperMs": 5080.39799501191
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.257524005981,
+          "upperMs": 5080.39799501191
+        },
+        "nativeEnd": {
+          "lowerMs": 5083.495052999962,
+          "upperMs": 5083.821842999983
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.8409569999785,
+          "upperMs": 5029.391447000002
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.40306899999268353,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 268,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 223.01382799999556,
+            "serverResponseDelayMs": 200.5579499999876,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.527143999992,
+              "upper": 28325.91786700001
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 34,
+      "scenario": "delayed-cd",
+      "round": 7,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4298520178902,
+          "upper": 966.980674000001,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.446475999983,
+          "upper": 2324.782091000001,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.481900999992,
+          "upper": 2895.818251000019,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5079.093805000011,
+        "upperMs": 5080.38497698211
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5079.093805000011,
+          "upperMs": 5080.38497698211
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.195078999968,
+          "upperMs": 5084.572282000008
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5028.594677999965,
+          "upperMs": 5029.26664300001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.4296139999933075,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 274,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 250.37493600000744,
+            "serverResponseDelayMs": 200.4487599999993,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.487286999967,
+              "upper": 28326.10304700001
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    },
+    {
+      "index": 35,
+      "scenario": "delayed-cd",
+      "round": 8,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 966.4636660238514,
+          "upper": 966.9674680178966,
+          "timeOrigin": 1793469771107.9
+        },
+        "probe": {
+          "lower": 2324.450264999992,
+          "upper": 2324.748214000021,
+          "timeOrigin": 1793469772465.619
+        },
+        "leader": {
+          "lower": 2895.4958580000093,
+          "upper": 2895.79459200002,
+          "timeOrigin": 1793469773036.767
+        }
+      },
+      "issues": [],
+      "target": "editor text",
+      "focusChangeObserved": false,
+      "firstFocusChange": null,
+      "firstFocusChangeSource": "none observed",
+      "firstFocusChangeWindow": "none observed",
+      "firstObservedChange": null,
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5080.073595011927,
+        "upperMs": 5081.280131005944
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5080.073595011927,
+          "upperMs": 5081.280131005944
+        },
+        "nativeEnd": {
+          "lowerMs": 5084.231147000013,
+          "upperMs": 5084.57657200002
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5029.741340999986,
+          "upperMs": 5030.338024000026
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": null,
+      "newTargetFocus": null,
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.4567559999995865,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "none within observation window"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": false
+      },
+      "scmTreeFocus": null,
+      "provider": {
+        "requests": [
+          {
+            "provider": "primary",
+            "clientPid": 3879751,
+            "serverPid": 3880324,
+            "id": 285,
+            "method": "textDocument/hover",
+            "commandRequestOrder": "after command start",
+            "commandAssociated": true,
+            "clientWaitMs": 249.65726899998845,
+            "serverResponseDelayMs": 200.03327800001716,
+            "serverResponseEvent": "cancelled-response",
+            "response": "cancelled/error -32800",
+            "jDuringClientWait": "proven inside",
+            "jDuringServerWait": "proven inside",
+            "serverClockOffset": {
+              "lower": 28325.521019000007,
+              "upper": 28325.953760000033
+            }
+          }
+        ],
+        "keydowns": 1,
+        "keyTarget": "editor text",
+        "route": "inferred Vim line movement",
+        "leaderKeys": [],
+        "finalSelections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "inputs": [
+          {
+            "value": "",
+            "focused": false,
+            "label": null
+          }
+        ]
+      },
+      "jBeforeCommandSettled": "proven after settlement"
+    }
+  ]
+}

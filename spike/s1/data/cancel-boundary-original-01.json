@@ -1,0 +1,6590 @@
+{
+  "scope": "Sentinel-gated cancellation diagnostic with renderer tracing; not an acceptance gate",
+  "gate": "cancel-boundary",
+  "started": "2026-10-30T22:55:25.852Z",
+  "sourceCommit": "c0b52fe9faba5f8bdfc4fed2c1b0976b12883acf",
+  "sourceDirty": "",
+  "node": "v24.21.0",
+  "condition": {
+    "delayMs": 10,
+    "load": "idle",
+    "affinity": "same extension host",
+    "instances": 1,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": null
+  },
+  "trials": [
+    {
+      "index": 0,
+      "round": 0,
+      "case": "root-ctrl+c",
+      "keys": [
+        "space",
+        "ctrl+c",
+        "j"
+      ],
+      "entry": {
+        "startedAt": 1793400952591,
+        "samples": [
+          {
+            "injectedAt": 1793400952591,
+            "injectionFinishedAt": 1793400952636,
+            "observedAt": 1793400952637,
+            "observed": {
+              "viewColumn": 2,
+              "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+              "selections": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "mode": 0,
+              "pending": {
+                "actionKeys": [],
+                "bufferedKeys": [],
+                "actionsRunPressedKeys": [],
+                "count": 0,
+                "operatorCount": 0,
+                "registerName": "\""
+              },
+              "registers": {
+                "%": [
+                  {
+                    "text": "sample.txt",
+                    "mode": "character"
+                  }
+                ],
+                ".": [
+                  {
+                    "text": {
+                      "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                    },
+                    "mode": "character"
+                  }
+                ],
+                "#": [
+                  {
+                    "text": "rendererLog",
+                    "mode": "character"
+                  }
+                ]
+              },
+              "queue": {
+                "pending": 0,
+                "jobs": 0,
+                "running": false
+              },
+              "leader": {
+                "active": true,
+                "prefix": [],
+                "events": [
+                  {
+                    "t": 25084.158085,
+                    "type": "start"
+                  },
+                  {
+                    "t": 25084.767416,
+                    "type": "context-on"
+                  }
+                ]
+              },
+              "sentinel": "normal-editor-capture-on",
+              "sentinelSequence": 2
+            }
+          }
+        ],
+        "confirmedAt": 1793400952637
+      },
+      "cancellationKeys": [
+        "ctrl+c",
+        "j"
+      ],
+      "injectedAt": 1793400952637,
+      "injectionFinishedAt": 1793400952672,
+      "before": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": []
+        },
+        "sentinel": "normal-editor-capture-off",
+        "sentinelSequence": 1
+      },
+      "after": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": [
+            {
+              "t": 25084.158085,
+              "type": "start"
+            },
+            {
+              "t": 25084.767416,
+              "type": "context-on"
+            },
+            {
+              "t": 25135.365243,
+              "type": "key",
+              "value": "ctrl+c",
+              "active": true
+            },
+            {
+              "t": 25142.55384,
+              "type": "end",
+              "reason": "ctrl+c"
+            }
+          ]
+        },
+        "sentinel": "normal-editor-capture-on",
+        "sentinelSequence": 2
+      },
+      "finalSentinel": "normal-editor-capture-off",
+      "finalSentinelSequence": 3,
+      "errors": []
+    },
+    {
+      "index": 1,
+      "round": 0,
+      "case": "root-escape",
+      "keys": [
+        "space",
+        "Escape",
+        "j"
+      ],
+      "entry": {
+        "startedAt": 1793400953262,
+        "samples": [
+          {
+            "injectedAt": 1793400953262,
+            "injectionFinishedAt": 1793400953310,
+            "observedAt": 1793400953310,
+            "observed": {
+              "viewColumn": 2,
+              "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+              "selections": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "mode": 0,
+              "pending": {
+                "actionKeys": [],
+                "bufferedKeys": [],
+                "actionsRunPressedKeys": [],
+                "count": 0,
+                "operatorCount": 0,
+                "registerName": "\""
+              },
+              "registers": {
+                "%": [
+                  {
+                    "text": "sample.txt",
+                    "mode": "character"
+                  }
+                ],
+                ".": [
+                  {
+                    "text": {
+                      "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                    },
+                    "mode": "character"
+                  }
+                ],
+                "#": [
+                  {
+                    "text": "rendererLog",
+                    "mode": "character"
+                  }
+                ]
+              },
+              "queue": {
+                "pending": 0,
+                "jobs": 0,
+                "running": false
+              },
+              "leader": {
+                "active": true,
+                "prefix": [],
+                "events": [
+                  {
+                    "t": 25754.467745,
+                    "type": "start"
+                  },
+                  {
+                    "t": 25760.286762,
+                    "type": "context-on"
+                  }
+                ]
+              },
+              "sentinel": "normal-editor-capture-on",
+              "sentinelSequence": 5
+            }
+          }
+        ],
+        "confirmedAt": 1793400953310
+      },
+      "cancellationKeys": [
+        "Escape",
+        "j"
+      ],
+      "injectedAt": 1793400953310,
+      "injectionFinishedAt": 1793400953335,
+      "before": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": []
+        },
+        "sentinel": "normal-editor-capture-off",
+        "sentinelSequence": 4
+      },
+      "after": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            1,
+            0,
+            1,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": [
+            {
+              "t": 25754.467745,
+              "type": "start"
+            },
+            {
+              "t": 25760.286762,
+              "type": "context-on"
+            },
+            {
+              "t": 25803.11338,
+              "type": "key",
+              "value": "escape",
+              "active": true
+            },
+            {
+              "t": 25803.780659,
+              "type": "end",
+              "reason": "escape"
+            }
+          ]
+        },
+        "sentinel": "normal-editor-capture-on",
+        "sentinelSequence": 5
+      },
+      "finalSentinel": "normal-editor-capture-off",
+      "finalSentinelSequence": 6,
+      "errors": []
+    },
+    {
+      "index": 2,
+      "round": 1,
+      "case": "root-ctrl+c",
+      "keys": [
+        "space",
+        "ctrl+c",
+        "j"
+      ],
+      "entry": {
+        "startedAt": 1793400953923,
+        "samples": [
+          {
+            "injectedAt": 1793400953923,
+            "injectionFinishedAt": 1793400953968,
+            "observedAt": 1793400953968,
+            "observed": {
+              "viewColumn": 2,
+              "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+              "selections": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "mode": 0,
+              "pending": {
+                "actionKeys": [],
+                "bufferedKeys": [],
+                "actionsRunPressedKeys": [],
+                "count": 0,
+                "operatorCount": 0,
+                "registerName": "\""
+              },
+              "registers": {
+                "%": [
+                  {
+                    "text": "sample.txt",
+                    "mode": "character"
+                  }
+                ],
+                ".": [
+                  {
+                    "text": {
+                      "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                    },
+                    "mode": "character"
+                  }
+                ],
+                "#": [
+                  {
+                    "text": "rendererLog",
+                    "mode": "character"
+                  }
+                ]
+              },
+              "queue": {
+                "pending": 0,
+                "jobs": 0,
+                "running": false
+              },
+              "leader": {
+                "active": true,
+                "prefix": [],
+                "events": [
+                  {
+                    "t": 26416.018689,
+                    "type": "start"
+                  },
+                  {
+                    "t": 26442.87429,
+                    "type": "context-on"
+                  }
+                ]
+              },
+              "sentinel": "normal-editor-capture-off",
+              "sentinelSequence": 8
+            }
+          },
+          {
+            "injectedAt": 1793400953968,
+            "injectionFinishedAt": 1793400954003,
+            "observedAt": 1793400954003,
+            "observed": {
+              "viewColumn": 2,
+              "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+              "selections": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "mode": 0,
+              "pending": {
+                "actionKeys": [],
+                "bufferedKeys": [],
+                "actionsRunPressedKeys": [],
+                "count": 0,
+                "operatorCount": 0,
+                "registerName": "\""
+              },
+              "registers": {
+                "%": [
+                  {
+                    "text": "sample.txt",
+                    "mode": "character"
+                  }
+                ],
+                ".": [
+                  {
+                    "text": {
+                      "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                    },
+                    "mode": "character"
+                  }
+                ],
+                "#": [
+                  {
+                    "text": "rendererLog",
+                    "mode": "character"
+                  }
+                ]
+              },
+              "queue": {
+                "pending": 0,
+                "jobs": 0,
+                "running": false
+              },
+              "leader": {
+                "active": true,
+                "prefix": [],
+                "events": [
+                  {
+                    "t": 26416.018689,
+                    "type": "start"
+                  },
+                  {
+                    "t": 26442.87429,
+                    "type": "context-on"
+                  }
+                ]
+              },
+              "sentinel": "normal-editor-capture-on",
+              "sentinelSequence": 9
+            }
+          }
+        ],
+        "confirmedAt": 1793400954003
+      },
+      "cancellationKeys": [
+        "ctrl+c",
+        "j"
+      ],
+      "injectedAt": 1793400954003,
+      "injectionFinishedAt": 1793400954040,
+      "before": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": []
+        },
+        "sentinel": "normal-editor-capture-off",
+        "sentinelSequence": 7
+      },
+      "after": {
+        "viewColumn": 2,
+        "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+        "selections": [
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "mode": 0,
+        "pending": {
+          "actionKeys": [],
+          "bufferedKeys": [],
+          "actionsRunPressedKeys": [],
+          "count": 0,
+          "operatorCount": 0,
+          "registerName": "\""
+        },
+        "registers": {
+          "%": [
+            {
+              "text": "sample.txt",
+              "mode": "character"
+            }
+          ],
+          ".": [
+            {
+              "text": {
+                "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+              },
+              "mode": "character"
+            }
+          ],
+          "#": [
+            {
+              "text": "rendererLog",
+              "mode": "character"
+            }
+          ]
+        },
+        "queue": {
+          "pending": 0,
+          "jobs": 0,
+          "running": false
+        },
+        "leader": {
+          "active": false,
+          "prefix": [],
+          "events": [
+            {
+              "t": 26416.018689,
+              "type": "start"
+            },
+            {
+              "t": 26442.87429,
+              "type": "context-on"
+            },
+            {
+              "t": 26502.77613,
+              "type": "key",
+              "value": "ctrl+c",
+              "active": false
+            },
+            {
+              "t": 26518.424815,
+              "type": "key",
+              "value": "j",
+              "active": false
+            },
+            {
+              "t": 26526.345515,
+              "type": "end",
+              "reason": "document-change"
+            }
+          ]
+        },
+        "sentinel": "normal-editor-capture-on",
+        "sentinelSequence": 9
+      },
+      "finalSentinel": "normal-editor-capture-off",
+      "finalSentinelSequence": 10,
+      "errors": [
+        "unexpected leader event sequence",
+        "leader did not receive exactly the prefix and cancel",
+        "companion cancel rule did not end the leader",
+        "j did not move down once in right editor"
+      ]
+    }
+  ],
+  "vimBundleSha256": "545bd89c5f518e2f5140729c9be4cf2ddf6daa2399af99aac21ea4f4e117aa17",
+  "product": {
+    "version": "1.141.0",
+    "commit": "2a59476c9bfcb90b3ddc372c36762471b7dfad1c"
+  },
+  "bindingComparison": {
+    "selected": "original",
+    "originalCommit": "eaa78ae4b5e7c28b3b3ecbd699b716e9d5cc333a",
+    "originalSha256": "6ecdadaf835615951d328bec2cf2be00a47adbe74d369ad7d6c8493df017a156",
+    "candidateSha256": "3c3dfa7d01d417c9ec1f545544413abe71a491f200a5ebf7fb47f516d58be81d",
+    "installedSha256": "6ecdadaf835615951d328bec2cf2be00a47adbe74d369ad7d6c8493df017a156",
+    "handlersSha256": "6203da3011392babf2db7d79e8960fbeded135c81e387a0e3561ae4de5ca62ff"
+  },
+  "settings": {
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "workbench.editor.enablePreview": false,
+    "window.restoreWindows": "none",
+    "files.autoSave": "off",
+    "files.hotExit": "off",
+    "update.mode": "none",
+    "extensions.autoCheckUpdates": false,
+    "extensions.autoUpdate": false,
+    "telemetry.telemetryLevel": "off",
+    "chat.disableAIFeatures": true,
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.autoClosingComments": "never",
+    "editor.autoSurround": "never",
+    "editor.autoIndent": "none",
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": false,
+    "editor.quickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.wordBasedSuggestions": "off",
+    "editor.parameterHints.enabled": false,
+    "editor.inlineSuggest.enabled": false,
+    "editor.snippetSuggestions": "none",
+    "editor.tabCompletion": "off",
+    "editor.editContext": true,
+    "vim.vimrc.enable": false,
+    "vim.useSystemClipboard": false,
+    "vim.normalModeKeyBindingsNonRecursive": [
+      {
+        "before": [
+          "<space>"
+        ],
+        "commands": [
+          "vimCompanion.startLeader"
+        ]
+      }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+      {
+        "before": [
+          "<space>"
+        ],
+        "commands": [
+          "vimCompanion.startLeader"
+        ]
+      }
+    ]
+  },
+  "deliveryKeybindings": [
+    {
+      "key": "space",
+      "command": "s1.deliveryKey",
+      "args": "space",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "w",
+      "command": "s1.deliveryKey",
+      "args": "w",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "h",
+      "command": "s1.deliveryKey",
+      "args": "h",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "j",
+      "command": "s1.deliveryKey",
+      "args": "j",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "a",
+      "command": "s1.deliveryKey",
+      "args": "a",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "b",
+      "command": "s1.deliveryKey",
+      "args": "b",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "c",
+      "command": "s1.deliveryKey",
+      "args": "c",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "d",
+      "command": "s1.deliveryKey",
+      "args": "d",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "e",
+      "command": "s1.deliveryKey",
+      "args": "e",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "f",
+      "command": "s1.deliveryKey",
+      "args": "f",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "r",
+      "command": "s1.deliveryKey",
+      "args": "r",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "escape",
+      "command": "s1.deliveryKey",
+      "args": "Escape",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "ctrl+[",
+      "command": "s1.deliveryKey",
+      "args": "ctrl+bracketleft",
+      "when": "s1.delivery"
+    },
+    {
+      "key": "ctrl+c",
+      "command": "s1.deliveryKey",
+      "args": "ctrl+c",
+      "when": "s1.delivery"
+    }
+  ],
+  "hello": {
+    "vscode": "1.141.0",
+    "vim": "1.32.4",
+    "pid": 2022397,
+    "leaderPid": 2022397,
+    "loadPid": null,
+    "extensions": [
+      "TypeScriptTeam.jsts-chat-features",
+      "ms-vscode.js-debug",
+      "ms-vscode.js-debug-companion",
+      "ms-vscode.vscode-js-profile-table",
+      "vim-companion-spike.s1-leader",
+      "vim-companion-spike.s1-probe",
+      "vscode.bat",
+      "vscode.builtin-notebook-renderers",
+      "vscode.clojure",
+      "vscode.coffeescript",
+      "vscode.configuration-editing",
+      "vscode.cpp",
+      "vscode.csharp",
+      "vscode.css",
+      "vscode.css-language-features",
+      "vscode.dart",
+      "vscode.debug-auto-launch",
+      "vscode.debug-server-ready",
+      "vscode.diff",
+      "vscode.docker",
+      "vscode.dotenv",
+      "vscode.emmet",
+      "vscode.extension-editing",
+      "vscode.fsharp",
+      "vscode.git",
+      "vscode.git-base",
+      "vscode.github",
+      "vscode.github-authentication",
+      "vscode.go",
+      "vscode.groovy",
+      "vscode.grunt",
+      "vscode.gulp",
+      "vscode.handlebars",
+      "vscode.hlsl",
+      "vscode.html",
+      "vscode.html-language-features",
+      "vscode.ini",
+      "vscode.ipynb",
+      "vscode.jake",
+      "vscode.java",
+      "vscode.javascript",
+      "vscode.json",
+      "vscode.json-language-features",
+      "vscode.julia",
+      "vscode.latex",
+      "vscode.less",
+      "vscode.log",
+      "vscode.lua",
+      "vscode.make",
+      "vscode.markdown",
+      "vscode.markdown-language-features",
+      "vscode.markdown-math",
+      "vscode.media-preview",
+      "vscode.merge-conflict",
+      "vscode.mermaid-markdown-features",
+      "vscode.microsoft-authentication",
+      "vscode.npm",
+      "vscode.objective-c",
+      "vscode.perl",
+      "vscode.php",
+      "vscode.php-language-features",
+      "vscode.powershell",
+      "vscode.prompt",
+      "vscode.pug",
+      "vscode.python",
+      "vscode.r",
+      "vscode.razor",
+      "vscode.references-view",
+      "vscode.restructuredtext",
+      "vscode.ruby",
+      "vscode.rust",
+      "vscode.scss",
+      "vscode.search-result",
+      "vscode.shaderlab",
+      "vscode.shellscript",
+      "vscode.simple-browser",
+      "vscode.sql",
+      "vscode.swift",
+      "vscode.terminal-suggest",
+      "vscode.theme-abyss",
+      "vscode.theme-defaults",
+      "vscode.theme-kimbie-dark",
+      "vscode.theme-monokai",
+      "vscode.theme-monokai-dimmed",
+      "vscode.theme-quietlight",
+      "vscode.theme-red",
+      "vscode.theme-solarized-dark",
+      "vscode.theme-solarized-light",
+      "vscode.theme-tomorrow-night-blue",
+      "vscode.tunnel-forwarding",
+      "vscode.typescript",
+      "vscode.typescript-language-features",
+      "vscode.vb",
+      "vscode.vscode-modern-icons",
+      "vscode.vscode-theme-seti",
+      "vscode.xml",
+      "vscode.yaml",
+      "vscodevim.vim"
+    ]
+  },
+  "initial": {
+    "viewColumn": 2,
+    "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+    "selections": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "mode": 0,
+    "pending": {
+      "actionKeys": [],
+      "bufferedKeys": [],
+      "actionsRunPressedKeys": [],
+      "count": 0,
+      "operatorCount": 0,
+      "registerName": "\""
+    },
+    "registers": {
+      "%": [
+        {
+          "text": "sample.txt",
+          "mode": "character"
+        }
+      ]
+    },
+    "queue": {
+      "pending": 0,
+      "jobs": 0,
+      "running": false
+    },
+    "leader": {
+      "active": false,
+      "prefix": [],
+      "events": []
+    },
+    "sentinel": null,
+    "sentinelSequence": 0
+  },
+  "delivery": {
+    "expected": [
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c",
+      "space",
+      "w",
+      "h",
+      "j",
+      "f",
+      "r",
+      "d",
+      "Escape",
+      "ctrl+bracketleft",
+      "ctrl+c"
+    ],
+    "observed": [
+      {
+        "key": "space",
+        "t": 1388.319456
+      },
+      {
+        "key": "w",
+        "t": 1398.534696
+      },
+      {
+        "key": "h",
+        "t": 1408.616398
+      },
+      {
+        "key": "j",
+        "t": 1418.733576
+      },
+      {
+        "key": "f",
+        "t": 1429.101719
+      },
+      {
+        "key": "r",
+        "t": 1439.181622
+      },
+      {
+        "key": "d",
+        "t": 1449.521333
+      },
+      {
+        "key": "Escape",
+        "t": 1459.817093
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1475.591007
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1496.335349
+      },
+      {
+        "key": "space",
+        "t": 1512.291297
+      },
+      {
+        "key": "w",
+        "t": 1522.565861
+      },
+      {
+        "key": "h",
+        "t": 1532.719519
+      },
+      {
+        "key": "j",
+        "t": 1542.784126
+      },
+      {
+        "key": "f",
+        "t": 1553.182458
+      },
+      {
+        "key": "r",
+        "t": 1563.366447
+      },
+      {
+        "key": "d",
+        "t": 1573.556516
+      },
+      {
+        "key": "Escape",
+        "t": 1583.803417
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1599.286159
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1621.176273
+      },
+      {
+        "key": "space",
+        "t": 1636.806577
+      },
+      {
+        "key": "w",
+        "t": 1647.057415
+      },
+      {
+        "key": "h",
+        "t": 1657.315618
+      },
+      {
+        "key": "j",
+        "t": 1667.291024
+      },
+      {
+        "key": "f",
+        "t": 1677.579606
+      },
+      {
+        "key": "r",
+        "t": 1688.0063
+      },
+      {
+        "key": "d",
+        "t": 1698.210764
+      },
+      {
+        "key": "Escape",
+        "t": 1708.368877
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1723.940746
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1744.619547
+      },
+      {
+        "key": "space",
+        "t": 1759.919997
+      },
+      {
+        "key": "w",
+        "t": 1770.469975
+      },
+      {
+        "key": "h",
+        "t": 1780.448169
+      },
+      {
+        "key": "j",
+        "t": 1790.608548
+      },
+      {
+        "key": "f",
+        "t": 1800.915671
+      },
+      {
+        "key": "r",
+        "t": 1811.148091
+      },
+      {
+        "key": "d",
+        "t": 1821.547984
+      },
+      {
+        "key": "Escape",
+        "t": 1831.598669
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1847.174181
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1867.420437
+      },
+      {
+        "key": "space",
+        "t": 1882.967566
+      },
+      {
+        "key": "w",
+        "t": 1893.316133
+      },
+      {
+        "key": "h",
+        "t": 1903.642266
+      },
+      {
+        "key": "j",
+        "t": 1913.692274
+      },
+      {
+        "key": "f",
+        "t": 1924.006869
+      },
+      {
+        "key": "r",
+        "t": 1934.163576
+      },
+      {
+        "key": "d",
+        "t": 1944.378755
+      },
+      {
+        "key": "Escape",
+        "t": 1954.564181
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 1969.828051
+      },
+      {
+        "key": "ctrl+c",
+        "t": 1990.951784
+      },
+      {
+        "key": "space",
+        "t": 2006.35253
+      },
+      {
+        "key": "w",
+        "t": 2016.403655
+      },
+      {
+        "key": "h",
+        "t": 2026.796289
+      },
+      {
+        "key": "j",
+        "t": 2037.848302
+      },
+      {
+        "key": "f",
+        "t": 2048.07133
+      },
+      {
+        "key": "r",
+        "t": 2058.33001
+      },
+      {
+        "key": "d",
+        "t": 2068.757396
+      },
+      {
+        "key": "Escape",
+        "t": 2079.34683
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2095.105305
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2116.179799
+      },
+      {
+        "key": "space",
+        "t": 2131.546153
+      },
+      {
+        "key": "w",
+        "t": 2141.925575
+      },
+      {
+        "key": "h",
+        "t": 2152.268146
+      },
+      {
+        "key": "j",
+        "t": 2162.533589
+      },
+      {
+        "key": "f",
+        "t": 2172.855643
+      },
+      {
+        "key": "r",
+        "t": 2183.005858
+      },
+      {
+        "key": "d",
+        "t": 2193.477654
+      },
+      {
+        "key": "Escape",
+        "t": 2203.704655
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2219.402015
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2240.018041
+      },
+      {
+        "key": "space",
+        "t": 2255.457957
+      },
+      {
+        "key": "w",
+        "t": 2265.472313
+      },
+      {
+        "key": "h",
+        "t": 2275.949848
+      },
+      {
+        "key": "j",
+        "t": 2286.298643
+      },
+      {
+        "key": "f",
+        "t": 2296.785055
+      },
+      {
+        "key": "r",
+        "t": 2307.16702
+      },
+      {
+        "key": "d",
+        "t": 2317.330111
+      },
+      {
+        "key": "Escape",
+        "t": 2327.594545
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2343.200978
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2363.715383
+      },
+      {
+        "key": "space",
+        "t": 2379.121944
+      },
+      {
+        "key": "w",
+        "t": 2389.523296
+      },
+      {
+        "key": "h",
+        "t": 2400.133894
+      },
+      {
+        "key": "j",
+        "t": 2410.266015
+      },
+      {
+        "key": "f",
+        "t": 2420.540803
+      },
+      {
+        "key": "r",
+        "t": 2430.48643
+      },
+      {
+        "key": "d",
+        "t": 2440.923964
+      },
+      {
+        "key": "Escape",
+        "t": 2451.028078
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2466.368411
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2487.127883
+      },
+      {
+        "key": "space",
+        "t": 2502.428155
+      },
+      {
+        "key": "w",
+        "t": 2512.992588
+      },
+      {
+        "key": "h",
+        "t": 2524.876316
+      },
+      {
+        "key": "j",
+        "t": 2557.487281
+      },
+      {
+        "key": "f",
+        "t": 2557.583157
+      },
+      {
+        "key": "r",
+        "t": 2557.653375
+      },
+      {
+        "key": "d",
+        "t": 2564.127001
+      },
+      {
+        "key": "Escape",
+        "t": 2574.836035
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2590.769773
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2611.762184
+      },
+      {
+        "key": "space",
+        "t": 2628.310104
+      },
+      {
+        "key": "w",
+        "t": 2640.35541
+      },
+      {
+        "key": "h",
+        "t": 2703.723858
+      },
+      {
+        "key": "j",
+        "t": 2706.792937
+      },
+      {
+        "key": "f",
+        "t": 2707.099727
+      },
+      {
+        "key": "r",
+        "t": 2707.13643
+      },
+      {
+        "key": "d",
+        "t": 2710.307883
+      },
+      {
+        "key": "Escape",
+        "t": 2710.340916
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2716.308227
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2741.393504
+      },
+      {
+        "key": "space",
+        "t": 2752.208487
+      },
+      {
+        "key": "w",
+        "t": 2763.519665
+      },
+      {
+        "key": "h",
+        "t": 2773.079481
+      },
+      {
+        "key": "j",
+        "t": 2785.099244
+      },
+      {
+        "key": "f",
+        "t": 2793.935567
+      },
+      {
+        "key": "r",
+        "t": 2804.206566
+      },
+      {
+        "key": "d",
+        "t": 2814.827022
+      },
+      {
+        "key": "Escape",
+        "t": 2824.706255
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2840.563368
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2861.738523
+      },
+      {
+        "key": "space",
+        "t": 2877.085524
+      },
+      {
+        "key": "w",
+        "t": 2887.443677
+      },
+      {
+        "key": "h",
+        "t": 2897.488085
+      },
+      {
+        "key": "j",
+        "t": 2908.065721
+      },
+      {
+        "key": "f",
+        "t": 2918.171312
+      },
+      {
+        "key": "r",
+        "t": 2928.490224
+      },
+      {
+        "key": "d",
+        "t": 2938.735903
+      },
+      {
+        "key": "Escape",
+        "t": 2949.060339
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 2965.083375
+      },
+      {
+        "key": "ctrl+c",
+        "t": 2986.158482
+      },
+      {
+        "key": "space",
+        "t": 3001.474024
+      },
+      {
+        "key": "w",
+        "t": 3011.631804
+      },
+      {
+        "key": "h",
+        "t": 3021.960715
+      },
+      {
+        "key": "j",
+        "t": 3032.114043
+      },
+      {
+        "key": "f",
+        "t": 3042.402898
+      },
+      {
+        "key": "r",
+        "t": 3052.934841
+      },
+      {
+        "key": "d",
+        "t": 3063.098169
+      },
+      {
+        "key": "Escape",
+        "t": 3073.3185
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3089.372296
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3110.079636
+      },
+      {
+        "key": "space",
+        "t": 3125.406293
+      },
+      {
+        "key": "w",
+        "t": 3135.60398
+      },
+      {
+        "key": "h",
+        "t": 3145.845103
+      },
+      {
+        "key": "j",
+        "t": 3156.08788
+      },
+      {
+        "key": "f",
+        "t": 3166.202577
+      },
+      {
+        "key": "r",
+        "t": 3176.48469
+      },
+      {
+        "key": "d",
+        "t": 3186.711827
+      },
+      {
+        "key": "Escape",
+        "t": 3196.99215
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3212.611442
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3233.202996
+      },
+      {
+        "key": "space",
+        "t": 3248.828028
+      },
+      {
+        "key": "w",
+        "t": 3259.090443
+      },
+      {
+        "key": "h",
+        "t": 3269.469839
+      },
+      {
+        "key": "j",
+        "t": 3279.674052
+      },
+      {
+        "key": "f",
+        "t": 3290.504827
+      },
+      {
+        "key": "r",
+        "t": 3300.221795
+      },
+      {
+        "key": "d",
+        "t": 3310.3635
+      },
+      {
+        "key": "Escape",
+        "t": 3320.741983
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3336.797487
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3358.153862
+      },
+      {
+        "key": "space",
+        "t": 3373.782178
+      },
+      {
+        "key": "w",
+        "t": 3383.840089
+      },
+      {
+        "key": "h",
+        "t": 3394.229196
+      },
+      {
+        "key": "j",
+        "t": 3404.416761
+      },
+      {
+        "key": "f",
+        "t": 3414.571213
+      },
+      {
+        "key": "r",
+        "t": 3424.937688
+      },
+      {
+        "key": "d",
+        "t": 3435.104895
+      },
+      {
+        "key": "Escape",
+        "t": 3445.47304
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3461.61533
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3482.747984
+      },
+      {
+        "key": "space",
+        "t": 3498.889873
+      },
+      {
+        "key": "w",
+        "t": 3509.033897
+      },
+      {
+        "key": "h",
+        "t": 3519.36343
+      },
+      {
+        "key": "j",
+        "t": 3529.619456
+      },
+      {
+        "key": "f",
+        "t": 3539.96569
+      },
+      {
+        "key": "r",
+        "t": 3550.167639
+      },
+      {
+        "key": "d",
+        "t": 3560.587406
+      },
+      {
+        "key": "Escape",
+        "t": 3570.833858
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3586.532345
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3607.924461
+      },
+      {
+        "key": "space",
+        "t": 3623.47853
+      },
+      {
+        "key": "w",
+        "t": 3633.506448
+      },
+      {
+        "key": "h",
+        "t": 3643.848349
+      },
+      {
+        "key": "j",
+        "t": 3653.904478
+      },
+      {
+        "key": "f",
+        "t": 3664.360541
+      },
+      {
+        "key": "r",
+        "t": 3674.514792
+      },
+      {
+        "key": "d",
+        "t": 3684.618819
+      },
+      {
+        "key": "Escape",
+        "t": 3694.968671
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3710.188461
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3730.580535
+      },
+      {
+        "key": "space",
+        "t": 3745.888632
+      },
+      {
+        "key": "w",
+        "t": 3755.934059
+      },
+      {
+        "key": "h",
+        "t": 3766.277867
+      },
+      {
+        "key": "j",
+        "t": 3776.511226
+      },
+      {
+        "key": "f",
+        "t": 3786.643897
+      },
+      {
+        "key": "r",
+        "t": 3796.98615
+      },
+      {
+        "key": "d",
+        "t": 3807.307521
+      },
+      {
+        "key": "Escape",
+        "t": 3817.580099
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3833.038645
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3853.467198
+      },
+      {
+        "key": "space",
+        "t": 3868.994208
+      },
+      {
+        "key": "w",
+        "t": 3879.205733
+      },
+      {
+        "key": "h",
+        "t": 3889.500496
+      },
+      {
+        "key": "j",
+        "t": 3899.526484
+      },
+      {
+        "key": "f",
+        "t": 3909.899583
+      },
+      {
+        "key": "r",
+        "t": 3919.876613
+      },
+      {
+        "key": "d",
+        "t": 3930.140284
+      },
+      {
+        "key": "Escape",
+        "t": 3940.562492
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 3955.725685
+      },
+      {
+        "key": "ctrl+c",
+        "t": 3977.228352
+      },
+      {
+        "key": "space",
+        "t": 3992.911854
+      },
+      {
+        "key": "w",
+        "t": 4003.240748
+      },
+      {
+        "key": "h",
+        "t": 4013.934478
+      },
+      {
+        "key": "j",
+        "t": 4024.274356
+      },
+      {
+        "key": "f",
+        "t": 4034.838522
+      },
+      {
+        "key": "r",
+        "t": 4045.081831
+      },
+      {
+        "key": "d",
+        "t": 4055.354619
+      },
+      {
+        "key": "Escape",
+        "t": 4065.558198
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4080.916799
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4101.459815
+      },
+      {
+        "key": "space",
+        "t": 4116.912815
+      },
+      {
+        "key": "w",
+        "t": 4127.061845
+      },
+      {
+        "key": "h",
+        "t": 4137.242664
+      },
+      {
+        "key": "j",
+        "t": 4147.568904
+      },
+      {
+        "key": "f",
+        "t": 4157.660544
+      },
+      {
+        "key": "r",
+        "t": 4167.910769
+      },
+      {
+        "key": "d",
+        "t": 4178.049161
+      },
+      {
+        "key": "Escape",
+        "t": 4188.408492
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4203.868621
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4224.664415
+      },
+      {
+        "key": "space",
+        "t": 4239.683563
+      },
+      {
+        "key": "w",
+        "t": 4250.102943
+      },
+      {
+        "key": "h",
+        "t": 4260.284824
+      },
+      {
+        "key": "j",
+        "t": 4270.594237
+      },
+      {
+        "key": "f",
+        "t": 4280.77752
+      },
+      {
+        "key": "r",
+        "t": 4291.253363
+      },
+      {
+        "key": "d",
+        "t": 4301.30721
+      },
+      {
+        "key": "Escape",
+        "t": 4311.67631
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4326.894384
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4347.362539
+      },
+      {
+        "key": "space",
+        "t": 4362.882804
+      },
+      {
+        "key": "w",
+        "t": 4373.10713
+      },
+      {
+        "key": "h",
+        "t": 4383.427179
+      },
+      {
+        "key": "j",
+        "t": 4393.619158
+      },
+      {
+        "key": "f",
+        "t": 4403.771683
+      },
+      {
+        "key": "r",
+        "t": 4414.077284
+      },
+      {
+        "key": "d",
+        "t": 4424.52687
+      },
+      {
+        "key": "Escape",
+        "t": 4434.584018
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4450.020685
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4470.852507
+      },
+      {
+        "key": "space",
+        "t": 4486.208716
+      },
+      {
+        "key": "w",
+        "t": 4496.267558
+      },
+      {
+        "key": "h",
+        "t": 4506.5073
+      },
+      {
+        "key": "j",
+        "t": 4516.751217
+      },
+      {
+        "key": "f",
+        "t": 4527.128746
+      },
+      {
+        "key": "r",
+        "t": 4537.27548
+      },
+      {
+        "key": "d",
+        "t": 4547.438825
+      },
+      {
+        "key": "Escape",
+        "t": 4557.735505
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4573.305726
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4593.624221
+      },
+      {
+        "key": "space",
+        "t": 4609.162135
+      },
+      {
+        "key": "w",
+        "t": 4619.020468
+      },
+      {
+        "key": "h",
+        "t": 4629.25794
+      },
+      {
+        "key": "j",
+        "t": 4639.549782
+      },
+      {
+        "key": "f",
+        "t": 4649.647762
+      },
+      {
+        "key": "r",
+        "t": 4659.910169
+      },
+      {
+        "key": "d",
+        "t": 4670.144434
+      },
+      {
+        "key": "Escape",
+        "t": 4680.473395
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4695.720123
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4716.328648
+      },
+      {
+        "key": "space",
+        "t": 4731.824958
+      },
+      {
+        "key": "w",
+        "t": 4742.183722
+      },
+      {
+        "key": "h",
+        "t": 4752.285597
+      },
+      {
+        "key": "j",
+        "t": 4762.556155
+      },
+      {
+        "key": "f",
+        "t": 4772.703473
+      },
+      {
+        "key": "r",
+        "t": 4782.980324
+      },
+      {
+        "key": "d",
+        "t": 4793.272439
+      },
+      {
+        "key": "Escape",
+        "t": 4803.39118
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4818.731795
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4839.409739
+      },
+      {
+        "key": "space",
+        "t": 4854.945478
+      },
+      {
+        "key": "w",
+        "t": 4865.411067
+      },
+      {
+        "key": "h",
+        "t": 4875.855012
+      },
+      {
+        "key": "j",
+        "t": 4886.21317
+      },
+      {
+        "key": "f",
+        "t": 4896.340878
+      },
+      {
+        "key": "r",
+        "t": 4906.721085
+      },
+      {
+        "key": "d",
+        "t": 4916.776323
+      },
+      {
+        "key": "Escape",
+        "t": 4927.077726
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 4942.843207
+      },
+      {
+        "key": "ctrl+c",
+        "t": 4964.143415
+      },
+      {
+        "key": "space",
+        "t": 4979.634105
+      },
+      {
+        "key": "w",
+        "t": 4990.251298
+      },
+      {
+        "key": "h",
+        "t": 5000.347771
+      },
+      {
+        "key": "j",
+        "t": 5010.984648
+      },
+      {
+        "key": "f",
+        "t": 5021.14809
+      },
+      {
+        "key": "r",
+        "t": 5031.366214
+      },
+      {
+        "key": "d",
+        "t": 5041.707843
+      },
+      {
+        "key": "Escape",
+        "t": 5051.799776
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5067.267712
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5088.635778
+      },
+      {
+        "key": "space",
+        "t": 5104.447643
+      },
+      {
+        "key": "w",
+        "t": 5114.706718
+      },
+      {
+        "key": "h",
+        "t": 5124.868868
+      },
+      {
+        "key": "j",
+        "t": 5135.234787
+      },
+      {
+        "key": "f",
+        "t": 5145.56646
+      },
+      {
+        "key": "r",
+        "t": 5155.641084
+      },
+      {
+        "key": "d",
+        "t": 5166.03199
+      },
+      {
+        "key": "Escape",
+        "t": 5176.190285
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5191.88469
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5213.656512
+      },
+      {
+        "key": "space",
+        "t": 5228.909438
+      },
+      {
+        "key": "w",
+        "t": 5239.146434
+      },
+      {
+        "key": "h",
+        "t": 5249.387011
+      },
+      {
+        "key": "j",
+        "t": 5259.656162
+      },
+      {
+        "key": "f",
+        "t": 5269.783702
+      },
+      {
+        "key": "r",
+        "t": 5280.055821
+      },
+      {
+        "key": "d",
+        "t": 5290.370058
+      },
+      {
+        "key": "Escape",
+        "t": 5300.456732
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5316.40184
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5338.148038
+      },
+      {
+        "key": "space",
+        "t": 5353.499692
+      },
+      {
+        "key": "w",
+        "t": 5363.874822
+      },
+      {
+        "key": "h",
+        "t": 5374.027653
+      },
+      {
+        "key": "j",
+        "t": 5384.192828
+      },
+      {
+        "key": "f",
+        "t": 5394.514323
+      },
+      {
+        "key": "r",
+        "t": 5404.714879
+      },
+      {
+        "key": "d",
+        "t": 5415.443824
+      },
+      {
+        "key": "Escape",
+        "t": 5426.316611
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5441.89596
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5463.615959
+      },
+      {
+        "key": "space",
+        "t": 5478.869646
+      },
+      {
+        "key": "w",
+        "t": 5489.184475
+      },
+      {
+        "key": "h",
+        "t": 5499.227556
+      },
+      {
+        "key": "j",
+        "t": 5509.648167
+      },
+      {
+        "key": "f",
+        "t": 5519.738394
+      },
+      {
+        "key": "r",
+        "t": 5530.057775
+      },
+      {
+        "key": "d",
+        "t": 5540.340419
+      },
+      {
+        "key": "Escape",
+        "t": 5550.647472
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5566.180108
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5588.025196
+      },
+      {
+        "key": "space",
+        "t": 5604.261978
+      },
+      {
+        "key": "w",
+        "t": 5614.587379
+      },
+      {
+        "key": "h",
+        "t": 5625.140265
+      },
+      {
+        "key": "j",
+        "t": 5635.265865
+      },
+      {
+        "key": "f",
+        "t": 5645.423355
+      },
+      {
+        "key": "r",
+        "t": 5655.724215
+      },
+      {
+        "key": "d",
+        "t": 5665.935037
+      },
+      {
+        "key": "Escape",
+        "t": 5676.315822
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5692.419728
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5713.498774
+      },
+      {
+        "key": "space",
+        "t": 5729.08656
+      },
+      {
+        "key": "w",
+        "t": 5739.178531
+      },
+      {
+        "key": "h",
+        "t": 5749.944619
+      },
+      {
+        "key": "j",
+        "t": 5760.102844
+      },
+      {
+        "key": "f",
+        "t": 5770.417525
+      },
+      {
+        "key": "r",
+        "t": 5780.610184
+      },
+      {
+        "key": "d",
+        "t": 5790.943025
+      },
+      {
+        "key": "Escape",
+        "t": 5801.176194
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5816.577991
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5837.115787
+      },
+      {
+        "key": "space",
+        "t": 5852.469029
+      },
+      {
+        "key": "w",
+        "t": 5862.717
+      },
+      {
+        "key": "h",
+        "t": 5872.909806
+      },
+      {
+        "key": "j",
+        "t": 5883.054686
+      },
+      {
+        "key": "f",
+        "t": 5893.3245
+      },
+      {
+        "key": "r",
+        "t": 5903.633332
+      },
+      {
+        "key": "d",
+        "t": 5913.976305
+      },
+      {
+        "key": "Escape",
+        "t": 5924.168435
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 5939.610012
+      },
+      {
+        "key": "ctrl+c",
+        "t": 5960.129685
+      },
+      {
+        "key": "space",
+        "t": 5975.7871
+      },
+      {
+        "key": "w",
+        "t": 5986.066945
+      },
+      {
+        "key": "h",
+        "t": 5996.1133
+      },
+      {
+        "key": "j",
+        "t": 6006.494657
+      },
+      {
+        "key": "f",
+        "t": 6016.784521
+      },
+      {
+        "key": "r",
+        "t": 6027.086719
+      },
+      {
+        "key": "d",
+        "t": 6037.303863
+      },
+      {
+        "key": "Escape",
+        "t": 6047.454165
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6062.864006
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6083.712265
+      },
+      {
+        "key": "space",
+        "t": 6099.000747
+      },
+      {
+        "key": "w",
+        "t": 6109.234598
+      },
+      {
+        "key": "h",
+        "t": 6119.754006
+      },
+      {
+        "key": "j",
+        "t": 6130.174258
+      },
+      {
+        "key": "f",
+        "t": 6140.37571
+      },
+      {
+        "key": "r",
+        "t": 6150.706801
+      },
+      {
+        "key": "d",
+        "t": 6161.014858
+      },
+      {
+        "key": "Escape",
+        "t": 6171.154378
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6186.800188
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6207.442971
+      },
+      {
+        "key": "space",
+        "t": 6222.959896
+      },
+      {
+        "key": "w",
+        "t": 6233.256498
+      },
+      {
+        "key": "h",
+        "t": 6243.393179
+      },
+      {
+        "key": "j",
+        "t": 6253.812493
+      },
+      {
+        "key": "f",
+        "t": 6263.949135
+      },
+      {
+        "key": "r",
+        "t": 6274.211727
+      },
+      {
+        "key": "d",
+        "t": 6284.404531
+      },
+      {
+        "key": "Escape",
+        "t": 6294.604769
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6310.068126
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6331.058712
+      },
+      {
+        "key": "space",
+        "t": 6346.617908
+      },
+      {
+        "key": "w",
+        "t": 6356.826315
+      },
+      {
+        "key": "h",
+        "t": 6367.456494
+      },
+      {
+        "key": "j",
+        "t": 6378.465696
+      },
+      {
+        "key": "f",
+        "t": 6388.793782
+      },
+      {
+        "key": "r",
+        "t": 6399.083973
+      },
+      {
+        "key": "d",
+        "t": 6409.530835
+      },
+      {
+        "key": "Escape",
+        "t": 6419.632781
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6435.341236
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6457.082004
+      },
+      {
+        "key": "space",
+        "t": 6473.098311
+      },
+      {
+        "key": "w",
+        "t": 6483.290565
+      },
+      {
+        "key": "h",
+        "t": 6493.441347
+      },
+      {
+        "key": "j",
+        "t": 6504.047045
+      },
+      {
+        "key": "f",
+        "t": 6514.061921
+      },
+      {
+        "key": "r",
+        "t": 6524.390469
+      },
+      {
+        "key": "d",
+        "t": 6534.68323
+      },
+      {
+        "key": "Escape",
+        "t": 6544.9371
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6561.261457
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6582.377828
+      },
+      {
+        "key": "space",
+        "t": 6597.783056
+      },
+      {
+        "key": "w",
+        "t": 6607.981155
+      },
+      {
+        "key": "h",
+        "t": 6618.120415
+      },
+      {
+        "key": "j",
+        "t": 6628.418338
+      },
+      {
+        "key": "f",
+        "t": 6638.78473
+      },
+      {
+        "key": "r",
+        "t": 6649.089451
+      },
+      {
+        "key": "d",
+        "t": 6659.037486
+      },
+      {
+        "key": "Escape",
+        "t": 6669.447595
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6684.800405
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6705.394727
+      },
+      {
+        "key": "space",
+        "t": 6721.994694
+      },
+      {
+        "key": "w",
+        "t": 6732.346656
+      },
+      {
+        "key": "h",
+        "t": 6742.416649
+      },
+      {
+        "key": "j",
+        "t": 6752.650737
+      },
+      {
+        "key": "f",
+        "t": 6762.983213
+      },
+      {
+        "key": "r",
+        "t": 6773.257812
+      },
+      {
+        "key": "d",
+        "t": 6783.410785
+      },
+      {
+        "key": "Escape",
+        "t": 6793.668689
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6809.712815
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6830.30593
+      },
+      {
+        "key": "space",
+        "t": 6845.939144
+      },
+      {
+        "key": "w",
+        "t": 6856.100437
+      },
+      {
+        "key": "h",
+        "t": 6866.673659
+      },
+      {
+        "key": "j",
+        "t": 6876.854145
+      },
+      {
+        "key": "f",
+        "t": 6887.150352
+      },
+      {
+        "key": "r",
+        "t": 6897.358008
+      },
+      {
+        "key": "d",
+        "t": 6907.588499
+      },
+      {
+        "key": "Escape",
+        "t": 6917.806923
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 6933.250379
+      },
+      {
+        "key": "ctrl+c",
+        "t": 6953.743246
+      },
+      {
+        "key": "space",
+        "t": 6969.22339
+      },
+      {
+        "key": "w",
+        "t": 6979.428132
+      },
+      {
+        "key": "h",
+        "t": 6989.53169
+      },
+      {
+        "key": "j",
+        "t": 6999.621779
+      },
+      {
+        "key": "f",
+        "t": 7009.966148
+      },
+      {
+        "key": "r",
+        "t": 7020.069973
+      },
+      {
+        "key": "d",
+        "t": 7030.338461
+      },
+      {
+        "key": "Escape",
+        "t": 7040.806216
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7056.21943
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7076.785811
+      },
+      {
+        "key": "space",
+        "t": 7092.119737
+      },
+      {
+        "key": "w",
+        "t": 7102.424981
+      },
+      {
+        "key": "h",
+        "t": 7112.777299
+      },
+      {
+        "key": "j",
+        "t": 7123.003243
+      },
+      {
+        "key": "f",
+        "t": 7133.200584
+      },
+      {
+        "key": "r",
+        "t": 7143.685222
+      },
+      {
+        "key": "d",
+        "t": 7153.958231
+      },
+      {
+        "key": "Escape",
+        "t": 7164.327128
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7180.66781
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7201.675933
+      },
+      {
+        "key": "space",
+        "t": 7217.594559
+      },
+      {
+        "key": "w",
+        "t": 7228.76301
+      },
+      {
+        "key": "h",
+        "t": 7238.974874
+      },
+      {
+        "key": "j",
+        "t": 7249.255346
+      },
+      {
+        "key": "f",
+        "t": 7259.443726
+      },
+      {
+        "key": "r",
+        "t": 7269.725315
+      },
+      {
+        "key": "d",
+        "t": 7280.177513
+      },
+      {
+        "key": "Escape",
+        "t": 7290.431933
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7306.21974
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7326.970899
+      },
+      {
+        "key": "space",
+        "t": 7342.35262
+      },
+      {
+        "key": "w",
+        "t": 7352.53538
+      },
+      {
+        "key": "h",
+        "t": 7362.75696
+      },
+      {
+        "key": "j",
+        "t": 7373.257657
+      },
+      {
+        "key": "f",
+        "t": 7383.562693
+      },
+      {
+        "key": "r",
+        "t": 7393.913599
+      },
+      {
+        "key": "d",
+        "t": 7404.061598
+      },
+      {
+        "key": "Escape",
+        "t": 7414.479568
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7429.696967
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7450.283732
+      },
+      {
+        "key": "space",
+        "t": 7465.626054
+      },
+      {
+        "key": "w",
+        "t": 7475.819366
+      },
+      {
+        "key": "h",
+        "t": 7486.081729
+      },
+      {
+        "key": "j",
+        "t": 7496.712239
+      },
+      {
+        "key": "f",
+        "t": 7507.380093
+      },
+      {
+        "key": "r",
+        "t": 7517.473117
+      },
+      {
+        "key": "d",
+        "t": 7527.711962
+      },
+      {
+        "key": "Escape",
+        "t": 7537.974774
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7553.310909
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7573.735085
+      },
+      {
+        "key": "space",
+        "t": 7589.08084
+      },
+      {
+        "key": "w",
+        "t": 7599.407187
+      },
+      {
+        "key": "h",
+        "t": 7609.66888
+      },
+      {
+        "key": "j",
+        "t": 7620.113765
+      },
+      {
+        "key": "f",
+        "t": 7630.092349
+      },
+      {
+        "key": "r",
+        "t": 7640.244563
+      },
+      {
+        "key": "d",
+        "t": 7650.663598
+      },
+      {
+        "key": "Escape",
+        "t": 7660.987336
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7676.253088
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7696.847751
+      },
+      {
+        "key": "space",
+        "t": 7712.294458
+      },
+      {
+        "key": "w",
+        "t": 7731.608745
+      },
+      {
+        "key": "h",
+        "t": 7732.656627
+      },
+      {
+        "key": "j",
+        "t": 7742.954639
+      },
+      {
+        "key": "f",
+        "t": 7753.432278
+      },
+      {
+        "key": "r",
+        "t": 7763.574783
+      },
+      {
+        "key": "d",
+        "t": 7773.964524
+      },
+      {
+        "key": "Escape",
+        "t": 7784.283703
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7799.776532
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7820.54912
+      },
+      {
+        "key": "space",
+        "t": 7835.931708
+      },
+      {
+        "key": "w",
+        "t": 7846.432436
+      },
+      {
+        "key": "h",
+        "t": 7856.651224
+      },
+      {
+        "key": "j",
+        "t": 7866.860624
+      },
+      {
+        "key": "f",
+        "t": 7877.173652
+      },
+      {
+        "key": "r",
+        "t": 7887.376279
+      },
+      {
+        "key": "d",
+        "t": 7897.699206
+      },
+      {
+        "key": "Escape",
+        "t": 7907.982747
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 7923.623793
+      },
+      {
+        "key": "ctrl+c",
+        "t": 7943.941237
+      },
+      {
+        "key": "space",
+        "t": 7959.428036
+      },
+      {
+        "key": "w",
+        "t": 7969.748613
+      },
+      {
+        "key": "h",
+        "t": 7979.960883
+      },
+      {
+        "key": "j",
+        "t": 7990.142539
+      },
+      {
+        "key": "f",
+        "t": 8000.360528
+      },
+      {
+        "key": "r",
+        "t": 8010.594124
+      },
+      {
+        "key": "d",
+        "t": 8020.952785
+      },
+      {
+        "key": "Escape",
+        "t": 8031.32965
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8046.698517
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8067.182629
+      },
+      {
+        "key": "space",
+        "t": 8082.694924
+      },
+      {
+        "key": "w",
+        "t": 8093.127016
+      },
+      {
+        "key": "h",
+        "t": 8103.46944
+      },
+      {
+        "key": "j",
+        "t": 8113.609657
+      },
+      {
+        "key": "f",
+        "t": 8123.834758
+      },
+      {
+        "key": "r",
+        "t": 8134.196035
+      },
+      {
+        "key": "d",
+        "t": 8144.371915
+      },
+      {
+        "key": "Escape",
+        "t": 8154.893537
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8170.465641
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8191.007322
+      },
+      {
+        "key": "space",
+        "t": 8206.189112
+      },
+      {
+        "key": "w",
+        "t": 8216.443697
+      },
+      {
+        "key": "h",
+        "t": 8226.562499
+      },
+      {
+        "key": "j",
+        "t": 8236.763858
+      },
+      {
+        "key": "f",
+        "t": 8247.118488
+      },
+      {
+        "key": "r",
+        "t": 8257.145408
+      },
+      {
+        "key": "d",
+        "t": 8267.484963
+      },
+      {
+        "key": "Escape",
+        "t": 8277.692183
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8293.219819
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8313.732185
+      },
+      {
+        "key": "space",
+        "t": 8329.086174
+      },
+      {
+        "key": "w",
+        "t": 8339.119983
+      },
+      {
+        "key": "h",
+        "t": 8349.494811
+      },
+      {
+        "key": "j",
+        "t": 8359.868135
+      },
+      {
+        "key": "f",
+        "t": 8369.953395
+      },
+      {
+        "key": "r",
+        "t": 8380.243367
+      },
+      {
+        "key": "d",
+        "t": 8390.333768
+      },
+      {
+        "key": "Escape",
+        "t": 8400.632308
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8416.284221
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8436.609412
+      },
+      {
+        "key": "space",
+        "t": 8452.19936
+      },
+      {
+        "key": "w",
+        "t": 8462.121611
+      },
+      {
+        "key": "h",
+        "t": 8472.491218
+      },
+      {
+        "key": "j",
+        "t": 8482.631718
+      },
+      {
+        "key": "f",
+        "t": 8493.005398
+      },
+      {
+        "key": "r",
+        "t": 8503.201867
+      },
+      {
+        "key": "d",
+        "t": 8513.530661
+      },
+      {
+        "key": "Escape",
+        "t": 8523.857618
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8539.321774
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8560.999469
+      },
+      {
+        "key": "space",
+        "t": 8576.79592
+      },
+      {
+        "key": "w",
+        "t": 8586.894058
+      },
+      {
+        "key": "h",
+        "t": 8597.530239
+      },
+      {
+        "key": "j",
+        "t": 8608.032877
+      },
+      {
+        "key": "f",
+        "t": 8618.311236
+      },
+      {
+        "key": "r",
+        "t": 8628.732689
+      },
+      {
+        "key": "d",
+        "t": 8639.172718
+      },
+      {
+        "key": "Escape",
+        "t": 8649.260163
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8664.808599
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8685.444501
+      },
+      {
+        "key": "space",
+        "t": 8700.681063
+      },
+      {
+        "key": "w",
+        "t": 8711.106485
+      },
+      {
+        "key": "h",
+        "t": 8721.33561
+      },
+      {
+        "key": "j",
+        "t": 8731.519189
+      },
+      {
+        "key": "f",
+        "t": 8742.331537
+      },
+      {
+        "key": "r",
+        "t": 8752.363522
+      },
+      {
+        "key": "d",
+        "t": 8762.902278
+      },
+      {
+        "key": "Escape",
+        "t": 8773.207945
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8788.744983
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8809.107884
+      },
+      {
+        "key": "space",
+        "t": 8824.618196
+      },
+      {
+        "key": "w",
+        "t": 8834.975468
+      },
+      {
+        "key": "h",
+        "t": 8845.071658
+      },
+      {
+        "key": "j",
+        "t": 8855.113485
+      },
+      {
+        "key": "f",
+        "t": 8865.597662
+      },
+      {
+        "key": "r",
+        "t": 8875.689505
+      },
+      {
+        "key": "d",
+        "t": 8886.081491
+      },
+      {
+        "key": "Escape",
+        "t": 8896.232613
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 8911.740344
+      },
+      {
+        "key": "ctrl+c",
+        "t": 8932.231855
+      },
+      {
+        "key": "space",
+        "t": 8947.634094
+      },
+      {
+        "key": "w",
+        "t": 8957.763897
+      },
+      {
+        "key": "h",
+        "t": 8968.030328
+      },
+      {
+        "key": "j",
+        "t": 8978.313753
+      },
+      {
+        "key": "f",
+        "t": 8988.467592
+      },
+      {
+        "key": "r",
+        "t": 8998.751621
+      },
+      {
+        "key": "d",
+        "t": 9009.071025
+      },
+      {
+        "key": "Escape",
+        "t": 9019.201153
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9034.654124
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9055.638295
+      },
+      {
+        "key": "space",
+        "t": 9071.025289
+      },
+      {
+        "key": "w",
+        "t": 9081.41974
+      },
+      {
+        "key": "h",
+        "t": 9091.570185
+      },
+      {
+        "key": "j",
+        "t": 9102.160353
+      },
+      {
+        "key": "f",
+        "t": 9112.340928
+      },
+      {
+        "key": "r",
+        "t": 9122.625636
+      },
+      {
+        "key": "d",
+        "t": 9132.919446
+      },
+      {
+        "key": "Escape",
+        "t": 9143.150564
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9158.912346
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9179.308097
+      },
+      {
+        "key": "space",
+        "t": 9194.885272
+      },
+      {
+        "key": "w",
+        "t": 9205.217929
+      },
+      {
+        "key": "h",
+        "t": 9215.650427
+      },
+      {
+        "key": "j",
+        "t": 9225.984415
+      },
+      {
+        "key": "f",
+        "t": 9236.096398
+      },
+      {
+        "key": "r",
+        "t": 9246.436872
+      },
+      {
+        "key": "d",
+        "t": 9256.679993
+      },
+      {
+        "key": "Escape",
+        "t": 9267.116284
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9282.533093
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9303.160235
+      },
+      {
+        "key": "space",
+        "t": 9318.971464
+      },
+      {
+        "key": "w",
+        "t": 9328.990576
+      },
+      {
+        "key": "h",
+        "t": 9339.361632
+      },
+      {
+        "key": "j",
+        "t": 9349.534361
+      },
+      {
+        "key": "f",
+        "t": 9360.014958
+      },
+      {
+        "key": "r",
+        "t": 9370.418218
+      },
+      {
+        "key": "d",
+        "t": 9380.553314
+      },
+      {
+        "key": "Escape",
+        "t": 9390.894657
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9406.464666
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9427.15781
+      },
+      {
+        "key": "space",
+        "t": 9442.49163
+      },
+      {
+        "key": "w",
+        "t": 9452.840086
+      },
+      {
+        "key": "h",
+        "t": 9462.973366
+      },
+      {
+        "key": "j",
+        "t": 9473.186053
+      },
+      {
+        "key": "f",
+        "t": 9483.658189
+      },
+      {
+        "key": "r",
+        "t": 9493.872796
+      },
+      {
+        "key": "d",
+        "t": 9504.084848
+      },
+      {
+        "key": "Escape",
+        "t": 9514.510264
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9529.931566
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9550.315532
+      },
+      {
+        "key": "space",
+        "t": 9565.812807
+      },
+      {
+        "key": "w",
+        "t": 9576.303629
+      },
+      {
+        "key": "h",
+        "t": 9586.577615
+      },
+      {
+        "key": "j",
+        "t": 9596.801681
+      },
+      {
+        "key": "f",
+        "t": 9607.416972
+      },
+      {
+        "key": "r",
+        "t": 9617.507025
+      },
+      {
+        "key": "d",
+        "t": 9627.966738
+      },
+      {
+        "key": "Escape",
+        "t": 9638.631054
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9654.335348
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9675.034303
+      },
+      {
+        "key": "space",
+        "t": 9690.535872
+      },
+      {
+        "key": "w",
+        "t": 9700.853981
+      },
+      {
+        "key": "h",
+        "t": 9711.104028
+      },
+      {
+        "key": "j",
+        "t": 9721.354187
+      },
+      {
+        "key": "f",
+        "t": 9731.474279
+      },
+      {
+        "key": "r",
+        "t": 9741.665222
+      },
+      {
+        "key": "d",
+        "t": 9752.06586
+      },
+      {
+        "key": "Escape",
+        "t": 9762.233452
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9777.583463
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9798.290627
+      },
+      {
+        "key": "space",
+        "t": 9813.533257
+      },
+      {
+        "key": "w",
+        "t": 9823.853935
+      },
+      {
+        "key": "h",
+        "t": 9834.021397
+      },
+      {
+        "key": "j",
+        "t": 9844.086976
+      },
+      {
+        "key": "f",
+        "t": 9854.423642
+      },
+      {
+        "key": "r",
+        "t": 9864.605026
+      },
+      {
+        "key": "d",
+        "t": 9874.972133
+      },
+      {
+        "key": "Escape",
+        "t": 9885.097184
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 9900.409839
+      },
+      {
+        "key": "ctrl+c",
+        "t": 9921.397747
+      },
+      {
+        "key": "space",
+        "t": 9936.713912
+      },
+      {
+        "key": "w",
+        "t": 9947.023355
+      },
+      {
+        "key": "h",
+        "t": 9957.422904
+      },
+      {
+        "key": "j",
+        "t": 9967.535757
+      },
+      {
+        "key": "f",
+        "t": 9977.906422
+      },
+      {
+        "key": "r",
+        "t": 9988.235973
+      },
+      {
+        "key": "d",
+        "t": 9998.380595
+      },
+      {
+        "key": "Escape",
+        "t": 10008.607367
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10024.764997
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10045.626472
+      },
+      {
+        "key": "space",
+        "t": 10061.748647
+      },
+      {
+        "key": "w",
+        "t": 10072.183775
+      },
+      {
+        "key": "h",
+        "t": 10082.337892
+      },
+      {
+        "key": "j",
+        "t": 10092.939014
+      },
+      {
+        "key": "f",
+        "t": 10103.07939
+      },
+      {
+        "key": "r",
+        "t": 10113.316238
+      },
+      {
+        "key": "d",
+        "t": 10123.529978
+      },
+      {
+        "key": "Escape",
+        "t": 10133.760271
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10149.72514
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10171.135096
+      },
+      {
+        "key": "space",
+        "t": 10186.45151
+      },
+      {
+        "key": "w",
+        "t": 10196.595558
+      },
+      {
+        "key": "h",
+        "t": 10206.963994
+      },
+      {
+        "key": "j",
+        "t": 10217.225339
+      },
+      {
+        "key": "f",
+        "t": 10227.738893
+      },
+      {
+        "key": "r",
+        "t": 10237.885585
+      },
+      {
+        "key": "d",
+        "t": 10248.063795
+      },
+      {
+        "key": "Escape",
+        "t": 10258.480489
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10274.173607
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10295.697219
+      },
+      {
+        "key": "space",
+        "t": 10310.972505
+      },
+      {
+        "key": "w",
+        "t": 10321.149081
+      },
+      {
+        "key": "h",
+        "t": 10331.499387
+      },
+      {
+        "key": "j",
+        "t": 10341.650277
+      },
+      {
+        "key": "f",
+        "t": 10351.900192
+      },
+      {
+        "key": "r",
+        "t": 10362.252929
+      },
+      {
+        "key": "d",
+        "t": 10372.376414
+      },
+      {
+        "key": "Escape",
+        "t": 10382.583478
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10398.234895
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10418.791263
+      },
+      {
+        "key": "space",
+        "t": 10434.098383
+      },
+      {
+        "key": "w",
+        "t": 10444.474881
+      },
+      {
+        "key": "h",
+        "t": 10454.641258
+      },
+      {
+        "key": "j",
+        "t": 10465.399511
+      },
+      {
+        "key": "f",
+        "t": 10475.770872
+      },
+      {
+        "key": "r",
+        "t": 10486.222377
+      },
+      {
+        "key": "d",
+        "t": 10496.719565
+      },
+      {
+        "key": "Escape",
+        "t": 10506.955512
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10522.488881
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10542.757961
+      },
+      {
+        "key": "space",
+        "t": 10558.129479
+      },
+      {
+        "key": "w",
+        "t": 10568.551055
+      },
+      {
+        "key": "h",
+        "t": 10578.671235
+      },
+      {
+        "key": "j",
+        "t": 10588.994953
+      },
+      {
+        "key": "f",
+        "t": 10599.160842
+      },
+      {
+        "key": "r",
+        "t": 10609.379734
+      },
+      {
+        "key": "d",
+        "t": 10619.561662
+      },
+      {
+        "key": "Escape",
+        "t": 10630.108947
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10645.422423
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10665.956757
+      },
+      {
+        "key": "space",
+        "t": 10681.703922
+      },
+      {
+        "key": "w",
+        "t": 10692.094834
+      },
+      {
+        "key": "h",
+        "t": 10702.179267
+      },
+      {
+        "key": "j",
+        "t": 10712.672474
+      },
+      {
+        "key": "f",
+        "t": 10722.976331
+      },
+      {
+        "key": "r",
+        "t": 10733.31784
+      },
+      {
+        "key": "d",
+        "t": 10743.578842
+      },
+      {
+        "key": "Escape",
+        "t": 10753.732106
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10769.272743
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10790.109207
+      },
+      {
+        "key": "space",
+        "t": 10805.423956
+      },
+      {
+        "key": "w",
+        "t": 10816.187948
+      },
+      {
+        "key": "h",
+        "t": 10826.206839
+      },
+      {
+        "key": "j",
+        "t": 10836.713734
+      },
+      {
+        "key": "f",
+        "t": 10846.737227
+      },
+      {
+        "key": "r",
+        "t": 10857.074628
+      },
+      {
+        "key": "d",
+        "t": 10867.185889
+      },
+      {
+        "key": "Escape",
+        "t": 10877.624008
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 10893.312909
+      },
+      {
+        "key": "ctrl+c",
+        "t": 10914.052211
+      },
+      {
+        "key": "space",
+        "t": 10929.450379
+      },
+      {
+        "key": "w",
+        "t": 10939.877724
+      },
+      {
+        "key": "h",
+        "t": 10950.044057
+      },
+      {
+        "key": "j",
+        "t": 10960.373445
+      },
+      {
+        "key": "f",
+        "t": 10970.642133
+      },
+      {
+        "key": "r",
+        "t": 10981.021904
+      },
+      {
+        "key": "d",
+        "t": 10991.316435
+      },
+      {
+        "key": "Escape",
+        "t": 11001.529422
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11017.232604
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11038.528949
+      },
+      {
+        "key": "space",
+        "t": 11054.86583
+      },
+      {
+        "key": "w",
+        "t": 11064.994559
+      },
+      {
+        "key": "h",
+        "t": 11075.383192
+      },
+      {
+        "key": "j",
+        "t": 11085.591848
+      },
+      {
+        "key": "f",
+        "t": 11095.755794
+      },
+      {
+        "key": "r",
+        "t": 11105.973005
+      },
+      {
+        "key": "d",
+        "t": 11116.399053
+      },
+      {
+        "key": "Escape",
+        "t": 11126.58378
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11142.774647
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11164.084029
+      },
+      {
+        "key": "space",
+        "t": 11179.903271
+      },
+      {
+        "key": "w",
+        "t": 11190.273258
+      },
+      {
+        "key": "h",
+        "t": 11200.408085
+      },
+      {
+        "key": "j",
+        "t": 11210.830059
+      },
+      {
+        "key": "f",
+        "t": 11221.071654
+      },
+      {
+        "key": "r",
+        "t": 11231.209213
+      },
+      {
+        "key": "d",
+        "t": 11241.579381
+      },
+      {
+        "key": "Escape",
+        "t": 11252.426334
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11268.637527
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11289.191654
+      },
+      {
+        "key": "space",
+        "t": 11304.547822
+      },
+      {
+        "key": "w",
+        "t": 11314.71832
+      },
+      {
+        "key": "h",
+        "t": 11324.836383
+      },
+      {
+        "key": "j",
+        "t": 11335.168262
+      },
+      {
+        "key": "f",
+        "t": 11345.362636
+      },
+      {
+        "key": "r",
+        "t": 11355.68984
+      },
+      {
+        "key": "d",
+        "t": 11365.956788
+      },
+      {
+        "key": "Escape",
+        "t": 11376.215691
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11391.567904
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11412.259463
+      },
+      {
+        "key": "space",
+        "t": 11427.94486
+      },
+      {
+        "key": "w",
+        "t": 11438.084095
+      },
+      {
+        "key": "h",
+        "t": 11448.292935
+      },
+      {
+        "key": "j",
+        "t": 11458.534489
+      },
+      {
+        "key": "f",
+        "t": 11468.8036
+      },
+      {
+        "key": "r",
+        "t": 11479.14004
+      },
+      {
+        "key": "d",
+        "t": 11489.198505
+      },
+      {
+        "key": "Escape",
+        "t": 11499.472807
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11515.422389
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11535.932661
+      },
+      {
+        "key": "space",
+        "t": 11551.317277
+      },
+      {
+        "key": "w",
+        "t": 11561.566884
+      },
+      {
+        "key": "h",
+        "t": 11572.038317
+      },
+      {
+        "key": "j",
+        "t": 11582.608695
+      },
+      {
+        "key": "f",
+        "t": 11592.348622
+      },
+      {
+        "key": "r",
+        "t": 11602.987871
+      },
+      {
+        "key": "d",
+        "t": 11612.841695
+      },
+      {
+        "key": "Escape",
+        "t": 11623.1267
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11638.460751
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11659.100341
+      },
+      {
+        "key": "space",
+        "t": 11674.360724
+      },
+      {
+        "key": "w",
+        "t": 11684.516681
+      },
+      {
+        "key": "h",
+        "t": 11694.769034
+      },
+      {
+        "key": "j",
+        "t": 11705.263156
+      },
+      {
+        "key": "f",
+        "t": 11715.28285
+      },
+      {
+        "key": "r",
+        "t": 11725.874486
+      },
+      {
+        "key": "d",
+        "t": 11736.068998
+      },
+      {
+        "key": "Escape",
+        "t": 11746.352367
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11761.554779
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11782.47554
+      },
+      {
+        "key": "space",
+        "t": 11797.839346
+      },
+      {
+        "key": "w",
+        "t": 11807.948082
+      },
+      {
+        "key": "h",
+        "t": 11818.213597
+      },
+      {
+        "key": "j",
+        "t": 11828.546374
+      },
+      {
+        "key": "f",
+        "t": 11838.933073
+      },
+      {
+        "key": "r",
+        "t": 11849.355001
+      },
+      {
+        "key": "d",
+        "t": 11859.160532
+      },
+      {
+        "key": "Escape",
+        "t": 11869.429493
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 11884.874978
+      },
+      {
+        "key": "ctrl+c",
+        "t": 11906.005034
+      },
+      {
+        "key": "space",
+        "t": 11921.704207
+      },
+      {
+        "key": "w",
+        "t": 11931.981897
+      },
+      {
+        "key": "h",
+        "t": 11942.343045
+      },
+      {
+        "key": "j",
+        "t": 11952.622201
+      },
+      {
+        "key": "f",
+        "t": 11962.879127
+      },
+      {
+        "key": "r",
+        "t": 11973.093885
+      },
+      {
+        "key": "d",
+        "t": 11983.192307
+      },
+      {
+        "key": "Escape",
+        "t": 11993.535091
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12008.955482
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12029.428065
+      },
+      {
+        "key": "space",
+        "t": 12044.941652
+      },
+      {
+        "key": "w",
+        "t": 12055.17318
+      },
+      {
+        "key": "h",
+        "t": 12065.510402
+      },
+      {
+        "key": "j",
+        "t": 12075.65686
+      },
+      {
+        "key": "f",
+        "t": 12085.759348
+      },
+      {
+        "key": "r",
+        "t": 12096.200438
+      },
+      {
+        "key": "d",
+        "t": 12106.263068
+      },
+      {
+        "key": "Escape",
+        "t": 12116.511469
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12131.740822
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12152.312117
+      },
+      {
+        "key": "space",
+        "t": 12167.889353
+      },
+      {
+        "key": "w",
+        "t": 12178.198848
+      },
+      {
+        "key": "h",
+        "t": 12188.436068
+      },
+      {
+        "key": "j",
+        "t": 12198.553988
+      },
+      {
+        "key": "f",
+        "t": 12209.042929
+      },
+      {
+        "key": "r",
+        "t": 12219.852624
+      },
+      {
+        "key": "d",
+        "t": 12230.254689
+      },
+      {
+        "key": "Escape",
+        "t": 12240.76276
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12256.746723
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12277.604835
+      },
+      {
+        "key": "space",
+        "t": 12293.129594
+      },
+      {
+        "key": "w",
+        "t": 12303.440473
+      },
+      {
+        "key": "h",
+        "t": 12313.639872
+      },
+      {
+        "key": "j",
+        "t": 12323.904122
+      },
+      {
+        "key": "f",
+        "t": 12334.282301
+      },
+      {
+        "key": "r",
+        "t": 12344.429102
+      },
+      {
+        "key": "d",
+        "t": 12354.950974
+      },
+      {
+        "key": "Escape",
+        "t": 12365.233035
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12381.642779
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12402.772252
+      },
+      {
+        "key": "space",
+        "t": 12418.13245
+      },
+      {
+        "key": "w",
+        "t": 12428.415493
+      },
+      {
+        "key": "h",
+        "t": 12438.665375
+      },
+      {
+        "key": "j",
+        "t": 12448.788747
+      },
+      {
+        "key": "f",
+        "t": 12459.274942
+      },
+      {
+        "key": "r",
+        "t": 12469.230835
+      },
+      {
+        "key": "d",
+        "t": 12479.617337
+      },
+      {
+        "key": "Escape",
+        "t": 12489.585989
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12505.001909
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12525.40009
+      },
+      {
+        "key": "space",
+        "t": 12540.638422
+      },
+      {
+        "key": "w",
+        "t": 12550.933248
+      },
+      {
+        "key": "h",
+        "t": 12561.138582
+      },
+      {
+        "key": "j",
+        "t": 12571.392939
+      },
+      {
+        "key": "f",
+        "t": 12581.636475
+      },
+      {
+        "key": "r",
+        "t": 12591.840814
+      },
+      {
+        "key": "d",
+        "t": 12602.105633
+      },
+      {
+        "key": "Escape",
+        "t": 12612.348598
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12627.833719
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12648.436767
+      },
+      {
+        "key": "space",
+        "t": 12663.801695
+      },
+      {
+        "key": "w",
+        "t": 12674.101687
+      },
+      {
+        "key": "h",
+        "t": 12684.310149
+      },
+      {
+        "key": "j",
+        "t": 12694.642335
+      },
+      {
+        "key": "f",
+        "t": 12704.968433
+      },
+      {
+        "key": "r",
+        "t": 12715.019429
+      },
+      {
+        "key": "d",
+        "t": 12725.550853
+      },
+      {
+        "key": "Escape",
+        "t": 12735.469859
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12750.84693
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12771.363343
+      },
+      {
+        "key": "space",
+        "t": 12786.782924
+      },
+      {
+        "key": "w",
+        "t": 12796.972579
+      },
+      {
+        "key": "h",
+        "t": 12807.032813
+      },
+      {
+        "key": "j",
+        "t": 12817.244797
+      },
+      {
+        "key": "f",
+        "t": 12827.829925
+      },
+      {
+        "key": "r",
+        "t": 12837.977055
+      },
+      {
+        "key": "d",
+        "t": 12848.137483
+      },
+      {
+        "key": "Escape",
+        "t": 12858.359873
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12873.61011
+      },
+      {
+        "key": "ctrl+c",
+        "t": 12894.441306
+      },
+      {
+        "key": "space",
+        "t": 12909.798682
+      },
+      {
+        "key": "w",
+        "t": 12919.963695
+      },
+      {
+        "key": "h",
+        "t": 12930.359452
+      },
+      {
+        "key": "j",
+        "t": 12940.534689
+      },
+      {
+        "key": "f",
+        "t": 12950.737951
+      },
+      {
+        "key": "r",
+        "t": 12961.090235
+      },
+      {
+        "key": "d",
+        "t": 12971.24169
+      },
+      {
+        "key": "Escape",
+        "t": 12981.644442
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 12996.896639
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13017.532744
+      },
+      {
+        "key": "space",
+        "t": 13033.084299
+      },
+      {
+        "key": "w",
+        "t": 13043.232325
+      },
+      {
+        "key": "h",
+        "t": 13053.498538
+      },
+      {
+        "key": "j",
+        "t": 13064.085801
+      },
+      {
+        "key": "f",
+        "t": 13074.301521
+      },
+      {
+        "key": "r",
+        "t": 13084.563629
+      },
+      {
+        "key": "d",
+        "t": 13094.752323
+      },
+      {
+        "key": "Escape",
+        "t": 13105.135331
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13120.518704
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13140.958547
+      },
+      {
+        "key": "space",
+        "t": 13156.528457
+      },
+      {
+        "key": "w",
+        "t": 13166.82133
+      },
+      {
+        "key": "h",
+        "t": 13177.281485
+      },
+      {
+        "key": "j",
+        "t": 13187.610805
+      },
+      {
+        "key": "f",
+        "t": 13198.196622
+      },
+      {
+        "key": "r",
+        "t": 13208.300668
+      },
+      {
+        "key": "d",
+        "t": 13219.466932
+      },
+      {
+        "key": "Escape",
+        "t": 13228.975614
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13244.974231
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13266.137456
+      },
+      {
+        "key": "space",
+        "t": 13282.158473
+      },
+      {
+        "key": "w",
+        "t": 13292.455133
+      },
+      {
+        "key": "h",
+        "t": 13302.647893
+      },
+      {
+        "key": "j",
+        "t": 13312.968814
+      },
+      {
+        "key": "f",
+        "t": 13323.263976
+      },
+      {
+        "key": "r",
+        "t": 13333.634568
+      },
+      {
+        "key": "d",
+        "t": 13343.890938
+      },
+      {
+        "key": "Escape",
+        "t": 13353.990145
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13369.971394
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13390.892245
+      },
+      {
+        "key": "space",
+        "t": 13406.704433
+      },
+      {
+        "key": "w",
+        "t": 13417.004947
+      },
+      {
+        "key": "h",
+        "t": 13427.228594
+      },
+      {
+        "key": "j",
+        "t": 13437.698832
+      },
+      {
+        "key": "f",
+        "t": 13447.784479
+      },
+      {
+        "key": "r",
+        "t": 13458.137071
+      },
+      {
+        "key": "d",
+        "t": 13468.357122
+      },
+      {
+        "key": "Escape",
+        "t": 13478.682255
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13493.975112
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13515.224629
+      },
+      {
+        "key": "space",
+        "t": 13530.667709
+      },
+      {
+        "key": "w",
+        "t": 13540.830301
+      },
+      {
+        "key": "h",
+        "t": 13551.243765
+      },
+      {
+        "key": "j",
+        "t": 13561.620966
+      },
+      {
+        "key": "f",
+        "t": 13571.909749
+      },
+      {
+        "key": "r",
+        "t": 13582.146938
+      },
+      {
+        "key": "d",
+        "t": 13592.241602
+      },
+      {
+        "key": "Escape",
+        "t": 13602.651555
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13618.240922
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13638.782733
+      },
+      {
+        "key": "space",
+        "t": 13653.942265
+      },
+      {
+        "key": "w",
+        "t": 13664.196988
+      },
+      {
+        "key": "h",
+        "t": 13674.43933
+      },
+      {
+        "key": "j",
+        "t": 13684.670872
+      },
+      {
+        "key": "f",
+        "t": 13694.785068
+      },
+      {
+        "key": "r",
+        "t": 13705.120531
+      },
+      {
+        "key": "d",
+        "t": 13715.600521
+      },
+      {
+        "key": "Escape",
+        "t": 13725.652494
+      },
+      {
+        "key": "ctrl+bracketleft",
+        "t": 13741.217104
+      },
+      {
+        "key": "ctrl+c",
+        "t": 13762.395203
+      }
+    ]
+  },
+  "vimScript": {
+    "expected": "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij",
+    "observed": {
+      "viewColumn": 2,
+      "text": "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij",
+      "selections": [
+        [
+          0,
+          999,
+          0,
+          999
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": null,
+      "sentinelSequence": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "root-ctrl+c",
+      "keys": [
+        "space",
+        "ctrl+c",
+        "j"
+      ],
+      "received": [
+        "ctrl+c"
+      ],
+      "reason": "ctrl+c"
+    },
+    {
+      "id": "root-escape",
+      "keys": [
+        "space",
+        "Escape",
+        "j"
+      ],
+      "received": [
+        "escape"
+      ],
+      "reason": "escape"
+    }
+  ],
+  "lastPreparation": {
+    "round": 1,
+    "case": "root-ctrl+c",
+    "prepared": {
+      "viewColumn": 2,
+      "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "selections": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ],
+        "#": [
+          {
+            "text": "rendererLog",
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": null,
+      "sentinelSequence": 6
+    },
+    "before": {
+      "viewColumn": 2,
+      "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "selections": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "mode": 0,
+      "pending": {
+        "actionKeys": [],
+        "bufferedKeys": [],
+        "actionsRunPressedKeys": [],
+        "count": 0,
+        "operatorCount": 0,
+        "registerName": "\""
+      },
+      "registers": {
+        "%": [
+          {
+            "text": "sample.txt",
+            "mode": "character"
+          }
+        ],
+        ".": [
+          {
+            "text": {
+              "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+            },
+            "mode": "character"
+          }
+        ],
+        "#": [
+          {
+            "text": "rendererLog",
+            "mode": "character"
+          }
+        ]
+      },
+      "queue": {
+        "pending": 0,
+        "jobs": 0,
+        "running": false
+      },
+      "leader": {
+        "active": false,
+        "prefix": [],
+        "events": []
+      },
+      "sentinel": "normal-editor-capture-off",
+      "sentinelSequence": 7
+    }
+  },
+  "lastEntry": {
+    "startedAt": 1793400953923,
+    "samples": [
+      {
+        "injectedAt": 1793400953923,
+        "injectionFinishedAt": 1793400953968,
+        "observedAt": 1793400953968,
+        "observed": {
+          "viewColumn": 2,
+          "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+          "selections": [
+            [
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "mode": 0,
+          "pending": {
+            "actionKeys": [],
+            "bufferedKeys": [],
+            "actionsRunPressedKeys": [],
+            "count": 0,
+            "operatorCount": 0,
+            "registerName": "\""
+          },
+          "registers": {
+            "%": [
+              {
+                "text": "sample.txt",
+                "mode": "character"
+              }
+            ],
+            ".": [
+              {
+                "text": {
+                  "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                },
+                "mode": "character"
+              }
+            ],
+            "#": [
+              {
+                "text": "rendererLog",
+                "mode": "character"
+              }
+            ]
+          },
+          "queue": {
+            "pending": 0,
+            "jobs": 0,
+            "running": false
+          },
+          "leader": {
+            "active": true,
+            "prefix": [],
+            "events": [
+              {
+                "t": 26416.018689,
+                "type": "start"
+              },
+              {
+                "t": 26442.87429,
+                "type": "context-on"
+              }
+            ]
+          },
+          "sentinel": "normal-editor-capture-off",
+          "sentinelSequence": 8
+        }
+      },
+      {
+        "injectedAt": 1793400953968,
+        "injectionFinishedAt": 1793400954003,
+        "observedAt": 1793400954003,
+        "observed": {
+          "viewColumn": 2,
+          "text": "alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+          "selections": [
+            [
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "mode": 0,
+          "pending": {
+            "actionKeys": [],
+            "bufferedKeys": [],
+            "actionsRunPressedKeys": [],
+            "count": 0,
+            "operatorCount": 0,
+            "registerName": "\""
+          },
+          "registers": {
+            "%": [
+              {
+                "text": "sample.txt",
+                "mode": "character"
+              }
+            ],
+            ".": [
+              {
+                "text": {
+                  "keys": "iabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij<Esc>"
+                },
+                "mode": "character"
+              }
+            ],
+            "#": [
+              {
+                "text": "rendererLog",
+                "mode": "character"
+              }
+            ]
+          },
+          "queue": {
+            "pending": 0,
+            "jobs": 0,
+            "running": false
+          },
+          "leader": {
+            "active": true,
+            "prefix": [],
+            "events": [
+              {
+                "t": 26416.018689,
+                "type": "start"
+              },
+              {
+                "t": 26442.87429,
+                "type": "context-on"
+              }
+            ]
+          },
+          "sentinel": "normal-editor-capture-on",
+          "sentinelSequence": 9
+        }
+      }
+    ],
+    "confirmedAt": 1793400954003
+  },
+  "status": "discrepancy",
+  "loadWindows": [],
+  "rendererTrace": [
+    {
+      "file": "data/logs/20261031T075526/window1/renderer.log",
+      "lines": [
+        "2026-10-31 07:55:52.433 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:52.433 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:52.433 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.439 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:52.439 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:52.439 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.444 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:52.444 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:52.444 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:52.444 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:52.444 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:52.449 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:52.595 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: Space, keyCode: 32, key:  ",
+        "2026-10-31 07:55:52.595 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: Space, keyCode: 10 ('Space')",
+        "2026-10-31 07:55:52.595 [info] [KeybindingService]: | Resolving [Space]",
+        "2026-10-31 07:55:52.595 [info] [KeybindingService]: \\ From 12 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:55:52.606 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:52.606 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:52.606 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.611 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:52.611 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:52.611 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.616 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:52.616 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:52.616 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:52.616 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:52.616 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:52.621 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:52.641 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:52.641 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:52.641 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.646 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: KeyC, keyCode: 67, key: c",
+        "2026-10-31 07:55:52.647 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: KeyC, keyCode: 33 ('C')",
+        "2026-10-31 07:55:52.647 [info] [KeybindingService]: | Resolving ctrl+[KeyC]",
+        "2026-10-31 07:55:52.647 [info] [KeybindingService]: \\ From 13 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:55:52.647 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:55:52.652 [info] [KeybindingService]: + Storing single modifier for possible chord ctrl.",
+        "2026-10-31 07:55:52.656 [info] [KeybindingService]: + Clearing single modifier due to other key up.",
+        "2026-10-31 07:55:52.662 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: KeyJ, keyCode: 74, key: j",
+        "2026-10-31 07:55:52.662 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: KeyJ, keyCode: 40 ('J')",
+        "2026-10-31 07:55:52.662 [info] [KeybindingService]: | Resolving [KeyJ]",
+        "2026-10-31 07:55:52.662 [info] [KeybindingService]: \\ From 5 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:55:52.803 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:52.803 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:52.803 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.809 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:52.809 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:52.809 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:52.814 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:52.814 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:52.814 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:52.814 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:52.814 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:52.819 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.105 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.105 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.105 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.110 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.111 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.111 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.115 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.115 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.115 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.115 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.115 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.120 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.265 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: Space, keyCode: 32, key:  ",
+        "2026-10-31 07:55:53.265 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: Space, keyCode: 10 ('Space')",
+        "2026-10-31 07:55:53.265 [info] [KeybindingService]: | Resolving [Space]",
+        "2026-10-31 07:55:53.266 [info] [KeybindingService]: \\ From 12 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:55:53.276 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.276 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.276 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.282 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.282 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.282 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.291 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.291 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.292 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.292 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.292 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.293 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.314 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: Escape, keyCode: 27, key: Escape",
+        "2026-10-31 07:55:53.314 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: Escape, keyCode: 9 ('Escape')",
+        "2026-10-31 07:55:53.314 [info] [KeybindingService]: | Resolving [Escape]",
+        "2026-10-31 07:55:53.315 [info] [KeybindingService]: \\ From 87 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:55:53.315 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:55:53.324 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: KeyJ, keyCode: 74, key: j",
+        "2026-10-31 07:55:53.325 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: KeyJ, keyCode: 40 ('J')",
+        "2026-10-31 07:55:53.325 [info] [KeybindingService]: | Resolving [KeyJ]",
+        "2026-10-31 07:55:53.325 [info] [KeybindingService]: \\ From 5 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:55:53.465 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.465 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.465 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.470 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.470 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.470 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.475 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.476 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.476 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.476 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.476 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.480 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.766 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.767 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.767 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.772 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.772 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.772 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.776 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.777 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.777 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.777 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.777 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.782 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.927 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: Space, keyCode: 32, key:  ",
+        "2026-10-31 07:55:53.927 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: Space, keyCode: 10 ('Space')",
+        "2026-10-31 07:55:53.927 [info] [KeybindingService]: | Resolving [Space]",
+        "2026-10-31 07:55:53.927 [info] [KeybindingService]: \\ From 12 keybinding entries, no when clauses matched the context.",
+        "2026-10-31 07:55:53.939 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.939 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.939 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.943 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.943 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.943 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.947 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.947 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.948 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.948 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.948 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.953 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:53.972 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:53.972 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:53.972 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.978 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:53.978 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:53.978 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:53.983 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:53.983 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:53.983 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:53.983 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:53.983 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:53.989 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys.",
+        "2026-10-31 07:55:54.010 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:54.010 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:54.010 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:54.014 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: KeyC, keyCode: 67, key: c",
+        "2026-10-31 07:55:54.014 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: KeyC, keyCode: 33 ('C')",
+        "2026-10-31 07:55:54.014 [info] [KeybindingService]: | Resolving ctrl+[KeyC]",
+        "2026-10-31 07:55:54.014 [info] [KeybindingService]: \\ From 13 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:55:54.014 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:55:54.019 [info] [KeybindingService]: + Storing single modifier for possible chord ctrl.",
+        "2026-10-31 07:55:54.024 [info] [KeybindingService]: + Clearing single modifier due to other key up.",
+        "2026-10-31 07:55:54.030 [info] [KeybindingService]: / Received  keydown event - modifiers: [], code: KeyJ, keyCode: 74, key: j",
+        "2026-10-31 07:55:54.030 [info] [KeybindingService]: | Converted keydown event - modifiers: [], code: KeyJ, keyCode: 40 ('J')",
+        "2026-10-31 07:55:54.030 [info] [KeybindingService]: | Resolving [KeyJ]",
+        "2026-10-31 07:55:54.030 [info] [KeybindingService]: \\ From 5 keybinding entries, matched vimCompanion.leaderKey, when: editorTextFocus && vimCompanion.leaderActive && vim.mode =~ /^(Normal|Visual)/ || vimCompanion.leaderActive && !inputFocus && vim.mode =~ /^(Normal|Visual)/, source: user extension vim-companion-spike.s1-leader.",
+        "2026-10-31 07:55:54.030 [info] [KeybindingService]: + Invoking command vimCompanion.leaderKey.",
+        "2026-10-31 07:55:54.169 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 17, key: Control",
+        "2026-10-31 07:55:54.169 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl], code: ControlLeft, keyCode: 5 ('Ctrl')",
+        "2026-10-31 07:55:54.169 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:54.174 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 18, key: Alt",
+        "2026-10-31 07:55:54.174 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: AltLeft, keyCode: 6 ('Alt')",
+        "2026-10-31 07:55:54.175 [info] [KeybindingService]: \\ Keyboard event cannot be dispatched in keydown phase.",
+        "2026-10-31 07:55:54.179 [info] [KeybindingService]: / Received  keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 57, key: 9",
+        "2026-10-31 07:55:54.179 [info] [KeybindingService]: | Converted keydown event - modifiers: [ctrl,alt], code: Digit9, keyCode: 30 ('9')",
+        "2026-10-31 07:55:54.179 [info] [KeybindingService]: | Resolving ctrl+alt+[Digit9]",
+        "2026-10-31 07:55:54.179 [info] [KeybindingService]: \\ From 3 keybinding entries, matched s1.sentinel, when: editorTextFocus && vim.active && !vimCompanion.leaderActive && vim.mode == 'Normal', source: user extension vim-companion-spike.s1-probe.",
+        "2026-10-31 07:55:54.179 [info] [KeybindingService]: + Invoking command s1.sentinel.",
+        "2026-10-31 07:55:54.184 [info] [KeybindingService]: + Ignoring single modifier alt due to it being pressed together with other keys."
+      ]
+    }
+  ],
+  "finished": "2026-10-30T22:55:55.338Z"
+}

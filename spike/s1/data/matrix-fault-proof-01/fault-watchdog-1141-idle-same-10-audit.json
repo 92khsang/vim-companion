@@ -1,0 +1,79 @@
+{
+  "rawFile": "fault-watchdog-1141-idle-same-10.json",
+  "rawSha256": "c64fea34a9033e8aac26dc9e2acf430dda36d9af870ddd500167b7d803ddbd6e",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "hang-watchdog",
+      "errors": [
+        "watchdog release exceeded 5000 ms"
+      ]
+    }
+  ],
+  "postFaultOrdering": {
+    "methodSha256": "eb2a803b140bfdf700458eb48655c3c43f9d90c16d840d5a7703978481b1e5d9",
+    "qualifiedTrials": 1,
+    "unqualified": [],
+    "orders": [
+      {
+        "index": 0,
+        "outcome": "proven",
+        "method": "leader fault occurrence bounded against renderer j",
+        "lowerMs": 5016.370763982115,
+        "upperMs": 5016.503477999999
+      }
+    ],
+    "limitation": "Unqualified trials do not establish post-fault routing success or failure; independent watchdog deadline misses remain failures. Raw status is retained."
+  },
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 707.9936809821193,
+      "upper": 708.0496920000005,
+      "uncertaintyMs": 0.056011017881246516
+    },
+    "leaderOffset": {
+      "lower": 1731.1503300000004,
+      "upper": 1731.2270330000028,
+      "uncertaintyMs": 0.07670300000245334
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.5568559999992431,
+      "p95": 0.5568559999992431,
+      "p99": 0.5568559999992431,
+      "maximum": 0.5568559999992431
+    },
+    "upperMs": {
+      "p50": 0.9650990178852226,
+      "p95": 0.9650990178852226,
+      "p99": 0.9650990178852226,
+      "maximum": 0.9650990178852226
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.5568559999992431,
+        "upperMs": 0.9650990178852226
+      }
+    ]
+  }
+}

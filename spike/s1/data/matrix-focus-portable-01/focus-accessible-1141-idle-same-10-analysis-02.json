@@ -1,0 +1,1048 @@
+{
+  "rawSha256": "aef44e6669970d9baf1221a1697efcffd93e81e56f08094fc063683283831f83",
+  "status": "focus-recorded",
+  "finished": "2026-10-31T16:54:16.208Z",
+  "condition": {
+    "delayMs": 10,
+    "load": "idle",
+    "affinity": "same extension host",
+    "instances": 1,
+    "display": "X11 under Xvfb",
+    "layout": "us",
+    "phaseSeed": null,
+    "instanceCountMeaning": "configured maximum; batch overlap intervals recorded separately",
+    "cpuAffinity": "16-19"
+  },
+  "version": "1.141.0",
+  "completeScenarioCounts": true,
+  "resourceQualification": "no resource errors observed",
+  "method": {
+    "sources": {
+      "focus-analysis.mjs": "71035e98ef75d40bbcfcd711c5d7c1003ea5af377f411ff812376112b7aff2f4",
+      "focus.mjs": "58594b94468d627caca0e46b395a5a181f1b3fd6b64090da3bafab076d82bb47",
+      "fault.mjs": "46eacee4d2971c44c8d6175465b71d5595d97773ae86076930ef85cc7df9329a"
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "focus": "All DOM focus events and actual native window transitions are candidates. Changes definitely before the command or after five seconds are retained separately; boundary-overlapping changes remain candidates. Native poll intervals require bounded IPC clocks. Negative bounds are never clamped.",
+    "visibility": "Last preserved false sample to first true sample; the nominal 25 ms interval is not substituted for missing polls.",
+    "predicate": "Fresh sentinel after the five-second observation; it does not establish the predicate at the first focus transition. An owned native dialog with an unfocused renderer and no fresh sentinel has no workbench keybinding target; its underlying workbench context remains unobserved.",
+    "provider": "Actual command-associated request candidates, client/server causal clock bounds and strict containment of the j keydown. Ambiguity remains explicit."
+  },
+  "scenarios": [
+    {
+      "id": "cd-accessible",
+      "leader": "SPC c d",
+      "state": "accessible",
+      "delayed": false,
+      "trials": 9,
+      "rounds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "issues": 0,
+      "targets": {
+        "other": 9
+      },
+      "predicates": {
+        "true": 9
+      },
+      "firstFocusChange": {
+        "count": 9,
+        "lowerMs": {
+          "median": 6.703709000001254,
+          "p95": 21.31496299999708,
+          "maximum": 21.31496299999708
+        },
+        "upperMs": {
+          "median": 7.6887750178721035,
+          "p95": 22.35156900000584,
+          "maximum": 22.35156900000584
+        }
+      },
+      "noFocusChangeObserved": 0,
+      "focusTimingOutcomes": {
+        "within 5 s": 9
+      },
+      "commandSettlementMs": {
+        "median": 0.5903650000036578,
+        "p95": 3.2873900000013236,
+        "maximum": 3.2873900000013236
+      },
+      "commandOutcomes": {
+        "fulfilled": 9
+      }
+    }
+  ],
+  "trials": [
+    {
+      "index": 0,
+      "scenario": "cd-accessible",
+      "round": 0,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3466539880803,
+          "upper": 954.8922829880783,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3626769999973,
+          "upper": 2336.4503680000016,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3430199999966,
+          "upper": 2336.429997000003,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 21.31496299999708,
+        "upperMs": 22.35156900000584
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 21.31496299999708,
+        "upperMs": 22.35156900000584
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5003.714963005965,
+        "upperMs": 5004.751569005959
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5003.714963005965,
+          "upperMs": 5004.751569005959
+        },
+        "nativeEnd": {
+          "lowerMs": 5007.960964999998,
+          "upperMs": 5008.096012000002
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.123592999997,
+          "upperMs": 5003.298261000004
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 21.31496299999708,
+        "upperMs": 22.35156900000584
+      },
+      "newTargetFocus": {
+        "lowerMs": 21.914962994036614,
+        "upperMs": 22.951568994045374
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 3.2873900000013236,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 27.51496298807615,
+            "upperMs": 38.35156900000584
+          },
+          "firstTrueSample": {
+            "lowerMs": 37.31496299999708,
+            "upperMs": 38.35156900000584
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 1,
+      "scenario": "cd-accessible",
+      "round": 1,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3140189880771,
+          "upper": 954.8313479821179,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3559079999977,
+          "upper": 2336.450054000001,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3343559999994,
+          "upper": 2336.4303269999946,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 7.678619982129021,
+        "upperMs": 8.695919976147707
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 7.678619982129021,
+        "upperMs": 8.695919976147707
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5004.0786199880895,
+        "upperMs": 5005.095919982108
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5004.0786199880895,
+          "upperMs": 5005.095919982108
+        },
+        "nativeEnd": {
+          "lowerMs": 5008.430765000005,
+          "upperMs": 5008.577859999998
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.729550000004,
+          "upperMs": 5003.919666999995
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 7.678619982129021,
+        "upperMs": 8.695919976147707
+      },
+      "newTargetFocus": {
+        "lowerMs": 8.178619982129021,
+        "upperMs": 9.195919976147707
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.7335859999984677,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 13.47861999404995,
+            "upperMs": 36.3959199940291
+          },
+          "firstTrueSample": {
+            "lowerMs": 35.378620000010415,
+            "upperMs": 36.3959199940291
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 2,
+      "scenario": "cd-accessible",
+      "round": 2,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3040439940426,
+          "upper": 954.8462489821202,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3605439999956,
+          "upper": 2336.4490430000005,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3412859999953,
+          "upper": 2336.4297850000003,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.26242101193202,
+        "upperMs": 7.297125000004598
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.26242101193202,
+        "upperMs": 7.297125000004598
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5003.66242098809,
+        "upperMs": 5004.697124976163
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5003.66242098809,
+          "upperMs": 5004.697124976163
+        },
+        "nativeEnd": {
+          "lowerMs": 5007.695963000006,
+          "upperMs": 5007.8349720000115
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.225603999999,
+          "upperMs": 5003.402602000009
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.26242101193202,
+        "upperMs": 7.297125000004598
+      },
+      "newTargetFocus": {
+        "lowerMs": 6.662420988090162,
+        "upperMs": 7.6971249761627405
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5903650000036578,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 12.46242100001109,
+            "upperMs": 38.597124982123205
+          },
+          "firstTrueSample": {
+            "lowerMs": 37.562420994050626,
+            "upperMs": 38.597124982123205
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 3,
+      "scenario": "cd-accessible",
+      "round": 3,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3218339999996,
+          "upper": 954.8037990059627,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3518419999964,
+          "upper": 2336.448507000001,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3300489999965,
+          "upper": 2336.428169999999,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.927848017883662,
+        "upperMs": 7.911934023839422
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.927848017883662,
+        "upperMs": 7.911934023839422
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5001.827847994042,
+        "upperMs": 5002.811933999998
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5001.827847994042,
+          "upperMs": 5002.811933999998
+        },
+        "nativeEnd": {
+          "lowerMs": 5006.116668999995,
+          "upperMs": 5006.264206000007
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5001.377797999994,
+          "upperMs": 5001.572584000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.927848017883662,
+        "upperMs": 7.911934023839422
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.527848011923197,
+        "upperMs": 8.511934017878957
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.6229649999950198,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 14.227848000002268,
+            "upperMs": 39.61193401191849
+          },
+          "firstTrueSample": {
+            "lowerMs": 38.62784800596273,
+            "upperMs": 39.61193401191849
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 4,
+      "scenario": "cd-accessible",
+      "round": 4,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3334799821216,
+          "upper": 954.8730470000035,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.359863999998,
+          "upper": 2336.4507250000024,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3377610000025,
+          "upper": 2336.431660000002,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.800742982122756,
+        "upperMs": 7.8382089999940945
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.800742982122756,
+        "upperMs": 7.8382089999940945
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5004.300742982123,
+        "upperMs": 5005.338208999994
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5004.300742982123,
+          "upperMs": 5005.338208999994
+        },
+        "nativeEnd": {
+          "lowerMs": 5008.583077000003,
+          "upperMs": 5008.724376999999
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.891993999998,
+          "upperMs": 5004.0767540000015
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.800742982122756,
+        "upperMs": 7.8382089999940945
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.300742982122756,
+        "upperMs": 8.338208999994094
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.6118029999997816,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 12.50074300000415,
+            "upperMs": 38.23820900595456
+          },
+          "firstTrueSample": {
+            "lowerMs": 37.20074298808322,
+            "upperMs": 38.23820900595456
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 5,
+      "scenario": "cd-accessible",
+      "round": 5,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3595819880768,
+          "upper": 954.8494240059615,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3577220000006,
+          "upper": 2336.448945999997,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3381290000034,
+          "upper": 2336.4293529999995,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.703709000001254,
+        "upperMs": 7.6887750178721035
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.703709000001254,
+        "upperMs": 7.6887750178721035
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5004.40370898808,
+        "upperMs": 5005.388775005951
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5004.40370898808,
+          "upperMs": 5005.388775005951
+        },
+        "nativeEnd": {
+          "lowerMs": 5008.369833000004,
+          "upperMs": 5008.506662
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.981890999996,
+          "upperMs": 5004.164338999988
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.703709000001254,
+        "upperMs": 7.6887750178721035
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.203709000001254,
+        "upperMs": 8.188775017872103
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5519569999960368,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 12.50370898211986,
+            "upperMs": 38.388775005951175
+          },
+          "firstTrueSample": {
+            "lowerMs": 37.403708988080325,
+            "upperMs": 38.388775005951175
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 6,
+      "scenario": "cd-accessible",
+      "round": 6,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.2910900000036,
+          "upper": 954.8542039821211,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3587130000087,
+          "upper": 2336.4485870000062,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3385000000126,
+          "upper": 2336.4297619999998,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.609977005966357,
+        "upperMs": 7.668352988061088
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.609977005966357,
+        "upperMs": 7.668352988061088
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5004.409977017873,
+        "upperMs": 5005.468352999989
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5004.409977017873,
+          "upperMs": 5005.468352999989
+        },
+        "nativeEnd": {
+          "lowerMs": 5008.609654,
+          "upperMs": 5008.749311999985
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5003.848603000006,
+          "upperMs": 5004.0297389999905
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.609977005966357,
+        "upperMs": 7.668352988061088
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.109977005966357,
+        "upperMs": 8.168352988061088
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5525549999947543,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 14.009977011926821,
+            "upperMs": 39.56835299402155
+          },
+          "firstTrueSample": {
+            "lowerMs": 38.50997701192682,
+            "upperMs": 39.56835299402155
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 7,
+      "scenario": "cd-accessible",
+      "round": 7,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3394270059555,
+          "upper": 954.8500139821215,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.3629619999992,
+          "upper": 2336.4522110000107,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3383890000114,
+          "upper": 2336.430990000008,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.562724005940254,
+        "upperMs": 7.569911982121994
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.562724005940254,
+        "upperMs": 7.569911982121994
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5001.06272400594,
+        "upperMs": 5002.069911982122
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5001.06272400594,
+          "upperMs": 5002.069911982122
+        },
+        "nativeEnd": {
+          "lowerMs": 5005.145535999996,
+          "upperMs": 5005.282817999992
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5000.657003999993,
+          "upperMs": 5000.838854000001
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.562724005940254,
+        "upperMs": 7.569911982121994
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.062724005940254,
+        "upperMs": 8.069911982121994
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5421579999965616,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 13.362724017861183,
+            "upperMs": 39.46991198808246
+          },
+          "firstTrueSample": {
+            "lowerMs": 38.46272401190072,
+            "upperMs": 39.46991198808246
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    },
+    {
+      "index": 8,
+      "scenario": "cd-accessible",
+      "round": 8,
+      "clockOffsets": {
+        "renderer": {
+          "lower": 954.3563539821237,
+          "upper": 954.8373289940453,
+          "timeOrigin": 1793465574445.6
+        },
+        "probe": {
+          "lower": 2336.360851999998,
+          "upper": 2336.450496000005,
+          "timeOrigin": 1793465575827.455
+        },
+        "leader": {
+          "lower": 2336.3402170000045,
+          "upper": 2336.4300479999947,
+          "timeOrigin": 1793465575827.455
+        }
+      },
+      "issues": [],
+      "target": "other",
+      "focusChangeObserved": true,
+      "firstFocusChange": {
+        "lowerMs": 6.664970976155018,
+        "upperMs": 7.639776988085941
+      },
+      "firstFocusChangeSource": "focusout or focusin",
+      "firstFocusChangeWindow": "within 5 s",
+      "firstObservedChange": {
+        "lowerMs": 6.664970976155018,
+        "upperMs": 7.639776988085941
+      },
+      "excludedFocusChanges": [],
+      "targetObservedAt": {
+        "lowerMs": 5000.5649709821155,
+        "upperMs": 5001.539776994046
+      },
+      "observationCoverage": {
+        "rendererEnd": {
+          "lowerMs": 5000.5649709821155,
+          "upperMs": 5001.539776994046
+        },
+        "nativeEnd": {
+          "lowerMs": 5004.631122999999,
+          "upperMs": 5004.770053
+        },
+        "hostSnapshotStart": {
+          "lowerMs": 5000.086005999998,
+          "upperMs": 5000.265480999995
+        },
+        "focusCoversFiveSeconds": true
+      },
+      "firstDeparture": {
+        "lowerMs": 6.664970976155018,
+        "upperMs": 7.639776988085941
+      },
+      "newTargetFocus": {
+        "lowerMs": 7.164970976155018,
+        "upperMs": 8.139776988085941
+      },
+      "nativeFocusChange": null,
+      "nativeClockMethod": "bounded IPC round trips",
+      "command": {
+        "status": "fulfilled",
+        "elapsedMs": 0.5799249999981839,
+        "jWhilePending": null
+      },
+      "predicate": true,
+      "captureAtPredicate": false,
+      "underlyingWorkbenchPredicate": true,
+      "widgets": {
+        "quickInput": {
+          "status": "none within observation window"
+        },
+        "rename": {
+          "status": "none within observation window"
+        },
+        "actionList": {
+          "status": "none within observation window"
+        },
+        "hover": {
+          "status": "appeared",
+          "bounds": {
+            "lowerMs": 13.264970999996876,
+            "upperMs": 39.2397770119278
+          },
+          "firstTrueSample": {
+            "lowerMs": 38.264970999996876,
+            "upperMs": 39.2397770119278
+          },
+          "window": "within 5 s"
+        },
+        "dialog": {
+          "status": "none within observation window"
+        }
+      },
+      "visibleHover": {
+        "beforeLeader": false,
+        "preLeaf": false,
+        "after": true
+      },
+      "scmTreeFocus": null,
+      "provider": null,
+      "jBeforeCommandSettled": "unobserved/pending"
+    }
+  ]
+}

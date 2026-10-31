@@ -1,0 +1,75 @@
+{
+  "rawFile": "query-ec-on-11410-idle-same-10.json",
+  "rawSha256": "438174df6c937acef75b5d731dd59a326a252af14f4efdd0a6a327a4b3c7dcac",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "errors": [
+        "query did not reach Quick Open exactly",
+        "Quick Open lacks real focus",
+        "query changed engine state",
+        "query keys reached leader or the entry was lost",
+        "Quick Open leaf did not run exactly once",
+        "query dismissal changed engine state"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 966.7716469999989,
+      "upper": 967.2751470238425,
+      "uncertaintyMs": 0.5035000238435714
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2327.855359000001,
+      "upper": 2327.950439,
+      "uncertaintyMs": 0.09507999999914318
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": -0.07933202384220023,
+      "p95": 0.1234969761594566,
+      "p99": 0.1234969761594566,
+      "maximum": 0.1234969761594566
+    },
+    "upperMs": {
+      "p50": 1.454477000000681,
+      "p95": 11.38146100000222,
+      "p99": 11.38146100000222,
+      "maximum": 11.38146100000222
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.1234969761594566,
+        "upperMs": 1.454477000000681
+      },
+      {
+        "index": 1,
+        "lowerMs": -0.07933202384220023,
+        "upperMs": 11.38146100000222
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "rawSha256": "013dae41822b77b8803aa7cb17190b44f8ed4c7f696ccedcde84065e4213b75f",
+  "reviewedAt": "2026-10-31T16:20:26.759Z",
+  "classification": "resource-errors-present",
+  "limitsAtReview": {
+    "max_user_instances": 128,
+    "max_user_watches": 65536
+  },
+  "files": {
+    "code.log": "057af77e50f4e20c7613a986e1a3e2325fbc56ba6c89c84f4e0b7327cc7f1f8a",
+    "data/logs/20261101T004150/window1/exthost/exthost.log": "ab4af2320c477cc6c4e0067ec879ae3051d538b9342f7d925b0461b9eba57d45",
+    "data/logs/20261101T004150/sharedprocess.log": "67e94e6fc5b62ea0b233ebc724f993c89c7b4954c01d11d97c0e403c52d8c500"
+  },
+  "errors": [
+    {
+      "file": "data/logs/20261101T004150/sharedprocess.log",
+      "line": 1,
+      "text": "2026-11-01 00:41:51.467 [error] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/extensions for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/extensions')"
+    }
+  ],
+  "qualification": "Retain as observations under resource pressure; do not qualify normal watcher-dependent configuration/focus behavior. Revalidation required."
+}

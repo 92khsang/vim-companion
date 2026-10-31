@@ -1,0 +1,84 @@
+{
+  "rawFile": "fault-mouse-1141-loaded-separate-10.json",
+  "rawSha256": "3285aa72c9a483df2d06f22313b6688339f04d6a043a7558bdd8a4e2cadb3259",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "mouse",
+      "errors": [
+        "expected fault cleanup did not complete"
+      ]
+    }
+  ],
+  "postFaultOrdering": {
+    "methodSha256": "46eacee4d2971c44c8d6175465b71d5595d97773ae86076930ef85cc7df9329a",
+    "qualifiedTrials": 0,
+    "unqualified": [
+      {
+        "index": 0,
+        "outcome": "inconclusive",
+        "reason": "capture ended before the injected mouse fault"
+      }
+    ],
+    "orders": [
+      {
+        "index": 0,
+        "outcome": "inconclusive",
+        "reason": "capture ended before the injected mouse fault"
+      }
+    ],
+    "limitation": "Unqualified trials do not establish post-fault routing success or failure; independent watchdog deadline misses remain failures. Raw status is retained."
+  },
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 714.2018950119211,
+      "upper": 714.6057120119174,
+      "uncertaintyMs": 0.403816999996252
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2257.466244000003,
+      "upper": 2257.6862370000017,
+      "uncertaintyMs": 0.2199929999987944
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 47.30542198212288,
+      "p95": 47.30542198212288,
+      "p99": 47.30542198212288,
+      "maximum": 47.30542198212288
+    },
+    "upperMs": {
+      "p50": 48.63957898212311,
+      "p95": 48.63957898212311,
+      "p99": 48.63957898212311,
+      "maximum": 48.63957898212311
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 47.30542198212288,
+        "upperMs": 48.63957898212311
+      }
+    ]
+  }
+}

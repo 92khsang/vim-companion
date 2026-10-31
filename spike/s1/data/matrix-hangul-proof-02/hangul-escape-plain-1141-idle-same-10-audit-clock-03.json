@@ -1,0 +1,76 @@
+{
+  "rawFile": "hangul-escape-plain-1141-idle-same-10.json",
+  "rawSha256": "013dae41822b77b8803aa7cb17190b44f8ed4c7f696ccedcde84065e4213b75f",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "case": "escape-plain",
+      "errors": [
+        "Hangul cancel did not use the expected leader rule",
+        "first post-cancel key did not move down once"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 655.0818960000008,
+      "upper": 655.4765739940365,
+      "uncertaintyMs": 0.3946779940356464
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 1660.9117779999942,
+      "upper": 1660.994018999998,
+      "uncertaintyMs": 0.08224100000370527
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.006432017881250418,
+      "p95": 0.1117340059595317,
+      "p99": 0.1117340059595317,
+      "maximum": 0.1117340059595317
+    },
+    "upperMs": {
+      "p50": 1.3213560119161247,
+      "p95": 1.3303779999964735,
+      "p99": 1.3303779999964735,
+      "maximum": 1.3303779999964735
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.1117340059595317,
+        "upperMs": 1.3303779999964735
+      },
+      {
+        "index": 1,
+        "lowerMs": 0.006432017881250418,
+        "upperMs": 1.3213560119161247
+      }
+    ]
+  }
+}
