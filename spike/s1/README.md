@@ -1904,6 +1904,23 @@ bytes and report JSON from 11,815,779 to 4,238,882 bytes. A serialized compariso
 confirmed that only the documented projection and generation/method metadata
 changed. All 29 targeted classification, coverage and report tests passed.
 
+Measured: under X11/CDP on 1.141.0, idle/shared host at 10 ms, Hangul search and
+the Hangul-to-Latin switch each completed 1,000 trials without discrepancies or
+resource errors. The reverse switch stopped on its first trial because release
+exceeded 5,000 ms; fresh composition evidence qualified. On 1.134.0,
+loaded/separate hosts at 10 ms, all 47 focus scenarios completed nine observations
+each, including accessible hover, with no independent-analysis or resource
+errors. The delayed `cq`, `cr`, `cf` and `cd` scenarios proved input within the
+fixed 200 ms server wait in 4, 5, 6 and 5 of nine trials respectively; those four
+conditions remain unverified.
+
+The [next compact checkpoint](data/portable-report-11.md) selects 264 conditional
+cells and 2,043 focus observations. Its 264 selected-evidence dependencies were
+verified against the Git index and its isolated replay matched apart from the
+generation timestamp. The observed overlap remained at most two IDEs with no
+conflicts or exclusions. All 2,400 final outcomes remain unverified while the
+matrix continues.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
