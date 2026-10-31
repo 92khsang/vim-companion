@@ -1888,6 +1888,15 @@ An isolated replay reconstructed 240 artifacts from the Git index, including
 238 selected-evidence dependencies, and reproduced the report exactly apart
 from its generation timestamp. Archive and decoded-byte hashes were verified.
 
+Measured: CDP Hangul input into Quick Open completed 1,000 trials without
+discrepancies on 1.141.0, idle/shared host, 10 ms under X11. Independent review
+qualified all 1,000 fresh composition observations and found no resource errors.
+The [following checkpoint](data/portable-report-09.md) selects 218 conditional
+cells and 1,656 focus observations; all final outcomes remain unverified pending
+completion and final overlap review. Its 242 selected-evidence dependencies
+were checked from the Git index, and its isolated replay differed only in the
+generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
