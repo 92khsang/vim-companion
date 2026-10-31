@@ -1990,6 +1990,27 @@ conflicts or exclusions and at most two IDEs. Final outcomes remain unverified.
 The 285 selected-evidence dependencies were verified from the Git index; an
 isolated replay matched apart from the report generation timestamp.
 
+Measured: the portable V-b unpaused condition on 1.141.0, idle/shared host at
+10 ms recorded all 1,000 trials, with no recorded errors or resource errors.
+Independent stock-trace and engine-state analysis classified all 1,000 paths
+as remaps, with zero unknown paths. Every trial recorded the left-group leaf
+effect and native `j`, ending at zero-based `(1, 0)` in editor group 1.
+This is a recorded comparison with no pass threshold; a leaf effect does not
+establish an exact command invocation count.
+
+Measured: the replacement focus run on 1.134.0, idle/shared host at 30 ms
+completed 108 observations across the remaining twelve scenarios, with nine
+per scenario and no analysis or resource errors. Each delayed-provider scenario
+proved all nine inputs inside the original fixed 200 ms wait. Accessible hover
+then completed its nine observations with no analysis or resource errors.
+The [next checkpoint](data/portable-report-14.md) selects 316 conditional cells
+and 2,466 focus observations. Its live overlap review includes both replacement
+batches and observed at most two IDEs without conflicts or exclusions. All final
+outcomes remain unverified. An earlier local overlap snapshot was retained but
+not selected because the next runner had not yet recorded its IDE launch.
+All 300 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
