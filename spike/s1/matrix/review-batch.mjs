@@ -5,14 +5,18 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { audit } from "./audit.mjs";
 
-const allowPartialFocus = process.argv.includes("--partial-focus");
-const directories = process.argv
-  .slice(2)
-  .filter((arg) => arg !== "--partial-focus");
+const args = process.argv.slice(2);
+const allowPartialFocus = args.includes("--partial-focus");
+const runIndex = args.indexOf("--run");
+const runId = runIndex < 0 ? null : args.splice(runIndex, 2)[1];
+if (runIndex >= 0) assert.match(runId ?? "", /^[a-z0-9-]+$/);
+const directories = args.filter((arg) => arg !== "--partial-focus");
 assert.ok(directories.length, "usage: review-batch.mjs BATCH_DIRECTORY [...]");
 for (const directory of directories) {
   const batch = JSON.parse(readFileSync(join(directory, "batch.json")));
-  for (const run of batch.runs.filter((run) => run.finished)) {
+  for (const run of batch.runs.filter(
+    (run) => run.finished && (!runId || run.id === runId),
+  )) {
     const file = join(directory, run.id + ".json");
     if (!existsSync(file)) {
       console.log(JSON.stringify({ id: run.id, error: "no raw result" }));

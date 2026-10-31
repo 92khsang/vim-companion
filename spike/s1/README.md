@@ -1652,6 +1652,16 @@ physical CPU-core sharing, native coexistence and configured-limit violations.
 Unobserved lifetimes or omitted declared workers prevent qualification. A
 `--live` overlap review is provisional and cannot qualify final coverage.
 
+`matrix/review-finished.mjs [--watch] BATCH_DIRECTORY [...]` audits each finished
+run, runs the applicable independent focus or V-b analysis, and verifies or
+creates lossless raw/log archives. It invokes analysis in a new process so a
+long-lived watcher cannot label an earlier loaded parser with a newer source
+hash. `--watch` checks batch manifests every 30 seconds and exits when all listed
+batches finish. Its `review-progress.json` is bookkeeping: errors, unknown paths
+and insufficient wait counts remain explicit, and it never supplies the final
+overlap qualification or changes a measured trial. Baseline/source tree archives
+and the final coverage review remain separate checks.
+
 The focus analyzer considers all recorded DOM and native-window transitions,
 including returns to the original target. It retains changes definitely before
 the command or after five seconds separately. A pre-command change cannot hide
