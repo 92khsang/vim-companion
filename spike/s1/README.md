@@ -1834,6 +1834,14 @@ scenario proved nine keys inside its fixed 200 ms server wait. The
 cells and 1,269 focus observations. It retains final outcomes as `unverified`
 until the running batches and final overlap qualification finish.
 
+Measured: root reset completed 1,000 trials without discrepancies on VS Code
+1.141.0, idle/shared host, 10 ms. Its independent post-fault ordering audit
+qualified all 1,000 observations, and its resource review found no errors.
+The [fourth report checkpoint](data/portable-report-04.md) applies the strengthened
+process-termination qualification and selects 169 conditional cells with 1,269
+focus observations. The live overlap review still observed at most two IDEs
+without recorded conflicts; all final outcomes remain `unverified`.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
