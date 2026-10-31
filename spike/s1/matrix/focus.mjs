@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { fork, execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
 import { focusScenarios } from "./focus-scenarios.mjs";
 import { clockSamples } from "./observer.mjs";
@@ -34,6 +35,62 @@ export function focusKind(target) {
     return "list or tree";
   if (target.hover) return "other";
   return target.editor ? "editor text" : "other";
+}
+
+function openEditorsDOM() {
+  const describe = (node) => {
+    if (!node) return { exists: false, visible: false };
+    const rect = node.getBoundingClientRect();
+    return {
+      exists: true,
+      visible:
+        node.checkVisibility({
+          visibilityProperty: true,
+          opacityProperty: true,
+        }) &&
+        rect.width > 0 &&
+        rect.height > 0 &&
+        rect.bottom > 0 &&
+        rect.top < innerHeight,
+      bounds: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+      role: node.getAttribute("role"),
+    };
+  };
+  const pane = document.querySelector(".open-editors");
+  const row = [...(pane?.querySelectorAll(".monaco-list-row") ?? [])].find(
+    (node) => node.textContent.includes("outside.s1focus"),
+  );
+  return {
+    time: performance.now(),
+    timeOrigin: performance.timeOrigin,
+    explorer: describe(document.querySelector(".explorer-folders-view")),
+    openEditors: describe(pane),
+    outsideRow: { ...describe(row), text: row?.textContent ?? null },
+  };
+}
+
+export function outsideFixtureIssues(scenario, proof) {
+  if (!["fp-outside-hidden", "fp-outside-visible"].includes(scenario))
+    return [];
+  const issues = [];
+  if (proof?.dom?.explorer?.visible !== true)
+    issues.push("outside-file fixture lacks a visible Explorer proof");
+  const visible = scenario === "fp-outside-visible";
+  if (proof?.dom?.openEditors?.visible !== visible)
+    issues.push(
+      "actual Open Editors visibility is unproved or differs from the scenario",
+    );
+  if (visible && proof?.dom?.outsideRow?.visible !== true)
+    issues.push("visible Open Editors fixture lacks the outside-file row");
+  if (
+    !proof?.expectedUri ||
+    proof.state?.active?.uri !== proof.expectedUri ||
+    proof.editor?.editor !== true
+  )
+    issues.push(
+      "outside file is not proven active in the focused editor before the leaf",
+    );
+  return issues;
 }
 export function ownedModal(native, window) {
   const last = native.samples.filter((sample) => sample.id).at(-1);
@@ -175,6 +232,32 @@ export async function runFocus({
         workspace,
         fixtureText,
       });
+      if (scenario.state.startsWith("outside")) {
+        await call("command", { command: "workbench.view.explorer" });
+        if (scenario.state === "outside-visible")
+          await call("command", {
+            command: "workbench.files.action.focusOpenEditorsView",
+          });
+        trial.fixtureOpenEditors = await until(
+          async () => {
+            const dom = await observer.evaluate(
+              `(${openEditorsDOM.toString()})()`,
+            );
+            const visible = scenario.state === "outside-visible";
+            return (
+              dom.explorer.visible &&
+              dom.openEditors.visible === visible &&
+              (!visible || dom.outsideRow.visible) &&
+              dom
+            );
+          },
+          "outside-file fixture did not establish actual Open Editors visibility",
+          5000,
+        );
+        await call("command", {
+          command: "workbench.action.focusActiveEditorGroup",
+        });
+      }
       if (trial.fixture.needsScmRowFocus) {
         await call("command", { command: "workbench.view.scm" });
         const row = await until(
@@ -292,6 +375,18 @@ export async function runFocus({
         assert.ok(trial.prefix.leader.active);
       }
       trial.preLeafDOM = await observer.read();
+      if (scenario.state.startsWith("outside")) {
+        trial.openEditorsPreLeaf = {
+          dom: await observer.evaluate(`(${openEditorsDOM.toString()})()`),
+          state: await call("focusState"),
+          expectedUri: pathToFileURL(trial.fixture.active).href,
+          editor: trial.preLeafDOM.active,
+        };
+        assert.deepEqual(
+          outsideFixtureIssues(scenario.id, trial.openEditorsPreLeaf),
+          [],
+        );
+      }
       if (trial.fixture.needsScmRowFocus) {
         trial.scmTreeFocus = await observer.evaluate(`(()=>{
           const row=[...document.querySelectorAll('.scm-view .monaco-list-row')].find(node=>node.textContent.includes('scm-change.txt'));

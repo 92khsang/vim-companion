@@ -5,7 +5,7 @@ import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { focusScenarios } from "./focus-scenarios.mjs";
-import { focusKind } from "./focus.mjs";
+import { focusKind, outsideFixtureIssues } from "./focus.mjs";
 import { buildMatrixRunner } from "./runner.mjs";
 
 test("focus inventory covers 26 leaders and all 47 state/provider scenarios", () => {
@@ -29,6 +29,31 @@ test("focus classification distinguishes Monaco-backed inputs from editor text",
   assert.equal(focusKind({ editor: true, hover: true }), "other");
   assert.equal(focusKind({ dialog: true, quickInput: true }), "dialog");
   assert.equal(focusKind({ editor: true }), "editor text");
+});
+
+test("outside-file scenarios require actual view visibility and the focused outside document", () => {
+  assert.ok(
+    outsideFixtureIssues("fp-outside-visible", {
+      settings: { "explorer.openEditors.visible": 9 },
+    }).length,
+  );
+  const proof = {
+    dom: {
+      explorer: { visible: true },
+      openEditors: { visible: true },
+      outsideRow: { visible: true },
+    },
+    expectedUri: "file:///fixture/outside.s1focus",
+    state: { active: { uri: "file:///fixture/outside.s1focus" } },
+    editor: { editor: true },
+  };
+  assert.deepEqual(outsideFixtureIssues("fp-outside-visible", proof), []);
+  assert.ok(outsideFixtureIssues("fp-outside-hidden", proof).length);
+  proof.dom.openEditors.visible = false;
+  proof.dom.outsideRow.visible = false;
+  assert.deepEqual(outsideFixtureIssues("fp-outside-hidden", proof), []);
+  proof.state.active.uri = "file:///fixture/inside.s1focus";
+  assert.ok(outsideFixtureIssues("fp-outside-hidden", proof).length);
 });
 
 test("focus runner generates a valid isolated experiment without weakening the retained gate", () => {

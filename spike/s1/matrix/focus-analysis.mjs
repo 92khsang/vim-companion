@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { rendererTimeErrorMs } from "./fault.mjs";
-import { focusKind } from "./focus.mjs";
+import { focusKind, outsideFixtureIssues } from "./focus.mjs";
 
 export function clockOffset(samples, member, error = 0) {
   const values = samples.map((sample) => ({
@@ -522,6 +522,7 @@ export function analyzeFocusTrial(raw, trial) {
     issues: [
       ...trial.errors,
       ...trial.inconclusive,
+      ...outsideFixtureIssues(trial.scenario, trial.openEditorsPreLeaf),
       ...Object.entries(offsets)
         .filter(([, value]) => !value)
         .map(([name]) => name + " clock bounds unresolved"),

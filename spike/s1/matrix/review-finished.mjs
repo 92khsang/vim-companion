@@ -22,6 +22,7 @@ assert.ok(
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const methodSha256 = hash(readFileSync(import.meta.filename));
 const seen = new Set();
+const finalized = new Set();
 const records = new Map(directories.map((directory) => [directory, []]));
 
 function nextAnalysis(directory, id, kind, rawSha256, sourceHash) {
@@ -189,7 +190,7 @@ do {
       changed = true;
       console.log(JSON.stringify({ batch: directory, ...record }));
     }
-    if (changed || batch.finished) {
+    if (changed || (batch.finished && !finalized.has(directory))) {
       const progress = {
         methodSha256,
         reviewedAt: new Date().toISOString(),
@@ -203,6 +204,7 @@ do {
           "$HOME",
         ) + "\n",
       );
+      if (batch.finished) finalized.add(directory);
     }
   }
   if (!watch || allFinished) break;

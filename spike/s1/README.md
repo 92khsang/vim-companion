@@ -1578,6 +1578,39 @@ wait observations and therefore keeps these eight cells incomplete. Adding
 request-observed supplemental trials is awaiting the user's protocol decision;
 the original unpaused trials and response deadline remain unchanged.
 
+### Actual Open Editors visibility
+
+The earlier `fp-outside-visible` setup recorded
+`explorer.openEditors.visible=9` without proving that the Open Editors view was
+shown. Documented: this setting controls
+[list height](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/contrib/files/browser/views/openEditorsView.ts#L612-L624),
+while the view is
+[hidden by default](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/contrib/files/browser/explorerViewlet.ts#L107-L123).
+The outside-file reveal path only focuses an existing Open Editors view; see
+[1.141.0](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/workbench/contrib/files/browser/fileCommands.ts#L342-L349)
+and [1.134.0](https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/contrib/files/browser/fileCommands.ts#L339-L346).
+The old editor-focus observations remain evidence of their recorded setup, but
+do not qualify the intended visible-view state.
+
+The fixture now opens Explorer for both outside-file states. The visible state
+also invokes `workbench.files.action.focusOpenEditorsView` and waits for a
+visible, nonzero Open Editors body and an `outside.s1focus` row. The hidden state
+requires the body to be absent or hidden. After returning to the editor, both
+states retain the actual view evidence, focused editor target and matching
+outside-file URI immediately before the leaf. Analysis rejects old observations
+without this proof. This changes setup verification, not the measured leader
+sequence, timing or nine-observation count.
+
+Measured: `matrix-focus-complete-03` was stopped with 133 completed observations
+to replace its frozen fixture. Fourteen scenarios had all nine observations;
+`space-default` had seven and remains incomplete. The stop, partial audit and
+raw data are retained. `matrix-focus-outside-01` then completed nine observations
+per outside state on each of 1.134.0 and 1.141.0, idle/shared host at 10 ms.
+Hidden Open Editors left editor focus in all nine per version; visible Open
+Editors focused a list/tree in all nine per version. The target predicate
+excluding `leaderActive` was true in all 36 observations. Source/delivery,
+resource and owned-process cleanup checks passed for both runs.
+
 ### Lossless storage of large raw artifacts
 
 `matrix/archive.mjs` stores large raw files as standard gzip, with a neighboring
@@ -1671,6 +1704,58 @@ Whether `j` preceded command settlement is evaluated separately from whether it
 followed command start or arrived inside the server wait. A pre-command key can
 still be proven to precede settlement when the command remains pending after
 five seconds.
+
+### Provisional answers for issue #7
+
+These are decision candidates, not catalog or schema changes. The user retains
+V-a. The remaining conditions and final overlap review must finish before the
+S1 verdict.
+
+1. **Define `exit` as a capture-release policy.** Repository observation: the
+   [measured dispatcher](https://github.com/92khsang/vim-companion/blob/f88aba69759edc85e6ddb615f4bdf9e790f9e95e/spike/s1/matrix/extended.mjs)
+   ends capture before invoking an `editor` leaf, but invokes an `input` leaf
+   while capture remains active and ends it in `finally`. Other cleanup events
+   can end capture earlier. Recommended: do not define `input` as either a text
+   input or every destination outside the editor.
+2. **Assign state-dependent commands by the desired next-key owner.** Measured:
+   Quick Fix with results focused a list/tree; no results left editor focus.
+   SCM commit focused a text input, while a previously focused resource row
+   selected a list/tree. Each state had nine observations on 1.141.0,
+   idle/shared host at 10 ms. Inferred: a static enum cannot predict all these
+   destinations. Choose the release contract before correcting catalog values.
+3. **Require the policy only on leader bindings.** Recommended: entries without
+   a leader should have no operative `exit` policy. Preserve existing values
+   until the separate schema/catalog decision, and require an explicit policy
+   when adding a leader. For an entry with both a leader and a Vim key, apply the
+   field only to the leader path.
+4. **Do not use command settlement as UI readiness.** Measured: Quick Fix with
+   one result settled before focus changed in all nine observations; settlement
+   median was 0.707 ms and the first-focus median bounds were 7.129–8.121 ms.
+   Allowed rename focused its input with median bounds 102.305–103.235 ms, yet
+   its promise did not settle within five seconds in any of nine observations.
+   These are the same 1.141.0, idle/shared, 10 ms condition, from the
+   [Quick Fix analysis](https://github.com/92khsang/vim-companion/blob/f88aba69759edc85e6ddb615f4bdf9e790f9e95e/spike/s1/data/matrix-focus-complete-01/focus-11410-idle-same-10-analysis-03.json)
+   and [rename analysis](https://github.com/92khsang/vim-companion/blob/f88aba69759edc85e6ddb615f4bdf9e790f9e95e/spike/s1/data/matrix-focus-complete-02/focus-11410-idle-same-10-analysis-02.json).
+5. **Decide explicitly who owns keys during provider work.** Measured: in nine
+   proven 200 ms waits per leaf under that condition, rename sent `j` to the
+   leader and kept the cursor unchanged. Quick Fix, formatting and hover moved
+   the cursor down once; formatting and hover requests were cancelled, and
+   Quick Fix showed no action list. Inferred: the latter motions came from Vim.
+   Use the [Quick Fix/rename observations](https://github.com/92khsang/vim-companion/blob/f88aba69759edc85e6ddb615f4bdf9e790f9e95e/spike/s1/data/matrix-focus-repair-01/focus-repair-11410-idle-same-10-analysis-02.json)
+   and the [corrected formatting/hover observations](https://github.com/92khsang/vim-companion/blob/f88aba69759edc85e6ddb615f4bdf9e790f9e95e/spike/s1/data/matrix-focus-repair-02/focus-delayed-repair-11410-idle-same-10-analysis-02.json).
+   A candidate policy is to release capture after selecting the leaf and let
+   the current focus owner receive subsequent keys. Its trade-off is that normal
+   editor motion can cancel provider work or suppress its UI. This would change
+   the current V-a release behavior; these measurements do not prove that
+   candidate lossless.
+
+The final focus table must show the whole population, finite timed observations,
+`none within 5 s`, pending commands and unresolved timing separately. Existing
+finite-sample quantiles are conditional on those observed events, not estimates
+that replace censored observations with zero. A native dialog has no workbench
+keyboard target; an unobserved workbench predicate must not be reported as false.
+The visible-hover fixture also retains the fact that leader keys can hide the
+old hover before the measured leaf recreates it.
 
 ### Renderer clock bounds
 
