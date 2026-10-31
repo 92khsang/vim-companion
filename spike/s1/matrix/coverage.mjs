@@ -16,6 +16,35 @@ import {
 } from "./startup-evidence.mjs";
 export { startupEvidenceSha256 } from "./startup-evidence.mjs";
 
+export function inputEvidenceSummary(evidence) {
+  assert.equal(evidence.validatedTrials, evidence.observations.length);
+  return {
+    sources: { ...evidence.sources },
+    validatedTrials: evidence.validatedTrials,
+    unqualified: [...evidence.unqualified],
+    counts: Object.fromEntries(
+      ["composition", "mode"].map((kind) => {
+        const values = evidence.observations.map(
+          (observation) => observation[kind],
+        );
+        return [
+          kind,
+          {
+            required: values.filter((value) => value.required).length,
+            requiredQualified: values.filter(
+              (value) => value.required && value.qualified,
+            ).length,
+            requiredUnqualified: values.filter(
+              (value) => value.required && !value.qualified,
+            ).length,
+            notRequired: values.filter((value) => !value.required).length,
+          },
+        ];
+      }),
+    ),
+  };
+}
+
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
   readFileSync(new URL("./remap-analysis.mjs", import.meta.url)),
@@ -431,7 +460,9 @@ export function collectCoverage(directories, overlapArtifact = null) {
         resourceReviewSha256: resource?.sha256,
         terminationSha256: termination?.sha256,
         batchSha256: batch.sha256,
-        ...(inputEvidence ? { inputEvidence } : {}),
+        ...(inputEvidence
+          ? { inputEvidence: inputEvidenceSummary(inputEvidence) }
+          : {}),
         reasons: [
           ...qualification(
             raw,

@@ -1897,6 +1897,13 @@ completion and final overlap review. Its 242 selected-evidence dependencies
 were checked from the Git index, and its isolated replay differed only in the
 generation timestamp.
 
+Measured: the [compact report checkpoint](data/portable-report-10.md) preserves
+the same 218 selected cells, qualification reasons, hashes and statistics.
+Keeping input-evidence summaries reduced coverage JSON from 5,153,352 to 1,256,997
+bytes and report JSON from 11,815,779 to 4,238,882 bytes. A serialized comparison
+confirmed that only the documented projection and generation/method metadata
+changed. All 29 targeted classification, coverage and report tests passed.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
@@ -2156,7 +2163,14 @@ taskset -c 0-3 mise exec node@24.21.0 -- node \
 ```
 
 Coverage recomputes this evidence even for an older frozen runner and records
-the classifier hashes; the report rejects changed classifiers. The source
+the classifier hashes; the report rejects changed classifiers. Coverage retains
+the source hashes, validated count, unqualified indices and separate composition
+and mode counts. Full per-trial proofs remain in the bound raw and audit files.
+The fresh analysis still runs before this projection; an older audit never
+substitutes for it. Evidence qualification is distinct from behavior success:
+a failed routing trial can have qualified evidence. This avoids duplicating full
+composition proofs across the report's selected and alternative records as the
+matrix grows. The source
 manifest also binds the new runtime helper and Shell observer. The unused native
 queue was stopped with zero runs and replaced with updated frozen sources.
 All 80 matrix tests passed, including the report aggregation regressions. The real Shell signal connection still awaits its

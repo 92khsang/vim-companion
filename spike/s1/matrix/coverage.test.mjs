@@ -15,7 +15,9 @@ import {
   selectFocusAnalysis,
   focusMethodSources,
   inputEvidenceSources,
+  inputEvidenceSummary,
 } from "./coverage.mjs";
+import { analyzeInputEvidence } from "./input-evidence.mjs";
 
 test("coverage preserves every Linux condition and separates focus states", () => {
   const cells = expectedCells();
@@ -265,6 +267,90 @@ test("Hangul coverage independently rejects absent fresh composition and stale c
     { ...evidence, validatedTrials: 0 },
   ])
     assert.ok(qualification(raw, "raw", {}, {}, {}, changed).includes(reason));
+});
+
+test("input summaries preserve qualification, missing-proof indices and raw evidence", () => {
+  for (const [backend, kind, requiredKind] of [
+    ["x11", "escape-plain", null],
+    ["x11", "escape-composed", "composition"],
+    ["wayland", "escape-plain", "mode"],
+  ]) {
+    const raw = {
+      gate: "hangul",
+      matrix: { backend },
+      status: "discrepancy",
+      trials: [{ index: 7, case: kind, errors: [] }],
+    };
+    const before = structuredClone(raw);
+    const full = analyzeInputEvidence(raw),
+      retained = structuredClone(full);
+    const summary = inputEvidenceSummary(full);
+    assert.deepEqual(
+      qualification(raw, "raw", {}, {}, {}, summary),
+      qualification(raw, "raw", {}, {}, {}, full),
+    );
+    assert.equal(Object.hasOwn(summary, "observations"), false);
+    assert.deepEqual(summary.unqualified, requiredKind ? [7] : []);
+    for (const key of ["composition", "mode"])
+      assert.deepEqual(summary.counts[key], {
+        required: Number(key === requiredKind),
+        requiredQualified: 0,
+        requiredUnqualified: Number(key === requiredKind),
+        notRequired: Number(key !== requiredKind),
+      });
+    assert.deepEqual(full, retained);
+    assert.deepEqual(raw, before);
+    summary.sources = {};
+    assert.ok(
+      qualification(raw, "raw", {}, {}, {}, summary).includes(
+        "fresh composition or native mode evidence is unqualified",
+      ),
+    );
+  }
+});
+
+test("input summary qualification counts describe proof, not behavior success", () => {
+  const full = {
+    sources: inputEvidenceSources(),
+    validatedTrials: 3,
+    unqualified: [2],
+    observations: [
+      {
+        index: 0,
+        composition: {
+          required: true,
+          qualified: true,
+          destinationMatches: false,
+        },
+        mode: { required: false, qualified: true },
+      },
+      {
+        index: 1,
+        composition: { required: true, qualified: true },
+        mode: { required: true, qualified: true },
+      },
+      {
+        index: 2,
+        composition: { required: false, qualified: true },
+        mode: { required: true, qualified: false },
+      },
+    ],
+  };
+  const summary = inputEvidenceSummary(full);
+  assert.deepEqual(summary.counts.composition, {
+    required: 2,
+    requiredQualified: 2,
+    requiredUnqualified: 0,
+    notRequired: 1,
+  });
+  assert.deepEqual(summary.counts.mode, {
+    required: 2,
+    requiredQualified: 1,
+    requiredUnqualified: 1,
+    notRequired: 1,
+  });
+  assert.deepEqual(summary.unqualified, [2]);
+  assert.throws(() => inputEvidenceSummary({ ...full, validatedTrials: 2 }));
 });
 
 test("cold coverage requires independent child cleanup and actual final snapshots", () => {
