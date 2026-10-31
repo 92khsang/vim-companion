@@ -1,0 +1,84 @@
+{
+  "rawFile": "fault-throw-11410-idle-same-10.json",
+  "rawSha256": "6b68e04f9c6fbfef6767f7a8672c2d7f381d9b0ca47aba903ca12087eccab0be",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "throw",
+      "errors": [
+        "post-fault j reached the leader",
+        "fault leader keys differ from the planned stimulus",
+        "post-fault j did not move down once"
+      ]
+    }
+  ],
+  "postFaultOrdering": {
+    "methodSha256": "46eacee4d2971c44c8d6175465b71d5595d97773ae86076930ef85cc7df9329a",
+    "qualifiedTrials": 1,
+    "unqualified": [],
+    "orders": [
+      {
+        "index": 0,
+        "outcome": "proven",
+        "method": "leader fault occurrence bounded against renderer j",
+        "lowerMs": 9.360560005959996,
+        "upperMs": 10.504671011920436,
+        "rendererTimestampErrorBoundMs": 0.202
+      }
+    ],
+    "limitation": "Unqualified trials do not establish post-fault routing success or failure; independent watchdog deadline misses remain failures. Raw status is retained."
+  },
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 968.5281989880798,
+      "upper": 969.0532259880808,
+      "uncertaintyMs": 0.525027000001046
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2334.5166050000007,
+      "upper": 2334.6174580000006,
+      "uncertaintyMs": 0.10085299999991548
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.11201599999776407,
+      "p95": 0.11201599999776407,
+      "p99": 0.11201599999776407,
+      "maximum": 0.11201599999776407
+    },
+    "upperMs": {
+      "p50": 1.4680999999995965,
+      "p95": 1.4680999999995965,
+      "p99": 1.4680999999995965,
+      "maximum": 1.4680999999995965
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.11201599999776407,
+        "upperMs": 1.4680999999995965
+      }
+    ]
+  }
+}

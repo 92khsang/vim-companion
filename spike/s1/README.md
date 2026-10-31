@@ -1634,7 +1634,9 @@ preserves different existing files. Python bytecode caches are not source inputs
 Restore those directories before an audit rebuilds the installed extensions:
 
 ```bash
-python3 -B spike/s1/matrix/archive-tree.py restore "$BATCH/source-snapshots.tar.gz"
+for ARCHIVE in "$BATCH"/source-snapshots*.tar.gz; do
+  python3 -B spike/s1/matrix/archive-tree.py restore "$ARCHIVE"
+done
 ```
 
 Each retained `batch.json` contains the exact job plan, CPU assignments, selected
@@ -1645,7 +1647,9 @@ the version-pinned IDE binaries above. For example, the native proof uses:
 BATCH=spike/s1/data/matrix-wayland-proof-07
 OUTPUT=spike/s1/data/matrix-wayland-replay-01
 PLAN=$(mktemp /tmp/s1-replay-plan.XXXXXX.json)
-python3 -B spike/s1/matrix/archive-tree.py restore "$BATCH/source-snapshots.tar.gz"
+for ARCHIVE in "$BATCH"/source-snapshots*.tar.gz; do
+  python3 -B spike/s1/matrix/archive-tree.py restore "$ARCHIVE"
+done
 python3 - "$BATCH/batch.json" "$PLAN" <<'PY'
 import json
 import sys
@@ -1737,6 +1741,22 @@ When coverage receives a live overlap review, observed conflicts, missing
 lifetimes, omitted workers and mismatched hashes remain rejection reasons.
 The report is an inventory, not the S1 verdict, and never publishes or closes
 issues.
+
+Measured: the first report checkpoint selected 117 conditional cell results,
+including all 47 focus scenarios with nine observations each in both IDE versions
+at idle load, shared host and 10 ms injection delay (846 focus observations).
+The live overlap review observed at most two measured IDEs, with no recorded
+physical-core conflicts, native coexistence, configured-limit violations, missing
+lifetimes or omitted declared workers. All final cell outcomes remained
+`unverified` because the batches were still running. The
+[provisional report](data/portable-report-01.md) preserves the distinction; it does
+not establish the remaining conditions or the final overlap review.
+
+The active-batch checkpoint stores 18 completed X11 runs, including comparison
+baselines, and three completed focus runs containing 279 observations. Their
+immutable source snapshots are in `source-snapshots-part-01.tar.gz` in each batch
+directory. Later parts may add finished runs; restore every part without replacing
+earlier archives. Active raw runs are not included in this checkpoint.
 
 ### Provisional answers for issue #7
 
