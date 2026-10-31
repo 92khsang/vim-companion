@@ -10,6 +10,8 @@ import {
   overlapQualification,
   remapMethodSha256,
   selectRemapAnalysis,
+  selectFocusAnalysis,
+  focusMethodSources,
 } from "./coverage.mjs";
 
 test("coverage preserves every Linux condition and separates focus states", () => {
@@ -92,6 +94,36 @@ test("V-b analysis selection uses numeric revisions of the current parser and pr
   });
   assert.equal(selectRemapAnalysis(candidates, "raw").value.unknown, 1);
   assert.equal(selectRemapAnalysis(candidates, "different"), undefined);
+});
+
+test("focus analysis selection validates imported classifiers as well as the main parser", () => {
+  const value = {
+    rawSha256: "raw",
+    method: { sources: focusMethodSources() },
+    issues: 0,
+  };
+  const candidates = [
+    { file: "run-analysis-01.json", value },
+    {
+      file: "run-analysis-02.json",
+      value: {
+        ...value,
+        method: {
+          sources: { ...value.method.sources, "focus.mjs": "old-classifier" },
+        },
+      },
+    },
+  ];
+  assert.equal(
+    selectFocusAnalysis(candidates, "raw").file,
+    "run-analysis-01.json",
+  );
+  candidates.push({
+    file: "run-analysis-10.json",
+    value: { ...value, issues: 1 },
+  });
+  assert.equal(selectFocusAnalysis(candidates, "raw").value.issues, 1);
+  assert.equal(selectFocusAnalysis(candidates, "changed"), undefined);
 });
 
 test("final overlap qualification binds manifests and raw lifetimes and rejects unresolved exclusions", () => {

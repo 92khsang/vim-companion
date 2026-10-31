@@ -1671,6 +1671,9 @@ status remain intact, and only complete nine-observation scenarios can contribut
 to the independent coverage inventory. `matrix/coverage.mjs` requires matching
 raw/audit/resource hashes, portable isolation and completed owned-process cleanup.
 It never substitutes a V-b failure for that row's 1,000 required observations.
+Focus analysis reuse checks the main parser and its imported focus/clock
+classifier hashes. Analysis revisions are ordered numerically; a newer unresolved
+result is not replaced by an older favorable result from the same parser.
 Native and Visual rows also inherit every qualification failure of the comparison
 baseline identified by its raw SHA. V-b requires a matching, source-hashed
 native-key analysis of all 1,000 distinct observations; unknown paths remain

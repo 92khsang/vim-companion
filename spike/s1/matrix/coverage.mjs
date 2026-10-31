@@ -9,6 +9,29 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 export const remapMethodSha256 = hash(
   readFileSync(new URL("./remap-analysis.mjs", import.meta.url)),
 );
+export function focusMethodSources() {
+  return Object.fromEntries(
+    ["focus-analysis.mjs", "focus.mjs", "fault.mjs"].map((name) => [
+      name,
+      hash(readFileSync(new URL(name, import.meta.url))),
+    ]),
+  );
+}
+export function selectFocusAnalysis(candidates, rawSha256) {
+  const sources = focusMethodSources();
+  const revision = (candidate) =>
+    Number(candidate.file.match(/-analysis-(\d+)\.json$/)?.[1] ?? 0);
+  return candidates
+    .filter(
+      (candidate) =>
+        candidate.value.rawSha256 === rawSha256 &&
+        Object.entries(sources).every(
+          ([name, sha256]) =>
+            candidate.value.method?.sources?.[name] === sha256,
+        ),
+    )
+    .sort((a, b) => revision(b) - revision(a))[0];
+}
 const catalog = JSON.parse(
   readFileSync(new URL("./catalog.json", import.meta.url)),
 );
@@ -178,14 +201,18 @@ export function remapQualification(rawSha256, analysis) {
   return reasons;
 }
 
-export function selectRemapAnalysis(candidates, rawSha256) {
+export function selectRemapAnalysis(
+  candidates,
+  rawSha256,
+  methodSha256 = remapMethodSha256,
+) {
   const revision = (candidate) =>
     Number(candidate.file.match(/-native-keys(?:-(\d+))?\.json$/)?.[1] ?? 0);
   return candidates
     .filter(
       (candidate) =>
         candidate.value.rawSha256 === rawSha256 &&
-        candidate.value.methodSha256 === remapMethodSha256,
+        candidate.value.methodSha256 === methodSha256,
     )
     .sort((a, b) => revision(b) - revision(a))[0];
 }
@@ -312,9 +339,7 @@ export function collectCoverage(directories, overlapArtifact = null) {
         .sort()
         .reverse()
         .map((name) => readArtifact(join(directory, name)));
-      const analysis = analyses.find(
-        (item) => item.value.rawSha256 === artifact.sha256,
-      );
+      const analysis = selectFocusAnalysis(analyses, artifact.sha256);
       for (const scenario of raw.focusProtocol?.scenarios ?? []) {
         const rows = raw.trials.filter(
           (trial) => trial.scenario === scenario.id,

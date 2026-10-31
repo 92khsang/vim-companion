@@ -11,6 +11,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { setTimeout as sleep } from "node:timers/promises";
 import { packArtifact, verifyArchive } from "./archive.mjs";
+import { selectFocusAnalysis, selectRemapAnalysis } from "./coverage.mjs";
 
 const args = process.argv.slice(2);
 const watch = args.includes("--watch");
@@ -32,14 +33,13 @@ function nextAnalysis(directory, id, kind, rawSha256, sourceHash) {
     )
     .map((name) => ({
       name,
+      file: join(directory, name),
       value: JSON.parse(readFileSync(join(directory, name))),
     }));
-  const matching = candidates.find(
-    ({ value }) =>
-      value.rawSha256 === rawSha256 &&
-      (value.method?.sources?.["focus-analysis.mjs"] ?? value.methodSha256) ===
-        sourceHash,
-  );
+  const matching =
+    kind === "analysis"
+      ? selectFocusAnalysis(candidates, rawSha256)
+      : selectRemapAnalysis(candidates, rawSha256, sourceHash);
   if (matching) return { file: join(directory, matching.name), existing: true };
   const revision =
     Math.max(
