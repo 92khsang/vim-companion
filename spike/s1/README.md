@@ -1858,6 +1858,36 @@ IDEs, no physical-core conflicts, no native overlap and no exclusions. The
 remaining matrix and final overlap qualification are incomplete; all 2,400
 final cell outcomes remain `unverified`.
 
+Measured: the 1.141.0 idle/shared-host restart condition at 10 ms completed all
+1,000 trials without discrepancies or observed resource errors. The dispatcher
+was suspended while its independent measurement wrapper continued; after that
+wrapper exited successfully and completed cleanup, the dispatcher was stopped
+before the next run. Its control record and unchanged raw result are retained.
+The replacement X11 queue keeps 32 prior results and runs the remaining 1,072
+jobs with the corrected cold readiness policy. Native Wayland waits for that
+replacement and the ongoing focus batch.
+
+Measured: the next cold condition stopped on its first sequence with missing
+leaf/`j` behavior and leaked leader keys. Both fresh-process controls and the
+measured trial qualified the first-readiness check. Each CDP no-leaf composition
+variant under X11 also stopped at its first trial because release exceeded
+5,000 ms; both qualified the fresh-composition review. These are retained
+first-discrepancy results, not failure-rate estimates. The accessible-hover
+condition on 1.134.0, loaded/shared host, 10 ms completed all nine observations
+with no independent-analysis or resource errors.
+
+The [next report checkpoint](data/portable-report-08.md) selects 217 conditional
+cells and 1,656 focus observations using the current input and startup classifiers.
+Its live overlap review has no exclusions or conflicts and at most two IDEs.
+Local intermediate reports `06` and `07` were generated during a new runner's
+prelaunch interval, when its IDE lifetime was not yet observed; they are not
+selected as this checkpoint. The matrix and final overlap review remain incomplete.
+The checkpoint also supplies the small qualification records and focus analysis
+omitted from the earlier prefix-reset and loaded/shared-focus publication.
+An isolated replay reconstructed 240 artifacts from the Git index, including
+238 selected-evidence dependencies, and reproduced the report exactly apart
+from its generation timestamp. Archive and decoded-byte hashes were verified.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
