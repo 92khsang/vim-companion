@@ -2053,6 +2053,23 @@ unverified.
 All 320 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: entry/exit checks on 1.141.0, idle/separate hosts at 10 ms with
+EditContext enabled completed 1,000 trials with zero discrepancies and no
+resource errors. The query condition with EditContext enabled stopped at its
+first discrepancy on trial 2: the leader received `a` without its expected
+second `Space`, Quick Open did not run, and Vim retained a buffered `c`.
+With EditContext disabled, entry/exit checks stopped at their first discrepancy
+on trial 6: the leader missed `w`, received `h`, then recorded `j` with
+`active: false` before its undefined-key cleanup finished. The final cursor
+was zero-based `(0, 6)` in editor group 2. Both failed runs had no resource
+errors. These observations do not isolate EditContext as the cause.
+The [separate-host input checkpoint](data/portable-report-18.md) selects 368
+conditional cells and 2,889 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified.
+All 332 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
