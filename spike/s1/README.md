@@ -2134,6 +2134,25 @@ conflicts or exclusions; final outcomes remain unverified.
 All 408 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: root `Ctrl+C` cancellation on 1.141.0, idle/separate hosts at 10 ms
+completed 1,000 trials without discrepancies. Each cancellation condition after
+`SPC w` stopped at its first discrepancy:
+
+| Cancel key | Trial | Leader log before `end`                        | Final cursor in editor group 2 |
+| ---------- | ----- | ---------------------------------------------- | ------------------------------ |
+| `Escape`   | 130   | `w`, `Escape`, then `j` with `active: false`   | `(0, 0)`                       |
+| `Ctrl+[`   | 3     | `Ctrl+[` then `j` with `active: false`; no `w` | `(0, 6)`                       |
+| `Ctrl+C`   | 3     | `Ctrl+C` then `j` with `active: false`; no `w` | `(0, 6)`                       |
+
+Measured: all three failed trials left the document and registers unchanged.
+All four runs had no resource errors.
+The [prefix-cancellation checkpoint](data/portable-report-22.md) selects 469
+conditional cells and 3,672 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified.
+All 424 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
