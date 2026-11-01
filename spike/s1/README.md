@@ -2328,6 +2328,54 @@ unverified.
 All 510 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the Hangul Quick Open condition on 1.141.0, idle/separate hosts at
+10 ms under X11 completed 1,000 trials without discrepancies or resource errors.
+CDP opened Quick Open and composed `가`, `나` and `다` without a `Process`/229
+keydown. Each trial proved three fresh composition episodes whose payload target
+matched the focused Quick Open input, with the exact query `가나다`. The leaf
+ran once and released capture through `leaf-finally`; editor text, registers,
+cursor and Normal mode stayed unchanged. The harness retained query evidence
+before closing Quick Open with `Escape`, then confirmed unchanged engine state
+and a fresh capture-off sentinel. This result covers CDP composition simulation;
+native IBus input remains a separate condition.
+
+Measured: the Hangul Search condition under the same version/load/affinity/delay
+and X11 environment completed 1,000 trials without discrepancies or resource
+errors. CDP sent `SPC /` and composed the same three syllables. Each trial proved
+fresh composition evidence on the focused Search textarea, with the exact query
+`가나다`. `workbench.action.findInFiles` ran once and capture ended through
+`leaf-finally`, with editor text, registers, cursor and Normal mode unchanged.
+After recording the query, the harness used `Escape` and `focusActiveEditorGroup`
+to return to the editor, then confirmed unchanged engine state and a fresh
+capture-off sentinel. These observations cover the simulated query input and
+its target, with native IBus input still separate.
+
+Measured: the `shift-latin` and `shift-hangul` fixtures on 1.141.0, idle/separate
+hosts at 10 ms under X11 stopped at their first discrepancies on trials 2 and 1,
+respectively. These CDP fixtures assume that the IME consumes `Shift+Space` and
+simulate the subsequent input; they do not inject that switch event.
+
+Measured: in the failed Latin trial, the renderer received `w`, `h` and `j` at
+9.1, 19.2 and 29.1 ms after `SPC`. Its context-setting interval was bounded
+27.909–29.728 ms after `SPC`. The leader recorded only `j`, then ended through
+undefined-key cleanup without a leaf execution. The final cursor was `(0, 5)`
+in editor group 2, with text, registers and Normal mode unchanged and no pending
+keys. These observations do not identify the native commands that handled
+`w` or `h`.
+
+Measured: the Hangul trial proved a fresh `ㅈ` to `조` composition, without an
+ordinary leader key or leaf execution and with preserved final engine state.
+It failed only the 5,000 ms watchdog deadline: the release request was
+5,004.939 ms after the entry command and acknowledgement was at 5,005.655 ms.
+Both runs passed source, resource and process-cleanup reviews. These
+first-discrepancy counts do not estimate failure rates or isolate host affinity
+as a cause.
+The [Hangul input checkpoint](data/portable-report-29.md) selects 628 conditional
+cells and 4,941 focus observations. Its live overlap review observed at most two
+IDEs without conflicts or exclusions; final outcomes remain unverified.
+All 526 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains

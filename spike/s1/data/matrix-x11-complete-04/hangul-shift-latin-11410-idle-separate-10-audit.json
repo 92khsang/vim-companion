@@ -1,0 +1,110 @@
+{
+  "rawFile": "hangul-shift-latin-11410-idle-separate-10.json",
+  "rawSha256": "82537bd69b5f953b258da4de514e85532613aecbf6bdc6839f0e3821a0dfce4b",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "inputEvidence": {
+    "sources": {
+      "matrix/input-evidence.mjs": "7254771e90f84d5d9c0441d31491ddb8f52c60b19b3acfe45472894d1e141f1d",
+      "wayland/extension/s1-harness@vimcompanion.spike/mode-trace.js": "de25ad94bf206e34ca6ebf690914a81a34256fe49b2d1dab0c72ad96714c6991"
+    },
+    "validatedTrials": 2,
+    "unqualified": [],
+    "observations": [
+      {
+        "index": 0,
+        "composition": {
+          "required": false,
+          "qualified": true
+        },
+        "mode": {
+          "required": false,
+          "qualified": true
+        }
+      },
+      {
+        "index": 1,
+        "composition": {
+          "required": false,
+          "qualified": true
+        },
+        "mode": {
+          "required": false,
+          "qualified": true
+        }
+      }
+    ]
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "case": "shift-latin",
+      "errors": [
+        "Latin switch leaf did not run once",
+        "Latin switch leader sequence leaked",
+        "Latin switch lost the leaf or first j"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 977.4966249880792,
+      "upper": 977.986003023844,
+      "uncertaintyMs": 0.48937803576473016
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2826.737718999997,
+      "upper": 2827.031262999997,
+      "uncertaintyMs": 0.2935440000001108
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.2887999999970798,
+      "p95": 27.909211999993655,
+      "p99": 27.909211999993655,
+      "maximum": 27.909211999993655
+    },
+    "upperMs": {
+      "p50": 1.9058680357607063,
+      "p95": 29.727720035761653,
+      "p99": 29.727720035761653,
+      "maximum": 29.727720035761653
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.2887999999970798,
+        "upperMs": 1.9058680357607063
+      },
+      {
+        "index": 1,
+        "lowerMs": 27.909211999993655,
+        "upperMs": 29.727720035761653
+      }
+    ]
+  }
+}
