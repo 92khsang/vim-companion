@@ -2196,6 +2196,33 @@ IDEs without conflicts or exclusions; final outcomes remain unverified.
 All 450 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: document-change cleanup on 1.141.0, idle/separate hosts at 10 ms
+completed 1,000 trials without discrepancies or resource errors. Each trial
+appended `fault-marker` through the editor API, then injected `j` after a requested
+10 ms delay from edit completion, without waiting for capture release. In every
+trial, document-change cleanup completed before the renderer received `j`.
+The final document contained exactly the original text plus the marker; the
+cursor moved to zero-based `(1, 0)` in the same document and editor group 2,
+with Normal mode, capture off and registers unchanged. The fault-order audit
+qualified all 1,000 observations.
+
+Measured: editor-change cleanup under the same condition completed 1,000 trials
+without discrepancies or resource errors. Each trial switched from `sample.txt`
+in editor group 2 to `fault-target.txt` in group 1 through the editor API, then
+injected `j` after a requested 10 ms delay from API completion. Capture release
+completed before `j` in every trial, without a capture-off wait in the harness.
+The cursor moved to `(1, 0)` in the target document with Normal mode and capture
+off. The target text did not change; the `%` and `#` registers reflected the file
+switch, while the other registers stayed unchanged. The final engine state
+matched both capture-off reference observations in the same sandbox with the
+companion installed. The fault-order audit qualified all 1,000 observations.
+The [document/editor cleanup checkpoint](data/portable-report-25.md) selects 522
+conditional cells and 4,095 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified.
+All 458 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
