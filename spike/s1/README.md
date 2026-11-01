@@ -1288,8 +1288,9 @@ The test dispatcher adds isolated throw/hang leaves for fault injection. It neve
 waits for the Vim queue. Each row checks its own destination: Quick Open queries
 are read from the focused input; count trials use four named editors; Visual
 trials compare selection and engine state against a companion-free reference.
-The fault row sends its first post-fault Vim key without waiting for capture-off;
-its subsequent observations measure recovery.
+The fault row adds no capture-off polling barrier before its first post-fault
+Vim key. API-triggered cases wait for API completion; the reset API itself awaits
+capture release. Subsequent observations measure recovery.
 The hanging leaf observes the full five-second deadline; cleanup never substitutes
 for a measured recovery. Restart and cold-start trials require a separate
 activation-aware harness; the warmed matrix must not be claimed as cold start.
@@ -2256,6 +2257,22 @@ conditional cells and 4,518 focus observations. Its live overlap review observed
 at most two IDEs without conflicts or exclusions; final outcomes remain
 unverified.
 All 476 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
+Measured: the root reset and prefix reset conditions on 1.141.0, idle/separate
+hosts at 10 ms each completed 1,000 trials without discrepancies or resource
+errors. The harness confirmed the active root context or `prefix: ["w"]`, then
+awaited `vimCompanion.resetInputState`, whose completion includes the context-off
+acknowledgement, and injected `j` after a requested 10 ms delay. Every trial moved
+from `(0, 0)` to `(1, 0)` in the same document and editor group 2, with unchanged
+text and registers, Normal mode, an empty prefix and capture off. The independent
+fault-order audits qualified all 2,000 observations.
+These observations establish input routing after reset completion; input during
+the reset request remains outside this condition.
+The [reset checkpoint](data/portable-report-27.md) selects 573 conditional cells
+and 4,518 focus observations. Its live overlap review observed at most two IDEs
+without conflicts or exclusions; final outcomes remain unverified.
+All 484 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
 ### Provisional answers for issue #7
