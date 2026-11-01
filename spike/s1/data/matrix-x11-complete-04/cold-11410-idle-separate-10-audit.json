@@ -1,0 +1,66 @@
+{
+  "rawFile": "cold-11410-idle-separate-10.json",
+  "rawSha256": "1600ad0a1cfc0bdd89728343266cdf8e67b4e51d998aa2e080d6bf03024c39d3",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "9c512329a8bc379f692de755ea2c8b23ad221b4c3812fcbe23d3091b48488f93",
+  "finalSnapshotAvailable": true,
+  "coldProcesses": {
+    "method": "cold-child-owned-cleanup-v1",
+    "validatedReferences": 2,
+    "validatedTrials": 1
+  },
+  "coldReadiness": {
+    "methodSha256": "daa33b4d0187a8a858a80dddb56596fa9f2323b4caa4effe30e44e9780462f36",
+    "definition": "Cold input follows the first observed editorTextFocus/vim.active sentinel; Extension.isActive is not an additional readiness condition. This proves ordering, not zero transport or scheduling delay.",
+    "observations": [
+      {
+        "reference": true,
+        "index": 0,
+        "qualified": true,
+        "firstContextReadySample": 9,
+        "samples": 10
+      },
+      {
+        "reference": true,
+        "index": 1,
+        "qualified": true,
+        "firstContextReadySample": 7,
+        "samples": 8
+      },
+      {
+        "reference": false,
+        "index": 0,
+        "qualified": true,
+        "firstContextReadySample": 12,
+        "samples": 13
+      }
+    ],
+    "unqualified": []
+  },
+  "failures": [
+    {
+      "index": 0,
+      "case": "cold",
+      "errors": [
+        "cold final capture/focus sentinel failed",
+        "first cold sequence lost its leaf or first j",
+        "cold leaf did not complete exactly once",
+        "cold leader keys leaked"
+      ]
+    }
+  ]
+}

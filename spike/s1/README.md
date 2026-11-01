@@ -2188,9 +2188,12 @@ errors. The delayed Quick Fix, rename, formatting and hover scenarios each
 proved all nine inputs inside the original fixed 200 ms server wait. The final
 leaf key to `j` interval was 60.0–60.4 ms; with clock uncertainty included, `j`
 arrived at least 57.286 ms after its associated request and at least 140.222 ms
-before the response. Rename routed `j` to the active leader and ended capture
-through undefined-key cleanup; the other three delayed scenarios routed it to
-Vim and moved down one line.
+before the response. Rename recorded `j` in the active leader and ended capture
+through undefined-key cleanup. In each of the other three delayed scenarios, a
+single `j` keydown reached the editor DOM, no leader `j` event was recorded, and
+the cursor moved from `(0, 0)` to `(1, 0)`.
+Inferred: those editor observations are consistent with Vim line movement;
+the focus probe does not directly trace Vim handler execution.
 The [60 ms focus checkpoint](data/portable-report-24.md) selects 520 conditional
 cells and 4,095 focus observations. Its live overlap review observed at most two
 IDEs without conflicts or exclusions; final outcomes remain unverified.
@@ -2249,9 +2252,12 @@ Measured: focus checks on 1.134.0, idle/separate hosts at 60 ms completed 414
 observations and nine accessible-hover observations without analysis or resource
 errors. The delayed Quick Fix, rename, formatting and hover scenarios each
 proved all nine inputs inside the original fixed 200 ms server wait. Rename
-routed `j` to the active leader; the other three delayed scenarios routed it to
-Vim and moved down one line. Command settlement and provider completion remained
-separate observations.
+recorded `j` in the active leader. In each of the other three delayed scenarios,
+a single `j` keydown reached the editor DOM, no leader `j` event was recorded,
+and the cursor moved from `(0, 0)` to `(1, 0)`. Command settlement and provider
+completion remained separate observations.
+Inferred: those editor observations are consistent with Vim line movement;
+the focus probe does not directly trace Vim handler execution.
 The [mouse, blur and focus checkpoint](data/portable-report-26.md) selects 571
 conditional cells and 4,518 focus observations. Its live overlap review observed
 at most two IDEs without conflicts or exclusions; final outcomes remain
@@ -2273,6 +2279,53 @@ The [reset checkpoint](data/portable-report-27.md) selects 573 conditional cells
 and 4,518 focus observations. Its live overlap review observed at most two IDEs
 without conflicts or exclusions; final outcomes remain unverified.
 All 484 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
+Measured: extension-host restart on 1.141.0, idle/separate hosts at 10 ms
+completed 1,000 trials without discrepancies or resource errors. Each trial
+restarted from active `SPC w`, observed new probe and leader hosts with separate
+PIDs, and moved the first `j` to `(1, 0)` in editor group 2 with capture off.
+The harness awaited both a new ready sentinel and Vim activation. Five trials
+needed an additional 10.269–23.797 ms after the first ready observation before
+Vim activation was confirmed. The first restart cleared the calibration value
+in the `.` register.
+
+Measured: the cold-start condition under the same version/load/affinity/delay
+stopped at its first discrepancy on trial 1. Two fresh-process no-input controls
+matched. The measured process received `SPC w h j` after its first ready
+observation, with no additional Vim-activation wait. The leader recorded only
+start and context-on acknowledgement, with no `w`, `h` or leaf execution.
+The final cursor was `(1, 5)` in editor group 2 with capture on. Text, Normal mode,
+pending state and registers matched the no-input controls. The readiness audit
+qualified both controls and the measured trial, with no resource errors.
+The context-on acknowledgement was bounded 37.609–39.205 ms after renderer `SPC`,
+which does not identify the exact renderer context-update time.
+
+Measured: the `letter-x11` and `letter-wayland` Hangul variants under this X11
+condition each stopped at their first discrepancy on trial 1. Both used CDP
+composition simulation; only `letter-x11` included a `Process`/229 keydown.
+Each proved a fresh `ㅎ` composition episode, with no ordinary leader key or
+leaf execution and preserved final engine state. The only failed check was the
+5,000 ms release deadline: entry-command to release request/acknowledgement was
+5,004.342/5,005.069 ms for `letter-x11` and 5,003.239/5,003.891 ms for
+`letter-wayland`. Both resource reviews passed. These are simulated X11 results;
+native Wayland remains queued. The first-discrepancy counts do not estimate
+failure rates.
+
+Measured: focus checks on 1.134.0, loaded/shared host at 60 ms completed 414
+observations and nine accessible-hover observations without analysis or resource
+errors. Each delayed Quick Fix, rename, formatting and hover scenario proved
+all nine inputs inside the original fixed 200 ms server wait. Rename recorded
+`j` in the active leader. For each of the other three, a single `j` keydown reached
+the editor DOM, no leader `j` event was recorded, and the cursor moved from
+`(0, 0)` to `(1, 0)`.
+Inferred: those editor observations are consistent with Vim line movement;
+the focus probe does not directly trace Vim handler execution.
+The [startup and focus checkpoint](data/portable-report-28.md) selects 624
+conditional cells and 4,941 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified.
+All 510 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
 ### Provisional answers for issue #7
