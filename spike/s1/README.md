@@ -2444,6 +2444,49 @@ at most two IDEs without conflicts or exclusions; final outcomes remain
 unverified. All 548 selected-evidence dependencies were checked from the Git
 index, and the isolated report replay matched apart from its generation timestamp.
 
+Measured: the `ctrl-bracket-composed` CDP fixture on 1.141.0, idle/separate
+hosts at 10 ms under X11 stopped at its first discrepancy on trial 427.
+It sent `SPC w`, a `ㅎ` composition committed through `insertText`, then
+`Ctrl+[ +`. All 427 fresh, target-qualified composition episodes ended before
+the cancel key. In the failed trial, renderer `w`, composition end, `Ctrl+[` and
+`+` occurred 9.0, 19.3, 27.8 and 37.1 ms after `SPC`, respectively. The leader
+started 1.959–3.151 ms after `w`, recorded only `ctrl+[`, and released capture
+8.092–9.285 ms before `+`. It recorded no leaf execution or `+`.
+
+Measured: the final cursor still matched the expected `(1, 0)` in editor
+group 2, with text, registers and Normal mode unchanged, no pending keys,
+an empty queue and capture off. The expected leader-key-sequence check detected
+the missing `w` despite that matching final cursor. Source, audit, resource and
+process-cleanup reviews passed. This CDP observation does not identify which
+native command handled `w`, establish native IBus behavior, or estimate a failure
+rate.
+
+Measured: the V-b entry row on 1.141.0, idle at requested 10 ms under X11,
+recorded all 1,000 trials without early termination or a pass threshold. Its
+`separate` matrix label does not imply a companion host: the companion was not
+installed and `leaderPid` was null. Every trial showed a transition to the left
+editor group and a final cursor of `(1, 0)` in Normal mode. Text and registers
+were preserved, and the final state stayed stable through the final snapshot,
+with no recorded errors or resource issues.
+Actual renderer intervals for `SPC` to `w`, `w` to `h`, and `h` to `j` had medians
+of 10.0, 10.3 and 10.5 ms, and ranges of 8.2–15.6, 8.4–17.2 and 8.9–17.7 ms,
+respectively. These timings include trace logging overhead.
+
+Inferred: the source-bound stock trace and engine-state analysis classified all
+1,000 observations as the remap path, with native `j` only and no native
+`SPC`, `w` or `h` interpretation. No input paths remained unknown. Independent
+reanalysis matched the stored analysis, and source, audit and process-cleanup
+reviews passed. Native command names remain inferred; the observed group-change
+effect does not prove an exact command invocation count. Final overlap
+qualification remains pending.
+
+The [composed cancel and V-b entry checkpoint](data/portable-report-31.md)
+selects 680 conditional cells and 5,364 focus observations. Its live overlap
+review observed at most two IDEs without conflicts or exclusions. All 557
+selected-evidence dependencies were checked from the Git index, and isolated
+report replay matched apart from its generation timestamp. Final outcomes
+remain unverified while the matrix runs.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
