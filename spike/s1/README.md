@@ -2097,6 +2097,15 @@ exclusions; final outcomes remain unverified.
 All 358 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the `r<Space>` and `d<Space>` comparisons on 1.141.0, idle/separate
+hosts at 10 ms each completed 1,000 trials matching their companion-free
+baselines, with zero discrepancies and no resource errors.
+The [native-key checkpoint](data/portable-report-20.md) selects 417 conditional
+cells and 3,285 focus observations. Its live overlap review observed at most two
+IDEs without conflicts or exclusions; final outcomes remain unverified.
+All 374 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
