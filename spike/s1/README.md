@@ -2487,6 +2487,37 @@ selected-evidence dependencies were checked from the Git index, and isolated
 report replay matched apart from its generation timestamp. Final outcomes
 remain unverified while the matrix runs.
 
+Measured: the 1.141.0 idle/separate-host focus run at 10 ms under X11 completed
+all 414 observations across 46 scenarios without qualification, audit, resource or
+analysis issues. Each delayed `cq`, `cr`, `cf` and `cd` scenario proved nine
+inputs inside both client and server request-wait intervals. The configured
+delay remained 200 ms; 278 response and cancelled-response intervals were
+200.013–201.197 ms. Actual leaf-to-`j` intervals were 9.9–10.3 ms. Conservative
+clock-alignment bounds placed every delayed `j` at least 6.740 ms after its
+associated request and 190.438 ms before its response. This condition added no
+insufficient-wait cells to the existing 23.
+
+Inferred: in all 27 delayed `cq`, `cf` and `cd` observations, one editor DOM `j`,
+no leader `j`, and the cursor change from `(0, 0)` to `(1, 0)` support Vim line
+movement without directly tracing a Vim handler. The nine delayed `cr`
+observations directly recorded active-leader `j`. The `cq` and `cd` promises
+settled before `j`, `cf` settled afterward, and `cr` remained pending at the
+five-second observation limit. Source-bound independent reanalysis matched the
+stored analysis.
+
+Measured: its accessible-hover companion completed nine qualified observations
+with accessibility enabled, the intended `other` target, capture off and the
+command fulfilled. Each first focus transition and hover-onset interval lay
+within five seconds; no onset interval overlapped command start. Independent
+source and analysis checks matched, with no audit, resource or cleanup issues.
+
+The [1.141.0 idle/separate focus checkpoint](data/portable-report-32.md) selects
+727 conditional cells and 5,787 focus observations. Its live overlap review
+observed at most two IDEs without conflicts or exclusions. All 567
+selected-evidence dependencies were checked from the Git index, and isolated
+report replay matched apart from its generation timestamp. Final outcomes
+remain unverified while the matrix runs.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
