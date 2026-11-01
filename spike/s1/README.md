@@ -2376,6 +2376,74 @@ IDEs without conflicts or exclusions; final outcomes remain unverified.
 All 526 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the `escape-plain` CDP fixture on 1.141.0, idle/separate hosts at
+10 ms under X11 completed 1,000 trials without discrepancies or resource errors.
+It sent `SPC w Escape j` without waiting for leader entry or capture release
+between keys. Each trial recorded only `w` and `escape` in the leader, released
+capture through `escape`, and executed no leaf. The final cursor was `(1, 0)`
+in editor group 2 with text, registers and Normal mode unchanged and a fresh
+capture-off sentinel. Actual renderer `Escape` to `j` intervals were 7.7–11.2 ms.
+There were no composition events: this fixture assumes no active composition
+and does not establish an IBus mode transition.
+
+Measured: the `escape-composed` CDP fixture under the same condition stopped at
+its first discrepancy on trial 553. Its sequence was `SPC w`, a `ㅎ` composition
+committed through `insertText`, then `Escape j`. All 553 composition episodes
+ended before `Escape`; these observations cover cancellation after that simulated
+composition, not Escape cancelling a native preedit still in progress.
+The [S1 criteria](https://github.com/92khsang/vim-companion/issues/10) specify
+committing the letter before the CDP cancel key; actual IBus preedit handling
+belongs to the separate native Wayland conditions.
+
+Measured: in the failed trial, renderer `w` arrived 11.7 ms after `SPC`, overlapping
+the 11.479–13.288 ms context-setting interval. The leader recorded only `escape`.
+Release acknowledgement preceded `j` by 7.997–9.182 ms, and no leader `j` event
+was recorded. The final cursor was `(1, 6)` in editor group 2 instead of the
+expected `(1, 0)`, with text, registers and Normal mode unchanged, no pending
+keys and capture off. Fresh composition and target evidence qualified all 553
+trials, and resource and cleanup reviews passed. This observation does not
+establish which native command handled `w` or estimate a failure rate.
+
+Measured: the `ctrl-bracket-plain` CDP fixture on 1.141.0, idle/separate hosts
+at 10 ms under X11 completed 1,000 trials without discrepancies. It sent
+`SPC w Ctrl+[ +` without a capture-release barrier between keys. Actual renderer
+`Ctrl+[` to `+` intervals were 6.9–12.3 ms. Each trial recorded only `w` and
+`ctrl+[` in the leader, released capture through `ctrl+[`, and executed no leaf.
+The final cursor was `(1, 0)` in editor group 2, with text, registers and Normal
+mode unchanged and capture off through the final sentinel. Source, audit,
+resource and process-cleanup reviews passed. No composition events occurred;
+this fixture does not establish whether native IBus keeps Hangul mode enabled.
+
+Measured: the 1.134.0 loaded/separate-host focus run at 60 ms completed all
+414 observations across 46 scenarios without qualification, audit, resource or
+analysis issues. Each delayed `cq`, `cr`, `cf` and `cd` scenario proved nine
+inputs inside both the client and server request-wait intervals. The configured
+delay remained 200 ms; 264 response and cancelled-response intervals were
+200.015–203.503 ms. Actual leaf-to-`j` intervals were 60–60.7 ms. Conservative
+clock-alignment bounds placed every delayed `j` at least 8.497 ms after its
+associated request and 140.411 ms before its response.
+
+Inferred: the 27 delayed `cq`, `cf` and `cd` observations support Vim line
+movement: each recorded one editor DOM `j`, no leader `j`, and a cursor change
+from `(0, 0)` to `(1, 0)`. They do not directly trace a Vim handler. The nine
+delayed `cr` observations directly recorded `j` in the active leader and
+undefined-key cleanup. The `cq` and `cd` promises settled before `j`, `cf`
+settled afterward, and `cr` remained pending at the five-second observation
+limit.
+
+Measured: the companion accessible-hover run completed nine qualified
+observations without analysis, audit or resource issues. Each showed a hover
+and a focus transition within five seconds. In observation index 8, the hover
+onset interval spanned command start, from -126.559 to 49.834 ms; the first
+positive sample was bounded 48.641–49.834 ms after the command. That observation
+does not establish an exact onset latency.
+
+The [cancel and focus checkpoint](data/portable-report-30.md) selects 678
+conditional cells and 5,364 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified. All 548 selected-evidence dependencies were checked from the Git
+index, and the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
