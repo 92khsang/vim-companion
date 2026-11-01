@@ -2106,6 +2106,34 @@ IDEs without conflicts or exclusions; final outcomes remain unverified.
 All 374 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: Visual character checks on 1.141.0, idle/separate hosts at 10 ms
+completed 1,000 trials without discrepancies. Visual line and block checks each
+stopped at their first discrepancy on trial 1. Both remained in editor group 2
+with a changed selection: the leader missed `w`, received `h`, then recorded
+`j` with `active: false` before undefined-key cleanup finished. Their documents
+and registers did not change.
+
+Measured: root `Escape` cancellation under the same condition stopped at its
+first discrepancy on trial 3. The leader did not record `Escape`; it recorded
+`j` with `active: true` and ended through undefined-key cleanup. The cursor
+remained at zero-based `(0, 0)` in editor group 2, with the document and registers
+unchanged. Root `Ctrl+[` cancellation then completed 1,000 trials without
+discrepancies. All five runs had no resource errors.
+
+Measured: focus checks on 1.134.0, loaded/separate hosts at 30 ms completed
+414 observations and nine accessible-hover observations without analysis or
+resource errors. The delayed Quick Fix, rename, formatting and hover scenarios
+proved respectively 6, 8, 7 and 7 of their nine inputs inside the original fixed
+200 ms server wait. The other eight inputs preceded their command-associated
+requests. All four delayed conditions remain unverified.
+The [Visual/cancellation checkpoint](data/portable-report-21.md) selects 465
+conditional cells and 3,672 focus observations. It selects 43 of the 47 focus
+conditions in this version/load/affinity/delay combination, excluding the four
+delayed cases above. Its live overlap review observed at most two IDEs without
+conflicts or exclusions; final outcomes remain unverified.
+All 408 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
