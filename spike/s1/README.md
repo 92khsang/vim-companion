@@ -2153,6 +2153,27 @@ unverified.
 All 424 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: exception cleanup on 1.141.0, idle/separate hosts at 10 ms completed
+1,000 trials without discrepancies. Every trial recorded the exception, the
+`finally` capture release and a subsequent `j` after the release acknowledgement;
+the cursor moved to zero-based `(1, 0)` in editor group 2.
+
+Measured: the immediate-input condition for a command that did not settle
+stopped at its first discrepancy on trial 1. The leader received `j` while active,
+9.378–10.610 ms after the injected hang, then released capture through undefined-key
+cleanup. The cursor remained at `(0, 0)`. The watchdog condition also stopped on
+trial 1: release was requested 5,005.561 ms after the last leader key and
+acknowledged at 5,006.329 ms, exceeding the 5,000 ms deadline. Its subsequent `j`
+arrived after release and moved the cursor to `(1, 0)`.
+All three runs had no resource errors. These fault checks confirmed leader entry
+before injecting the fault; capture release does not establish that the pending
+command terminated. The first-discrepancy trials do not estimate failure rates.
+The [fault-cleanup checkpoint](data/portable-report-23.md) selects 472 conditional
+cells and 3,672 focus observations. Its live overlap review observed at most two
+IDEs without conflicts or exclusions; final outcomes remain unverified.
+All 436 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
