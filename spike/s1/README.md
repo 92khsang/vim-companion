@@ -2223,6 +2223,41 @@ unverified.
 All 458 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: native mouse-selection cleanup on 1.141.0, idle/separate hosts with
+a requested 10 ms delay after the click command completed 1,000 trials without
+discrepancies or resource errors. Every click selected zero-based `(0, 6)` in
+editor group 2; both the Mouse selection callback and capture release preceded
+`j`. The final cursor was `(1, 6)` in the same document, with Normal mode, capture
+off and unchanged text and registers. The engine state matched both capture-off
+reference observations in the same sandbox. Actual renderer `pointerdown` to
+`j` intervals were 107.7–119.5 ms; these observations do not establish input
+routing 10 ms after the physical click began.
+
+Measured: window-blur cleanup under the same version/load/affinity/delay condition
+stopped at its first discrepancy on trial 355. Renderer focus returned 13.6 ms
+after blur, and `j` arrived 16.6 ms after that return. The leader logged `j` with
+`active: false`, 2.877 ms before the window-blur release acknowledgement on its
+own clock. The cursor remained at `(0, 0)` in editor group 2; the document and
+registers stayed unchanged, with Normal mode, no pending keys and capture off in
+the final observation. All 355 fault orderings qualified, with no resource errors.
+The acknowledgement does not establish the exact renderer execution time of
+`setContext(false)`, and this first-discrepancy count does not estimate a failure
+rate.
+
+Measured: focus checks on 1.134.0, idle/separate hosts at 60 ms completed 414
+observations and nine accessible-hover observations without analysis or resource
+errors. The delayed Quick Fix, rename, formatting and hover scenarios each
+proved all nine inputs inside the original fixed 200 ms server wait. Rename
+routed `j` to the active leader; the other three delayed scenarios routed it to
+Vim and moved down one line. Command settlement and provider completion remained
+separate observations.
+The [mouse, blur and focus checkpoint](data/portable-report-26.md) selects 571
+conditional cells and 4,518 focus observations. Its live overlap review observed
+at most two IDEs without conflicts or exclusions; final outcomes remain
+unverified.
+All 476 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
