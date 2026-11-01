@@ -2070,6 +2070,33 @@ unverified.
 All 332 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: the query condition on 1.141.0, idle/separate hosts at 10 ms with
+EditContext disabled stopped at its first discrepancy on trial 446. Quick Open
+did not run, the leader received only `c`, and the actual editor text changed
+from `alpha` to `ablpha` at the start of the first line. The count condition
+stopped on trial 2: the leader missed `b`, received `n`, then recorded `j` with
+`active: false` before undefined-key cleanup finished. The original tab remained
+active with its cursor at zero-based `(0, 0)` and its document unchanged.
+Both runs had no resource errors. The following `f<Space>` comparison completed
+1,000 trials matching its companion-free baseline, without discrepancies or
+resource errors.
+
+Measured: focus checks on 1.134.0, loaded/shared host at 30 ms completed 414
+observations and nine accessible-hover observations without analysis or resource
+errors. The delayed Quick Fix, rename, formatting and hover scenarios proved
+respectively 7, 6, 9 and 5 of their nine inputs inside the original fixed 200 ms
+server wait. The other nine inputs preceded their command-associated requests.
+Only formatting qualified all nine wait observations; the other three delayed
+conditions remain unverified. The insufficient-wait evidence therefore also
+covers a 30 ms condition.
+The [loaded-wait checkpoint](data/portable-report-19.md) selects 415 conditional
+cells and 3,285 focus observations. It selects 44 of the 47 focus conditions in
+this version/load/affinity/delay combination, excluding the three delayed cases
+above. Its live overlap review observed at most two IDEs without conflicts or
+exclusions; final outcomes remain unverified.
+All 358 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
