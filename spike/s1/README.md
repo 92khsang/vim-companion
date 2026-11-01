@@ -2174,6 +2174,28 @@ IDEs without conflicts or exclusions; final outcomes remain unverified.
 All 436 selected-evidence dependencies were checked from the Git index, and
 the isolated report replay matched apart from its generation timestamp.
 
+Measured: undefined-key cleanup on 1.141.0, idle/separate hosts at 10 ms
+completed 1,000 trials without discrepancies or resource errors. In every trial,
+the leader received `z`, ended capture through undefined-key cleanup, and the
+subsequent `j` moved the cursor to zero-based `(1, 0)` in editor group 2. The
+documents and registers did not change. The fault-order audit qualified all
+1,000 observations.
+
+Measured: focus checks on 1.134.0, idle/shared host at 60 ms completed 414
+observations and nine accessible-hover observations without analysis or resource
+errors. The delayed Quick Fix, rename, formatting and hover scenarios each
+proved all nine inputs inside the original fixed 200 ms server wait. The final
+leaf key to `j` interval was 60.0–60.4 ms; with clock uncertainty included, `j`
+arrived at least 57.286 ms after its associated request and at least 140.222 ms
+before the response. Rename routed `j` to the active leader and ended capture
+through undefined-key cleanup; the other three delayed scenarios routed it to
+Vim and moved down one line.
+The [60 ms focus checkpoint](data/portable-report-24.md) selects 520 conditional
+cells and 4,095 focus observations. Its live overlap review observed at most two
+IDEs without conflicts or exclusions; final outcomes remain unverified.
+All 450 selected-evidence dependencies were checked from the Git index, and
+the isolated report replay matched apart from its generation timestamp.
+
 ### Provisional answers for issue #7
 
 These are decision candidates, not catalog or schema changes. The user retains
