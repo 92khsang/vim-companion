@@ -1,0 +1,288 @@
+{
+  "started": "2026-10-31T17:56:11.554Z",
+  "maximumConcurrentInstances": 1,
+  "maximumConcurrentExperimentInstances": 2,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "16-19"
+    ],
+    "externalCpuSets": [
+      "20-23"
+    ],
+    "externalBatches": [
+      "matrix-x11-complete-02"
+    ],
+    "globalConcurrentLimit": 2,
+    "waitForBatches": [
+      "spike/s1/data/matrix-focus-repair-01/batch.json"
+    ],
+    "jobs": [
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-delayed-repair-11410-idle-same-10",
+        "focusFrom": "delayed-cf"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": true,
+        "affinity": "same",
+        "id": "focus-delayed-11410-loaded-same-10",
+        "focusFrom": "delayed-cq"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": true,
+        "affinity": "separate",
+        "id": "focus-delayed-11410-loaded-separate-10",
+        "focusFrom": "delayed-cq"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-supplement-cr-rejected-11410-idle-same-10",
+        "focusFrom": "cr-rejected",
+        "focusThrough": "cr-rejected"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-supplement-cf-unavailable-dialog-11410-idle-same-10",
+        "focusFrom": "cf-unavailable-dialog",
+        "focusThrough": "cf-unavailable-dialog"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-supplement-cd-first-11410-idle-same-10",
+        "focusFrom": "cd-first",
+        "focusThrough": "cd-first"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-supplement-fp-outside-hidden-11410-idle-same-10",
+        "focusFrom": "fp-outside-hidden",
+        "focusThrough": "fp-outside-hidden"
+      },
+      {
+        "version": "1.141.0",
+        "row": "focus",
+        "delay": 10,
+        "load": false,
+        "affinity": "same",
+        "id": "focus-supplement-fp-outside-visible-11410-idle-same-10",
+        "focusFrom": "fp-outside-visible",
+        "focusThrough": "fp-outside-visible"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "focus-delayed-repair-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T17:56:11.555Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T17:58:28.147Z",
+      "status": "focus-recorded",
+      "trials": 18,
+      "measuredStarted": "2026-10-31T17:56:11.641Z",
+      "measuredFinished": "2026-10-31T17:58:28.123Z",
+      "ideLauncher": {
+        "pid": 3859515,
+        "started": "2026-10-31T17:56:11.745Z",
+        "finished": "2026-10-31T17:58:28.072Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-delayed-11410-loaded-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T17:58:28.154Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:02:50.077Z",
+      "status": "focus-recorded",
+      "trials": 36,
+      "measuredStarted": "2026-10-31T17:58:28.232Z",
+      "measuredFinished": "2026-10-31T18:02:50.043Z",
+      "ideLauncher": {
+        "pid": 3867462,
+        "started": "2026-10-31T17:58:28.336Z",
+        "finished": "2026-10-31T18:02:49.991Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-delayed-11410-loaded-separate-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:02:50.092Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:07:16.175Z",
+      "status": "focus-recorded",
+      "trials": 36,
+      "measuredStarted": "2026-10-31T18:02:50.179Z",
+      "measuredFinished": "2026-10-31T18:07:16.141Z",
+      "ideLauncher": {
+        "pid": 3879260,
+        "started": "2026-10-31T18:02:50.276Z",
+        "finished": "2026-10-31T18:07:16.093Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-supplement-cr-rejected-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:07:16.187Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:08:37.608Z",
+      "status": "focus-recorded",
+      "trials": 9,
+      "measuredStarted": "2026-10-31T18:07:16.272Z",
+      "measuredFinished": "2026-10-31T18:08:37.589Z",
+      "ideLauncher": {
+        "pid": 3890620,
+        "started": "2026-10-31T18:07:16.386Z",
+        "finished": "2026-10-31T18:08:37.538Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-supplement-cf-unavailable-dialog-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:08:37.611Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:09:59.244Z",
+      "status": "focus-recorded",
+      "trials": 9,
+      "measuredStarted": "2026-10-31T18:08:37.697Z",
+      "measuredFinished": "2026-10-31T18:09:59.224Z",
+      "ideLauncher": {
+        "pid": 3894363,
+        "started": "2026-10-31T18:08:37.799Z",
+        "finished": "2026-10-31T18:09:59.172Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-supplement-cd-first-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:09:59.247Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:11:20.837Z",
+      "status": "focus-recorded",
+      "trials": 9,
+      "measuredStarted": "2026-10-31T18:09:59.329Z",
+      "measuredFinished": "2026-10-31T18:11:20.817Z",
+      "ideLauncher": {
+        "pid": 3898185,
+        "started": "2026-10-31T18:09:59.432Z",
+        "finished": "2026-10-31T18:11:20.765Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-supplement-fp-outside-hidden-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:11:20.840Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:12:42.332Z",
+      "status": "focus-recorded",
+      "trials": 9,
+      "measuredStarted": "2026-10-31T18:11:20.924Z",
+      "measuredFinished": "2026-10-31T18:12:42.312Z",
+      "ideLauncher": {
+        "pid": 3904828,
+        "started": "2026-10-31T18:11:21.034Z",
+        "finished": "2026-10-31T18:12:42.260Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    },
+    {
+      "id": "focus-supplement-fp-outside-visible-11410-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T18:12:42.334Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T18:14:03.799Z",
+      "status": "focus-recorded",
+      "trials": 9,
+      "measuredStarted": "2026-10-31T18:12:42.419Z",
+      "measuredFinished": "2026-10-31T18:14:03.779Z",
+      "ideLauncher": {
+        "pid": 3909307,
+        "started": "2026-10-31T18:12:42.528Z",
+        "finished": "2026-10-31T18:14:03.727Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": []
+    }
+  ],
+  "waitedForBatches": [
+    {
+      "file": "spike/s1/data/matrix-focus-repair-01/batch.json",
+      "finished": "2026-10-31T17:54:36.749Z",
+      "verifiedAt": "2026-10-31T17:56:11.554Z"
+    }
+  ],
+  "finished": "2026-10-31T18:14:03.802Z",
+  "stoppedOnHarnessError": false,
+  "notStarted": []
+}

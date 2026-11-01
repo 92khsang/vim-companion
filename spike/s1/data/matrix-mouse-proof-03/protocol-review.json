@@ -1,0 +1,7 @@
+{
+  "reviewedAt": "2026-10-31T15:46:24.754129+00:00",
+  "raw": "fault-mouse-1141-loaded-separate-10.json",
+  "rawSha256": "3285aa72c9a483df2d06f22313b6688339f04d6a043a7558bdd8a4e2cadb3259",
+  "classification": "unqualified-harness-attempt",
+  "finding": "Two capture-off references proved the corrected window-relative pointer coordinates (the X window origin was y=50). The measured mouse attempt waited approximately 15 s in xdotool mousemove --sync at the already-selected position. Watchdog cleanup preceded the click; the one raw discrepancy is an invalid fault fixture, not a qualified mouse failure. The live injector omits mousemove --sync, and fault ordering now rejects capture ending before pointer arrival."
+}

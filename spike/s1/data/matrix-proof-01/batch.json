@@ -1,0 +1,157 @@
+{
+  "started": "2026-10-31T13:57:03.118Z",
+  "maximumConcurrentInstances": 4,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "16-19",
+      "20-23",
+      "24-27",
+      "28-31"
+    ],
+    "jobs": [
+      {
+        "id": "entry-1141-loaded-separate-10",
+        "row": "entry-exit",
+        "load": true,
+        "affinity": "separate",
+        "version": "1.141.0",
+        "delay": 10
+      },
+      {
+        "id": "query-1141-idle-same-10",
+        "row": "query",
+        "load": false,
+        "affinity": "same",
+        "version": "1.141.0",
+        "delay": 10
+      },
+      {
+        "id": "cancel-1141-idle-same-10-root-ctrlc",
+        "row": "cancel",
+        "case": "root-ctrl+c",
+        "load": false,
+        "affinity": "same",
+        "version": "1.141.0",
+        "delay": 10
+      },
+      {
+        "id": "native-baseline-1141-idle-same-10",
+        "row": "native-baseline",
+        "load": false,
+        "affinity": "same",
+        "version": "1.141.0",
+        "delay": 10
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "entry-1141-loaded-separate-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T13:57:03.118Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T13:57:38.894Z",
+      "status": "discrepancy",
+      "trials": 1,
+      "measuredStarted": "2026-10-31T13:57:03.206Z",
+      "measuredFinished": "2026-10-31T13:57:38.882Z",
+      "ideLauncher": {
+        "pid": 3207482,
+        "started": "2026-10-31T13:57:03.359Z",
+        "finished": "2026-10-31T13:57:38.857Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": [
+        "query-1141-idle-same-10",
+        "cancel-1141-idle-same-10-root-ctrlc",
+        "native-baseline-1141-idle-same-10"
+      ]
+    },
+    {
+      "id": "query-1141-idle-same-10",
+      "cpuSet": "20-23",
+      "started": "2026-10-31T13:57:03.126Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T14:10:54.652Z",
+      "status": "query-gate-passed",
+      "trials": 1000,
+      "measuredStarted": "2026-10-31T13:57:03.210Z",
+      "measuredFinished": "2026-10-31T14:10:54.460Z",
+      "ideLauncher": {
+        "pid": 3207477,
+        "started": "2026-10-31T13:57:03.355Z",
+        "finished": "2026-10-31T14:10:54.436Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": [
+        "entry-1141-loaded-separate-10",
+        "cancel-1141-idle-same-10-root-ctrlc",
+        "native-baseline-1141-idle-same-10"
+      ]
+    },
+    {
+      "id": "cancel-1141-idle-same-10-root-ctrlc",
+      "cpuSet": "24-27",
+      "started": "2026-10-31T13:57:03.128Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T13:58:56.477Z",
+      "status": "discrepancy",
+      "trials": 127,
+      "measuredStarted": "2026-10-31T13:57:03.210Z",
+      "measuredFinished": "2026-10-31T13:58:56.463Z",
+      "ideLauncher": {
+        "pid": 3207473,
+        "started": "2026-10-31T13:57:03.350Z",
+        "finished": "2026-10-31T13:58:56.437Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": [
+        "entry-1141-loaded-separate-10",
+        "query-1141-idle-same-10",
+        "native-baseline-1141-idle-same-10"
+      ]
+    },
+    {
+      "id": "native-baseline-1141-idle-same-10",
+      "cpuSet": "28-31",
+      "started": "2026-10-31T13:57:03.129Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T13:57:36.811Z",
+      "status": "native-baseline-recorded",
+      "trials": 6,
+      "measuredStarted": "2026-10-31T13:57:03.207Z",
+      "measuredFinished": "2026-10-31T13:57:36.798Z",
+      "ideLauncher": {
+        "pid": 3207476,
+        "started": "2026-10-31T13:57:03.354Z",
+        "finished": "2026-10-31T13:57:36.774Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        }
+      },
+      "overlappingWrapperRuns": [
+        "entry-1141-loaded-separate-10",
+        "query-1141-idle-same-10",
+        "cancel-1141-idle-same-10-root-ctrlc"
+      ]
+    }
+  ],
+  "finished": "2026-10-31T14:10:54.725Z",
+  "stoppedOnHarnessError": false,
+  "notStarted": []
+}

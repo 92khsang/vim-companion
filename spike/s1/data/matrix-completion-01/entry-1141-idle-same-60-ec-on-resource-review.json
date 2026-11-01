@@ -1,0 +1,52 @@
+{
+  "rawSha256": "92ec227e9aaacd376b20760511e0aa6a55c6a1117d1ff95287d930f4585ab2c6",
+  "reviewedAt": "2026-10-31T16:20:27.237Z",
+  "classification": "resource-errors-present",
+  "limitsAtReview": {
+    "max_user_instances": 128,
+    "max_user_watches": 65536
+  },
+  "files": {
+    "code.log": "27dd664dd6e44b13f6d4e12e3f154d97cada19439484d34c0b04e1ff03cd8a33",
+    "data/logs/20261031T234937/window1/exthost/exthost.log": "acaa6ded6e84bcb7c703df613376011d569c8c2ffb3c65cf968b15c86767d1a2",
+    "data/logs/20261031T234937/sharedprocess.log": "c8cf07dca6a842f86de18c7f5967d9e6abd66672272e208c09695be730c6adb1"
+  },
+  "errors": [
+    {
+      "file": "code.log",
+      "line": 18,
+      "text": "[main 2026-10-31T14:49:37.739Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/data/User for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/data/User')"
+    },
+    {
+      "file": "code.log",
+      "line": 19,
+      "text": "[main 2026-10-31T14:49:37.739Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/data/User/settings.json for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/data/User/settings.json')"
+    },
+    {
+      "file": "code.log",
+      "line": 50,
+      "text": "[main 2026-10-31T14:49:39.295Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/data/User for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/data/User')"
+    },
+    {
+      "file": "code.log",
+      "line": 51,
+      "text": "[main 2026-10-31T14:49:39.296Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/data/User/settings.json for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/data/User/settings.json')"
+    },
+    {
+      "file": "code.log",
+      "line": 52,
+      "text": "[main 2026-10-31T14:49:39.581Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/extensions for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/extensions')"
+    },
+    {
+      "file": "code.log",
+      "line": 53,
+      "text": "[main 2026-10-31T14:49:39.581Z] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/extensions/extensions.json for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/extensions/extensions.json')"
+    },
+    {
+      "file": "data/logs/20261031T234937/sharedprocess.log",
+      "line": 1,
+      "text": "2026-10-31 23:49:39.344 [error] [File Watcher (node.js)] Failed to watch $S1_SANDBOX/extensions for changes using fs.watch() (Error: EMFILE: too many open files, watch '$S1_SANDBOX/extensions')"
+    }
+  ],
+  "qualification": "Retain as observations under resource pressure; do not qualify normal watcher-dependent configuration/focus behavior. Revalidation required."
+}

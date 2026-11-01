@@ -1,0 +1,114 @@
+{
+  "started": "2026-10-31T16:13:12.517Z",
+  "maximumConcurrentInstances": 1,
+  "maximumConcurrentExperimentInstances": 7,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "20-23"
+    ],
+    "externalCpuSets": [
+      "4-7",
+      "8-11",
+      "12-15",
+      "16-19",
+      "24-27",
+      "28-31"
+    ],
+    "externalBatches": [
+      "matrix-completion-01",
+      "matrix-cold-completion-01",
+      "matrix-fault-proof-03",
+      "matrix-focus-proof-03",
+      "matrix-remap-proof-01"
+    ],
+    "globalConcurrentLimit": 7,
+    "waitForRuns": [
+      "spike/s1/data/matrix-completion-01/entry-1141-idle-same-10-ec-off.json",
+      "spike/s1/data/matrix-completion-01/entry-1141-idle-separate-10-ec-off.json"
+    ],
+    "waitForCpuSets": [
+      "20-23"
+    ],
+    "jobs": [
+      {
+        "id": "wayland-letter-1141-idle-same-10",
+        "row": "hangul",
+        "backend": "wayland",
+        "case": "letter",
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10
+      },
+      {
+        "id": "wayland-quick-open-1141-idle-same-10",
+        "row": "hangul",
+        "backend": "wayland",
+        "case": "quick-open",
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10
+      },
+      {
+        "id": "wayland-latin-entry-1141-idle-same-10",
+        "row": "hangul",
+        "backend": "wayland",
+        "case": "latin-entry",
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10
+      },
+      {
+        "id": "wayland-escape-composed-1141-idle-same-10",
+        "row": "hangul",
+        "backend": "wayland",
+        "case": "escape-composed",
+        "version": "1.141.0",
+        "load": false,
+        "affinity": "same",
+        "delay": 10
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "wayland-letter-1141-idle-same-10",
+      "cpuSet": "20-23",
+      "started": "2026-10-31T16:13:12.602Z",
+      "signal": null,
+      "exitCode": 1,
+      "finished": "2026-10-31T16:13:12.880Z",
+      "status": "harness-error",
+      "trials": 0,
+      "measuredStarted": "2026-10-31T16:13:12.690Z",
+      "measuredFinished": "2026-10-31T16:13:12.751Z",
+      "overlappingWrapperRuns": []
+    }
+  ],
+  "waitedForRuns": [
+    {
+      "file": "spike/s1/data/matrix-completion-01/entry-1141-idle-same-10-ec-off.json",
+      "finished": "2026-10-31T16:08:34.487Z"
+    },
+    {
+      "file": "spike/s1/data/matrix-completion-01/entry-1141-idle-separate-10-ec-off.json",
+      "finished": "2026-10-31T16:09:30.766Z"
+    }
+  ],
+  "cpuReuseChecks": [
+    {
+      "cpus": "20-23",
+      "noRemainingAffinityOwnersAt": "2026-10-31T16:13:12.602Z"
+    }
+  ],
+  "finished": "2026-10-31T16:13:12.880Z",
+  "stoppedOnHarnessError": true,
+  "notStarted": [
+    "wayland-quick-open-1141-idle-same-10",
+    "wayland-latin-entry-1141-idle-same-10",
+    "wayland-escape-composed-1141-idle-same-10"
+  ]
+}

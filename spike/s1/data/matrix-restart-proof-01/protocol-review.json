@@ -1,0 +1,10 @@
+{
+  "reviewedAt": "2026-10-31T15:39:35.156430+00:00",
+  "raw": "restart-1141-loaded-separate-10.json",
+  "rawSha256": "8507fbfdda3f7cbbe1fd67deb6580baa86d8cec45fe688a778d2e3c5cd33872a",
+  "classification": "interrupted-invalid-load-condition",
+  "reason": "The frozen startup load scheduled setInterval(block, 100) after the first 50 ms block. Its first-to-second block start interval was approximately 150 ms instead of the required 100 ms. The batch was interrupted after 240 trials; these observations do not qualify the prescribed loaded condition.",
+  "correction": "The interval is now scheduled before the initial block. A VM regression test verifies a 100 ms first-to-second block interval and at least 50 ms block duration. All 21 matrix tests passed.",
+  "termination": "Owned-process cleanup completed with no errors and no remaining processes; see restart-1141-loaded-separate-10-termination.json.",
+  "replacement": "Rerun in matrix-restart-proof-02 with a fresh frozen source snapshot."
+}

@@ -1,0 +1,30 @@
+{
+  "rawSha256": "b50271a731ec30030de338191fc2d5093f453db6bd2fc937890fda240bc4a8e8",
+  "status": "harness-error",
+  "originalError": "Error: probe timeout: focusSetup",
+  "rendererLogSha256": "19bd2cfd8a5e2289552224907dc3cc2c1541e44fe93babf69e0094922d2a0f21",
+  "saveConflicts": [
+    {
+      "line": 146,
+      "message": "2026-11-01 02:39:30.321 [error] [text file model] handleSaveError(2) - exit - resulted in a save error: Error: Unable to write file '/var/tmp/s1-ji6NkZ/workspace/beta.s1focus' (Error: File Modified Since) file:///var/tmp/s1-ji6NkZ/workspace/beta.s1focus"
+    }
+  ],
+  "contaminatedObservations": [
+    {
+      "index": 325,
+      "scenario": "wc-dirty",
+      "round": 1,
+      "beforeText": "dirty dirty alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "afterText": "dirty dirty alpha beta gamma\ndelta epsilon zeta\neta theta iota\n",
+      "reason": "Repeated dirty prefix in the cached model; exclude this observation from fixture qualification."
+    }
+  ],
+  "unfinishedAttempt": {
+    "index": 326,
+    "scenario": "wc-dirty",
+    "round": 2,
+    "commandStarted": false
+  },
+  "reuseLimit": "Only complete nine-observation scenarios with independent timing/resource/source checks may contribute. wc-dirty has only two observations and is repeated in the repaired fixture; prior full dirty scenarios have one prefix and no earlier save-conflict log.",
+  "pendingStage": "The existing raw record cannot distinguish the saveAll await from the following closeAllEditors await; the renderer save-conflict is observed."
+}

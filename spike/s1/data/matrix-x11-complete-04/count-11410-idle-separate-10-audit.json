@@ -1,0 +1,78 @@
+{
+  "rawFile": "count-11410-idle-separate-10.json",
+  "rawSha256": "f5ac52177f6bd6b4bcf7ccc9f0df9adcb74e0c59fa52eec89d1b7eff27f9131a",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "errors": [
+        "count did not switch to the next tab once",
+        "count carried over to j or j was lost",
+        "count registers differ from the expected tab transition",
+        "count repeated or lost the leader leaf",
+        "count sequence leaked into or out of leader"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 981.5851520357621,
+      "upper": 982.1378710238412,
+      "uncertaintyMs": 0.5527189880790502
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2854.8107820000005,
+      "upper": 2855.1236350000036,
+      "uncertaintyMs": 0.3128530000030878
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 8.293466976158468,
+      "p95": 14.30564698808166,
+      "p99": 14.30564698808166,
+      "maximum": 14.30564698808166
+    },
+    "upperMs": {
+      "p50": 9.90986496424148,
+      "p95": 16.20466997616086,
+      "p99": 16.20466997616086,
+      "maximum": 16.20466997616086
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 8.293466976158468,
+        "upperMs": 9.90986496424148
+      },
+      {
+        "index": 1,
+        "lowerMs": 14.30564698808166,
+        "upperMs": 16.20466997616086
+      }
+    ]
+  },
+  "countRegisterOracle": {
+    "method": "exact-filename-register-transition-v1",
+    "validatedTrials": 2
+  }
+}

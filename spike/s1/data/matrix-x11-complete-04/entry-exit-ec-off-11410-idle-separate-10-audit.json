@@ -1,0 +1,93 @@
+{
+  "rawFile": "entry-exit-ec-off-11410-idle-separate-10.json",
+  "rawSha256": "816ba8e118596d9ea4bf3550f603f6bcaf8df0480038d5b3a1b7f881c4c1688c",
+  "status": "discrepancy",
+  "trials": 6,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 5,
+      "errors": [
+        "leaf did not complete exactly once",
+        "leader did not receive exactly w,h",
+        "left group not active",
+        "j did not move down once in left editor"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 972.4252160000008,
+      "upper": 972.9134120000006,
+      "uncertaintyMs": 0.4881959999997889
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2759.9249530000016,
+      "upper": 2760.2921800000004,
+      "uncertaintyMs": 0.36722699999882025
+    },
+    "count": 6,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 1.814570000000911,
+      "p95": 13.498097011923617,
+      "p99": 13.498097011923617,
+      "maximum": 13.498097011923617
+    },
+    "upperMs": {
+      "p50": 3.7148600000014103,
+      "p95": 15.19592701192005,
+      "p99": 15.19592701192005,
+      "maximum": 15.19592701192005
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 1.814570000000911,
+        "upperMs": 3.5741819999980198
+      },
+      {
+        "index": 1,
+        "lowerMs": 8.54231401192237,
+        "upperMs": 10.242330011920332
+      },
+      {
+        "index": 2,
+        "lowerMs": 1.92477600000211,
+        "upperMs": 3.7148600000014103
+      },
+      {
+        "index": 3,
+        "lowerMs": 1.7043959999996314,
+        "upperMs": 5.62394700000141
+      },
+      {
+        "index": 4,
+        "lowerMs": 1.6488679761591793,
+        "upperMs": 3.3503029761573107
+      },
+      {
+        "index": 5,
+        "lowerMs": 13.498097011923617,
+        "upperMs": 15.19592701192005
+      }
+    ]
+  }
+}

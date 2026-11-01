@@ -1,0 +1,125 @@
+{
+  "version": "0.0.0",
+  "publisher": "vim-companion-spike",
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "main": "./extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "name": "s1-probe",
+  "displayName": "S1 measurement probe",
+  "extensionDependencies": [
+    "vscodevim.vim",
+    "vim-companion-spike.s1-leader"
+  ],
+  "contributes": {
+    "keybindings": [
+      {
+        "key": "space",
+        "command": "s1.deliveryKey",
+        "args": "space",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "w",
+        "command": "s1.deliveryKey",
+        "args": "w",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "h",
+        "command": "s1.deliveryKey",
+        "args": "h",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "j",
+        "command": "s1.deliveryKey",
+        "args": "j",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "a",
+        "command": "s1.deliveryKey",
+        "args": "a",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "b",
+        "command": "s1.deliveryKey",
+        "args": "b",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "c",
+        "command": "s1.deliveryKey",
+        "args": "c",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "d",
+        "command": "s1.deliveryKey",
+        "args": "d",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "e",
+        "command": "s1.deliveryKey",
+        "args": "e",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "f",
+        "command": "s1.deliveryKey",
+        "args": "f",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "r",
+        "command": "s1.deliveryKey",
+        "args": "r",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "escape",
+        "command": "s1.deliveryKey",
+        "args": "Escape",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "ctrl+[",
+        "command": "s1.deliveryKey",
+        "args": "ctrl+bracketleft",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "ctrl+c",
+        "command": "s1.deliveryKey",
+        "args": "ctrl+c",
+        "when": "s1.delivery"
+      },
+      {
+        "key": "ctrl+alt+9",
+        "command": "s1.sentinel",
+        "args": "other"
+      },
+      {
+        "key": "ctrl+alt+9",
+        "command": "s1.sentinel",
+        "args": "normal-editor-capture-off",
+        "when": "editorTextFocus && vim.active && vim.mode == Normal && !vimCompanion.leaderActive"
+      },
+      {
+        "key": "ctrl+alt+9",
+        "command": "s1.sentinel",
+        "args": "normal-editor-capture-on",
+        "when": "editorTextFocus && vim.active && vim.mode == Normal && vimCompanion.leaderActive"
+      }
+    ]
+  }
+}

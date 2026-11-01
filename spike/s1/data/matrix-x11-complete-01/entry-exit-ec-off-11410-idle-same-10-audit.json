@@ -1,0 +1,73 @@
+{
+  "rawFile": "entry-exit-ec-off-11410-idle-same-10.json",
+  "rawSha256": "99b7d267250b7151699ef91fac8b799b5165799a0810f78fbca9aeed1d2b1391",
+  "status": "discrepancy",
+  "trials": 2,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "c517ce5b2eae8f5b07d279ac6347853b31652fe6f892d8c005a453981e6baa6a",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 1,
+      "errors": [
+        "leaf did not complete exactly once",
+        "leader did not receive exactly w,h",
+        "left group not active",
+        "j did not move down once in left editor"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 965.6898309821202,
+      "upper": 966.1871869940394,
+      "uncertaintyMs": 0.49735601191923706
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2307.1109539999998,
+      "upper": 2307.213059999998,
+      "uncertaintyMs": 0.10210599999845726
+    },
+    "count": 2,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.22970299404050637,
+      "p95": 0.4067469940405299,
+      "p99": 0.4067469940405299,
+      "maximum": 0.4067469940405299
+    },
+    "upperMs": {
+      "p50": 2.8496590059562568,
+      "p95": 28.067524005958607,
+      "p99": 28.067524005958607,
+      "maximum": 28.067524005958607
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.4067469940405299,
+        "upperMs": 2.8496590059562568
+      },
+      {
+        "index": 1,
+        "lowerMs": 0.22970299404050637,
+        "upperMs": 28.067524005958607
+      }
+    ]
+  }
+}

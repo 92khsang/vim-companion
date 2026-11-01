@@ -1,0 +1,70 @@
+{
+  "rawFile": "hangul-letter-x11-1141-idle-same-10.json",
+  "rawSha256": "ea6b3a8a7fbb7ad7ff236612b46e0077e6a808674f7f47ec0d42877902b62fe0",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "letter-x11",
+      "errors": [
+        "composition release exceeded 5000 ms"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 645.0898970238388,
+      "upper": 645.4657370178782,
+      "uncertaintyMs": 0.37583999403932467
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 1628.479704999998,
+      "upper": 1628.530816999999,
+      "uncertaintyMs": 0.05111200000101235
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.08626600595971284,
+      "p95": 0.08626600595971284,
+      "p99": 0.08626600595971284,
+      "maximum": 0.08626600595971284
+    },
+    "upperMs": {
+      "p50": 1.220563000000313,
+      "p95": 1.220563000000313,
+      "p99": 1.220563000000313,
+      "maximum": 1.220563000000313
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.08626600595971284,
+        "upperMs": 1.220563000000313
+      }
+    ]
+  }
+}

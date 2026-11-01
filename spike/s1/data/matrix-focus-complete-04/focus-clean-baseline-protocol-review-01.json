@@ -1,0 +1,74 @@
+{
+  "reviewedAt": "2026-10-31T22:24:14.491954+00:00",
+  "rawSha256": "20afdfc6a07526622edcd42f57882e065cfc388e648ba3e43ce76d9dc6171ef6",
+  "status": "harness-error",
+  "originalError": "Error: AssertionError [ERR_ASSERTION]: fixture baseline could not be saved\n\nfalse !== true\n",
+  "unfinishedAttempt": {
+    "index": 314,
+    "scenario": "wl-default",
+    "round": 8,
+    "errors": [],
+    "inconclusive": [],
+    "fixtureReturned": false,
+    "measuredKeysInjected": false
+  },
+  "completedObservations": 314,
+  "baselineRecordsVerified": 1256,
+  "completeScenarios": 34,
+  "reusableObservations": 306,
+  "partialScenarios": {
+    "wl-default": 8
+  },
+  "fixtureFilesAfterTermination": [
+    {
+      "file": "$S1_SANDBOX/workspace/alpha.s1focus",
+      "bytes": 51,
+      "sha256": "2789d76581c68be6c5dd857593cd9a03fe2f709bdd7b9067e02b60b1b674592d",
+      "mtime": "2026-10-31T21:42:31.238130+00:00",
+      "ctime": "2026-10-31T21:42:31.238130+00:00"
+    },
+    {
+      "file": "$S1_SANDBOX/workspace/beta.s1focus",
+      "bytes": 51,
+      "sha256": "2789d76581c68be6c5dd857593cd9a03fe2f709bdd7b9067e02b60b1b674592d",
+      "mtime": "2026-10-31T21:42:31.244130+00:00",
+      "ctime": "2026-10-31T21:42:31.244130+00:00"
+    },
+    {
+      "file": "$S1_SANDBOX/workspace/gamma.s1focus",
+      "bytes": 51,
+      "sha256": "2789d76581c68be6c5dd857593cd9a03fe2f709bdd7b9067e02b60b1b674592d",
+      "mtime": "2026-10-31T21:42:31.252130+00:00",
+      "ctime": "2026-10-31T21:42:31.252130+00:00"
+    },
+    {
+      "file": "$S1_SANDBOX/outside.s1focus",
+      "bytes": 51,
+      "sha256": "2789d76581c68be6c5dd857593cd9a03fe2f709bdd7b9067e02b60b1b674592d",
+      "mtime": "2026-10-31T21:42:31.254130+00:00",
+      "ctime": "2026-10-31T21:42:31.254130+00:00"
+    }
+  ],
+  "retainedLogs": [
+    {
+      "file": "focus-clean-baseline-renderer-01.log",
+      "sha256": "e72e5eaa65b67b14a715a92e4a3d8d9855e19f3f21e23578c6b72893b3dfd110",
+      "originalSha256": "2397fd7751286da148fbdcc535d8235db00f066d4cb23f20c2c4822caeee59b3",
+      "lines": 9
+    },
+    {
+      "file": "focus-clean-baseline-extension-host-01.log",
+      "sha256": "e4404092ed2bed3e648097bd008761b5fa7b1f242f859513194a059f00d82ddf",
+      "originalSha256": "152f5b6e2d87a1a20a043959fd93efcf9cdcb035518e1592a69ca9bd0094398d",
+      "lines": 19
+    }
+  ],
+  "finding": "The setup invoked save unconditionally after checking or resetting model content. The four retained files match the baseline; no failure-time write/conflict log was found. The failing URI and pre-save model state were not retained, so the precise cause of save returning false is unverified. Post-termination file state does not prove failure-time model state.",
+  "repair": "Save only dirty models, retain mandatory dirty-save success, clean-state and exact model/disk baseline assertions, and include model state in a rejected-save diagnostic.",
+  "reuseLimit": "Only independently qualified complete nine-round scenarios contribute. Preserve the eight wl-default observations as incomplete and repeat that entire scenario. No trial is converted to a pass or dropped.",
+  "sources": [
+    "https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/api/browser/mainThreadDocuments.ts",
+    "https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/api/common/extHostDocumentData.ts",
+    "https://github.com/microsoft/vscode/blob/1.134.0/src/vs/workbench/services/textfile/browser/textFileService.ts"
+  ]
+}

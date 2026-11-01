@@ -1,0 +1,121 @@
+{
+  "rawFile": "hangul-shift-hangul-11410-idle-same-10.json",
+  "rawSha256": "591f993b572824c9fe98739531d29378770b160ad59780f4688bacdb1c0b99fd",
+  "status": "discrepancy",
+  "trials": 1,
+  "discrepancies": 1,
+  "environmentQualification": "no resource errors observed during preflight and final cleanup",
+  "cdpProof": {
+    "deliveryKeys": 1000,
+    "scriptCharacters": 1000,
+    "compositionPassed": true
+  },
+  "inputEvidence": {
+    "sources": {
+      "matrix/input-evidence.mjs": "7254771e90f84d5d9c0441d31491ddb8f52c60b19b3acfe45472894d1e141f1d",
+      "wayland/extension/s1-harness@vimcompanion.spike/mode-trace.js": "de25ad94bf206e34ca6ebf690914a81a34256fe49b2d1dab0c72ad96714c6991"
+    },
+    "validatedTrials": 1,
+    "unqualified": [],
+    "observations": [
+      {
+        "index": 0,
+        "composition": {
+          "required": true,
+          "qualified": true,
+          "expected": [
+            "조"
+          ],
+          "requireEnd": true,
+          "proof": [
+            {
+              "text": "조",
+              "episodes": [
+                {
+                  "target": 1,
+                  "editContext": true,
+                  "startIndex": 4,
+                  "endIndex": 8,
+                  "payloads": [
+                    {
+                      "index": 6,
+                      "targetMatches": true
+                    },
+                    {
+                      "index": 7,
+                      "targetMatches": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "destinationMatches": true,
+          "limitation": "A fresh payload at a different destination may support a retained failed trial; it never qualifies a passing trial."
+        },
+        "mode": {
+          "required": false,
+          "qualified": true
+        }
+      }
+    ]
+  },
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "6cb8beb4eccadddf4698ac7ae948c6b89344436f820095b62ee519acca32a37b",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 0,
+      "case": "shift-hangul",
+      "errors": [
+        "composition release exceeded 5000 ms"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 962.8748489940383,
+      "upper": 963.4157400119209,
+      "uncertaintyMs": 0.5408910178825863
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2309.2630139999965,
+      "upper": 2309.3502179999996,
+      "uncertaintyMs": 0.08720400000311201
+    },
+    "count": 1,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 0.06604099403784675,
+      "p95": 0.06604099403784675,
+      "p99": 0.06604099403784675,
+      "maximum": 0.06604099403784675
+    },
+    "upperMs": {
+      "p50": 1.47707301192486,
+      "p95": 1.47707301192486,
+      "p99": 1.47707301192486,
+      "maximum": 1.47707301192486
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 0.06604099403784675,
+        "upperMs": 1.47707301192486
+      }
+    ]
+  }
+}

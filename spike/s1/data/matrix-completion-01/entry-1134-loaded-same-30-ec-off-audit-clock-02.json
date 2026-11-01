@@ -1,0 +1,87 @@
+{
+  "rawFile": "entry-1134-loaded-same-30-ec-off.json",
+  "rawSha256": "c6f8e46ed75bb9116b132d7e812f5eb782a1d9e33352fab10279f603e98d179e",
+  "status": "discrepancy",
+  "trials": 5,
+  "discrepancies": 1,
+  "checks": [
+    "source hashes",
+    "reconstructed installed artifacts",
+    "1000-key delivery order",
+    "Vim insertion script",
+    "host PID placement",
+    "first-discrepancy boundary",
+    "required counts, status consistency and case order",
+    "available final-sentinel snapshots"
+  ],
+  "installedManifestHashesAreFinal": true,
+  "finalProbeManifestSha256": "4b8c1bf5cfe4e1382ee98dc07bd38113a1d8f9e3e49ee605d59a1cf3b301b899",
+  "finalSnapshotAvailable": true,
+  "failures": [
+    {
+      "index": 4,
+      "errors": [
+        "leaf did not complete exactly once",
+        "leader did not receive exactly w,h",
+        "left group not active",
+        "j did not move down once in left editor"
+      ]
+    }
+  ],
+  "entryLatency": {
+    "definition": "Renderer SPC keydown to setContext execution, bounded by companion start and acknowledgement; includes passive observer instrumentation",
+    "clockAssumption": "constant relative monotonic clock offsets over this run, checked by intersecting pre/post round-trip intervals",
+    "rendererOffset": {
+      "lower": 1080.8697850178771,
+      "upper": 1081.4064340059656,
+      "uncertaintyMs": 0.5366489880884728
+    },
+    "rendererTimestampErrorBoundMs": 0.202,
+    "leaderOffset": {
+      "lower": 2294.145967000004,
+      "upper": 2294.284062000006,
+      "uncertaintyMs": 0.13809500000206754
+    },
+    "count": 5,
+    "excluded": [],
+    "lowerMs": {
+      "p50": 21.51410400596296,
+      "p95": 44.817707017874,
+      "p99": 44.817707017874,
+      "maximum": 44.817707017874
+    },
+    "upperMs": {
+      "p50": 23.004837994046742,
+      "p95": 48.4475780059779,
+      "p99": 48.4475780059779,
+      "maximum": 48.4475780059779
+    },
+    "bounds": [
+      {
+        "index": 0,
+        "lowerMs": 21.51410400596296,
+        "upperMs": 23.004837994046742
+      },
+      {
+        "index": 1,
+        "lowerMs": 0.5161539940404491,
+        "upperMs": 3.064935982130466
+      },
+      {
+        "index": 2,
+        "lowerMs": 26.848250011923025,
+        "upperMs": 28.70075700000371
+      },
+      {
+        "index": 3,
+        "lowerMs": 0.300666999998155,
+        "upperMs": 3.0318509880939946
+      },
+      {
+        "index": 4,
+        "lowerMs": 44.817707017874,
+        "upperMs": 48.4475780059779
+      }
+    ]
+  }
+}

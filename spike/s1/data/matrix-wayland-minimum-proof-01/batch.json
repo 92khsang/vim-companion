@@ -1,0 +1,76 @@
+{
+  "started": "2026-10-31T17:33:37.079Z",
+  "maximumConcurrentInstances": 1,
+  "maximumConcurrentExperimentInstances": 1,
+  "cpuTopology": "# The following is the parsable format, which can be fed to other\n# programs. Each different item in every column has an unique ID\n# starting usually from zero.\n# CPU,Core,Socket\n0,0,0\n1,0,0\n2,1,0\n3,1,0\n4,2,0\n5,2,0\n6,3,0\n7,3,0\n8,4,0\n9,4,0\n10,5,0\n11,5,0\n12,6,0\n13,6,0\n14,7,0\n15,7,0\n16,8,0\n17,9,0\n18,10,0\n19,11,0\n20,12,0\n21,13,0\n22,14,0\n23,15,0\n24,16,0\n25,17,0\n26,18,0\n27,19,0\n28,20,0\n29,21,0\n30,22,0\n31,23,0\n",
+  "plan": {
+    "cpuSets": [
+      "16-19"
+    ],
+    "globalConcurrentLimit": 1,
+    "waitForBatches": [
+      "spike/s1/data/matrix-x11-complete-01/batch.json",
+      "spike/s1/data/matrix-focus-complete-02/batch.json"
+    ],
+    "waitForCpuSets": [
+      "16-19"
+    ],
+    "jobs": [
+      {
+        "id": "wayland-letter-11340-idle-same-10",
+        "version": "1.134.0",
+        "row": "hangul",
+        "backend": "wayland",
+        "case": "letter",
+        "delay": 10,
+        "load": false,
+        "affinity": "same"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "wayland-letter-11340-idle-same-10",
+      "cpuSet": "16-19",
+      "started": "2026-10-31T17:39:46.501Z",
+      "signal": null,
+      "exitCode": 0,
+      "finished": "2026-10-31T17:40:30.074Z",
+      "status": "discrepancy",
+      "trials": 1,
+      "measuredStarted": "2026-10-31T17:39:46.582Z",
+      "measuredFinished": "2026-10-31T17:40:29.643Z",
+      "ideLauncher": {
+        "pid": 3831960,
+        "started": "2026-10-31T17:39:48.300Z",
+        "finished": "2026-10-31T17:40:29.330Z",
+        "exit": {
+          "code": null,
+          "signal": "SIGKILL"
+        }
+      },
+      "overlappingWrapperRuns": []
+    }
+  ],
+  "waitedForBatches": [
+    {
+      "file": "spike/s1/data/matrix-x11-complete-01/batch.json",
+      "finished": "2026-10-31T17:32:03.628Z",
+      "verifiedAt": "2026-10-31T17:33:37.080Z"
+    },
+    {
+      "file": "spike/s1/data/matrix-focus-complete-02/batch.json",
+      "finished": "2026-10-31T17:39:46.297Z",
+      "verifiedAt": "2026-10-31T17:39:46.493Z"
+    }
+  ],
+  "cpuReuseChecks": [
+    {
+      "cpus": "16-19",
+      "noRemainingAffinityOwnersAt": "2026-10-31T17:39:46.498Z"
+    }
+  ],
+  "finished": "2026-10-31T17:40:30.163Z",
+  "stoppedOnHarnessError": false,
+  "notStarted": []
+}
